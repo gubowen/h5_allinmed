@@ -1,0 +1,47 @@
+@import "../../library/common-modules";
+@import "../myServices/symptom_lists";
+.tc-caseContentBox{
+  margin-bottom:rem(100px);
+  .tc-baseInfo{
+    position:relative;
+  }
+  .preliminary-advice{
+    position: absolute;
+    top:rem(28px);
+    right: rem(36px);
+    display: block;
+    color: #818CAB;
+    @include font-dpr(15px);
+    i{
+      display: inline-block;
+      width: rem(10px);
+      height: rem(20px);
+      margin-left: rem(15px);
+      background: url("/image/img00/doctorMain/home_expansion_right.png") no-repeat center;
+      background-size: 100% 100%;
+    }
+  }
+  .appGoRefer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index:1;
+    width: 100%;
+    line-height: rem(100px);
+    text-align: center;
+    color: #fff;
+    background: #7BA1EE;
+    @include font-dpr(16px);
+    margin-top:rem(100px);
+    &:before {
+      display: inline-block;
+      content: '';
+      width: rem(40px);
+      height: rem(40px);
+      background: url("/image/img00/app_native/app_communication.png") no-repeat;
+      background-size: 100% 100%;
+      margin-right: rem(10px);
+      vertical-align: middle;
+    }
+  }
+}

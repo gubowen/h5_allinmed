@@ -1,0 +1,1066 @@
+html, body {
+  height: 100%; }
+
+.wx-main-inner.wx-orderForPay-main {
+  height: 100%; }
+  .wx-main-inner.wx-orderForPay-main .wx-main-content.no-marginTop {
+    background-color: #F3F6F7; }
+
+.wx-main-inner .wx-main-content {
+  margin-top: 0.13333rem;
+  background-color: #F3F6F7; }
+  .wx-main-inner .wx-main-content.no-marginTop.reviewNetOrder {
+    background-color: #F3F6F7;
+    height: 100%; }
+  .wx-main-inner .wx-main-content.no-marginTop {
+    margin-top: 0;
+    background-color: #ffffff; }
+
+.wx-main-inner .wx-surgical-commBox {
+  background-color: #ffffff;
+  padding-top: 0.56rem;
+  margin-bottom: 0.18667rem; }
+  .wx-main-inner .wx-surgical-commBox .wx-surgical-commTitle {
+    font-size: 16px;
+    position: relative;
+    color: #555555;
+    padding-left: 0.56rem; }
+    [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commTitle {
+      font-size: 32px; }
+    [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commTitle {
+      font-size: 48px; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commTitle:after {
+      position: absolute;
+      content: '';
+      width: 0.08rem;
+      height: 0.32rem;
+      left: 0.37333rem;
+      top: 50%;
+      margin-top: -0.16rem;
+      background-color: #4CD3C6; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commTitle.wx-surgical-commTime {
+      margin-top: 0.69333rem; }
+  .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter {
+    padding: 0.58667rem 0.64rem 0 0.64rem; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox {
+      padding-bottom: 0.64rem; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-left {
+        font-size: 15px;
+        display: inline-block;
+        width: 1.66667rem;
+        padding-right: 0.90667rem;
+        color: #909090; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-left {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-left {
+          font-size: 45px; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-left.wx-multiLine-textLeft {
+          display: block;
+          float: left; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-right {
+        font-size: 16px;
+        vertical-align: top;
+        color: #555555; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-right {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-right {
+          font-size: 48px; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-right.wx-multiLine-textRight {
+          display: block;
+          padding-left: 2.66667rem; }
+          .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox .wx-surgical-commItemList-right.wx-multiLine-textRight .wx-netOrderNameList {
+            padding-right: 0.64rem; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox.wx-multiLine-textBox:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox.wx-surgical-compare-itemBox {
+        border: 1px solid #D9F2F2;
+        border-radius: 4px;
+        padding-bottom: 0;
+        position: relative; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-commItemBox.wx-surgical-compare-itemBox .wx-selectBtn-recommend {
+          position: absolute;
+          display: inline-block;
+          width: 0.85333rem;
+          height: 0.85333rem;
+          background: url("/image/img00/wx/pay_hook_inactivated.png") no-repeat center;
+          background-size: 100% 100%;
+          bottom: -0.02667rem;
+          right: -0.02667rem; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox {
+      padding: 0.42667rem 0.45333rem;
+      background-color: #D9F2F2; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-logo {
+        display: inline-block;
+        width: 0.48rem;
+        height: 0.48rem;
+        vertical-align: bottom;
+        line-height: 0.56rem;
+        background: url("/image/img00/wx/pay_hospital_inactivated.png") no-repeat center;
+        background-size: 100% 100%; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-text {
+        line-height: 1;
+        margin-left: 0.08rem;
+        display: inline-block;
+        font-size: 16px;
+        vertical-align: bottom;
+        color: #6B7698; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-text {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-text {
+          font-size: 48px; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-tips {
+        margin-left: 0.21333rem;
+        display: inline-block;
+        vertical-align: bottom;
+        width: 0.69333rem;
+        height: 0.32rem;
+        padding: 0.05333rem 0.10667rem;
+        line-height: 0.42667rem;
+        font-size: 10px;
+        color: #F7854B;
+        border: 1px solid #F7854B;
+        border-radius: 2px;
+        text-align: center; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-tips {
+          font-size: 20px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-titleBox .wx-surgical-compare-title .wx-surgical-compare-tips {
+          font-size: 30px; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox {
+      padding-top: 0.45333rem;
+      padding-left: 0.05333rem; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox .wx-surgical-compare-listItem {
+        position: relative;
+        float: left;
+        font-size: 13px;
+        color: #6B7698;
+        opacity: 0.85;
+        padding: 0 0.2rem 0 0.72rem;
+        margin-bottom: 0.4rem; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox .wx-surgical-compare-listItem {
+          font-size: 26px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox .wx-surgical-compare-listItem {
+          font-size: 39px; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter .wx-surgical-compare-listBox .wx-surgical-compare-listItem:before {
+          position: absolute;
+          display: table;
+          content: '';
+          width: 0.08rem;
+          height: 0.08rem;
+          left: 0.42667rem;
+          border-radius: 50%;
+          top: 50%;
+          margin-top: -0.04rem;
+          background-color: #6B7698; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-compare-itemBox {
+      border: 1px solid #F2F2F2; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-compare-itemBox .wx-surgical-compare-titleBox {
+        background-color: #F2F2F2; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-compare-itemBox .wx-surgical-compare-titleBox .wx-surgical-compare-text {
+          color: #BDBDBD; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-compare-listBox .wx-surgical-compare-listItem {
+      color: #BDBDBD; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-compare-listBox .wx-surgical-compare-listItem:before {
+        background-color: #BDBDBD; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-not-recommend .wx-surgical-commItemBox.wx-surgical-compare-itemBox .wx-selectBtn-recommend {
+      display: none; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-commSelect .wx-surgical-compare-itemBox {
+      border-color: #00CFC0; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-commSelect .wx-surgical-compare-itemBox .wx-surgical-compare-titleBox {
+        background-color: #00CFC0; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-commSelect .wx-surgical-compare-itemBox .wx-surgical-compare-titleBox .wx-surgical-compare-logo {
+          background: url("/image/img00/wx/pay_hospital_activation.png") no-repeat center;
+          background-size: 100% 100%; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.wx-surgical-commSelect .wx-surgical-compare-itemBox .wx-selectBtn-recommend {
+        background: url("/image/img00/wx/pay_hook_activation.png") no-repeat center;
+        background-size: 100% 100%; }
+    .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.surgical-commAreaBox .surgical-commAreaBoxItem {
+      background-color: #F9FBFB;
+      padding: 0.37333rem 0;
+      border-radius: 8px; }
+      .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.surgical-commAreaBox .surgical-commAreaBoxItem .wx-commAreaLogo-right {
+        font-size: 15px;
+        display: inline-block;
+        position: relative;
+        padding-left: 1.33333rem;
+        color: #333333; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.surgical-commAreaBox .surgical-commAreaBoxItem .wx-commAreaLogo-right {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.surgical-commAreaBox .surgical-commAreaBoxItem .wx-commAreaLogo-right {
+          font-size: 45px; }
+        .wx-main-inner .wx-surgical-commBox .wx-surgical-commCenter.surgical-commAreaBox .surgical-commAreaBoxItem .wx-commAreaLogo-right .wx-commHospitalBtn-left {
+          position: absolute;
+          background: url("/image/img00/wx/pay_positioning.png") no-repeat center;
+          background-size: 100% 100%;
+          width: 0.64rem;
+          height: 0.64rem;
+          left: 0.34667rem;
+          top: 50%;
+          margin-top: -0.32rem; }
+  .wx-main-inner .wx-surgical-commBox.wx-surgical-compareMain {
+    padding-bottom: 1.14667rem;
+    margin-bottom: 0; }
+  .wx-main-inner .wx-surgical-commBox.wx-surgical-aboutNet {
+    padding-top: 0; }
+  .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital {
+    padding-bottom: 1.06667rem; }
+    .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox {
+      padding: 0.37333rem 1.06667rem;
+      margin-bottom: 0.37333rem;
+      background-color: #F9FBFB;
+      border-radius: 8px; }
+      .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right {
+        position: relative;
+        font-size: 15px;
+        color: #909090; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right {
+          font-size: 45px; }
+        .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right .wx-commHospitalBtn-left {
+          position: absolute;
+          display: inline-block;
+          left: -0.69333rem;
+          width: 0.53333rem;
+          height: 0.53333rem;
+          border-radius: 50%;
+          background: url("/image/img00/wx/pay_select_inactivated-05.png") no-repeat center;
+          background-size: 100% 100%;
+          top: 50%;
+          margin-top: -0.26667rem; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right .wx-commHospitalBtn-left.selected {
+            background: url("/image/img00/wx/pay_select_activation-06.png") no-repeat center;
+            background-size: 100% 100%; }
+        .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right {
+          position: relative;
+          padding-left: 1.33333rem;
+          display: block;
+          height: 1.14667rem;
+          line-height: 1.14667rem; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-commHospitalBtn-left {
+            position: absolute;
+            width: 0.64rem;
+            height: 0.64rem;
+            background: url("/image/img00/wx/pay_time.png") no-repeat center;
+            background-size: 100% 100%;
+            left: 0.34667rem;
+            top: 50%;
+            margin-top: -0.32rem; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .surgical-timeWait {
+            font-size: 15px;
+            color: #333333; }
+            [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .surgical-timeWait {
+              font-size: 30px; }
+            [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .surgical-timeWait {
+              font-size: 45px; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timesYear {
+            font-size: 15px;
+            color: #333333; }
+            [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timesYear {
+              font-size: 30px; }
+            [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timesYear {
+              font-size: 45px; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeTips {
+            font-size: 15px;
+            color: #333333; }
+            [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeTips {
+              font-size: 30px; }
+            [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeTips {
+              font-size: 45px; }
+          .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeSeconds {
+            font-size: 15px;
+            color: #333333; }
+            [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeSeconds {
+              font-size: 30px; }
+            [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox .wx-commHospitalBtn-right.wx-commTimeLogo-right .wx-surgical-timeSeconds {
+              font-size: 45px; }
+      .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox.surgical-timeBox {
+        padding: 0;
+        margin-bottom: 0; }
+        .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox.surgical-timeBox .wx-commHospitalBtn-left {
+          border-radius: 0; }
+        .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox.surgical-timeBox .wx-surgical-timeTips {
+          padding-left: 0.26667rem; }
+        .wx-main-inner .wx-surgical-commBox.wx-net-selectHospital .wx-surgical-commCenter .wx-hospitalInfo-itemBox.surgical-timeBox .wx-surgical-timeSeconds {
+          padding-left: 0.26667rem; }
+  .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox {
+    margin-bottom: 0;
+    padding-bottom: 0.66667rem; }
+    .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-instructions-close {
+      font-size: 14px;
+      color: #909090; }
+      [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-instructions-close {
+        font-size: 28px; }
+      [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-instructions-close {
+        font-size: 42px; }
+    .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox {
+      padding-bottom: 0.66667rem; }
+      .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-rolesItemLeft {
+        float: left;
+        color: #333333;
+        padding-top: 0.45333rem; }
+      .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-rolesItemRight {
+        float: right;
+        color: #6B7698;
+        padding-top: 0.45333rem; }
+        .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-rolesItemRight .order-costPercent {
+          display: inline-block;
+          color: #F76365;
+          width: 1.06667rem;
+          text-align: center; }
+      .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-hootTips {
+        font-size: 14px;
+        color: #555555;
+        padding-top: 0.4rem; }
+        [data-dpr="2"] .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-hootTips {
+          font-size: 28px; }
+        [data-dpr="3"] .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-hootTips {
+          font-size: 42px; }
+        .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-hootTips .surgical-hootTips-number {
+          float: left; }
+        .wx-main-inner .wx-surgical-commBox.wx-surgical-mainBox .wx-surgical-commCenter .surgical-closeRolesBox .surgical-hootTips .surgical-hootTips-text {
+          padding-left: 0.4rem; }
+
+.wx-main-inner .wx-surgical-commOrderBtnBox {
+  background-color: #ffffff;
+  padding-bottom: 0.53333rem; }
+  .wx-main-inner .wx-surgical-commOrderBtnBox .wx-surgical-orderBtn {
+    font-size: 16px;
+    display: block;
+    margin: 0 auto;
+    color: #FFFFFF;
+    width: 7.6rem;
+    height: 1.17333rem;
+    text-align: center;
+    border-radius: 100px;
+    background: #DFDFDF; }
+    [data-dpr="2"] .wx-main-inner .wx-surgical-commOrderBtnBox .wx-surgical-orderBtn {
+      font-size: 32px; }
+    [data-dpr="3"] .wx-main-inner .wx-surgical-commOrderBtnBox .wx-surgical-orderBtn {
+      font-size: 48px; }
+    .wx-main-inner .wx-surgical-commOrderBtnBox .wx-surgical-orderBtn.wx-orderSelected {
+      background-color: #00D6C6; }
+
+.wx-main-inner .wx-surgical-commBottomTips {
+  padding-bottom: 1.33333rem;
+  background-color: #fff; }
+  .wx-main-inner .wx-surgical-commBottomTips .surgical-bottomTextBox {
+    position: relative;
+    font-size: 12px;
+    width: 2.66667rem;
+    margin: 0 auto;
+    color: #BDBDBD;
+    text-align: center;
+    padding-left: 0.08rem; }
+    [data-dpr="2"] .wx-main-inner .wx-surgical-commBottomTips .surgical-bottomTextBox {
+      font-size: 24px; }
+    [data-dpr="3"] .wx-main-inner .wx-surgical-commBottomTips .surgical-bottomTextBox {
+      font-size: 36px; }
+    .wx-main-inner .wx-surgical-commBottomTips .surgical-bottomTextBox .surgical-bottomText {
+      border-bottom: 1px solid #BDBDBD; }
+    .wx-main-inner .wx-surgical-commBottomTips .surgical-bottomTextBox:before {
+      position: absolute;
+      content: '';
+      display: block;
+      width: 0.37333rem;
+      height: 0.37333rem;
+      background: url("/image/img00/wx/pay_question.png") no-repeat center;
+      background-size: 100% 100%;
+      left: -0.37333rem;
+      top: 50%;
+      margin-top: -0.16rem; }
+  .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain {
+    display: none; }
+    .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainBox {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: #555555;
+      opacity: 0.78;
+      z-index: 1; }
+    .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      width: 7.2rem;
+      margin-top: -3.6rem;
+      margin-left: -3.6rem;
+      border-radius: 12px;
+      background: #ffffff;
+      z-index: 5; }
+      .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox {
+        position: relative; }
+        .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-title {
+          text-align: center;
+          font-size: 16px;
+          color: #333333;
+          padding-top: 0.64rem;
+          padding-bottom: 0.37333rem; }
+          [data-dpr="2"] .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-title {
+            font-size: 32px; }
+          [data-dpr="3"] .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-title {
+            font-size: 48px; }
+        .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-content {
+          padding: 0 0.53333rem 1.06667rem 0.53333rem;
+          font-size: 15px;
+          color: #555555; }
+          [data-dpr="2"] .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-content {
+            font-size: 30px; }
+          [data-dpr="3"] .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commExplain-content {
+            font-size: 45px; }
+        .wx-main-inner .wx-surgical-commBottomTips .wx-surgical-commTipsMain .wx-surgical-commExplainCenter .wx-surgical-commTipsBox .wx-surgical-commTipsCloseBtn {
+          position: absolute;
+          bottom: -1.28rem;
+          left: 50%;
+          margin-left: -0.37333rem;
+          width: 0.74667rem;
+          height: 0.74667rem;
+          border-radius: 50%;
+          background: url("/image/img00/wx/surgery_delete@2x.png") no-repeat center;
+          background-size: 100% 100%; }
+
+.wx-main-inner .wx-surgical-commSubmitBox {
+  width: 100%;
+  background: #DFDFDF; }
+  .wx-main-inner .wx-surgical-commSubmitBox .wx-surgical-commSubmitBtn {
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    padding: 0.42667rem 0;
+    color: #FFFFFF; }
+    [data-dpr="2"] .wx-main-inner .wx-surgical-commSubmitBox .wx-surgical-commSubmitBtn {
+      font-size: 32px; }
+    [data-dpr="3"] .wx-main-inner .wx-surgical-commSubmitBox .wx-surgical-commSubmitBtn {
+      font-size: 48px; }
+    .wx-main-inner .wx-surgical-commSubmitBox .wx-surgical-commSubmitBtn.active {
+      background-color: #00D6C6; }
+
+.wx-main-inner .submitPublicOrder .wx-baseSurgicalTime, .wx-main-inner .submitPublicOrder .wx-baseSurgicalWeek, .wx-main-inner .submitPublicOrder .wx-baseSurgicalDate, .wx-main-inner .reviewNetOrder .wx-baseSurgicalTime, .wx-main-inner .reviewNetOrder .wx-baseSurgicalWeek, .wx-main-inner .reviewNetOrder .wx-baseSurgicalDate, .wx-main-inner .publicOrderDetails .wx-baseSurgicalTime, .wx-main-inner .publicOrderDetails .wx-baseSurgicalWeek, .wx-main-inner .publicOrderDetails .wx-baseSurgicalDate {
+  font-size: 15px;
+  color: #333333; }
+  [data-dpr="2"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalTime, [data-dpr="2"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalWeek, [data-dpr="2"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalDate, [data-dpr="2"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalTime, [data-dpr="2"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalWeek, [data-dpr="2"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalDate, [data-dpr="2"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalTime, [data-dpr="2"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalWeek, [data-dpr="2"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalDate {
+    font-size: 30px; }
+  [data-dpr="3"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalTime, [data-dpr="3"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalWeek, [data-dpr="3"] .wx-main-inner .submitPublicOrder .wx-baseSurgicalDate, [data-dpr="3"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalTime, [data-dpr="3"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalWeek, [data-dpr="3"] .wx-main-inner .reviewNetOrder .wx-baseSurgicalDate, [data-dpr="3"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalTime, [data-dpr="3"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalWeek, [data-dpr="3"] .wx-main-inner .publicOrderDetails .wx-baseSurgicalDate {
+    font-size: 45px; }
+
+.wx-main-inner .submitPublicOrder .wx-baseSurgicalTime, .wx-main-inner .reviewNetOrder .wx-baseSurgicalTime, .wx-main-inner .publicOrderDetails .wx-baseSurgicalTime {
+  margin-right: 0; }
+
+.wx-main-inner .submitPublicOrder .wx-baseSurgicalDate, .wx-main-inner .reviewNetOrder .wx-baseSurgicalDate, .wx-main-inner .publicOrderDetails .wx-baseSurgicalDate {
+  display: inline-block;
+  padding-left: 0.26667rem; }
+
+.wx-main-inner {
+  height: 100%; }
+  .wx-main-inner .wx-orderComm-baseBox {
+    padding: 0.64rem 0.64rem 0 0.64rem;
+    background-color: #ffffff; }
+    .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox {
+      padding-bottom: 0.90667rem; }
+      .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft {
+        font-size: 15px;
+        float: left;
+        color: #909090;
+        width: 1.66667rem;
+        margin-right: 0.90667rem; }
+        [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft {
+          font-size: 45px; }
+        .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total {
+          position: relative; }
+          .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail {
+            position: absolute;
+            top: 50%;
+            margin-top: -0.24rem;
+            right: -0.10667rem;
+            width: 0.48rem;
+            height: 0.48rem;
+            background: url("/image/img00/wx/pay_question_remind.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm {
+              display: none;
+              position: relative; }
+              .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox {
+                position: absolute;
+                width: 7.312rem;
+                height: 5.184rem;
+                background: #FFFFFF;
+                box-shadow: 0 2px 10px 0 rgba(0, 190, 175, 0.25);
+                top: -5.58667rem;
+                left: -0.56rem;
+                border-radius: 20px; }
+                .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain {
+                  position: relative;
+                  height: 100%; }
+                  .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-refund-bottomMark {
+                    position: absolute;
+                    display: inline-block;
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border: 0.32rem solid transparent;
+                    border-top: 0.32rem solid rgba(0, 190, 175, 0.25);
+                    bottom: -0.64rem;
+                    left: 0.49333rem;
+                    opacity: 0.5; }
+                  .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-refund-bottomMarkBack {
+                    position: absolute;
+                    display: inline-block;
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border: 0.29333rem solid transparent;
+                    border-top: 0.29333rem solid #ffffff;
+                    bottom: -0.56rem;
+                    left: 0.50667rem; }
+                  .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-role {
+                    font-size: 14px;
+                    color: #909090;
+                    padding-top: 0.56rem;
+                    padding-bottom: 0.4rem;
+                    text-align: center; }
+                    [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-role {
+                      font-size: 28px; }
+                    [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-role {
+                      font-size: 42px; }
+                  .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-cost {
+                    font-size: 14px;
+                    color: #333333;
+                    padding-bottom: 0.21333rem;
+                    text-align: center; }
+                    [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-cost {
+                      font-size: 28px; }
+                    [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-cost {
+                      font-size: 42px; }
+                  .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole {
+                    font-size: 14px;
+                    color: #6B7698;
+                    text-align: center;
+                    padding-bottom: 0.42667rem; }
+                    [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole {
+                      font-size: 28px; }
+                    [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole {
+                      font-size: 42px; }
+                    .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole .wx-close-percent {
+                      font-size: 14px;
+                      color: #F76365; }
+                      [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole .wx-close-percent {
+                        font-size: 28px; }
+                      [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListLeft.wx-refund-total .wx-refund-detail .wx-refund-tipsComm .wx-refund-tipsBox .wx-refund-conformMain .wx-close-costRole .wx-close-percent {
+                        font-size: 42px; }
+      .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight {
+        font-size: 16px;
+        padding-left: 2.57333rem;
+        color: #555555; }
+        [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight {
+          font-size: 48px; }
+        .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-baseSurgicalTime {
+          margin-right: 0.53333rem; }
+        .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal {
+          font-size: 18px;
+          color: #F76365; }
+          [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal {
+            font-size: 36px; }
+          [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal {
+            font-size: 54px; }
+          .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal .wx-payMark {
+            font-size: 12px; }
+            [data-dpr="2"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal .wx-payMark {
+              font-size: 24px; }
+            [data-dpr="3"] .wx-main-inner .wx-orderComm-baseBox .wx-baseItemBox .wx-baseListRight .wx-payTotal .wx-payMark {
+              font-size: 36px; }
+  .wx-main-inner .wx-comm-bottomBtn {
+    position: fixed;
+    bottom: -0.05333rem;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 1px 4px 0 #EFF1F6; }
+    .wx-main-inner .wx-comm-bottomBtn:after {
+      content: '';
+      display: table;
+      clear: both; }
+    .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft {
+      float: left;
+      width: 50%;
+      height: 1.30667rem;
+      background-color: #ffffff;
+      line-height: 1.30667rem;
+      text-align: center; }
+      .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-needPay {
+        font-size: 15px;
+        color: #555555;
+        padding-right: 0.16rem; }
+        [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-needPay {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-needPay {
+          font-size: 45px; }
+      .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal {
+        font-size: 18px;
+        color: #F76365; }
+        [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal {
+          font-size: 36px; }
+        [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal {
+          font-size: 54px; }
+        .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal .wx-payMark {
+          font-size: 12px; }
+          [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal .wx-payMark {
+            font-size: 24px; }
+          [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft .wx-payTotal .wx-payMark {
+            font-size: 36px; }
+      .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-refund, .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-closeOrder {
+        font-size: 16px;
+        color: #909090; }
+        [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-refund, [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-closeOrder {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-refund, [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnLeft.wx-closeOrder {
+          font-size: 48px; }
+    .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight {
+      width: 50%;
+      height: 1.30667rem;
+      background-color: #00D6C6;
+      line-height: 1.30667rem;
+      text-align: center; }
+      .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goPay, .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goConsult, .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goCheck, .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-procedureGoPay {
+        font-size: 16px;
+        color: #FFFFFF; }
+        [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goPay, [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goConsult, [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goCheck, [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-procedureGoPay {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goPay, [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goConsult, [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-goCheck, [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-procedureGoPay {
+          font-size: 48px; }
+      .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-closeBtnForDoor {
+        width: 100%;
+        color: #ffffff;
+        font-size: 16px; }
+        [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-closeBtnForDoor {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnRight.wx-closeBtnForDoor {
+          font-size: 48px; }
+    .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnOver {
+      text-align: center;
+      font-size: 16px;
+      color: #FFFFFF;
+      padding: 0.45333rem 0;
+      width: 100%;
+      background: #00D6C6; }
+      [data-dpr="2"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnOver {
+        font-size: 32px; }
+      [data-dpr="3"] .wx-main-inner .wx-comm-bottomBtn .wx-comm-bottomBtnOver {
+        font-size: 48px; }
+  .wx-main-inner .wx-orderProgressComm {
+    padding: 0.48rem 0.64rem;
+    position: relative;
+    height: 1.93333rem;
+    background: url("/image/img00/wx/pay_status_bg_small.png") no-repeat center;
+    background-size: 100% 100%; }
+    .wx-main-inner .wx-orderProgressComm .wx-orderProgressCover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2.85333rem;
+      opacity: 0.5;
+      z-index: 1; }
+    .wx-main-inner .wx-orderProgressComm .wx-progressBarBox {
+      position: absolute;
+      width: 8.72rem;
+      top: 0.45333rem;
+      left: 0.64rem;
+      padding-left: 0.34667rem;
+      padding-bottom: 0.90667rem;
+      z-index: 5; }
+      .wx-main-inner .wx-orderProgressComm .wx-progressBarBox:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox {
+        float: left; }
+        .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox.progress-hasBar {
+          width: 3.89333rem; }
+        .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem {
+          float: left;
+          position: relative;
+          width: 0.34667rem;
+          height: 0.32rem;
+          text-align: center;
+          border-radius: 50%;
+          font-size: 0;
+          background-color: #9798A6; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem .wx-progressLine {
+            position: absolute;
+            left: 0.50667rem;
+            width: 3.14667rem;
+            height: 0.02667rem;
+            background-color: #858487;
+            top: 50%;
+            margin-top: -0.01333rem;
+            border-radius: 100px; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem .wx-progressText {
+            font-size: 13px;
+            color: #858487;
+            position: absolute;
+            display: inline-block;
+            width: 1.33333rem;
+            bottom: -0.4rem;
+            left: 50%;
+            margin-left: -0.66667rem;
+            text-align: center; }
+            [data-dpr="2"] .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem .wx-progressText {
+              font-size: 26px; }
+            [data-dpr="3"] .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem .wx-progressText {
+              font-size: 39px; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-waitPay {
+            background: url("/image/img00/wx/pay_status_on_1.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-waitPay .wx-progressText {
+              color: #00BEAF; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isPay {
+            background: url("/image/img00/wx/pay_status_completed.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isPay .wx-progressText {
+              color: #00BEAF; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isPay .wx-progressLine {
+              background-color: #00BEAF; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-notSurgical {
+            background: url("/image/img00/wx/pay_status_off_2.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-notSurgical .wx-progressText {
+              color: #858487; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-waitSurgical {
+            background: url("/image/img00/wx/pay_status_on_2.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-waitSurgical .wx-progressText {
+              color: #00BEAF; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isSurgical {
+            background: url("/image/img00/wx/pay_status_completed.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isSurgical .wx-progressText {
+              color: #00BEAF; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-isSurgical .wx-progressLine {
+              background-color: #00BEAF; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-payWaitOver {
+            background: url("/image/img00/wx/pay_status_off_3.png") no-repeat center;
+            background-size: 100% 100%; }
+          .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-payIsOver {
+            background: url("/image/img00/wx/pay_status_on_3.png") no-repeat center;
+            background-size: 100% 100%; }
+            .wx-main-inner .wx-orderProgressComm .wx-progressBarBox .wx-progressItemBox .wx-progressItem.wx-payIsOver .wx-progressText {
+              color: #00BEAF; }
+    .wx-main-inner .wx-orderProgressComm .wx-progressTextBox {
+      position: absolute;
+      width: 8.72rem;
+      top: 1.94667rem;
+      left: 0.64rem;
+      z-index: 5;
+      font-size: 14px;
+      color: #FFFFFF; }
+      [data-dpr="2"] .wx-main-inner .wx-orderProgressComm .wx-progressTextBox {
+        font-size: 28px; }
+      [data-dpr="3"] .wx-main-inner .wx-orderProgressComm .wx-progressTextBox {
+        font-size: 42px; }
+      .wx-main-inner .wx-orderProgressComm .wx-progressTextBox .wx-remainingTime {
+        font-size: 14px;
+        color: #00BEAF;
+        margin-right: 0.05333rem; }
+        [data-dpr="2"] .wx-main-inner .wx-orderProgressComm .wx-progressTextBox .wx-remainingTime {
+          font-size: 28px; }
+        [data-dpr="3"] .wx-main-inner .wx-orderProgressComm .wx-progressTextBox .wx-remainingTime {
+          font-size: 42px; }
+    .wx-main-inner .wx-orderProgressComm.notHasTips {
+      height: 0.82667rem; }
+      .wx-main-inner .wx-orderProgressComm.notHasTips .wx-orderProgressCover {
+        height: 1.78667rem; }
+      .wx-main-inner .wx-orderProgressComm.notHasTips .wx-progressBarBox {
+        padding-bottom: 0; }
+  .wx-main-inner .wx-orderComm-baseLine {
+    width: 100%;
+    height: 0.18667rem;
+    background-color: #F3F6F7; }
+  .wx-main-inner .wx-order-infoBase {
+    background-color: #ffffff;
+    padding: 0.58667rem 0.64rem 1.73333rem 0.64rem; }
+    .wx-main-inner .wx-order-infoBase .wx-order-patientInfoBox .wx-order-patientInfoItem {
+      font-size: 13px;
+      color: #BDBDBD;
+      padding-bottom: 0.37333rem; }
+      [data-dpr="2"] .wx-main-inner .wx-order-infoBase .wx-order-patientInfoBox .wx-order-patientInfoItem {
+        font-size: 26px; }
+      [data-dpr="3"] .wx-main-inner .wx-order-infoBase .wx-order-patientInfoBox .wx-order-patientInfoItem {
+        font-size: 39px; }
+      .wx-main-inner .wx-order-infoBase .wx-order-patientInfoBox .wx-order-patientInfoItem .wx-patientNameLeft {
+        float: left; }
+      .wx-main-inner .wx-order-infoBase .wx-order-patientInfoBox .wx-order-patientInfoItem .wx-patientNameRight {
+        display: block;
+        padding-left: 1.73333rem; }
+  .wx-main-inner .netOrderCureArea {
+    display: none; }
+  .wx-main-inner .netOrderCureTime {
+    display: none; }
+  .wx-main-inner .wx-comm-topSmall {
+    padding: 0.48rem 0.64rem;
+    position: relative;
+    height: 0.53333rem;
+    background: url("/image/img00/wx/pay_status_bg_small.png") no-repeat center;
+    background-size: 100% 100%; }
+    .wx-main-inner .wx-comm-topSmall .wx-comm-topCover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1.49333rem;
+      opacity: 0.5;
+      z-index: 1; }
+    .wx-main-inner .wx-comm-topSmall .wx-comm-topText {
+      font-size: 14px;
+      color: #ffffff; }
+      [data-dpr="2"] .wx-main-inner .wx-comm-topSmall .wx-comm-topText {
+        font-size: 28px; }
+      [data-dpr="3"] .wx-main-inner .wx-comm-topSmall .wx-comm-topText {
+        font-size: 42px; }
+  .wx-main-inner .wx-public-hospital {
+    font-size: 13px;
+    color: #BDBDBD;
+    padding: 0.58667rem 0.64rem; }
+    [data-dpr="2"] .wx-main-inner .wx-public-hospital {
+      font-size: 26px; }
+    [data-dpr="3"] .wx-main-inner .wx-public-hospital {
+      font-size: 39px; }
+    .wx-main-inner .wx-public-hospital .wx-public-hospitalLeft {
+      float: left; }
+    .wx-main-inner .wx-public-hospital .wx-public-hospitalRight {
+      padding-left: 0.66667rem; }
+  .wx-main-inner .wx-appointment-submitMain {
+    padding-top: 1.17333rem; }
+    .wx-main-inner .wx-appointment-submitMain .wx-submit-successLogo span {
+      display: block;
+      width: 2.18667rem;
+      height: 2.18667rem;
+      background: url("/image/img00/wx/pay_success.png") no-repeat center;
+      background-size: 100% 100%;
+      margin: 0 auto; }
+    .wx-main-inner .wx-appointment-submitMain .wx-submit-successText {
+      font-size: 17px;
+      color: #222222;
+      text-align: center;
+      padding: 0.66667rem 0 0.48rem 0; }
+      [data-dpr="2"] .wx-main-inner .wx-appointment-submitMain .wx-submit-successText {
+        font-size: 34px; }
+      [data-dpr="3"] .wx-main-inner .wx-appointment-submitMain .wx-submit-successText {
+        font-size: 51px; }
+    .wx-main-inner .wx-appointment-submitMain .wx-submit-successContent {
+      font-size: 14px;
+      color: #AAAAAA;
+      padding: 0 1.28rem 0.74667rem 1.28rem; }
+      [data-dpr="2"] .wx-main-inner .wx-appointment-submitMain .wx-submit-successContent {
+        font-size: 28px; }
+      [data-dpr="3"] .wx-main-inner .wx-appointment-submitMain .wx-submit-successContent {
+        font-size: 42px; }
+    .wx-main-inner .wx-appointment-submitMain .wx-waitInform {
+      font-size: 14px;
+      color: #AAAAAA;
+      text-align: center;
+      padding: 0.42667rem 0 0.74667rem 0; }
+      [data-dpr="2"] .wx-main-inner .wx-appointment-submitMain .wx-waitInform {
+        font-size: 28px; }
+      [data-dpr="3"] .wx-main-inner .wx-appointment-submitMain .wx-waitInform {
+        font-size: 42px; }
+    .wx-main-inner .wx-appointment-submitMain .wx-continueConsult {
+      font-size: 16px;
+      color: #00BEAF;
+      text-align: center;
+      padding-bottom: 0.82667rem; }
+      [data-dpr="2"] .wx-main-inner .wx-appointment-submitMain .wx-continueConsult {
+        font-size: 32px; }
+      [data-dpr="3"] .wx-main-inner .wx-appointment-submitMain .wx-continueConsult {
+        font-size: 48px; }
+      .wx-main-inner .wx-appointment-submitMain .wx-continueConsult .wx-continueConsult-text {
+        position: relative; }
+        .wx-main-inner .wx-appointment-submitMain .wx-continueConsult .wx-continueConsult-text .wx-continueConsult-right {
+          position: absolute;
+          display: block;
+          content: '';
+          width: 0.26667rem;
+          height: 0.26667rem;
+          right: -0.4rem;
+          top: 50%;
+          margin-top: -0.13333rem;
+          background: url("/image/img00/wx/pay_arrow.png") no-repeat center;
+          background-size: 100% 100%; }
+  .wx-main-inner .wx-select-timeMain .wx-selectTop-info {
+    padding: 0.53333rem; }
+    .wx-main-inner .wx-select-timeMain .wx-selectTop-info:after {
+      content: '';
+      display: table;
+      clear: both; }
+    .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-left {
+      float: left; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-left .wx-docLogoBox {
+        position: relative;
+        display: inline-block;
+        font-size: 0; }
+        .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-left .wx-docLogoBox .wx-doctorLogo {
+          width: 1.49333rem;
+          height: 1.49333rem; }
+        .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-left .wx-docLogoBox .wx-doctor-identification {
+          position: absolute;
+          display: inline-block;
+          width: 0.48rem;
+          height: 0.48rem;
+          right: 0;
+          bottom: 0;
+          background: url("/image/img00/wx/identification.png") no-repeat center;
+          background-size: 100% 100%; }
+    .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right {
+      padding-left: 1.97333rem; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-name {
+        font-size: 16px;
+        display: inline-block;
+        color: #222222;
+        width: 3.14667rem;
+        verflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -webkit-box-orient: vertical; }
+        [data-dpr="2"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-name {
+          font-size: 32px; }
+        [data-dpr="3"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-name {
+          font-size: 48px; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-post {
+        font-size: 15px;
+        color: #B3B9C4;
+        padding-left: 0.21333rem;
+        padding-right: 0.37333rem; }
+        [data-dpr="2"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-post {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-post {
+          font-size: 45px; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-degree {
+        font-size: 15px;
+        color: #B3B9C4; }
+        [data-dpr="2"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-degree {
+          font-size: 30px; }
+        [data-dpr="3"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-degree {
+          font-size: 45px; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-hospital {
+        font-size: 14px;
+        color: #555555;
+        padding-top: 0.37333rem;
+        padding-bottom: 0.32rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -webkit-box-orient: vertical; }
+        [data-dpr="2"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-hospital {
+          font-size: 28px; }
+        [data-dpr="3"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-selectDoc-hospital {
+          font-size: 42px; }
+      .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list {
+        font-size: 14px;
+        color: #555555;
+        position: relative; }
+        [data-dpr="2"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list {
+          font-size: 28px; }
+        [data-dpr="3"] .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list {
+          font-size: 42px; }
+        .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list:not(:last-child) {
+          margin-right: 0.18667rem; }
+          .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list:not(:last-child):after {
+            position: absolute;
+            content: '';
+            width: 0.02667rem;
+            height: 0.18667rem;
+            top: 50%;
+            margin-top: -0.12rem;
+            right: -0.13333rem;
+            background-color: #B3B9C4; }
+        .wx-main-inner .wx-select-timeMain .wx-selectTop-info .wx-selectInfo-right .wx-docSubject-item .wx-docSubject-list:not(:first-child) {
+          margin-left: 0.09333rem; }
+  .wx-main-inner .wx-select-timeMain .wx-selectMo-gap {
+    height: 0.18667rem;
+    background-color: #F3F6F7; }
+
+.maskers.selectOrderClose .confirmBox-content {
+  border-bottom: none; }
+  .maskers.selectOrderClose .confirmBox-content article h2 {
+    font-size: 17px;
+    color: #333333;
+    margin-bottom: 0.29333rem; }
+    [data-dpr="2"] .maskers.selectOrderClose .confirmBox-content article h2 {
+      font-size: 34px; }
+    [data-dpr="3"] .maskers.selectOrderClose .confirmBox-content article h2 {
+      font-size: 51px; }
+  .maskers.selectOrderClose .confirmBox-content article p {
+    position: relative;
+    text-align: left;
+    padding-left: 0.73333rem;
+    font-size: 16px;
+    color: #555555; }
+    [data-dpr="2"] .maskers.selectOrderClose .confirmBox-content article p {
+      font-size: 32px; }
+    [data-dpr="3"] .maskers.selectOrderClose .confirmBox-content article p {
+      font-size: 48px; }
+    .maskers.selectOrderClose .confirmBox-content article p:not(:last-child) {
+      margin-bottom: 0.37333rem; }
+    .maskers.selectOrderClose .confirmBox-content article p:after {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 0.48rem;
+      height: 0.48rem;
+      top: 50%;
+      margin-top: -0.25333rem;
+      left: 0;
+      background: url("/image/img00/wx/pay_select_inactivated-07.png") no-repeat center;
+      background-size: 100% 100%; }
+    .maskers.selectOrderClose .confirmBox-content article p.selected:after {
+      background: url("/image/img00/wx/pay_select_activation-08.png") no-repeat center;
+      background-size: 100% 100%; }
+
+.maskers.selectOrderClose .confirmBox-textarea-box {
+  padding: 0 0.64rem;
+  margin-bottom: 0.64rem;
+  display: none; }
+  .maskers.selectOrderClose .confirmBox-textarea-box textarea {
+    box-sizing: border-box;
+    padding: 0.32rem;
+    width: 100%;
+    border: none;
+    background: #F9FBFB;
+    font-size: 14px;
+    color: #555555; }
+    [data-dpr="2"] .maskers.selectOrderClose .confirmBox-textarea-box textarea {
+      font-size: 28px; }
+    [data-dpr="3"] .maskers.selectOrderClose .confirmBox-textarea-box textarea {
+      font-size: 42px; }
+
+.maskers.selectOrderClose .confirmBox-btns {
+  border-top: 1px solid #DFDFDF; }
+  .maskers.selectOrderClose .confirmBox-btns .confirmBox-cancelBtn.disabled {
+    color: #aaaaaa; }
+
+.wx-main-content.orderDetails .wx-baseListRight .wx-surgical-timeTips {
+  padding-left: 0.26667rem; }
+
+.wx-main-content.orderDetails .wx-baseListRight .wx-surgical-timeSeconds {
+  padding-left: 0.26667rem; }

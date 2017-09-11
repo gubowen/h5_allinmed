@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>认证</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/app_native/authentication.css">
+</head>
+<body>
+<section class="main-inner">
+
+
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">医师认证</a>
+        <a href="javascript:void(0)" class="main-header-item">&nbsp</a>
+    </header>
+
+
+    <article class="header-tips">
+        <p>认证后，即可开通咨询、预约、手术等服务</p>
+    </article>
+
+
+    <section class="aut-list" style="margin-top: 0;">
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>姓名</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <input type="text" placeholder="请输入姓名">
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>性别</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-sex-selector icon-aut-selector on"><span>男</span></section>
+                <section class="aut-sex-selector icon-aut-selector"><span>女</span></section>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>年龄</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请输入年龄</span>
+            </figure>
+        </article>
+    </section>
+
+
+    <section class="aut-list">
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>医院</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择医院</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>专业</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择专业</span>
+            </figure>
+        </article>
+    </section>
+
+
+    <section class="aut-list">
+        <header class="aut-list-item-header">近2年独立完成骨科手术病例数</header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span class="grey-title">2016年</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <span class="modal-inner">请输入手术病例数</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span class="grey-title">2015年</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <span class="modal-inner">请输入手术病例数</span>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">二级以上负主要责任的医疗事故</header>
+        <article class="aut-list-item single-selector">
+            <figure class="aut-list-item-input">
+                <section class="aut-sex-selector icon-aut-selector"><span>无</span></section>
+                <section class="aut-sex-selector icon-aut-selector"><span>有</span></section>
+            </figure>
+        </article>
+    </section>
+
+
+    <section class="aut-list">
+        <header class="aut-list-header"><span>职称履历</span></header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>最高职称</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择职称</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>起止时间</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-list-item-time">
+                    <select name="" id="">
+                        <option value="">2017</option>
+                    </select>
+                    <span>年</span>
+                    <select name="" id="">
+                        <option value="">12</option>
+                    </select>
+                    <span>月</span>
+                </section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time">
+                    <select name="" id="">
+                        <option value="">2017</option>
+                    </select>
+                    <span>年</span>
+                    <select name="" id="">
+                        <option value="">12</option>
+                    </select>
+                    <span>月</span>
+                </section>
+            </figure>
+        </article>
+    </section>
+
+    <section class="aut-list" style="margin-bottom: 0;">
+        <header class="aut-list-header">上传在线执业资料</header>
+
+        <header class="aut-list-item-header">手持身份证正反面</header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">正面示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">反面示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">医师执业证书第一、二两页</header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第一页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第二页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">医师资格证第一、二两页</header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第一页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-upload-img">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第二页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <article>
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>更多资料</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择证书类型(选填)</span>
+            </figure>
+        </article>
+    </section>
+    <footer class="btn-full next-path on">保存并下一步</footer>
+</section>
+
+<section class="main-inner">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">医师认证</a>
+        <a href="javascript:void(0)" class="main-header-item btn-top">跳过</a>
+    </header>
+
+
+    <article class="header-tips">
+        <p>信息越齐全，推荐用户越多</p>
+    </article>
+    <section class="aut-list">
+        <header class="aut-list-header"><span>教育背景</span><em>(从高到低填写)</em></header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>学历</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择学历</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>学校</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择学校或机构</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>专业</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner">请选择专业</span>
+            </figure>
+        </article>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>最高职称</span>
+            </figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-list-item-time">
+                    <select name="" id="">
+                        <option value="">2017</option>
+                    </select>
+                    <span>年</span>
+                    <select name="" id="">
+                        <option value="">12</option>
+                    </select>
+                    <span>月</span>
+                </section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time">
+                    <select name="" id="">
+                        <option value="">2017</option>
+                    </select>
+                    <span>年</span>
+                    <select name="" id="">
+                        <option value="">12</option>
+                    </select>
+                    <span>月</span>
+                </section>
+            </figure>
+        </article>
+        <footer class="add-edu-background">
+            <span>添加教育背景</span>
+        </footer>
+    </section>
+    <section class="aut-list">
+        <header class="aut-list-header"><span>继续教育</span></header>
+        <article class="aut-list-item">
+            <button class="btn-select has-selector on">有</button>
+            <button class="btn-select has-selector">无</button>
+        </article>
+        <section class="aut-list-second">
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>机构</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入学术机构">
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>时间</span>
+                </figcaption>
+                <figure class="aut-list-item-input">
+                    <span class="hr-text">至</span>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>获得证书</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入获得证书或荣誉">
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>培训内容</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入培训内容">
+                </figure>
+            </article>
+
+        </section>
+        <footer class="add-edu-background">
+            <span>添加继续教育</span>
+        </footer>
+    </section>
+    <section class="aut-list" style="margin-bottom: 0;">
+        <header class="aut-list-header"><span>进修经历</span></header>
+        <article class="aut-list-item">
+            <button class="btn-select has-selector on">有</button>
+            <button class="btn-select has-selector">无</button>
+        </article>
+        <section class="aut-list-second">
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>地点</span>
+                </figcaption>
+                <figure class="aut-list-item-input">
+                    <section class="aut-sex-selector icon-aut-selector on"><span>国内</span></section>
+                    <section class="aut-sex-selector icon-aut-selector"><span>国外</span></section>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>机构</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <span class="modal-inner">请选择学术机构</span>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>时间</span>
+                </figcaption>
+                <figure class="aut-list-item-input">
+                    <span class="hr-text">至</span>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>进修说明</span>
+                </figcaption>
+                <figure class="aut-list-item-input ">
+                    <input type="text" placeholder="请输入进修内容">
+                </figure>
+            </article>
+
+        </section>
+        <footer class="add-edu-background">
+            <span>添加继续进修</span>
+        </footer>
+    </section>
+
+    <footer class="btn-full next-path on">保存并下一步</footer>
+</section>
+
+<section class="main-inner">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">添加头像</a>
+        <a href="javascript:void(0)" class="main-header-item btn-top">跳过</a>
+    </header>
+    <section class="img-upload-inner">
+        <div class="bg-mask">
+            <img src="/image/img00/app_native/add photo_bg@2x.png" alt="">
+        </div>
+        <section class="img-upload">
+            <figure class="img-upload-input">
+                <img src="/image/img00/app_native/upload_portrait2x.png" alt="">
+            </figure>
+            <figcaption class="img-upload-content">
+                <p>上传真实头像后，有助于和患者</p>
+                <p>亲切交流！</p>
+            </figcaption>
+        </section>
+        <footer class="img-upload-submit on">
+            <p>完成</p>
+        </footer>
+    </section>
+</section>
+</body>
+</html>

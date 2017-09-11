@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>填写就诊信息</title>
+    <meta name="data-alcode" content="a9"  >
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/patientReport/medical_info.css">
+</head>
+
+<body data-alcode="55" >
+<section class="main-inner he-main">
+    <!--就诊信息内容-->
+    <section class="medical-info-box">
+        <!--就诊信息顶部内容-->
+        <section class="info-nav">
+            <!--就诊的疾病-->
+            <ul class="info-ill" data-alcode-mod='583'>
+                <li class="info-ill-left">所患疾病</li>
+                <li class="info-ill-right disease" data-alcode='e100'>请选择患病部位及疾病名称</li>
+            </ul>
+            <!--就诊详情导航-->
+            <section class="info-nav-box">
+                <h2 class="info-nav-title">请选择当前状态</h2>
+                <nav class="info-nav-list" data-alcode-mod='584' data-alcode-item-selector=".info-nav-item">
+                    <span class="info-nav-item" data-type="1">门诊后</span>
+                    <span class="info-nav-item" data-type="2">住院中</span>
+                    <span class="info-nav-item" data-type="3">已出院</span>
+                    <span class="info-nav-item" data-type="4">术后复诊</span>
+                </nav>
+            </section>
+
+        </section>
+        <!--就诊信息详情填写-->
+        <!--门诊后的信息填写-->
+        <section class="info-description" data-type="1">
+            <dl class="info-desc-desc has-time visitTime" data-required="1">
+                <dt class="info-desc-left">就诊时间</dt>
+                <dd class="info-desc-right" data-alcode-mod='586' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="outpatientAfterYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="outpatientAfterMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="outpatientAfterDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+            <h4 class="info-description-title">医生建议</h4>
+            <section class="info-desc-list first-selector doctorSuggest" data-alcode-mod='587' data-alcode-item-selector=".info-desc-item" data-required="1">
+                <div class="info-desc-item single-choices" data-type="1"><i class="icon-select"></i><span>拍片检查</span></div>
+                <div class="info-desc-item single-choices" data-type="2"><i class="icon-select"></i><span>药物治疗（针剂治疗等）</span></div>
+                <div class="info-desc-item single-choices" data-type="3"><i class="icon-select"></i><span>门诊小手术</span></div>
+                <div class="info-desc-item single-choices" data-type="4"><i class="icon-select"></i><span>住院治疗(无需手术)</span></div>
+                <div class="info-desc-item single-choices" data-type="5">
+                    <i class="icon-select"></i><span>手术治疗</span>
+                    <section class="info-desc-list second-selector" data-required="0">
+                        <div class="info-desc-item single-choices" data-type="1"><i class="icon-select"></i><span>等待住院</span></div>
+                        <div class="info-desc-item single-choices" data-type="2"><i class="icon-select"></i><span>正在考虑</span></div>
+                    </section>
+                </div>
+            </section>
+        </section>
+        <!--住院中的信息填写-->
+        <section class="info-description" data-type="2">
+            <dl class="info-desc-desc has-time enterTime" data-required="1">
+                <dt class="info-desc-left">入院时间</dt>
+                <dd class="info-desc-right" data-alcode-mod='588' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="inHospitalInYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="inHospitalInMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="inHospitalInDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+            <h4 class="info-description-title">治疗方式</h4>
+            <section class="info-desc-list first-selector treatMethod" data-alcode-mod='589' data-alcode-item-selector=".info-desc-item" data-required="1">
+                <div class="info-desc-item single-choices" data-type="1"><i class="icon-select"></i><span>药物治疗（药剂治疗等）</span></div>
+                <div class="info-desc-item single-choices" data-type="2"><i class="icon-select"></i><span>手术治疗</span></div>
+                <dl class="info-desc-desc info-desc-last operation" data-required="0">
+                    <dt class="info-desc-left">手术名称</dt>
+                    <dd class="info-desc-right" data-alcode='e111' id="inHospitalOperation">请选择手术名称</dd>
+                </dl>
+            </section>
+        </section>
+        <!--已出院的信息填写-->
+        <section class="info-description" data-type="3">
+            <dl class="info-desc-desc has-time enterTime" data-required="1">
+                <dt class="info-desc-left">入院时间</dt>
+                <dd class="info-desc-right" data-alcode-mod='591' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="leaveHospitalInYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="leaveHospitalInMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="leaveHospitalInDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+            <dl class="info-desc-desc has-time leaveTime" data-required="1">
+                <dt class="info-desc-left">出院时间</dt>
+                <dd class="info-desc-right" data-alcode-mod='592' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="leaveHospitalOutYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="leaveHospitalOutMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="leaveHospitalOutDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+            <dl class="info-desc-desc" data-required="1" data-alcode-mod='595'>
+                <dt class="info-desc-left">复诊建议</dt>
+                <dd class="info-desc-right" data-alcode='e103' id="visitAdvice">请选择复诊建议</dd>
+            </dl>
+            <h4 class="info-description-title">治疗方式</h4>
+            <section class="info-desc-list first-selector treatMethod" data-alcode-mod='593' data-alcode-item-selector=".info-desc-item" data-required="1">
+                <div class="info-desc-item single-choices" data-type="1"><i class="icon-select"></i><span>药物治疗（药剂治疗等）</span></div>
+                <div class="info-desc-item single-choices" data-type="2"><i class="icon-select"></i><span>手术治疗</span></div>
+                <dl class="info-desc-desc info-desc-last operation" data-required="0">
+                    <dt class="info-desc-left">手术名称</dt>
+                    <dd class="info-desc-right" data-alcode='e112' id="leaveHospitalOperation">请选择手术名称</dd>
+                </dl>
+            </section>
+        </section>
+        <!--术后复诊的详情-->
+        <section class="info-description" data-type="4">
+            <dl class="info-operation-check operation" data-alcode-mod='596' data-required="1">
+                <dt class="info-operation-left">手术名称</dt>
+                <dd class="info-operation-right" data-alcode='e106' id="operationVisitOperation">请选择手术名称</dd>
+            </dl>
+            <dl class="info-operation-check has-time operationTime" data-required="1">
+                <dt class="info-operation-left">手术时间</dt>
+                <dd class="info-operation-right" data-alcode-mod='598' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="operationVisitOperationYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="operationVisitOperationMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="operationVisitOperationDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+            <dl class="info-operation-check has-select revisitType"  data-alcode-mod='599' data-required="1">
+                <dt class="info-operation-left">复诊阶段</dt>
+                <dd class="info-operation-right" data-alcode='e107' id="visitStage">
+                    请选择复诊阶段
+                    <!--<span class="show">请选择复诊阶段</span>-->
+                    <!--<select id="visitStage">-->
+                        <!--<option value="" style="display: none"></option>-->
+                        <!--<option value="首次复诊" data-type="1">首次复诊</option>-->
+                        <!--<option value="第二次复诊" data-type="2">第二次复诊</option>-->
+                        <!--<option value="第三次复诊" data-type="3">第三次复诊</option>-->
+                        <!--<option value="三次以上" data-type="4">三次以上</option>-->
+                    <!--</select>-->
+                </dd>
+            </dl>
+            <dl class="info-operation-check has-time revisitTime" data-required="1">
+                <dt class="info-operation-left">本次复诊时间</dt>
+                <dd class="info-operation-right" data-alcode-mod='600' data-alcode-item-selector=".dateSelector">
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector year" id="operationVisitVisitYear"></select>
+                        <span>年</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector month" id="operationVisitVisitMonth"></select>
+                        <span>月</span>
+                    </article>
+                    <article class="tableModuleSelect">
+                        <select class="dateSelector day" id="operationVisitVisitDay"></select>
+                        <span>日</span>
+                    </article>
+                </dd>
+            </dl>
+        </section>
+    </section>
+
+    <footer class="medical-info-footer" data-alcode-mod='601'>
+        <button class="footer-btn disabled" data-alcode='e108' id="footerBtn" disabled = "disabled">报到</button>
+        <img class="loading" src="/image/img00/directOperation/loading.png" alt="loading...">
+    </footer>
+</section>
+
+<!--选择复诊建议的盒子-->
+<section class="visit-advice-box">
+    <section class="visit-advice-container"  data-alcode-mod='602'>
+        <header class="visit-advice-top">
+            <p class="visit-advice-title">复诊建议<em>(可多选)</em></p>
+            <span class="visit-advice-cancel" data-alcode='e109'></span>
+        </header>
+        <section class="visit-advice-select">
+            <ul class="visit-advice-list">
+                <li class="visit-advice-item" data-type="1"><span>出院后三天复查</span></li>
+                <li class="visit-advice-item" data-type="2"><span>出院后一周复查</span></li>
+                <li class="visit-advice-item" data-type="3"><span>出院后两周复查</span></li>
+                <li class="visit-advice-item" data-type="4"><span>出院后一月复查</span></li>
+                <li class="visit-advice-item" data-type="5"><span>出院后三月复查</span></li>
+                <li class="visit-advice-item" data-type="6"><span>出院后半年复查</span></li>
+                <li class="visit-advice-item" data-type="7"><span>出院后一年复查</span></li>
+                <li class="visit-advice-item" data-type="8" id="visitAdviceOther" data-times="0"><span>其他</span></li>
+                <li class="visit-advice-item" data-type="9"><span class="without">无需复诊</span></li>
+            </ul>
+            <section class="visit-advice-bottom">
+                <button class="visit-advice-btn"  data-alcode='e110'>完成</button>
+            </section>
+        </section>
+        <section class="visit-advice-write">
+            <section class="visit-advice-content">
+                <input type="text" placeholder="其他复诊建议" class="visit-advice-write-input">
+                <button class="visit-advice-write-btn">添加</button>
+            </section>
+        </section>
+    </section>
+</section>
+
+<aside class="searchTypeSelect">
+
+</aside>
+
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="//paas.allinmd.cn/modules/sps/sps.js"></script>
+<script src="/js/common/log.js"></script>
+
+<script src="/js/third-party/picker.min.js"></script>
+
+<script src="/js/plugins/q.js"></script>
+<script src="/js/plugins/plugins.validate.js"></script>
+<script src="/js/plugins/plugins.selector.js"></script>
+<script src="/js/plugins/plugins.firstLetter.js"></script>
+<script src="/js/third-party/ymd.js"></script>
+
+<script src="/js/modules/module.search.input.js"></script>
+<script src="/js/modules/module.search.list.js"></script>
+
+<script src="/js/scene/patientReport/scene.patientReport.medicalInfo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单支付</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/wxPay/wx_pay.css">
+</head>
+<body>
+<section class="wx-main-inner wx-orderForPay-main">
+    <section class="wx-main-content no-marginTop reviewNetOrder">
+        <section class="wx-orderComm-baseBox">
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">医生姓名</li>
+                <li class="wx-baseListRight">徐伟</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单类型</li>
+                <li class="wx-baseListRight">互联网手术</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单类型</li>
+                <li class="wx-baseListRight">广州市第一人民路12号广州第一
+                    人民医院第一人民医院</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">手术时间</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-baseSurgicalTime">2016年10月27日</span><span class="wx-baseSurgicalDate">上午</span>
+                </li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单金额</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-payTotal"><span class="wx-payMark">￥</span>10,000.00</span>
+                </li>
+            </ul>
+        </section>
+        <section class="wx-comm-bottomBtn">
+            <button class="wx-comm-bottomBtnLeft">
+                <span class="wx-needPay">需支付</span><span class="wx-payTotal"><span class="wx-payMark">￥</span>10,000.00</span>
+            </button>
+            <button class="wx-comm-bottomBtnRight wx-goPay">去支付</button>
+        </section>
+    </section>
+</section>
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/common.js"></script>
+<script>
+    $(function () {
+        common.selectConfirmBox({
+            title:"请选择取消原因",
+            data:{
+                list:[{
+                    text:"已找其他医生",
+                    id:"123123"
+                }, {
+                        text:"已找其他医生",
+                        id:"233333"
+                    },
+                    {
+                        text:"已找其他医生",
+                        id:"233333"
+                    },
+                    {
+                        text:"已找其他医生",
+                        id:"233333"
+                    },
+                    {
+                        text:"其他原因",
+                        id:"233333"
+                    }],
+                input:true
+            },
+            cancel:"取消订单",
+            ensure:"继续支付",
+            ensureCallback:function () {
+                alert("fuck")
+            },
+            cancelCallback:function () {
+                alert("nyanyanya")
+            }
+        })
+    });
+</script>
+</body>
+
+</html>

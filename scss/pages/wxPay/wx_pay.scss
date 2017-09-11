@@ -1,0 +1,618 @@
+@charset "UTF-8";
+@import "../../library/common-modules";
+@import "../../modules/_wxProcedureOrder";  //手术单模块
+
+//html,body{
+//  height: 100%;
+//}
+.wx-main-inner{
+  height: 100%;
+  //订单comm部分
+  .wx-orderComm-baseBox{
+    padding: rem(48px) rem(48px) 0 rem(48px);
+    background-color: #ffffff;
+    .wx-baseItemBox{
+      @include clearfix();
+      padding-bottom: rem(68px);
+      .wx-baseListLeft{
+        @include font-dpr(15px);
+
+        float: left;
+        color: #909090;
+        width: rem(125px);
+        margin-right: rem(68px);
+        &.wx-refund-total{
+          position: relative;
+          .wx-refund-detail{
+            position: absolute;
+            top: 50%;
+            margin-top: rem(-18px);
+            right: rem(-8px);
+            width: rem(36px);
+            height: rem(36px);
+            background: url("/image/img00/wx/pay_question_remind.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-refund-tipsComm{
+              display: none;
+              position: relative;
+              .wx-refund-tipsBox{
+                position: absolute;
+                width: rem(548.4px);
+                height: rem(388.8px);
+                background: #FFFFFF;
+                box-shadow: 0 2px 10px 0 rgba(0,190,175,0.25);
+                top: rem(-419px);
+                left: rem(-42px);
+                border-radius: 20px;
+                .wx-refund-conformMain{
+                  position: relative;
+                  height: 100%;
+                  .wx-refund-bottomMark{
+                    position: absolute;
+                    display: inline-block;
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border: rem(24px) solid transparent;
+                    border-top:rem(24px) solid rgba(0,190,175,0.25);
+                    bottom: rem(-48px);
+                    left: rem(37px);
+                    opacity: 0.5;
+                  }
+                  .wx-refund-bottomMarkBack{
+                    position: absolute;
+                    display: inline-block;
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border: rem(22px) solid transparent;
+                    border-top:rem(22px) solid #ffffff;
+                    bottom: rem(-42px);
+                    left: rem(38px);
+                  }
+                  .wx-close-role{
+                    @include font-dpr(14px);
+                    color: #909090;
+                    padding-top:rem(42px);
+                    padding-bottom: rem(30px);
+                    text-align: center;
+                  }
+                  .wx-close-cost{
+                    @include font-dpr(14px);
+                    color: #333333;
+                    padding-bottom: rem(16px);
+                    text-align: center;
+                  }
+                  .wx-close-costRole{
+                    @include font-dpr(14px);
+                    color: #6B7698;
+                    text-align: center;
+                    padding-bottom: rem(32px);
+                    .wx-close-percent{
+                      @include font-dpr(14px);
+                      color: #F76365;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .wx-baseListRight{
+        @include font-dpr(16px);
+        padding-left: rem(193px);
+        color: #555555;
+        //手术时间
+        .wx-baseSurgicalTime{
+          margin-right: rem(40px);
+        }
+        .wx-payTotal{
+          @include font-dpr(18px);
+          color: #F76365;
+          .wx-payMark{
+            @include font-dpr(12px);
+          }
+        }
+      }
+    }
+  }
+  //支付底部样式
+  .wx-comm-bottomBtn{
+    @include clearfix();
+    position: fixed;
+    bottom: rem(-4px);
+    left: 0;
+    width: 100%;
+    box-shadow: 0 1px 4px 0 #EFF1F6;
+    .wx-comm-bottomBtnLeft{
+      float: left;
+      width: 50%;
+      height: rem(98px);
+      background-color: #ffffff;
+      line-height: rem(98px);
+      text-align: center;
+      //需支付样式
+      .wx-needPay{
+        @include font-dpr(15px);
+        color: #555555;
+        padding-right: rem(12px);
+      }
+      .wx-payTotal{
+        @include font-dpr(18px);
+        color: #F76365;
+        .wx-payMark{
+          @include font-dpr(12px);
+        }
+      }
+      //退款
+      &.wx-refund,&.wx-closeOrder{
+        @include font-dpr(16px);
+        color: #909090;
+      }
+    }
+    .wx-comm-bottomBtnRight{
+      width: 50%;
+      height: rem(98px);
+      background-color: #00D6C6;
+      line-height: rem(98px);
+      text-align: center;
+      &.wx-goPay,&.wx-goConsult,&.wx-goCheck,&.wx-procedureGoPay{
+        @include font-dpr(16px);
+        color: #FFFFFF;
+      }
+      &.wx-closeBtnForDoor{
+        width: 100%;
+        color: #ffffff;
+        @include font-dpr(16px);
+      }
+    }
+    //底部只有一个按钮
+    .wx-comm-bottomBtnOver{
+      text-align: center;
+      @include font-dpr(16px);
+      color: #FFFFFF;
+      padding: rem(34px) 0;
+      width: 100%;
+      background: #00D6C6;
+    }
+  }
+  //支付进度条comm
+  .wx-orderProgressComm{
+    padding: rem(36px) rem(48px);
+    position: relative;
+    height: rem(145px);
+    background: url("/image/img00/wx/pay_status_bg_small.png") no-repeat center;
+    background-size: 100% 100%;
+    .wx-orderProgressCover{
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: rem(214px);
+      opacity:0.5;
+      z-index: 1;
+    }
+    .wx-progressBarBox{
+      position: absolute;
+      width: rem(654px);
+      top:rem(34px);
+      left: rem(48px);
+      padding-left: rem(26px);
+      padding-bottom: rem(68px);
+      z-index: 5;
+      @include clearfix();
+      .wx-progressItemBox{
+        float: left;
+        &.progress-hasBar{
+          width: rem(292px);
+        }
+        .wx-progressItem{
+          float: left;
+          position: relative;
+          width: rem(26px);
+          height: rem(24px);
+          text-align: center;
+          border-radius:50%;
+          font-size: 0;
+          background-color: #9798A6;
+          .wx-progressLine{
+            position: absolute;
+            left: rem(38px);
+            width: rem(236px);
+            height: rem(2px);
+            background-color: #858487;
+            top:50%;
+            margin-top: rem(-1px);
+            -webkit-border-radius: 100px;
+            -moz-border-radius: 100px;
+            border-radius: 100px;
+          }
+          .wx-progressText{
+            @include font-dpr(13px);
+            color: #858487;
+            position: absolute;
+            display: inline-block;
+            width: rem(100px);
+            bottom: rem(-30px);
+            left: 50%;
+            margin-left: rem(-50px);
+            text-align: center;
+          }
+          //支付状态
+          &.wx-waitPay{
+            background: url("/image/img00/wx/pay_status_on_1.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #00BEAF;
+            }
+          }
+          &.wx-isPay{
+            background: url("/image/img00/wx/pay_status_completed.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #00BEAF;
+            }
+            .wx-progressLine{
+              background-color:#00BEAF;
+            }
+          }
+          //就诊状态
+          &.wx-notSurgical{
+            background: url("/image/img00/wx/pay_status_off_2.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #858487;
+            }
+          }
+          &.wx-waitSurgical{
+            background: url("/image/img00/wx/pay_status_on_2.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #00BEAF;
+            }
+          }
+          &.wx-isSurgical{
+            background: url("/image/img00/wx/pay_status_completed.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #00BEAF;
+            }
+            .wx-progressLine{
+              background-color:#00BEAF;
+            }
+          }
+          //完成状态
+          &.wx-payWaitOver{
+            background: url("/image/img00/wx/pay_status_off_3.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+          &.wx-payIsOver{
+            background: url("/image/img00/wx/pay_status_on_3.png") no-repeat center;
+            background-size: 100% 100%;
+            .wx-progressText{
+              color: #00BEAF;
+            }
+          }
+        }
+      }
+    }
+    //进度提示标题
+    .wx-progressTextBox{
+      position: absolute;
+      width: rem(654px);
+      top:rem(146px);
+      left: rem(48px);
+      z-index: 5;
+      @include font-dpr(14px);
+      color: #FFFFFF;
+      .wx-remainingTime{
+        @include font-dpr(14px);
+        color: #00BEAF;
+        margin-right: rem(4px);
+      }
+    }
+    //无提示标题进度条模块
+    &.notHasTips{
+      height: rem(62px);
+      .wx-orderProgressCover{
+        height: rem(134px);
+      }
+      .wx-progressBarBox{
+        padding-bottom: 0;
+      }
+    }
+  }
+  .wx-orderComm-baseLine{
+    width: 100%;
+    height: rem(14px);
+    background-color: #F3F6F7;
+  }
+  .wx-order-infoBase{
+    background-color: #ffffff;
+    //margin-bottom: rem(110px);
+    padding: rem(44px) rem(48px) rem(130px) rem(48px);
+    .wx-order-patientInfoBox{
+      .wx-order-patientInfoItem{
+        @include font-dpr(13px);
+        color: #BDBDBD;
+        padding-bottom: rem(28px);
+        .wx-patientNameLeft{
+          float: left;
+        }
+        .wx-patientNameRight{
+          display: block;
+          padding-left: rem(130px);
+        }
+      }
+    }
+  }
+  //互联网医院地区样式
+  .netOrderCureArea{
+    display: none;
+  }
+  .netOrderCureTime{
+    display: none;
+  }
+  //顶部banner small
+  .wx-comm-topSmall{
+    padding: rem(36px) rem(48px);
+    position: relative;
+    height: rem(40px);
+    background: url("/image/img00/wx/pay_status_bg_small.png") no-repeat center;
+    background-size: 100% 100%;
+    .wx-comm-topCover{
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: rem(112px);
+      opacity:0.5;
+      z-index: 1;
+    }
+    .wx-comm-topText{
+      @include font-dpr(14px);
+      color: #ffffff;
+    }
+  }
+  //公立医院注意
+  .wx-public-hospital{
+    @include font-dpr(13px);
+    color: #BDBDBD;
+    padding: rem(44px) rem(48px);
+    .wx-public-hospitalLeft{
+      float: left;
+    }
+    .wx-public-hospitalRight{
+      padding-left: rem(50px);
+    }
+  }
+  //预约提交成功
+  .wx-appointment-submitMain{
+    padding-top:rem(88px);
+    .wx-submit-successLogo{
+      span{
+        display: block;
+        width: rem(164px);
+        height: rem(164px);
+        background: url("/image/img00/wx/pay_success.png") no-repeat center;
+        background-size: 100% 100%;
+        margin: 0 auto;
+      }
+    }
+    .wx-submit-successText{
+      @include font-dpr(17px);
+      color: #222222;
+      text-align: center;
+      padding: rem(50px) 0 rem(36px) 0;
+
+    }
+    .wx-submit-successContent{
+      @include font-dpr(14px);
+      color: #AAAAAA;
+      padding: 0 rem(96px) rem(56px) rem(96px);
+    }
+    .wx-waitInform{
+      @include font-dpr(14px);
+      color: #AAAAAA;
+      text-align: center;
+      padding: rem(32px) 0 rem(56px) 0;
+    }
+    .wx-continueConsult{
+      @include font-dpr(16px);
+      color: #00BEAF;
+      text-align: center;
+      padding-bottom: rem(62px);
+      .wx-continueConsult-text{
+        position: relative;
+        .wx-continueConsult-right{
+          position: absolute;
+          display: block;
+          content: '';
+          width: rem(20px);
+          height: rem(20px);
+          right: rem(-30px);
+          top:50%;
+          margin-top: rem(-10px);
+          background: url("/image/img00/wx/pay_arrow.png") no-repeat center;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+  //选择出诊时间
+  .wx-select-timeMain{
+    .wx-selectTop-info{
+      padding:rem(40px);
+      @include clearfix();
+      .wx-selectInfo-left{
+        float: left;
+        .wx-docLogoBox{
+          position: relative;
+          display: inline-block;
+          font-size: 0;
+          .wx-doctorLogo{
+            width: rem(112px);
+            height: rem(112px);
+          }
+          .wx-doctor-identification{
+            position: absolute;
+            display: inline-block;
+            width: rem(36px);
+            height: rem(36px);
+            right: 0;
+            bottom: 0;
+            background: url("/image/img00/wx/identification.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+        }
+      }
+      .wx-selectInfo-right{
+        padding-left: rem(148px);
+        .wx-selectDoc-name{
+          @include font-dpr(16px);
+          display: inline-block;
+          color: #222222;
+          width: rem(236px);
+          verflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          -o-text-overflow: ellipsis;
+          -ms-text-overflow: ellipsis;
+          -webkit-box-orient: vertical;
+        }
+        .wx-selectDoc-post{
+          @include font-dpr(15px);
+          color: #B3B9C4;
+          padding-left: rem(16px);
+          padding-right: rem(28px);
+        }
+        .wx-selectDoc-degree{
+          @include font-dpr(15px);
+          color: #B3B9C4;
+        }
+        .wx-selectDoc-hospital{
+          @include font-dpr(14px);
+          color: #555555;
+          padding-top:rem(28px);
+          padding-bottom: rem(24px);
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          -o-text-overflow: ellipsis;
+          -ms-text-overflow: ellipsis;
+          -webkit-box-orient: vertical;
+        }
+        .wx-docSubject-item{
+          .wx-docSubject-list{
+            @include font-dpr(14px);
+            color: #555555;
+            position: relative;
+            &:not(:last-child){
+              margin-right: rem(14px);
+              &:after{
+                position: absolute;
+                content: '';
+                width: rem(2px);
+                height: rem(14px);
+                top:50%;
+                margin-top: rem(-9px);
+                right: rem(-10px);
+                background-color: #B3B9C4;
+              }
+            }
+            &:not(:first-child){
+              margin-left: rem(7px);
+            }
+          }
+        }
+      }
+    }
+    .wx-selectMo-gap{
+      height: rem(14px);
+      background-color: #F3F6F7;
+    }
+  }
+}
+
+//手术支付模态框
+.maskers.selectOrderClose{
+  //&.show{
+  //  display: none;
+  //}
+  .confirmBox-inner{
+
+  }
+  .confirmBox-content{
+    border-bottom: none;
+    article{
+      h2{
+        @include font-dpr(17px);
+        color: #333333;
+        margin-bottom: rem(22px);
+      }
+      p{
+        position: relative;
+        text-align: left;
+        padding-left: rem(55px);
+        @include font-dpr(16px);
+        color: #555555;
+        &:not(:last-child){
+          margin-bottom: rem(28px);
+        }
+        &:after{
+          display: block;
+          content: '';
+          position: absolute;
+          width: rem(36px);
+          height: rem(36px);
+          top:50%;
+          margin-top: rem(-19px);
+          left: 0;
+          background: url("/image/img00/wx/pay_select_inactivated-07.png") no-repeat center;
+          background-size: 100% 100%;
+        }
+        &.selected{
+          &:after{
+            background: url("/image/img00/wx/pay_select_activation-08.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+        }
+      }
+    }
+  }
+  .confirmBox-textarea-box{
+    padding: 0 rem(48px);
+    margin-bottom: rem(48px);
+    display: none;
+    textarea{
+      box-sizing: border-box;
+      padding: rem(24px);
+      width: 100%;
+      border:none;
+      background: #F9FBFB;
+      @include font-dpr(14px);
+      color: #555555;
+    }
+  }
+  .confirmBox-btns{
+    border-top: 1px solid #DFDFDF;
+    .confirmBox-cancelBtn{
+      &.disabled{
+        color: #aaaaaa;
+      }
+    }
+  }
+}
+
+//订单详情时间手术时间样式
+.wx-main-content.orderDetails{
+  .wx-baseListRight{
+    .wx-surgical-timeTips {
+      padding-left: rem(20px);
+    }
+    .wx-surgical-timeSeconds{
+      padding-left: rem(20px);
+    }
+  }
+}

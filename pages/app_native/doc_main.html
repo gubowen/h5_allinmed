@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>医生主页</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/myServices/doc_main.css">
+    <link rel="stylesheet" href="/css/vander/swiper.min.css">
+    <script src="/js/third-party/flexible.js"></script>
+    <script>
+    var appNative = function () {
+      window.onerror = function (err) {
+        log('window.onerror: ' + err)
+      };
+      /*这段代码是固定的，必须要放到js中*/
+      function setupWebViewJavascriptBridge(callback) {
+
+        if (window.WebViewJavascriptBridge) {
+          return callback(WebViewJavascriptBridge);
+        }
+        if (window.WVJBCallbacks) {
+          return window.WVJBCallbacks.push(callback);
+        }
+        window.WVJBCallbacks = [callback];
+
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function () {
+          document.documentElement.removeChild(WVJBIframe)
+        }, 0)
+      }
+
+      /*与OC交互的所有JS方法都要放在此处注册，才能调用通过JS调用OC或者让OC调用这里的JS*/
+      setupWebViewJavascriptBridge(function (bridge) {
+        var uniqueId = 1;
+        function log(message, data) {
+          var log = document.getElementById('log')
+          var el = document.createElement('div')
+          el.className = 'logLine'
+          el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+          if (log.children.length) {
+            log.insertBefore(el, log.children[0])
+          }
+          else {
+            log.appendChild(el)
+          }
+        }
+
+        sessionStorage.setItem("goToLogin", 1);
+
+
+        /* Initialize your app here */
+
+        /*JS给ObjC提供公开的API（testJavascriptHandler），在ObjC端可以手动调用JS的这个API（调用方法如：[_bridge callHandler:@"testJavascriptHandler" data:@{ @"foo":@"before ready" }];）。
+         1.testJavascriptHandler：JS给ObjC提供公开的API name
+         2.参数data：接收ObjC传过来的参数（data为参数）
+         3.参数responseCallback：可以回调ObjC（responseCallback是OC提供的回调函数）
+         4.responseData：JS传给OC回调函数的参数
+         */
+        /*注册getNativeInfoHandler方法，Native调用此方法传递参数给JS*/
+        bridge.registerHandler('getNativeInfoHandler',
+          function (data, responseCallback) {
+            // log('getNativeInfoHandler', data)
+            var responseData = {'Javascript Says': 'Right back atcha!'};
+            responseCallback(responseData)
+          });
+        /*注册getJSRegisterInfoHandler方法，Native调用此方法获取需要注册的本地组件信息*/
+        bridge.registerHandler('getJSRegisterInfoHandler',
+          function (data, responseCallback) {
+            // log('ObjC called testJavascriptHandler with', data)
+            var responseData = '{\"jsRegisterList\":[{\"scheme\":\"da-jxjy-app\",\"target\":\"Homepage\",\"action\":\"nativeHomepageViewController\",\"transformType\":\"0\"},{\"scheme\":\"da-jxjy-app\",\"target\":\"PaymentWeb\",\"action\":\"payTableViewController\",\"transformType\":\"1\"}]}'
+
+            var responseData = {
+              'jsRegisterList': [{
+                'scheme': 'da-jxjy-app',
+                'target': 'Homepage',
+                'action': 'nativeHomepageViewController',
+                'transformType': '0'
+              }, {
+                'scheme': 'da-jxjy-app',
+                'target': 'PaymentWeb',
+                'action': 'payTableViewController',
+                'transformType': '1'
+              }]
+            }
+
+            // log('JS responding with', responseData)
+            responseCallback(responseData)
+          })
+      })
+    }
+    appNative();
+  </script>
+</head>
+<body>
+<section class="docMain">
+    <!--医生个人信息-->
+    <section class="docIntro"></section>
+    <!--医生专业擅长-->
+    <section class="majorTrait"></section>
+    <!--网上问诊-->
+    <section class="onlineVisit"></section>
+    <!--停诊信息-->
+    <section class="stopVisit" style="display:none;">
+        <h2 class="moudle_title">停诊信息</h2>
+        <article></article>
+    </section>
+    <!--预约条件-->
+    <section class="bookingConditions"></section>
+    <!--预约门诊-->
+    <section class="orderVisit"></section>
+</section>
+<script>
+  sessionStorage.setItem("goToLogin",1);
+</script>
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/js/third-party/picker.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/modules/moudle.chooseOutpatienTime.js"></script>
+<script src="/js/modules/modules.payType.popup.js"></script>
+
+<script src="/js/scene/myServices/scene.myServices.docMain.js"></script>
+
+</body>
+</html>

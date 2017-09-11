@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <canvas width="650" height="330" id="canvas"></canvas>
+</section>
+</body>
+<script>
+    window.onload = function () {
+        var container = {
+            init: function () {
+                this.canvas = document.getElementById("canvas");
+                this.ctx = canvas.getContext("2d");
+
+                this.canvas.width = 650;
+                this.canvas.height = 330;
+
+                this.setBackground();
+
+                this.canvasDownload();
+            },
+            setBackground: function () {
+                var that = this;
+
+
+                this.ctx.save();
+                var image = new Image(),
+                    that = this;
+
+
+                image.src = "/image/img00/app_native/Artboard_bg.png";
+                image.onload = function () {
+                    that.ctx.drawImage(image, 0, 0, that.canvas.width, that.canvas.height)
+                    that.ctx.moveTo(0, 214);
+                    that.ctx.globalAlpha = 0.69;
+                    that.ctx.fillStyle = "#6C7FB4";
+                    that.ctx.fillRect(0, 214, 650, 116);
+                    that.ctx.fill();
+                    that.drawTips();
+//                    that.drawBaseMessage();
+//                    that.drawLogo();
+                };
+
+                this.ctx.restore();
+
+
+            },
+            drawTips: function () {
+                this.ctx.save();
+
+                this.ctx.font = "normal 15px Microsoft Yahei";
+                this.ctx.fillStyle = "#fff";
+                this.ctx.textAlign = "center";
+                this.ctx.fillText("点击这里，填写你的信息即可与我交流", 325, 278)
+            },
+            drawLogo: function () {
+                var image = new Image(),
+                    that = this;
+
+                this.ctx.save();
+                this.ctx.strokeStyle = "#fff";
+                this.ctx.fillStyle = "#000";
+                this.ctx.arc(80, 80, 50, 0, Math.PI * 2);
+                this.ctx.restore();
+                image.src = "/image/img00/app_native/test2.png";
+                image.onload = function () {
+                    that.ctx.drawImage(image, 30, 30, 100, 100)
+                };
+                this.ctx.fill();
+                this.ctx.clip();
+            },
+            drawBaseMessage: function () {
+                this.ctx.save();
+                this.ctx.font = "normal 15px Microsoft Yahei";
+                this.ctx.fillStyle = "#000";
+                this.ctx.textAlign = "left";
+                this.ctx.fillText("韩伟", 178, 52);
+                this.ctx.fillText("北京301解放军医...", 178, 75);
+
+                this.ctx.fillText("骨科 住院医师", 178, 100);
+
+                this.ctx.fillText("从业：3年", 436, 60);
+
+                this.ctx.fillText("学历：本科", 436, 90);
+                this.ctx.fill();
+            },
+            canvasDownload: function () {
+                var that=this;
+                setTimeout(function () {
+                    var imgData = that.canvas.toDataURL("jpg");
+
+                    var fixtype=function(type){
+                        type=type.toLocaleLowerCase().replace(/jpg/i,'jpeg');
+                        var r=type.match(/png|jpeg|bmp|gif/)[0];
+                        return 'image/'+r;
+                    };
+
+                    imgData=imgData.replace(fixtype("jpg"),'image/octet-stream');
+
+                    var savaFile=function(data,filename)
+                    {
+                        var save_link=document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                        save_link.href=data;
+                        save_link.download=filename;
+                        var event=document.createEvent('MouseEvents');
+                        event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+                        save_link.dispatchEvent(event);
+                    };
+                    var filename=''+new Date().getDate()+'.jpg';
+                    savaFile(imgData,filename);
+                },1000)
+
+            }
+        };
+        container.init();
+
+    };
+</script>
+</html>

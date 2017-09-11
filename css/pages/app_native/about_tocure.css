@@ -1,0 +1,63 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/26
+ * @author: lichenyang
+ */
+html, body {
+  height: 100%; }
+
+.main-inner {
+  width: 100%;
+  height: 100%;
+  position: relative; }
+  .main-inner .inner-header {
+    padding-top: 1.2rem; }
+    .main-inner .inner-header img {
+      width: 2.13333rem;
+      height: 2.13333rem;
+      display: block;
+      margin: 0 auto; }
+    .main-inner .inner-header figcaption {
+      color: #222222;
+      font-size: 15px;
+      line-height: 1;
+      margin-top: 0.56rem;
+      text-align: center; }
+      [data-dpr="2"] .main-inner .inner-header figcaption {
+        font-size: 30px; }
+      [data-dpr="3"] .main-inner .inner-header figcaption {
+        font-size: 45px; }
+  .main-inner .content {
+    text-align: center;
+    margin-top: 2.13333rem;
+    line-height: 1;
+    font-size: 13px;
+    color: #CCCCCC; }
+    [data-dpr="2"] .main-inner .content {
+      font-size: 26px; }
+    [data-dpr="3"] .main-inner .content {
+      font-size: 39px; }
+    .main-inner .content a {
+      color: #7B95DC; }
+  .main-inner .inner-footer {
+    position: absolute;
+    bottom: 0;
+    height: 2.13333rem;
+    width: 100%;
+    color: #909090;
+    box-sizing: border-box;
+    padding: 0.53333rem 0 0.66667rem;
+    font-size: 13px;
+    background: #F6F7F9;
+    line-height: 1; }
+    [data-dpr="2"] .main-inner .inner-footer {
+      font-size: 26px; }
+    [data-dpr="3"] .main-inner .inner-footer {
+      font-size: 39px; }
+    .main-inner .inner-footer p {
+      text-align: center; }
+    .main-inner .inner-footer p + p {
+      margin-top: 0.18667rem; }

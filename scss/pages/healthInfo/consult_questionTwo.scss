@@ -1,0 +1,149 @@
+@import "../../base.scss";
+@import "../../modules/_searchCommTop";
+@import "../../modules/_searchResult";
+@import "../../modules/_upLoadFilesPlus.scss";
+
+$main-color: #00D6C6;
+
+html, body {
+  height: 100%;
+}
+//咨询问题第二页
+.questionContain-PartTwo{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding:rem(32px);
+  background-color: #E6E6ED;
+ //页内公共样式
+  .questionContainMain{
+    border-radius: 16px;
+    background-color: #ffffff;
+    .questionItem-common{
+      padding-bottom: rem(68px);
+      &:first-child{
+        padding-top: rem(54px);
+      }
+      &:last-child{
+        padding-bottom: rem(80px);
+      }
+      //问题标题
+      .questionTitleCommon{
+        position: relative;
+        @include font-dpr(20px);
+        padding: 0 rem(64px);
+        color: #222222;
+        &:after{
+          position: absolute;
+          content: '';
+          display: inline-block;
+          width: rem(16px);
+          height: rem(16px);
+          -webkit-border-radius: 50px;
+          -moz-border-radius: 50px;
+          border-radius: 50px;
+          background-color: #2FC5BD;
+          left: rem(32px);
+          top:50%;
+          margin-top: rem(-8px);
+        }
+
+      }
+      //单选按钮
+      .questionContain-center{
+        @include clearfix();
+        padding:rem(64px) rem(28px) rem(16px);
+        .questionSelectBtn{
+          width: rem(284px);
+          @include font-dpr(16px);
+          padding: rem(20px) 0;
+          text-align: center;
+          float: left;
+          border: 2px solid #ECECEC;
+          border-radius: 100px;
+          &.selected-right{
+            float: right;
+          }
+          &.selected{
+            border: 2px solid #2FC5BD;
+            color: #2FC5BD;
+          }
+        }
+      }
+      //隐藏域内容样式
+      .questionHiddenCommon{
+        @include font-dpr(16px);
+        display: none;
+        padding: rem(20px) rem(80px);
+        background-color: #E5E5E5;
+        .selected-HospitalBtn{
+          border-bottom: 1px solid #D5D5D5;
+        }
+        .selected-HospitalBtn,.selected-cureBtn{
+          position: relative;
+          padding: rem(20px) 0;
+          &:after{
+            position: absolute;
+            display: block;
+            content: '';
+            width: rem(28px);
+            height: rem(28px);
+            right: 0;
+            top: 50%;
+            margin-top: rem(-14px);
+            background: url("/image/img00/patientConsult/arrow@2x.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+        }
+        //输入框
+        .medicineBox{
+          @include font-dpr(16px);
+          width: 100%;
+          border-radius: 9px;
+          outline-style: none;
+          background: #E5E5E5;
+          border-width: 0;
+        }
+        .qu-underline{
+          display: block;
+          height: rem(2px);
+          width: 100%;
+          background-color: #D5D5D5;
+          margin-bottom: rem(16px);
+        }
+        .qu-setMedicineTipText{
+          @include font-dpr(12px);
+          color: #AAAAAA;
+        }
+        //选择医院隐藏域
+        &.selectHospitalBox{
+          padding: rem(20px) rem(60px) rem(20px) rem(100px);
+        }
+        //填写药物隐藏域
+        &.qu-setMedicineBox{
+          padding:rem(60px) rem(60px) rem(60px) rem(106px);
+        }
+      }
+    }
+
+  }
+  //底部按钮
+  .questionSubmitBtnBox{
+    text-align: center;
+    padding-top:rem(76px);
+    padding-bottom: rem(68px);
+    .questionSubmitBtn{
+      @include font-dpr(20px);
+      width: rem(560px);
+      height: rem(100px);
+      line-height: rem(100px);
+      background-color: #2FC5BD;
+      text-align: center;
+      color: #ffffff;
+      border-radius: 36px;
+      box-shadow: 0 4px 12px 0 rgba(47,197,189,0.40);
+      //margin:0 auto;
+    }
+  }
+}

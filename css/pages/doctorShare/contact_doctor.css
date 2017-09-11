@@ -1,0 +1,202 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+.main-inner .main-header .header-box {
+  padding-top: 0.26667rem; }
+  .main-inner .main-header .header-box .header-bg {
+    width: 9.04rem;
+    height: 5.06667rem;
+    display: block;
+    margin: 0 auto; }
+  .main-inner .main-header .header-box .doctor-info {
+    width: 9.30667rem;
+    padding-bottom: 0.46667rem;
+    box-sizing: border-box;
+    padding-right: 0.13333rem;
+    background: #FFFFFF;
+    border: 1px solid #CFD9FF;
+    box-shadow: 0 5px 8px 0 rgba(182, 200, 245, 0.3);
+    margin: 0.45333rem auto 0px;
+    background: url("/image/img00/doctorShare/share_point.png") no-repeat;
+    background-size: 0.42667rem 0.37333rem;
+    background-position: 8.37333rem 0.50667rem; }
+    .main-inner .main-header .header-box .doctor-info:after {
+      content: '';
+      display: table;
+      clear: both; }
+    .main-inner .main-header .header-box .doctor-info .info-left {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: url("/image/img00/doctorShare/share_avatar_bg.png") no-repeat center;
+      background-size: contain;
+      float: left;
+      margin: 0.56rem 0.34667rem 0.26667rem; }
+      .main-inner .main-header .header-box .doctor-info .info-left .doctor-icon {
+        width: 1.86667rem;
+        height: 1.86667rem;
+        margin: 0.26667rem;
+        border-radius: 50%; }
+    .main-inner .main-header .header-box .doctor-info .info-right {
+      float: left;
+      line-height: 1;
+      margin-top: 0.96rem;
+      width: 6rem; }
+      .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+        font-size: 20px;
+        color: #4654A7; }
+        [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+          font-size: 40px; }
+        [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+          font-size: 60px; }
+      .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+        margin-left: 0.32rem;
+        font-size: 12px;
+        color: #B3B7D1;
+        margin-right: 0.10667rem;
+        line-height: 1.2; }
+        [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+          font-size: 24px; }
+        [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+          font-size: 36px; }
+      .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+        margin-left: 0.16rem;
+        font-size: 12px;
+        color: #B3B7D1; }
+        [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+          font-size: 24px; }
+        [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+          font-size: 36px; }
+      .main-inner .main-header .header-box .doctor-info .info-right .info-middle {
+        margin-top: 0.45333rem;
+        font-size: 0; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-middle:after {
+          content: '';
+          display: table;
+          clear: both; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+          font-size: 14px;
+          color: #717BB5; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+            font-size: 28px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+            font-size: 42px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+          height: 0.37333rem;
+          box-sizing: border-box;
+          padding: 0px 0.10667rem;
+          line-height: 0.37333rem;
+          background: rgba(255, 255, 255, 0.9);
+          border: 1px solid #54667D;
+          border-radius: 100px;
+          color: #596BCE;
+          font-size: 11px; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+            font-size: 22px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+            font-size: 33px; }
+      .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+        margin-top: 0.26667rem;
+        font-size: 13px;
+        color: #717BB5;
+        line-height: 1.2; }
+        [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+          font-size: 26px; }
+        [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+          font-size: 39px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-bottom .subject-item {
+          margin-right: 0.16rem; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-bottom .subject-item + .subject-item::before {
+          display: inline-block;
+          content: '';
+          width: 0.02667rem;
+          height: 0.26667rem;
+          background-color: #B2B7D0;
+          margin-right: 0.16rem; }
+
+.main-inner .header-tips {
+  color: #666666;
+  font-size: 15px;
+  margin-top: 0.74667rem; }
+  [data-dpr="2"] .main-inner .header-tips {
+    font-size: 30px; }
+  [data-dpr="3"] .main-inner .header-tips {
+    font-size: 45px; }
+  .main-inner .header-tips p {
+    width: 8.08rem;
+    margin: 0 auto; }
+
+.main-inner .main-content {
+  padding-bottom: 0.53333rem; }
+  .main-inner .main-content .content-item {
+    margin: 0.53333rem 0.69333rem;
+    background: #F6F8FD;
+    border-radius: 0.08rem; }
+    .main-inner .main-content .content-item .item-title {
+      line-height: 1.52rem;
+      padding-left: 0.32rem;
+      font-size: 16px;
+      color: #555555;
+      border-bottom: 1px solid #F0F3FD; }
+      [data-dpr="2"] .main-inner .main-content .content-item .item-title {
+        font-size: 32px; }
+      [data-dpr="3"] .main-inner .main-content .content-item .item-title {
+        font-size: 48px; }
+      .main-inner .main-content .content-item .item-title::before {
+        display: inline-block;
+        content: "";
+        width: 0.10667rem;
+        height: 0.32rem;
+        background: #02CCB9;
+        margin-right: 0.16rem; }
+      .main-inner .main-content .content-item .item-title .go-other {
+        display: inline-block;
+        width: 2rem;
+        background: #02CCB9;
+        padding: 0.18667rem 0;
+        border-radius: 0.05333rem;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: normal;
+        float: right;
+        line-height: 1;
+        margin-top: 0.42667rem;
+        margin-right: 0.37333rem;
+        text-align: center; }
+        [data-dpr="2"] .main-inner .main-content .content-item .item-title .go-other {
+          font-size: 26px; }
+        [data-dpr="3"] .main-inner .main-content .content-item .item-title .go-other {
+          font-size: 39px; }
+    .main-inner .main-content .content-item .item-detail {
+      font-size: 14px;
+      color: #9FA3A9;
+      padding-bottom: 0.53333rem; }
+      [data-dpr="2"] .main-inner .main-content .content-item .item-detail {
+        font-size: 28px; }
+      [data-dpr="3"] .main-inner .main-content .content-item .item-detail {
+        font-size: 42px; }
+      .main-inner .main-content .content-item .item-detail dt, .main-inner .main-content .content-item .item-detail dd {
+        width: 7.78667rem;
+        margin: 0.26667rem auto; }
+      .main-inner .main-content .content-item .item-detail .detail-num {
+        font-size: 12px;
+        display: inline-block;
+        text-align: center;
+        width: 0.37333rem;
+        height: 0.37333rem;
+        line-height: 0.34667rem;
+        border: 1px solid #9FA3A9;
+        border-radius: 50%;
+        box-sizing: border-box; }
+        [data-dpr="2"] .main-inner .main-content .content-item .item-detail .detail-num {
+          font-size: 24px; }
+        [data-dpr="3"] .main-inner .main-content .content-item .item-detail .detail-num {
+          font-size: 36px; }
+  .main-inner .main-content .content-item:nth-child(even) .item-title::before {
+    background: #7B95DC; }
+  .main-inner .main-content .content-item:nth-child(even) .go-other {
+    background: #7B95DC; }

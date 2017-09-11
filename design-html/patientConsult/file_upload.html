@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>资料上传</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/file_upload.css">
+</head>
+<body>
+<section class="main-inner">
+    <section class="tc-upLoadFile">
+        <!--<header class="main-header fileUpload">-->
+            <!--<figure class="main-header-item">-->
+                <!--<a href="">-->
+                    <!--<img src="../../image/arrow_back.png" alt="">-->
+                <!--</a>-->
+            <!--</figure>-->
+            <!--<figure class="main-header-item doctor-name">-->
+                <!--<h3>上传资料</h3>-->
+            <!--</figure>-->
+            <!--<figure class="main-header-item">-->
+            <!--</figure>-->
+        <!--</header>-->
+        <section class="tc-upLoadBox">
+            <form action="">
+                <figure class="tc-upLoadTitle">
+                    <span class="tc-upLoadTitleName">X光片</span><span class="tc-upLoadRightIcon"></span>
+                </figure>
+                <ul class="tc-upLoadItemBox">
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt="">
+                        <span class="tc-upLoadAfresh"></span><span class="tc-upLoadAfreshText">重新上传</span>
+                    </li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt="">
+                        <span class="tc-upLoadCover"></span><span class="tc-upLoading"></span><span class="tc-upLoadDel"></span><span class="tc-upLoadAfreshText">等待上传</span>
+                    </li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt="">
+                        <span class="tc-upLoading"></span><span class="tc-upLoadDel"></span><span class="tc-upLoadAfreshText">等待上传</span>
+                    </li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt="">
+                        <span class="tc-upLoading"></span><span class="tc-upLoadDel"></span><span class="tc-upLoadAfreshText">等待上传</span>
+                    </li>
+                    <li class="tc-upLoadAdd">
+                        <a href="javascript:;">
+                            <span class="tc-upLoadAddMore"></span>
+                        </a>
+                    </li>
+                </ul>
+            </form>
+            <form action="">
+                <figure class="tc-upLoadTitle">
+                    <span class="tc-upLoadTitleName">X光片</span><span class="tc-upLoadRightIcon"></span>
+                </figure>
+                <ul class="tc-upLoadItemBox">
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""><span class="tc-upLoadDel"></span></li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""></li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""></li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""></li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""></li>
+                    <li class="tc-upLoadItemList"><img src="/image/img00/patientConsult/uploadfilepic.png" alt=""></li>
+                    <li class="tc-upLoadItemList tc-upLoadAdd">
+                        <a href="javascript:;">
+                            <span class="tc-upLoadAddMore"></span>
+                        </a>
+                    </li>
+                </ul>
+            </form>
+            <form action="">
+                <figure class="tc-upLoadTitle">
+                    <span class="tc-upLoadTitleName">曾就诊病理</span><span class="tc-upLoadRightIcon"></span>
+                </figure>
+            </form>
+        </section>
+        <footer class="tc-upLoadSubmit">
+            <button class="tc-submitBtn">上传</button>
+        </footer>
+    </section>
+</section>
+
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/plugins/plugins.firstLetter.js"></script>
+<script src="/js/third-party/q.js"></script>
+
+<script src="/js/common.js"></script>
+<script src="/js/common/commonString.js"></script>
+
+<script src="/js/modules/module.search.input.js"></script>
+<script src="/js/modules/module.search.list.js"></script>
+<script src="/js/modules/modules.upLoadFile.js"></script>
+<script src="/js/plugins/plugins.validate.js"></script>
+<script src="/js/third-party/uploadReplace.js"></script>
+<script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/js/third-party/swiper/js/showBigImg.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        modules.upLoadFiles({
+            caseId:'1489545287440',
+            data:'',           // 图集数组 （有历史图片数据需传图集数组）
+            picPkList:'',      //图片ID串 (IM入口需传)
+            route:'',          //路由
+            imageType:'1',     // 上传资料类型
+            upLoadType:'',     //方法调用类型 （1-历史健康、2-直约手术<无caseId>、3-问诊单、4-IM入口、5-初诊建议）
+            fileCallBack:function(picList) {
+                                               //回调函数返回文件主键PK串
+            },
+            backFunction:function(){
+                                              //来源页路由里的方法事件
+            }
+        });
+    })
+</script>
+</body>
+</html>

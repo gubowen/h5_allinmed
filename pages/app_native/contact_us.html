@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>联系我们</title>
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/app_native/contact_us.css">
+</head>
+<body>
+    <section class="main-inner">
+        <section class="inner-module">
+            <section class="module-box">
+                <h3 class="module-title">工作时间<span class="module-tips">(周一至周五9:00-18:00)节假日除外</span></h3>
+                <p class="module-text connect-us"><span class="text-left">客服电话</span><span class="text-right">010-59007006</span><span class="callMeIcon"></span></p>
+                <p class="module-text"><span class="text-left">客服微信</span><span class="text-right">weiyi635<span class="module-tips">(加微信号请备注姓名)</span></span></p>
+            </section>
+        </section>
+        <section class="inner-module">
+            <section class="module-box">
+                <h3 class="module-title">非工作时间</h3>
+                <p class="module-text"><span class="text-left">客服邮箱</span><span class="text-right">help@allinmed.cn</span></p>
+            </section>
+        </section>
+    </section>
+
+    <script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var container = {
+                init:function(){
+                    /*这段代码是固定的，必须要放到js中*/
+                    function setupWebViewJavascriptBridge(callback) {
+
+                        if (window.WebViewJavascriptBridge) {
+                            return callback(WebViewJavascriptBridge);
+                        }
+                        if (window.WVJBCallbacks) {
+                            return window.WVJBCallbacks.push(callback);
+                        }
+                        window.WVJBCallbacks = [callback];
+
+                        var WVJBIframe = document.createElement('iframe');
+                        WVJBIframe.style.display = 'none';
+                        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+                        document.documentElement.appendChild(WVJBIframe);
+                        setTimeout(function () {
+                            document.documentElement.removeChild(WVJBIframe)
+                        }, 0)
+                    }
+
+                    /*与OC交互的所有JS方法都要放在此处注册，才能调用通过JS调用OC或者让OC调用这里的JS*/
+                    setupWebViewJavascriptBridge(function (bridge) {
+                        $('.module-text.connect-us').on("click", function () {
+                            if (!$(this).hasClass('active')) {
+                                $(this).addClass('active');
+                            }
+                            var dialNumber = $(this).find('.text-right').text();
+                            bridge.callHandler('connectUs', {'dialNumber': dialNumber}, function (response) {
+
+                            });
+                        })
+                    })
+                }
+            };
+            container.init();
+        })
+    </script>
+</body>
+</html>

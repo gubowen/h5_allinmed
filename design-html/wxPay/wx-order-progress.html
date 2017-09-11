@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单进度</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/wxPay/wx_pay.css">
+</head>
+<body>
+<section class="wx-main-inner">
+    <section class="wx-main-content no-marginTop">
+        <!--支付进度条1-->
+        <!--支付进度条4 无提示标题-->
+        <section class="wx-orderProgressComm">
+            <div class="wx-orderProgressCover"></div>
+            <div class="wx-progressBarBox">
+                <div class="wx-progressItemBox progress-hasBar">
+                    <div class="wx-progressItem wx-isPay">
+                        <span class="wx-progressLine"></span>
+                        <span class="wx-progressText">待支付</span>
+                    </div>
+                </div>
+                <div class="wx-progressItemBox progress-hasBar">
+                    <div class="wx-progressItem wx-waitSurgical">
+                        <span class="wx-progressLine"></span>
+                        <span class="wx-progressText">待就诊</span>
+                    </div>
+                </div>
+                <div class="wx-progressItemBox">
+                    <div class="wx-progressItem wx-payWaitOver">
+                        <span class="wx-progressText">已完成</span>
+                    </div>
+                </div>
+            </div>
+            <div class="wx-progressTextBox">1564645</div>
+        </section>
+        <!--支付进度条4 无提示标题-->
+        <section class="wx-orderProgressComm notHasTips">
+            <div class="wx-orderProgressCover"></div>
+            <div class="wx-progressBarBox">
+                <div class="wx-progressItemBox progress-hasBar">
+                    <div class="wx-progressItem wx-isPay">
+                        <span class="wx-progressLine"></span>
+                        <span class="wx-progressText">待支付</span>
+                    </div>
+                </div>
+                <div class="wx-progressItemBox progress-hasBar">
+                    <div class="wx-progressItem wx-isSurgical">
+                        <span class="wx-progressLine"></span>
+                        <span class="wx-progressText">已就诊</span>
+                    </div>
+                </div>
+                <div class="wx-progressItemBox">
+                    <div class="wx-progressItem wx-payWaitOver wx-payIsOver">
+                        <span class="wx-progressText">已完成</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--中间订单信息部分-->
+        <section class="wx-orderComm-baseBox">
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">医生姓名</li>
+                <li class="wx-baseListRight">徐伟</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单类型</li>
+                <li class="wx-baseListRight">互联网手术</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单类型</li>
+                <li class="wx-baseListRight">广州市第一人民路12号广州第一
+                    人民医院第一人民医院</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">手术时间</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-baseSurgicalTime">2016年10月27日</span><span class="wx-baseSurgicalDate">上午</span>
+                </li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单金额</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-payTotal"><span class="wx-payMark">￥</span>10,000.00</span>
+                </li>
+            </ul>
+        </section>
+        <!--隔行灰底-->
+        <section class="wx-orderComm-baseLine"></section>
+
+        <section class="wx-order-infoBase">
+            <ul class="wx-order-patientInfoBox">
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">患者姓名:</span><span class="wx-patientNameRight">李铁根</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">联系电话:</span><span class="wx-patientNameRight">13234567890</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">订单编号:</span><span class="wx-patientNameRight">1024515453266565</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">提交时间:</span><span class="wx-patientNameRight">2017-4-18 19:14:41</span>
+                </li>
+            </ul>
+        </section>
+        <!--底部-->
+        <section class="wx-comm-bottomBtn">
+            <button class="wx-comm-bottomBtnLeft wx-refund ">
+                退款
+            </button>
+            <button class="wx-comm-bottomBtnRight wx-goConsult ">去支付</button>
+        </section>
+    </section>
+</section>
+</body>
+</html>

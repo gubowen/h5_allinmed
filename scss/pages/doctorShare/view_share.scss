@@ -1,0 +1,117 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+.main-inner{
+  .main-header{
+    padding-top: rem(154px);
+    background: url("/image/img00/doctorShare/share_logo.png") no-repeat rem(134px) rem(46px);
+    background-size: rem(484px) rem(71px);
+    .header-tips{
+      width: rem(618px);
+      height: rem(62px);
+      margin: 0 auto;
+      background: #F7F8FE;
+      border-radius: rem(999px);
+      text-align: center;
+      line-height: rem(62px);
+      @include font-dpr(14px);
+      color: #87B3ED;
+      .tips-light{
+        color: #05CCB9;
+      }
+    }
+    figure{
+      width: rem(640px);
+      height: rem(748px);
+      background: url("/image/img00/doctorShare/share_bg_02.png") no-repeat center;
+      background-size: contain;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding-top: rem(64px);
+      img{
+        display: block;
+        width: rem(380px);
+        height: rem(380px);
+        margin: 0 auto;
+      }
+    }
+  }
+  .main-content-box{
+    margin-top: rem(26px);
+    .step-title{
+      width: rem(166px);
+      margin: 0 auto;
+      text-align: center;
+      color: #222222;
+      position: relative;
+      @include font-dpr(17px);
+      background: url("/image/img00/doctorShare/share_bg_03.png") no-repeat bottom;
+      background-size: rem(166px) rem(26px);
+      line-height: rem(60px);
+      &::before{
+        display: inline-block;
+        content: "";
+        width: rem(20px);
+        height: rem(1px);
+        background-color: #808080;
+        position: absolute;
+        left: rem(-26px);
+        top: rem(34px);
+      }
+      &::after{
+        display: inline-block;
+        content: "";
+        width: rem(20px);
+        height: rem(1px);
+        background-color: #808080;
+        position: absolute;
+        right: rem(-26px);
+        top: rem(34px);
+      }
+    }
+    .step-list{
+      color: #555555;
+      @include font-dpr(14px);
+      padding: rem(56px) rem(48px) 0px;
+      .step-item{
+        @include clearfix();
+        .item-left{
+          float: left;
+          display: block;
+        }
+        .item-right{
+          float: left;
+          display: block;
+          width: rem(630px);
+        }
+      }
+      .step-item + .step-item{
+        margin-top: rem(40px);
+      }
+    }
+  }
+  .main-footer{
+    width: rem(654px);
+    height: rem(78px);
+    line-height: rem(78px);
+    margin: rem(60px) rem(48px) rem(100px);
+    background: #FBFBFC;
+    border-radius:rem(4px);
+    @include font-dpr(12px);
+    color: #B9B9B9;
+    .remind{
+      box-sizing: border-box;
+      padding-left: rem(56px);
+      width: rem(654px);
+      height: rem(78px);
+      background: url("/image/img00/doctorShare/share_volume@2x.png") no-repeat rem(20px) rem(24px);
+      background-size: rem(28px) rem(28px);
+    }
+  }
+}

@@ -1,0 +1,120 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/2/14
+ * @author: qiangkailiang
+ */
+
+@charset "utf-8";
+@import "../../library/_common-modules";
+@import "../../modules/_mainHeader";
+@import "../../modules/_imStyle";
+@import "../patientConsult/videos_upload";
+@import "../patientConsult/file_upload";
+@import "../../modules/_wxProceDureOrder";
+@import "../patientConsult/case_list.scss";
+@import "../../modules/_onlineVisits";
+@import "../../modules/_searchCommTop";
+@import "../../modules/_searchDoctor.scss";
+@import "../../modules/_searchResult";
+
+html, body {
+  width: 100%;
+  height: auto !important;
+  background-color: #f4f5f7;
+
+}
+
+.main-inner {
+  //position: absolute;
+  //bottom: 0;
+  //right: 0;
+  //left: 0;
+  //top: 0;
+  //overflow: auto;
+  background-color: #f4f5f7;
+  padding: 0;
+}
+
+.case-list {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  background-color: #fff;
+  padding: rem(30px) rem(48px);
+  box-sizing: border-box;
+  &-item {
+    .time {
+      width: rem(150px);
+      display: inline-block;
+
+    }
+  }
+}
+
+.wx-main-inner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  overflow: auto;
+  z-index: 10;
+  .wx-main-content {
+    margin-top: 0;
+  }
+}
+
+.first-message {
+  @include font-dpr(12px);
+  color: #3F4249;
+  background-color: #dfdfdf;
+  text-align: left;
+  margin: 0.4rem 0.5rem;
+  padding: 0.2rem;
+  box-sizing: border-box;
+  border-radius: 0.2rem
+}
+
+.main-message-content {
+  .middle-tip-box {
+    position: absolute;
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: rem(21px);
+    z-index: 1;
+    &:before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+  .middle-tip-box-text {
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    & > img {
+      @include circle(rem(40px), transparent);
+      animation: rotate 1s linear forwards infinite;
+    }
+    & > .progress{
+      @include font-dpr(14px);
+      color: #fff;
+    }
+  }
+}
+
+@include keyframes(rotate) {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

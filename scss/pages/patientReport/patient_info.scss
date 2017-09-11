@@ -1,0 +1,176 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/3/30
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+@import "../../modules/_searchCommTop";
+@import "../../modules/_searchResult";
+
+.main-inner{
+  //患者填写信息盒子
+  .patient-info-box{
+    display: none;
+    position: relative;
+    //患者信息列表
+    .info-list{
+      padding-top: rem(60px);
+      .info-item{
+        margin: 0 auto;
+        line-height: 1;
+        width: rem(654px);
+        .info-item-left{
+          width: rem(216px);
+          display: table-cell;
+          vertical-align:middle;
+          color: #222222;
+          @include font-dpr(15px);
+        }
+        .info-item-right{
+          position: relative;
+          .select-area{
+            color: #A9A9A9;
+            display: block;
+            //top: 0;
+          }
+          .select-area.show{
+            color: #555555;
+          }
+          width: rem(438px);
+          display: table-cell;
+          vertical-align:middle;
+          color: #555555;
+          @include font-dpr(15px);
+          input{
+            border: none;
+            display: block;
+            width: 100%;
+          }
+          //性别选项
+          .sex-option{
+            i{
+              display: inline-block;
+              margin-right: rem(20px);
+              @include circle(rem(30px), #fff);
+              vertical-align: rem(-3px);
+              background: url("/image/img00/directOperation/select_no.png") no-repeat center;
+              background-size: contain;
+            }
+            &.selected i{
+              background: url("/image/img00/directOperation/select_yes.png") no-repeat center;
+              background-size: contain;
+            }
+          }
+          //有下拉框
+          //&.has-select{
+          //  span{
+          //    position: absolute;
+          //    z-index: 1;
+          //
+          //  }
+          //  select{
+          //    border: none;
+          //    outline: none;
+          //    appearance:none;
+          //    background-color: #ffffff;
+          //    display: block;
+          //    color:  #CCCCCC;
+          //    width: rem(405px);
+          //    opacity: 0;
+          //    position: absolute;
+          //    top: 0;
+          //    z-index: 2;
+          //  }
+          //}
+          //有箭头
+          &.has-after::after{
+            display: table;
+            content: '';
+            width: rem(12px);
+            height:rem(20px);
+            position: absolute;
+            top:rem(5px);
+            right: rem(-12px);
+            background: url("/image/img00/healthInfo/right_icon.png") no-repeat center;
+            background-size: contain;
+          }
+          //发送验证码
+          .send-validate-code{
+            position: absolute;
+            right: rem(52px);
+            bottom: 0;
+            top: 50%;
+            margin-top: rem(-15px);
+            color: #AAAAAA;
+            &.disabled{
+              right: rem(0px);
+            }
+            &.send{
+              color: #00BEAF;
+              right: rem(52px);
+            }
+          }
+          .sex-option + .sex-option{
+            margin-left: rem(80px);
+          }
+        }
+      }
+      .info-item + .info-item{
+        margin-top: rem(78px);
+      }
+    }
+    //患者信息底部
+    footer{
+      padding-top: rem(226px);
+      .next-btn{
+        width: rem(570px);
+        height: rem(88px);
+        background: #00D6C6;
+        border-radius: 100px;
+        display: block;
+        margin: 0 auto;
+        @include font-dpr(16px);
+        color: #ffffff;
+        &.disabled{
+          background: #DFDFDF;
+        }
+      }
+      .select-patient{
+        display: block;
+        @include font-dpr(13px);
+        color: #7F858E;
+        line-height: 1;
+        text-align: center;
+        margin-top: rem(100px);
+      }
+    }
+  }
+  //患者列表盒子
+  .patient-list-box{
+    display: none;
+    padding-top: rem(20px);
+    .patient-list{
+      font-size: 0;
+      .patient-item{
+        display: inline-block;
+        margin: rem(60px) 0 0 rem(64px);
+        width: rem(164px);
+        height: rem(60px);
+        border: 1px solid #DFDFDF;
+        border-radius: 100px;
+        @include font-dpr(14px);
+        color: #3F4249;
+        &.add{
+          background-color: #00D6C6;
+          color: white;
+        }
+        text-align: center;
+        line-height: rem(60px);
+        @include ellipsis();
+      }
+    }
+  }
+}

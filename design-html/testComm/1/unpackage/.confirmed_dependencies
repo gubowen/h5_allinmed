@@ -1,0 +1,13 @@
+{
+	"index.html": {
+		"resources": [
+			"js/main.js",
+			"videos/echo-hereweare.mp4",
+			"css/pure-min.css",
+			"css/main.css",
+			"js/jquery-1.9.0.min.js",
+			"css/mui.min.css",
+			"fonts/mui.ttf"
+		]
+	}
+}

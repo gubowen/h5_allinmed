@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title></title>
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/doctorShare/share_page.css">
+    <script>
+        var appNative = function () {
+//        window.onerror = function (err) {
+//          log('window.onerror: ' + err)
+//        };
+        /*这段代码是固定的，必须要放到js中*/
+        function setupWebViewJavascriptBridge(callback) {
+
+          if (window.WebViewJavascriptBridge) {
+            return callback(WebViewJavascriptBridge);
+          }
+          if (window.WVJBCallbacks) {
+            return window.WVJBCallbacks.push(callback);
+          }
+          window.WVJBCallbacks = [callback];
+
+          var WVJBIframe = document.createElement('iframe');
+          WVJBIframe.style.display = 'none';
+          WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+          document.documentElement.appendChild(WVJBIframe);
+          setTimeout(function () {
+            document.documentElement.removeChild(WVJBIframe)
+          }, 0)
+        }
+
+        /*与OC交互的所有JS方法都要放在此处注册，才能调用通过JS调用OC或者让OC调用这里的JS*/
+        setupWebViewJavascriptBridge(function (bridge) {
+          var uniqueId = 1;
+          function log(message, data) {
+            var log = document.getElementById('log')
+            var el = document.createElement('div')
+            el.className = 'logLine'
+            el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+            if (log.children.length) {
+              log.insertBefore(el, log.children[0])
+            }
+            else {
+              log.appendChild(el)
+            }
+          }
+
+          sessionStorage.setItem("goToLogin", 1);
+
+
+          /* Initialize your app here */
+
+          /*JS给ObjC提供公开的API（testJavascriptHandler），在ObjC端可以手动调用JS的这个API（调用方法如：[_bridge callHandler:@"testJavascriptHandler" data:@{ @"foo":@"before ready" }];）。
+           1.testJavascriptHandler：JS给ObjC提供公开的API name
+           2.参数data：接收ObjC传过来的参数（data为参数）
+           3.参数responseCallback：可以回调ObjC（responseCallback是OC提供的回调函数）
+           4.responseData：JS传给OC回调函数的参数
+           */
+          /*注册getNativeInfoHandler方法，Native调用此方法传递参数给JS*/
+          bridge.registerHandler('getNativeInfoHandler',
+            function (data, responseCallback) {
+              // log('getNativeInfoHandler', data)
+              var responseData = {'Javascript Says': 'Right back atcha!'};
+              responseCallback(responseData)
+            });
+          /*注册getJSRegisterInfoHandler方法，Native调用此方法获取需要注册的本地组件信息*/
+          bridge.registerHandler('getJSRegisterInfoHandler',
+            function (data, responseCallback) {
+              // log('ObjC called testJavascriptHandler with', data)
+              var responseData = '{\"jsRegisterList\":[{\"scheme\":\"da-jxjy-app\",\"target\":\"Homepage\",\"action\":\"nativeHomepageViewController\",\"transformType\":\"0\"},{\"scheme\":\"da-jxjy-app\",\"target\":\"PaymentWeb\",\"action\":\"payTableViewController\",\"transformType\":\"1\"}]}'
+
+              var responseData = {
+                'jsRegisterList': [{
+                  'scheme': 'da-jxjy-app',
+                  'target': 'Homepage',
+                  'action': 'nativeHomepageViewController',
+                  'transformType': '0'
+                }, {
+                  'scheme': 'da-jxjy-app',
+                  'target': 'PaymentWeb',
+                  'action': 'payTableViewController',
+                  'transformType': '1'
+                }]
+              }
+
+              // log('JS responding with', responseData)
+              responseCallback(responseData)
+            })
+        })
+      }
+        appNative();
+    </script>
+</head>
+<body>
+    <section class="main-inner">
+        <header class="main-header">
+            <p class="authentication-tips"><span class="in-authentication">您的信息正在认证中...</span><span class="tips-info">当前为示例信息，认证后会显示您个人信息</span><span class="go-authentication" id="goAuthentication"></span></p>
+            <figure class="header-box">
+                <img class="header-bg" src="/image/img00/doctorShare/share_bg.png" alt="分享背景">
+                <figcaption class="doctor-info">
+                    <!--<section class="info-left"><img class="doctor-icon" src="/image/img00/doctorShare/share_avatar_allin.png" alt="医生头像"></section>-->
+                    <!--<section class="info-right">-->
+                        <!--<p class="info-top"><span class="doctor-name">张国强</span><span class="doctor-post">副主任医师</span><span class="doctor-degree">副教授</span></p>-->
+                        <!--<p class="info-middle"><span class="doctor-hospital">北京301医院附属第二医院</span><span class="hospital-level">三甲</span></p>-->
+                        <!--<p class="info-bottom"><span class="subject-item">创伤骨科</span><span class="subject-item">脑震荡</span><span class="subject-item">关节</span></p>-->
+                    <!--</section>-->
+                </figcaption>
+            </figure>
+        </header>
+        <section class="main-content-box">
+            <section class="info-module">
+                <h2 class="module-title">擅长疾病</h2>
+                <p class="module-detail" id="illnessDetail"></p>
+            </section>
+            <section class="info-module">
+                <h2 class="module-title">擅长手术</h2>
+                <p class="module-detail" id="operationDetail"></p>
+                <ul class="operation-case-list">
+                    <!--<li class="operation-case-item"><span class="operation-case-year">2016手术病例数:</span><span class="operation-case-num">100台</span></li>-->
+                    <!--<li class="operation-case-item"><span class="operation-case-year">2015手术病例数:</span><span class="operation-case-num">80台</span></li>-->
+                </ul>
+            </section>
+            <section class="info-module" id="hospitalName">
+                <h2 class="module-title">执业医院<span class="go-view-time">查看初诊时间</span></h2>
+                <!--<p class="module-detail">辽宁一颗大医院</p>-->
+                <!--<p class="module-detail">第二人民医院</p>-->
+                <!--<p class="module-detail">熟练掌握人工髋关节置换手术技术、人工膝关节置换手术技术；人工髋关节置换返修手术；快速恢</p>-->
+                <!--<p class="module-detail">杭州医院</p>-->
+            </section>
+        </section>
+        <footer class="main-footer">
+            <!--<span class="footer-icon"></span>-->
+            <span id="contactDoctor">点击立即与我联系</span>
+        </footer>
+    </section>
+    <!--查看二维码-->
+    <section class="view-code">
+        <figure>
+            <img src="/image/img00/doctorShare/code_loading.png" alt="二维码">
+            <figcaption>
+                <p>长按此处</p>
+                <p>点击“识别二维码”即可</p>
+            </figcaption>
+        </figure>
+    </section>
+
+    <script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+    <script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+    <script src="/js/third-party/fastclick.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="/js/common.js"></script>
+
+    <script src="/js/scene/doctorShare/scene.doctorShare.sharePage.js"></script>
+</body>
+</html>

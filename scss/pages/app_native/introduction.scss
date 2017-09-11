@@ -1,0 +1,42 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/26
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+.main-inner{
+  padding-top: rem(40px);
+  padding-bottom: rem(40px);
+  .inner-item{
+    .item-question{
+      padding: 0 rem(30px) 0 rem(86px);
+      color: #232C4E;
+      @include font-dpr(17px);
+      position: relative;
+      text-align: justify;
+      span{
+        color: white;
+        @include font-dpr(10px);
+        padding: rem(4px) rem(10px) rem(18px);
+        background: url("/image/img00/app_native/question@2x.png") no-repeat center;
+        background-size: contain;
+        position: absolute;
+        left: rem(20px);
+        top: rem(8px);
+      }
+    }
+    .item-answer{
+      margin-top: rem(36px);
+      padding: 0 rem(30px) 0 rem(86px);
+      color: #333333;
+      @include font-dpr(15px);
+      text-align: justify;
+    }
+  }
+  .inner-item +.inner-item{
+    margin-top: rem(70px);
+  }
+}

@@ -1,0 +1,586 @@
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/3/1
+*/
+
+//聊天区
+.main-message {
+  background-color: #f4f5f7;
+  //width: 100%;
+  //height: 100%;
+  //overflow: auto;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+  padding-top: 0.5rem;
+}
+
+.main-message-box {
+  margin: rem(35px) 0;
+  padding: 0 rem(20px);
+  box-sizing: border-box;
+  font-size: 0;
+  @include clearfix();
+  &-item {
+
+    & > .main-message-img {
+      display: inline-block;
+      vertical-align: top;
+      & > img {
+        width: rem(60px);
+        height: rem(60px);
+        vertical-align: top;
+        border-radius: 50%;
+
+      }
+    }
+    & > .main-message-content {
+      display: inline-block;
+      vertical-align: top;
+      max-width: rem(510px);
+      padding: rem(20px) rem(30px);
+      margin: 0 rem(30px);
+      border-radius: rem(21px);
+      @include font-dpr(15px);
+      word-break: break-all;
+      box-sizing: border-box;
+      & > img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+      }
+      .main-message-href {
+        @include font-dpr(15px);
+        color: #00BEAF;
+        text-decoration: underline;
+      }
+    }
+    &.others-message {
+      float: left;
+      & > .main-message-content {
+        display: inline-block;
+        vertical-align: top;
+        background-color: #fff;
+        border-top-left-radius: 0;
+        & > p {
+          word-break: break-all;
+        }
+      }
+    }
+    &.my-message {
+      float: right;
+      & > .main-message-content {
+        display: inline-block;
+        vertical-align: top;
+        background-color: #01d1c2;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+}
+
+//输入区
+.main-input-box {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  //height: 1rem;
+  box-sizing: border-box;
+  font-size: 0;
+  padding: rem(20px) rem(90px);
+  background-color: #fff;
+  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50);
+  //position: relative;
+  display: none;
+  & > * {
+    display: inline-block;
+    vertical-align: bottom;
+
+  }
+  .main-input-box-textarea-inner {
+    box-sizing: border-box;
+    margin-left: rem(30px);
+    max-height: 2.5rem;
+    overflow: auto;
+
+    .main-input-box-textarea {
+      width: rem(490px);
+      border-radius: rem(40px);
+      padding-left: rem(20px);
+      padding-right: rem(20px);
+      padding-top: rem(15px);
+      @include font-dpr(14px);
+      background: #F3F6F7;
+      border: 0 solid #E8ECEF;
+      box-sizing: border-box;
+      min-height: rem(60px);
+
+    }
+  }
+
+  .main-input-box-send {
+    @include font-dpr(15px);
+    color: #B6B6B6;
+    height: rem(50px);
+    position: absolute;
+    right: rem(40px);
+    top: 50%;
+    margin-top: rem(-25px);
+    &.on {
+      color: #00D6C6;
+    }
+  }
+  .main-input-box-plus {
+    @include font-dpr(16px);
+    width: rem(50px);
+    height: rem(50px);
+    position: absolute;
+    left: rem(40px);
+    top: 50%;
+    margin-top: rem(-25px);
+    input[type="file"] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      display: block;
+      width: rem(50px);
+    }
+  }
+}
+
+//病例单
+.message-result {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 rem(30px);
+
+}
+
+.message-result-item {
+  width: rem(510px);
+  border-radius: rem(22px);
+  &-title {
+    background-color: #01d1c2;
+    @include font-dpr(12px);
+    padding: rem(10px) rem(32px);
+    border-top-left-radius: rem(21px);
+    color: #fff;
+  }
+  &-message {
+    border: rem(1px) solid #01d1c2;
+    .message-result-item-img {
+      display: inline-block;
+      vertical-align: top;
+      padding: rem(28px) rem(20px);
+      background: #e5faf8;
+
+      & > img {
+        width: rem(80px);
+        height: rem(92px);
+        vertical-align: top;
+      }
+    }
+    & > figcaption {
+      display: inline-block;
+      vertical-align: top;
+      padding: rem(34px) rem(24px);
+      max-width: 4.5rem;
+      & > p {
+        font-size: 0;
+        color: #909090;
+        span {
+          margin-right: rem(12px);
+          @include font-dpr(12px);
+        }
+      }
+      & > h2 {
+        @include font-dpr(14px);
+        color: #222;
+        font-weight: normal;
+        margin-bottom: rem(6px);
+      }
+    }
+  }
+}
+
+//初诊结果
+.diagnosed-record {
+  .message-result-item-title {
+    border-top-right-radius: rem(21px);
+    border-top-left-radius: 0;
+    background: #A6C6EE;
+    color: #fff;
+
+  }
+  .message-result-item-message {
+    border: rem(1px) solid #96C0F3;
+  }
+}
+
+//发送手术预约
+.direct-operation-btn {
+  @include circle(rem(80px), rgba(0, 214, 198, 0.70));
+  position: absolute;
+  bottom: rem(120px);
+  right: rem(40px);
+  box-shadow: 0px 2px 10px 0px rgba(76, 211, 198, 0.25);
+  z-index: 1;
+  @include font-dpr(13px);
+  color: #FFFFFF;
+}
+
+//测试用，接收反馈
+
+.icon-im-plus {
+  @include square(rem(40px));
+  background: url("/image/imScene/dialog_photo_default@2x.png") no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  background-size: 100% 100%;
+}
+
+.check-suggestion {
+  position: relative;
+  &.doctor-special {
+    &:after {
+      display: none;
+    }
+  }
+  &.preview-suggestion {
+    .message-result-item-message {
+      border-bottom-right-radius: 0;
+    }
+
+    &:after {
+      display: none;
+    }
+  }
+  &:after {
+    content: '上传';
+    width: rem(66px);
+    height: rem(48px);
+    background: #ce9faf;
+    @include font-dpr(12px);
+    line-height: rem(48px);
+    color: #FFFFFF;
+    display: block;
+    position: absolute;
+    right: rem(1px);
+    bottom: rem(1px);
+    text-align: center;
+    border-bottom-right-radius: rem(21px);
+    border-top-left-radius: rem(21px);
+  }
+  .message-result-item {
+    &-title {
+      border-top-right-radius: rem(21px);
+      border-top-left-radius: 0;
+      background: #A6C7EE;
+      text-align: right;
+
+    }
+    &-bottom {
+      text-align: center;
+      padding: rem(30px) rem(36px);
+      padding-top: 0;
+      box-sizing: border-box;
+
+      a {
+        @include font-dpr(15px);
+        display: block;
+        padding-top: rem(30px);
+        text-align: center;
+        border-top: 1px solid #dfdfdf;
+        color: #00BEAF;
+      }
+    }
+    &-message {
+      background-color: #fff;
+      border-bottom-right-radius: rem(21px);
+      border-bottom-left-radius: rem(21px);
+      //padding-bottom:rem(24px);
+    }
+  }
+  &-item {
+    @include font-dpr(14px);
+    margin: rem(24px) 0;
+    padding: 0 rem(48px);
+
+    color: #222222;
+    position: relative;
+    box-sizing: border-box;
+    text-indent: rem(-18px);
+    & > span {
+      padding-left: rem(12px);
+    }
+    &:before {
+      content: '';
+      @include square(rem(6px));
+      background: #91B0D4;
+      left: rem(36px);
+      display: inline-block;
+      vertical-align: middle;
+
+    }
+  }
+}
+
+.preview-suggestion-tips {
+  background: #EAEDED;
+  border-radius: rem(8px);
+  padding: rem(15px);
+  margin: rem(35px) auto;
+  width: rem(510px);
+  box-sizing: border-box;
+  p {
+    @include font-dpr(12px);
+    color: #AAAAAA;
+  }
+}
+
+.time-stamp {
+  @include font-dpr(12px);
+  color: #3F4249;
+  text-align: center;
+  margin: rem(40px) 0;
+}
+
+.main-message-time {
+  padding: rem(10px) 0;
+  @include font-dpr(12px);
+  text-align: center;
+  color: #B0B4C5;
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background: #f4f5f7;
+  z-index: 5;
+  span {
+    color: #ff7267;
+  }
+}
+
+.prohibit-input {
+  background: #00D6C6;
+  box-shadow: 0 0 rem(6px) 0 rgba(226, 226, 226, 0.50);
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+  &:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+
+  }
+  & > div {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    &:before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: rem(41px);
+      width: rem(41px);
+      background: url("/image/imScene/dialogue_counsel@2x.png") no-repeat center;
+      background-size: contain;
+      margin-right: rem(12px);
+    }
+  }
+  span {
+    display: inline-block;
+    vertical-align: middle;
+    @include font-dpr(15px);
+    color: #FFFFFF;
+  }
+}
+
+
+.over-tips {
+  @include font-dpr(12px);
+  color: #CCCCCC;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-top: -1.15rem;
+  &:before {
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: rem(30px);
+    height: rem(30px);
+    background: url("/image/imScene/dialogue_prompt@2x.png") no-repeat center;
+    background-size: contain;
+    margin-right: rem(10px);
+  }
+  & > span {
+    display: inline-block;
+    vertical-align: top;
+    width: 85%;
+  }
+}
+
+.talk-num-tips {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #f4f5f7;
+  text-align: center;
+  padding: rem(10px) 0;
+  &.over {
+    p, span {
+      color: #fa7a7c;
+    }
+
+  }
+  & > p {
+    color: #B0B4C5;
+    @include font-dpr(12px);
+    span {
+      color: #fa7a7c;
+      padding: 0 rem(5px);
+    }
+  }
+
+}
+
+.over-tips-bottom {
+  @include font-dpr(12px);
+  color: #CCCCCC;
+  padding: 0 rem(70px);
+  padding-left: rem(30px);
+  &:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    background: url("/image/imScene/dialogue_prompt@2x.png") no-repeat center;
+    background-size: contain;
+    width: rem(30px);
+    height: rem(30px);
+  }
+  span {
+    vertical-align: top;
+    width: 90%;
+    display: inline-block;
+    margin-left: rem(12px);
+    line-height: 1.5;
+  }
+
+}
+
+.refuse-tips {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  text-align: center;
+  &:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+  span {
+    @include font-dpr(12px);
+    color: #CCCCCC;
+    vertical-align: middle;
+    a {
+      color: #01d1c2;
+      text-decoration: underline;
+    }
+  }
+  div {
+    display: inline-block;
+    vertical-align: middle;
+    &:before {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      background: url("/image/imScene/dialogue_prompt@2x.png") no-repeat center;
+      background-size: contain;
+      width: rem(30px);
+      height: rem(30px);
+      margin-right: rem(10px);
+    }
+  }
+}
+
+.message-getSendCount-tips {
+  background: #EAECEE;
+  border: 0 solid #E4E9EC;
+  border-radius: rem(9999px);
+  padding: rem(8px) rem(44px);
+  text-align: center;
+  @include font-dpr(12px);
+  color: #979AA6;
+  position: fixed;
+  bottom: rem(128px);
+  left: rem(74px);
+  right: rem(74px);
+  transform: translateY(100%);
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s linear;
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.audio-message {
+  width: 4rem;
+  text-align: right;
+  position: relative;
+  &:before {
+    content: '';
+    width: rem(40px);
+    height: rem(40px);
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    left: rem(20px);
+    top: 50%;
+    margin-top: rem(-20px);
+    background: url("/image/imScene/chat_play.png") no-repeat;
+    background-size: contain;
+  }
+}
+
+.main-message-box-item {
+  position: relative;
+
+}
+
+.fail-button {
+  width: rem(50px);
+  height: rem(50px);
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  left: -1rem;
+  top: 50%;
+  margin-top: rem(-25px);
+  & > img{
+    width: 100%;
+  }
+}

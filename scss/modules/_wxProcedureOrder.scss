@@ -1,0 +1,507 @@
+@charset "UTF-8";
+@import "../library/common-modules";
+
+html,body{
+  height: 100%;
+}
+.wx-main-inner {
+  $main-color-textLeft: #555555;
+  $main-color-background: #F3F6F7;
+  &.wx-orderForPay-main {
+    height: 100%;
+    .wx-main-content.no-marginTop {
+      background-color: #F3F6F7;
+    }
+  }
+  .wx-main-content {
+
+    margin-top: rem(10px);
+    background-color: $main-color-background;
+    &.no-marginTop.reviewNetOrder{
+      background-color: #F3F6F7;
+      height: 100%;
+    }
+    &.no-marginTop {
+      margin-top: 0;
+      background-color: #ffffff;
+    }
+  }
+  .wx-surgical-commBox {
+    background-color: #ffffff;
+    padding-top: rem(42px);
+    margin-bottom: rem(14px);
+    .wx-surgical-commTitle {
+      @include font-dpr(16px);
+      position: relative;
+      color: $main-color-textLeft;
+
+      padding-left: rem(42px);
+      //line-height: rem(16px);
+      &:after {
+        position: absolute;
+        content: '';
+        width: rem(6px);
+        height: rem(24px);
+        left: rem(28px);
+        top: 50%;
+        margin-top: rem(-12px);
+        background-color: #4CD3C6;
+      }
+      //手术时间标题
+      &.wx-surgical-commTime {
+        margin-top: rem(52px);
+      }
+    }
+    .wx-surgical-commCenter {
+      padding: rem(44px) rem(48px) 0 rem(48px);
+      .wx-surgical-commItemBox {
+        padding-bottom: rem(48px);
+        .wx-surgical-commItemList-left {
+          @include font-dpr(15px);
+          display: inline-block;
+          width: rem(125px);
+          padding-right: rem(68px);
+          color: #909090;
+          &.wx-multiLine-textLeft{
+            display: block;
+            float: left;
+          }
+        }
+        .wx-surgical-commItemList-right {
+          @include font-dpr(16px);
+          vertical-align: top;
+          color: #555555;
+          &.wx-multiLine-textRight{
+            display: block;
+            padding-left: rem(200px);
+            .wx-netOrderNameList{
+              padding-right:rem(48px);
+            }
+          }
+        }
+        &.wx-multiLine-textBox{
+          @include clearfix();
+        }
+        &.wx-surgical-compare-itemBox {
+          border: 1px solid #D9F2F2;
+          border-radius: 4px;
+          padding-bottom: 0;
+          position: relative;
+          .wx-selectBtn-recommend {
+            position: absolute;
+            display: inline-block;
+            width: rem(64px);
+            height: rem(64px);
+            background: url("/image/img00/wx/pay_hook_inactivated.png") no-repeat center;
+            background-size: 100% 100%;
+            bottom: rem(-2px);
+            right: rem(-2px);
+          }
+        }
+      }
+      .wx-surgical-compare-titleBox {
+        padding: rem(32px) rem(34px);
+        background-color: #D9F2F2;
+        .wx-surgical-compare-title {
+          //padding: rem(32px) rem(34px);
+          //background-color: #D9F2F2;
+          .wx-surgical-compare-logo {
+            display: inline-block;
+            width: rem(36px);
+            height: rem(36px);
+            vertical-align: bottom;
+            line-height: rem(42px);
+            background: url("/image/img00/wx/pay_hospital_inactivated.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+          .wx-surgical-compare-text {
+            line-height: 1;
+            margin-left: rem(6px);
+            display: inline-block;
+            @include font-dpr(16px);
+            vertical-align: bottom;
+            color: #6B7698;
+          }
+          .wx-surgical-compare-tips {
+            margin-left: rem(16px);
+            display: inline-block;
+            vertical-align: bottom;
+            width: rem(52px);
+            height: rem(24px);
+            padding: rem(4px) rem(8px);
+            line-height: rem(32px);
+            @include font-dpr(10px);
+            color: #F7854B;
+            border: 1px solid #F7854B;
+            border-radius: 2px;
+            text-align: center;
+          }
+        }
+      }
+      .wx-surgical-compare-listBox {
+        @include clearfix();
+        padding-top: rem(34px);
+        padding-left: rem(4px);
+        .wx-surgical-compare-listItem {
+          position: relative;
+          float: left;
+          @include font-dpr(13px);
+          color: #6B7698;
+          opacity: 0.85;
+          padding: 0 rem(15px) 0 rem(54px);
+          margin-bottom: rem(30px);
+          &:before {
+            position: absolute;
+            display: table;
+            content: '';
+            width: rem(6px);
+            height: rem(6px);
+            left: rem(32px);
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            top: 50%;
+            margin-top: rem(-3px);
+            background-color: #6B7698;
+          }
+        }
+      }
+      &.wx-surgical-not-recommend {
+        .wx-surgical-compare-itemBox {
+          border: 1px solid #F2F2F2;
+          .wx-surgical-compare-titleBox {
+            background-color: #F2F2F2;
+            .wx-surgical-compare-text {
+              color: #BDBDBD;
+            }
+          }
+        }
+        .wx-surgical-compare-listBox {
+          .wx-surgical-compare-listItem {
+            color: #BDBDBD;
+            &:before {
+              background-color: #BDBDBD;
+            }
+          }
+        }
+        .wx-surgical-commItemBox.wx-surgical-compare-itemBox {
+          .wx-selectBtn-recommend {
+            display: none;
+          }
+        }
+      }
+      &.wx-surgical-commSelect {
+        .wx-surgical-compare-itemBox {
+          border-color: #00CFC0;
+          .wx-surgical-compare-titleBox {
+            background-color: #00CFC0;
+            .wx-surgical-compare-logo {
+              background: url("/image/img00/wx/pay_hospital_activation.png") no-repeat center;
+              background-size: 100% 100%;
+            }
+          }
+          .wx-selectBtn-recommend {
+            background: url("/image/img00/wx/pay_hook_activation.png") no-repeat center;
+            background-size: 100% 100%;
+          }
+        }
+      }
+      //就诊地点
+      &.surgical-commAreaBox {
+        .surgical-commAreaBoxItem {
+          background-color: #F9FBFB;
+          padding: rem(28px) 0;
+          -webkit-border-radius: 8px;
+          -moz-border-radius: 8px;
+          border-radius: 8px;
+          .wx-commAreaLogo-right {
+            @include font-dpr(15px);
+            display: inline-block;
+            position: relative;
+            padding-left: rem(100px);
+            color: #333333;
+            .wx-commHospitalBtn-left {
+              position: absolute;
+              background: url("/image/img00/wx/pay_positioning.png") no-repeat center;
+              background-size: 100% 100%;
+              width: rem(48px);
+              height: rem(48px);
+              left: rem(26px);
+              top: 50%;
+              margin-top: rem(-24px);
+            }
+          }
+        }
+      }
+    }
+    &.wx-surgical-compareMain {
+      padding-bottom: rem(86px);
+      margin-bottom: 0;
+    }
+    //互联网手术单去标题
+    &.wx-surgical-aboutNet {
+      padding-top: 0;
+
+    }
+    //选择就诊医院
+    &.wx-net-selectHospital {
+      padding-bottom: rem(80px);
+      .wx-surgical-commCenter {
+        .wx-hospitalInfo-itemBox {
+          padding: rem(28px) rem(80px);
+          margin-bottom: rem(28px);
+          background-color: #F9FBFB;
+          -webkit-border-radius: 8px;
+          -moz-border-radius: 8px;
+          border-radius: 8px;
+          .wx-commHospitalBtn-right {
+            position: relative;
+            @include font-dpr(15px);
+            color: #909090;
+            .wx-commHospitalBtn-left {
+              position: absolute;
+              display: inline-block;
+              left: rem(-52px);
+              width: rem(40px);
+              height: rem(40px);
+              -webkit-border-radius: 50%;
+              -moz-border-radius: 50%;
+              border-radius: 50%;
+              background: url("/image/img00/wx/pay_select_inactivated-05.png") no-repeat center;
+              background-size: 100% 100%;
+              top: 50%;
+              margin-top: rem(-20px);
+              &.selected {
+                background: url("/image/img00/wx/pay_select_activation-06.png") no-repeat center;
+                background-size: 100% 100%;
+              }
+            }
+            &.wx-commTimeLogo-right {
+              position: relative;
+              padding-left: rem(100px);
+              display: block;
+              height: rem(86px);
+              line-height: rem(86px);
+              .wx-commHospitalBtn-left {
+                position: absolute;
+                width: rem(48px);
+                height: rem(48px);
+                background: url("/image/img00/wx/pay_time.png") no-repeat center;
+                background-size: 100% 100%;
+                left: rem(26px);
+                top: 50%;
+                margin-top: rem(-24px);
+              }
+              .surgical-timeWait {
+                @include font-dpr(15px);
+                color: #333333;
+              }
+              .wx-surgical-timesYear{
+                @include font-dpr(15px);
+                color: #333333;
+              }
+              .wx-surgical-timeTips{
+                @include font-dpr(15px);
+                color: #333333;
+              }
+              .wx-surgical-timeSeconds{
+                @include font-dpr(15px);
+                color: #333333;
+              }
+            }
+          }
+          &.surgical-timeBox {
+            padding: 0;
+            margin-bottom: 0;
+            .wx-commHospitalBtn-left {
+              -webkit-border-radius: 0;
+              -moz-border-radius: 0;
+              border-radius: 0;
+            }
+            .wx-surgical-timeTips {
+              padding-left: rem(20px);
+            }
+            .wx-surgical-timeSeconds{
+              padding-left: rem(20px);
+            }
+          }
+        }
+      }
+    }
+    //就诊须知
+    &.wx-surgical-mainBox {
+      margin-bottom: 0;
+      padding-bottom: rem(50px);
+      .wx-surgical-commCenter {
+        .surgical-instructions-close {
+          @include font-dpr(14px);
+          color: #909090;
+        }
+        .surgical-closeRolesBox {
+          @include clearfix();
+          padding-bottom: rem(50px);
+          .surgical-rolesItemLeft {
+            float: left;
+            color: #333333;
+            padding-top: rem(34px);
+          }
+          .surgical-rolesItemRight {
+            float: right;
+            color: #6B7698;
+            padding-top: rem(34px);
+            .order-costPercent {
+              display: inline-block;
+              color: #F76365;
+              width: rem(80px);
+              text-align: center;
+            }
+          }
+          .surgical-hootTips {
+            @include font-dpr(14px);
+            color: #555555;
+            padding-top: rem(30px);
+            .surgical-hootTips-number {
+              float: left;
+            }
+            .surgical-hootTips-text {
+              padding-left: rem(30px);
+            }
+          }
+        }
+      }
+    }
+  }
+  .wx-surgical-commOrderBtnBox {
+    background-color: #ffffff;
+    padding-bottom: rem(40px);
+    .wx-surgical-orderBtn {
+      @include font-dpr(16px);
+      display: block;
+      margin: 0 auto;
+      color: #FFFFFF;
+      width: rem(570px);
+      height: rem(88px);
+      text-align: center;
+      -webkit-border-radius: 100px;
+      -moz-border-radius: 100px;
+      border-radius: 100px;
+      background: #DFDFDF;
+      &.wx-orderSelected {
+        background-color: #00D6C6;
+      }
+    }
+  }
+  .wx-surgical-commBottomTips {
+    padding-bottom: rem(100px);
+    background-color: #fff;
+    .surgical-bottomTextBox {
+      position: relative;
+      @include font-dpr(12px);
+      width: rem(200px);
+      margin: 0 auto;
+      color: #BDBDBD;
+      text-align: center;
+      padding-left: rem(6px);
+      .surgical-bottomText {
+        border-bottom: 1px solid #BDBDBD;
+      }
+      &:before {
+        position: absolute;
+        content: '';
+        display: block;
+        width: rem(28px);
+        height: rem(28px);
+        background: url("/image/img00/wx/pay_question.png") no-repeat center;
+        background-size: 100% 100%;
+        left: rem(-28px);
+        top:50%;
+        margin-top: rem(-12px);
+      }
+    }
+    .wx-surgical-commTipsMain {
+      display: none;
+      .wx-surgical-commExplainBox {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: #555555;
+        opacity: 0.78;
+        z-index: 1;
+      }
+      .wx-surgical-commExplainCenter {
+        position: fixed;
+        top: 40%;
+        left: 50%;
+        width: rem(540px);
+        margin-top: rem(-270px);
+        margin-left: rem(-270px);
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        background: #ffffff;
+        z-index: 5;
+        .wx-surgical-commTipsBox {
+          position: relative;
+          .wx-surgical-commExplain-title {
+            text-align: center;
+            @include font-dpr(16px);
+            color: #333333;
+            padding-top: rem(48px);
+            padding-bottom: rem(28px);
+
+          }
+          .wx-surgical-commExplain-content {
+            padding: 0 rem(40px) rem(80px) rem(40px);
+            @include font-dpr(15px);
+            color: #555555;
+          }
+          .wx-surgical-commTipsCloseBtn {
+            position: absolute;
+            bottom: rem(-96px);
+            left: 50%;
+            margin-left: rem(-28px);
+            width: rem(56px);
+            height: rem(56px);
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            background: url("/image/img00/wx/surgery_delete@2x.png") no-repeat center;
+            background-size: 100% 100%;
+
+          }
+        }
+      }
+    }
+  }
+  //互联网手术单提交按钮
+  .wx-surgical-commSubmitBox {
+    width: 100%;
+    background: #DFDFDF;
+    .wx-surgical-commSubmitBtn {
+      @include font-dpr(16px);
+      width: 100%;
+      text-align: center;
+      padding: rem(32px) 0;
+      color: #FFFFFF;
+      &.active {
+        background-color: #00D6C6;
+      }
+    }
+  }
+  //公立医院提交预览时间样式
+  .submitPublicOrder,.reviewNetOrder,.publicOrderDetails{
+    .wx-baseSurgicalTime,.wx-baseSurgicalWeek,.wx-baseSurgicalDate{
+      @include font-dpr(15px);
+      color: #333333;
+    }
+    .wx-baseSurgicalTime{
+      margin-right: 0;
+    }
+    .wx-baseSurgicalDate{
+      display: inline-block;
+      padding-left: rem(20px);
+    }
+  }
+}

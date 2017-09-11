@@ -1,0 +1,263 @@
+@import "../../library/common-modules";
+//字号定义
+.left{
+  float:left;
+}
+.right{
+  float:right;
+}
+//亲友管理
+.noFriendText{
+  padding:rem(340px) rem(94px) 0;
+  &:before{
+    content: '';
+    display: block;
+    width:rem(390px);
+    height:rem(250px);
+    background:url("/image/img00/myServices/no_friend.png") no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    top: rem(48px);
+    left: 50%;
+    margin-left:rem(-390px / 2);
+  }
+  p{
+    &:nth-child(1){
+      @include font-dpr(19px);
+      color:#222;
+      text-align:center;
+    }
+    &:nth-child(2){
+      margin-top:rem(30px);
+      @include font-dpr(16px);
+      color:#AAA;
+      line-height:rem(40px);
+    }
+  }
+}
+.noFriendHref{
+  a{
+    text-align: center;
+    margin-top:rem(60px);
+    color:#00beaf;
+    display:block;
+    @include font-dpr(18px);
+  }
+}
+//咨询历史，预约历史
+.orderList{
+  background:#f3f6f7;
+  &.bg-f{
+    background:#fff;
+  }
+  .orderHistoryItem{
+    padding:0 rem(40px);
+    margin-bottom:rem(14px);
+    background:#fff;
+    .orderHisItemTop{
+      padding-top:rem(54px);
+      @include clearfix();
+      img{
+        width:rem(60px);
+        height:rem(60px);
+        margin-right:rem(20px);
+        border-radius: 50%;
+        vertical-align: middle;
+      }
+      span{
+        display:inline-block;
+        @include font-dpr(17px);
+        color:#aaa;
+        vertical-align: middle;
+        margin-right:rem(20px);
+      }
+      .doctorState{
+        @include font-dpr(16px);
+        color:#f08954;
+        line-height:rem(60px);
+        &.font-gray{
+          color:#ccc;
+        }
+      }
+    }
+    .bookingHisItemTop{
+      padding-top:rem(54px);
+      @include clearfix();
+      img{
+        width:rem(32px);
+        height:rem(32px);
+        margin-right:rem(20px);
+        vertical-align: middle;
+      }
+      span{
+        display:inline-block;
+        @include font-dpr(17px);
+        color:#555;
+        vertical-align: middle;
+      }
+      .doctorState{
+        @include font-dpr(16px);
+        color:#f08954;
+        &.font-gray{
+          color:#ccc;
+        }
+      }
+    }
+    .countDown{
+      &.hide{
+        display:none;
+      }
+      padding:rem(26px) 0 rem(26px) rem(20px);
+      margin-top:rem(28px);
+      background:#F9FBFB;
+      color:#aaa;
+      @include font-dpr(16px);
+      span{
+        color:#FF7267;
+        &:last-child{
+          margin-right:rem(12px);
+        }
+      }
+    }
+    .orderHistoryItemCenter{
+      padding-top:rem(40px);
+      @include font-dpr(17px);
+      color:#555;
+      p{
+        &:nth-child(2){
+          padding:rem(20px) 0 rem(44px);
+          border-bottom:1px solid #f3f6f7;
+        }
+        span{
+          color:#222;
+        }
+      }
+    }
+    .bookingHistoryItemCenter{
+      padding-top:rem(40px);
+      @include font-dpr(17px);
+      color:#222;
+      p{
+        &:nth-child(2){
+          padding:rem(20px) 0 rem(44px);
+          border-bottom:1px solid #f3f6f7;
+          color:#555;
+        }
+        span{
+          margin-right:rem(30px);
+        }
+      }
+    }
+    .orderHistoryItemBottom{
+      line-height:rem(112px);
+      @include clearfix();
+      .orderHisItemBottomLeft{
+        margin-top:rem(25px);
+        @include font-dpr(14px);
+        color:#BDBDBD;
+        span{
+          display:block;
+          line-height:rem(30px);
+          padding-bottom:rem(10px);
+        }
+      }
+    }
+    .bookingHistoryItemBottom{
+      line-height:rem(140px);
+      @include clearfix();
+      .orderHisItemBottomLeft{
+        @include font-dpr(14px);
+        color:#909090;
+        p{
+          padding-top:rem(32px);
+          line-height:rem(25px);
+          &:nth-child(2){
+            padding:rem(20px) 0 rem(40px);
+          }
+          span{
+            margin-right:rem(15px);
+          }
+        }
+      }
+    }
+  }
+}
+//预约单详情
+.orderDetailsBox{
+  background:#f3f6f7;
+  .orderDetailsUp{
+    @include clearfix();
+    padding:0 rem(40px);
+    margin-bottom:rem(14px);
+    background:#fff;
+    h3{
+      font-weight:normal;
+      padding:rem(40px) 0;
+      @include font-dpr(16px);
+      color:#909090;
+    }
+    figure{
+      margin-top:rem(16px);
+      figcaption{
+        width:rem(120px);
+        height:rem(120px);
+        img{
+          display:block;
+          width:100%;
+          height:100%;
+        }
+      }
+      .doctorInforBox{
+        margin-left:rem(48px);
+        h4{
+          @include font-dpr(20px);
+          color:#222;
+          padding-top:rem(5px);
+        }
+        div{
+          @include font-dpr(17px);
+          color:#7f858e;
+          padding-top:rem(25px);
+        }
+        p{
+          @include font-dpr(17px);
+          color:#3f4249;
+          padding:rem(48px) 0 rem(60px);
+        }
+      }
+    }
+  }
+  .orderDetailsDown{
+    background:#fff;
+    padding:0 rem(40px);
+    p{
+      padding-top:rem(70px);
+      @include font-dpr(17px);
+      color:#7f858e;
+      span{
+        &:nth-child(1){
+          display: inline-block;
+          width:rem(188px);
+        }
+      }
+    }
+    div{
+      padding-top:rem(100px);
+      button{
+        display:inline-block;
+        margin-left:rem(60px);
+        width:rem(240px);
+        line-height:rem(70px);
+        @include font-dpr(16px);
+        border-radius: rem(200px);
+        border:1px solid #00d6c6;
+        color:#00d6c6;
+      }
+      .bg-green{
+        background:#00d6c6;
+        color:#fff;
+      }
+    }
+  }
+}
+

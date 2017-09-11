@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问诊单</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/js/third-party/swiper/css/swiper.min.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/file_upload.css">
+    <link rel="stylesheet" href="/css/pages/myServices/symptom_lists.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/select_parts.css">
+</head>
+<body>
+<!--存储点击时距顶部的高度-->
+<input type="hidden" id="ev-scrollTop">
+<!--问诊单正文显示-->
+<section class="main-inner symptom-list ev-fileUpHide" style="display:none;">
+    <section class="tc-caseContentBox">
+        <section id="ev-baseInfo" class="tc-baseInfo">
+            <ul class="tc-baseInfoList">
+                <li class="tc-baseInfoItem">
+                    <div class="tc-baseInfoItemLeft">
+                        <img src="/image/img00/myServices/chatting_chatting_man@2x.png">
+                    </div>
+                    <div class="tc-baseInfoItemRight">
+                        <span class="tc-baseInfoName">武呵呵天</span>
+                        <span class="tc-baseInfoSex">男</span>
+                        <span class="tc-baseInfoAge">22</span>
+                    </div>
+                </li>
+                <li class="tc-baseInfoItem ">
+                    <div class="tc-baseInfoItemLeft">问诊日期</div>
+                    <div class="tc-baseInfoItemRight">2017年07月27日</div>
+                </li>
+            </ul>
+            <section class="tc-baseInfoItem">
+                <div class="tc-baseInfoItemLeft">主诉</div>
+                <div class="tc-baseInfoItemRight tc-recommendUserMain">双膝疼痛麻木一年以上，伴随腰部阵痛腰部阵痛</div>
+            </section>
+        </section>
+        <section id="ev-mainSymptom" class="tc-caseDescribe tc-module">
+            <section class="tc-caseDescribeTitle title"><h3>症状描述</h3></section>
+            <ul class="tc-caseDescribeList">
+                <li class="tc-caseDescribeItem">
+                    <span class="tc-caseDescribeItemLeft">不适部位</span>
+                    <span class="tc-caseDescribeItemRight tc-noRevice" id="ev-parts" >双肩</span>
+                </li>
+                <li class="tc-caseDescribeItem" data-type="">
+                    <span class="tc-caseDescribeItemLeft">不适症状</span>
+                    <span class="tc-caseDescribeItemRight">无力无力无力无力无力无力无力无力无力无力无力无力无力</span>
+                </li>
+                <li class="tc-caseDescribeItem" data-type=""><i><span class="tc-caseDescribeItemLeft">持续时间</span><span
+                        class="tc-caseDescribeItemRight" data-mainoptionid="" data-partid="1491806852799"
+                        data-questionid="1493774314338" data-optionidlist="1493779470173" othertext="一个月左右"
+                        data-otherdes="">一个月左右</span></i></li>
+                <li class="tc-caseDescribeItem" data-type=""><i><span class="tc-caseDescribeItemLeft">加重时间</span><span
+                        class="tc-caseDescribeItemRight" data-mainoptionid="" data-partid="1491806852799"
+                        data-questionid="1493774379664" data-optionidlist="1493779470173" othertext="一个月左右"
+                        data-otherdes="">一个月左右</span></i></li>
+            </ul>
+        </section>
+        <section id="ev-nowHistory" class="tc-caseDescribe tc-module">
+            <section class="tc-caseDescribeTitle title"><h3><i>现病史</i></h3></section>
+            <ul class="tc-caseDescribeList">
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">曾就诊医院</span><span
+                        class="tc-caseDescribeItemRight" id="ev-choose-hospital" data-name="" data-id="0">无</span></i>
+                </li>
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">确诊疾病</span><span
+                        class="tc-caseDescribeItemRight" id="ev-choose-disease" data-name="" data-id="0">无</span></i>
+                </li>
+                <li class="tc-caseDescribeItem ev-datumUpload">
+                    <span class="tc-caseDescribeItemLeft">检查资料</span>
+                    <span class="tc-caseDescribeItemRight">未上传</span>
+                    <ul class="uploadListsBox">
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                        <li><img src="/image/img00/doctorMain/doc_logo.png"></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <section id="ev-baseInform" class="tc-caseDescribe tc-module">
+            <section class="tc-caseDescribeTitle title"><h3><i>基本信息</i></h3></section>
+            <ul class="tc-caseDescribeList">
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">患者所在地</span><span
+                        class="tc-caseDescribeItemRight patientLocation" data-provinceid="110000" data-cityid="110100"
+                        data-districtid="110114" data-province="北京市" data-city="北京市"
+                        data-district="昌平区">北京市北京市昌平区</span></i></li>
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">手机号码</span><span
+                        class="tc-caseDescribeItemRight patientTel">13323033508</span></i></li>
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">社保类型</span><span
+                        class="tc-caseDescribeItemRight socialType" data-socialid="-1">无</span></i></li>
+                <li class="tc-caseDescribeItem"><i><span class="tc-caseDescribeItemLeft">社保所在地</span><span
+                        class="tc-caseDescribeItemRight socialLocation" data-provinceid="0" data-cityid="0"
+                        data-districtid="0" data-province="" data-city="" data-district="">无</span></i></li>
+            </ul>
+        </section>
+        <section id="ev-comment" class="tc-caseDescribe tc-module tc-comment">
+            <section class="tc-caseDescribeTitle title"><h3><i>备注</i></h3></section>
+            <textarea class="tc-caseDesOther" placeholder="填写可描述的内容"></textarea>
+        </section>
+        <section class="submit_symptom_box"><i>
+            <button class="submit_symptom">提交复诊单</button>
+        </i></section>
+    </section>
+</section>
+<!--问诊单正文显示结束-->
+
+
+<!--编辑问诊单弹层外框-->
+<section class="symptom-list-mask">
+
+    <!--症状修改弹层-->
+    <section class="sticky-wrapper" style="display:none;">
+        <section class="main-inner">
+            <section class="main-inner-content">
+                <section id="ev-choiceList" class="symptom-desc-inner">
+                    <section class="symptom-desc-form">
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+    <!--症状修改弹层结束-->
+
+    <section class="mask-mobile-box">
+        <span>手机号码</span>
+        <input type="number" class="mobile-number">
+    </section>
+    <section class="mask-medicine-box">
+        <textarea class="medicine-content"></textarea>
+        <footer>(填写示例：三七片、接骨七厘散)</footer>
+    </section>
+
+    <footer class="mask-footer-button">
+        <button class="mask-btn-sure">确定修改</button>
+        <button class="mask-btn-cancel">取消</button>
+    </footer>
+</section>
+<!--编辑问诊单弹层外框-->
+
+
+<!--城市侧边栏-->
+<aside class="searchTypeSelect"></aside>
+<!--城市侧边栏结束-->
+
+
+
+
+
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/common/commonString.js"></script>
+
+
+<script src="/js/third-party/q.js"></script>
+<script src="/js/third-party/uploadReplace.js"></script>
+<script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="//paas.allinmd.cn/modules/show_big_img/1.1/showBigImg.js"></script>
+<script src="/js/plugins/plugins.firstLetter.js"></script>
+<script src="/js/plugins/plugins.validate.js"></script>
+
+<script src="/js/modules/modules.upLoadFile.js"></script>
+<script src="/js/modules/module.search.input.js"></script>
+<script src="/js/modules/module.search.list.js"></script>
+
+
+</body>
+</html>

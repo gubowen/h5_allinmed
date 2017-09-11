@@ -1,0 +1,245 @@
+@charset "utf-8";
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/2/21
+ * @author: qiangkailiang
+ */
+
+@import "../../modules/_mainHeader";
+@import "../../library/_common-modules";
+@import "../../modules/_patientConsultRate";
+@import "../../modules/_topTips";
+@import "../../modules/_ustbPicker";
+html, body {
+  width: 100%;
+  height: 100%;
+}
+.sticky-wrapper{
+  height: auto;
+  min-height: 100%;
+}
+
+.main-inner {
+  width: 100%;
+  height: 100%;
+  padding-bottom:rem(115px);
+}
+
+.main-inner-content {
+  overflow: hidden;
+  position: relative;
+}
+
+//患者咨询
+.add-patient-content {
+  padding: 0 rem(70px);
+  margin-top: rem(67px);
+  display: none;
+  &-title {
+    text-align: center;
+    & > h4 {
+      font-weight: normal;
+      color: #909090;
+      @include font-dpr(14px);
+      & > span {
+        vertical-align: middle;
+      }
+      &:before, &:after {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        @include circle(rem(6px), #00D6C6);
+        margin: 0 rem(14px);
+      }
+    }
+  }
+  .add-patient-content-form{
+    margin-top:rem(76px);
+
+  }
+  &-item {
+    &:nth-last-child(1){
+      margin-bottom:rem(45px);
+    }
+
+
+    font-size: 0;
+    & > figcaption {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: rem(100px);
+      @include font-dpr(15px);
+    }
+    & > .add-patient-input {
+      display: inline-block;
+      vertical-align: middle;
+      width:rem(320px);
+
+
+      & > input {
+        width: 100%;
+        border: none;
+        background: none;
+        @include font-dpr(16px);
+        color: #555;
+        padding:rem(45px) 0;
+      }
+      & > select{
+        min-height:rem(60px);
+        @include font-dpr(16px);
+        font-family:"microsoft yahei";
+        background: none;
+        border: none;
+        width: 100%;
+        padding:rem(45px) 0;
+        outline: medium;
+      }
+      //与患者关系的span
+      > .patient-relation{
+        display: block;
+        width: rem(300px);
+        height:rem(40px);
+        padding:rem(45px) 0;
+        background: url(/image/img00/doctorShare/spTemp_nav_two_bg_up.png) no-repeat;
+        background-size: auto;
+        background-position: right center;
+        font-size: rem(32px);
+        line-height: rem(40px);
+      }
+    }
+    .add-patient-sex-selector {
+      display: inline-block;
+      vertical-align: middle;
+      @include font-dpr(16px);
+      margin-right: rem(60px);
+      padding:rem(45px) 0;
+      .add-patient-selector {
+        @include circle(rem(30px), #fff);
+        border: 2px solid #cccccc;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: rem(20px);
+
+        box-sizing: border-box;
+      }
+      & > span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &.on {
+        .add-patient-selector {
+          @include circle(rem(30px));
+          background: url("/image/img00/patientConsult/inquiry_choose_sel@2x.png") no-repeat;
+          background-size: 100% 100%;
+
+        }
+      }
+    }
+  }
+}
+
+
+.add-patient-submit {
+  padding:0 rem(90px);
+  margin-top:rem(-115px);
+  box-sizing: border-box;
+  justify-content: space-between;
+  display: flex;
+  .btn-primary {
+    width:rem(240px);
+  }
+
+  .cancel{
+    background: #FFFFFF;
+    border: 1px solid #00D6C6;
+    color: #00BEAF;
+  }
+  &.off{
+    .btn-primary {
+      background-color: #DFDFDF;
+    }
+    .cancel{
+      background: #FFFFFF;
+      border: 1px solid #00D6C6;
+      color: #00BEAF;
+    }
+  }
+  &.none{
+    .btn-primary{
+      width: 100%;
+    }
+  }
+}
+
+.patient-list {
+  text-align: left;
+  font-size: 0;
+  margin-top:rem(61px);
+}
+
+.patient-list-item {
+  padding: 0 rem(32px);
+  box-sizing: border-box;
+  margin-top: rem(60px);
+  display: inline-block;
+  width: 33.3%;
+  text-align: center;
+  vertical-align: middle;
+  & > figcaption {
+    $h: rem(60px);
+    text-align: center;
+    @include font-dpr(14px);
+    min-width: rem(164px);
+    height: $h;
+    line-height: $h;
+    border: 2px solid #DFDFDF;
+    border-radius: 100px;
+    @include ellipsis();
+
+  }
+  &.on {
+    color: #fff;
+    & > figcaption {
+      background-color: #00d6c6;
+    }
+    &.patient-list-item-plus{
+      & > figcaption{
+        background: url("/image/img00/patientConsult/add people_yet2@2x.png") no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+  }
+  &.patient-list-item-plus{
+    & > figcaption{
+      border: none;
+      background: url("/image/img00/patientConsult/add people_nor2@2x.png") no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+}
+
+.add-patient-save {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  .btn-primary {
+    width: rem(240px);
+    border: 1px solid #00d6c6;
+    &.cancel {
+      color: #00d6c6;
+      background-color: #fff;
+    }
+  }
+  &.off{
+    .save{
+      background-color: #dfdfdf;
+    }
+  }
+}
+.horizontal-box{
+  padding:rem(100px) rem(130px);
+}

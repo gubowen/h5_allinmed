@@ -1,0 +1,45 @@
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/3/22
+*/
+@import "../../library/_common-modules";
+.case-list-title{
+  @include font-dpr(13px);
+  color: #555555;
+
+}
+.main-inner{
+  padding:rem(60px) rem(48px);
+}
+.icon-rightArrow:after{
+  content:"";
+  background: url("/image/img00/patientConsult/suggestion_enter@2x.png") no-repeat;
+  background-size: contain;
+  width:rem(20px);
+  height:rem(20px);
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform:translateY(-50%)
+}
+.case-list-item{
+  margin:rem(30px) 0;
+  position: relative;
+  font-size: 0;
+  .time{
+    @include font-dpr(15px);
+    color: #222222;
+    vertical-align: middle;
+    margin-right:rem(80px);
+  }
+  &-name{
+    @include font-dpr(15px);
+    color: #555555;
+    vertical-align: middle;
+  }
+}

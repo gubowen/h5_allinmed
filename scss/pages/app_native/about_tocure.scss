@@ -1,0 +1,62 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/26
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+html,body{
+  height: 100%;
+}
+.main-inner{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .inner-header{
+    padding-top:rem(90px);
+    img{
+      width: rem(160px);
+      height: rem(160px);
+      display: block;
+      margin: 0 auto;
+    }
+    figcaption{
+      color: #222222;
+      @include font-dpr(15px);
+      line-height: 1;
+      margin-top: rem(42px);
+
+      text-align: center;
+    }
+  }
+  .content{
+    text-align: center;
+    margin-top: rem(160px);
+    line-height: 1;
+    @include font-dpr(13px);
+    color: #CCCCCC;
+    a{
+      color: #7B95DC;
+    }
+  }
+  .inner-footer{
+    position: absolute;
+    bottom: 0;
+    height: rem(160px);
+    width: 100%;
+    color: #909090;
+    box-sizing: border-box;
+    padding: rem(40px) 0 rem(50px);
+    @include font-dpr(13px);
+    background: #F6F7F9;
+    line-height: 1;
+    p{
+      text-align: center;
+    }
+    p+p{
+      margin-top: rem(14px);
+    }
+  }
+}

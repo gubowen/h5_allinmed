@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>填写就诊信息</title>
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/patientReport/medical_info.css">
+</head>
+<body>
+<section class="main-inner">
+    <!--就诊信息内容-->
+    <section class="medical-info-box">
+        <!--就诊信息顶部内容-->
+        <section class="info-nav">
+            <!--就诊的疾病-->
+            <ul class="info-ill">
+                <li class="info-ill-left">所患疾病</li>
+                <li class="info-ill-right">请选择患病部位及疾病名称</li>
+            </ul>
+            <!--就诊详情导航-->
+            <section class="info-nav-box">
+                <h2 class="info-nav-title">请选择当前状态</h2>
+                <nav class="info-nav-list">
+                    <span class="info-nav-item on">门诊后</span>
+                    <span class="info-nav-item">住院中</span>
+                    <span class="info-nav-item">已出院</span>
+                    <span class="info-nav-item">术后复诊</span>
+                </nav>
+            </section>
+
+        </section>
+        <!--就诊信息详情填写-->
+        <!--门诊后的信息填写-->
+        <section class="info-description" style="display: none">
+            <dl class="info-desc-desc">
+                <dt class="info-desc-left">就诊时间</dt>
+                <dd class="info-desc-right">请选择就诊时间</dd>
+            </dl>
+            <h4 class="info-description-title">医生建议</h4>
+            <section class="info-desc-list first-selector">
+                <div class="info-desc-item single-choices"><i class="icon-select"></i><span>拍片检查</span></div>
+                <div class="info-desc-item single-choices"><i class="icon-select"></i><span>药物治疗（针剂治疗等）</span></div>
+                <div class="info-desc-item single-choices"><i class="icon-select"></i><span>门诊小手术</span></div>
+                <div class="info-desc-item single-choices"><i class="icon-select"></i><span>住院治疗(无需手术)</span></div>
+                <div class="info-desc-item single-choices"><i class="icon-select"></i><span>手术治疗</span></div>
+                <div class="info-desc-item single-choices selected">
+                    <i class="icon-select"></i><span>手术治疗</span>
+                    <section class="info-desc-list second-selector">
+                        <div class="info-desc-item single-choices"><i class="icon-select"></i><span>等待住院</span></div>
+                        <div class="info-desc-item single-choices"><i class="icon-select"></i><span>正在考虑</span></div>
+                    </section>
+                </div>
+            </section>
+        </section>
+        <!--住院中的信息填写-->
+        <section class="info-description" style="display: none">
+            <dl class="info-desc-desc">
+                <dt class="info-desc-left">就诊时间</dt>
+                <dd class="info-desc-right">请选择就诊就诊就诊就诊就诊就诊就诊就诊时间</dd>
+            </dl>
+            <h4 class="info-description-title">治疗方式</h4>
+            <section class="info-desc-list first-selector">
+                <div class="info-desc-item multiple-choices"><i class="icon-select"></i><span>药物治疗（药剂治疗等）</span></div>
+                <div class="info-desc-item multiple-choices selected"><i class="icon-select"></i><span>手术治疗</span></div>
+            </section>
+            <dl class="info-desc-desc info-desc-last">
+                <dt class="info-desc-left">手术名称</dt>
+                <dd class="info-desc-right">请选择手术名称</dd>
+            </dl>
+        </section>
+        <!--已出院的信息填写-->
+        <section class="info-description" style="display: none">
+            <dl class="info-desc-desc">
+                <dt class="info-desc-left">入院时间</dt>
+                <dd class="info-desc-right">请选择就诊就诊就诊就诊就诊就诊就诊就诊时间</dd>
+            </dl>
+            <dl class="info-desc-desc">
+                <dt class="info-desc-left">出院时间</dt>
+                <dd class="info-desc-right">请选择就诊就诊就诊就诊就诊就诊就诊就诊时间</dd>
+            </dl>
+            <dl class="info-desc-desc">
+                <dt class="info-desc-left">复诊类型</dt>
+                <dd class="info-desc-right">请选择就诊就诊就诊就诊就诊就诊就诊就诊时间</dd>
+            </dl>
+            <h4 class="info-description-title">治疗方式</h4>
+            <section class="info-desc-list first-selector">
+                <div class="info-desc-item multiple-choices"><i class="icon-select"></i><span>药物治疗（药剂治疗等）</span></div>
+                <div class="info-desc-item multiple-choices selected"><i class="icon-select"></i><span>手术治疗</span></div>
+            </section>
+            <dl class="info-desc-desc info-desc-last">
+                <dt class="info-desc-left">手术名称</dt>
+                <dd class="info-desc-right">请选择手术名称</dd>
+            </dl>
+        </section>
+        <!--术后复诊的详情-->
+        <section class="info-description">
+            <dl class="info-operation-check">
+                <dt class="info-operation-left">手术名称</dt>
+                <dd class="info-operation-right">请选择手术名称</dd>
+            </dl>
+            <dl class="info-operation-check">
+                <dt class="info-operation-left">手术时间</dt>
+                <dd class="info-operation-right">请选择手术时间</dd>
+            </dl>
+            <dl class="info-operation-check">
+                <dt class="info-operation-left">复诊阶段</dt>
+                <dd class="info-operation-right">请选择复诊阶段</dd>
+            </dl>
+            <dl class="info-operation-check">
+                <dt class="info-operation-left">本次复诊时间</dt>
+                <dd class="info-operation-right">请选择本次复诊时间</dd>
+            </dl>
+        </section>
+    </section>
+
+    <footer class="medical-info-footer">
+        <button class="footer-btn">报到</button>
+    </footer>
+</section>
+
+<!--选择复诊建议的盒子-->
+<section class="visit-advice-box">
+    <section class="visit-advice-container">
+        <header class="visit-advice-top">
+            <p class="visit-advice-title">复诊建议<em>(可多选)</em></p>
+            <span class="visit-advice-cancel"></span>
+        </header>
+        <section class="visit-advice-select">
+            <ul class="visit-advice-list">
+                <li class="visit-advice-item on">出院后三天复查</li>
+                <li class="visit-advice-item">出院后一周复查</li>
+                <li class="visit-advice-item">出院后两周复查</li>
+                <li class="visit-advice-item">出院后一月复查</li>
+                <li class="visit-advice-item">出院后三月复查</li>
+                <li class="visit-advice-item">出院后半年复查</li>
+                <li class="visit-advice-item">出院后一年复查</li>
+                <li class="visit-advice-item">其他</li>
+                <li class="visit-advice-item">无需复诊</li>
+            </ul>
+            <section class="visit-advice-bottom">
+                <button class="visit-advice-btn">完成</button>
+            </section>
+        </section>
+        <section class="visit-advice-write">
+            <section class="visit-advice-content">
+                <input type="text" placeholder="其他复诊建议" class="visit-advice-write-input">
+                <button class="visit-advice-write-btn disabled" disabled="disabled">添加</button>
+            </section>
+        </section>
+    </section>
+</section>
+
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/common.js"></script>
+
+</body>
+</html>

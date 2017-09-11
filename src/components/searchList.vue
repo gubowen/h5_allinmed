@@ -1,0 +1,591 @@
+<template>
+  <section class="search-box tc-mainInner">
+    <section class="tc-searchCommFixedTop">
+      <div class="tc-searchCommTop">
+        <i class="tc-searchBtnPic"></i>
+        <input class="tc-searchCommInput"
+               ref="searchInput"
+               v-model="searchText"
+               type="text"
+               :placeholder="placeholderText"
+               @input="searchEvent"
+        >
+      </div>
+    </section>
+    <section class="tc-searchMain">
+      <section class="tc-search-noResult" style="display: none;">
+        <p>暂未搜索到相关城市信息</p>
+      </section>
+      <section class="no-result-item-add" style="display: none;">
+        <textarea name="addText" class="add-result-item" aria-required="true" aria-invalid="false"></textarea>
+        <button class="btn-primary add-result-item-btn">保存</button>
+      </section>
+      <section class="tc-searchContentInner ev-initList" style="">
+        <!--<header class="tc-searchDocArea">-->
+        <!--<i class="tc-searchDocAreaLeft"></i>-->
+        <!--<span class="tc-searchAreaName">选择城市</span>-->
+        <!--</header>-->
+        <section class="searchResult">
+          <p class="searchResultItem" v-for="item in messageList">{{item}}</p>
+        </section>
+
+      </section>
+      <section class="tc-searchContentInner ev-searchList"></section>
+    </section>
+    <!--<div id="tip" class="tips-text">-->
+    <!--{{tipString}}-->
+    <!--</div>-->
+    <!--<loading v-show="finish"></loading>-->
+  </section>
+</template>
+<script>
+  /**
+   * @Desc：
+   * @Usage:
+   * @Notify：
+   * @Depend：
+   *
+   * Created by qiangkailiang on 2017/9/11.
+   */
+  import api from "common/js/util/util";
+  const XHRList = {
+    hospital: "/mcall/comm/data/baseinfo/v1/getHospitalList/",
+    disease: "/mcall/cms/part/illness/relation/v1/getMapList/",
+  };
+  export default{
+    data(){
+      return {
+        messageList: [],
+        searchFlag: true,
+        searchText: '',
+        placeholderText: ""
+      }
+    },
+    mounted(){
+      this.listType = this.$route.params.listType;
+
+      this.getPlaceHolder(this.listType);
+      this.limitChinese();
+    },
+    methods: {
+      getPlaceHolder(type){
+        switch (type) {
+          case "hospital":
+            this.placeholderText = "请输入就诊医院名称";
+            break;
+          case "disease":
+            this.placeholderText = "请输入疾病名称";
+            break;
+          default:
+            break;
+        }
+      },
+
+      limitChinese(){
+        setTimeout(() => {
+          this.$refs.searchInput.addEventListener("compositionstart", () => {
+            this.searchFlag = false;
+          });
+          this.$refs.searchInput.addEventListener("compositionend", () => {
+            this.searchFlag = true;
+          });
+        }, 20);
+      },
+
+      getMessageList(searchContent){
+        const that = this;
+
+        let searchData = {};
+        switch (this.listType) {
+          case "hospital":
+            searchData = {
+              hospitalName: searchContent
+            };
+            break;
+          case "disease":
+            searchData = {
+              diseaseName: searchContent
+            };
+            break;
+          default:
+            break;
+        }
+
+        let data = Object.assign({}, {
+          isValid: "1",
+          firstResult: "0",
+          maxResult: "9999",
+          cityId: ""
+        }, searchData);
+        api.ajax({
+          url: XHRList.hospital,
+          method: "POST",
+          data: data,
+          beforeSend(config) {
+            this.finish = false;
+          },
+          done(param) {
+            console.log(param)
+
+            if (param.responseObject.responseData) {
+              let dataList = param.responseObject.responseData.dataList;
+              if (dataList && dataList.length !== 0) {
+                that.messageList = dataList;
+              }
+            }
+          },
+          fail(err) {
+
+          }
+        })
+      },
+      searchEvent(){
+
+        if (this.searchText.length === 0) {
+          return false;
+        } else {
+          clearTimeout(this.searchTimeout);
+          this.searchTimeout = setTimeout(() => {
+            this.getMessageList(this.searchText);
+          }, 300);
+        }
+      }
+    },
+    props: {}
+  }
+</script>
+<style lang="scss" rel="stylesheet/scss">
+  /*@import "../../scss/modules/_searchCommTop";*/
+  @import "../../scss/library/_common-modules";
+  /*@import "../../scss/modules/_searchResult";*/
+  .search-box {
+    overflow: hidden;
+    /*transform:translateX(100%);*/
+    transition: transform 0.2s ease-in-out;
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*z-index: 4;*/
+    background-color: #fff;
+    &.show {
+      transform: translateX(0);
+    }
+  }
+
+  .tc-searchMain {
+    $colorTwo: #222222;
+    $colorFive: #555555;
+    padding-top: 1.3rem;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+    .main-header {
+      display: flex;
+      position: fixed;
+      top: 0;
+      .tc-searchBackBtn {
+        @include font-dpr(16px);
+        line-height: rem(60px);
+        color: #000;
+      }
+    }
+    //医生列表
+    .tc-searchContentInner {
+      //margin-top: rem(198px);
+      .tc-searchDocArea {
+        padding: rem(12px) rem(40px);
+        box-sizing: border-box;
+        border-bottom: 1px solid #DFDFDF;
+        //position: fixed;
+        width: 100%;
+        //margin-top:1.3rem;
+        background: #FFF;
+        .tc-searchDocAreaLeft {
+          display: inline-block;
+          width: rem(10px);
+          height: rem(18px);
+          background: url(../common/image/img00/patientConsult/searchAreaLeft.png);
+          background-size: 100% 100%;
+        }
+        .tc-searchAreaName {
+          @include font-dpr(13px);
+          color: #909090;
+          padding-left: rem(10px);
+          &.tc-selectIllnessName {
+            padding-left: 0;
+          }
+        }
+      }
+
+      //padding-top: rem(56px);
+      .searchResultTitle {
+        @include font-dpr(14px);
+        color: $colorFive;
+        background: #F9FBFC;
+        padding: rem(10px) 0 rem(12px) rem(40px);
+      }
+      .searchResultItem {
+        @include font-dpr(16px);
+        color: $colorTwo;
+        display: block;
+        padding: rem(24px) rem(40px);
+        line-height: rem(32px);
+        cursor: pointer;
+        &.selected {
+          background-color: #F9FBFB;
+        }
+        & > em {
+          color: #00BEAF;
+          font-style: normal;
+        }
+
+      }
+      .tc-searchListBoxIllness {
+        max-height: 100%;
+        .tc-searchDocKeyWord {
+          max-height: 100%;
+        }
+        .tc-searchDocListItem {
+          max-height: 100%;
+        }
+      }
+    }
+    //未找到相关结果 添加
+    .tc-searchCommFixedBottom {
+      bottom: 0;
+      position: fixed;
+      width: 100%;
+      height: rem(98px);
+      background-color: #ffffff;
+      border-top: 1px solid #DFDFDF;
+      text-align: center;
+      @include font-dpr(13px);
+      .tc-searchNoResult {
+        display: inline-block;
+        color: #B3B9C4;
+      }
+      .tc-searchAddBtn {
+        display: inline-block;
+        color: #00BEAF;
+        padding: rem(12px) rem(18px);
+        -webkit-border-radius: 100px;
+        -moz-border-radius: 100px;
+        border-radius: 100px;;
+        border: 1px solid #00BEAF;
+        margin: rem(24px) 0 rem(24px) rem(12px);
+        vertical-align: middle;
+      }
+    }
+    //搜索无结果
+    .tc-searchCommNoResult {
+      text-align: center;
+      padding-top: rem(60px);
+      .tc-searchNoResultText {
+        display: inline-block;
+        @include font-dpr(15px);
+        color: #909090;
+        padding-top: rem(80px);
+      }
+    }
+    //手动添加医院
+    .tc-searchAddBySelf {
+      .tc-searchAddTextArea {
+        textarea {
+          @include font-dpr(16px);
+          width: rem(668px);
+          height: rem(200px);
+          color: $colorFive;
+          padding: rem(40px);
+          background-color: #F9FBFB;
+          border-style: none;
+          line-height: rem(32px);
+          -webkit-box-shadow: inset 0px -3px 4px 0 #F4F8FD;
+          -moz-box-shadow: inset 0px -3px 4px 0 #F4F8FD;
+          box-shadow: inset 0px -3px 4px 0 #F4F8FD;
+        }
+      }
+      .tc-searchAddHosBtn {
+        padding-top: rem(100px);
+        span {
+          @include font-dpr(16px);
+          color: #ffffff;
+          display: block;
+          width: rem(570px);
+          height: rem(72px);
+          line-height: rem(72px);
+          text-align: center;
+          background-color: #00D6C6;
+          -webkit-border-radius: 100px;
+          -moz-border-radius: 100px;
+          border-radius: 100px;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+
+  .searchTypeSelect {
+    position: fixed;
+    z-index: 5;
+    right: 0;
+    top: rem(225px);
+    padding: rem(10px) 0 rem(5px) 0;
+  }
+
+  .searchTypeSelectItem {
+    display: block;
+    @include font-dpr(13px);
+    color: #B3B9C4;
+    text-align: center;
+    position: relative;
+    background-color: #fff;
+    padding-left: rem(10px);
+    padding-right: rem(10px);
+    border-right: rem(20px) solid transparent;
+    border-left: 2rem solid transparent;
+    background-clip: padding-box;
+    &:before {
+      content: attr(data-toolTips);
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      left: rem(-140px);
+      top: 55%;
+      width: rem(104px);
+      margin-top: rem(-32px);
+      height: rem(62px);
+      line-height: rem(62px);
+      /*background: transparent url('/image/img00/healthInfo/tips_bg.png') center center no-repeat;*/
+      /*background-size: 100% 100%;*/
+      font-weight: bold;
+      @include font-dpr(20px);
+      color: #3598db;
+    }
+  }
+
+  .searchTypeSelectItem.selected {
+    color: #3598db;
+    &:before {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  //.tc-selectIllnessMain{
+  //  $colorTwo:#222222;
+  //  $colorFive:#555555;
+  //  .main-header{
+  //    display: flex;
+  //    position: fixed;
+  //    top:0;
+  //    .tc-searchBackBtn{
+  //      @include font-dpr(16px);
+  //      line-height: rem(60px);
+  //      color: #000;
+  //    }
+  //  }
+  //}
+  .tc-search-noResult {
+    text-align: center;
+    padding-top: rem(200px);
+    box-sizing: border-box;
+    display: none;
+    & > p {
+      @include font-dpr(15px);
+      color: #909090;;
+    }
+    & > span {
+      display: block;
+      margin-top: rem(60px);
+      @include font-dpr(16px);
+      color: #00BEAF;
+      em {
+        font-style: normal;
+      }
+    }
+  }
+
+  .icon-addResult:after {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    width: rem(14px);
+    height: rem(14px);
+    background: url("/image/img00/healthInfo/dialog_overtime_arrow.png");
+    background-size: contain;
+    margin-left: rem(12px);
+  }
+
+  .no-result-item-add {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 4;
+    .add-result-item {
+      background: #F9FBFB;
+      padding: rem(40px);
+      color: #555555;
+      width: 100%;
+      border: none;
+      resize: none;
+      @include font-dpr(16px);
+      box-sizing: border-box;
+      box-shadow: 0px rem(-3px) rem(4px) 0px #F4F8FD;
+    }
+    .add-result-item-btn {
+      width: rem(570px);
+      display: block;
+      margin: 0 rem(90px);
+      margin-top: rem(100px);
+      &.unable {
+        color: #fff;
+        background: #DFDFDF;
+      }
+    }
+  }
+
+  //医生列表
+  $colorTwo: #222222;
+  $colorFive: #555555;
+  .tc-mainInner {
+    .tc-searchCommFixedTop {
+      position: fixed;
+      //top:rem(101px);
+      width: 100%;
+    }
+    .tc-search-noResult {
+      display: block;
+    }
+    .tc-searchCommTop {
+      padding: rem(20px);
+      background-color: #F3F6F7;
+      position: relative;
+      width: 100%;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      .tc-searchCommInput {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        @include font-dpr(15px);
+        color: #555555;
+        width: 100%;
+        height: rem(58px);
+        padding-left: rem(60px);
+        margin: 0 auto;
+        outline: none;
+        border-style: none;
+        -webkit-border-radius: rem(8px);
+        -moz-border-radius: rem(8px);
+        border-radius: rem(8px);
+      }
+      .tc-searchBtnPic {
+        display: inline-block;
+        width: rem(30px);
+        height: rem(30px);
+        background: url(../common/image/img00/patientConsult/inquire_search@2x.png) no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        left: rem(40px);
+        top: 50%;
+        margin-top: rem(-15px);
+      }
+    }
+  }
+
+  .tc-searchCommFixedTop {
+    z-index: 5;
+  }
+
+  .tc-searchContentInner {
+    //margin-top: rem(198px);
+    .tc-searchDocArea {
+      padding: rem(12px) rem(40px);
+      box-sizing: border-box;
+      border-bottom: 1px solid #DFDFDF;
+      //position: fixed;
+      width: 100%;
+      //margin-top:1.3rem;
+      background: #FFF;
+      .tc-searchDocAreaLeft {
+        display: inline-block;
+        width: rem(10px);
+        height: rem(18px);
+        background: url(../common/image/img00/patientConsult/searchAreaLeft.png);
+        background-size: 100% 100%;
+      }
+      .tc-searchAreaName {
+        @include font-dpr(13px);
+        color: #909090;
+        padding-left: rem(10px);
+        &.tc-selectIllnessName {
+          padding-left: 0;
+        }
+      }
+    }
+
+    //padding-top: rem(56px);
+    .searchResultTitle {
+      @include font-dpr(14px);
+      color: $colorFive;
+      background: #F9FBFC;
+      padding: rem(10px) 0 rem(12px) rem(40px);
+    }
+    .searchResultItem {
+      @include font-dpr(16px);
+      color: $colorTwo;
+      display: block;
+      padding: rem(24px) rem(40px);
+      line-height: rem(32px);
+      cursor: pointer;
+      &.selected {
+        background-color: #F9FBFB;
+      }
+      & > em {
+        color: #00BEAF;
+        font-style: normal;
+      }
+
+    }
+    .tc-searchListBoxIllness {
+      max-height: 100%;
+      .tc-searchDocKeyWord {
+        max-height: 100%;
+      }
+      .tc-searchDocListItem {
+        max-height: 100%;
+      }
+    }
+  }
+
+  .letter-aside {
+    position: fixed;
+    z-index: 5;
+    right: 0;
+    top: 3rem;
+    padding: 0.13333rem 0 0.06667rem 0;
+    li {
+      display: block;
+      @include font-dpr(13px);
+      color: #B3B9C4;
+      text-align: center;
+      position: relative;
+      background-color: #fff;
+      padding-left: 0.13333rem;
+      padding-right: 0.13333rem;
+      border-right: 0.26667rem solid transparent;
+      border-left: 2rem solid transparent;
+      background-clip: padding-box;
+    }
+  }
+
+  .tips-text {
+    display: none;
+  }
+</style>

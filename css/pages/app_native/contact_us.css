@@ -1,0 +1,75 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/6/1
+ * @author: lichenyang
+ */
+.main-inner {
+  line-height: 1; }
+  .main-inner .inner-module {
+    background: #F6F7F9;
+    padding-top: 0.21333rem; }
+    .main-inner .inner-module .module-box {
+      background-color: white; }
+    .main-inner .inner-module .module-title {
+      padding: 0.53333rem 0 0.21333rem;
+      font-size: 15px;
+      color: #666666;
+      margin-left: 0.4rem;
+      font-weight: normal;
+      border-bottom: 1px solid #eeeeee; }
+      [data-dpr="2"] .main-inner .inner-module .module-title {
+        font-size: 30px; }
+      [data-dpr="3"] .main-inner .inner-module .module-title {
+        font-size: 45px; }
+      .main-inner .inner-module .module-title::before {
+        display: inline-block;
+        content: " ";
+        width: 0.05333rem;
+        height: 0.22667rem;
+        background: #7B95DC;
+        margin-right: 0.10667rem;
+        margin-bottom: 0.05333rem; }
+    .main-inner .inner-module .module-text {
+      position: relative;
+      width: 9.2rem;
+      margin: 0 auto;
+      box-sizing: border-box;
+      font-size: 15px;
+      padding: 0.53333rem 0rem 0.53333rem 0.45333rem;
+      color: #333333; }
+      [data-dpr="2"] .main-inner .inner-module .module-text {
+        font-size: 30px; }
+      [data-dpr="3"] .main-inner .inner-module .module-text {
+        font-size: 45px; }
+      .main-inner .inner-module .module-text.connect-us {
+        width: 100%;
+        margin: 0;
+        padding: 0.53333rem 0.4rem 0.53333rem 0.85333rem; }
+        .main-inner .inner-module .module-text.connect-us.active {
+          background-color: #FBFBFC; }
+      .main-inner .inner-module .module-text:nth-child(2) {
+        border-bottom: 1px solid #eeeeee; }
+      .main-inner .inner-module .module-text .text-right {
+        margin-left: 0.42667rem;
+        position: absolute; }
+      .main-inner .inner-module .module-text .callMeIcon {
+        display: inline-block;
+        position: absolute;
+        right: 0.56rem;
+        top: 50%;
+        margin-top: -0.34667rem;
+        width: 0.69333rem;
+        height: 0.69333rem;
+        background: url("/image/img00/app_native/phone.png") no-repeat center;
+        background-size: 100% 100%; }
+    .main-inner .inner-module .module-tips {
+      font-size: 13px;
+      color: #AAAAAA;
+      margin-left: 0.21333rem; }
+      [data-dpr="2"] .main-inner .inner-module .module-tips {
+        font-size: 26px; }
+      [data-dpr="3"] .main-inner .inner-module .module-tips {
+        font-size: 39px; }

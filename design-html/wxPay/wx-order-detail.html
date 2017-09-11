@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/wxPay/wx_pay.css">
+</head>
+<body>
+<section class="wx-main-inner">
+    <section class="wx-main-content no-marginTop">
+        <section class="wx-comm-topSmall">
+            <section class="wx-comm-topCover"></section>
+            <section class="wx-comm-topText">
+                <p>订单已取消</p>
+            </section>
+        </section>
+        <!--中间订单信息部分-->
+        <section class="wx-orderComm-baseBox">
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">医生姓名</li>
+                <li class="wx-baseListRight">徐伟</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单类型</li>
+                <li class="wx-baseListRight">互联网手术</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">就诊医院</li>
+                <li class="wx-baseListRight">北京市解放军301医院</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">手术时间</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-baseSurgicalTime">2016年10月27日</span><span class="wx-baseSurgicalDate">上午</span>
+                </li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">就诊地点</li>
+                <li class="wx-baseListRight">广州市第一人民路12号广州第一人民医院第一人民医院</li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft">订单金额</li>
+                <li class="wx-baseListRight">
+                    <span class="wx-payTotal"><span class="wx-payMark">￥</span>10,000.00</span>
+                </li>
+            </ul>
+            <ul class="wx-baseItemBox">
+                <li class="wx-baseListLeft wx-refund-total">
+                    已退款<span class="wx-refund-detail">
+                    <div class="wx-refund-tipsComm">
+                        <div class="wx-refund-tipsBox">
+                            <div class="wx-refund-conformMain">
+                                <span class="wx-refund-bottomMark"></span>
+                                <span class="wx-refund-bottomMarkBack"></span>
+                                <p class="wx-close-role">取消订单规则:</p>
+                                <P class="wx-close-cost">接受住院手术安排前取消</P>
+                                <p class="wx-close-costRole">收取 <span class="wx-close-percent">5%</span>手续费</p>
+                                <P class="wx-close-cost">接受住院手术安排前爽约</P>
+                                <p class="wx-close-costRole">收取 <span class="wx-close-percent">15%</span>手续费</p>
+                            </div>
+                        </div>
+                    </div></span>
+                </li>
+                <li class="wx-baseListRight">
+                    <span class="wx-payTotal"><span class="wx-payMark">￥</span>10,000.00</span>
+                </li>
+            </ul>
+        </section>
+        <!--隔行灰底-->
+        <section class="wx-orderComm-baseLine"></section>
+        <!--个人信息-->
+        <section class="wx-order-infoBase">
+            <ul class="wx-order-patientInfoBox">
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">患者姓名:</span><span class="wx-patientNameRight">李铁根</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">联系电话:</span><span class="wx-patientNameRight">13234567890</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">订单编号:</span><span class="wx-patientNameRight">1024515453266565</span>
+                </li>
+                <li class="wx-order-patientInfoItem">
+                    <span class="wx-patientNameLeft">提交时间:</span><span class="wx-patientNameRight">2017-4-18 19:14:41</span>
+                </li>
+            </ul>
+        </section>
+        <!--底部-->
+        <section class="wx-comm-bottomBtn">
+            <button class="wx-comm-bottomBtnLeft wx-closeOrder">取消订单</button>
+            <button class="wx-comm-bottomBtnRight wx-goCheck">继续沟通</button>
+        </section>
+        <!--底部-->
+        <!--<section class="wx-comm-bottomBtn">-->
+        <!--<button class="wx-comm-bottomBtnOver">继续沟通</button>-->
+        <!--</section>-->
+    </section>
+</section>
+</body>
+</html>

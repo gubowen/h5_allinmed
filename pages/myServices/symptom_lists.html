@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问诊单</title>
+    <meta name="data-alcode" content="a9"  >
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="//paas.allinmd.cn/modules/show_big_img/1.1/showBigImg.css">
+    <link rel="stylesheet" href="/js/third-party/swiper/css/swiper.min.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/file_upload.css">
+    <link rel="stylesheet" href="/css/pages/myServices/symptom_lists.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/select_parts.css">
+</head>
+<body data-alcode="24" >
+
+    <!--存储点击时距顶部的高度-->
+    <input type="hidden" id="ev-scrollTop">
+
+    <!--问诊单正文显示-->
+    <section class="main-inner symptom-list">
+        <section class="tc-caseContentBox"></section>
+    </section>
+    <!--问诊单正文显示结束-->
+
+
+    <!--编辑问诊单弹层外框-->
+    <section class="symptom-list-mask" style="display:none;height:100%;">
+
+        <!--症状修改弹层-->
+        <section class="sticky-wrapper" style="display:none;">
+            <section class="main-inner">
+                <section class="main-inner-content">
+                    <section id="ev-choiceList" class="symptom-desc-inner">
+                        <section class="symptom-desc-form">
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+        <!--症状修改弹层结束-->
+
+        <!--取消、确认按钮-->
+        <footer class="symptom-desc-controller">
+            <a href="javascript:;" class="btn-hollow">取消</a>
+            <a href="javascript:;" class="btn-primary">确定</a>
+        </footer>
+        <!--取消、确认按钮结束  -->
+
+    </section>
+    <!--编辑问诊单弹层外框-->
+
+
+    <!--城市侧边栏-->
+    <aside class="searchTypeSelect"></aside>
+    <!--城市侧边栏结束-->
+
+
+    <script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+    <script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/common/commonString.js"></script>
+
+
+    <script src="/js/third-party/q.js"></script>
+    <script src="/js/third-party/uploadReplace.js"></script>
+    <script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="//paas.allinmd.cn/modules/show_big_img/1.1/showBigImg.js"></script>
+    <script src="/js/plugins/plugins.firstLetter.js"></script>
+    <script src="/js/plugins/plugins.validate.js"></script>
+
+    <script src="/js/modules/modules.upLoadFile.js"></script>
+    <script src="/js/modules/module.search.input.js"></script>
+    <script src="/js/modules/module.search.list.js"></script>
+
+    <script src="/js/scene/myServices/scene.myServices.symptomLists.js"></script>
+</body>
+</html>

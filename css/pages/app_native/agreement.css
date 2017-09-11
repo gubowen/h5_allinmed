@@ -1,0 +1,31 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/25
+ * @author: lichenyang
+ */
+.main-inner {
+  padding: 0 0.64rem; }
+  .main-inner .inner-item:last-child {
+    margin-bottom: 0.53333rem; }
+  .main-inner .item-title {
+    color: #222222;
+    font-size: 16px;
+    margin: 0.53333rem 0 0; }
+    [data-dpr="2"] .main-inner .item-title {
+      font-size: 32px; }
+    [data-dpr="3"] .main-inner .item-title {
+      font-size: 48px; }
+  .main-inner .item-text {
+    color: #333333;
+    text-align: justify;
+    font-size: 15px;
+    margin: 0.4rem 0 0; }
+    [data-dpr="2"] .main-inner .item-text {
+      font-size: 30px; }
+    [data-dpr="3"] .main-inner .item-text {
+      font-size: 45px; }
+  .main-inner .item-text + .item-text {
+    margin-top: 0.48rem; }

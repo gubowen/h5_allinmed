@@ -1,0 +1,78 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/15
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+.main-inner{
+  width: rem(750px);
+  height: rem(1206px);
+  background: url("/image/img00/downloadPage/main_bg.png") no-repeat center;
+  background-size: contain;
+  box-sizing: border-box;
+  padding-top: rem(32px);
+  .header-icon{
+    margin: 0 auto;
+    width: rem(390px);
+    height: rem(110px);
+    background: url("/image/img00/downloadPage/title.png") no-repeat center;
+    background-size: contain;
+  }
+  .main-content{
+    margin-top: rem(104px);
+    .page-icon{
+      margin: 0 auto;
+      width: rem(420px);
+      height: rem(482px);
+      background: url("/image/img00/downloadPage/bao_icon.png") no-repeat center;
+      background-size: contain;
+    }
+    .page-title{
+      margin: rem(36px) auto 0;
+      width: rem(390px);
+      height: rem(140px);
+      background: url("/image/img00/downloadPage/copy_writer.png") no-repeat center;
+      background-size: contain;
+    }
+    .page-button{
+      margin: rem(76px) auto 0;
+      width: rem(500px);
+      height: rem(120px);
+      background: url("/image/img00/downloadPage/botton.png") no-repeat center;
+      background-size: contain;
+    }
+  }
+  .footer-icon{
+    margin: rem(8px) auto;
+    width: rem(390px);
+    height: rem(56px);
+    background: url("/image/img00/downloadPage/footer.png") no-repeat center;
+    background-size: contain;
+  }
+}
+.page-tips{
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  section{
+    margin-top: rem(30px);
+    width: rem(750px);
+    height: rem(500px);
+    display: none;
+    &.ad-tip-icon{
+      background: url("/image/img00/downloadPage/ad-icon.png") no-repeat rem(150px);
+      background-size: contain;
+    }
+    &.ios-tip-icon{
+      background: url("/image/img00/downloadPage/ios-icon.png") no-repeat rem(150px);
+      background-size: contain;
+    }
+  }
+}

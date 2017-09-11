@@ -1,0 +1,172 @@
+@import "../../library/common-modules";
+@import "../../modules/_searchCommTop";
+@import "../../modules/_searchResult";
+
+.main-inner{
+  //头部提示
+  .patientInfoHeader{
+    padding: rem(48px) rem(48px) rem(0px);
+    .headerTips{
+      background-color: #F9FBFB;
+      position: relative;
+      border-radius: rem(15px);
+      box-sizing: border-box;
+      padding: rem(25px) rem(35px) rem(25px) rem(90px);
+      text-align: justify;
+      color: #ACACAC;
+      @include font-dpr(14px);
+      &::before{
+        display: table;
+        content: '';
+        width: rem(44px);
+        height: rem(44px);
+        position: absolute;
+        background: url("/image/img00/directOperation/success_back.png") no-repeat center;
+        background-size: contain;
+        top: rem(38px);
+        left: rem(24px);
+      }
+    }
+  }
+  //信息列表
+  .patientInfoList{
+    padding-top: rem(52px);
+    .patientInfoItem{
+      padding: 0 rem(48px);
+      display: table;
+      height: rem(120px);
+      @include font-dpr(15px);
+      .patientInfoItemLeft{
+        display: table-cell;
+        width:rem(248px);
+        color: #222222;
+        vertical-align:top;
+
+      }
+      .patientInfoItemRight{
+        display: table-cell;
+        width: rem(405px);
+        color: #CCCCCC;
+        position: relative;
+        span.show{
+          display: block;
+          @include ellipsis();
+          width: rem(385px);
+        }
+        &.hasSelect{
+          span.show{
+            position: absolute;
+            z-index: 1;
+            &.selected{
+              color: #555555;
+            }
+          }
+          select{
+            position: absolute;
+            z-index: 2;
+            opacity: 0;
+            display: block;
+            height: 50%;
+            width: 100%;
+          }
+        }
+        &.hasAfter::after{
+          display: table;
+          content: '';
+          width: rem(12px);
+          height: rem(20px);
+          position: absolute;
+          top: rem(10px);
+          right: 0;
+          background: url("/image/img00/healthInfo/right_icon.png") no-repeat center;
+          background-size: contain;
+        }
+      }
+    }
+  }
+  //其他信息样式
+  .patientInfoOther{
+    line-height: 1;
+    .otherTop{
+      padding: rem(0px) rem(48px);
+      @include font-dpr(16px);
+      .otherTopTitle{
+        font-weight: 100;
+        color: #222222;
+      }
+      .helpList{
+        font-size: 0;
+        .helpItem{
+          //height: rem(48px);
+          padding: rem(10px) rem(22px);
+          margin-top: rem(36px);
+          @include font-dpr(14px);
+          color: #9E9E9E;
+          line-height: 1;
+          text-align: center;
+          display: inline-block;
+          border: 1px solid #BDBDBD;
+          border-radius: rem(100px);
+          &.on{
+            background: #E4FDFC;
+            border: 1px solid #00D6C6;
+            color: #00BEAF;
+          }
+          &:not(:last-child){
+            margin-right: rem(25px);
+          }
+        }
+      }
+    }
+    .otherBottom{
+      margin-top: rem(38px);
+      background-color: #F9FBFB;
+      height: rem(276px);
+      box-sizing: border-box;
+      padding: rem(40px) rem(48px);
+      textarea{
+        display: block;
+        height: 100%;
+        background-color: #F9FBFB;
+        @include font-dpr(15px);
+      }
+    }
+  }
+  //底部按钮
+  .patientInfoBtn{
+    display: flex;
+    justify-content: space-between;
+    margin: rem(90px) rem(0px);
+    padding: 0 rem(100px);
+    //margin-top: rem(-115px);
+    box-sizing: border-box;
+    & > button {
+      //display: inline-block;
+      vertical-align: middle;
+      width: rem(245px);
+      height: rem(88px);
+      @include font-dpr(15px);
+      line-height: rem(88px);
+      box-sizing: border-box;
+      border-radius: rem(44px);
+    }
+    .btnBack{
+      border: 2px solid #15D9CB;
+      color: #15D9CB;
+    }
+    .btnSubmit{
+      border: 2px solid #15D9CB;
+      color: #15D9CB;
+      &.disabled{
+        background-color: #DFDFDF;
+        border: none;
+        color: #ffffff;
+      }
+    }
+  }
+  input,textarea{
+    border: none;
+    display: block;
+    width: 100%;
+  }
+}

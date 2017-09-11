@@ -1,0 +1,70 @@
+{
+    "responseData": {
+    "data_list": [
+        {
+            "picMap": [
+                {
+                    "id": "710",
+                    "caseAttType": "1",
+                    "caseAttSource": "0",
+                    "caseAttUrl": "https://img05.allinmed.cn/public1/M00/01/7E/wKgBw1jcaW-Aa0mtAARo_YI4kGo273.png",
+                    "caseId": "1490937645278",
+                    "caseAttName": "pic1",
+                    "caseCategoryId": "1"
+                },
+                {
+                    "id": "711",
+                    "caseAttType": "1",
+                    "caseAttSource": "0",
+                    "caseAttUrl": "https://img05.allinmed.cn/public1/M00/01/7C/wKgBwVjbHGOALgCtAAAnfTeypns517.png",
+                    "caseId": "1490937645278",
+                    "caseAttName": "pic2",
+                    "caseCategoryId": "1"
+                }
+            ]
+        },
+        {
+            "videoMap": [
+                {
+                    "id": "713",
+                    "caseAttType": "4",
+                    "caseAttSource": "0",
+                    "caseAttUrl": "https://img05.allinmed.cn/public1/M00/01/7E/wKgBw1jbG8qAaFJnAAAnfTeypns137.png",
+                    "caseAttName": "videoPic1",
+                    "qiniuId": "123",
+                    "caseCategoryId": "1",
+                    "videoList": [
+                        {
+                            "id": "716",
+                            "caseAttType": "2",
+                            "playTime": "",
+                            "caseAttUrl": "https://vpro01.allinmd.cn/1491370288749"
+                        }
+                    ]
+                },
+                {
+                    "id": "715",
+                    "caseAttType": "4",
+                    "caseAttSource": "0",
+                    "caseAttUrl": "https://img05.allinmed.cn/public1/M00/01/7E/wKgBw1jbG8qAaFJnAAAnfTeypns137.png",
+                    "caseAttName": "videoPic3",
+                    "qiniuId": "789",
+                    "caseCategoryId": "1",
+                    "videoList": [
+                        {
+                            "id": "718",
+                            "caseAttType": "2",
+                            "playTime": "",
+                            "caseAttUrl": "https://vpro01.allinmd.cn/1491370288749"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+},
+    "responseMessage": "",
+    "responseCode": "",
+    "responsePk": "0",
+    "responseStatus": true
+}

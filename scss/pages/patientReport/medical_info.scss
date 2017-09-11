@@ -1,0 +1,461 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/3/30
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+@import "../../modules/_searchCommTop";
+@import "../../modules/_searchResult";
+@import "../../modules/_ustbPicker";
+
+html,body{
+  height: 100%;
+}
+
+.main-inner{
+  height: 100%;
+  line-height: 1;
+  .medical-info-box{
+    min-height: 100%;
+    box-sizing: border-box;
+    padding-bottom: rem(288px);
+    .info-nav{
+      background-color: #ffffff;
+      padding-top: rem(60px);
+      //就诊的疾病
+      .info-ill{
+        width: rem(654px);
+        margin: 0 auto;
+        position: relative;
+        &::after{
+          display: table;
+          content: '';
+          width: rem(12px);
+          height:rem(20px);
+          position: absolute;
+          top:50%;
+          margin-top: rem(-10px);
+          right: rem(-12px);
+          background: url("/image/img00/healthInfo/right_icon.png") no-repeat center;
+          background-size: contain;
+        }
+        li{
+          display: inline-block;
+          vertical-align: middle;
+          @include font-dpr(16px);
+          &.info-ill-left{
+            width: rem(176px);
+            color: #222222;
+          }
+          &.info-ill-right{
+            color: #CCCCCC;
+            line-height: 1.2;
+            width: rem(468px);
+            @include ellipsis();
+            &.selected{
+              color: #555555;
+            }
+          }
+        }
+      }
+      //就诊详情导航
+      .info-nav-box{
+        padding: rem(90px) rem(48px) rem(48px);
+        .info-nav-title{
+          color: #222222;
+          @include font-dpr(16px);
+          font-weight: 100;
+        }
+        .info-nav-list{
+          font-size: 0;
+          .info-nav-item{
+            //height: rem(48px);
+            padding: rem(10px) rem(22px);
+            margin-top: rem(36px);
+            @include font-dpr(14px);
+            line-height: 1;
+            text-align: center;
+            display: inline-block;
+            border: 1px solid #BDBDBD;
+            border-radius: rem(100px);
+            &.on{
+              background: #E4FDFC;
+              border: 1px solid #00D6C6;
+              color: #00BEAF;
+            }
+            &:not(:last-child){
+              margin-right: rem(25px);
+            }
+          }
+        }
+      }
+
+    }
+    //就诊信息详情填写
+    .info-description{
+      display: none;
+      padding: rem(48px) 0 rem(72px) rem(70px);
+      background: #F9FBFB;
+      display: none;
+      &.on{
+        display: block;
+      }
+      .info-desc-desc{
+        @include font-dpr(15px);
+        position: relative;
+        &::after{
+          display: block;
+          content: '';
+          width: rem(12px);
+          height:rem(20px);
+          position: absolute;
+          top:50%;
+          margin-top: rem(-10px);
+          right: rem(40px);
+          background: url("/image/img00/healthInfo/right_icon.png") no-repeat center;
+          background-size: contain;
+        }
+        .info-desc-left{
+          display: inline-block;
+          width: rem(152px);
+          color: #555555;
+          vertical-align: middle;
+        }
+        .info-desc-right{
+          display: inline-block;
+          width: rem(438px);
+          vertical-align: middle;
+          color: #CCCCCC;
+          @include ellipsis();
+          &.selected{
+            color: #333333;
+          }
+        }
+      }
+      .info-desc-desc + .info-desc-desc{
+        margin-top: rem(66px);
+      }
+      .info-desc-last{
+        display: none;
+        margin-top: rem(70px);
+      }
+      .info-description-title{
+        margin-top: rem(70px);
+        @include font-dpr(13px);
+        font-weight: 100;
+        color: #B3B9C4;
+      }
+      .info-desc-list{
+        padding-top: rem(44px);
+        .info-desc-item{
+          @include font-dpr(15px);
+          color: #777777;
+          .second-selector{
+            display: none;
+            margin-left: rem(56px);
+          }
+          span{
+            vertical-align: middle;
+          }
+        }
+        .single-choices{
+          .icon-select{
+            display: inline-block;
+            @include circle(rem(30px));
+            background-color: #fff;
+            border: 1px solid #cccccc;
+            vertical-align: middle;
+            margin-right: rem(24px);
+          }
+          &.selected{
+            color: #00BEAF;
+            &>.icon-select {
+              background: url("/image/img00/patientConsult/symptom_circle_sel@2x.png") no-repeat;
+              background-size: 100% 100%;
+            }
+          }
+        }
+        .multiple-choices{
+          .icon-select {
+            display: inline-block;
+            @include square(rem(30px));
+            background-color: #fff;
+            border: 1px solid #cccccc;
+            border-radius: rem(4px);
+            vertical-align: middle;
+            margin-right: rem(24px);
+          }
+          &.selected{
+            color: #00BEAF;
+            &>.icon-select {
+              background: url("/image/img00/patientConsult/symptom_square_sel@2x.png") no-repeat;
+              background-size: 100% 100%;
+            }
+          }
+        }
+        .info-desc-item + .info-desc-item{
+          margin-top: rem(66px);
+        }
+      }
+      .info-operation-check{
+        @include font-dpr(15px);
+        position: relative;
+        &.has-select{
+          .info-operation-right{
+            position: relative;
+            select{
+              display: block;
+              position: absolute;
+              z-index: 2;
+              opacity: 0;
+              width: rem(390px);
+              top: 0;
+            }
+          }
+        }
+        &::after{
+          display: block;
+          content: '';
+          width: rem(12px);
+          height:rem(20px);
+          position: absolute;
+          top:50%;
+          margin-top: rem(-10px);
+          right: rem(40px);
+          background: url("/image/img00/healthInfo/right_icon.png") no-repeat center;
+          background-size: contain;
+        }
+        .info-operation-left{
+          display: inline-block;
+          width: rem(212px);
+          color: #555555;
+          vertical-align: middle;
+        }
+        .info-operation-right{
+          display: inline-block;
+          width: rem(390px);
+          vertical-align: middle;
+          color: #CCCCCC;
+          @include ellipsis();
+          &.selected{
+            color: #333333;
+          }
+        }
+      }
+      .info-operation-check + .info-operation-check{
+        margin-top: rem(66px);
+      }
+    }
+  }
+  .medical-info-footer{
+    margin-top: rem(-188px);
+    text-align: center;
+    //padding-top: rem(100px);
+    position: relative;
+    .footer-btn{
+      width: rem(570px);
+      height: rem(88px);
+      display: inline-block;
+      background: #00D6C6;
+      border-radius: rem(100px);
+      @include font-dpr(16px);
+      color: #FFFFFF;
+      &.disabled{
+        background: #DFDFDF;
+      }
+    }
+    .loading{
+      display: none;
+      width: rem(56px);
+      height: rem(56px);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: rem(-28px);
+      margin-top: rem(-28px);
+      animation: rotate 1s linear forwards infinite;
+    }
+  }
+}
+
+//选择复诊建议的盒子
+.visit-advice-box{
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.50);
+  .visit-advice-container{
+    background-color: #ffffff;
+    width: 100%;
+    height: rem(760px);
+    position: absolute;
+    bottom: 0;
+    .visit-advice-top{
+      height: rem(100px);
+      position: relative;
+      .visit-advice-title{
+        line-height: rem(100px);
+        padding-left: rem(40px);
+        @include font-dpr(16px);
+        em{
+          font-style: normal;
+          color: #B3B9C4;
+        }
+      }
+      .visit-advice-cancel{
+        display: block;
+        position: absolute;
+        width: rem(22px);
+        height: rem(22px);
+        background: url("/image/img00/directOperation/screen_close@2x.png")  no-repeat;
+        background-size: contain;
+        top: 50%;
+        margin-top: rem(-11px);
+        right: rem(48px);
+      }
+    }
+    .visit-advice-select{
+      .visit-advice-list{
+        box-sizing: border-box;
+        height: rem(560px);
+        border-top: 1px solid #DFDFDF;
+        border-bottom: 1px solid #DFDFDF;
+        padding-top: rem(8px);
+        font-size: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:  flex-start;
+        align-content: flex-start;
+        overflow: scroll;
+        .visit-advice-item{
+          padding-top: rem(40px);
+          height: rem(60px);
+          width: rem(256px);
+          margin-left: rem(80px);
+          span {
+            display: inline-block;
+            box-sizing: border-box;
+            padding: 0 rem(28px);
+            @include font-dpr(14px);
+            border: 1px solid #BDBDBD;
+            color: #828282;
+            height: rem(60px);
+            line-height: rem(60px);
+            border-radius: 100px;
+            @include ellipsis();
+
+          }
+          &.on{
+            span{
+              border: 1px solid #00D6C6;
+              color: #00D6C6;
+            }
+          }
+        }
+      }
+    }
+    .visit-advice-write{
+      display: none;
+      box-sizing: border-box;
+      //height: rem(660px);
+      border-top: 1px solid #DFDFDF;
+      .visit-advice-content{
+        width: rem(580px);
+        margin: 0 auto;
+        height: rem(104px);
+        position: relative;
+        border-bottom: 1px solid #DFDFDF;
+        .visit-advice-write-input{
+          border:none;
+          position: absolute;
+          @include font-dpr(15px);
+          left: 0;
+          bottom: rem(10px);
+        }
+        .visit-advice-write-btn{
+          background: #00D6C6;
+          border-radius: rem(4px);
+          width: rem(100px);
+          height: rem(56px);
+          color: #FFFFFF;
+          @include font-dpr(13px);
+          line-height: rem(56px);
+          position: absolute;
+          right: 0;
+          bottom: rem(8px);
+          &.disabled{
+            background: #D8D8D8;
+          }
+        }
+      }
+    }
+    .visit-advice-bottom{
+      height: rem(100px);
+      line-height: rem(100px);
+      @include font-dpr(17px);
+      text-align: center;
+      .visit-advice-btn{
+        width: rem(200px);
+        color: #00BEAF;
+      }
+    }
+  }
+}
+
+//把时间单独提出来
+dl.has-time{
+  &::after{
+    display: none !important;
+  }
+  dt{
+    vertical-align: baseline !important;
+  }
+  dd{
+    //width: rem(378px);
+    height: rem(30px);
+    overflow: visible !important;
+    font-size: 0 !important;
+    vertical-align: baseline !important;
+    .tableModuleSelect {
+      color: #aaa;
+      display: inline-block;
+      margin-right: rem(16px);
+      .dateSelector {
+        @include font-dpr(15px);
+        appearance:none;
+        text-transform: none;
+        border: none;
+        background: 0 0;
+        padding: 0 0 rem(8px) rem(20px);
+        display: inline-block;
+        margin: 0 rem(4px) 0 0;
+        color: #333333;
+        border-bottom: 1px solid #DFDFDF;
+        vertical-align: baseline;
+        outline: medium;
+        &.year{
+          width: rem(120px);
+        }
+        &.month{
+          width: rem(80px);
+        }
+        &.day{
+          width: rem(80px);
+        }
+      }
+      span {
+        @include font-dpr(15px);
+        display: inline-block;
+        color: #777777;
+      }
+    }
+  }
+}
+
+

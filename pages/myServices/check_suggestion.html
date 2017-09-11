@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>初诊建议</title>
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/recoveryReport/recovery_report.css">
+    <link rel="stylesheet" href="//paas.allinmd.cn/modules/show_big_img/1.1/showBigImg.css">
+    <link rel="stylesheet" href="/js/third-party/swiper/css/swiper.min.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/file_upload.css">
+    <script>
+    var appNative = function () {
+      window.onerror = function (err) {
+        log('window.onerror: ' + err)
+      };
+      /*这段代码是固定的，必须要放到js中*/
+      function setupWebViewJavascriptBridge(callback) {
+
+        if (window.WebViewJavascriptBridge) {
+          return callback(WebViewJavascriptBridge);
+        }
+        if (window.WVJBCallbacks) {
+          return window.WVJBCallbacks.push(callback);
+        }
+        window.WVJBCallbacks = [callback];
+
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function () {
+          document.documentElement.removeChild(WVJBIframe)
+        }, 0)
+      }
+
+      /*与OC交互的所有JS方法都要放在此处注册，才能调用通过JS调用OC或者让OC调用这里的JS*/
+      setupWebViewJavascriptBridge(function (bridge) {
+        var uniqueId = 1;
+        function log(message, data) {
+          var log = document.getElementById('log')
+          var el = document.createElement('div')
+          el.className = 'logLine'
+          el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+          if (log.children.length) {
+            log.insertBefore(el, log.children[0])
+          }
+          else {
+            log.appendChild(el)
+          }
+        }
+
+        sessionStorage.setItem("goToLogin", 1);
+
+
+        /* Initialize your app here */
+
+        /*JS给ObjC提供公开的API（testJavascriptHandler），在ObjC端可以手动调用JS的这个API（调用方法如：[_bridge callHandler:@"testJavascriptHandler" data:@{ @"foo":@"before ready" }];）。
+         1.testJavascriptHandler：JS给ObjC提供公开的API name
+         2.参数data：接收ObjC传过来的参数（data为参数）
+         3.参数responseCallback：可以回调ObjC（responseCallback是OC提供的回调函数）
+         4.responseData：JS传给OC回调函数的参数
+         */
+        /*注册getNativeInfoHandler方法，Native调用此方法传递参数给JS*/
+        bridge.registerHandler('getNativeInfoHandler',
+          function (data, responseCallback) {
+            // log('getNativeInfoHandler', data)
+            var responseData = {'Javascript Says': 'Right back atcha!'};
+            responseCallback(responseData)
+          });
+        /*注册getJSRegisterInfoHandler方法，Native调用此方法获取需要注册的本地组件信息*/
+        bridge.registerHandler('getJSRegisterInfoHandler',
+          function (data, responseCallback) {
+            // log('ObjC called testJavascriptHandler with', data)
+            var responseData = '{\"jsRegisterList\":[{\"scheme\":\"da-jxjy-app\",\"target\":\"Homepage\",\"action\":\"nativeHomepageViewController\",\"transformType\":\"0\"},{\"scheme\":\"da-jxjy-app\",\"target\":\"PaymentWeb\",\"action\":\"payTableViewController\",\"transformType\":\"1\"}]}'
+
+            var responseData = {
+              'jsRegisterList': [{
+                'scheme': 'da-jxjy-app',
+                'target': 'Homepage',
+                'action': 'nativeHomepageViewController',
+                'transformType': '0'
+              }, {
+                'scheme': 'da-jxjy-app',
+                'target': 'PaymentWeb',
+                'action': 'payTableViewController',
+                'transformType': '1'
+              }]
+            }
+
+            // log('JS responding with', responseData)
+            responseCallback(responseData)
+          })
+      })
+    }
+    appNative();
+  </script>
+</head>
+<body>
+<section class="tc-main he-main ev-fileUpHide">
+    <section class="tc-mainContent">
+        <!--基本信息-->
+        <section class="tc-baseInfo">
+            <ul class="tc-baseInfoList"></ul>
+        </section>
+        <!--推荐医生-->
+        <section class="tc-recommendDoctor tc-module" style="display:none;">
+            <section class="tc-recommendDoctorTitle title">
+                <h3>推荐医生</h3>
+            </section>
+            <section class="tc-recommendDoctorBox">
+                <p class="tc-boxTitle">根据您的病情为您推荐最擅长该领域的医生</p>
+                <ul class="tc-recommendDoctorList"></ul>
+                <!--<div class="tc-lookBySelf"><span>自己找医生 <i></i> </span></div>-->
+            </section>
+        </section>
+        <!--检查检查-->
+        <section class="tc-suggestChecking tc-module" style="display:none;">
+            <section class="tc-suggestCheckingTitle title">
+                <h3>建议检查/检验<span class="tc-suggestCheckingUpBtn tc-recommendRightComm ev-upLoadBtn">上传<i></i></span></h3>
+            </section>
+            <section class="tc-suggestCheckingBox">
+                <p class="tc-boxTitle">为了更清晰更准确的了解您的情况，建议您做以下检查项目，并在检查完成后上传检查结果；</p>
+                <ul class="tc-suggestCheckingList"></ul>
+            </section>
+        </section>
+        <!--患教知识-->
+        <section class="tc-teachingKnowledge tc-module" style="display:none;">
+            <section class="tc-teachingKnowledge title">
+                <h3>患教知识</h3>
+            </section>
+            <section class="tc-teachingKnowledgeBox"></section>
+        </section>
+        <!--处置建议-->
+        <section class="tc-disposalAdvice tc-module tc-disposeSuggested" style="display:none;">
+            <section class="tc-disposalAdviceTitle title">
+                <h3>处置建议</h3>
+            </section>
+            <section class="tc-disposalAdviceBox">
+                <p class="tc-boxTitle">请在医生建议下合理安排。</p>
+                <ul class="tc-disposalAdviceList tc-disposeSuggestedList"></ul>
+            </section>
+        </section>
+        <!--手术建议-->
+        <section class="tc-surgery tc-module" style="display:none;">
+            <section class="tc-surgeryTitle title">
+                <h3>手术建议</h3>
+            </section>
+            <section class="tc-surgeryBox">
+                <p class="tc-boxTitle">请在医生建议下合理安排。</p>
+                <ul class="tc-surgeryList">
+                </ul>
+            </section>
+        </section>
+        <!--footer提示-->
+        <section class="tc-warmPrompt">
+            <p class="tc-tc-warmPromptText"><span>温馨提示：</span>由于不能面诊，医生无法全面了解病情，初诊建议仅供参考，如有需要您可预约医生进行面诊。</p>
+        </section>
+    </section>
+</section>
+<script>
+  sessionStorage.setItem("goToLogin",1)
+</script>
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/third-party/q.js"></script>
+<script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/js/third-party/uploadReplace.js"></script>
+<script src="//paas.allinmd.cn/modules/show_big_img/1.1/showBigImg.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/common/commonString.js"></script>
+<script src="/js/third-party/nim/NIM_Web_NIM_v4.0.0.js"></script>
+<script src="/js/modules/modules.upLoadFile.js"></script>
+<script src="/js/modules/module.search.input.js"></script>
+<script src="/js/modules/module.search.list.js"></script>
+<script src="/js/scene/myServices/scene.myServices.checkSuggest.js"></script>
+</body>
+</html>

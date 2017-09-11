@@ -1,0 +1,296 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+.main-inner .main-header {
+  padding-bottom: 0.98667rem; }
+  .main-inner .main-header .authentication-tips {
+    display: none;
+    font-size: 14px;
+    background: #F6F7F9;
+    line-height: 1;
+    padding: 0.4rem 0;
+    color: #aaaaaa;
+    text-align: center; }
+    [data-dpr="2"] .main-inner .main-header .authentication-tips {
+      font-size: 28px; }
+    [data-dpr="3"] .main-inner .main-header .authentication-tips {
+      font-size: 42px; }
+    .main-inner .main-header .authentication-tips .in-authentication {
+      display: none;
+      margin: 0 auto 0.13333rem; }
+    .main-inner .main-header .authentication-tips .go-authentication {
+      color: #5F7AC0;
+      border-bottom: 0.01333rem solid #5F7AC0;
+      display: inline-block; }
+  .main-inner .main-header .header-box {
+    padding-top: 0.26667rem; }
+    .main-inner .main-header .header-box .header-bg {
+      width: 9.04rem;
+      height: 5.06667rem;
+      display: block;
+      margin: 0 auto; }
+    .main-inner .main-header .header-box .doctor-info {
+      width: 9.30667rem;
+      padding-bottom: 0.46667rem;
+      box-sizing: border-box;
+      padding-right: 0.13333rem;
+      background: #FFFFFF;
+      border: 1px solid #CFD9FF;
+      box-shadow: 0 5px 8px 0 rgba(182, 200, 245, 0.3);
+      margin: 0.45333rem auto 0px;
+      background: url("/image/img00/doctorShare/share_point.png") no-repeat;
+      background-size: 0.42667rem 0.37333rem;
+      background-position: 8.37333rem 0.50667rem; }
+      .main-inner .main-header .header-box .doctor-info:after {
+        content: '';
+        display: table;
+        clear: both; }
+      .main-inner .main-header .header-box .doctor-info .info-left {
+        width: 2.4rem;
+        height: 2.4rem;
+        background: url("/image/img00/doctorShare/share_avatar_bg.png") no-repeat center;
+        background-size: contain;
+        float: left;
+        margin: 0.56rem 0.34667rem 0.29333rem; }
+        .main-inner .main-header .header-box .doctor-info .info-left .doctor-icon {
+          width: 1.86667rem;
+          height: 1.86667rem;
+          margin: 0.26667rem;
+          border-radius: 50%; }
+      .main-inner .main-header .header-box .doctor-info .info-right {
+        float: left;
+        line-height: 1;
+        margin-top: 0.96rem;
+        width: 6rem; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+          font-size: 20px;
+          color: #4654A7; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+            font-size: 40px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-name {
+            font-size: 60px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+          margin-left: 0.32rem;
+          font-size: 12px;
+          color: #B3B7D1;
+          margin-right: 0.10667rem;
+          line-height: 1.2; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+            font-size: 24px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-post {
+            font-size: 36px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+          margin-left: 0.16rem;
+          font-size: 12px;
+          color: #B3B7D1; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+            font-size: 24px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-top .doctor-degree {
+            font-size: 36px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-middle {
+          margin-top: 0.45333rem;
+          font-size: 0; }
+          .main-inner .main-header .header-box .doctor-info .info-right .info-middle:after {
+            content: '';
+            display: table;
+            clear: both; }
+          .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+            font-size: 14px;
+            color: #717BB5; }
+            [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+              font-size: 28px; }
+            [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .doctor-hospital {
+              font-size: 42px; }
+          .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+            height: 0.37333rem;
+            box-sizing: border-box;
+            padding: 0px 0.10667rem;
+            line-height: 0.37333rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #54667D;
+            border-radius: 100px;
+            color: #596BCE;
+            font-size: 11px; }
+            [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+              font-size: 22px; }
+            [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-middle .hospital-level {
+              font-size: 33px; }
+        .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+          margin-top: 0.26667rem;
+          font-size: 13px;
+          color: #717BB5;
+          line-height: 1.2; }
+          [data-dpr="2"] .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+            font-size: 26px; }
+          [data-dpr="3"] .main-inner .main-header .header-box .doctor-info .info-right .info-bottom {
+            font-size: 39px; }
+          .main-inner .main-header .header-box .doctor-info .info-right .info-bottom .subject-item {
+            margin-right: 0.16rem; }
+          .main-inner .main-header .header-box .doctor-info .info-right .info-bottom .subject-item + .subject-item::before {
+            display: inline-block;
+            content: '';
+            width: 0.02667rem;
+            height: 0.26667rem;
+            background-color: #B2B7D0;
+            margin-right: 0.16rem; }
+
+.main-inner .main-content-box {
+  padding-bottom: 2.4rem; }
+  .main-inner .main-content-box .info-module {
+    padding-left: 0.96rem; }
+    .main-inner .main-content-box .info-module .module-title {
+      position: relative;
+      line-height: 1;
+      color: #555555;
+      font-size: 16px; }
+      [data-dpr="2"] .main-inner .main-content-box .info-module .module-title {
+        font-size: 32px; }
+      [data-dpr="3"] .main-inner .main-content-box .info-module .module-title {
+        font-size: 48px; }
+      .main-inner .main-content-box .info-module .module-title::before {
+        display: block;
+        content: '';
+        width: 0.10667rem;
+        height: 0.42667rem;
+        background-color: #02CCB9;
+        position: absolute;
+        top: 0.02667rem;
+        left: -0.26667rem; }
+      .main-inner .main-content-box .info-module .module-title::after {
+        display: block;
+        content: '';
+        width: 0.64rem;
+        height: 0.02667rem;
+        opacity: 0.5;
+        background: #DFE3F2;
+        position: absolute;
+        left: 0px;
+        bottom: -0.34667rem; }
+      .main-inner .main-content-box .info-module .module-title .go-view-time {
+        color: #818CAB;
+        display: none;
+        font-size: 14px;
+        position: absolute;
+        right: 0.58667rem;
+        font-weight: 100; }
+        [data-dpr="2"] .main-inner .main-content-box .info-module .module-title .go-view-time {
+          font-size: 28px; }
+        [data-dpr="3"] .main-inner .main-content-box .info-module .module-title .go-view-time {
+          font-size: 42px; }
+        .main-inner .main-content-box .info-module .module-title .go-view-time::after {
+          display: inline-block;
+          content: '';
+          width: 0.32rem;
+          height: 0.32rem;
+          background: url("/image/img00/doctorShare/suggestion_enter@2x.png") no-repeat center;
+          background-size: contain;
+          vertical-align: bottom;
+          margin-left: 0.02667rem; }
+    .main-inner .main-content-box .info-module .module-detail {
+      width: 8.08rem;
+      margin-top: 0.56rem;
+      font-size: 14px;
+      color: #666666; }
+      [data-dpr="2"] .main-inner .main-content-box .info-module .module-detail {
+        font-size: 28px; }
+      [data-dpr="3"] .main-inner .main-content-box .info-module .module-detail {
+        font-size: 42px; }
+    .main-inner .main-content-box .info-module .operation-case-list {
+      padding-top: 0.4rem; }
+      .main-inner .main-content-box .info-module .operation-case-list .operation-case-item {
+        height: 0.58667rem;
+        line-height: 0.58667rem;
+        box-sizing: border-box;
+        display: inline-block;
+        padding-left: 0.58667rem;
+        padding-right: 0.32rem;
+        margin-right: 1.33333rem;
+        background: url("/image/img00/doctorShare/share_label.png") no-repeat;
+        background-position: 0.14667rem 0.14667rem;
+        background-size: 0.26667rem 0.26667rem;
+        border: 1px solid #EEEEEE;
+        border-radius: 4px;
+        color: #969DB1;
+        font-size: 12px; }
+        [data-dpr="2"] .main-inner .main-content-box .info-module .operation-case-list .operation-case-item {
+          font-size: 24px; }
+        [data-dpr="3"] .main-inner .main-content-box .info-module .operation-case-list .operation-case-item {
+          font-size: 36px; }
+        .main-inner .main-content-box .info-module .operation-case-list .operation-case-item .operation-case-num {
+          display: inline-block;
+          width: 1.2rem;
+          text-align: right; }
+      .main-inner .main-content-box .info-module .operation-case-list .operation-case-item + .operation-case-item {
+        margin-top: 0.21333rem; }
+    .main-inner .main-content-box .info-module .module-detail + .module-detail {
+      margin-top: 0.21333rem; }
+  .main-inner .main-content-box .info-module:nth-child(even) .module-title::before {
+    background: #7A88D3; }
+  .main-inner .main-content-box .info-module + .info-module {
+    margin-top: 0.8rem; }
+
+.main-inner .main-footer {
+  display: none;
+  height: 1.30667rem;
+  width: 100%;
+  background: #00D6C6;
+  box-shadow: 0 0 6px 0 rgba(226, 226, 226, 0.5);
+  position: fixed;
+  bottom: 0px;
+  line-height: 1.30667rem;
+  font-size: 15px;
+  color: #FFFFFF;
+  text-align: center; }
+  [data-dpr="2"] .main-inner .main-footer {
+    font-size: 30px; }
+  [data-dpr="3"] .main-inner .main-footer {
+    font-size: 45px; }
+  .main-inner .main-footer span::before {
+    display: inline-block;
+    content: '';
+    vertical-align: -0.13333rem;
+    width: 0.53333rem;
+    height: 0.53333rem;
+    background: url("/image/img00/doctorShare/share_counsel@2x.png") no-repeat center;
+    background-size: contain;
+    margin-right: 0.10667rem; }
+
+.view-code {
+  display: none;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2; }
+  .view-code figure {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: 7.2rem;
+    height: 8.85333rem;
+    margin: 3.06667rem auto;
+    padding-top: 0.85333rem; }
+    .view-code figure img {
+      display: block;
+      width: 5.6rem;
+      height: 5.6rem;
+      margin: 0 auto; }
+    .view-code figure figcaption {
+      font-size: 15px;
+      color: #666666;
+      line-height: 1;
+      text-align: center;
+      margin-top: 0.64rem; }
+      [data-dpr="2"] .view-code figure figcaption {
+        font-size: 30px; }
+      [data-dpr="3"] .view-code figure figcaption {
+        font-size: 45px; }
+      .view-code figure figcaption p + p {
+        margin-top: 0.21333rem; }

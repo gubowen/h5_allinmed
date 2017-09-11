@@ -1,0 +1,466 @@
+@charset "UTF-8";
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+/**
+ * @Desc：预约门诊日历表
+ * @Usage:
+ * @Notify：
+ * @Depend：
+ *
+ * Created by gubowen on 2017/5/3
+ */
+.data-diagram {
+  margin-top: 0.66667rem;
+  width: 100%;
+  position: relative; }
+  .data-diagram header {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    font-size: 0.4rem;
+    color: #AAAAAA;
+    letter-spacing: 0;
+    line-height: 20px; }
+    .data-diagram header dl {
+      background: #F9FDFC;
+      box-shadow: 2px 0 5px 0 rgba(0, 0, 0, 0.1); }
+      .data-diagram header dl dd {
+        display: block;
+        width: 0.90667rem;
+        height: 1.97333rem;
+        line-height: 1.5;
+        text-align: center;
+        padding: 0.21333rem;
+        box-sizing: border-box;
+        position: relative; }
+        .data-diagram header dl dd:first-child {
+          height: 1.6rem;
+          border-top: 0; }
+        .data-diagram header dl dd:after {
+          content: "";
+          display: block;
+          position: absolute;
+          bottom: 0;
+          width: 50%;
+          height: 1px;
+          left: 25%;
+          background: #DEDEDE; }
+  .data-diagram .content {
+    width: 100%;
+    overflow: auto; }
+    .data-diagram .content > div {
+      margin-left: 0.90667rem;
+      white-space: nowrap; }
+      .data-diagram .content > div .notClinic {
+        padding: 0;
+        text-align: center;
+        line-height: 7.53333rem;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc; }
+      .data-diagram .content > div > article {
+        display: inline-block;
+        vertical-align: top; }
+        .data-diagram .content > div > article:first-child {
+          border-width: 1px 1px 1px 1px; }
+        .data-diagram .content > div > article ul {
+          width: auto;
+          border-color: #d8d8d8;
+          border-style: solid;
+          border-width: 1px 1px 1px 0; }
+          .data-diagram .content > div > article ul li {
+            width: 1.97333rem;
+            height: 1.97333rem;
+            border-color: #d8d8d8;
+            border-style: solid;
+            border-width: 0 0 1px 0;
+            text-align: center; }
+            .data-diagram .content > div > article ul li .day {
+              padding-top: 0.53333rem; }
+            .data-diagram .content > div > article ul li .week {
+              padding-top: 0.16rem; }
+            .data-diagram .content > div > article ul li i {
+              margin-top: 0.13333rem;
+              width: 0.8rem;
+              height: 0.8rem;
+              display: inline-block; }
+            .data-diagram .content > div > article ul li:first-child {
+              height: 1.6rem;
+              border-top: 0;
+              font-size: 0.34667rem;
+              color: #555555;
+              letter-spacing: 0;
+              line-height: 0.34667rem; }
+  .data-diagram .explain ul li {
+    width: 32.5%;
+    display: inline-block;
+    height: 1.6rem;
+    padding: 0.42667rem;
+    font-size: 0.32rem;
+    color: #555;
+    letter-spacing: 0;
+    line-height: 0.32rem;
+    text-align: center;
+    box-sizing: border-box;
+    position: relative; }
+    .data-diagram .explain ul li i {
+      width: 0.53333rem;
+      height: 0.53333rem;
+      background-size: 100% 100%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.10667rem; }
+    .data-diagram .explain ul li .money {
+      color: #909090; }
+    .data-diagram .explain ul li:after {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      height: 50%;
+      width: 1px;
+      top: 25%;
+      background: #DEDEDE; }
+    .data-diagram .explain ul li:last-child:after {
+      display: none; }
+  .data-diagram .good {
+    background: url("/image/img00/doctorMain/order_common_unclickable@2x.png") no-repeat;
+    background-size: 100% 100%; }
+    .data-diagram .good.on {
+      background: url("/image/img00/doctorMain/order_common@2x.png") no-repeat;
+      background-size: 100% 100%; }
+  .data-diagram .better {
+    background: url("/image/img00/doctorMain/order_specialist_unclickable@2x.png") no-repeat;
+    background-size: 100% 100%; }
+    .data-diagram .better.on {
+      background: url("/image/img00/doctorMain/order_specialist@2x.png") no-repeat;
+      background-size: 100% 100%; }
+  .data-diagram .best {
+    background: url("/image/img00/doctorMain/order_particularly_unclickable@2x.png") no-repeat;
+    background-size: 100% 100%; }
+    .data-diagram .best.on {
+      background: url("/image/img00/doctorMain/order_particularly@2x.png") no-repeat;
+      background-size: 100% 100%; }
+
+.select-hospital {
+  margin-top: 0.8rem;
+  color: #6B7698;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1; }
+  [data-dpr="2"] .select-hospital {
+    font-size: 32px; }
+  [data-dpr="3"] .select-hospital {
+    font-size: 48px; }
+  .select-hospital .select-icon-down {
+    display: inline-block;
+    width: 0.21333rem;
+    height: 0.10667rem;
+    background: url("/image/img00/doctorShare/spTemp_nav_two_bg_up.png") no-repeat center;
+    background-size: contain;
+    margin-left: 0.10667rem;
+    vertical-align: 0.08rem; }
+  .select-hospital .select-icon-up {
+    display: inline-block;
+    width: 0.21333rem;
+    height: 0.10667rem;
+    background: url("/image/img00/doctorShare/spTemp_nav_two_bg_down.png") no-repeat center;
+    background-size: contain;
+    margin-left: 0.10667rem;
+    vertical-align: 0.08rem; }
+
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/4/27
+*/
+body .picker {
+  display: none;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+  font-family: 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback';
+  font-size: 14px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+  [data-dpr="2"] body .picker {
+    font-size: 28px; }
+  [data-dpr="3"] body .picker {
+    font-size: 42px; }
+  body .picker .picker-mask {
+    position: absolute;
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    background: transparent;
+    opacity: 0; }
+    body .picker .picker-mask.show {
+      background: rgba(0, 0, 0, 0.6);
+      opacity: 1; }
+  body .picker .picker-panel {
+    position: absolute;
+    z-index: 600;
+    bottom: 0;
+    width: 100%;
+    height: 5.38667rem;
+    background: #fff;
+    -ms-transform: translateY(3.24rem);
+        transform: translateY(3.24rem);
+    -webkit-transform: translateY(3.24rem);
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s; }
+    body .picker .picker-panel.show {
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+      -webkit-transform: translateY(0); }
+    body .picker .picker-panel .picker-choose {
+      position: relative;
+      height: 1.33333rem;
+      color: #878787;
+      font-size: 14px; }
+      [data-dpr="2"] body .picker .picker-panel .picker-choose {
+        font-size: 28px; }
+      [data-dpr="3"] body .picker .picker-panel .picker-choose {
+        font-size: 42px; }
+      body .picker .picker-panel .picker-choose .picker-title {
+        line-height: 0.66667rem;
+        font-size: 19px;
+        text-align: center;
+        color: #333; }
+        [data-dpr="2"] body .picker .picker-panel .picker-choose .picker-title {
+          font-size: 38px; }
+        [data-dpr="3"] body .picker .picker-panel .picker-choose .picker-title {
+          font-size: 57px; }
+      body .picker .picker-panel .picker-choose .confirm, body .picker .picker-panel .picker-choose .cancel {
+        position: absolute;
+        padding: 0.4rem;
+        font-size: 16px; }
+        [data-dpr="2"] body .picker .picker-panel .picker-choose .confirm, [data-dpr="2"] body .picker .picker-panel .picker-choose .cancel {
+          font-size: 32px; }
+        [data-dpr="3"] body .picker .picker-panel .picker-choose .confirm, [data-dpr="3"] body .picker .picker-panel .picker-choose .cancel {
+          font-size: 48px; }
+      body .picker .picker-panel .picker-choose .confirm {
+        right: 0;
+        color: #5F7AC0; }
+      body .picker .picker-panel .picker-choose .cancel {
+        left: 0;
+        color: #909090; }
+    body .picker .picker-panel .picker-content {
+      position: relative; }
+      body .picker .picker-panel .picker-content .mask-top, body .picker .picker-panel .picker-content .mask-bottom {
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+        pointer-events: none;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0); }
+      body .picker .picker-panel .picker-content .mask-top {
+        top: -0.1rem;
+        height: 1.1rem;
+        background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 0.8)));
+        border-bottom: 1px solid #ccc; }
+      body .picker .picker-panel .picker-content .mask-bottom {
+        bottom: -1.36rem;
+        height: 2.93333rem;
+        border-top: 1px solid #ccc;
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 0.8))); }
+    body .picker .picker-panel .wheel-wrapper {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      padding: 0 0.13333rem; }
+      body .picker .picker-panel .wheel-wrapper .wheel {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+            -ms-flex: 1;
+                flex: 1;
+        width: 1%;
+        height: 3.2rem;
+        overflow: hidden;
+        font-size: 21px; }
+        [data-dpr="2"] body .picker .picker-panel .wheel-wrapper .wheel {
+          font-size: 42px; }
+        [data-dpr="3"] body .picker .picker-panel .wheel-wrapper .wheel {
+          font-size: 63px; }
+        body .picker .picker-panel .wheel-wrapper .wheel .wheel-scroll {
+          margin-top: 0.90667rem;
+          line-height: 0.8rem; }
+          body .picker .picker-panel .wheel-wrapper .wheel .wheel-scroll .wheel-item {
+            overflow: hidden;
+            white-space: nowrap;
+            color: #333; }
+  body .picker .picker-footer {
+    height: 0.26667rem; }
+
+.main-inner {
+  background: #eff4f8; }
+  .main-inner .module_title, .main-inner .moudle_title {
+    margin-left: 0.37333rem;
+    padding-top: 0.66667rem;
+    color: #555;
+    font-size: 16px;
+    font-weight: normal; }
+    [data-dpr="2"] .main-inner .module_title, [data-dpr="2"] .main-inner .moudle_title {
+      font-size: 32px; }
+    [data-dpr="3"] .main-inner .module_title, [data-dpr="3"] .main-inner .moudle_title {
+      font-size: 48px; }
+    .main-inner .module_title:before, .main-inner .moudle_title:before {
+      display: inline-block;
+      content: '';
+      width: 0.04rem;
+      height: 0.32rem;
+      margin-right: 0.10667rem;
+      background: #00D6C6; }
+  .main-inner .stopVisit {
+    background: #ffffff;
+    display: none; }
+    .main-inner .stopVisit article {
+      margin-top: 0.8rem;
+      padding: 0 0.53333rem; }
+    .main-inner .stopVisit p {
+      color: #222;
+      font-size: 15px; }
+      [data-dpr="2"] .main-inner .stopVisit p {
+        font-size: 30px; }
+      [data-dpr="3"] .main-inner .stopVisit p {
+        font-size: 45px; }
+    .main-inner .stopVisit .stopVisit_rest:before {
+      display: inline-block;
+      content: '';
+      width: 0.53333rem;
+      height: 0.53333rem;
+      margin-right: 0.21333rem;
+      vertical-align: sub;
+      background: url("/image/img00/doctorMain/home_time@2x.png") no-repeat;
+      background-size: 100% 100%; }
+    .main-inner .stopVisit .stopVisit_normal {
+      margin-top: 0.4rem; }
+      .main-inner .stopVisit .stopVisit_normal:before {
+        display: inline-block;
+        content: '';
+        width: 0.53333rem;
+        height: 0.53333rem;
+        margin-right: 0.21333rem;
+        vertical-align: sub;
+        background: url("/image/img00/doctorMain/home_reception@2x.png") no-repeat;
+        background-size: 100% 100%; }
+    .main-inner .stopVisit .stopVisit_hint {
+      margin-top: 0.13333rem;
+      display: block;
+      width: 100%;
+      color: #ccc;
+      font-size: 12px;
+      text-align: right; }
+      [data-dpr="2"] .main-inner .stopVisit .stopVisit_hint {
+        font-size: 24px; }
+      [data-dpr="3"] .main-inner .stopVisit .stopVisit_hint {
+        font-size: 36px; }
+      .main-inner .stopVisit .stopVisit_hint:before {
+        display: inline-block;
+        content: '';
+        width: 0.48rem;
+        height: 0.01333rem;
+        margin-right: 0.16rem;
+        vertical-align: middle;
+        background: #cccccc; }
+    .main-inner .stopVisit dl {
+      margin-top: 0.72rem;
+      padding: 0 0.53333rem 0.26667rem; }
+    .main-inner .stopVisit dt {
+      color: #222;
+      font-size: 16px; }
+      [data-dpr="2"] .main-inner .stopVisit dt {
+        font-size: 32px; }
+      [data-dpr="3"] .main-inner .stopVisit dt {
+        font-size: 48px; }
+    .main-inner .stopVisit dd {
+      margin-top: 0.13333rem;
+      line-height: 0.53333rem;
+      color: #aaa;
+      font-size: 14px; }
+      [data-dpr="2"] .main-inner .stopVisit dd {
+        font-size: 28px; }
+      [data-dpr="3"] .main-inner .stopVisit dd {
+        font-size: 42px; }
+  .main-inner .orderCon {
+    background: #fff;
+    padding: 0.66667rem 0.53333rem 0.4rem; }
+    .main-inner .orderCon dt {
+      color: #222;
+      font-size: 15px; }
+      [data-dpr="2"] .main-inner .orderCon dt {
+        font-size: 30px; }
+      [data-dpr="3"] .main-inner .orderCon dt {
+        font-size: 45px; }
+    .main-inner .orderCon dd {
+      padding-top: 0.13333rem;
+      line-height: 0.53333rem;
+      color: #aaa;
+      font-size: 14px;
+      word-break: break-all;
+      word-wrap: break-word; }
+      [data-dpr="2"] .main-inner .orderCon dd {
+        font-size: 28px; }
+      [data-dpr="3"] .main-inner .orderCon dd {
+        font-size: 42px; }
+    .main-inner .orderCon .overText {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2; }
+    .main-inner .orderCon .icon-more {
+      display: block;
+      padding: 0.4rem 0 0rem;
+      background: url("/image/img00/doctorMain/home_expansion@2x.png") no-repeat center;
+      background-size: 0.4rem 0.4rem; }
+    .main-inner .orderCon .icon-less {
+      display: block;
+      padding: 0.4rem 0 0rem;
+      background: url("/image/img00/doctorMain/home_pack@2x.png") no-repeat center;
+      background-size: 0.4rem 0.4rem; }
+  .main-inner .orderVisit {
+    background: #ffffff;
+    margin-top: 0.18667rem; }
+    .main-inner .orderVisit .select-hospital {
+      color: #6B7698;
+      margin-top: 0.8rem;
+      font-size: 16px;
+      text-align: center;
+      line-height: 1; }
+      [data-dpr="2"] .main-inner .orderVisit .select-hospital {
+        font-size: 32px; }
+      [data-dpr="3"] .main-inner .orderVisit .select-hospital {
+        font-size: 48px; }
+      .main-inner .orderVisit .select-hospital .select-icon-down {
+        display: inline-block;
+        width: 0.21333rem;
+        height: 0.10667rem;
+        background: url("/image/img00/doctorShare/spTemp_nav_two_bg_up.png") no-repeat center;
+        background-size: contain;
+        margin-left: 0.10667rem;
+        vertical-align: 0.08rem; }
+      .main-inner .orderVisit .select-hospital .select-icon-up {
+        display: inline-block;
+        width: 0.21333rem;
+        height: 0.10667rem;
+        background: url("/image/img00/doctorShare/spTemp_nav_two_bg_down.png") no-repeat center;
+        background-size: contain;
+        margin-left: 0.10667rem;
+        vertical-align: 0.08rem; }

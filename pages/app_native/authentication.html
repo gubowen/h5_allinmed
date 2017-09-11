@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>认证</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/js/plugins/show_big_img_pass/showBigImg.css">
+    <link rel="stylesheet" href="/css/pages/patientConsult/file_upload.css">
+    <link rel="stylesheet" href="/css/pages/app_native/authentication.css">
+    <link href="//cdn.bootcss.com/Swiper/3.4.1/css/swiper.min.css" rel="stylesheet">
+</head>
+<body>
+<section class="main-inner he-main" >
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back main-index-back" >
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">医师认证</a>
+        <a href="javascript:void(0)" class="main-header-item">&nbsp;</a>
+    </header>
+
+
+    <article class="header-tips">
+        <p>认证后，即可开通咨询、预约、手术等服务</p>
+    </article>
+
+
+    <section class="aut-list" style="margin-top: 0;"><!--data-firstOnOff是用来判断第一步选择对错的-->
+        <article class="aut-list-item aut-list-name" data-firstOnOff="false">
+            <figcaption class="aut-list-item-title">
+                <span>姓名</span>
+            </figcaption>
+            <figure class="aut-list-item-input ">
+                <input type="text" placeholder="请输入姓名" class="aut-list-item-name-input">
+            </figure>
+        </article>
+        <article class="aut-list-item aut-list-sex-input"  data-firstOnOff="false">
+            <figcaption class="aut-list-item-title">
+                <span>性别</span>
+            </figcaption>
+            <figure class="aut-list-item-input aut-list-sex-input">
+                <section class="aut-sex-selector icon-aut-selector"  data-sexId="1"><span>男</span></section>
+                <section class="aut-sex-selector icon-aut-selector" data-sexId="2"><span>女</span></section>
+            </figure>
+        </article>
+        <article class="aut-list-item" data-firstOnOff="false">
+            <figcaption class="aut-list-item-title">
+                <span>年龄</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow aut-list-age-input">
+                <span class="modal-inner" id="ev-ageSelector">请选择年龄</span>
+            </figure>
+        </article>
+    </section>
+
+
+    <section class="aut-list" id="ev-professionBox">
+        <article class="aut-list-item aut-list-hospital"   data-firstOnOff="false">
+            <figcaption class="aut-list-item-title">
+                <span>医院</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow aut-list-hospital-input">
+                <span class="modal-inner" id="ev-selectHospitalInner">请选择医院</span>
+            </figure>
+        </article>
+        <article class="aut-list-item"   data-firstOnOff="false">
+            <figcaption class="aut-list-item-title">
+                <span>专科</span>
+            </figcaption>
+            <figure class="aut-list-item-input  aut-list-professional-input icon-right-arrow">
+                <span class="modal-inner" id="ev-professional-select">请选择专业</span>
+            </figure>
+
+        </article>
+        <section class="aut-list-second aut-list-second-surgery-ill" >
+            <article class="aut-list-item aut-list-good" data-firstOnOff="false">
+                <figcaption class="aut-list-item-title"><span>擅治疾病</span></figcaption>
+                <figure class="aut-list-item-input aut-list-disease icon-right-arrow right-place"><span
+                        class="modal-inner disease-inner">请添加疾病</span>
+                </figure>
+            </article>
+            <article class="aut-list-item  aut-list-surgery" data-firstOnOff="false">
+                <figcaption class="aut-list-item-title"><span>手术专长</span></figcaption>
+                <figure class="aut-list-item-input icon-right-arrow  right-place"><span
+                        class="modal-inner illness-inner">请添加手术</span>
+                </figure>
+            </article>
+        </section>
+    </section>
+
+
+    <section class="aut-list">
+        <header class="aut-list-item-header">近2年独立完成骨科手术病例数</header>
+        <article class="aut-list-item aut-list-ill">
+            <figcaption class="aut-list-item-title">
+                <span class="grey-title">2016年</span>
+            </figcaption>
+            <figure class="aut-list-item-input"   data-firstOnOff="false">
+                <input type="number" placeholder="请输入手术病例数" class="illness-number">
+                <span class="illtips">例</span>
+            </figure>
+        </article>
+        <article class="aut-list-item aut-list-ill">
+            <figcaption class="aut-list-item-title">
+                <span class="grey-title">2015年</span>
+            </figcaption>
+            <figure class="aut-list-item-input"  data-firstOnOff="false">
+                <input type="number" placeholder="请输入手术病例数" class="illness-number">
+                <span class="illtips">例</span>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">二级以上负主要责任的医疗事故</header>
+        <article class="aut-list-item single-selector aut-list-accident-input" data-firstOnOff="false">
+            <figure class="aut-list-item-input">
+                <section class="icon-aut-selector "  data-judge="0"><span>无</span></section>
+                <section class="icon-aut-selector" data-judge="1"><span>有</span></section>
+            </figure>
+        </article>
+    </section>
+
+
+    <section class="aut-list" id="ev-medicalTitleBox">
+        <header class="aut-list-header"><span>职称履历</span></header>
+        <article class="aut-list-item">
+            <figcaption class="aut-list-item-title">
+                <span>最高职称</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow"  data-firstOnOff="false" id="ev-medicalTitleSelector">
+                <span class="modal-inner">请选择职称</span>
+            </figure>
+        </article>
+        <article class="aut-list-item aut-list-job"  data-firstOnOff="false" style="display:block;">
+            <figcaption class="aut-list-item-title"  data-jobType="主任医师">
+                <span>起止时间</span>
+            </figcaption>
+            <figure class="aut-list-item-input first">
+                <section class="aut-list-item-time aut-list-start-time"  >
+                    <span class="title-time-selector title-time-medical" data-timeSelectId="1">开始时间</span>
+                </section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time aut-list-end-time"  >
+                    <span class="title-time-selector  title-time-medical">结束时间</span>
+                </section>
+            </figure>
+        </article>
+        <article class="aut-list-item aut-list-job plus-title-selector"   data-firstOnOff="false">
+            <figcaption class="aut-list-item-title" data-jobType="副主任医师"><span>副主任医师</span></figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-list-item-time aut-list-start-time"  ><span class="title-time-selector  title-time-medical" data-timeSelectId="2">开始时间</span></section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time  aut-list-end-time"  ><span class="title-time-selector  title-time-medical" data-timeSelectId="1">结束时间</span></section>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-job plus-title-selector"   data-firstOnOff="false">
+            <figcaption class="aut-list-item-title" data-jobType="主治医师"><span>主治医师</span></figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-list-item-time  aut-list-start-time"  ><span class="title-time-selector title-time-medical" data-timeSelectId="3">开始时间</span></section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time   aut-list-end-time"  ><span class="title-time-selector  title-time-medical" data-timeSelectId="2">结束时间</span></section>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-job plus-title-selector"   data-firstOnOff="false">
+            <figcaption class="aut-list-item-title" data-jobType="住院医师"><span>住院医师</span></figcaption>
+            <figure class="aut-list-item-input">
+                <section class="aut-list-item-time aut-list-start-time" ><span class="title-time-selector title-time-medical">开始时间</span></section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time aut-list-end-time"  ><span class="title-time-selector title-time-medical" data-timeSelectId="3">结束时间</span></section>
+            </figure>
+        </article>
+    </section>
+
+    <section class="aut-list" style="margin-bottom: 0;">
+        <header class="aut-list-header">上传在线执业资料</header>
+
+        <header class="aut-list-item-header">手持身份证正反面</header>
+        <!--<div id="ev-pic" style="height:100px;width:100px;"></div>-->
+        <article class="aut-list-item aut-list-post-image"  data-status="身份证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img aut-list-upload-post">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">正面示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="1" accept="image/*">
+                    </form>
+                </section>
+                <article class="aut-upload-tool"  data-uploadId="1" >
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <!--<span class="tc-upLoading-box"><span class="tc-upLoading"></span></span>-->
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-post-image" data-status="身份证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img  aut-list-upload-post" >
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">反面示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="2" accept="image/*">
+                    </form>
+                </section>
+                <article  class="aut-upload-tool"  data-uploadId="2">
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">医师执业证书第一、二两页</header>
+        <article class="aut-list-item  aut-list-post-image" data-status="医师执业证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img  aut-list-upload-post"  >
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第一页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="3" accept="image/*">
+                    </form>
+                </section>
+                <article  class="aut-upload-tool" data-uploadId="3">
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-post-image" data-status="医师执业证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img  aut-list-upload-post"   >
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第二页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="4" accept="image/*">
+                    </form>
+                </section>
+                <article  class="aut-upload-tool" data-uploadId="4">
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <header class="aut-list-item-header">医师资格证第一、二两页</header>
+        <article class="aut-list-item  aut-list-post-image" data-status="医师资格证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img  aut-list-upload-post">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第一页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="5" accept="image/*">
+                    </form>
+                </section>
+                <article  class="aut-upload-tool"  data-uploadId="5">
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-post-image" data-status="医师资格证" data-firstOnOff="false">
+            <figcaption class="aut-list-upload-img  aut-list-upload-post">
+                <img src="/image/img00/app_native/测试图片.jpg" alt="">
+                <span class="tips">第二页示例</span>
+            </figcaption>
+            <figure class="aut-list-item-upload-input">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">图片
+                        <input type="file" class="postPicButton"  name="file"   data-uploadId="6" accept="image/*">
+                    </form>
+                </section>
+                <article  class="aut-upload-tool"  data-uploadId="6">
+                    <img src="/image/img00/app_native/upload_photo.png" alt="">
+                    <p>上传图片</p>
+                </article>
+            </figure>
+        </article>
+        <section class="au-doctor-cer-list">
+
+        </section>
+
+        <article class="aut-list-item aut-list-more">
+            <figcaption class="aut-list-item-title">
+                <span>更多资料</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow aut-list-more-input">
+                <span class="modal-inner">请选择证书类型(选填)</span>
+            </figure>
+        </article>
+    </section>
+    <footer class="btn-full next-path">保存并下一步</footer>
+</section>
+
+<section class="main-inner" style="display: none;" >
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back  main-index-back" >
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">医师认证</a>
+        <a href="javascript:void(0)" class="main-header-item btn-top">跳过</a>
+    </header>
+
+
+    <article class="header-tips">
+        <p>信息越齐全，推荐用户越多</p>
+    </article>
+    <section class="aut-list au-education-list">
+        <header class="aut-list-header"><span>教育背景</span><em>(从高到低填写)</em></header>
+        <article class="aut-list-item aut-list-item-edu" data-edu-count="1">
+            <figcaption class="aut-list-item-title">
+                <span>学历</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow aut-list-select-edu">
+                <span class="modal-inner">请选择学历</span>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-item-edu" data-edu-count="1">
+            <figcaption class="aut-list-item-title">
+                <span>学校</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow aut-list-select-school">
+                <span class="modal-inner">请选择学校或机构</span>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-item-edu" data-edu-count="1">
+            <figcaption class="aut-list-item-title">
+                <span>专业</span>
+            </figcaption>
+            <figure class="aut-list-item-input icon-right-arrow">
+                <span class="modal-inner aut-list-select-major">请选择专业</span>
+            </figure>
+        </article>
+        <article class="aut-list-item  aut-list-item-edu" data-edu-count="1">
+            <figcaption class="aut-list-item-title">
+                <span>时间</span>
+            </figcaption>
+            <figure class="aut-list-item-input aut-list-max-input">
+                <section class="aut-list-item-time aut-list-item-year aut-list-start-year">
+                    <span class="title-time-selector">开始时间</span>
+                </section>
+                <span class="hr-text">至</span>
+                <section class="aut-list-item-time aut-list-item-year aut-list-end-year">
+                    <span class="title-time-selector">结束时间</span>
+                </section>
+            </figure>
+        </article>
+        <footer class="add-edu-background add-edu-backdrop" data-edu-add="1">
+            <span>添加教育背景</span>
+        </footer>
+    </section>
+    <section class="aut-list au-continue-education">
+        <header class="aut-list-header"><span>继续教育</span></header>
+        <article class="aut-list-item">
+            <button class="btn-select has-selector has-selector-continue">有</button>
+            <button class="btn-select has-selector  has-selector-continue on">无</button>
+        </article>
+        <section class="aut-list-second aut-list-continue-edu" data-add-continue="1">
+            <article class="aut-list-item aut-list-continue">
+                <figcaption class="aut-list-item-title">
+                    <span>机构</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入学术机构" class='aut-list-input-text'>
+                    <span class="aut-list-input-explain"></span>
+                </figure>
+            </article>
+            <article class="aut-list-item  aut-list-continue">
+                <figcaption class="aut-list-item-title">
+                    <span>时间</span>
+                </figcaption>
+                <figure class="aut-list-item-input">
+                    <span class="title-time-selector">开始时间</span>
+                    <span class="hr-text">至</span>
+                    <span class="title-time-selector">结束时间</span>
+                </figure>
+            </article>
+            <article class="aut-list-item  aut-list-continue">
+                <figcaption class="aut-list-item-title">
+                    <span>获得证书</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入获得证书或荣誉" class='aut-list-input-text'>
+                    <span class="aut-list-input-explain"></span>
+                </figure>
+            </article>
+            <article class="aut-list-item  aut-list-continue">
+                <figcaption class="aut-list-item-title">
+                    <span>培训内容</span>
+                </figcaption>
+                <figure class="aut-list-item-input icon-right-arrow">
+                    <input type="text" placeholder="请输入培训内容" class='aut-list-input-text'>
+                    <span class="aut-list-input-explain"></span>
+                </figure>
+            </article>
+
+        </section>
+        <footer class="add-edu-background add-edu-continue" data-continue-count="1">
+            <span>添加继续教育</span>
+        </footer>
+    </section>
+    <section class="aut-list au-continue-academic" style="margin-bottom: 0;">
+        <header class="aut-list-header"><span>进修经历</span></header>
+        <article class="aut-list-item">
+            <button class="btn-select has-selector has-selector-Fellow">有</button>
+            <button class="btn-select has-selector has-selector-Fellow on">无</button>
+        </article>
+        <section class="aut-list-second  aut-list-continue-engage" data-add-fellow="1">
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>地点</span>
+                </figcaption>
+                <figure class="aut-list-item-input aut-list-country-input">
+                    <section class="icon-aut-selector" data-type="2"><span>国内</span></section>
+                    <section class="icon-aut-selector" data-type="1"><span>国外</span></section>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>机构</span>
+                </figcaption>
+                <figure class="aut-list-item-input aut-list-academic-input icon-right-arrow">
+                    <span class="modal-inner aut-list-academic">请选择学术机构</span>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>时间</span>
+                </figcaption>
+                <figure class="aut-list-item-input">
+                    <span class="title-time-selector">开始时间</span>
+                    <span class="hr-text">至</span>
+                    <span class="title-time-selector">结束时间</span>
+                </figure>
+            </article>
+            <article class="aut-list-item">
+                <figcaption class="aut-list-item-title">
+                    <span>进修说明</span>
+                </figcaption>
+                <figure class="aut-list-item-input ">
+                    <input type="text" placeholder="请输入进修内容" class='aut-list-input-text aut-list-input-academic'>
+                    <span class="aut-list-input-explain"></span>
+                </figure>
+            </article>
+
+        </section>
+        <footer class="add-edu-background add-edu-engage" data-fellow-count="1">
+            <span>添加继续进修</span>
+        </footer>
+    </section>
+
+    <footer class="btn-full next-path on">保存并下一步</footer>
+</section>
+<section class="main-inner" style="display: none;"  >
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back  main-index-back" >
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">添加头像</a>
+        <a href="javascript:void(0)" class="main-header-item btn-top">&nbsp;</a>
+    </header>
+    <section class="img-upload-inner aut-list-post-image">
+        <div class="bg-mask">
+            <img src="/image/img00/app_native/add%20photo_bg@2x.png" alt="">
+        </div>
+        <section class="img-upload  ">
+            <figure class="img-upload-input img-upload-head">
+                <img src="/image/img00/app_native/upload_portrait2x.png" alt="">
+                <section class="aut-list-upload-file">
+                    <form class="uploadIcon uploadPic" method="POST" enctype="multipart/form-data">
+                        <input type="file" class="postPicButton  postPicButtonLogo"  name="file" accept="image/*">
+                    </form>
+                </section>
+            </figure>
+            <figcaption class="img-upload-content">
+                <p>上传真实头像后，有助于和患者</p>
+                <p>亲切交流！</p>
+            </figcaption>
+        </section>
+        <footer class="img-upload-submit img-upload-btn ">
+            <p>完成</p>
+        </footer>
+    </section>
+</section>
+<section class="selector-dialog no-selector" id="ev-hospital">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="1">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">选择医院</a>
+        <a href="javascript:void(0)" class="main-header-item save"></a>
+    </header>
+    <section class="search-hospital-tool"><input type="text"  class="search-text" placeholder="请输入医院名称">
+        <section class="search-result">
+        </section>
+    </section>
+    <section class="selector-dialog-content">
+
+    </section>
+    <!--<section class="selector-dialog-content">
+        <header class="selector-dialog-content-title">
+            <span>A</span>
+        </header>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>
+    <section class="selector-dialog-content">
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>-->
+</section>
+<section class="selector-dialog" id="ev-professional">
+    <header class="main-header main-header-professional">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="2">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">选择专科</a>
+        <a href="javascript:void(0)" class="main-header-item save">保存</a>
+    </header>
+
+    <section class="selector-dialog-content">
+        <!--<article class="selector-dialog-item">
+            <span>关节</span>
+            <section class="selector-dialog-content second">
+                <article class="selector-dialog-item">
+                    <span>关节</span>
+                </article>
+                <article class="selector-dialog-item">
+                    <span>关节</span>
+                </article>
+                <article class="selector-dialog-item">
+                    <span>关节</span>
+                </article>
+                <article class="selector-dialog-item">
+                    <span>关节</span>
+                </article>
+                <article class="selector-dialog-item">
+                    <span>关节</span>
+                </article>
+            </section>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>-->
+    </section>
+</section>
+<section class="selector-dialog" id="ev-disease">
+    <header class="main-header main-header-disease">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="3">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">添加擅治疾病</a>
+        <a href="javascript:void(0)" class="main-header-item save">保存</a>
+    </header>
+    <section class="selector-dialog-content">
+        <section class="selector-enjoy-ill">
+            <header class="enjoy-ill-head"><i></i>&nbsp;已添加疾病</header>
+            <article class="enjoy-ill-details">
+                <ul class="enjoy-ill-list">
+                    <!--<li class="enjoy-ill-item" data-illListId="1234567877123"><span>锁骨骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肩锁关节脱位</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肩关节脱位</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨外科颈骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨干骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨髁上骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肘关节脱位</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>前臂双骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>桡骨下端骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>手外伤</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>断指再植</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>髋关节脱位</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>股骨转子间骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨外科颈骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨干骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肱骨髁上骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>肘关节脱位</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>前臂双骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>桡骨下端骨折</span><i>x</i></li>
+                    <li class="enjoy-ill-item" data-illListId="1234567877123"><span>手外伤</span><i>x</i></li>-->
+                </ul>
+            </article>
+            <figure class="enjoy-ill-input">
+                <input type="text" placeholder="请输入疾病名称" class="enjoy-ill-input-text">
+            </figure>
+            <ul class="enjoy-ill-search">
+                <!--<li class="enjoy-search-item">桡骨下端骨折</li>
+                <li class="enjoy-search-item">肱骨髁上骨折</li>
+                <li class="enjoy-search-item">肱骨干骨折</li>
+                <li class="enjoy-search-item">锁骨骨折</li>
+                <li class="enjoy-search-item">肱骨髁上骨折</li>-->
+            </ul>
+        </section>
+        <!--<article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>-->
+    </section>
+</section>
+<section class="selector-dialog selector-dialog-illness" id="ev-illness">
+    <header class="main-header main-header-surgery">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="3">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">选择手术</a>
+        <a href="javascript:void(0)" class="main-header-item save">保存</a>
+    </header>
+    <section class="selector-dialog-content">
+        <section class="selector-dialog-major">
+            <!--<header class="selector-dialog-major-title">关节</header>
+            <ul>
+                <li>
+                    <article class="selector-dialog-item selector-dialog-title">
+                        <span>锁骨骨折</span>
+                        <i></i>
+                    </article>
+                    <article class="selector-all selector-dialog-item">
+                        <span>全选</span>
+                    </article>
+                    <article class="selector-dialog-item ">
+                        <span>关节</span>
+                    </article>
+                    <article class="selector-dialog-item">
+                        <span>关节</span>
+                    </article>
+                    <article class="selector-dialog-item">
+                        <span>关节</span>
+                    </article>
+                    <article class="selector-dialog-item">
+                        <span>关节</span>
+                    </article>
+                    <article class="selector-dialog-item">
+                        <span>关节</span>
+                    </article>
+                </li>
+            </ul>-->
+        </section>
+
+    </section>
+</section>
+<section class="selector-dialog no-selector" id="ev-subject">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="4">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">专业学科</a>
+        <a href="javascript:void(0)" class="main-header-item"></a>
+    </header>
+    <section class="selector-dialog-content">
+
+    </section>
+    <!--<section class="selector-dialog-content">
+        <header class="selector-dialog-content-title">
+            <span>A</span>
+        </header>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>
+    <section class="selector-dialog-content">
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>-->
+</section>
+<section class="selector-dialog no-selector" id="ev-academic">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back"  data-backId="5">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">学术机构</a>
+        <a href="javascript:void(0)" class="main-header-item"></a>
+    </header>
+    <section class="selector-dialog-content">
+
+    </section>
+    <!--<section class="selector-dialog-content">
+        <header class="selector-dialog-content-title">
+            <span>A</span>
+        </header>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>
+    <section class="selector-dialog-content">
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item">
+            <span>关节</span>
+        </article>
+    </section>-->
+</section>
+<section class="selector-dialog" id="ev-school">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back back-school"  data-backId="6">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">选择学校</a>
+        <a href="javascript:void(0)" class="main-header-item save"></a>
+    </header>
+    <section class="search-hospital-tool"><input type="text"  class="search-text" placeholder="请输入学校名称">
+        <section class="search-result">
+        </section>
+    </section>
+    <section class="selector-dialog-content">
+        <!--<article class="selector-dialog-item selector-dialog-school">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item selector-dialog-school">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item selector-dialog-school">
+            <span>关节</span>
+        </article>
+        <article class="selector-dialog-item selector-dialog-school">
+            <span>关节</span>
+        </article>-->
+    </section>
+</section>
+<section class="selector-dialog" id="ev-province">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back back-province"  data-backId="7">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item">选择省份</a>
+        <a href="javascript:void(0)" class="main-header-item save"></a>
+    </header>
+    <section class="search-hospital-tool"><input type="text"  class="search-text" placeholder="请输入医院名称">
+        <section class="search-result">
+        </section>
+    </section>
+    <section class="selector-dialog-content">
+    </section>
+</section>
+<section class="selector-dialog" id="ev-city">
+    <header class="main-header">
+        <a href="javascript:void(0)" class="main-header-item back back-city" data-backId="8">
+            <img src="/image/img00/app_native/arrow_back.png" alt="">
+        </a>
+        <a href="javascript:void(0)" class="main-header-item"></a>
+        <a href="javascript:void(0)" class="main-header-item save"></a>
+    </header>
+    <section class="search-hospital-tool"><input type="text"  class="search-text" placeholder="请输入医院名称">
+        <section class="search-result">
+        </section>
+    </section>
+    <section class="selector-dialog-content">
+    </section>
+
+</section>
+<aside class="searchTypeSelect">
+
+</aside>
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/third-party/jquery-form/jquery.form.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/common/commonString.js"></script>
+<script src="/js/third-party/q.js"></script>
+<script src="/js/third-party/uploadReplace.js"></script>
+<script src="/js/third-party/jqueryscrollpagination/js/scrollpagination.js"></script>
+<script src="/js/modules/modules.upLoadFile.js"></script>
+<script src="/js/plugins/plugins.validate.js"></script>
+<script src="/js/third-party/picker.min.js"></script>
+<script src="//cdn.bootcss.com/Swiper/3.4.1/js/swiper.min.js"></script>
+<script src="/js/plugins/plugins.firstLetter.js"></script>
+<script src="/js/plugins/show_big_img_pass/showBigImg.js"></script>
+<script src="/js/scene/app_native/pinying.js"></script>
+<script src="/js/scene/app_native/scene.app_native.authentication.js"></script>
+</body>
+</html>

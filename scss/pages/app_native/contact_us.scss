@@ -1,0 +1,79 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/6/1
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+.main-inner{
+  line-height: 1;
+  .inner-module{
+    background: #F6F7F9;
+    padding-top: rem(16px);
+    .module-box{
+      background-color: white;
+    }
+    .module-title{
+      padding: rem(40px) 0 rem(16px);
+      @include font-dpr(15px);
+      color: #666666;
+      margin-left: rem(30px);
+      font-weight: normal;
+      border-bottom: 1px solid #eeeeee;
+      &::before{
+        display: inline-block;
+        content: " ";
+        width: rem(4px);
+        height: rem(17px);
+        background: #7B95DC;
+        margin-right: rem(8px);
+        margin-bottom: rem(4px);
+      }
+    }
+    .module-text{
+      position: relative;
+      width: rem(690px);
+      margin: 0 auto;
+      box-sizing: border-box;
+      @include font-dpr(15px);
+      padding: rem(40px) rem(0px) rem(40px) rem(34px);
+      color: #333333;
+      &.connect-us{
+        width:100%;
+        margin: 0;
+        padding: rem(40px) rem(30px) rem(40px) rem(64px);
+        &.active{
+          background-color: #FBFBFC;
+          //background-color: red;
+
+        }
+      }
+      &:nth-child(2){
+        border-bottom: 1px solid #eeeeee;
+      }
+      .text-right{
+        margin-left: rem(32px);
+        position: absolute;
+        //max-width: rem(500px);
+      }
+      .callMeIcon{
+        display: inline-block;
+        position: absolute;
+        right: rem(42px);
+        top:50%;
+        margin-top: rem(-26px);
+        width: rem(52px);
+        height: rem(52px);
+        background: url("/image/img00/app_native/phone.png") no-repeat center;
+        background-size: 100% 100%;
+      }
+    }
+    .module-tips{
+      @include font-dpr(13px);
+      color: #AAAAAA;
+      margin-left: rem(16px);
+    }
+  }
+}

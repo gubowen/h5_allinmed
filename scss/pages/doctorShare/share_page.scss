@@ -1,0 +1,310 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+@import "../../library/common-modules";
+.main-inner{
+  .main-header{
+    padding-bottom: rem(74px);
+    .authentication-tips{
+      display: none;
+      @include font-dpr(14px);
+      background: #F6F7F9;
+      line-height: 1;
+      padding: rem(30px) 0;
+      color: #aaaaaa;
+      text-align: center;
+      .in-authentication{
+        display: none;
+        margin: 0 auto rem(10px);
+      }
+      //.tips-info{
+      //  display: none;
+      //}
+      .go-authentication{
+        color: #5F7AC0;
+        border-bottom: 0.01333rem solid #5F7AC0;
+        display: inline-block;
+      }
+    }
+    .header-box{
+      padding-top: rem(20px);
+      .header-bg{
+        width: rem(678px);
+        height: rem(380px);
+        display: block;
+        margin: 0 auto;
+      }
+      .doctor-info{
+        width: rem(698px);
+        //height: rem(284px);
+        padding-bottom: rem(35px);
+        box-sizing: border-box;
+        padding-right: rem(10px);
+        background: #FFFFFF;
+        border: 1px solid #CFD9FF;
+        box-shadow: 0 5px 8px 0 rgba(182,200,245,0.30);
+        margin: rem(34px) auto 0px;
+        background: url("/image/img00/doctorShare/share_point.png") no-repeat;
+        background-size: rem(32px) rem(28px);
+        background-position: rem(628px) rem(38px);
+        @include clearfix();
+        .info-left{
+          width: rem(180px);
+          height: rem(180px);
+          background: url("/image/img00/doctorShare/share_avatar_bg.png") no-repeat center;
+          background-size: contain;
+          float: left;
+          margin: rem(42px) rem(26px) rem(22px);
+          .doctor-icon{
+            width: rem(140px);
+            height: rem(140px);
+            margin: rem(20px);
+            border-radius: 50%;
+          }
+        }
+        .info-right{
+          float: left;
+          line-height: 1;
+          margin-top: rem(72px);
+          width: rem(450px);
+          .info-top{
+            .doctor-name{
+              @include font-dpr(20px);
+              color: #4654A7;
+            }
+            .doctor-post{
+              //display: inline-block;
+              margin-left: rem(24px);
+              @include font-dpr(12px);
+              color: #B3B7D1;
+              margin-right:rem(8px);
+              line-height: 1.2;
+              //max-width: rem(300px);
+              //overflow: hidden;
+              //text-overflow: ellipsis;
+              //white-space: nowrap;
+            }
+            .doctor-degree{
+              margin-left: rem(12px);
+              @include font-dpr(12px);
+              color: #B3B7D1;
+            }
+          }
+          .info-middle{
+            margin-top: rem(34px);
+            font-size: 0;
+            @include clearfix();
+            .doctor-hospital{
+              //display: inline-block;
+              //float: left;
+              @include font-dpr(14px);
+              color: #717BB5;
+              //margin-right:rem(8px);
+              //max-width: rem(358px);
+              //overflow: hidden;
+              //text-overflow: ellipsis;
+              //white-space: nowrap;
+            }
+            .hospital-level{
+              //display: inline-block;
+              //float: left;
+              height: rem(28px);
+              box-sizing: border-box;
+              padding: 0px rem(8px);
+              line-height: rem(28px);
+              background: rgba(255,255,255,0.90);
+              border: 1px solid #54667D;
+              border-radius: 100px;
+              color: #596BCE;
+              @include font-dpr(11px);
+            }
+          }
+          .info-bottom{
+            margin-top: rem(20px);
+            @include font-dpr(13px);
+            color: #717BB5;
+            line-height: 1.2;
+            //overflow: hidden;
+            //text-overflow: ellipsis;
+            //white-space: nowrap;
+            .subject-item{
+              margin-right: rem(12px);
+            }
+            .subject-item + .subject-item{
+              &::before{
+                display: inline-block;
+                content: '';
+                width: rem(2px);
+                height: rem(20px);
+                background-color: #B2B7D0;
+                margin-right: rem(12px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .main-content-box{
+    padding-bottom: rem(180px);
+    .info-module{
+      padding-left: rem(72px);
+      .module-title{
+        position: relative;
+        line-height: 1;
+        color: #555555;
+        @include font-dpr(16px);
+        &::before{
+          display: block;
+          content: '';
+          width: rem(8px);
+          height: rem(32px);
+          background-color:#02CCB9;
+          position: absolute;
+          top: rem(2px);
+          left: rem(-20px);
+        }
+        &::after{
+          display: block;
+          content: '';
+          width: rem(48px);
+          height: rem(2px);
+          opacity: 0.5;
+          background: #DFE3F2;
+          position: absolute;
+          left: 0px;
+          bottom: rem(-26px);
+        }
+        .go-view-time{
+          color: #818CAB;
+          display: none;
+          @include font-dpr(14px);
+          position: absolute;
+          right: rem(44px);
+          font-weight: 100;
+          &::after{
+            display: inline-block;
+            content: '';
+            width: rem(24px);
+            height: rem(24px);
+            //position: absolute;
+            background: url("/image/img00/doctorShare/suggestion_enter@2x.png") no-repeat center;
+            background-size: contain;
+            vertical-align: bottom;
+            margin-left: rem(2px);
+          }
+        }
+      }
+      .module-detail{
+        width: rem(606px);
+        margin-top: rem(42px);
+        @include font-dpr(14px);
+        color: #666666;
+      }
+      .operation-case-list{
+        padding-top: rem(30px);
+        .operation-case-item{
+          //@include clearfix();
+          //width: rem(350px);
+          height: rem(44px);
+          line-height: rem(44px);
+          box-sizing: border-box;
+          display: inline-block;
+          padding-left: rem(44px);
+          padding-right: rem(24px);
+          margin-right: rem(100px);
+          background: url("/image/img00/doctorShare/share_label.png") no-repeat;
+          background-position: rem(11px) rem(11px);
+          background-size: rem(20px) rem(20px);
+          border: 1px solid #EEEEEE;
+          border-radius: 4px;
+          color: #969DB1;
+          @include font-dpr(12px);
+          .operation-case-num{
+            //float: right;
+            display: inline-block;
+            width: rem(90px);
+            text-align: right;
+          }
+        }
+        .operation-case-item + .operation-case-item{
+          margin-top: rem(16px);
+        }
+      }
+      .module-detail + .module-detail{
+        margin-top: rem(16px);
+      }
+    }
+    .info-module:nth-child(even){
+      .module-title::before{
+        background: #7A88D3;
+      }
+    }
+    .info-module + .info-module{
+      margin-top: rem(60px);
+    }
+  }
+  .main-footer{
+    display: none;
+    height: rem(98px);
+    width: 100%;
+    background: #00D6C6;
+    box-shadow: 0 0 6px 0 rgba(226,226,226,0.50);
+    position: fixed;
+    bottom: 0px;
+    line-height: rem(98px);
+    @include font-dpr(15px);
+    color: #FFFFFF;
+    text-align: center;
+    span::before{
+      display: inline-block;
+      content: '';
+      vertical-align: rem(-10px);
+      width: rem(40px);
+      height:rem(40px);
+      background: url("/image/img00/doctorShare/share_counsel@2x.png") no-repeat center;
+      background-size: contain;
+      margin-right: rem(8px);
+    }
+  }
+}
+.view-code{
+  display: none;
+  position: fixed;
+  background: rgba(0,0,0,0.50);
+  top:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  figure{
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: rem(540px);
+    height: rem(664px);
+    margin: rem(230px) auto;
+    padding-top: rem(64px);
+    img{
+      display: block;
+      width: rem(420px);
+      height: rem(420px);
+      margin: 0 auto;
+    }
+    figcaption{
+      @include font-dpr(15px);
+      color: #666666;
+      line-height: 1;
+      text-align: center;
+      margin-top: rem(48px);
+      p + p{
+        margin-top: rem(16px);
+      }
+    }
+  }
+}

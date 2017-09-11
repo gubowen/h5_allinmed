@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>医生主页</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/myServices/doc_main.css">
+    <link rel="stylesheet" href="/css/vander/swiper.min.css">
+    <script src="/js/third-party/flexible.js"></script>
+</head>
+<body>
+<section class="docMain">
+    <!--医生个人信息-->
+    <section class="docIntro"></section>
+    <!--医生专业擅长-->
+    <section class="majorTrait"></section>
+    <!--网上问诊-->
+    <section class="onlineVisit"></section>
+    <!--停诊信息-->
+    <section class="stopVisit" style="display:none;">
+        <h2 class="moudle_title">停诊信息</h2>
+        <article></article>
+    </section>
+    <!--预约条件-->
+    <section class="bookingConditions"></section>
+    <!--预约门诊-->
+    <section class="orderVisit"></section>
+</section>
+
+<script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+<script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+<script src="/js/third-party/swiper/js/swiper-3.4.2.jquery.min.js"></script>
+<script src="/js/third-party/picker.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/modules/moudle.chooseOutpatienTime.js"></script>
+<script src="/js/modules/modules.payType.popup.js"></script>
+<script src="/js/modules/module.wxPay.wx_pay.js"></script>
+<script src="/js/modules/module.wxPay.createOrder.js"></script>
+
+<script src="/js/scene/myServices/scene.myServices.docMain.js"></script>
+<!--<script src="/js/third-party/vconsole.min.js"></script>-->
+<!--<script src="/js/third-party/eruda/eruda.min.js"></script>-->
+<!--<script>eruda.init()</script>-->
+</body>
+</html>

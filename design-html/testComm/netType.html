@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>网络类型</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+     <p id="re"></p>
+	 <button id="btn">获取网络</button>
+
+	 <script>
+	 	var connection = navigator.connection||navigator.mozConnection||navigator.webkitConnection||{tyep:'unknown'};
+	 	var type_text = ['unknown','ethernet','wifi','WIFI','2g','3g','4g','none'];
+	 	var userAgentInfo = navigator.userAgent;
+		alert(userAgentInfo);
+		if(userAgentInfo.indexOf("WIFI")>0){
+			alert("wifi")
+		}
+		alert(userAgentInfo.indexOf("WIFI"));
+//	 	alert(userAgentInfo);
+	 	alert(connection.type);
+//	 	alert(navigator.userAgent);
+	 	var re_el = document.getElementById("re");
+	 	var btn_el = document.getElementById("btn");
+	 	function get_status(){
+	 		if(typeof(connection.type) == "number"){
+	 			connection.type_text = type_text[connection.type];
+	 			alert(connection.bandwidth)
+	 		}else{
+	 			connection.type_text = connection.type;
+	 		}
+	 		if(typeof(connection.bandwidth) == "number"){
+	 			alert(typeof(connection.bandwidth));
+	 			if(connection.bandwidth > 10){
+	 				connection.type = 'wifi';
+	 			}else if(connection.bandwidth > 2){
+	 				connection.type = '3g';
+	 			}else if(connection.bandwidth > 0){
+	 				connection.type = '2g';
+	 			}else if(connection.bandwidth == 0){
+	 				connection.type = 'none';
+	 			}else{
+	 				connection.type = 'unknown';
+	 			}
+	 		}
+	 		var html = 'Type : '+connection.type_text;
+	 		html += '<br>Bandwidth : '+connection.bandwidth;
+	 		html += '<br>isOnline : '+navigator.onLine;
+	 		re_el.innerHTML = html;
+	 	}
+
+	 	btn_el.onclick = function(){
+	 		re_el.innerHTML = "Waiting...";
+	 		get_status();
+	 	}
+
+
+	 	var str="Hello world!"
+	 	document.write(str.indexOf("Hello") + "<br />")
+	 	document.write(str.indexOf("wold") + "<br />")
+	 	document.write(str.indexOf("world"))
+	 </script>
+</body>
+</html>

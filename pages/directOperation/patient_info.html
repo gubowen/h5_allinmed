@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>患者信息</title>
+    <meta name="data-alcode" content="a9"  >
+    <script src="/js/third-party/flexible.js"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/pages/directOperation/patient_info.css">
+</head>
+<body data-alcode="48" >
+    <section class="main-inner he-main">
+        <header class="patientInfoHeader">
+            <p class="headerTips">为了保证诊疗的真实性，同时保证您的合法权益，请务必填写患者真实信息，专业匹配医生马上为您治疗</p>
+        </header>
+        <section class="patientInfo">
+            <!--患者信息填写列表-->
+            <ul class="patientInfoList">
+                <li class="patientInfoItem" data-required="1" data-type="1" >
+                    <div class="patientInfoItemLeft">患者真实姓名</div>
+                    <div class="patientInfoItemRight">
+                        <input class="show" type="text" placeholder="请填写">
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="2" data-required="1">
+                    <div class="patientInfoItemLeft">证件类型</div>
+                    <div class="patientInfoItemRight hasSelect cardTypeBox">
+                        <span  class="show">请选择</span>
+                        <select name="idCard" id="idCard" data-check="1">
+                            <option value="" style="display: none;"></option>
+                        </select>
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="3" data-required="1">
+                    <div class="patientInfoItemLeft">证件号码</div>
+                    <div class="patientInfoItemRight">
+                        <input class="show" type="text" data-check="true" placeholder="请填写">
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="4" data-required="1">
+                    <div class="patientInfoItemLeft">联系电话</div>
+                    <div class="patientInfoItemRight">
+                        <input class="show" type="number" placeholder="请填写">
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="5" data-required="1">
+                    <div class="patientInfoItemLeft">患者所在地</div>
+                    <div class="patientInfoItemRight hasAfter">
+                        <span  class="show"  id="ev-go-to-select-city">省市地区/县</span>
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="6" data-required="0">
+                    <div class="patientInfoItemLeft">社保类型</div>
+                    <div class="patientInfoItemRight hasSelect protectTypeBox">
+                        <span  class="show">请选择</span>
+                        <select name="protectType" id="protectType" data-check="2">
+                            <option value="" style="display: none;"></option>
+                        </select>
+                    </div>
+                </li>
+                <li class="patientInfoItem" data-type="7" data-required="0">
+                    <div class="patientInfoItemLeft">社保所在地</div>
+                    <div class="patientInfoItemRight hasAfter">
+                        <span  class="show" id="ev-go-to-select-perfect">省市地区/县</span>
+                    </div>
+                </li>
+            </ul>
+            <!--患者信息其他内容(健康辅助信息)-->
+            <!--<section class="patientInfoOther">-->
+                <!--<section class="otherTop">-->
+                    <!--<h3 class="otherTopTitle">备注</h3>-->
+                <!--</section>-->
+                <!--<section class="otherBottom">-->
+                    <!--<textarea placeholder="请输入补充内容"></textarea>-->
+                <!--</section>-->
+            <!--</section>-->
+            <!--患者信息其他内容（健康信息）-->
+            <!--<section class="patientInfoOther">-->
+                <!--<section class="otherTop">-->
+                    <!--<h3 class="otherTopTitle">希望获得医生的什么帮助</h3>-->
+                    <!--<ul class="helpList">-->
+                        <!--<li class="helpItem on">治疗方法</li>-->
+                        <!--<li class="helpItem">看片子</li>-->
+                        <!--<li class="helpItem">开处方</li>-->
+                        <!--<li class="helpItem">手术咨询</li>-->
+                    <!--</ul>-->
+                <!--</section>-->
+                <!--<section class="otherBottom">-->
+                    <!--<textarea placeholder="请输入补充内容"></textarea>-->
+                <!--</section>-->
+            <!--</section>-->
+        </section>
+        <footer class="patientInfoBtn">
+            <button class="btnBack">返回</button>
+            <button class="btnSubmit disabled" id="saveInfoBtn">提交</button>
+        </footer>
+    </section>
+
+    <aside class="searchTypeSelect"></aside>
+
+    <script src="/js/third-party/jquery/jquery-2.1.0.min.js"></script>
+    <script src="/js/third-party/jquery/jquery.json-2.4.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/plugins/plugins.firstLetter.js"></script>
+    <script src="/js/plugins/q.js"></script>
+    <script src="/js/plugins/plugins.validate.js"></script>
+    <script src="/js/modules/module.search.input.js"></script>
+    <script src="/js/modules/module.search.list.js"></script>
+    <script src="/js/scene/directOperation/scene.directOperation.patientInfo.js"></script>
+</body>
+</html>

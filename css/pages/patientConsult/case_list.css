@@ -1,0 +1,55 @@
+@charset "UTF-8";
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/3/22
+*/
+.case-list-title {
+  font-size: 13px;
+  color: #555555; }
+  [data-dpr="2"] .case-list-title {
+    font-size: 26px; }
+  [data-dpr="3"] .case-list-title {
+    font-size: 39px; }
+
+.main-inner {
+  padding: 0.8rem 0.64rem; }
+
+.icon-rightArrow:after {
+  content: "";
+  background: url("/image/img00/patientConsult/suggestion_enter@2x.png") no-repeat;
+  background-size: contain;
+  width: 0.26667rem;
+  height: 0.26667rem;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%); }
+
+.case-list-item {
+  margin: 0.4rem 0;
+  position: relative;
+  font-size: 0; }
+  .case-list-item .time {
+    font-size: 15px;
+    color: #222222;
+    vertical-align: middle;
+    margin-right: 1.06667rem; }
+    [data-dpr="2"] .case-list-item .time {
+      font-size: 30px; }
+    [data-dpr="3"] .case-list-item .time {
+      font-size: 45px; }
+  .case-list-item-name {
+    font-size: 15px;
+    color: #555555;
+    vertical-align: middle; }
+    [data-dpr="2"] .case-list-item-name {
+      font-size: 30px; }
+    [data-dpr="3"] .case-list-item-name {
+      font-size: 45px; }

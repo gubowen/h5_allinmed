@@ -1,0 +1,118 @@
+/**
+ * @name:
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/5/3
+ * @author: lichenyang
+ */
+.main-inner .main-header {
+  padding-top: 2.05333rem;
+  background: url("/image/img00/doctorShare/share_logo.png") no-repeat 1.78667rem 0.61333rem;
+  background-size: 6.45333rem 0.94667rem; }
+  .main-inner .main-header .header-tips {
+    width: 8.24rem;
+    height: 0.82667rem;
+    margin: 0 auto;
+    background: #F7F8FE;
+    border-radius: 13.32rem;
+    text-align: center;
+    line-height: 0.82667rem;
+    font-size: 14px;
+    color: #87B3ED; }
+    [data-dpr="2"] .main-inner .main-header .header-tips {
+      font-size: 28px; }
+    [data-dpr="3"] .main-inner .main-header .header-tips {
+      font-size: 42px; }
+    .main-inner .main-header .header-tips .tips-light {
+      color: #05CCB9; }
+  .main-inner .main-header figure {
+    width: 8.53333rem;
+    height: 9.97333rem;
+    background: url("/image/img00/doctorShare/share_bg_02.png") no-repeat center;
+    background-size: contain;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-top: 0.85333rem; }
+    .main-inner .main-header figure img {
+      display: block;
+      width: 5.06667rem;
+      height: 5.06667rem;
+      margin: 0 auto; }
+
+.main-inner .main-content-box {
+  margin-top: 0.34667rem; }
+  .main-inner .main-content-box .step-title {
+    width: 2.21333rem;
+    margin: 0 auto;
+    text-align: center;
+    color: #222222;
+    position: relative;
+    font-size: 17px;
+    background: url("/image/img00/doctorShare/share_bg_03.png") no-repeat bottom;
+    background-size: 2.21333rem 0.34667rem;
+    line-height: 0.8rem; }
+    [data-dpr="2"] .main-inner .main-content-box .step-title {
+      font-size: 34px; }
+    [data-dpr="3"] .main-inner .main-content-box .step-title {
+      font-size: 51px; }
+    .main-inner .main-content-box .step-title::before {
+      display: inline-block;
+      content: "";
+      width: 0.26667rem;
+      height: 0.01333rem;
+      background-color: #808080;
+      position: absolute;
+      left: -0.34667rem;
+      top: 0.45333rem; }
+    .main-inner .main-content-box .step-title::after {
+      display: inline-block;
+      content: "";
+      width: 0.26667rem;
+      height: 0.01333rem;
+      background-color: #808080;
+      position: absolute;
+      right: -0.34667rem;
+      top: 0.45333rem; }
+  .main-inner .main-content-box .step-list {
+    color: #555555;
+    font-size: 14px;
+    padding: 0.74667rem 0.64rem 0px; }
+    [data-dpr="2"] .main-inner .main-content-box .step-list {
+      font-size: 28px; }
+    [data-dpr="3"] .main-inner .main-content-box .step-list {
+      font-size: 42px; }
+    .main-inner .main-content-box .step-list .step-item:after {
+      content: '';
+      display: table;
+      clear: both; }
+    .main-inner .main-content-box .step-list .step-item .item-left {
+      float: left;
+      display: block; }
+    .main-inner .main-content-box .step-list .step-item .item-right {
+      float: left;
+      display: block;
+      width: 8.4rem; }
+    .main-inner .main-content-box .step-list .step-item + .step-item {
+      margin-top: 0.53333rem; }
+
+.main-inner .main-footer {
+  width: 8.72rem;
+  height: 1.04rem;
+  line-height: 1.04rem;
+  margin: 0.8rem 0.64rem 1.33333rem;
+  background: #FBFBFC;
+  border-radius: 0.05333rem;
+  font-size: 12px;
+  color: #B9B9B9; }
+  [data-dpr="2"] .main-inner .main-footer {
+    font-size: 24px; }
+  [data-dpr="3"] .main-inner .main-footer {
+    font-size: 36px; }
+  .main-inner .main-footer .remind {
+    box-sizing: border-box;
+    padding-left: 0.74667rem;
+    width: 8.72rem;
+    height: 1.04rem;
+    background: url("/image/img00/doctorShare/share_volume@2x.png") no-repeat 0.26667rem 0.32rem;
+    background-size: 0.37333rem 0.37333rem; }

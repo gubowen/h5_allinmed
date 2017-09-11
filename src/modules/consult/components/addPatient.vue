@@ -1,0 +1,803 @@
+<template>
+  <section class="sticky-wrapper">
+    <section class="main-inner">
+      <section class="main-inner-content">
+        <!--头部-->
+        <header class="patient-consult-rate add-patient-title">
+          <!--无患者时的头部提示-->
+          <section class="patient-tips" v-if="headerShow == 1">
+            <p class="patient-tips-top">为准确诊断，请填写就诊对象的真实信息</p>
+            <p class="patient-tips-bottom">所有信息仅您和医生可见，请放心填写</p>
+          </section>
+          <!--添加患者-->
+          <section class="add-patient"  v-else-if="headerShow == 2">
+            <span class="add-patient-btn" :class="{'on':createNewPatient}"
+                  @click="createNewPatient=true;headerShow=3">添加新患者</span>
+          </section>
+          <!--取消添加-->
+          <section class="cancel-add" v-else="headerShow == 3">
+            <span class="add-patient-text">添加新患者</span>
+            <span class="cancel-add-btn"@click="createNewPatient=false;headerShow=2">取消添加</span>
+          </section>
+        </header>
+        <!--渐变的中间层-->
+        <section class="gradient-box">
+        </section>
+        <!--患者咨询底部-->
+        <section class="patient-consult-bottom">
+          <!--患者列表-->
+          <!--<transition name="fadeDown" mode="out-in">-->
+            <section class="patient-list" v-if="!createNewPatient">
+              <section
+                :class="{'on':createNewPatient===false && currentIndex==index}"
+                class="patient-list-item"
+                v-for="(item,index) in patientList"
+                @click="toSelectPart(patientList[index])"
+              >
+                <figcaption>
+                  {{item.patientName}}
+                </figcaption>
+              </section>
+            </section>
+          <!--</transition>-->
+
+          <!--添加患者-->
+          <transition name="fadeDown">
+            <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
+              <section class="add-patient-content-form">
+                <article class="add-patient-content-item">
+                  <figcaption>患者姓名</figcaption>
+                  <figure class="add-patient-input">
+                    <input type="text" placeholder="请填写真实姓名" id="patientName" @blur="validateBlur('username')"
+                           v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username" v-model="username">
+                  </figure>
+                </article>
+                <article class="add-patient-content-item">
+                  <figcaption>性别</figcaption>
+                  <figure class="add-patient-input" id="ev-patient-sex">
+                    <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="sexSelect=1">
+                      <i class="add-patient-selector"></i>
+                      <span>男</span>
+                    </section>
+                    <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="sexSelect=2">
+                      <i class="add-patient-selector"></i>
+                      <span>女</span>
+                    </section>
+                  </figure>
+                </article>
+                <article class="add-patient-content-item">
+                  <figcaption>年龄</figcaption>
+                  <figure class="add-patient-input">
+                    <input type="number" @blur="validateBlur('age')" placeholder="请填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"
+                           v-model="userage">
+                  </figure>
+                </article>
+                <article class="add-patient-content-item">
+                  <figcaption>所在地</figcaption>
+                  <figure class="add-patient-input">
+                    <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
+                    <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
+                  </figure>
+                </article>
+                <article class="add-patient-content-item">
+                  <figcaption>与患者关系</figcaption>
+                  <figure class="add-patient-input">
+                    <span id="ev-relationship" class="patient-relation" :class="{'on':relationClick}"
+                          @click="picker.show()">{{relationShip.title}}</span>
+                    <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
+                  </figure>
+                </article>
+                <article class="add-patient-content-item">
+                  <figcaption>手机号码</figcaption>
+                  <figure class="add-patient-input">
+                    <input type="number" @blur="validateBlur('phone')" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone" v-model="phone">
+                  </figure>
+                </article>
+              </section>
+            </section>
+          </transition>
+        </section>
+        <!--无患者提示-->
+        <transition name="fade">
+          <section v-if="createNewPatient">
+            <button class="btn-primary go-next" @click="validate">去咨询</button>
+          </section>
+        </transition>
+      </section>
+    </section>
+    <loading :show="finish"></loading>
+    <!--<transition name="fade">-->
+      <!--<section class="btnBox-tips maskers show" horizontal="" v-if="hasCase" @click="hasCase=false">-->
+        <!--<section class="horizontal-box" @click="hasCase=true">-->
+          <!--<a class="btnBox-btn btn-hollow" @click="toSelectPart(patientList[currentIndex])">新问诊</a>-->
+          <!--<a class="btnBox-btn btn-hollow" @click="openCasePage()">复诊</a>-->
+        <!--</section>-->
+      <!--</section>-->
+    <!--</transition>-->
+    <!--<transition name="fadeRight">-->
+      <!--<selectArea v-if="showSelectArea" :show.sync="showSelectArea" :level.sync="cityLevel" :areaParam.sync="areaParam" :listType="listType" class="child-view"></selectArea>-->
+    <!--</transition>-->
+    <transition name="fade">
+      <toast :content="errorMsg" v-if="errorShow"></toast>
+    </transition>
+  </section>
+</template>
+
+<script type="text/ecmascript-6">
+  /**
+   * @Desc：患者选择
+   * @Usage:
+   * @Notify：
+   * @Depend：
+   *
+   * Created by Qiangkailiang/Lichenyang on 17/7/10.
+   */
+  import api from 'common/js/util/util';
+  import loading from 'components/loading';
+  import area from 'components/selectArea';
+  import Picker from 'better-picker';
+  import toast from 'components/toast';
+  import ustb from 'common/styles/_ustbPicker.css';
+  const XHRList = {
+    addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
+    deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
+    patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
+    createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
+    saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
+    caseList: "/mcall/customer/patient/case/v1/getCaseMapList/"//获取患者病例单
+  };
+
+
+  export default{
+    data(){
+      return {
+        headerShow:2,//头部显示哪个
+        patientList: [],//患者列表
+        currentIndex: -1,//第几个患者
+        finish: true,//加载的菊花转
+        hasCase: false,//是否有病例单
+        createNewPatient: false,//添加新患者
+        showSelectArea: false,//选择部位
+        areaParam: {
+          provinceId: "",
+          province: "",
+          cityId: "",
+          city: "",
+          districtId: "",
+          district: "",
+          result:"选择患者所在地"
+        },//选择城市参数
+        cityLevel:2,//城市选择级别
+        sexSelect: 1,//性别选择控制
+        picker: null,//仿ios选择器
+        relationShip: {
+          title: "选择您与患者关系",
+          id: ""
+        },//仿ios选择器确定出的与患者关系
+        count:0,//曾经是否来过
+        relationInput:"",//用来验证与患者关系是否填写
+        username: "",//添加患者名字
+        userage: "",//患者年龄
+        phone: "",//手机号
+        errorMsg: "fuck",//提示错误的字段
+        errorShow: false,//是否提示错误
+        areaClick:true,//选择城市是否点击过
+        relationClick:true,//选择患者是否点击,
+        listType:"city" //类型为城市
+      }
+    },
+    activated(){
+      //手机号校验
+      api.mobileCheck();
+      document.title="为谁咨询";
+      this.finish=false;
+      this.initData();
+    },
+    mounted() {
+      document.title="为谁咨询";
+      this.getPatientList();
+      this.relationshipPicker();
+      this.$validator.updateDictionary({
+        en: {
+          custom: {
+            //用户姓名的验证
+            username: {
+              required: '请填写患者姓名',
+              noNumber:'不能包含数字和特殊字符',
+              isEmoji:'不能包含数字和特殊字符',
+              special:'不能包含数字和特殊字符',
+              max_length:'不能包含数字和特殊字符',
+            },
+            //用户年龄的验证
+            age:{
+              required: '请填写年龄',
+              max_value:'请填写0-150岁之间的年龄',
+              min_value:'请填写0-150岁之间的年龄',
+              special:'请填写0-150岁之间的年龄',
+            },
+            //手机号的验证
+            phone:{
+              required: '请填写手机号码',
+              mobile:'请填写真实手机号码',
+            },
+            //患者关系的验证规则
+            relationInput: {
+              required: '请选择与患者关系',
+            },
+            //患者所在地的验证规则
+            areaInput: {
+              required: '请选择患者所在地',
+            },
+          }
+        }
+      });
+    },
+    computed: {},
+    methods: {
+      initData () {
+
+        if (this.$route.params.areaParam) {
+          this.areaParam= this.$route.params.areaParam;
+          this.areaClick=false;
+
+//          this.areaParam.districtId = true;
+        }
+      },
+      selectArea(){
+//        this.$el.querySelectorAll(".middle-tip-box.ev-loading")[0].style.display="none";
+//        this.showSelectArea=true;
+//        this.areaParam.result='';
+//        this.areaClick=false;
+        this.$router.push({
+          name:'selectArea',
+          params: {
+            listType: 'city',
+            level:2,
+            from:this.$route.name,
+          },
+          query:this.$route.query
+        })
+      },
+      getPatientList() {
+        const that = this;
+        api.ajax({
+          url: XHRList.patientList,
+          method: "POST",
+          data: {
+            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
+            isValid: "1",
+            firstResult: "0",
+            maxResult: "9999"
+          },
+          beforeSend(config) {
+            that.finish = true;
+          },
+          done(param) {
+            that.finish = false;
+            that.count=param.responseObject.responseData.totalCount;
+            if(param.responseObject.responseMessage == "NO DATA"){
+              that.createNewPatient = true;
+              that.headerShow = 1;
+            } else {
+              that.patientList = param.responseObject.responseData.dataList.reverse();
+              that.createNewPatient = false;
+              that.headerShow = 2;
+            }
+          },
+          fail(err) {
+
+          }
+        })
+      },
+      // 点击选择患者...
+      selectPatient(index, event) {
+        this.currentIndex = index;
+        this.createNewPatient = false;
+        this.checkHistoryList(this.patientList[index])
+      },
+      // 判断是否来过...
+      checkHistoryList(param) {
+        const that = this;
+        api.ajax({
+          url: XHRList.caseList,
+          method: "POST",
+          data: {
+            patientId: param.patientId,
+            caseType: 0
+          },
+          beforeSend(config) {
+            that.finish = true;
+          },
+          done(data) {
+            that.finish = false;
+            if (data.responseObject.responseData) {
+              let dataList = data.responseObject.responseData.dataList;
+              if (dataList && dataList.length !== 0) {
+                that.hasCase = true;
+              } else {
+                that.hasCase = false;
+                that.toSelectPart(param);
+              }
+            }
+          }
+        })
+      },
+      validate() {
+        this.$validator.validateAll().then(result => {
+          console.log(result);
+          if (result) {
+            this.messageSubmit();
+            this.errorShow = false;
+          } else {
+            console.log(this.$validator.errors);
+            this.errorMsg = this.$validator.errors.items[0].msg;
+            this.errorShow = true;
+            setTimeout(() => {
+              this.errorShow = false;
+            }, 2000)
+          }
+        });
+      },
+      validateBlur (name) {
+        this.$validator.validateAll();
+//        console.log(this.errors.first(name));
+        console.log(this.errors.all());
+        if (this.errors.has(name)) {
+//          switch (name){
+//            case "username":
+//              console.log(this.errors.first(name));
+//              this.errorMsg = this.errors.first(name);
+//              break;
+//            case "age":
+//              console.log(this.errors.first(name));
+//              this.errorMsg = this.errors.first(name);
+//              break;
+//            case "phone":
+//              console.log(this.errors.first(name));
+//              this.errorMsg = this.errors.first(name);
+//              break;
+//          }
+          this.errorMsg = this.errors.first(name);
+          this.errorShow = true;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000)
+        }
+      },
+      messageSubmit() {
+        const that = this;
+        api.ajax({
+          url: XHRList.addPatient,
+          method: "POST",
+          data: {
+            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
+            patientName: this.username,
+            patientAge: this.userage,
+            patientSex: this.sexSelect,
+            patientRelationId: this.relationShip.id,
+            mobile: this.phone,
+            provinceId: this.areaParam.provinceId,
+            province: this.areaParam.province,
+            cityId: this.areaParam.cityId,
+            city: this.areaParam.city,
+            districtId: this.areaParam.districtId,
+            district: this.areaParam.district
+          },
+          beforeSend(config) {
+            that.finish = true;
+          },
+          done(data) {
+            that.finish = false;
+            if (data.responseObject.responseStatus) {
+              that.createNewPatient = false;
+              that.headerShow = 2;
+              that.patientList.unshift({
+                isValid:"1",
+                patientAge:that.userage,
+                patientId:data.responseObject.responsePk,
+                patientLogoUrl:null,
+                patientName:that.username,
+                patientRelationId:that.relationShip.id,
+                patientSex:that.sexSelect,
+              });
+              //去咨询成功后，需要清除表单数据
+              that.userage = "";
+              that.username = "";
+              that.phone = "";
+              that.areaParam.result = "选择患者所在地";
+              that.areaClick=true;//选择城市是否点击过
+              that.relationClick=true;
+              that.relationShip.title="选择您与患者关系";
+              setTimeout(function () {
+                that.selectPatient(0);
+              },500);
+            } else {
+              that.errorMsg = data.responseObject.responseMessage;
+              that.errorShow = true;
+              setTimeout(() => {
+                that.errorShow = false;
+              }, 2000)
+            }
+          }
+        })
+      },
+      relationshipPicker() {
+        const hospitalData = [{
+          text: "本人",
+          value: "0"
+        }, {
+          text: "家人",
+          value: "1"
+        }, {
+          text: "亲戚",
+          value: "2"
+        }, {
+          text: "朋友",
+          value: "3"
+        }, {
+          text: "其他",
+          value: "4"
+        }];
+        this.picker = new Picker({
+          data: [hospitalData]
+        });
+        this.picker.on('picker.valuechange', (e, selectedVal, selectedIndex) => {
+          this.relationShip.title = hospitalData[selectedVal[0]].text;
+          this.relationShip.id = hospitalData[selectedVal[0]].value;
+          this.relationClick = false;
+          this.relationInput = hospitalData[selectedVal[0]].text;
+        });
+      },
+      toSelectPart(param) {
+        this.$router.push({
+          name: "selectPart",
+          query: {
+            userId:this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
+            sex: param.patientSex,
+            age: param.patientAge,
+            patientId: param.patientId,
+            count:this.count
+          }
+        });
+      },
+      openCasePage(){
+        let that = this;
+        window.location.href = "/pages/patientConsult/case_list.html?customerId=" +(that.$route.query.customerId?that.$route.query.customerId:api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId
+      }
+    },
+    components: {
+      "loading": loading,
+      "selectArea": area,
+      "toast": toast
+    }
+  };
+
+
+</script>
+<style lang="scss" scoped="">
+  @import "../../../../scss/library/_common-modules";
+
+  html,body{
+    width: 100%;
+    height: 100%;
+  }
+  .sticky-wrapper {
+    height: auto;
+    min-height: 100%;
+    box-sizing: border-box;
+    background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
+    background-size:100% rem(272px);
+  }
+
+  .main-inner {
+    /*width: 100%;*/
+    height: 100%;
+    padding: rem(32px) rem(30px) rem(60px);
+
+  }
+
+  .main-inner-content {
+    overflow: hidden;
+    position: relative;
+  }
+
+  /*头部*/
+  .patient-consult-rate.add-patient-title{
+    background-color: white;
+    border-radius: rem(16px) rem(16px) 0 0;
+    height: rem(142px);
+    /*没有患者列表时的头部提示*/
+    .patient-tips{
+      /*display: none;*/
+      line-height: 1;
+      padding: rem(44px) 0 0 rem(64px);
+      .patient-tips-top{
+        @include font-dpr(14px);
+        color: #909090;
+      }
+      .patient-tips-bottom{
+        margin-top: rem(10px);
+        @include font-dpr(12px);
+        padding-left: rem(32px);
+        color: #BBBBBB;
+        background: url("../../../common/image/img00/patientConsult/patient_tips.png") no-repeat left top;
+        background-size: rem(28px) rem(28px);
+        line-height: 1.3;
+      }
+    }
+    /*有患者列表时的添加患者*/
+    .add-patient{
+      /*display: none;*/
+      &-btn{
+        @include font-dpr(15px);
+        line-height: rem(142px);
+        color: #07B6AC;
+        padding-left: rem(48px);
+        position: relative;
+        &::before{
+          content: '';
+          display: inline-block;
+          width: rem(40px);
+          height: rem(40px);
+          background: url("../../../common/image/img00/patientConsult/add_people.png") no-repeat;
+          background-size: 100% 100%;
+          vertical-align: middle;
+          margin-right: rem(8px);
+        }
+      }
+    }
+    /*取消添加*/
+    .cancel-add{
+      /*display: none;*/
+      line-height: rem(142px);
+      @include font-dpr(15px);
+      @include clearfix();
+      .add-patient-text{
+        color: #555555;
+        float: left;
+        margin-left: rem(50px);
+        &::before{
+          content: '';
+          display: inline-block;
+          width: rem(4px);
+          height: rem(20px);
+          background-color: #2FC5BD;
+          margin-right: rem(10px);
+        }
+      }
+      .cancel-add-btn{
+        float: right;
+        color: #818CAB;
+        margin-right: 32px;
+      }
+    }
+  }
+  //患者咨询
+  .add-patient-content {
+    padding: rem(40px) rem(24px) rem(120px) rem(64px);
+    .add-patient-content-form {
+      background-color: white;
+    }
+    &-item + &-item{
+      margin-top: rem(76px);
+    }
+    &-item {
+      /*line-height: 1;*/
+      font-size: 0;
+      & > figcaption {
+        display: inline-block;
+        vertical-align: middle;
+        /*margin-right: rem(100px);*/
+        width: rem(218px);
+        @include font-dpr(17px);
+      }
+      & > .add-patient-input {
+        display: inline-block;
+        vertical-align: middle;
+        width: rem(375px);
+        @include font-dpr(18px);
+        color: #666666;
+        & > span {
+          width: 100%;
+          display: inline-block;
+          color: #555;
+          /*height: rem(40px);*/
+          box-sizing: border-box;
+          padding-right: rem(30px);
+          vertical-align: middle;
+          background: url(../../../common/image/img00/patientConsult/arrow_right.png) no-repeat  right center;
+          background-size: rem(16px) rem(30px);
+          @include ellipsis();
+          &.on{
+            color: #AFAFAF;
+          }
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+          color: #AFAFAF;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+          color: #AFAFAF;
+          opacity:  1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+          color: #AFAFAF;
+          opacity:  1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+          color: #AFAFAF;
+        }
+
+        & > input {
+          width: 100%;
+          border: none;
+          background: none;
+          color: #555;
+          /*padding: rem(45px) 0;*/
+
+        }
+        & > select {
+          min-height: rem(60px);
+          /*font-family: "microsoft yahei";*/
+          background: none;
+          border: none;
+          width: 100%;
+          /*padding: rem(45px) 0;*/
+          outline: medium;
+        }
+      }
+      .add-patient-sex-selector {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: rem(64px);
+        /*padding: rem(45px) 0;*/
+        .add-patient-selector {
+          width: rem(30px);
+          height: rem(30px);
+          background: url("../../../common/image/img00/patientConsult/inquiry_choose_nor@2x.png") no-repeat;
+          background-size: contain;
+          /*border: 2px solid #cccccc;*/
+          display: inline-block;
+          vertical-align: middle;
+          /*margin-right: rem(8px);*/
+          box-sizing: border-box;
+        }
+        & > span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        &.on {
+          .add-patient-selector {
+            background: url("../../../common/image/img00/patientConsult/inquiry_choose_sel@2x.png") no-repeat;
+            background-size: contain;
+          }
+        }
+      }
+    }
+  }
+  /*渐变的中间层*/
+  .gradient-box{
+    margin-top: rem(-1px);
+    height: rem(20px);
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FAFAFA), to(#FFFFFF));
+    /*background: red;*/
+  }
+  .patient-consult-bottom{
+    background-color: white;
+    margin-top: rem(-1px);
+    margin-bottom: rem(70px);
+    border-radius: 0 0 rem(16px) rem(16px);
+  }
+  .patient-list {
+    text-align: left;
+    font-size: 0;
+    padding-left: rem(34px);
+    /*padding-right: rem(10px);*/
+    padding-bottom: rem(80px);
+  }
+
+  .patient-list-item {
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: rem(20px);
+    & > figcaption {
+      box-sizing: border-box;
+      margin-top: rem(32px);
+      @include font-dpr(16px);
+      min-width: rem(164px);
+      max-width: rem(338px);
+      padding: rem(20px) rem(26px) rem(20px) rem(68px);
+      border: 1px solid #F6F6F6;
+      color: #333333;
+      line-height: 1;
+      @include ellipsis();
+      border-radius: rem(4px);
+      background: url("../../../common/image/img00/patientConsult/Portrait@2x.png") no-repeat rem(18px) center;
+      background-size: rem(40px) rem(40px);
+    }
+    &.on {
+      & > figcaption {
+        color: #07b6ac;
+        border:1px solid #2fc5bd;
+      }
+      &.patient-list-item-plus {
+        & > figcaption {
+          background: url("../../../common/image/img00/patientConsult/add people_yet2@2x.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+
+  /*.add-patient-save {*/
+    /*display: flex;*/
+    /*width: 100%;*/
+    /*box-sizing: border-box;*/
+    /*justify-content: space-between;*/
+    /*.btn-primary {*/
+      /*width: rem(240px);*/
+      /*border: 1px solid #00d6c6;*/
+      /*&.cancel {*/
+        /*color: #00d6c6;*/
+        /*background-color: #fff;*/
+      /*}*/
+    /*}*/
+    /*&.off {*/
+      /*.save {*/
+        /*background-color: #dfdfdf;*/
+      /*}*/
+    /*}*/
+  /*}*/
+
+  .go-next {
+    width: rem(560px);
+    height: rem(100px);
+    line-height: rem(100px);
+    display: block;
+    border-radius: 9999px;
+    background-color: #00d6c6;
+    text-align: center;
+    box-sizing: border-box;
+    @include font-dpr(18px);
+    color: #fff;
+    outline: medium;
+    padding: 0;
+    margin: rem(0px) auto;
+  }
+
+  .horizontal-box {
+    padding: rem(100px) rem(130px);
+  }
+
+
+  /*vue组件自定义动画开始*/
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+  }
+
+  .fadeDown-enter-active, .fadeDown-leave-active {
+    transition: all ease-in-out .5s
+  }
+
+  .fadeDown-enter, .fadeDown-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+  .fadeRight-enter-active, .fadeRight-leave-active {
+    transition: all ease-in-out .5s;
+    transform: translateX(0);
+  }
+
+  .fadeRight-enter, .fadeRight-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  /*vue组件自定义动画开始*/
+</style>
