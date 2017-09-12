@@ -395,6 +395,9 @@ $(function () {
       window.onresize = function () {
         window.location.reload();
       }
+      if (!common.checkOpenId()) {
+        common.wxGetOpenId(1);    //获取openId
+      }
       modules.dateDiagrame();
       t.addHtml();
       t.goInquiry();
