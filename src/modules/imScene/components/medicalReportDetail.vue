@@ -33,8 +33,16 @@
             <span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">不适症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">肿胀</span>
+            <span class="tc-caseDescribeItemLeft">症状描述</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="acheType.length">
+            <span class="tc-caseDescribeItemLeft">疼痛性质</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{acheType}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="VASGrade.length">
+            <span class="tc-caseDescribeItemLeft">VAS评分</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{VASGrade}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">持续时间</span>
@@ -51,7 +59,7 @@
         </ul>
       </section>
       <section class="tc-caseDescribe tc-module">
-        <section class="tc-caseDescribeTitle title"><h3>现病史</h3></section>
+        <section class="tc-caseDescribeTitle title"><h3>诊治情况</h3></section>
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
@@ -59,7 +67,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">确诊疾病</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">检查资料</span>
@@ -135,7 +143,10 @@
         complication: "",
         resultMainList: [],
         imageList1: [],
-        imageList2: []
+        imageList2: [],
+        symptomDescription:'',//症状描述
+        acheType:"",//疼痛类型
+        VASGrade:'',//VAS评分
       }
     },
     activated(){
@@ -143,6 +154,9 @@
     },
     mounted(){
       this.getMedicalReport();
+    },
+    computed: {
+
     },
     methods: {
       getMedicalReport() {
@@ -164,6 +178,14 @@
               let _data = data.responseObject.responseData.dataList[0];
               that.patientCasemap = data.responseObject.responseData.dataList[0].patientCasemap;
               that.resultMainList = data.responseObject.responseData.dataList[0].resultMainList;
+              that.resultMainList[0].symptomOptions.forEach((element,index)=>{
+                that.symptomDescription += element.optionName + '、';
+              });
+              that.symptomDescription = that.symptomDescription.substring(0,that.symptomDescription.length-1);
+              if(that.resultMainList[0].symptomOptions[0].refQuestionList.length){
+                that.acheType=that.resultMainList[0].symptomOptions[0].refQuestionList[0].symptomOptions[0].optionName;
+                that.VASGrade=that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName + that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionDesc;//VAS评分
+              }
               let caseTime = that.patientCasemap.caseTime.split(' ')[0];
 
               that.caseTime = caseTime.split('-')[0] + '年' + caseTime.split('-')[1] + '月' + caseTime.split('-')[2] + '日'

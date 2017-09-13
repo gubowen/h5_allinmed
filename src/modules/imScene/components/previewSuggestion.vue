@@ -263,7 +263,7 @@
               }
             }
           }
-        })
+        });
         api.ajax({
           url: XHRList.getRecommedDoctor,
           method: "POST",
