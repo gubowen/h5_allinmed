@@ -29,8 +29,8 @@ var LogPageId = [{id: 1, desc: "浏览首页"}, {id: 2, desc: "浏览视频应�
  */
 
 Log.urlList = {
-	createBrowse: "/mcall/log/allinmed/customer/browse/v1/createBrowse/",	// 创建浏览记录
-	updateLeave: "/mcall/log/allinmed/customer/browse/v1/updateLeave/"	// 更新浏览记录－离开页面时间
+	createBrowse: "/mcall/log/tocure/customer/browse/v1/createBrowse/",	// 创建浏览记录
+	updateLeave: "/mcall/log/tocure/customer/browse/v1/updateLeave/"	// 更新浏览记录－离开页面时间
 };
 Log.logId = "";
 Log.isClose = false;

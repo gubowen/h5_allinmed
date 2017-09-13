@@ -392,11 +392,11 @@ $(function () {
     },
     init: function () {
       var t = this;
-      window.onresize = function () {
-        window.location.reload();
-      }
       if (!common.checkOpenId()) {
         common.wxGetOpenId(1);    //获取openId
+      }
+      window.onresize = function () {
+        window.location.reload();
       }
       modules.dateDiagrame();
       t.addHtml();

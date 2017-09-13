@@ -47,17 +47,6 @@
   .grey-tips{
     text-align: center;
   }
-  .first-message {
-    @include font-dpr(13px);
-    color: #AAAAAA;
-    background-color: #EDEEEE;
-    text-align: center;
-    margin: 0 rem(30px);
-    padding: rem(15px) rem(26px);
-    box-sizing: border-box;
-    border-radius: 0.2rem;
-    display: inline-block;
-  }
   .receive-treatment {
     text-align: center;
     &:before, &:after {

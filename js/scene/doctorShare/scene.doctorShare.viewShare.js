@@ -16,7 +16,7 @@ $(function () {
         template: {},
         path: {
             getDocMain:"/mcall/customer/auth/v1/getMapById/",
-            getCode:"/mcall/wx/allinmed/interact/v1/createQrCodeTicket/"//获取医生二维码
+            getCode:"/mcall/wx/tocure/interact/v1/createQrCodeTicket/"//获取医生二维码
         },
         //得到url参数保存起来
         getUrlParam: function () {

@@ -213,6 +213,11 @@
       document.title = "描述情况";
       this.patientMessage = this.$route.query;
       this.getQuestionList();
+      this.finish=true;
+
+      setTimeout(()=>{
+        document.body.scrollTop=20;
+      },300);
       if (this.$route.query.count == 0) {
         if (!localStorage.getItem("hasCome") || localStorage.getItem("hasCome") != 0) {
           this.firstConsult = true;
@@ -562,7 +567,7 @@
         });
       },
       answerValidator() {
-        let errorMsg = ['请选择怎么不舒服', '请选择持续多久了', '请选择加重多久了'];
+        let errorMsg = ['您还有问题未完善', '您还有问题未完善', '您还有问题未完善'];
         let flag = false;
         for (let index = 0; index < this.selectList.length; index++) {
           if (this.selectList[index].optionIdList.length === 0 /*|| this.selectList[index].optionDesc.length === 0*/) {
@@ -580,7 +585,7 @@
               setTimeout(() => {
                 this.errorShow = false;
               }, 2000);
-              this.errorMsg = "请选择疼痛的性质";
+              this.errorMsg = "您还有问题未完善";
               document.body.scrollTop = this.$el.querySelectorAll(".consult-total")[index].offsetTop;
               flag = false;
               break;
@@ -589,7 +594,7 @@
               setTimeout(() => {
                 this.errorShow = false;
               }, 2000);
-              this.errorMsg = "请填写其他情况 ";
+              this.errorMsg = "您还有问题未完善 ";
               document.body.scrollTop = this.$el.querySelectorAll(".consult-total")[index].offsetTop;
               flag = false;
               break;
@@ -613,7 +618,7 @@
           setTimeout(() => {
             this.errorShow = false;
           }, 2000);
-          this.errorMsg = "您已超过500字了";
+          this.errorMsg = "最多只能输入500字";
           return false;
         }
       },
@@ -639,9 +644,7 @@
     activated() {
       this.levelShow = false;
       this.pageLeaveEnsure = false;
-//      if (this.$route.query.from && this.$route.query.from==="selectPart"){
-//          console.log(5)
-//      }
+
     }
   }
 </script>
@@ -1232,7 +1235,6 @@
   }
 
   .fadeDown-enter-active, .fadeDown-leave-active {
-    transform: scaleY(1);
     opacity: 1;
     transition: all ease-in-out .4s
   }
@@ -1240,7 +1242,5 @@
   .fadeDown-enter, .fadeDown-leave-to /* .fade-leave-active in <2.1.8 */
   {
     opacity: 0;
-    transform: scaleY(0);
-
   }
 </style>

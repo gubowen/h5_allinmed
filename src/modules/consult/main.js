@@ -17,7 +17,7 @@ import history from './components/history';
 import upLoadTip from './components/upLoadTip';
 import showBigImg from 'components/showBigImg';
 import vueg from 'vueg'
-import 'vueg/css/transition-min.css'
+import 'vueg/css/transition-min.css';
 import "static/css/base.css";
 import api from '../../common/js/util/util';
 import selectArea from 'components/selectArea';
@@ -67,7 +67,7 @@ class Consult {
       }],                       //默认为[]，name对应路由的name,以实现类似app中点击tab页面水平转场效果，如tab[1]到tab[0]，会使用backAnim动画，tab[1]到tab[2]，会使用forwardAnim动画
       tabsDisable: false,           //值为true时，tabs间的转场没有动画，默认为false
       disable: false,               //禁用转场动画，默认为false，嵌套路由默认为true
-    }
+    };
     this.router = new VueRouter({
       routes: this.routes,
       scrollBehavior (to, from, savedPosition) {
@@ -113,7 +113,7 @@ class Consult {
         name: "searchList",
         component: searchList,
         meta: {
-          keepAlive: true
+          keepAlive: false
         },
       },
       {

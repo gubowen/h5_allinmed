@@ -235,7 +235,7 @@
           localStorage.setItem("doctorLogo",docLogo);
           window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
         }else{
-          window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
+          window.location.href = '/pages/imScene/im_main_scene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
         }
       },
       goToUploadPic(opt){

@@ -194,7 +194,7 @@
           multi_selection: false,
           uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
           get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-          domain: 'allinmed',     // bucket域名，下载资源时用到，必需
+          domain: 'tocure',     // bucket域名，下载资源时用到，必需
           container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
           max_file_size: '100mb',             // 最大文件体积限制
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径

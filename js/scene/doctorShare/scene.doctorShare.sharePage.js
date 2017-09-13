@@ -19,7 +19,7 @@ $(function () {
             this.config.isH5 && $(".main-footer").show();
         },
         config: {
-          domainName:"//m.allinmed.cn",//app嵌套域名修改
+          // domainName:"//m.allinmed.cn",//app嵌套域名修改
         },
         template: {
             //获取医生信息dom
@@ -53,7 +53,7 @@ $(function () {
         path: {
             getDocMain:"/mcall/customer/auth/v1/getMapById/",//获取医生信息
             getHospital:"/mcall/customer/multipoint/practice/v1/getMapById2/",//获取医院
-            getCode:"/mcall/wx/allinmed/interact/v1/createQrCodeTicket/"//获取医生二维码
+            getCode:"/mcall/wx/tocure/interact/v1/createQrCodeTicket/"//获取医生二维码
         },
         //获取浏览器类型
         getBrowseType: function () {
@@ -355,9 +355,9 @@ $(function () {
                         // that.config.customerId=JSON.parse(data).customerId;
                         //window.location.href = '//m.allinmed.cn/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId;
                         var dateTemp = new Date();
-                        window.location.replace(that.config.domainName + '/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId + '&time='+Date.parse(dateTemp));
+                        window.location.replace('//'+location.hostname + '/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId + '&time='+Date.parse(dateTemp));
                     }
-                    var responseData = {'resourceUrl': that.config.domainName + '/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId};
+                    var responseData = {'resourceUrl': '//'+location.hostname + '/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId};
                     // log('JS responding with', responseData)
                     responseCallback(responseData)
                 });

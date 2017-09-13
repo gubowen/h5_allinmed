@@ -2669,7 +2669,7 @@ $(document).ready(function(){
                             };
                             postData = {paramJson: $.toJSON(postData)};
                             _isThis.parent().ajaxSubmit({//上传图片
-                                url: "//m.allinmed.cn/mcall/allinmed/upload/attachment/v1/upload/",
+                                url: "//m.allinmed.cn/mcall/tocure/upload/attachment/v1/upload/",
                                 dataType: 'text',
                                 data: postData,
                                 type: "POST",
