@@ -309,8 +309,8 @@ class Api {
         _timeCompares = op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日";                                 //  05月08日 星期一 14:20
         break;
       case 2:      //2017.05.08
-        _timeCompare = op.time.substring(0, 4) + "." + op.time.substring(5, 7) + "." + op.time.substring(8, 10) + "日";  //  2017.05.08 星期一 14:20
-        _timeCompares = op.time.substring(5, 7) + "." + op.time.substring(8, 10) + ".";                                  //  05.08 星期一 14:20
+        _timeCompare = op.time.substring(0, 4) + "." + op.time.substring(5, 7) + "." + op.time.substring(8, 10);  //  2017.05.08 星期一 14:20
+        _timeCompares = op.time.substring(5, 7) + "." + op.time.substring(8, 10);                                  //  05.08 星期一 14:20
         break;
       case 3:
         break;
