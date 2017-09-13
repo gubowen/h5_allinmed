@@ -11,7 +11,7 @@ import App from './App';
 import VeeValidator, {Validator}  from 'vee-validate';
 import VueRouter from 'vue-router';
 import doctorMain from './components/doctorMain';
-import callInfo from './components/callInfo';
+import individualInfo from './components/individualInfo';
 import clinicDetails from './components/clinicDetails';
 import vueg from 'vueg'
 import 'vueg/css/transition-min.css'
@@ -151,9 +151,9 @@ class Consult {
         },
       },
       {
-        path: "/callInfo",
-        name: "callInfo",
-        component: callInfo,
+        path: "/individualInfo",
+        name: "individualInfo",
+        component: individualInfo,
         meta: {
           keepAlive: true
         },

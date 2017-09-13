@@ -31,7 +31,10 @@
     };
     export default {
         data() {
-            return {}
+            return {
+              errorShow:false,
+              finish:false
+            }
         },
         activated() {
 
