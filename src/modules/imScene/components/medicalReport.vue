@@ -34,7 +34,8 @@
           <img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">
         </figure>
         <figcaption class="main-message-content">
-          <p>您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家</p>
+          <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家</p>
+          <p v-else-if="!timeSlot">您好！分诊服务时间为09：00-22：00，如有问题请留言，分诊医生上班后会为您答复。</p>
           <!--<p>①  与您沟通分析病情</p>-->
           <!--<p>②  根据病情推荐对症专家</p>-->
           <!--<p>分诊医生通常会在5分钟内回复，请您耐心等候</p>-->
@@ -60,11 +61,13 @@
   export default{
     data(){
       return{
-        mainCase:""//患者主诉详情
+        mainCase:"",//患者主诉详情
+        timeSlot:true,//是否再服务时间段
       }
     },
     mounted(){
       this.getCaseMain();
+      this.getTimeSlot();
       store.commit("setLogoUrl",this.medicalReportMessage.data)
     },
     methods:{
@@ -89,6 +92,14 @@
             console.log("请求失败");
           }
         })
+      },
+      getTimeSlot (){
+        let timeTamp = parseInt(this.medicalReportMessage.data.time.split(" ")[1].split(":")[0]);
+        if(timeTamp< 9 || timeTamp>22){
+          this.timeSlot=false;
+        }else {
+          this.timeSlot=true;
+        }
       },
       goToDetail(){
           this.$router.push({
