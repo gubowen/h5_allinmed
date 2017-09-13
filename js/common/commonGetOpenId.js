@@ -36,10 +36,10 @@ common.wxGetOpenId = function (env) {
     _encodeUrl = encodeURIComponent(_currentPageUrl);
   if (env == 2) {
     appId = "wxe8384f7b06c169ef";
-    XHRUrl = "http://m.allinmed.cn/mcall/wx/allinmed/interact/v1/view/";
+    XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
   } else if (env == 1) {
     appId = "wxaa5288ad7f627608";
-    XHRUrl = "http://m1.allinmed.cn/mcall/wx/allinmed/interact/v1/view/";
+    XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
   }
   var _url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
     "appid=" + appId +

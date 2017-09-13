@@ -2,7 +2,7 @@
   <section class="search-box tc-mainInner">
     <section class="tc-searchCommFixedTop">
       <div class="tc-searchCommTop">
-        <i class="tc-searchBtnPic"></i>
+        <!--<i class="tc-searchBtnPic"></i>-->
         <input class="tc-searchCommInput"
                ref="searchInput"
                v-model="searchText"
@@ -10,32 +10,27 @@
                :placeholder="placeholderText"
                @input="searchEvent"
         >
+        <i class="search-cancel" @click="searchText=''" v-show="searchText.length>0">
+          <img src="../common/image/img00/consult_V1.2/icon_searchCancel.png" alt="">
+        </i>
       </div>
     </section>
     <section class="tc-searchMain">
-      <section class="tc-search-noResult" style="display: none;">
-        <p>暂未搜索到相关城市信息</p>
-      </section>
-      <section class="no-result-item-add" style="display: none;">
-        <textarea name="addText" class="add-result-item" aria-required="true" aria-invalid="false"></textarea>
-        <button class="btn-primary add-result-item-btn">保存</button>
+      <section class="no-result-item-add" v-if="noResult">
+        <button class="btn-primary add-result-item-btn" @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
+          保存
+        </button>
       </section>
       <section class="tc-searchContentInner ev-initList" style="">
-        <!--<header class="tc-searchDocArea">-->
-        <!--<i class="tc-searchDocAreaLeft"></i>-->
-        <!--<span class="tc-searchAreaName">选择城市</span>-->
-        <!--</header>-->
         <section class="searchResult">
-          <p class="searchResultItem" v-for="item in messageList">{{item}}</p>
+          <p class="searchResultItem" v-for="item in messageList" @click="backToPast(item)">
+            {{listType === "hospital" ? item.hospitalName : item.illnessName}}</p>
         </section>
-
       </section>
       <section class="tc-searchContentInner ev-searchList"></section>
     </section>
-    <!--<div id="tip" class="tips-text">-->
-    <!--{{tipString}}-->
-    <!--</div>-->
-    <!--<loading v-show="finish"></loading>-->
+    <Loading v-if="finish"></Loading>
+
   </section>
 </template>
 <script>
@@ -48,6 +43,8 @@
    * Created by qiangkailiang on 2017/9/11.
    */
   import api from "common/js/util/util";
+  import Loading from "components/loading";
+
   const XHRList = {
     hospital: "/mcall/comm/data/baseinfo/v1/getHospitalList/",
     disease: "/mcall/cms/part/illness/relation/v1/getMapList/",
@@ -58,11 +55,22 @@
         messageList: [],
         searchFlag: true,
         searchText: '',
-        placeholderText: ""
+        placeholderText: "",
+        finish: false,
+        noResult: false
       }
     },
     mounted(){
+      let page = 0;
       this.listType = this.$route.params.listType;
+      this.returnRouter = this.$route.params.from;
+
+      window.addEventListener("scroll", () => {
+        if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
+          page++;
+          this.getMessageList(this.searchText, page)
+        }
+      });
 
       this.getPlaceHolder(this.listType);
       this.limitChinese();
@@ -92,20 +100,25 @@
         }, 20);
       },
 
-      getMessageList(searchContent){
+      getMessageList(searchContent, page){
         const that = this;
-
+        this.finish = true;
+        let url = "";
+        let firstResult = 0 + (page * 20);
+        let maxResult = 20 + (page * 20);
         let searchData = {};
         switch (this.listType) {
           case "hospital":
             searchData = {
               hospitalName: searchContent
             };
+            url = XHRList.hospital;
             break;
           case "disease":
             searchData = {
               diseaseName: searchContent
             };
+            url = XHRList.disease;
             break;
           default:
             break;
@@ -113,16 +126,16 @@
 
         let data = Object.assign({}, {
           isValid: "1",
-          firstResult: "0",
-          maxResult: "9999",
+          firstResult: 0,
+          maxResult: maxResult,
           cityId: ""
         }, searchData);
         api.ajax({
-          url: XHRList.hospital,
+          url: url,
           method: "POST",
           data: data,
           beforeSend(config) {
-            this.finish = false;
+
           },
           done(param) {
             console.log(param)
@@ -131,6 +144,9 @@
               let dataList = param.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
                 that.messageList = dataList;
+                that.loading = false;
+              } else {
+                that.noResult = true;
               }
             }
           },
@@ -139,19 +155,51 @@
           }
         })
       },
+      backToPast(item){
+        if (this.listType === "hospital") {
+          this.$router.push({
+            name: this.returnRouter,
+            params: {
+              baseMessage: {
+                name: item.hospitalName,
+                id: item.id,
+              },
+              from: "hospital"
+            },
+            query: this.$route.query
+          });
+        } else if (this.listType === "disease") {
+          this.$router.push({
+            name: this.returnRouter,
+            params: {
+              baseMessage: {
+                name: item.illnessName,
+                id: item.id,
+              },
+              from: "disease"
+            },
+            query: this.$route.query
+          });
+        }
+      },
       searchEvent(){
 
         if (this.searchText.length === 0) {
           return false;
+        } else if (api.getByteLen(this.searchText.length >= 30)) {
+          this.searchText = api.getStrByteLen(this.searchText, 60);
         } else {
           clearTimeout(this.searchTimeout);
           this.searchTimeout = setTimeout(() => {
-            this.getMessageList(this.searchText);
+            this.getMessageList(this.searchText, 0);
           }, 300);
         }
       }
     },
-    props: {}
+    props: {},
+    components: {
+      Loading
+    }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
@@ -177,7 +225,7 @@
   .tc-searchMain {
     $colorTwo: #222222;
     $colorFive: #555555;
-    padding-top: 1.3rem;
+    padding-top: rem(140px);
     height: 100%;
     box-sizing: border-box;
     overflow: auto;
@@ -227,7 +275,7 @@
         padding: rem(10px) 0 rem(12px) rem(40px);
       }
       .searchResultItem {
-        @include font-dpr(16px);
+        @include font-dpr(17px);
         color: $colorTwo;
         display: block;
         padding: rem(24px) rem(40px);
@@ -438,10 +486,11 @@
       box-shadow: 0px rem(-3px) rem(4px) 0px #F4F8FD;
     }
     .add-result-item-btn {
-      width: rem(570px);
+      width: rem(360px);
+      height:rem(100px);
       display: block;
-      margin: 0 rem(90px);
-      margin-top: rem(100px);
+      margin: 0 auto;
+      margin-top: rem(302px);
       &.unable {
         color: #fff;
         background: #DFDFDF;
@@ -473,17 +522,20 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        @include font-dpr(15px);
-        color: #555555;
+        @include font-dpr(18px);
+
         width: 100%;
-        height: rem(58px);
-        padding-left: rem(60px);
+        height: rem(100px);
+        padding-left: rem(30px);
         margin: 0 auto;
         outline: none;
         border-style: none;
         -webkit-border-radius: rem(8px);
         -moz-border-radius: rem(8px);
         border-radius: rem(8px);
+        @include placeholder() {
+          color: #CCCCCC;
+        }
       }
       .tc-searchBtnPic {
         display: inline-block;
@@ -587,5 +639,20 @@
 
   .tips-text {
     display: none;
+  }
+
+  .search-cancel {
+    width: rem(60px);
+    height: rem(60px);
+    display: block;
+    position: absolute;
+    right: rem(28px);
+    top: 50%;
+    margin-top: rem(-16px);
+    & > img {
+      width: rem(32px);
+      height: rem(32px);
+      vertical-align: top;
+    }
   }
 </style>

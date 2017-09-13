@@ -289,8 +289,6 @@ class Api {
               window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
             }
           }
-        },
-        fail(){
         }
       })
     }

@@ -32,7 +32,7 @@ class ValidateVerifiPolicy {
         en: field => '请填写真实姓名，不能输入数字及特殊符号',
       },
       validate: value => {
-        return !(/[`~!！？@#$%^&*()_+<>?:"{},，。.\/;'[\] ]/).test(value)
+        return !(/[`~!！？@#$%^&*()_+<>?:"{},，。\/;'[\] ]/).test(value)
       }
     });
 

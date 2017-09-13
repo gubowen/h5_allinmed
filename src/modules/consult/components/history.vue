@@ -229,12 +229,12 @@
           this.allParams.patientId = params.patientId;
         }
 
-        if (this.$route.params.diseaseMessage) {
-          this.diseaseMessage = this.$route.params.diseaseMessage;
+        if (this.$route.params.from==="disease") {
+          this.diseaseMessage = this.$route.params.baseMessage;
         }
 
-        if (this.$route.params.hospitalMessage) {
-          this.hospitalMessage = this.$route.params.hospitalMessage;
+        if (this.$route.params.from==="hospital") {
+          this.hospitalMessage = this.$route.params.baseMessage;
         }
 
       },
@@ -251,7 +251,7 @@
       },
       selectDisease () {
         this.$router.push({
-          name: 'selectArea',
+          name: 'searchList',
           params: {
             listType: 'disease',
             level: 2,
@@ -473,26 +473,26 @@
       // 填写情况验证
       validateParamsFull() {
         if (!this.visit.none && !this.visit.has) {
-          this.validateToast("请选择有去医院就诊过吗");
+          this.validateToast("请选择最近一次就诊医院");
           return false;
         } else if (this.visit.has && !this.hospitalMessage.id) {
-          this.validateToast("请选择有去医院就诊过吗");
+          this.validateToast("请选择最近一次就诊医院");
           return false;
         }
 
         if (!this.upload.none && !this.upload.has) {
-          this.validateToast("请选择有影像资料吗");
+          this.validateToast("请上传检查资料或患处照片 ");
           return false;
         } else if (this.upload.has && (this.imageList1.length === 0 && this.imageList2.length === 0)) {
-          this.validateToast("请选择有影像资料吗");
+          this.validateToast("请上传检查资料或患处照片 ");
           return false;
         }
 
         if (!this.medical.none && !this.medical.has) {
-          this.validateToast("请选择有服用药物吗");
+          this.validateToast("请填写药物名称");
           return false;
         } else if (this.medical.has && this.medicalMessage.length === 0) {
-          this.validateToast("请选择有服用药物吗");
+          this.validateToast("请填写药物名称");
           return false;
         }
 

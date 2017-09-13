@@ -6,103 +6,103 @@
         <header class="patient-consult-rate add-patient-title">
           <!--无患者时的头部提示-->
           <section class="patient-tips" v-if="headerShow == 1">
-            <p class="patient-tips-top">为准确诊断，请填写就诊对象的真实信息</p>
+            <h2 class="patient-tips-top">请填写患者真实信息</h2>
             <p class="patient-tips-bottom">所有信息仅您和医生可见，请放心填写</p>
           </section>
           <!--添加患者-->
           <section class="add-patient"  v-else-if="headerShow == 2">
-            <span class="add-patient-btn" :class="{'on':createNewPatient}"
-                  @click="createNewPatient=true;headerShow=3">添加新患者</span>
+            <h2 class="patient-tips-top">请选择为谁问诊</h2>
+            <p class="patient-tips-bottom">为给您准确判断，请选择为谁问诊</p>
           </section>
           <!--取消添加-->
           <section class="cancel-add" v-else="headerShow == 3">
-            <span class="add-patient-text">添加新患者</span>
-            <span class="cancel-add-btn"@click="createNewPatient=false;headerShow=2">取消添加</span>
+            <h2 class="patient-tips-top">添加新患者</h2>
+            <p class="patient-tips-bottom">为准确判断，请填写患者的真实信息</p>
           </section>
         </header>
-        <!--渐变的中间层-->
-        <section class="gradient-box">
-        </section>
+        <!--渐变的中间层(新版本取消)-->
+        <!--<section class="gradient-box"></section>-->
         <!--患者咨询底部-->
-        <section class="patient-consult-bottom">
-          <!--患者列表-->
-          <!--<transition name="fadeDown" mode="out-in">-->
-            <section class="patient-list" v-if="!createNewPatient">
-              <section
-                :class="{'on':createNewPatient===false && currentIndex==index}"
-                class="patient-list-item"
-                v-for="(item,index) in patientList"
-                @click="toSelectPart(patientList[index])"
-              >
-                <figcaption>
-                  {{item.patientName}}
-                </figcaption>
-              </section>
-            </section>
-          <!--</transition>-->
-
-          <!--添加患者-->
-          <transition name="fadeDown">
-            <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
-              <section class="add-patient-content-form">
-                <article class="add-patient-content-item">
-                  <figcaption>患者姓名</figcaption>
-                  <figure class="add-patient-input">
-                    <input type="text" placeholder="请填写真实姓名" id="patientName" @blur="validateBlur('username')"
-                           v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username" v-model="username">
-                  </figure>
-                </article>
-                <article class="add-patient-content-item">
-                  <figcaption>性别</figcaption>
-                  <figure class="add-patient-input" id="ev-patient-sex">
-                    <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="sexSelect=1">
-                      <i class="add-patient-selector"></i>
-                      <span>男</span>
-                    </section>
-                    <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="sexSelect=2">
-                      <i class="add-patient-selector"></i>
-                      <span>女</span>
-                    </section>
-                  </figure>
-                </article>
-                <article class="add-patient-content-item">
-                  <figcaption>年龄</figcaption>
-                  <figure class="add-patient-input">
-                    <input type="number" @blur="validateBlur('age')" placeholder="请填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"
-                           v-model="userage">
-                  </figure>
-                </article>
-                <article class="add-patient-content-item">
-                  <figcaption>所在地</figcaption>
-                  <figure class="add-patient-input">
-                    <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
-                    <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
-                  </figure>
-                </article>
-                <article class="add-patient-content-item">
-                  <figcaption>与患者关系</figcaption>
-                  <figure class="add-patient-input">
-                    <span id="ev-relationship" class="patient-relation" :class="{'on':relationClick}"
-                          @click="picker.show()">{{relationShip.title}}</span>
-                    <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
-                  </figure>
-                </article>
-                <article class="add-patient-content-item">
-                  <figcaption>手机号码</figcaption>
-                  <figure class="add-patient-input">
-                    <input type="number" @blur="validateBlur('phone')" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone" v-model="phone">
-                  </figure>
-                </article>
-              </section>
-            </section>
-          </transition>
-        </section>
-        <!--无患者提示-->
-        <transition name="fade">
-          <section v-if="createNewPatient">
-            <button class="btn-primary go-next" @click="validate">去咨询</button>
+        <!--患者列表-->
+        <!--<transition name="fadeDown" mode="out-in">-->
+        <section class="patient-list" v-if="!createNewPatient">
+          <section
+            :class="{'on':createNewPatient===false && currentIndex==index}"
+            class="patient-list-item"
+            v-for="(item,index) in patientList"
+            @click="toSelectPart(index)"
+          >
+            <figcaption>
+              {{item.patientName}}
+            </figcaption>
           </section>
-        </transition>
+        </section>
+        <!--</transition>-->
+        <section class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
+          <span class="add-patient-btn" :class="{'on':createNewPatient}">添加新患者</span>
+        </section>
+        <!--添加患者-->
+        <!--<transition name="fadeUp">-->
+          <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
+            <section class="add-patient-content-form">
+              <article class="add-patient-content-item">
+                <figcaption>患者姓名</figcaption>
+                <figure class="add-patient-input">
+                  <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')" @input="inputMaxLength('username',40)"
+                         v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username" v-model="username">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>性别</figcaption>
+                <figure class="add-patient-input" id="ev-patient-sex">
+                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="sexSelect=1">
+                    <i class="add-patient-selector"></i>
+                    <span>男</span>
+                  </section>
+                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="sexSelect=2">
+                    <i class="add-patient-selector"></i>
+                    <span>女</span>
+                  </section>
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>年龄</figcaption>
+                <figure class="add-patient-input">
+                  <input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"
+                         v-model="userage">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>所在地</figcaption>
+                <figure class="add-patient-input">
+                  <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
+                  <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>与患者关系</figcaption>
+                <figure class="add-patient-input">
+                  <span id="ev-relationship" class="patient-relation" :class="{'on':relationClick}"
+                        @click="picker.show()">{{relationShip.title}}</span>
+                  <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>手机号码</figcaption>
+                <figure class="add-patient-input">
+                  <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone" v-model="phone">
+                </figure>
+              </article>
+            </section>
+          </section>
+        <!--</transition>-->
+        <!--无患者提示-->
+        <!--<transition name="fade">-->
+          <section v-if="createNewPatient">
+            <button class="btn-primary go-next" @click="validate">去问诊</button>
+            <p class="cancel-add-btn" v-if="headerShow == 3" @click="cancelAddFun()">取消添加</p>
+          </section>
+        <!--</transition>-->
       </section>
     </section>
     <loading :show="finish"></loading>
@@ -142,6 +142,7 @@
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
     patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
+    getPhone: "/mcall/patient/customer/unite/v1/getById/",//患者列表
     createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
     saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/"//获取患者病例单
@@ -183,7 +184,8 @@
         errorShow: false,//是否提示错误
         areaClick:true,//选择城市是否点击过
         relationClick:true,//选择患者是否点击,
-        listType:"city" //类型为城市
+        listType:"city", //类型为城市
+        bindPhone:"",//用户绑定的手机号
       }
     },
     activated(){
@@ -192,28 +194,30 @@
       document.title="为谁咨询";
       this.finish=false;
       this.initData();
+      this.currentIndex = -1;
     },
     mounted() {
       document.title="为谁咨询";
       this.getPatientList();
       this.relationshipPicker();
+      this.getPatientPhone();//获取绑定的手机号
       this.$validator.updateDictionary({
         en: {
           custom: {
             //用户姓名的验证
             username: {
               required: '请填写患者姓名',
-              noNumber:'不能包含数字和特殊字符',
-              isEmoji:'不能包含数字和特殊字符',
-              special:'不能包含数字和特殊字符',
-              max_length:'不能包含数字和特殊字符',
+              noNumber:'请填写真实姓名',
+              isEmoji:'请填写真实姓名',
+              special:'请填写真实姓名',
+              max_length:'请填写真实姓名',
             },
             //用户年龄的验证
             age:{
               required: '请填写年龄',
-              max_value:'请填写0-150岁之间的年龄',
-              min_value:'请填写0-150岁之间的年龄',
-              special:'请填写0-150岁之间的年龄',
+              max_value:'请填写真实年龄',
+              min_value:'请填写真实年龄',
+              special:'请填写真实年龄',
             },
             //手机号的验证
             phone:{
@@ -232,7 +236,12 @@
         }
       });
     },
-    computed: {},
+    computed: {
+
+    },
+    filters: {
+
+    },
     methods: {
       initData () {
 
@@ -242,6 +251,35 @@
 
 //          this.areaParam.districtId = true;
         }
+      },
+      //获取绑定的手机号
+      getPatientPhone(){
+        const that = this;
+        api.ajax({
+          url: XHRList.getPhone,
+          method: "POST",
+          data:  {
+            isValid: 1,                           // string 是   1
+            firstResult: 0,                       // string 是  分页参数
+            maxResult: 99999,                     //  string 是  分页参数
+            customerId: api.getPara().customerId,                       //  string 是  用户id
+          },
+          beforeSend(config) {
+
+          },
+          done(param) {
+            console.log(param);
+            if(param.responseObject.responseStatus && param.responseObject.responseData.dataList && param.responseObject.responseData.dataList.patientCustomerUnite.mobile){
+              that.phone=param.responseObject.responseData.dataList.patientCustomerUnite.mobile;
+              that.bindPhone=param.responseObject.responseData.dataList.patientCustomerUnite.mobile;
+            } else {
+
+            }
+          },
+          fail(err) {
+            console.log(param);
+          }
+        })
       },
       selectArea(){
 //        this.$el.querySelectorAll(".middle-tip-box.ev-loading")[0].style.display="none";
@@ -257,6 +295,30 @@
           },
           query:this.$route.query
         })
+      },
+      //键盘最大长度事件
+//      keyMaxLength(attr,length){
+//        let keyCode = event.keyCode;
+////        console.log("keyCode");
+////        let len=0;
+////        console.log(this[attr].length);
+////        for (let codePoint of this[attr]) {
+////          debugger
+////          if (this[attr].charCodeAt(codePoint) > 128) {
+////            len += 2;
+////          } else {
+////            len++;
+////          }
+////        }
+//        if (api.getByteLen(this[attr]) < length) {
+//          event.returnValue = true;
+//        } else {
+//          event.returnValue = false;
+//        }
+//      },
+      //input最大长度事件
+      inputMaxLength(attr,length){
+        this[attr] = api.getStrByteLen(this[attr], length);
       },
       getPatientList() {
         const that = this;
@@ -409,7 +471,7 @@
               that.relationClick=true;
               that.relationShip.title="选择您与患者关系";
               setTimeout(function () {
-                that.selectPatient(0);
+                that.toSelectPart(0);
               },500);
             } else {
               that.errorMsg = data.responseObject.responseMessage;
@@ -448,17 +510,49 @@
           this.relationInput = hospitalData[selectedVal[0]].text;
         });
       },
-      toSelectPart(param) {
+      toSelectPart(index) {
+        this.currentIndex = index;
         this.$router.push({
           name: "selectPart",
           query: {
             userId:this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
-            sex: param.patientSex,
-            age: param.patientAge,
-            patientId: param.patientId,
+            sex: this.patientList[index].patientSex,
+            age: this.patientList[index].patientAge,
+            patientId: this.patientList[index].patientId,
             count:this.count
           }
         });
+      },
+      //添加患者按钮
+      addFun(){
+        this.createNewPatient=true;
+        this.headerShow=3;
+        window.scrollTo(0,0);
+      },
+      //取消添加按钮
+      cancelAddFun(){
+        this.createNewPatient=false;
+        this.headerShow=2;
+        this.username="";//添加患者名字
+        this.userage="";//患者年龄
+        this.phone = this.bindPhone;
+        this. relationShip={
+          title: "选择您与患者关系",
+            id: ""
+        };
+        this.sexSelect = 1;
+        this.areaParam={
+          provinceId: "",
+            province: "",
+            cityId: "",
+            city: "",
+            districtId: "",
+            district: "",
+            result:"选择患者所在地"
+        };
+        this.areaClick=true;//选择城市是否点击过
+        this.relationClick=true;//选择患者是否点击,
+        window.scrollTo(0,0);
       },
       openCasePage(){
         let that = this;
@@ -492,7 +586,7 @@
   .main-inner {
     /*width: 100%;*/
     height: 100%;
-    padding: rem(32px) rem(30px) rem(60px);
+    padding: rem(0px) rem(30px);
 
   }
 
@@ -503,78 +597,35 @@
 
   /*头部*/
   .patient-consult-rate.add-patient-title{
-    background-color: white;
-    border-radius: rem(16px) rem(16px) 0 0;
-    height: rem(142px);
+    /*background-color: yellow;*/
+    /*border-radius: rem(16px) rem(16px) 0 0;*/
+    height: rem(194px);
+    padding-top: rem(50px);
+    padding-left: rem(14px);
+    box-sizing: border-box;
     /*没有患者列表时的头部提示*/
-    .patient-tips{
-      /*display: none;*/
-      line-height: 1;
-      padding: rem(44px) 0 0 rem(64px);
-      .patient-tips-top{
-        @include font-dpr(14px);
-        color: #909090;
-      }
-      .patient-tips-bottom{
-        margin-top: rem(10px);
-        @include font-dpr(12px);
-        padding-left: rem(32px);
-        color: #BBBBBB;
-        background: url("../../../common/image/img00/patientConsult/patient_tips.png") no-repeat left top;
-        background-size: rem(28px) rem(28px);
-        line-height: 1.3;
-      }
+    .patient-tips-top{
+      @include font-dpr(22px);
+      color: #555555;
+      font-weight: normal;
     }
-    /*有患者列表时的添加患者*/
-    .add-patient{
-      /*display: none;*/
-      &-btn{
-        @include font-dpr(15px);
-        line-height: rem(142px);
-        color: #07B6AC;
-        padding-left: rem(48px);
-        position: relative;
-        &::before{
-          content: '';
-          display: inline-block;
-          width: rem(40px);
-          height: rem(40px);
-          background: url("../../../common/image/img00/patientConsult/add_people.png") no-repeat;
-          background-size: 100% 100%;
-          vertical-align: middle;
-          margin-right: rem(8px);
-        }
-      }
-    }
-    /*取消添加*/
-    .cancel-add{
-      /*display: none;*/
-      line-height: rem(142px);
+    .patient-tips-bottom{
+      margin-top: rem(10px);
       @include font-dpr(15px);
-      @include clearfix();
-      .add-patient-text{
-        color: #555555;
-        float: left;
-        margin-left: rem(50px);
-        &::before{
-          content: '';
-          display: inline-block;
-          width: rem(4px);
-          height: rem(20px);
-          background-color: #2FC5BD;
-          margin-right: rem(10px);
-        }
-      }
-      .cancel-add-btn{
-        float: right;
-        color: #818CAB;
-        margin-right: 32px;
-      }
+      /*padding-left: rem(32px);*/
+      color: #909090;
+      /*background: url("../../../common/image/img00/patientConsult/patient_tips.png") no-repeat left top;*/
+      /*background-size: rem(28px) rem(28px);*/
+      /*line-height: 1.3;*/
     }
+
   }
   //患者咨询
   .add-patient-content {
-    padding: rem(40px) rem(24px) rem(120px) rem(64px);
+    background-color: white;
+    margin-bottom: rem(70px);
+    border-radius: rem(16px);
+    padding: rem(60px) rem(24px) rem(60px) rem(64px);
     .add-patient-content-form {
       background-color: white;
     }
@@ -675,24 +726,17 @@
     }
   }
   /*渐变的中间层*/
-  .gradient-box{
+  /*.gradient-box{
     margin-top: rem(-1px);
     height: rem(20px);
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FAFAFA), to(#FFFFFF));
-    /*background: red;*/
-  }
-  .patient-consult-bottom{
-    background-color: white;
-    margin-top: rem(-1px);
-    margin-bottom: rem(70px);
-    border-radius: 0 0 rem(16px) rem(16px);
-  }
+  }*/
   .patient-list {
+    background-color: white;
+    border-radius: rem(16px);
     text-align: left;
     font-size: 0;
-    padding-left: rem(34px);
-    /*padding-right: rem(10px);*/
-    padding-bottom: rem(80px);
+    padding: rem(16px) rem(0px) rem(80px) rem(34px);
   }
 
   .patient-list-item {
@@ -707,7 +751,7 @@
       min-width: rem(164px);
       max-width: rem(338px);
       padding: rem(20px) rem(26px) rem(20px) rem(68px);
-      border: 1px solid #F6F6F6;
+      border: 1px solid #EDEDED;
       color: #333333;
       line-height: 1;
       @include ellipsis();
@@ -729,25 +773,30 @@
     }
   }
 
-  /*.add-patient-save {*/
-    /*display: flex;*/
-    /*width: 100%;*/
-    /*box-sizing: border-box;*/
-    /*justify-content: space-between;*/
-    /*.btn-primary {*/
-      /*width: rem(240px);*/
-      /*border: 1px solid #00d6c6;*/
-      /*&.cancel {*/
-        /*color: #00d6c6;*/
-        /*background-color: #fff;*/
-      /*}*/
-    /*}*/
-    /*&.off {*/
-      /*.save {*/
-        /*background-color: #dfdfdf;*/
-      /*}*/
-    /*}*/
-  /*}*/
+  .add-patient-box{
+    border-radius: rem(16px);
+    background-color: white;
+    margin-bottom: rem(70px);
+    margin-top: rem(20px);
+    /*有患者列表时的添加患者*/
+    .add-patient-btn{
+      @include font-dpr(15px);
+      line-height: rem(142px);
+      color: #07B6AC;
+      padding-left: rem(48px);
+      position: relative;
+      &::before{
+        content: '';
+        display: inline-block;
+        width: rem(40px);
+        height: rem(40px);
+        background: url("../../../common/image/img00/patientConsult/add_people.png") no-repeat;
+        background-size: 100% 100%;
+        vertical-align: middle;
+        margin-right: rem(8px);
+      }
+    }
+  }
 
   .go-next {
     width: rem(560px);
@@ -755,14 +804,22 @@
     line-height: rem(100px);
     display: block;
     border-radius: 9999px;
-    background-color: #00d6c6;
+    background: #2FC5BD;
+    box-shadow: 0 rem(8px) rem(24px) 0 rgba(47,197,189,0.40);
     text-align: center;
     box-sizing: border-box;
     @include font-dpr(18px);
     color: #fff;
     outline: medium;
     padding: 0;
-    margin: rem(0px) auto;
+    margin: rem(0px) auto rem(40px);
+  }
+
+  .cancel-add-btn{
+    @include font-dpr(18px);
+    color: #909090;
+    text-align: center;
+    padding-bottom: rem(60px);
   }
 
   .horizontal-box {
@@ -789,6 +846,22 @@
     opacity: 0;
     transform: translateY(-50%);
   }
+  .fadeUp-enter-active{
+    transition: all ease-in-out .5s
+  }
+  .fadeUp-leave-active{
+    /*transition: opacity 0s*/
+  }
+  .fadeUp-enter /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  .fadeUp-leave-to{
+    opacity: 0;
+    /*transform: translateY(50%);*/
+  }
+
   .fadeRight-enter-active, .fadeRight-leave-active {
     transition: all ease-in-out .5s;
     transform: translateX(0);

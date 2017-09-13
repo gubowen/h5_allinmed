@@ -93,7 +93,7 @@ class wxStrings {
       "#wechat_redirect";
     if (common.getpara().code) {
       if (window.location.href.indexOf("openId") === -1) {
-        window.location.href = "http://m.allinmed.cn/mcall/wx/allinmed/interact/v1/view/" +
+        window.location.href = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/" +
           "?ref=" + localStorage.getItem("currentUrl") +
           "&response_type=code" +
           "&scope=snsapi_base" +

@@ -73,8 +73,8 @@
           </MiddleTips>
         </section>
         <!--继续问诊去购买时间-->
-        <section class="main-message-box grey-tips" v-if="!lastTimeShow"  :key="0">
-          <figcaption class="first-message" @click="buyTime">
+        <section class="main-message-box grey-tips" v-if="consultTipsShow"  :key="0">
+          <figcaption class="first-message" @click="getConsultPrice()">
             <p>分诊医生本次问诊已结束，如需继续帮助，请选择</p>
             <p class="go-consult"><span>继续问诊</span></p>
           </figcaption>
@@ -131,7 +131,8 @@
     getTriageId: "/mcall/customer/case/consultation/v1/getMapById/",
     time: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",
     refresh: "/mcall/customer/case/consultation/v1/update/",
-    updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/"
+    updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
+    getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
   };
   export default{
     data(){
@@ -148,8 +149,9 @@
         orderSourceId: "",
         beginTimestamp: 0,
         finish: true,
-        lastTimeShow: false,//顶部时间的提示和输入框、购买咨询消息是否展示
+        lastTimeShow: false,//顶部时间的提示和输入框是否展示
 //        inputBoxShow: false,//底部是否显示
+        consultTipsShow:false,//购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
         msgList: [],//消息列表
         //用户数据
         userData: {
@@ -404,17 +406,19 @@
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
-              debugger;
               if (dataList.consultationFrequency == "-1") {
-                that.lastTimeShow = false
+                that.lastTimeShow = false;
+                that.consultTipsShow = true;
               } else {
-//                time = 10000;
+                time = 10000;
                 if (time > 0) {
                   store.commit("setLastTime", time);
                   store.commit("lastTimeCount");
                   that.lastTimeShow = true;
+                  that.consultTipsShow = false;
                 } else {
                   that.lastTimeShow = false;
+                  that.consultTipsShow = true;
                 }
               }
             }
@@ -570,27 +574,24 @@
       getConsultPrice(){
         const that = this;
         api.ajax({
-          url: XHRList.updateCount,
+          url: XHRList.getPrice,
           method: "POST",
           data: {
-            consultationId: this.orderSourceId,
-            frequency: "0",
-            frequencyType: "2",
-            consultationLevel: "1"
+            visitSiteId:17,	//string	是	站点
+            maxResult:999,
+            id:0,
           },
           done(data) {
-            if (data.responseObject.responseData) {
-//              that.lastTimeShow = true;
-//              store.commit("setLastTime", 24 * 60 * 60 * 1000);
-//              store.commit("lastTimeCount");
-//              that.getLastTime();
-//              that.sendPayFinish();
+            if (data.responseObject.responseStatus) {
+              let price = data.responseObject.responseData.dataList.adviceAmount
+              price = "0";
+              price === "0"?that.refreashOrderTime():that.buyTime(price)
             }
           }
         })
       },
       //购买时间
-      buyTime(){
+      buyTime(price){
         const that = this;
         alert("我要购买");
 //        that.lastTimeShow=true;
@@ -602,7 +603,7 @@
           orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
           orderSourceId: this.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
           orderSourceType: "1",                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
-          orderAmount: 9.90,                  //	string	否	订单金额  （单位/元 保留两位小数）
+          orderAmount: price,                  //	string	否	订单金额  （单位/元 保留两位小数）
           status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
           body: '咨询',   //   string  否  订单描述 （微信支付展示用）
           isCharge: "true",                    //   string  是  true-收费  false-免费
@@ -698,9 +699,9 @@
     },
     mounted(){
       let that = this;
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
+//      if(!api.checkOpenId()){
+//        api.wxGetOpenId(1);
+//      }
       this.getUserBaseData();
       this.triageDoctorAssign();
     },
@@ -733,9 +734,11 @@
       lastTime: function (time) {
         if (time <= 0) {
           this.lastTimeShow = false;
+          this.consultTipsShow = true;
           this.sendConsultState(5);
         } else {
           this.lastTimeShow = true;
+          this.consultTipsShow = false;
         }
       },
     },
@@ -755,6 +758,18 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imStyle";
+  //问诊开始结束提示样式
+  .first-message {
+    @include font-dpr(13px);
+    color: #AAAAAA;
+    background-color: #EDEEEE;
+    text-align: center;
+    margin: 0 rem(30px);
+    padding: rem(15px) rem(26px);
+    box-sizing: border-box;
+    border-radius: 0.2rem;
+    display: inline-block;
+  }
   //继续问诊样式
   .go-consult{
     text-align: center;

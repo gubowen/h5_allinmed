@@ -95,9 +95,9 @@
     <section class="main-message-box" v-if="doctorObj.allData.length">
       <article class="doctor-box">
         <header class="doctor-header">
-          <h3 class="doctor-title">专家问诊</h3>
-          <p class="doctor-introduce">直达三甲名医 一对一服务 超时未回复全额退款</p>
-          <p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>
+          <h3 class="doctor-title">匹配医生</h3>
+          <p class="doctor-introduce"><span>直达三甲名医</span><span>超时未回复全额退款</span></p>
+          <!--<p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>-->
         </header>
         <section class="doctor-content">
           <ul class="doctor-list">
@@ -120,7 +120,9 @@
               </section>
               <section class="doctor-item-bottom">
                 <span class="go-consult">图文问诊</span>
-                <span class="general-money">{{item.generalPrice}}/{{item.generalTimes}}次起</span>
+                <span class="free-consult">免费问诊</span>
+                <span class="free-price">{{item.generalPrice}}元</span>
+                <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
             </li>
           </ul>
@@ -278,7 +280,7 @@
           },
           done(data){
             if (data.responseObject.responseData.dataList) {
-              that.doctorObj.allData = data.responseObject.responseData.dataList.concat(data.responseObject.responseData.dataList).concat(data.responseObject.responseData.dataList);
+              that.doctorObj.allData = data.responseObject.responseData.dataList;
 //              that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
@@ -501,9 +503,21 @@
       }
       .doctor-introduce{
         color: #333333;
-        @include font-dpr(14px);
-        font-weight: bold;
-        padding:0 rem(30px);
+        @include font-dpr(15px);
+        span{
+          &::before{
+            content:'';
+            display: inline-block;
+            width: rem(8px);
+            height: rem(8px);
+            background: #43CBC3;
+            border-radius: rem(4px);
+            vertical-align: middle;
+            margin: rem(0px) rem(8px) rem(0px) rem(30px);
+          }
+        }
+        /*font-weight: bold;*/
+        /*padding:0 rem(30px);*/
       }
       .doctor-tips{
         border: 1px solid #F4F4F4;
@@ -524,6 +538,7 @@
           .doctor-item-top{
             display: flex;
             .doctor-item-img{
+              margin-top: rem(6px);
               width: rem(108px);
               height: rem(108px);
               margin-right: rem(16px);
@@ -595,6 +610,7 @@
             @include font-dpr(14px);
             @include clearfix();
             margin-top: rem(40px);
+            padding-left: rem(120px);
             .go-consult{
               float: right;
               background: rgba(47,197,189,0.90);
@@ -602,11 +618,32 @@
               padding: rem(12px) rem(56px);
               color: #ffffff;
             }
+            .free-consult{
+              float: left;
+              color: #FA787A;
+              margin-top: rem(12px);
+            }
+            .free-price{
+              @include font-dpr(13px);
+              color: #BBBBBB;
+              top: rem(12px);
+              margin-left: rem(12px);
+              position: relative;
+              &::before{
+                content: '';
+                display: block;
+                position: absolute;
+                width: 100%;
+                height: rem(1px);
+                left: 0;
+                top:50%;
+                background-color: #BBBBBB;;
+              }
+            }
             .general-money{
               float: left;
               color: #07B6AC;
               padding-left: rem(34px);
-              margin-left: rem(120px);
               margin-top: rem(12px);
               background: url("../../../common/image/imScene/money@2x.png") no-repeat left center;
               background-size: rem(32px) rem(32px);
