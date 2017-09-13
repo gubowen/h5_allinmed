@@ -121,7 +121,7 @@
     import toast from 'components/toast';
     import confirm from 'components/confirm';
     const XHRList = {
-      phoneCheck: "/mcall/patient/customer/unite/v1/getById/",  // check mobile number
+      getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",  // 个人简介
       getCode: "/mcall/customer/send/code/v1/create/",         // get code
       codeCheck: "/mcall/customer/send/code/v1/update/",       // check code
       wxBindCheck: "/mcall/patient/customer/unite/info/v1/getIsWeixinBind/",       // check mobile is bind weiXin
@@ -145,11 +145,10 @@
           levelShow:false,
           backShow:false,
           params: {
-            getCodeParams: {
-              typeId: 5,	    //string	是	(1-找回密码、2-账号验证(1.绑定手机、手机号注册)、3-快速登录)',4-老患者报到5-患者注册	5
-              account: '',	  //string	//是	账号
-              codeLength: 4,	//string	//是	代码长度	4
-              accountType: 0,	//string	//是	0-手机 1-邮箱
+            getPersonalProParams: {
+              customerId: "1461229672002",
+              visitSiteId: 1,
+              maxResult: 9999,
             },
             codeCheck: {
               validCode: '',	  //string	是	验证码CODE
@@ -198,6 +197,7 @@
             }
           }
         });
+        this.getPersonalProDate();
       },
 //      beforeRouteLeave (to, from, next) {
 //        // 导航离开该组件的对应路由时调用
@@ -213,6 +213,41 @@
           if (this.errors.has(name)) {
             this.toastComm(this.errors.first(name));
           }
+        },
+        //get  Personal Profile
+        getPersonalProDate() {
+          let _this = this;
+//          _this.params.getCodeParams.account = _this.phoneMessage;
+          api.ajax({
+            url: XHRList.getPersonalProXHR,
+            method: "POST",
+            data: _this.params.getPersonalProParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              console.log(data);
+              if (data.responseObject.responsePk !== 0&&data.responseObject.responseStatus) {
+//                _this.toastComm("验证码已发送");
+//                _this.imgUrl = _this.toastImg.success;
+//                _this.countDown(60);
+//                _this.params.codeCheck.id=data.responseObject.responsePk
+              }else{
+//                _this.errorMsg = data.responseObject.responseMessage;
+//                _this.errorShow = true;
+//                setTimeout(() => {
+//                  _this.errorShow = false;
+//                }, 2000)
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
         },
         //获取验证码
         getCodeApi() {

@@ -203,10 +203,10 @@ class Api {
     let XHRUrl = "";
     let _currentPageUrl =  (window.location.origin + window.location.pathname + window.location.search),
       _encodeUrl = encodeURIComponent(_currentPageUrl);
-    if (env ==1) {
+    if (env ==2) {
       appId = "wxe8384f7b06c169ef";
       XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
-    } else if (env == 2) {
+    } else if (env == 1) {
       appId = "wxaa5288ad7f627608";
       XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
@@ -292,6 +292,30 @@ class Api {
         }
       })
     }
+  }
+
+  //时间处理  2017年05月08日 星期一 14:20 / 2017.05.08 星期一 14:20
+  timeFormate(op){
+    let _operationTime = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+      _timeDeal = op.time.substring(0,10).replace(/\-/g, "\/"),
+      _timesList = new Date(_timeDeal).getDay(),
+      _timeCompare = '' ,                        //  2017年05月08日 星期一 14:20
+      _timeCompares = '' ,                       //  05月08日 星期一 14:20
+      _week = _operationTime[_timesList],
+      _hours = op.time.substring(11,16);
+    switch (parseInt(op.type)) {
+      case 1:      //2017年05月08日
+        _timeCompare = op.time.substring(0, 4) + "年" + op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日"; //  2017年05月08日 星期一 14:20
+        _timeCompares = op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日";                                 //  05月08日 星期一 14:20
+        break;
+      case 2:      //2017.05.08
+        _timeCompare = op.time.substring(0, 4) + "." + op.time.substring(5, 7) + "." + op.time.substring(8, 10);  //  2017.05.08 星期一 14:20
+        _timeCompares = op.time.substring(5, 7) + "." + op.time.substring(8, 10);                                  //  05.08 星期一 14:20
+        break;
+      case 3:
+        break;
+    }
+    return {year:_timeCompare,years:_timeCompares,week:_week,hour:_hours};
   }
 
   MillisecondToDate(msd) {

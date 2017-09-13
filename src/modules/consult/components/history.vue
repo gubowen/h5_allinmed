@@ -207,7 +207,7 @@
       this.initData();
     },
     mounted(){
-      document.title = "描述情况";
+      document.title = "描述病情";
       document.body.scrollTop = 0;
       autosize(this.$el.querySelector(".medicineBox"));
       localStorage.setItem("hasCome", 0);
