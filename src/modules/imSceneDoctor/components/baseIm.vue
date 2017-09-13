@@ -477,7 +477,7 @@
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign({}, that.userData, userData);
               } else if (data.responseObject.responseMessage === "NO DATA") {
-                  that.getPatientBase();
+                that.getPatientBase();
               }
             }
           }
@@ -904,6 +904,33 @@
             break;
         }
       },
+      checkFirstBuy(){
+        if (localStorage.getItem("sendTips")&&localStorage.getItem("sendTips")==1) {
+          this.nim.sendCustomMsg({
+            scene: 'p2p',
+            to: this.targetData.account,
+            needPushNick: false,
+            pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
+            pushPayload: JSON.stringify({
+              "account": "0_" + api.getPara().caseId,
+              "type": "1"
+            }),
+            content: JSON.stringify({
+              type: "notification",
+              data: {
+                actionType: "1",
+                contentDesc: `患者已购买了您的${desc}问诊`,
+                subContentDesc: subContentDesc
+              }
+            }),
+            done (error, msg) {
+              if (!error) {
+                that.sendMessageSuccess(error, msg)
+              }
+            }
+          });
+        }
+      },
       sendPayFinish(count){
         const that = this;
         let desc = "",
@@ -964,6 +991,10 @@
     },
     mounted(){
       this.getUserBaseData();
+//      this.checkFirstBuy();
+    },
+    activated(){
+      this.scrollToBottom();
     },
     watch: {
       lastTime (time) {
