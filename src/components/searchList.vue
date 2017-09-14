@@ -614,6 +614,9 @@
       padding: rem(24px) rem(40px);
       line-height: rem(32px);
       cursor: pointer;
+      &:active{
+        background-color: #F9FBFB;
+      }
       &.selected {
         background-color: #F9FBFB;
       }

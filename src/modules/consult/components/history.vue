@@ -473,26 +473,26 @@
       // 填写情况验证
       validateParamsFull() {
         if (!this.visit.none && !this.visit.has) {
-          this.validateToast("请选择最近一次就诊医院");
+          this.validateToast("您还有问题未完善");
           return false;
         } else if (this.visit.has && !this.hospitalMessage.id) {
-          this.validateToast("请选择最近一次就诊医院");
+          this.validateToast("您还有问题未完善");
           return false;
         }
 
         if (!this.upload.none && !this.upload.has) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("您还有问题未完善 ");
           return false;
         } else if (this.upload.has && (this.imageList1.length === 0 && this.imageList2.length === 0)) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("您还有问题未完善 ");
           return false;
         }
 
         if (!this.medical.none && !this.medical.has) {
-          this.validateToast("请填写药物名称");
+          this.validateToast("您还有问题未完善");
           return false;
         } else if (this.medical.has && this.medicalMessage.length === 0) {
-          this.validateToast("请填写药物名称");
+          this.validateToast("您还有问题未完善");
           return false;
         }
 

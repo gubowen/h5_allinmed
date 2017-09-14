@@ -85,7 +85,7 @@
       <footer class="main-input-box" v-if="lastTimeShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
@@ -257,7 +257,7 @@
             that.getTimeStampShowList();
             setTimeout(() => {
 //              console.log(that.$el.querySelector(".main-message"));
-              if (api.getPara().suggest) {
+              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
 //                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
                 document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
