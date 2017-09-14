@@ -503,7 +503,7 @@
         this.picker = new Picker({
           data: [hospitalData]
         });
-        this.picker.on('picker.valuechange', (e, selectedVal, selectedIndex) => {
+        this.picker.on('picker.select', (e, selectedVal, selectedIndex) => {
           this.relationShip.title = hospitalData[selectedVal[0]].text;
           this.relationShip.id = hospitalData[selectedVal[0]].value;
           this.relationClick = false;
