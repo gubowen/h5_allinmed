@@ -350,7 +350,7 @@ $(function () {
 
                 });
                 bridge.registerHandler('returnCustomerId', function (data, responseCallback) {
-                    // log('ObjC called testJavascriptHandler with', data);
+                    // alert('ObjC called testJavascriptHandler with'+ data);
                     if (!common.getpara().customerId) {
                         // that.config.customerId=JSON.parse(data).customerId;
                         //window.location.href = '//m.allinmed.cn/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId;
