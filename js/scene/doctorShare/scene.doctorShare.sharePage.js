@@ -70,7 +70,6 @@ $(function () {
         addHtml:function () {
             var that = this;
             //加载医生信息
-            alert("请求之前："+that.config.customerId);
             $.ajax({
                 url: that.path.getDocMain,
                 dataType:"json",
@@ -351,7 +350,7 @@ $(function () {
 
                 });
                 bridge.registerHandler('returnCustomerId', function (data, responseCallback) {
-                    alert('ObjC called testJavascriptHandler with'+ data);
+                    // alert('ObjC called testJavascriptHandler with'+ data);
                     if (!common.getpara().customerId) {
                         // that.config.customerId=JSON.parse(data).customerId;
                         //window.location.href = '//m.allinmed.cn/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId;
