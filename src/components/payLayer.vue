@@ -41,7 +41,7 @@
           'cancel':'取消',
           'content':'医生暂不能为您提供帮助，请医生开启问诊服务后再来沟通。',
           'title':'暂未开启问诊服务'
-          }" v-if="noStateShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="cancelEvent">
+          }" v-if="noStateShow" @cancelClickEvent="cancelEvent(1)" @ensureClickEvent="cancelEvent(1)">
       </confirm>
     </transition>
     <transition name="fade">
@@ -50,7 +50,7 @@
           'cancel':'取消',
           'content':'医生今日的名额已全部预约 请改日再来',
           'title':'问诊名额已满'
-          }" v-if="noMoreShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="cancelEvent">
+          }" v-if="noMoreShow" @cancelClickEvent="cancelEvent(2)" @ensureClickEvent="cancelEvent(2)">
       </confirm>
     </transition>
     <transition name="fade">
@@ -282,12 +282,15 @@
           }
         });
       },
-      cancelEvent(){
+      cancelEvent(_type){
         this.levelShow = false;
         this.noStateShow = false;
         this.noMoreShow = false;
         this.hasCommunShow = false;
         this.closePopup();
+        if(this.payPopupParams.from=="docMain"){
+          this.$emit('docCallBack',_type);
+        }
       },
       ensureEvent(){
         const that = this;

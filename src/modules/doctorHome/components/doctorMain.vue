@@ -41,12 +41,12 @@
               <p>图文问诊<span>60元</span></p>
             </section>
             <section class="onlineForChart-right">
-              <p>去问诊</p>
+              <p @click="payPopupShow=true">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
           <section class="doc-onlineForFree">
-            <section class="onlineForFree-ticket"></section>
+            <section class="onlineForFree-ticket" @click="payPopupShow=true"></section>
           </section>
         </section>
       </section>
@@ -125,12 +125,13 @@
       <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
     <!--支付弹层-->
-    <payPopup :payPopupShow.sync="RuleIcon" :payPopupParams = "{
+    <payPopup v-if="payPopupShow" @docCallBack="docStatusChange" :payPopupShow.sync="RuleIcon" :payPopupParams = "{
         docName:'王国强',
         docId:'1493879076659',
         caseId:'1493879076669',
         patientId:'1493879076667',
-        patientCustomerId:'1493879076667'
+        patientCustomerId:'1493879076667',
+        from:'docMain'
     }"></payPopup>
     <!--支付弹层完成-->
     <loading v-show="finish"></loading>
@@ -187,6 +188,7 @@
           finish: false,
           levelShow:false,
           backShow:false,
+          payPopupShow:false,
           logoUrl:'', //头像
           fullName:'',//姓名
           company:"", //医院
@@ -486,6 +488,19 @@
             name:'individualInfo',
             params:_this.personalIndividual
           })
+        },
+        //医生端状态更改
+        docStatusChange(statueType){
+          switch (statueType){
+            case 1:
+              //暂未开启问诊
+              console.log("4156465")
+              break;
+            case 2:
+              //问诊名额已满
+
+              break;
+          }
         },
         //获取验证码
         getCodeApi() {
