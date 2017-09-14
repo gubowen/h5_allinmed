@@ -256,13 +256,20 @@
             that.msgList = obj.msgs.reverse();
             that.getTimeStampShowList();
             setTimeout(() => {
-              document.body.scrollTop = Math.pow(10, 10);
+//              console.log(that.$el.querySelector(".main-message"));
+              if (api.getPara().suggest) {
+//                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
+                document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+//                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
+              } else{
+                document.body.scrollTop = Math.pow(10, 20);
+              }
               that.getImageList();
               //判断消息列表里面是否有问诊单，没有的话发送一条
               if (!that.$refs.medicalReport) {
                 that.getMedicalMessage();
               }
-            }, 100);
+            }, 600);
           },
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
@@ -410,7 +417,7 @@
                 that.lastTimeShow = false;
                 that.consultTipsShow = true;
               } else {
-                time = 10000;
+//                time = 10000;
                 if (time > 0) {
                   store.commit("setLastTime", time);
                   store.commit("lastTimeCount");
@@ -456,7 +463,7 @@
           that.sendErrorTips(msg);
         }
         setTimeout(() => {
-          document.body.scrollTop = Math.pow(10, 10);
+          document.body.scrollTop = Math.pow(10, 20);
         }, 20)
       },
       //聊天记录时间戳处理
@@ -567,7 +574,7 @@
       scrollToBottom(){
         setTimeout(() => {
           //滑动到底部
-          document.body.scrollTop = Math.pow(10, 10);
+          document.body.scrollTop = Math.pow(10, 20);
         }, 600)
       },
       //获取咨询价格
@@ -584,7 +591,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               let price = data.responseObject.responseData.dataList.adviceAmount
-              price = "0";
+//              price = "0";
               price === "0"?that.refreashOrderTime():that.buyTime(price)
             }
           }
@@ -593,7 +600,6 @@
       //购买时间
       buyTime(price){
         const that = this;
-        alert("我要购买");
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
         let data = {
@@ -702,8 +708,23 @@
 //      if(!api.checkOpenId()){
 //        api.wxGetOpenId(1);
 //      }
-      this.getUserBaseData();
-      this.triageDoctorAssign();
+      that.getUserBaseData();
+      that.triageDoctorAssign();
+//      let p1 = new Promise(resolve => that.getUserBaseData());
+//      let p2 = new Promise(resolve => that.triageDoctorAssign());
+//      Promise.all([p1,p2]).then(function () {
+//        console.log("页面加载完成");
+//      }).catch(function () {
+//        console.log("页面加载失败");
+//      })
+    },
+    //组件更新之前的生命钩子
+    beforeUpdate(){
+//      console.log("组件更新前"+document.querySelector(".main-message-wrapper"))
+    },
+    //组件更新之后的生命钩子
+    updated(){
+//      console.log("组件更新后"+document.querySelector(".main-message-wrapper"))
     },
     activated(){
       let that = this;
