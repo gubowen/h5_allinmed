@@ -4,19 +4,23 @@
       <section class="doctor-personalInfo">
         <div class="doctor-personalInfoBox">
           <div class="doc-personalInfo-left">
-            <span class="personInfo-tips">唯医骨科认证</span>
+            <!--<span class="personInfo-tips">唯医骨科认证</span>-->
             <p class="personInfo-name">王雨轩</p>
+            <div class="doc-presentInfo">
+              <span class="doc-major">骨科</span><span class="doc-presents">副主任医师</span><span class="doc-presents-two">博士生导师</span>
+            </div>
           </div>
           <div class="doc-personalInfo-right">
             <div class="doc-personPicBox">
               <img :src="{personLogo}" src="../../../common/image/img00/doctorHome/doctorPic.png" alt="">
-              <span class="doc-personPicTips"></span>
+              <span class="doc-presentAge">从医36年</span>
+              <!--<span class="doc-personPicTips">从医36年</span>-->
             </div>
           </div>
         </div>
-        <div class="doc-presentInfo">
-          <span class="doc-presents">副主任医师</span><span class="doc-presentAge">从医36年</span>
-        </div>
+        <!--<div class="doc-presentInfo">-->
+          <!--<span class="doc-presents">副主任医师</span><span class="doc-presentAge">从医36年</span>-->
+        <!--</div>-->
         <div class="doc-personalAddress">
           <p>上海交通大学医学院附属第一人民医院</p>
         </div>
@@ -25,13 +29,31 @@
         </div>
       </section>
       <!--网上问诊-->
-      <section class="online-visitsBox doc-commonSty">
-
+      <section class="online-visitsBox">
+        <section class="doc-commonTitle">
+          <p class="doc-titleLeft">网上问诊服务</p>
+          <span class="doc-lastPerson not-usable-num">剩余人数：20人</span>
+        </section>
+        <section class="doc-onlineContentBox">
+          <!--图文问诊-->
+          <section class="doc-onlineForChart">
+            <section class="onlineForChart-left">
+              <p>图文问诊<span>60元</span></p>
+            </section>
+            <section class="onlineForChart-right">
+              <p>去问诊</p>
+            </section>
+          </section>
+          <!--免费问诊-->
+          <section class="doc-onlineForFree">
+            <section class="onlineForFree-ticket"></section>
+          </section>
+        </section>
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty">
         <section class="doc-commonTitle">
-          <p class="doc-titleLeft">专科信息</p>
+          <p class="doc-titleLeft">专科：脊柱外科</p>
         </section>
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem">
@@ -60,8 +82,8 @@
       <!--门诊预约-->
       <section class="outpatient-infoBox doc-commonSty">
         <section class="doc-commonTitle">
-          <p class="doc-titleLeft">门诊预约</p>
-          <p class="doc-titleRight">查看出诊时间</p>
+          <p class="doc-titleLeft">执业地点</p>
+          <p class="doc-titleRight" @click="viewCureTime">查看出诊时间</p>
         </section>
         <ul class="doc-hospitalBox">
           <li class="doc-hospitalItem">西京医院</li>
@@ -72,6 +94,7 @@
       <section class="individual-infoBox doc-commonSty">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
+          <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
         </section>
         <section class="individual-textBox">北京协和医和医学进步奖。掌握了一套非手术治疗颈肩腰腿痛的有效疗法，即洛阳正骨治筋疗法。优值牵引法：采用床头多功能牵引架，根据患者不同的病情采用相对应的牵引角度、牵引重量、牵引时间，进行牵引治疗以达正骨理筋的治疗。</section>
       </section>
@@ -197,7 +220,8 @@
             }
           }
         });
-        this.getPersonalProDate();
+//        this.getPersonalProDate();
+        console.log(api.timeFormate({time:"2014-05-24 12:25:00",type:2}))
       },
 //      beforeRouteLeave (to, from, next) {
 //        // 导航离开该组件的对应路由时调用
@@ -213,6 +237,13 @@
           if (this.errors.has(name)) {
             this.toastComm(this.errors.first(name));
           }
+        },
+        //view cureTime
+        viewCureTime(){
+          this.ruleShow=true;
+          this.$router.push({
+            name:'clinicDetails'
+          })
         },
         //get  Personal Profile
         getPersonalProDate() {
@@ -247,6 +278,13 @@
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
             }
+          })
+        },
+        //view individualInfo for detail
+        individualInfoDetail(){
+          this.ruleShow=true;
+          this.$router.push({
+            name:'individualInfo'
           })
         },
         //获取验证码
@@ -365,47 +403,53 @@
       .doctorContent-box{
         padding: rem(18px) rem(30px) rem(34px);
         .doctor-personalInfo{
-          padding: rem(52px) rem(30px);
-          background-image: linear-gradient(-90deg, #919FB5 8%, #416081 93%);
+          padding: rem(30px) rem(30px) rem(54px);
+          background: url("../../../common/image/img00/doctorHome/background@2x.png") no-repeat center;
+          background-size: 100% 100%;
           border-radius: 8px 8px 0 0;
           .doctor-personalInfoBox{
             @include clearfix();
             .doc-personalInfo-left,.doc-personalInfo-right{
               float: left;
-              width: 50%;
             }
             .doc-personalInfo-left{
-              .personInfo-tips{
-                @include font-dpr(12px);
-                color: #F1BC64;
-                letter-spacing: 0;
-                display: inline-block;
-                position: relative;
-                padding:rem(6px) rem(10px) rem(6px) rem(40px);
-                background: #3E5571;
-                border-radius: 100px;
-                &:before{
-                  content: '';
-                  display: inline-block;
-                  width: rem(26px);
-                  height: rem(26px);
-                  position: absolute;
-                  top:50%;
-                  left: rem(10px);
-                  margin-top: rem(-13px);
-                  background: url("../../../common/image/img00/doctorHome/Group 3@2x.png") no-repeat center ;
-                  background-size: rem(26px) rem(26px);
-                }
-              }
+              width: 70%;
               .personInfo-name{
                 @include font-dpr(20px);
                 font-weight: bold;
                 color: #FFFFFF;
                 letter-spacing: 0;
-                margin-top: rem(12px);
+                margin-top: rem(24px);
+              }
+              .doc-presentInfo{
+                margin-top: rem(34px);
+                @include font-dpr(14px);
+                color: #C1D0E0;
+                padding-right: rem(14px);
+                display: inline-block;
+                .doc-major{
+
+                }
+                .doc-presents{
+                  margin-left: rem(16px);
+                }
+                .doc-presents-two{
+                  margin-left: rem(16px);
+                }
+              }
+              .doc-presentAge{
+                @include font-dpr(12px);
+                color: #FFFFFF;
+                letter-spacing: 0;
+                padding:rem(5px) rem(10px);
+                background-color: #738FAC;
+                -webkit-border-radius: 100px;
+                -moz-border-radius: 100px;
+                border-radius: 100px;
               }
             }
             .doc-personalInfo-right{
+              width: 30%;
               text-align: right;
               @include clearfix();
               .doc-personPicBox{
@@ -416,7 +460,8 @@
                 border-radius: 50%;
                 width: rem(146px);
                 height: rem(146px);
-                background-color: #BCCBD8;
+                background: url("../../../common/image/img00/doctorHome/head- background@2x.png") no-repeat center;
+                background-size: 100% 100%;
                 img{
                   position: absolute;
                   width: rem(128px);
@@ -429,41 +474,42 @@
                   left: 50%;
                   margin-left:rem(-64px);
                 }
-                .doc-personPicTips{
+                .doc-presentAge{
+                  @include font-dpr(12px);
+                  text-align: center;
+                  color: #FFFFFF;
                   position: absolute;
                   content: '';
-                  bottom:rem(2px);
-                  right: rem(17px);
-                  width: rem(32px);
-                  height: rem(32px);
-                  background: url("../../../common/image/img00/doctorHome/Group 3@2x.png") no-repeat center;
-                  background-size: rem(32px) rem(32px);
+                  background: #F5A623;
+                  border-radius: rem(100px);
+                  bottom:0;
+                  left:50%;
+                  margin-left: rem(-60px);
+                  width: rem(120px);
                 }
               }
-            }
-          }
-          .doc-presentInfo{
-            .doc-presents{
-              @include font-dpr(14px);
-              color: #C1D0E0;
-              letter-spacing: 0;
-              padding-right: rem(14px);
-            }
-            .doc-presentAge{
-              @include font-dpr(12px);
-              color: #FFFFFF;
-              letter-spacing: 0;
-              padding:rem(5px) rem(10px);
-              background-color: #738FAC;
-              -webkit-border-radius: 100px;
-              -moz-border-radius: 100px;
-              border-radius: 100px;
             }
           }
           .doc-personalAddress{
             @include font-dpr(14px);
             color: #C1D0E0;
-            margin-top: rem(12px);
+            margin-top: rem(8px);
+            p{
+              position: relative;
+              padding-left: rem(30px);
+              &:before{
+                display: inline-block;
+                content: '';
+                position: absolute;
+                width: rem(22px);
+                height: rem(26px);
+                background: url("../../../common/image/img00/doctorHome/positioning@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                left:0;
+                top: 50%;
+                margin-top: rem(-13px);
+              }
+            }
           }
           .doc-personal-labelBox{
             margin-top: rem(28px);
@@ -491,6 +537,7 @@
             @include font-dpr(18px);
             color: #333333;
             position: relative;
+            font-weight: bold;
             &:before{
               position: absolute;
               content: '';
@@ -514,7 +561,8 @@
               display: inline-block;
               width: rem(14px);
               height: rem(28px);
-              background-color: rebeccapurple;
+              background: url("../../../common/image/img00/doctorHome/ more@2x.png") no-repeat center;
+              background-size: 100% 100%;
               top:50%;
               margin-top: rem(-14px);
               right: rem(-28px);
@@ -529,8 +577,127 @@
           border-radius: rem(16px);
         }
         //网上问诊样式
-        .online-visitsBox{
-
+        .online-visitsBox {
+          background-color: #FFFFFF;
+          .doc-commonTitle {
+            padding-right: rem(24px);
+          }
+          .doc-lastPerson {
+            @include font-dpr(14px);
+            display: inline-block;
+            color: #F5A623;
+            float: right;
+            vertical-align: bottom;
+            margin-top: rem(10px);
+            position: relative;
+            padding-left: rem(24px);
+            &:before {
+              position: absolute;
+              content: '';
+              width: rem(20px);
+              height: rem(22px);
+              background: url("../../../common/image/img00/doctorHome/remaining@2x.png") no-repeat center;
+              background-size: 100% 100%;
+              top: 50%;
+              margin-top: rem(-10px);
+              left: 0;
+            }
+            &.not-usable-off {
+              color: #ACACAC;
+              padding-left: rem(34px);
+              &:before {
+                position: absolute;
+                content: '';
+                width: rem(30px);
+                height: rem(24px);
+                background: url("../../../common/image/img00/doctorHome/Did not open@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                top: 50%;
+                margin-top: rem(-12px);
+                left: 0;
+              }
+            }
+            &.not-usable-num {
+              color: #ACACAC;
+              padding-left: rem(30px);
+              &:before {
+                position: absolute;
+                content: '';
+                width: rem(26px);
+                height: rem(26px);
+                background: url("../../../common/image/img00/doctorHome/Today's quota@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                top: 50%;
+                margin-top: rem(-13px);
+                left: 0;
+              }
+            }
+          }
+          .doc-onlineContentBox{
+            //免费问诊
+            .doc-onlineForChart{
+              @include clearfix();
+              padding: rem(24px) rem(30px) rem(38px) rem(50px);
+              .onlineForChart-left{
+                float: left;
+                padding-top: rem(12px);
+                p{
+                  @include font-dpr(18px);
+                  color: #444444;
+                  position: relative;
+                  span{
+                    @include font-dpr(16px);
+                    color: #7C98BC;
+                    margin-left: rem(22px);
+                  }
+                  &:before{
+                    display: inline-block;
+                    content: '';
+                    position: absolute;
+                    width: rem(8px);
+                    height: rem(8px);
+                    left: rem(-16px);
+                    top: 50%;
+                    margin-top:rem(-4px);
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    border-radius: 50%;
+                    background-color: #2FC5BD;
+                  }
+                }
+              }
+              .onlineForChart-right{
+                float: right;
+                p{
+                  @include font-dpr(18px);
+                  color: #FFFFFF;
+                  padding: rem(14px) rem(22px) rem(12px) rem(26px);
+                  background: #2FC5BD;
+                  box-shadow: 0 4px 8px 0 rgba(89,209,202,0.40);
+                  border-radius: rem(100px);
+                }
+              }
+            }
+            //图文问诊
+            .doc-onlineForFree{
+              padding-bottom: rem(34px);
+              .onlineForFree-ticket{
+                margin: 0 auto;
+                width: rem(648px);
+                height: rem(182px);
+                background:url("../../../common/image/img00/doctorHome/clickable@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                &.isUse{
+                  background:url("../../../common/image/img00/doctorHome/Has been used@2x.png") no-repeat center;
+                  background-size: 100% 100%;
+                }
+                &.notUsable{
+                  background:url("../../../common/image/img00/doctorHome/not click@2x.png") no-repeat center;
+                  background-size: 100% 100%;
+                }
+              }
+            }
+          }
         }
         //专科信息
         .college-infoBox{
@@ -538,26 +705,53 @@
             padding-top: rem(50px);
             .doc-collegeBoxItem{
               padding-bottom: rem(60px);
-              @include clearfix();
               .collegeItem-left{
-                float: left;
-                @include font-dpr(17px);
-                color: #AAAAAA;
-                letter-spacing: 0;
-                padding-left: rem(30px);
-              }
-              .collegeItem-right{
-                padding-left: rem(200px);
                 @include font-dpr(18px);
                 color: #444444;
-                letter-spacing: 0;
+                padding-left: rem(50px);
+                margin-bottom: rem(14px);
+                position: relative;
+                &:before{
+                  display: inline-block;
+                  content: '';
+                  position: absolute;
+                  width: rem(8px);
+                  height: rem(8px);
+                  top:50%;
+                  margin-top: rem(-4px);
+                  left:rem(32px);
+                  background-color: #2FC5BD;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  border-radius: 50%;
+                }
+              }
+              .collegeItem-right{
+                padding-left: rem(52px);
+                @include font-dpr(18px);
+                color: #999999;
               }
             }
             .doc-collegeBoxItem-totalNum{
-              @include font-dpr(17px);
-              color: #AAAAAA;
-              padding-left: rem(30px);
-              padding-bottom: rem(44px);
+              @include font-dpr(18px);
+              color: #444444;
+              padding-left: rem(50px);
+              margin-bottom: rem(44px);
+              position: relative;
+              &:before{
+                display: inline-block;
+                content: '';
+                position: absolute;
+                width: rem(8px);
+                height: rem(8px);
+                top:50%;
+                margin-top: rem(-4px);
+                left:rem(32px);
+                background-color: #2FC5BD;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border-radius: 50%;
+              }
             }
             .doc-medicalNumTotalBox{
               padding-bottom:rem(60px);

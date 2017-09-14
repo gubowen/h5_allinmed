@@ -34,10 +34,10 @@ common.wxGetOpenId = function (env) {
   var XHRUrl = "";
   var _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
     _encodeUrl = encodeURIComponent(_currentPageUrl);
-  if (env == 1) {
+  if (env == 2) {
     appId = "wxe8384f7b06c169ef";
     XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
-  } else if (env == 2) {
+  } else if (env == 1) {
     appId = "wxaa5288ad7f627608";
     XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
   }
