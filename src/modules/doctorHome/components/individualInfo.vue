@@ -12,12 +12,18 @@
               引起的双侧关节病。</section>
             <section class="individual-baseInfo-item">
               <p class="individual-baseInfoItem-title individual-education-title">教育与进修经历</p>
-              <section class="individual-education-item">
-                <span>sdfsf斯蒂芬</span><span>所发生的方式</span><span>北京协和医和医学进步奖。掌握了一套非
-              手术治疗颈肩腰腿痛的有效疗法，即洛阳
-              正骨治筋疗法。优值牵引法：采用床头多
-              功能牵引架根据患者采用最好的发育异常
-              引起的双侧关节病。</span>
+              <section class="individual-education-item" v-for="(item ,index) in continuingEducationList">
+                <span class="education-item-time">{{timeDeal(item.startTime)}}-{{timeDeal(item.endTime)}}，</span><span class="education-item-address">{{item.organization}}，</span><span class="education-item-information">{{item.cmeDesc}}</span>
+              </section>
+              <section class="individual-education-item" v-for="(item ,index) in educationList">
+                <span class="education-item-time">{{timeDeal(item.startTime)}}-{{timeDeal(item.endTime)}}，</span><span class="education-item-address">{{item.university}}，</span><span class="education-item-information">{{item.major}}，</span><span class="education-item-information">{{item.education}}</span>
+              </section>
+              <p class="individual-baseInfoItem-title individual-education-title"> 科研成果及荣誉</p>
+              <section class="individual-education-item" v-for="(item ,index) in honorList">
+                <span class="education-item-information">{{item.awardYear}}年，</span><span class="education-item-address">{{item.awardDepartment}}，</span><span class="education-item-time">{{item.honorName}}</span>
+              </section>
+              <section class="individual-education-item" v-for="(item ,index) in fundList">
+                <span class="education-item-time">{{timeDeals(item.approvalTime)}}，</span><span class="education-item-address">完成科研项目{{item.fundName}}</span>
               </section>
             </section>
           </section>
@@ -55,16 +61,38 @@
         data() {
             return {
               errorShow:false,
-              finish:false
+              finish:false,
+              continuingEducationList:'',
+              educationList:'',
+              fundList:'',
+              honorList:'',
+              CESTimeBox:[],
+              CEETimeBox:[],
+
             }
         },
         activated() {
-
+          console.log(this.$route.params);
+          let _this =this;
+          const _data=this.$route.params;
+          _this.continuingEducationList=_data.continuingEducationList;  //继续教育
+          _this.educationList=_data.educationList;                      //教育
+          _this.fundList=_data.fundList;                                //科研
+          _this.honorList=_data.honorList;                              //荣誉
         },
         mounted() {
 
         },
-        methods: {},
+        methods: {
+          timeDeal(time){
+            let _year = api.timeFormate({time:time,type:2}).year;
+            return _year;
+          },
+          timeDeals(time){
+            let _year = `${api.timeFormate({time:time,type:2}).year.substring(0,4)}年`;
+            return _year;
+          }
+        },
         components: {
             loading,
             toast,
@@ -121,6 +149,7 @@
             color: #666666;
           }
           .individual-baseInfo-item{
+            padding-bottom: rem(60px);
             .individual-baseInfoItem-title{
               @include font-dpr(18px);
               color: #444444;
@@ -143,7 +172,15 @@
               }
             }
             .individual-education-item{
-
+              padding: rem(32px) rem(60px) 0;
+            .education-item-address,.education-item-information{
+              @include font-dpr(16px);
+              color: #2A2A2A;
+            }
+            .education-item-time{
+              @include font-dpr(16px);
+              color: #444444;
+            }
             }
           }
         }
