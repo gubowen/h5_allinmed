@@ -34,11 +34,26 @@
           <p class="doc-titleLeft">网上问诊服务</p>
           <span class="doc-lastPerson not-usable-num">剩余人数：20人</span>
         </section>
+        <section class="doc-onlineContentBox">
+          <!--图文问诊-->
+          <section class="doc-onlineForChart">
+            <section class="onlineForChart-left">
+              <p>图文问诊<span>60元</span></p>
+            </section>
+            <section class="onlineForChart-right">
+              <p>去问诊</p>
+            </section>
+          </section>
+          <!--免费问诊-->
+          <section class="doc-onlineForFree">
+            <section class="onlineForFree-ticket"></section>
+          </section>
+        </section>
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty">
         <section class="doc-commonTitle">
-          <p class="doc-titleLeft">专科信息</p>
+          <p class="doc-titleLeft">专科：脊柱外科</p>
         </section>
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem">
@@ -67,8 +82,8 @@
       <!--门诊预约-->
       <section class="outpatient-infoBox doc-commonSty">
         <section class="doc-commonTitle">
-          <p class="doc-titleLeft">门诊预约</p>
-          <p class="doc-titleRight">查看出诊时间</p>
+          <p class="doc-titleLeft">执业地点</p>
+          <p class="doc-titleRight" @click="viewCureTime">查看出诊时间</p>
         </section>
         <ul class="doc-hospitalBox">
           <li class="doc-hospitalItem">西京医院</li>
@@ -222,6 +237,13 @@
           if (this.errors.has(name)) {
             this.toastComm(this.errors.first(name));
           }
+        },
+        //view cureTime
+        viewCureTime(){
+          this.ruleShow=true;
+          this.$router.push({
+            name:'clinicDetails'
+          })
         },
         //get  Personal Profile
         getPersonalProDate() {
@@ -438,7 +460,8 @@
                 border-radius: 50%;
                 width: rem(146px);
                 height: rem(146px);
-                background-color: #BCCBD8;
+                background: url("../../../common/image/img00/doctorHome/head- background@2x.png") no-repeat center;
+                background-size: 100% 100%;
                 img{
                   position: absolute;
                   width: rem(128px);
@@ -538,7 +561,8 @@
               display: inline-block;
               width: rem(14px);
               height: rem(28px);
-              background: rebeccapurple;
+              background: url("../../../common/image/img00/doctorHome/ more@2x.png") no-repeat center;
+              background-size: 100% 100%;
               top:50%;
               margin-top: rem(-14px);
               right: rem(-28px);
@@ -609,6 +633,71 @@
               }
             }
           }
+          .doc-onlineContentBox{
+            //免费问诊
+            .doc-onlineForChart{
+              @include clearfix();
+              padding: rem(24px) rem(30px) rem(38px) rem(50px);
+              .onlineForChart-left{
+                float: left;
+                padding-top: rem(12px);
+                p{
+                  @include font-dpr(18px);
+                  color: #444444;
+                  position: relative;
+                  span{
+                    @include font-dpr(16px);
+                    color: #7C98BC;
+                    margin-left: rem(22px);
+                  }
+                  &:before{
+                    display: inline-block;
+                    content: '';
+                    position: absolute;
+                    width: rem(8px);
+                    height: rem(8px);
+                    left: rem(-16px);
+                    top: 50%;
+                    margin-top:rem(-4px);
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    border-radius: 50%;
+                    background-color: #2FC5BD;
+                  }
+                }
+              }
+              .onlineForChart-right{
+                float: right;
+                p{
+                  @include font-dpr(18px);
+                  color: #FFFFFF;
+                  padding: rem(14px) rem(22px) rem(12px) rem(26px);
+                  background: #2FC5BD;
+                  box-shadow: 0 4px 8px 0 rgba(89,209,202,0.40);
+                  border-radius: rem(100px);
+                }
+              }
+            }
+            //图文问诊
+            .doc-onlineForFree{
+              padding-bottom: rem(34px);
+              .onlineForFree-ticket{
+                margin: 0 auto;
+                width: rem(648px);
+                height: rem(182px);
+                background:url("../../../common/image/img00/doctorHome/clickable@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                &.isUse{
+                  background:url("../../../common/image/img00/doctorHome/Has been used@2x.png") no-repeat center;
+                  background-size: 100% 100%;
+                }
+                &.notUsable{
+                  background:url("../../../common/image/img00/doctorHome/not click@2x.png") no-repeat center;
+                  background-size: 100% 100%;
+                }
+              }
+            }
+          }
         }
         //专科信息
         .college-infoBox{
@@ -616,26 +705,53 @@
             padding-top: rem(50px);
             .doc-collegeBoxItem{
               padding-bottom: rem(60px);
-              @include clearfix();
               .collegeItem-left{
-                float: left;
-                @include font-dpr(17px);
-                color: #AAAAAA;
-                letter-spacing: 0;
-                padding-left: rem(30px);
-              }
-              .collegeItem-right{
-                padding-left: rem(200px);
                 @include font-dpr(18px);
                 color: #444444;
-                letter-spacing: 0;
+                padding-left: rem(50px);
+                margin-bottom: rem(14px);
+                position: relative;
+                &:before{
+                  display: inline-block;
+                  content: '';
+                  position: absolute;
+                  width: rem(8px);
+                  height: rem(8px);
+                  top:50%;
+                  margin-top: rem(-4px);
+                  left:rem(32px);
+                  background-color: #2FC5BD;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  border-radius: 50%;
+                }
+              }
+              .collegeItem-right{
+                padding-left: rem(52px);
+                @include font-dpr(18px);
+                color: #999999;
               }
             }
             .doc-collegeBoxItem-totalNum{
-              @include font-dpr(17px);
-              color: #AAAAAA;
-              padding-left: rem(30px);
-              padding-bottom: rem(44px);
+              @include font-dpr(18px);
+              color: #444444;
+              padding-left: rem(50px);
+              margin-bottom: rem(44px);
+              position: relative;
+              &:before{
+                display: inline-block;
+                content: '';
+                position: absolute;
+                width: rem(8px);
+                height: rem(8px);
+                top:50%;
+                margin-top: rem(-4px);
+                left:rem(32px);
+                background-color: #2FC5BD;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border-radius: 50%;
+              }
             }
             .doc-medicalNumTotalBox{
               padding-bottom:rem(60px);
