@@ -166,7 +166,6 @@
       },
       //判断是否还有剩余名额
       toJudge(opt){
-          debugger
         const that = this;
         api.ajax({
           url: XHRList.getCurrentState,
@@ -285,9 +284,10 @@
       },
       cancelEvent(){
         this.levelShow = false;
-        this.noStateShow = false,
-        this.noMoreShow = false,
-        this.hasCommunShow = false
+        this.noStateShow = false;
+        this.noMoreShow = false;
+        this.hasCommunShow = false;
+        this.closePopup();
       },
       ensureEvent(){
         const that = this;
@@ -446,5 +446,4 @@
     opacity: 0;
     transform: translateY(50%);
   }
-
 </style>

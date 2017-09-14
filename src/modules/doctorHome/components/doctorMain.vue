@@ -124,6 +124,15 @@
     <transition name="fade">
       <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
+    <!--支付弹层-->
+    <payPopup :payPopupShow.sync="RuleIcon" :payPopupParams = "{
+        docName:'王国强',
+        docId:'1493879076659',
+        caseId:'1493879076669',
+        patientId:'1493879076667',
+        patientCustomerId:'1493879076667'
+    }"></payPopup>
+    <!--支付弹层完成-->
     <loading v-show="finish"></loading>
   </section>
 </template>
@@ -142,6 +151,7 @@
     import fb from "common/js/third-party/flexible";
     import toast from 'components/toast';
     import confirm from 'components/confirm';
+    import payPopup from 'components/payLayer';
     const XHRList = {
       getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
       getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
@@ -571,7 +581,8 @@
       components: {
         loading,
         toast,
-        confirm
+        confirm,
+        payPopup
       }
     }
 
