@@ -255,6 +255,8 @@
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
             that.getTimeStampShowList();
+            //判断消息列表里面是否有问诊单，没有的话发送一条
+            that.hasMedicalMessage();
             setTimeout(() => {
 //              console.log(that.$el.querySelector(".main-message"));
               if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
@@ -266,13 +268,28 @@
               }
               that.getImageList();
               //判断消息列表里面是否有问诊单，没有的话发送一条
-              if (!that.$refs.medicalReport) {
-                that.getMedicalMessage();
-              }
+//              if (!that.$refs.medicalReport) {
+//                that.getMedicalMessage();
+//              }
             }, 600);
           },
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
+      },
+      //判断消息列表里面是否有问诊单，没有的话发送一条
+      hasMedicalMessage(){
+        let that = this;
+        let flag = true;
+        for (let i=0;i<that.msgList.length;i++){
+          console.log(i);
+          if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='medicalReport'){
+            flag = false;
+            break;
+          }
+        }
+        if (flag){
+          that.getMedicalMessage();
+        }
       },
       //获取患者问诊单
       getMedicalMessage(){

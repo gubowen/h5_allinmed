@@ -139,11 +139,7 @@
       </footer>
     </transition>
     <!--支付弹层-->
-    <PayTypePopup
-      :payPopupShow.sync="payPopupShow"
-      @paySuccess="refreashOrderTime"
-    >
-    </PayTypePopup>
+    <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams = "payPopupDate" v-if="payPopupShow"></payPopup>
     <Loading v-if="loading"></Loading>
   </section>
 </template>
@@ -174,6 +170,7 @@
   import AudioMessage from "./audioMessage";
 
   import Loading from "components/loading";
+  import payPopup from 'components/payLayer';
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
   let nim;
@@ -215,6 +212,14 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
+        payPopupDate:{
+          docName:this.$store.state.targetMsg.nick,
+          docId:api.getPara().doctorCustomerId,
+          caseId:api.getPara().caseId,
+          patientId:api.getPara().patientId,
+          patientCustomerId:api.getPara().patientCustomerId,
+          from:'aa'
+        },
         userData: {
           account: "",
           token: ""
@@ -869,6 +874,7 @@
         })
       },
       retryClick(type){
+
         const that = this;
         switch (type) {
           case -1:
@@ -1027,7 +1033,7 @@
       BottomTips,
       MiddleTips,
       PayFinishTips,
-      PayTypePopup,
+      payPopup,
       OutpatientInvite,
       SurgicalDrape,
       HospitalNotice,

@@ -5,15 +5,15 @@
         <div class="doctor-personalInfoBox">
           <div class="doc-personalInfo-left">
             <!--<span class="personInfo-tips">唯医骨科认证</span>-->
-            <p class="personInfo-name">王雨轩</p>
+            <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major">骨科</span><span class="doc-presents">副主任医师</span><span class="doc-presents-two">博士生导师</span>
+              <span class="doc-major" v-show="false">骨科</span><span class="doc-presents">副主任医师</span><span class="doc-presents-two" v-show="false">博士生导师</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
             <div class="doc-personPicBox">
-              <img :src="{personLogo}" src="../../../common/image/img00/doctorHome/doctorPic.png" alt="">
-              <span class="doc-presentAge">从医36年</span>
+              <img :src="logoUrl"  alt="">
+              <span class="doc-presentAge" v-show="false">从医36年</span>
               <!--<span class="doc-personPicTips">从医36年</span>-->
             </div>
           </div>
@@ -52,46 +52,45 @@
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty">
-        <section class="doc-commonTitle">
-          <p class="doc-titleLeft">专科：脊柱外科</p>
+        <section class="doc-commonTitle" v-show="areasExpertise.length>0">
+          <p class="doc-titleLeft">专科：{{areasExpertise}}</p>
         </section>
         <section class="doc-collegeBox">
-          <section class="doc-collegeBoxItem">
+          <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
             <p class="collegeItem-left">擅治疾病</p>
-            <p class="collegeItem-right">颈椎病、腰椎病</p>
+            <p class="collegeItem-right"><span  v-for="(item,index) in illnessMapList">{{item.illnessName}}、</span></p>
           </section>
-          <section class="doc-collegeBoxItem">
-            <p class="collegeItem-left">擅治疾病</p>
-            <p class="collegeItem-right">脑瘫手术，脊椎脊髓损伤手术与康复微创手术治疗腰间盘突出综合症状</p>
+          <section class="doc-collegeBoxItem" v-show="operationMapList.length>0">
+            <p class="collegeItem-left">擅治手术</p>
+            <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}、</span></p>
           </section>
-          <p class="doc-collegeBoxItem-totalNum">近年独立完成的骨科手术病历数</p>
-          <section class="doc-medicalNumTotalBox">
+          <p class="doc-collegeBoxItem-totalNum" v-show="precedingYearOperationNum.length>0&&yesteryearOperationNum.length>0">近年独立完成的骨科手术病历数</p>
+          <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum.length>0&&yesteryearOperationNum.length>0">
             <section class="doc-medicalNumBox">
-              <span class="doc-medicalYear">2017年</span>
-              <span class="doc-medicalNumTotal">185</span>
+              <span class="doc-medicalYear">{{yesteryear}}年</span>
+              <span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span>
               <span class="doc-medicalNumText">例</span>
             </section>
             <section class="doc-medicalNumBox">
-              <span class="doc-medicalYear">2016年</span>
-              <span class="doc-medicalNumTotal">185</span>
+              <span class="doc-medicalYear">{{precedingYear}}年</span>
+              <span class="doc-medicalNumTotal">{{yesteryearOperationNum}}</span>
               <span class="doc-medicalNumText">例</span>
             </section>
           </section>
         </section>
       </section>
       <!--门诊预约-->
-      <section class="outpatient-infoBox doc-commonSty">
+      <section class="outpatient-infoBox doc-commonSty" v-show="outpatientClinic">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">执业地点</p>
           <p class="doc-titleRight" @click="viewCureTime">查看出诊时间</p>
         </section>
         <ul class="doc-hospitalBox">
-          <li class="doc-hospitalItem">西京医院</li>
-          <li class="doc-hospitalItem">马真胜医生工作室</li>
+          <li class="doc-hospitalItem">{{company}}</li>
         </ul>
       </section>
       <!--个人简介斯蒂芬-->
-      <section class="individual-infoBox doc-commonSty">
+      <section class="individual-infoBox doc-commonSty" v-show="isPersonalShow">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
@@ -125,6 +124,15 @@
     <transition name="fade">
       <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
+    <!--支付弹层-->
+    <payPopup :payPopupShow.sync="RuleIcon" :payPopupParams = "{
+        docName:'王国强',
+        docId:'1493879076659',
+        caseId:'1493879076669',
+        patientId:'1493879076667',
+        patientCustomerId:'1493879076667'
+    }"></payPopup>
+    <!--支付弹层完成-->
     <loading v-show="finish"></loading>
   </section>
 </template>
@@ -143,12 +151,24 @@
     import fb from "common/js/third-party/flexible";
     import toast from 'components/toast';
     import confirm from 'components/confirm';
+    import payPopup from 'components/payLayer';
     const XHRList = {
-      getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",  // 个人简介
-      getCode: "/mcall/customer/send/code/v1/create/",         // get code
-      codeCheck: "/mcall/customer/send/code/v1/update/",       // check code
-      wxBindCheck: "/mcall/patient/customer/unite/info/v1/getIsWeixinBind/",       // check mobile is bind weiXin
-      wxBind: "/mcall/patient/customer/unite/info/v1/createWxUnionIdBind/",        // mobile bind for weiXin
+      getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
+      getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
+      isReceiveClinic: "/mcall/customer/clinic/setting/v1/getMapById/",                    //是否接受门诊 responseData.dataList.isReceive
+      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
+      getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",                    //问诊详情
+      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
+      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
+      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
+      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
+      updateTime: "/mcall/customer/case/consultation/v1/updateFrequency/",                 //更新次数
+      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
+      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
+      getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
+      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
+      getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
+      todayIsHasOrder: "/mcall/cms/pay/order/v1/getMapByCustomerId/"                       //是否当天已经预约过门诊
     };
     export default {
       data() {
@@ -167,36 +187,43 @@
           finish: false,
           levelShow:false,
           backShow:false,
+          logoUrl:'', //头像
+          fullName:'',//姓名
+          company:"", //医院
+          medicalTitle:"", //职称
+          areasExpertise:"", //专科
+          illnessMapList:"", //擅长疾病
+          operationMapList:"", //擅长手术
+          yesteryear: new Date().getFullYear()-2,       //前年年份
+          yesteryearOperationNum:"",                //前年
+          precedingYear:new Date().getFullYear()-1,     //去年年份
+          precedingYearOperationNum:"",            //去年
+          outpatientClinic:"",                     //门诊是否设置
+          isPersonalShow:false,                    //个人简介是否显示
           params: {
             getPersonalProParams: {
               customerId: "1461229672002",
               visitSiteId: 1,
               maxResult: 9999,
             },
-            codeCheck: {
-              validCode: '',	  //string	是	验证码CODE
-              id: '',           //	string	是	验证码主键
-              isValid: 1,       //	string	是	修改验证码信息
-              account: '',      //	string	是	手机号
+            getDocMainParams: {
+              customerId: "1493879076659",
+              logoUseFlag: 3
             },
-            wxBindCheckParams:{
-              isValid: 1,       //	string	是		1
-              firstResult: 0,   //	string	是	分页参数
-              maxResult: 99999, //	string	是	分页参数
-//              customerId: "", //	string	否	用户id
-              account: "",      //	string	否	手机号
+            isReceiveClinicParams:{
+              customerId: "1493879076659",
+              hospitalId: "24362"
             },
-            wxBindParams:{
-              customerId: "",   //  string  否  用户id
-              account: "",      // string  否  手机号
-              openid: "",       // string  是  微信openId
-              isUpdate: 1,     // string  否  是否换绑1 - 换
+            isCreateChatParams:{
+              patientId: api.getPara().patientId,    //患者ID
+              doctorId: "1493879076659",                // 医生ID
+              orderType: 1,
+              orderSourceType: 0,
+              sortType: 2
             },
-            phoneCheckParams: {
-              isValid: 1,//	string	是		1
-              firstResult: 0,//	string	是	分页参数
-              maxResult: 99999,//string	是	分页参数
-              customerId: "",//string	是	用户id
+            currentByCustomerIdParams: {
+              customerId: "1493879076659",
+              caseId: "1501642266017"
             }
           }
 
@@ -220,8 +247,13 @@
             }
           }
         });
-//        this.getPersonalProDate();
-        console.log(api.timeFormate({time:"2014-05-24 12:25:00",type:2}))
+        this.getPersonalProDate();
+        this.getDocInfo();
+        this.getIsReceiveClinic();
+        this.isCreateChatForFree();
+        this.questionStatus({callBack:(data)=>{
+          console.log(data)
+        }});
       },
 //      beforeRouteLeave (to, from, next) {
 //        // 导航离开该组件的对应路由时调用
@@ -245,10 +277,178 @@
             name:'clinicDetails'
           })
         },
+        //获取医生信息
+        getDocInfo(){
+          let _this = this;
+          api.ajax({
+            url: XHRList.getDocMain,
+            method: "POST",
+            data: _this.params.getDocMainParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              console.log(data);
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                let _data=data.responseObject.responseData.dataList[0];
+                _this.logoUrl=_data.logoUrlMap.logoUrl;
+                _this.fullName=_data.authMap.fullName;
+                _this.company=_data.authMap.company;
+                _this.medicalTitle=_data.authMap.medicalTitle;
+                _this.areasExpertise=_data.authMap.areasExpertise;
+                _this.precedingYearOperationNum=_data.authMap.precedingYearOperationNum;
+                _this.yesteryearOperationNum=_data.authMap.yesteryearOperationNum;
+                _this.illnessMapList=_data.illnessMapList;
+                _this.operationMapList=_data.operationMapList;
+              }else{
+                _this.errorShow = true;
+                setTimeout(() => {
+                  _this.errorShow = false;
+                }, 2000)
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //是否创建过免费聊天
+        isCreateChatForFree(isfc) {
+          let _this = this;
+          api.ajax({
+            url: XHRList.getOrderDetails,
+            method: "POST",
+            data: _this.params.isCreateChatParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              console.log(data);
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                let  _orderAmount = data.responseObject.responseData.dataList[0].orderAmount;
+                if (_orderAmount > 0) {
+                  //未使用免费问诊
+
+                } else {
+                  //已使用免费问诊
+
+                }
+              }else{
+
+                _this.errorShow = true;
+                setTimeout(() => {
+                  _this.errorShow = false;
+                }, 2000)
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //是否开启问诊及剩余咨询人数
+        questionStatus (Obj) {
+          let _this = this;
+          api.ajax({
+            url: XHRList.getCurrentByCustomerId,
+            method: "POST",
+            data: _this.params.currentByCustomerIdParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              console.log(data);
+              if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                let _dataList = data.responseObject.responseData.dataList;
+                Obj.callBack(_dataList);
+              }else{
+                _this.errorShow = true;
+                setTimeout(() => {
+                  _this.errorShow = false;
+                }, 2000)
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        checkPatientState (cps) {
+          var _remainNum = cps.dataList.remainNum,
+            _state = cps.dataList.state,
+            _conState = cps.dataList.conState;
+          if (_state == 1) {
+            //开启问诊
+            if (_remainNum !== 0) {    //_remainNum!==0 (-1次数无限)
+              //剩余人数>0
+              if (_remainNum > 0) {
+                var _text = "剩余名额" + _remainNum + "人";
+                $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('lastNumTotal').siblings().text(_text).addClass('isLastNum');
+              }
+            } else {
+              //无剩余名额
+              $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('lastNumNull').siblings().text("今日名额已用完").addClass('isNullNum');
+              $('.onlineVisit .goInquiryBox').find('.inquiryType').siblings().addClass('forbid');
+              $('.goRefer').addClass('forbid');
+            }
+          } else {
+            //未开启问诊
+            $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('isOpenQuestion').siblings().text("医生未开启问诊").addClass('isNotOpenQues');
+            $('.onlineVisit .goInquiryBox').find('.inquiryType').siblings().text("暂不接诊").addClass('forbid');
+            $('.goRefer').addClass('forbid');
+          }
+        },
+        //是否接受门诊
+        getIsReceiveClinic(){
+          let _this = this;
+          api.ajax({
+            url: XHRList.isReceiveClinic,
+            method: "POST",
+            data: _this.params.isReceiveClinicParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              console.log(data);
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                let _isReceive = data.responseObject.responseData.dataList[0].isReceive;
+                if(parseInt(_isReceive)==1){
+                  _this.outpatientClinic = true;
+                }else {
+                  _this.outpatientClinic = false;
+                }
+
+              }else{
+                _this.errorShow = true;
+                setTimeout(() => {
+                  _this.errorShow = false;
+                }, 2000)
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
         //get  Personal Profile
         getPersonalProDate() {
           let _this = this;
-//          _this.params.getCodeParams.account = _this.phoneMessage;
           api.ajax({
             url: XHRList.getPersonalProXHR,
             method: "POST",
@@ -260,17 +460,14 @@
             done(data) {
               _this.finish = false;
               console.log(data);
-              if (data.responseObject.responsePk !== 0&&data.responseObject.responseStatus) {
-//                _this.toastComm("验证码已发送");
-//                _this.imgUrl = _this.toastImg.success;
-//                _this.countDown(60);
-//                _this.params.codeCheck.id=data.responseObject.responsePk
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.data_list) {
+                _this.personalIndividual=data.responseObject.responseData.data_list;
+
               }else{
-//                _this.errorMsg = data.responseObject.responseMessage;
-//                _this.errorShow = true;
-//                setTimeout(() => {
-//                  _this.errorShow = false;
-//                }, 2000)
+                _this.errorShow = true;
+                setTimeout(() => {
+                  _this.errorShow = false;
+                }, 2000)
               }
             },
             fail(err){
@@ -282,9 +479,12 @@
         },
         //view individualInfo for detail
         individualInfoDetail(){
+          let _this=this;
+          console.log(_this.personalIndividual);
           this.ruleShow=true;
           this.$router.push({
-            name:'individualInfo'
+            name:'individualInfo',
+            params:_this.personalIndividual
           })
         },
         //获取验证码
@@ -381,7 +581,8 @@
       components: {
         loading,
         toast,
-        confirm
+        confirm,
+        payPopup
       }
     }
 

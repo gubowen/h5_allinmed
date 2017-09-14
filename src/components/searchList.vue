@@ -86,9 +86,11 @@
         switch (type) {
           case "hospital":
             this.placeholderText = "请输入就诊医院名称";
+            document.title="就诊医院";
             break;
           case "disease":
             this.placeholderText = "请输入疾病名称";
+            document.title="确诊疾病";
             break;
           default:
             break;
@@ -295,7 +297,7 @@
         @include font-dpr(17px);
         color: $colorTwo;
         display: block;
-        padding: rem(24px) rem(40px);
+        padding: rem(24px) rem(50px);
         line-height: rem(32px);
         cursor: pointer;
         @include ellipsis();
@@ -611,7 +613,7 @@
       @include font-dpr(16px);
       color: $colorTwo;
       display: block;
-      padding: rem(24px) rem(40px);
+      padding: rem(24px) rem(50px);
       line-height: rem(32px);
       cursor: pointer;
       &:active{
