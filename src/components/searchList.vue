@@ -17,12 +17,13 @@
     </section>
     <section class="tc-searchMain">
       <section class="no-result-item-add" v-if="noResult">
-        <button class="btn-primary add-result-item-btn" @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
-          保存
+        <button class="btn-primary add-result-item-btn"
+                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
+          确定
         </button>
       </section>
-      <section class="tc-searchContentInner ev-initList" style="">
-        <section class="searchResult">
+      <section class="tc-searchContentInner ev-initList">
+        <section class="searchResult" ref="listBox">
           <p class="searchResultItem" v-for="item in messageList" @click="backToPast(item)">
             {{listType === "hospital" ? item.hospitalName : item.illnessName}}</p>
         </section>
@@ -57,23 +58,28 @@
         searchText: '',
         placeholderText: "",
         finish: false,
-        noResult: false
+        noResult: false,
+        over: false
       }
     },
     mounted(){
       let page = 0;
       this.listType = this.$route.params.listType;
       this.returnRouter = this.$route.params.from;
-
+      this.$refs.searchInput.focus();
       window.addEventListener("scroll", () => {
-        if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
-          page++;
-          this.getMessageList(this.searchText, page)
+        if (this.$refs.listBox.children.length > 1) {
+            this.$refs.searchInput.blur();
+          if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
+            page++;
+            this.getMessageList(this.searchText, page)
+          }
         }
       });
 
       this.getPlaceHolder(this.listType);
       this.limitChinese();
+
     },
     methods: {
       getPlaceHolder(type){
@@ -126,34 +132,42 @@
 
         let data = Object.assign({}, {
           isValid: "1",
-          firstResult: 0,
-          maxResult: maxResult,
+          firstResult: firstResult,
+          maxResult: 20,
           cityId: ""
         }, searchData);
-        api.ajax({
-          url: url,
-          method: "POST",
-          data: data,
-          beforeSend(config) {
-
-          },
-          done(param) {
-            console.log(param)
-
-            if (param.responseObject.responseData) {
-              let dataList = param.responseObject.responseData.dataList;
-              if (dataList && dataList.length !== 0) {
-                that.messageList = dataList;
-                that.loading = false;
-              } else {
-                that.noResult = true;
+        if (!this.over) {
+          api.ajax({
+            url: url,
+            method: "POST",
+            data: data,
+            done(param) {
+              if (param.responseObject.responseData) {
+                let dataList = param.responseObject.responseData.dataList;
+                if (dataList && dataList.length !== 0) {
+                  if (page === 0) {
+                    that.messageList = dataList;
+                  } else {
+                    dataList.forEach((element, index) => {
+                      that.messageList.push(element);
+                    });
+                  }
+                  that.noResult = false;
+                  that.loading = false;
+                } else {
+                  that.over = true;
+                  if (page === 0) {
+                    that.messageList = [];
+                    that.noResult = true;
+                  }
+                }
               }
-            }
-          },
-          fail(err) {
+            },
+            fail(err) {
 
-          }
-        })
+            }
+          })
+        }
       },
       backToPast(item){
         if (this.listType === "hospital") {
@@ -186,12 +200,15 @@
 
         if (this.searchText.length === 0) {
           return false;
-        } else if (api.getByteLen(this.searchText.length >= 30)) {
+        } else if (api.getByteLen(this.searchText) >= 30) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
         } else {
           clearTimeout(this.searchTimeout);
           this.searchTimeout = setTimeout(() => {
-            this.getMessageList(this.searchText, 0);
+            if (this.searchText.trim().length > 0) {
+              this.over = false;
+              this.getMessageList(this.searchText, 0);
+            }
           }, 300);
         }
       }
@@ -281,6 +298,7 @@
         padding: rem(24px) rem(40px);
         line-height: rem(32px);
         cursor: pointer;
+        @include ellipsis();
         &.selected {
           background-color: #F9FBFB;
         }
@@ -487,7 +505,7 @@
     }
     .add-result-item-btn {
       width: rem(360px);
-      height:rem(100px);
+      height: rem(100px);
       display: block;
       margin: 0 auto;
       margin-top: rem(302px);
