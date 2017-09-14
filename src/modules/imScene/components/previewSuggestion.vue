@@ -146,7 +146,7 @@
    * @Notify：
    * @Depend：
    *
-   * Created by 李晨阳 on 2017/8/18.
+   * Created by lichenyang on 2017/8/18.
    */
   import api from "common/js/util/util";
 
