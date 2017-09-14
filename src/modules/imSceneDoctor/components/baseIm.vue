@@ -129,7 +129,7 @@
         </section>
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"

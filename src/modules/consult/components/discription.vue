@@ -520,7 +520,7 @@
           setTimeout(() => {
             this.errorShow = false;
           }, 2000);
-          this.errorMsg = "您已超过500字了";
+          this.errorMsg = "最多只能输入500字";
           return false;
         }
         this.selectList[pIndex].optionDesc = content;
