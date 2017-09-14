@@ -16,7 +16,7 @@
                      v-for="(item , index) in question.optionList1" :data-oId="item.optionId">
               <article class="consult-question-item"
                        :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
-                       @click="selectEvent(question.questionType==2,pIndex,index)"
+                       @click="selectEvent(question.questionType==2,pIndex,index,item)"
               >
                 <p>{{item.optionName}}</p>
                 <i class="icon-select"></i>
@@ -25,7 +25,9 @@
                         @click.stop="">
               <textarea class="input-textarea" placeholder="填写其他情况"
                         @input="otherReason(pIndex,index,$event)"
-                        v-model="questionList[pIndex].optionList[index].optionDesc">
+                        v-model="questionList[pIndex].optionList[index].optionDesc"
+                        ref="otherEle"
+              >
               </textarea>
                   <p class="text-num-tips" v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100">
                     {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
@@ -210,7 +212,7 @@
 //      if (localStorage.getItem("consultParams")&&localStorage.getItem("consultParams").length !== 0) {
 //        this.selectList = JSON.parse(localStorage.getItem("consultParams"));
 //      }
-      document.title = "描述情况";
+      document.title = "描述病情";
       this.patientMessage = this.$route.query;
       this.getQuestionList();
       this.finish=true;
@@ -407,7 +409,8 @@
           })
         });
       },
-      selectEvent(type, pIndex, index) {
+      selectEvent(type, pIndex, index,item) {
+
         if (type) {
           this.questionList[pIndex].optionList[index].isSelected = !this.questionList[pIndex].optionList[index].isSelected;
           if (this.questionList[pIndex].optionList[index].isSelected) {
@@ -440,6 +443,15 @@
               }
             }
           })
+        }
+
+
+
+        if (item.isAttachment==2){
+          setTimeout(()=>{
+//              console.log(this.$refs.otherEle)
+//            this.$refs.otherEle.focus();
+          },100);
         }
       },
       showQueryDetail(id){
