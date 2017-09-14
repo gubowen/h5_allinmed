@@ -6,7 +6,7 @@
             <img src="../../../common/image/background_wave.png" class="docLogo">
           </figcaption>
           <div class="docNameBox">
-            <span class="docName">王玉轩</span>
+            <span class="docName">王玉轩龙</span>
             <span class="docTitle">副主任医师</span>
           </div>
         </figure>
