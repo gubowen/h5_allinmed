@@ -257,7 +257,7 @@
             that.getTimeStampShowList();
             setTimeout(() => {
 //              console.log(that.$el.querySelector(".main-message"));
-              if (api.getPara().suggest) {
+              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
 //                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
                 document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])

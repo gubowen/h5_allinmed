@@ -104,7 +104,7 @@
             <li class="doctor-item"
                 v-for="(item , index) in doctorObj.tempData"
             >
-              <section class="doctor-item-top">
+              <section class="doctor-item-top" @click="goDoctorHome(index)">
                 <figure class="doctor-item-img">
                   <img :src="item.logoUrl" alt="">
                 </figure>
@@ -118,11 +118,15 @@
                   <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
                 </figcaption>
               </section>
-              <section class="doctor-item-bottom">
-                <span class="go-consult">图文问诊</span>
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
+                <span class="go-consult">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
+              </section>
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
+                <span class="go-consult">去问诊</span>
+                <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </li>
           </ul>
@@ -149,7 +153,8 @@
   const XHRList = {
     getCheckSuggestion: "/mcall/patient/case/diagnosis/v1/getMapList/",//预览初诊建议
     getRecommedDoctor: "/mcall/patient/recommend/v1/getMapList/",//推荐医生
-    getToken: "/mcall/im/interact/v1/refreshToken/"
+    getToken: "/mcall/im/interact/v1/refreshToken/",
+    getCurrentByCustomerId:'/mcall/customer/advice/setting/v1/getCurrentByCustomerId/',//获取是否与专业医生建立过im
   };
 
   export default{
@@ -163,6 +168,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //处置建议里的数据
@@ -172,6 +178,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //患教知识里的数据
@@ -181,6 +188,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //推荐医生的的数据
@@ -190,7 +198,8 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
-          pageNum:3,//分页数据条数
+          initNum:3,//初始展示的数据条数
+          pageNum:5,//分页数据条数
         },
       }
 
@@ -291,9 +300,9 @@
       //检查检验数据
       checkSuggestData (param) {
         let that = this;
-        if (that[param].allData.length > that[param].pageNum) {
+        if (that[param].allData.length > that[param].initNum) {
           that[param].moreBoxShow = true;
-          that[param].lessData = that[param].allData.slice(0,that[param].pageNum);
+          that[param].lessData = that[param].allData.slice(0,that[param].initNum);
           that[param].tempData = that[param].lessData;
           that[param].moreData = true;
         } else {
@@ -310,6 +319,31 @@
           that[param].moreData = false;
           that[param].tempData = that[param].allData;
         }
+      },
+      //去医生主页
+      goDoctorHome(index){
+        let that = this;
+        window.location.href = '/pages/myServices/doc_main.html?customerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId + '&type=2';
+      },
+      //获取患者是否建立过问诊 responseData.dataList.conState 0-无沟通中数据 1-有
+      goToFreeConsult(index){
+        let that = this;
+        api.ajax({
+          url: XHRList.getCurrentByCustomerId,
+          method: "POST",
+          data: {
+            customerId:	that.doctorObj.allData[index].customerId,//string	是	医生的Id	1489998833435
+            caseId:api.getPara().caseId,	//string	是
+          },
+          beforeSend(){
+
+          },
+          done(data){
+            if (data.responseObject.responseData.dataList && data.responseObject.responseStatus) {
+              console.log(data);
+            }
+          }
+        })
       },
       //收起
       lessDataShow(param){
@@ -613,9 +647,11 @@
             padding-left: rem(120px);
             .go-consult{
               float: right;
+              width: rem(224px);
+              text-align: center;
               background: rgba(47,197,189,0.90);
               border-radius: 52px;
-              padding: rem(12px) rem(56px);
+              padding: rem(12px);
               color: #ffffff;
             }
             .free-consult{
