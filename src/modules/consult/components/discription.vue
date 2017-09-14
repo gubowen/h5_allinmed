@@ -215,7 +215,7 @@
       document.title = "描述病情";
       this.patientMessage = this.$route.query;
       this.getQuestionList();
-      this.finish=true;
+      this.finish=false;
 
       setTimeout(()=>{
         document.body.scrollTop=20;

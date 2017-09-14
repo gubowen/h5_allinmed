@@ -508,7 +508,7 @@
       contentLimit(){
         if (api.getByteLen(this.medicalMessage) > 1000) {
           this.medicalMessage = api.getStrByteLen(this.medicalMessage,1000);
-          this.validateToast("您已超过500字了")
+          this.validateToast("最多只能输入500字")
         }
       },
       getByteLen(len){
