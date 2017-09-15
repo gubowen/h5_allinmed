@@ -1389,7 +1389,7 @@ common.bindCallApp=function(options,config) {
                         window.location.href = config.iosUrl; // app download url
                     }
                 }
-            }, 1e3));
+            }, 3e3));
         }
     }
     function log() {

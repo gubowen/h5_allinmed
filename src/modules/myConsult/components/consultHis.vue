@@ -64,6 +64,9 @@
     },
     mounted(){
       api.mobileCheck();
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);    //获取openId
+      }
       this.getOrderHistoryLists();
     },
     methods: {
