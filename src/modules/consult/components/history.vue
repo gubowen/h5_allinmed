@@ -205,6 +205,7 @@
     activated(){
       this.finish = false;
       this.initData();
+       document.title = "描述病情";
     },
     mounted(){
       document.title = "描述病情";
@@ -629,6 +630,7 @@
           background-color: #E5E5E5;
           p {
             color: #666666;
+            @include ellipsis();
             &.selected {
               color: #07B6AC;
             }
