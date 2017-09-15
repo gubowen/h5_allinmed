@@ -67,9 +67,11 @@
       this.listType = this.$route.params.listType;
       this.returnRouter = this.$route.params.from;
       this.$refs.searchInput.focus();
+      document.body.scrollTop=0;
+      
       window.addEventListener("scroll", () => {
         if (this.$refs.listBox.children.length > 1) {
-            this.$refs.searchInput.blur();
+            // this.$refs.searchInput.blur();
           if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
             page++;
             this.getMessageList(this.searchText, page)
@@ -484,6 +486,7 @@
     background: url("/image/img00/healthInfo/dialog_overtime_arrow.png");
     background-size: contain;
     margin-left: rem(12px);
+
   }
 
   .no-result-item-add {
