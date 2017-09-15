@@ -218,7 +218,8 @@
           caseId:api.getPara().caseId,
           patientId:api.getPara().patientId,
           patientCustomerId:api.getPara().patientCustomerId,
-          from:'aa'
+          from:'imDoctor',
+          payType:'pay'
         },
         userData: {
           account: "",

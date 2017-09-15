@@ -106,6 +106,7 @@
       });
     },
     methods: {
+      //关闭支付弹层
       closePopup(){
         this.$emit('update:payPopupShow', false);
       },
@@ -130,7 +131,7 @@
               }else if(items.conState ==1 && that.payPopupParams.from != "imDoctor"){
                 that.hasCommunShow = true;
               }else{
-                if(that.payPopupParams.type=="free"){
+                if(that.payPopupParams.payType=="free"){
                   that.freeToPay();
                 }else{
                   if(opt.type == 0){
@@ -199,63 +200,6 @@
             }
           });
         }
-      },
-      //免费直接支付
-      freeToPay(){
-        const that = this;
-        api.ajax({
-          url: XHRList.getConsultationId,
-          method: "post",
-          data: {
-            caseId: this.payPopupParams.caseId,
-            customerId: this.payPopupParams.docId,
-            isCreate: 1,
-            isValid: 1,
-            consultationType: 1,
-            firstResult: 0,
-            maxResult: 999
-          },
-          done (data) {
-            if (data.responseObject.responseData.dataList) {
-              let consultationId = data.responseObject.responseData.dataList.consultationId;
-              sessionStorage.setItem("orderSourceId", consultationId);
-              wxCommon.wxCreateOrder({
-                isTest:0,
-                data: {
-                  caseId: that.payPopupParams.caseId,                //  string  是  caseId
-                  patientCustomerId: that.payPopupParams.patientCustomerId, //	string	是	患者所属用户id
-                  patientId: that.payPopupParams.patientId,         // 	string	是	患者id
-                  doctorId: that.payPopupParams.docId,          //	string	是	医生id
-                  orderType: 1,     //	string	是	订单类型  1-咨询2-手术3-门诊预约
-                  orderSourceId: consultationId,                   //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
-                  orderSourceType: 0,               //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
-                  orderAmount: 0,                           //	string	否	订单金额  （单位/元 保留两位小数）
-                  status: '2',                              //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-                  body: '免费问诊',                          //    string  否  订单描述 （微信支付展示用）
-                  isCharge: "false"                         //    string  是  true-收费  false-免费
-                },
-                backCreateSuccess: function (_data) {
-                  that.$emit("paySuccess", {
-                    orderType: 0,
-                    orderAmount: 0,
-                    orderFrequency:3
-                  });
-                  that.closePopup();
-                },
-                backCreateError: function (_data) {
-                  //创建订单失败  (必选)
-                },
-                wxPaySuccess: function (_data) {
-                  //支付成功回调  (问诊/门诊类型 必选)
-                },
-                wxPayError: function (_data) {
-                  //支付失败回调  (问诊/门诊类型 必选)
-
-                }
-              });
-            }
-          }
-        })
       },
       //是否有重复订单
       isHasOrder(opt){
@@ -344,6 +288,7 @@
           }
         });
       },
+      //提示弹层关闭执行
       cancelEvent(_type){
         this.levelShow = false;
         this.noStateShow = false;
@@ -378,7 +323,64 @@
       },
       ensureCommunEvent(){
           window.location.href = `/dist/imSceneDoctor.html?caseId=${this.payPopupParams.caseId}&doctorCustomerId=${this.payPopupParams.docId}&patientCustomerId=${this.payPopupParams.patientCustomerId}&patientId=${this.payPopupParams.patientId}`
-      }
+      },
+      //免费直接支付
+      freeToPay(){
+        const that = this;
+        api.ajax({
+          url: XHRList.getConsultationId,
+          method: "post",
+          data: {
+            caseId: this.payPopupParams.caseId,
+            customerId: this.payPopupParams.docId,
+            isCreate: 1,
+            isValid: 1,
+            consultationType: 1,
+            firstResult: 0,
+            maxResult: 999
+          },
+          done (data) {
+            if (data.responseObject.responseData.dataList) {
+              let consultationId = data.responseObject.responseData.dataList.consultationId;
+              sessionStorage.setItem("orderSourceId", consultationId);
+              wxCommon.wxCreateOrder({
+                isTest:0,
+                data: {
+                  caseId: that.payPopupParams.caseId,                //  string  是  caseId
+                  patientCustomerId: that.payPopupParams.patientCustomerId, //	string	是	患者所属用户id
+                  patientId: that.payPopupParams.patientId,         // 	string	是	患者id
+                  doctorId: that.payPopupParams.docId,          //	string	是	医生id
+                  orderType: 1,     //	string	是	订单类型  1-咨询2-手术3-门诊预约
+                  orderSourceId: consultationId,                   //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+                  orderSourceType: 0,               //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+                  orderAmount: 0,                           //	string	否	订单金额  （单位/元 保留两位小数）
+                  status: '2',                              //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
+                  body: '免费问诊',                          //    string  否  订单描述 （微信支付展示用）
+                  isCharge: "false"                         //    string  是  true-收费  false-免费
+                },
+                backCreateSuccess: function (_data) {
+                  that.$emit("paySuccess", {
+                    orderType: 0,
+                    orderAmount: 0,
+                    orderFrequency:3
+                  });
+                  that.closePopup();
+                },
+                backCreateError: function (_data) {
+                  //创建订单失败  (必选)
+                },
+                wxPaySuccess: function (_data) {
+                  //支付成功回调  (问诊/门诊类型 必选)
+                },
+                wxPayError: function (_data) {
+                  //支付失败回调  (问诊/门诊类型 必选)
+
+                }
+              });
+            }
+          }
+        })
+      },
     },
     props: {
       payPopupShow: {
