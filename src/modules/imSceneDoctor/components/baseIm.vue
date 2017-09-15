@@ -212,15 +212,7 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
-        payPopupDate:{
-          docName:this.$store.state.targetMsg.nick,
-          docId:api.getPara().doctorCustomerId,
-          caseId:api.getPara().caseId,
-          patientId:api.getPara().patientId,
-          patientCustomerId:api.getPara().patientCustomerId,
-          from:'imDoctor',
-          payType:'pay'
-        },
+
         userData: {
           account: "",
           token: ""
@@ -302,7 +294,7 @@
             let type = JSON.parse(msg.content).data.actionType;
             switch (parseInt(type)) {
               case 1: //患者购买 不处理
-                
+
                 break;
               case 2://医生赠送次数
                 this.lastTimeShow = true;
@@ -995,7 +987,18 @@
       },
       lastCount(){
         return this.$store.state.lastCount;
-      }
+      },
+      payPopupDate(){
+        return {
+          docName: this.$store.state.targetMsg.nick,
+          docId: api.getPara().doctorCustomerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().patientCustomerId,
+          from: 'imDoctor',
+          payType: 'pay'
+        }
+      },
     },
     mounted(){
       this.getUserBaseData();

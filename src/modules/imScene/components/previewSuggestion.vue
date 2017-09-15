@@ -118,13 +118,13 @@
                   <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
                 </figcaption>
               </section>
-              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes" @click="goConsult(index,'free')">
                 <span class="go-consult">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
-              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes" @click="goConsult(index,'pay')">
                 <span class="go-consult">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
@@ -149,6 +149,7 @@
    * Created by lichenyang on 2017/8/18.
    */
   import api from "common/js/util/util";
+  import store from "../store/store";
 
   const XHRList = {
     getCheckSuggestion: "/mcall/patient/case/diagnosis/v1/getMapList/",//预览初诊建议
@@ -325,6 +326,16 @@
         let that = this;
         window.location.href = '/pages/myServices/doc_main.html?customerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId + '&type=2';
       },
+      //免费问诊
+      goConsult(index,type){
+        let that = this;
+        that.$emit('update:payPopupShow', true);
+
+        store.commit("setTargetMsg", {customerId:that.doctorObj.allData[index].customerId});
+        store.commit("setTargetMsg", {nick:that.doctorObj.allData[index].fullName});
+        store.commit("setTargetMsg", {payType:type});
+
+      },
       //获取患者是否建立过问诊 responseData.dataList.conState 0-无沟通中数据 1-有
       goToFreeConsult(index){
         let that = this;
@@ -361,8 +372,11 @@
     },
     props:{
       previewSuggestionMessage:{
-          type:Object
-      }
+        type:Object
+      },
+      payPopupShow:{
+        type:Boolean
+      },
     }
   }
 </script>
