@@ -294,7 +294,6 @@
             let type = JSON.parse(msg.content).data.actionType;
             switch (parseInt(type)) {
               case 1: //患者购买 不处理
-
                 break;
               case 2://医生赠送次数
                 this.lastTimeShow = true;
@@ -940,7 +939,7 @@
             desc = "免费";
             break;
           case 1:
-            desc = "普通";
+            desc = "图文";
             break;
           case 3:
             desc = "特需";
