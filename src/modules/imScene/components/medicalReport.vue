@@ -145,6 +145,7 @@
       .patient-info{
         .patient-name{
           color: #333333;
+          font-weight: bold;
         }
         .patient-age{
           @include font-dpr(14px);
@@ -153,6 +154,7 @@
       .case-describe{
         margin-top: rem(20px);
         .case-describe-main{
+          font-weight: bold;
           display: inline-block;
           width: rem(520px);
           white-space:nowrap;

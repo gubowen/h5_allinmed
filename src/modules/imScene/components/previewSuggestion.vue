@@ -370,7 +370,7 @@
   @import "../../../../scss/library/_common-modules";
   /*展开更多的公共样式*/
   .more-box{
-    padding-top: rem(50px);
+    padding-top: rem(40px);
     @include font-dpr(14px);
     color: #909090;
     text-align: center;
@@ -652,6 +652,7 @@
               background: rgba(47,197,189,0.90);
               border-radius: 52px;
               padding: rem(12px);
+              box-sizing: border-box;
               color: #ffffff;
             }
             .free-consult{
