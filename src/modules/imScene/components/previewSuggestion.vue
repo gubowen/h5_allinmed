@@ -421,6 +421,7 @@
           line-height: 1;
           padding: rem(0px) rem(64px);
           position: relative;
+          font-weight: bold;
           &::before{
             content: '';
             width: rem(8px);
@@ -487,6 +488,7 @@
           padding: rem(42px) rem(0px);
           margin: 0 rem(30px);
           position: relative;
+          font-weight: bold;
           .knowledge-detail{
             position: absolute;
             color: #AAAAAA;
@@ -590,6 +592,7 @@
                 line-height: 1;
                 .doctor-name{
                   color: #333333;
+                  font-weight: bold;
                   @include font-dpr(16px);
                   display: inline-block;
                   max-width: rem(160px);
@@ -658,6 +661,7 @@
             .free-consult{
               float: left;
               color: #FA787A;
+              font-weight: bold;
               margin-top: rem(12px);
             }
             .free-price{
