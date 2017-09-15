@@ -172,7 +172,7 @@
           switch (Number(opt.consultationLevel)){
             case 0:
             case 1:
-              consultationLevel = "普通问诊";
+              consultationLevel = "图文问诊";
               break;
             case 3:
               consultationLevel = "特需问诊";

@@ -126,7 +126,7 @@
             break;
           case "disease":
             searchData = {
-              diseaseName: searchContent
+              diseaseNameQuery: searchContent
             };
             url = XHRList.disease;
             break;
@@ -203,6 +203,7 @@
       searchEvent(){
 
         if (this.searchText.length === 0) {
+          this.messageList=[];
           return false;
         } else if (api.getByteLen(this.searchText) >= 30) {
           this.searchText = api.getStrByteLen(this.searchText, 60);

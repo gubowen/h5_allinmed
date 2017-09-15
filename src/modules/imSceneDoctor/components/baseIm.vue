@@ -212,15 +212,7 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
-        payPopupDate:{
-          docName:this.$store.state.targetMsg.nick,
-          docId:api.getPara().doctorCustomerId,
-          caseId:api.getPara().caseId,
-          patientId:api.getPara().patientId,
-          patientCustomerId:api.getPara().patientCustomerId,
-          from:'imDoctor',
-          payType:'pay'
-        },
+
         userData: {
           account: "",
           token: ""
@@ -302,7 +294,6 @@
             let type = JSON.parse(msg.content).data.actionType;
             switch (parseInt(type)) {
               case 1: //患者购买 不处理
-                
                 break;
               case 2://医生赠送次数
                 this.lastTimeShow = true;
@@ -948,7 +939,7 @@
             desc = "免费";
             break;
           case 1:
-            desc = "普通";
+            desc = "图文";
             break;
           case 3:
             desc = "特需";
@@ -995,7 +986,18 @@
       },
       lastCount(){
         return this.$store.state.lastCount;
-      }
+      },
+      payPopupDate(){
+        return {
+          docName: this.$store.state.targetMsg.nick,
+          docId: api.getPara().doctorCustomerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().patientCustomerId,
+          from: 'imDoctor',
+          payType: 'pay'
+        }
+      },
     },
     mounted(){
       this.getUserBaseData();
@@ -1068,5 +1070,6 @@
     opacity: 0;
     transform: translateY(50%);
   }
+
 </style>
 

@@ -145,6 +145,7 @@
           box-sizing: border-box;
           padding: rem(0px) rem(58px);
           position: relative;
+          font-weight: bold;
           &::before{
             content: '';
             width: rem(8px);

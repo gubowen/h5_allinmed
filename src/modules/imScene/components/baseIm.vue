@@ -29,6 +29,7 @@
           <PreviewSuggestion
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='previewSuggestion'"
             :previewSuggestionMessage="JSON.parse(msg.content)"
+            :payPopupShow.sync="payPopupShow"
           >
           </PreviewSuggestion>
           <!--支付成功-->
@@ -94,8 +95,13 @@
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
     </transition>
+    <!--支付弹层-->
+    <payPopup @paySuccess="refreashOrderTime"
+              :payPopupShow.sync="payPopupShow"
+              :payPopupParams = "payPopupDate"
+              v-if="payPopupShow">
+    </payPopup>
   </section>
-
 
 </template>
 <script type="text/ecmascript-6">
@@ -110,6 +116,8 @@
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
+
+  import payPopup from 'components/payLayer';
 
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
@@ -136,6 +144,7 @@
   };
   export default{
     data(){
+
       return {
         nim: {},
         imageProgress: {
@@ -158,6 +167,9 @@
           account: "",
           token: ""
         },
+        payPopupShow:false,//支付弹窗是否显示
+        //支付数据
+
         //聊天目标数据
         targetData: {
           account: "1_doctor00001"
@@ -719,6 +731,20 @@
       lastTimeText(){
         return api.MillisecondToDateNew(this.$store.state.lastTime);
       },
+//      payPopupShow(){
+//        return this.$store.state.payPopupShow;
+//      }
+      payPopupDate(){
+        return {
+          docName: this.$store.state.targetDoctor.nick,
+          docId: this.$store.state.targetDoctor.customerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().customerId,
+          from: 'checkSuggest',
+          payType: this.$store.state.targetDoctor.payType,
+        }
+      },
     },
     mounted(){
       let that = this;
@@ -790,6 +816,7 @@
       Triage,
       PayFinishTips,
       MiddleTips,
+      payPopup,
     }
   }
 </script>
