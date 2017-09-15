@@ -1389,13 +1389,14 @@ common.bindCallApp=function(options,config) {
                         window.location.href = config.iosUrl; // app download url
                     }
                 }
-            }, 3e3));
+            }, 1e3));
         }
     }
     function log() {
         console.log("请传入要跳转的APP地址的参数对象，如：{ios:\"allinmdios://meettingBroadcast/meetInfo\",android:\"'allin://com.allin.social:75235?data=mydata\"}");
     }
 };
+
 /**
  * @name:
  * @desc:时间处理方法
