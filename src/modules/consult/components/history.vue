@@ -517,7 +517,6 @@
       }
     },
     components: {
-      selectArea,
       loading,
       toast,
       confirm
