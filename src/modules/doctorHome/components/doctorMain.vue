@@ -24,7 +24,7 @@
         <div class="doc-personalAddress">
           <p>上海交通大学医学院附属第一人民医院</p>
         </div>
-        <div class="doc-personal-labelBox">
+        <div class="doc-personal-labelBox" v-show="false">
           <span class="doc-perLabel-item">三甲</span><span class="doc-perLabel-item">全国top10骨科医院</span>
         </div>
       </section>
@@ -38,7 +38,7 @@
           <!--图文问诊-->
           <section class="doc-onlineForChart">
             <section class="onlineForChart-left">
-              <p>图文问诊<span>60元</span></p>
+              <p>图文问诊<span>{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
               <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
@@ -53,7 +53,7 @@
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty">
         <section class="doc-commonTitle" v-show="areasExpertise.length>0">
-          <p class="doc-titleLeft">专科：{{areasExpertise}}</p>
+          <p class="doc-titleLeft doc-majorItem">专科：{{areasExpertise}}</p>
         </section>
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
@@ -85,7 +85,7 @@
           <p class="doc-titleLeft">执业地点</p>
           <p class="doc-titleRight" @click="viewCureTime">查看出诊时间</p>
         </section>
-        <ul class="doc-hospitalBox">
+        <ul class="doc-hospitalBox" v-show="company.length>0">
           <li class="doc-hospitalItem">{{company}}</li>
         </ul>
       </section>
@@ -95,7 +95,9 @@
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
         </section>
-        <section class="individual-textBox">北京协和医和医学进步奖。掌握了一套非手术治疗颈肩腰腿痛的有效疗法，即洛阳正骨治筋疗法。优值牵引法：采用床头多功能牵引架，根据患者不同的病情采用相对应的牵引角度、牵引重量、牵引时间，进行牵引治疗以达正骨理筋的治疗。</section>
+        <section class="individual-textBox">
+          <p>北京协和医和医学进步奖。掌握了一套非手术治疗颈肩腰腿痛的有效疗法，即洛阳正骨治筋疗法。优值牵引法：采用床头多功能牵引架，根据患者不同的病情采用相对应的牵引角度、牵引重量、牵引时间，进行牵引治疗以达正骨理筋的治疗。</p>
+        </section>
       </section>
     </section>
     <transition name="fade">
@@ -185,6 +187,7 @@
           areasExpertise:"",    //专科
           illnessMapList:"",    //擅长疾病
           operationMapList:"",  //擅长手术
+          generalPrice:'',      //咨询的价格 (图文问诊)
           yesteryear: new Date().getFullYear()-2,       //前年年份
           yesteryearOperationNum:"",                    //前年
           precedingYear:new Date().getFullYear()-1,    //去年年份
@@ -238,6 +241,9 @@
               consultationLevel: '',
               siteId: 17,
               caseType: 0
+            },
+            getGoodsInfoParams:{
+              customerId: api.getPara().doctorId
             }
           }
         }
@@ -252,6 +258,8 @@
         this.questionStatus({callBack:(data)=>{
           _this.checkPatientState(data);
         }});
+        //test Fn
+        this.getGoodsInfo();
       },
       methods: {
         //view cureTime
@@ -261,7 +269,7 @@
           this.$router.push({
             name:'clinicDetails',
             params:{
-              docterId: _this.docId,
+              doctorId: _this.docId,
               hospitalId: _this.hospitalId,
               docName: _this.fullName,
               docTitle: _this.medicalTitle
@@ -285,7 +293,7 @@
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _data = data.responseObject.responseData.dataList[0],
                   _logoUrl = _data.logoUrlMap.logoUrl;
-                _this.fullName = _data.authMap.fullName;
+                _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10字
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
@@ -305,6 +313,33 @@
               _this.finish = false;
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //获取商品详情
+        getGoodsInfo(){
+          let _this=this;
+          console.log("5fsdfds");
+          api.ajax({
+            url:XHRList.getVisitDetails,
+            method:"POST",
+            data:_this.params.getGoodsInfoParams,
+            beforeSend:function () {
+              _this.finish = true;
+            },
+            timeout:20000,
+            done(data){
+              _this.finish = false;
+              console.log(data);
+              if(data&&data.responseObject&&data.responseObject.responseData){
+                let _dataList = data.responseObject.responseData.dataList[0];
+                console.log(_dataList);
+                _this.generalPrice=_dataList.generalPrice;  // 图文问诊 (老接口普通问诊价格)
+
+              }
+            },
+            fail(){
+
             }
           })
         },
@@ -353,7 +388,7 @@
             case 0:
               //免费
               console.log("创建免费问诊");
-              _this.getConsultationId({orderType:_orderType,callBackFn:()=>{
+              _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
@@ -366,7 +401,7 @@
             case 1:
               //图文问诊
               console.log("创建图文问诊");
-              _this.getConsultationId({orderType:_orderType,callBackFn:()=>{
+              _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
@@ -392,50 +427,8 @@
             done(data) {
               _this.finish = false;
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                let consultationIds = data.responseObject.responseData.dataList.consultationId;
-                if(consultationIds ==0){
-                  _this.createConsultationId({
-                    createType:org.orderType,
-                    callBack:()=>{
-                      org.callBackFn();
-                    }
-                  });
-                }else{
                   _this.consultationId = data.responseObject.responseData.dataList.consultationId;
                   org.callBackFn();
-                }
-              }
-            },
-            fail(err){
-              _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
-            }
-          })
-        },
-        //创建consultationId
-        createConsultationId(create){
-          let _this = this;
-          if (create.createType==0){
-            //免费问诊
-            _this.params.createConsultationIdParams.consultationLevel=0;
-          }else {
-            //图文问诊
-            _this.params.createConsultationIdParams.consultationLevel=1;
-          }
-          api.ajax({
-            url: XHRList.triageAssign,
-            method: "POST",
-            data: _this.params.createConsultationIdParams,
-            beforeSend: function () {
-              _this.finish = true;
-            },
-            timeout: 20000,
-            done(data) {
-              _this.finish = false;
-              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                _this.consultationId = data.responseObject.responseData.dataList.consultationId;
-                create.callBack();
               }
             },
             fail(err){
@@ -806,6 +799,14 @@
               margin-top: rem(-9px);
               left: rem(-12px);
             }
+            //专科
+            &.doc-majorItem{
+              width: 100%;
+              -ms-text-overflow: ellipsis;
+              text-overflow: ellipsis;
+              white-space:nowrap;
+              overflow: hidden;
+            }
           }
           .doc-titleRight{
             @include font-dpr(18px);
@@ -1096,9 +1097,16 @@
         .individual-infoBox{
           .individual-textBox{
             padding: rem(30px) rem(80px) rem(50px) rem(60px);
-            @include font-dpr(16px);
-            color: #666666;
-            line-height: rem(48px);
+            p{
+              font-size: rem(32px);
+              color: #666666;
+              line-height: rem(45px);
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              -webkit-box-orient: vertical;
+              word-break: break-all;
+            }
           }
         }
       }
