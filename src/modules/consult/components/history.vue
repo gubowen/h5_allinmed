@@ -134,7 +134,7 @@
    * Created by qiangkailiang/jukun on 2017/7/25.
    */
 
-  import selectArea from 'components/selectArea';
+  // import selectArea from 'components/selectArea';
   import api from 'common/js/util/util';
   import loading from 'components/loading';
   import toast from 'components/toast';
