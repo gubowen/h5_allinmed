@@ -168,8 +168,7 @@
           token: ""
         },
         payPopupShow:false,//支付弹窗是否显示
-        //支付数据
-
+        isClick:false,//立即咨询按钮是否点击
         //聊天目标数据
         targetData: {
           account: "1_doctor00001"
@@ -609,6 +608,10 @@
       //获取咨询价格
       getConsultPrice(){
         const that = this;
+        if (that.isClick){
+          return false;
+        }
+        that.isClick=true;
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -683,6 +686,7 @@
 //              store.commit("lastTimeCount");
               that.getLastTime();
               that.sendPayFinish();
+              that.isClick = false;//是否点击立即咨询重置
             }
           }
         })
@@ -748,6 +752,7 @@
     },
     mounted(){
       let that = this;
+
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }
