@@ -67,14 +67,16 @@
       this.listType = this.$route.params.listType;
       this.returnRouter = this.$route.params.from;
       this.$refs.searchInput.focus();
+
       document.body.scrollTop=0;
-      
+
       window.addEventListener("scroll", () => {
         if (this.$refs.listBox.children.length > 1) {
-            // this.$refs.searchInput.blur();
           if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
-            page++;
-            this.getMessageList(this.searchText, page)
+            setTimeout(()=>{
+              page++;
+              this.getMessageList(this.searchText, page)
+            },100);
           }
         }
       });
@@ -126,7 +128,7 @@
             break;
           case "disease":
             searchData = {
-              diseaseNameQuery: searchContent
+              illnessNameQuery: searchContent
             };
             url = XHRList.disease;
             break;

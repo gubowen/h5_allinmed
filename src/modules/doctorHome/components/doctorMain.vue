@@ -32,7 +32,7 @@
       <section class="online-visitsBox">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">网上问诊服务</p>
-          <span class="doc-lastPerson not-usable-num">剩余人数：20人</span>
+          <span class="doc-lastPerson" v-show="isShowCureStatus" :class="{'isUsable-num':isUsableNum,'not-usable-num':isNotUsable,'not-usable-off':isOpenCure}">{{isCureStatusText}}</span>
         </section>
         <section class="doc-onlineContentBox">
           <!--图文问诊-->
@@ -41,12 +41,12 @@
               <p>图文问诊<span>60元</span></p>
             </section>
             <section class="onlineForChart-right">
-              <p @click="payPopupShow=true">去问诊</p>
+              <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
-          <section class="doc-onlineForFree">
-            <section class="onlineForFree-ticket" @click="payPopupShow=true"></section>
+          <section class="doc-onlineForFree" v-show="true">
+            <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable}" ></section>
           </section>
         </section>
       </section>
@@ -97,41 +97,19 @@
         </section>
         <section class="individual-textBox">北京协和医和医学进步奖。掌握了一套非手术治疗颈肩腰腿痛的有效疗法，即洛阳正骨治筋疗法。优值牵引法：采用床头多功能牵引架，根据患者不同的病情采用相对应的牵引角度、牵引重量、牵引时间，进行牵引治疗以达正骨理筋的治疗。</section>
       </section>
-
-
     </section>
-
-    <transition name="fade">
-      <confirm
-        :confirmParams="{
-          'ensure':'确定',
-          'cancel':'取消',
-          'content':confirmContentText
-//          'title':'当前WIFI未连接'
-          }" v-if="levelShow" :showFlag.sync="levelShow" @cancelClickEvent="loginCancelEvent"
-        @ensureClickEvent="loginEnsureEvent"></confirm>
-    </transition>
-    <transition name="fade">
-      <confirm
-        :confirmParams="{
-          'ensure':'离开',
-          'cancel':'再想想',
-//          'content':'确定离开吗？',
-          'title':'确定离开吗？'
-          }" v-if="backShow" :showFlag.sync="backShow" @cancelClickEvent="loginBackCancelEvent"
-        @ensureClickEvent="loginEnsureEventWait"></confirm>
-    </transition>
     <transition name="fade">
       <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
     <!--支付弹层-->
-    <payPopup v-if="payPopupShow" @docCallBack="docStatusChange" :payPopupShow.sync="RuleIcon" :payPopupParams = "{
-        docName:'王国强',
-        docId:'1493879076659',
-        caseId:'1493879076669',
-        patientId:'1493879076667',
-        patientCustomerId:'1493879076667',
-        from:'docMain'
+    <payPopup v-if="payPopupShow" @paySuccess="paySuccessBack" @docCallBack="docStatusChange" :payPopupShow.sync="payPopupShow" :payPopupParams = "{
+        docName:docName,
+        docId:docId,
+        caseId:caseId,
+        patientId:patientId,
+        patientCustomerId:patientCustomerId,
+        from:from,
+        payType:payType,
     }"></payPopup>
     <!--支付弹层完成-->
     <loading v-show="finish"></loading>
@@ -189,18 +167,32 @@
           levelShow:false,
           backShow:false,
           payPopupShow:false,
-          logoUrl:'', //头像
-          fullName:'',//姓名
-          company:"", //医院
-          medicalTitle:"", //职称
-          areasExpertise:"", //专科
-          illnessMapList:"", //擅长疾病
-          operationMapList:"", //擅长手术
+          isShowCureStatus:true,
+          isUsableNum:false,
+          isCureStatusText:'',
+          docName:'王国强',                     //医生姓名
+          docId:api.getPara().doctorId,                        //医生ID
+          caseId:api.getPara().caseId,                         //病历ID
+          patientId:api.getPara().patientId,                   //患者ID
+          patientCustomerId:api.getPara().patientCustomerId,   //患者所属用户ID
+          from:'docMain',                       //来源医生主页
+          payType:'',                           //是否免费
+
+          logoUrl:'',           //头像
+          fullName:'',          //姓名
+          company:"",           //医院
+          medicalTitle:"",      //职称
+          areasExpertise:"",    //专科
+          illnessMapList:"",    //擅长疾病
+          operationMapList:"",  //擅长手术
           yesteryear: new Date().getFullYear()-2,       //前年年份
-          yesteryearOperationNum:"",                //前年
-          precedingYear:new Date().getFullYear()-1,     //去年年份
-          precedingYearOperationNum:"",            //去年
+          yesteryearOperationNum:"",                    //前年
+          precedingYear:new Date().getFullYear()-1,    //去年年份
+          precedingYearOperationNum:"",                 //去年
           outpatientClinic:"",                     //门诊是否设置
+          isUseCureForFree:"",                     //是否使用过免费问诊
+          isOpenCure:false,                        //是否开启问诊
+          isNotUsable:false,                       //是否可用
           isPersonalShow:false,                    //个人简介是否显示
           params: {
             getPersonalProParams: {
@@ -209,74 +201,71 @@
               maxResult: 9999,
             },
             getDocMainParams: {
-              customerId: "1493879076659",
+              customerId:api.getPara().doctorId,
               logoUseFlag: 3
             },
             isReceiveClinicParams:{
-              customerId: "1493879076659",
+              customerId: api.getPara().doctorId,
               hospitalId: "24362"
             },
             isCreateChatParams:{
               patientId: api.getPara().patientId,    //患者ID
-              doctorId: "1493879076659",                // 医生ID
+              doctorId: api.getPara().doctorId,      // 医生ID
               orderType: 1,
               orderSourceType: 0,
               sortType: 2
             },
             currentByCustomerIdParams: {
-              customerId: "1493879076659",
-              caseId: "1501642266017"
+              customerId: api.getPara().doctorId,
+              caseId: api.getPara().caseId
+            },
+            getConsultationIdParams:{
+              caseId: api.getPara().caseId,
+              customerId: api.getPara().doctorId,
+              isCreate: 1,
+              isValid: 1,
+              consultationType: 1,
+              firstResult: 0,
+              maxResult: 999
+            },
+            createConsultationIdParams:{
+              caseId: api.getPara().caseId,
+              customerId: api.getPara().doctorId,
+              patientCustomerId: api.getPara().patientCustomerId,
+              patientId: api.getPara().patientId,
+              consultationType: 1,
+              consultationState: -1,
+              consultationLevel: '',
+              siteId: 17,
+              caseType: 0
             }
           }
-
         }
       },
       mounted() {
         document.title="医生主页";
-        this.$validator.updateDictionary({
-          en: {
-            custom: {
-              //手机号的验证
-              phone: {
-                required: '请输入手机号码',
-                mobile: '请输入正确的手机号码',
-              },
-              //患者关系的验证规则
-              codeInput: {
-                required: '请输入短信验证码',
-                digits: '验证码错误'
-              },
-            }
-          }
-        });
+        let _this=this;
         this.getPersonalProDate();
         this.getDocInfo();
         this.getIsReceiveClinic();
         this.isCreateChatForFree();
         this.questionStatus({callBack:(data)=>{
-          console.log(data)
+          _this.checkPatientState(data);
         }});
       },
-//      beforeRouteLeave (to, from, next) {
-//        // 导航离开该组件的对应路由时调用
-//        // 可以访问组件实例 `this`
-//        if (to.name === "login") {
-//          this.backShow = true;
-//        }
-//        next(this.pageBackEnsure);
-//      },
       methods: {
-        validateBlur(name) {
-          this.$validator.validateAll();
-          if (this.errors.has(name)) {
-            this.toastComm(this.errors.first(name));
-          }
-        },
         //view cureTime
         viewCureTime(){
+          let _this=this;
           this.ruleShow=true;
           this.$router.push({
-            name:'clinicDetails'
+            name:'clinicDetails',
+            params:{
+              docterId: _this.docId,
+              hospitalId: _this.hospitalId,
+              docName: _this.fullName,
+              docTitle: _this.medicalTitle
+            }
           })
         },
         //获取医生信息
@@ -294,21 +283,22 @@
               _this.finish = false;
               console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                let _data=data.responseObject.responseData.dataList[0];
-                _this.logoUrl=_data.logoUrlMap.logoUrl;
-                _this.fullName=_data.authMap.fullName;
-                _this.company=_data.authMap.company;
-                _this.medicalTitle=_data.authMap.medicalTitle;
-                _this.areasExpertise=_data.authMap.areasExpertise;
-                _this.precedingYearOperationNum=_data.authMap.precedingYearOperationNum;
-                _this.yesteryearOperationNum=_data.authMap.yesteryearOperationNum;
-                _this.illnessMapList=_data.illnessMapList;
-                _this.operationMapList=_data.operationMapList;
-              }else{
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
+                let _data = data.responseObject.responseData.dataList[0],
+                  _logoUrl = _data.logoUrlMap.logoUrl;
+                _this.fullName = _data.authMap.fullName;
+                _this.company = _data.authMap.company;
+                _this.hospitalId = _data.authMap.companyId;
+                _this.medicalTitle = _data.authMap.medicalTitle;
+                _this.areasExpertise = _data.authMap.areasExpertise;
+                _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
+                _this.yesteryearOperationNum = _data.authMap.yesteryearOperationNum;
+                _this.illnessMapList = _data.illnessMapList;
+                _this.operationMapList = _data.operationMapList;
+                if (_logoUrl.length > 0) {
+                  _this.logoUrl = _logoUrl;
+                } else {
+                  _this.logoUrl = require("../../../common/image/img00/doctorHome/docLogo_default.jpg");
+                }
               }
             },
             fail(err){
@@ -334,25 +324,148 @@
               console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let  _orderAmount = data.responseObject.responseData.dataList[0].orderAmount;
-                if (_orderAmount > 0) {
+                if (!parseInt(_orderAmount) > 0) {
                   //未使用免费问诊
-
+                  _this.isUseCureForFree=false;
                 } else {
                   //已使用免费问诊
-
+                  _this.isUseCureForFree=true;
                 }
               }else{
-
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
+                //无数据时   展示未使用免费问诊
+                _this.isUseCureForFree=false;
               }
             },
             fail(err){
               _this.finish = false;
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //支付成功回调
+        paySuccessBack(data){
+          let _this=this,
+              _orderAmount = data.orderAmount,         //金额
+              _orderFrequency = data.orderFrequency,   //次数
+              _orderType = data.orderType;             //0-免费
+          switch (_orderType){
+            case 0:
+              //免费
+              console.log("创建免费问诊");
+              _this.getConsultationId({orderType:_orderType,callBackFn:()=>{
+                _this.reloadIMTime({
+                  data:data,
+                  callBack:()=>{
+                    console.log("免费--跳页");
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                  }
+                });
+              }});
+              break;
+            case 1:
+              //图文问诊
+              console.log("创建图文问诊");
+              _this.getConsultationId({orderType:_orderType,callBackFn:()=>{
+                _this.reloadIMTime({
+                  data:data,
+                  callBack:()=>{
+                    console.log("收费--跳页");
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                  }
+                });
+              }});
+              break;
+          }
+        },
+        //获取consultationId
+        getConsultationId(org) {
+          let _this = this;
+          api.ajax({
+            url: XHRList.getConsultationId,
+            method: "POST",
+            data: _this.params.getConsultationIdParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                let consultationIds = data.responseObject.responseData.dataList.consultationId;
+                if(consultationIds ==0){
+                  _this.createConsultationId({
+                    createType:org.orderType,
+                    callBack:()=>{
+                      org.callBackFn();
+                    }
+                  });
+                }else{
+                  _this.consultationId = data.responseObject.responseData.dataList.consultationId;
+                  org.callBackFn();
+                }
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //创建consultationId
+        createConsultationId(create){
+          let _this = this;
+          if (create.createType==0){
+            //免费问诊
+            _this.params.createConsultationIdParams.consultationLevel=0;
+          }else {
+            //图文问诊
+            _this.params.createConsultationIdParams.consultationLevel=1;
+          }
+          api.ajax({
+            url: XHRList.triageAssign,
+            method: "POST",
+            data: _this.params.createConsultationIdParams,
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            timeout: 20000,
+            done(data) {
+              _this.finish = false;
+              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
+                _this.consultationId = data.responseObject.responseData.dataList.consultationId;
+                create.callBack();
+              }
+            },
+            fail(err){
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
+            }
+          })
+        },
+        //刷新IM时间
+        reloadIMTime(count){
+          const _this = this;
+          api.ajax({
+            url: XHRList.updateCount,
+            method: "POST",
+            data: {
+              consultationId: _this.consultationId,
+              frequency: count.data.orderFrequency,
+              frequencyType: "2",
+              consultationLevel: count.data.orderType,
+              consultationState: -1
+            },
+            beforeSend: function () {
+              _this.finish = true;
+            },
+            done(data) {
+              _this.finish = false;
+              if (data.responseObject.responseStatus) {
+                localStorage.setItem("sendTips",JSON.stringify(count.data));
+              }
             }
           })
         },
@@ -373,11 +486,6 @@
               if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _dataList = data.responseObject.responseData.dataList;
                 Obj.callBack(_dataList);
-              }else{
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
               }
             },
             fail(err){
@@ -388,28 +496,37 @@
           })
         },
         checkPatientState (cps) {
-          var _remainNum = cps.dataList.remainNum,
-            _state = cps.dataList.state,
-            _conState = cps.dataList.conState;
+          let _this=this,
+              _remainNum = cps.remainNum,
+              _state = cps.state,
+              _conState = cps.conState,
+              _consultationState = cps.consultationState;    //0-进行中  2-已拒绝
           if (_state == 1) {
             //开启问诊
+            _this.isOpenCure=false;
             if (_remainNum !== 0) {    //_remainNum!==0 (-1次数无限)
               //剩余人数>0
               if (_remainNum > 0) {
-                var _text = "剩余名额" + _remainNum + "人";
-                $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('lastNumTotal').siblings().text(_text).addClass('isLastNum');
+                _this.isNotUsable=false;
+                _this.isUsableNum=true;
+                _this.isCureStatusText = `今日剩余名额：${_remainNum}人`;
+              }else {
+                _this.isShowCureStatus = false;
               }
             } else {
               //无剩余名额
-              $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('lastNumNull').siblings().text("今日名额已用完").addClass('isNullNum');
-              $('.onlineVisit .goInquiryBox').find('.inquiryType').siblings().addClass('forbid');
-              $('.goRefer').addClass('forbid');
+              _this.isNotUsable=true;
+              _this.isCureStatusText = `今日名额：0`;
             }
           } else {
             //未开启问诊
-            $('.onlineVisit .moudle_title').find('.netVisitIcon_onLine').addClass('isOpenQuestion').siblings().text("医生未开启问诊").addClass('isNotOpenQues');
-            $('.onlineVisit .goInquiryBox').find('.inquiryType').siblings().text("暂不接诊").addClass('forbid');
-            $('.goRefer').addClass('forbid');
+            _this.isOpenCure = true;
+            _this.isCureStatusText = "医生未开启问诊";
+            _this.isNotUsable = true;
+          }
+          //医生拒绝
+          if(_consultationState==2){
+            _this.isNotUsable = true;
           }
         },
         //是否接受门诊
@@ -491,82 +608,20 @@
         },
         //医生端状态更改
         docStatusChange(statueType){
+          let _this=this;
           switch (statueType){
             case 1:
               //暂未开启问诊
-              console.log("4156465")
+              _this.isOpenCure = true;
+              _this.isCureStatusText = "医生未开启问诊";
+              _this.isNotUsable = true;
               break;
             case 2:
-              //问诊名额已满
-
+              //问诊名额:0
+              _this.isNotUsable=true;
+              _this.isCureStatusText = `今日名额：0`;
               break;
           }
-        },
-        //获取验证码
-        getCodeApi() {
-          this.$validator.validateAll();
-          if (this.getCode){
-            if (this.errors.has('phone')) {
-              this.toastComm(this.errors.first('phone'));
-              return;
-            }
-          }else{
-            return;
-          }
-          let _this = this;
-          _this.params.getCodeParams.account = _this.phoneMessage;
-          api.ajax({
-            url: XHRList.getCode,
-            method: "POST",
-            data: _this.params.getCodeParams,
-            beforeSend: function () {
-              _this.finish = true;
-            },
-            timeout: 20000,
-            done(data) {
-              _this.finish = false;
-              if (data.responseObject.responsePk !== 0&&data.responseObject.responseStatus) {
-                _this.toastComm("验证码已发送");
-                _this.imgUrl = _this.toastImg.success;
-                _this.countDown(60);
-                _this.params.codeCheck.id=data.responseObject.responsePk
-              }else{
-                _this.errorMsg = data.responseObject.responseMessage;
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
-              }
-            },
-            fail(err){
-              _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
-            }
-          })
-        },
-        //验证码倒计时
-        countDown(time) {
-          let _this = this;
-          let _codeTime = time;
-          _this.codeTime = _codeTime-- + "s";
-          _this.getCode = false;
-          let inn = window.setInterval(()=>{
-            if (_codeTime > 0) {
-              _this.codeTime = _codeTime-- + "s";
-            } else {
-              _this.getCode = true;
-              _this.codeTime = "重新获取";
-              clearInterval(inn);
-            }
-          }, 1000);
-        },
-        //同意条款
-        ruleClick(){
-          this.ruleShow=true;
-          this.$router.push({
-            name: ""
-          });
         },
         //toast提示
         toastComm(text){
@@ -578,20 +633,6 @@
             _this.imgUrl = '';
           }, 2000)
         },
-        loginEnsureEventWait(){
-          this.pageBackEnsure = true;
-          this.backShow = false;
-        },
-        loginBackCancelEvent(){
-          this.pageBackEnsure = false;
-          this.backShow = false;
-        },
-        //url参数替换
-        urlReplace(url, arg, val) {
-          let pattern = arg+'=([^&]*)';
-          let replaceText = arg+'='+val;
-          return url.match(pattern) ? url.replace(eval('/('+ arg+'=)([^&]*)/gi'), replaceText) : (url.match('[\?]') ? url+'&'+replaceText : url+'?'+replaceText);
-        }
       },
       components: {
         loading,
@@ -644,13 +685,13 @@
                 padding-right: rem(14px);
                 display: inline-block;
                 .doc-major{
-
+                  margin-right: rem(16px);
                 }
                 .doc-presents{
-                  margin-left: rem(16px);
+                  margin-right: rem(16px);
                 }
                 .doc-presents-two{
-                  margin-left: rem(16px);
+                  /*margin-left: rem(16px);*/
                 }
               }
               .doc-presentAge{
@@ -807,16 +848,18 @@
             margin-top: rem(10px);
             position: relative;
             padding-left: rem(24px);
-            &:before {
-              position: absolute;
-              content: '';
-              width: rem(20px);
-              height: rem(22px);
-              background: url("../../../common/image/img00/doctorHome/remaining@2x.png") no-repeat center;
-              background-size: 100% 100%;
-              top: 50%;
-              margin-top: rem(-10px);
-              left: 0;
+            &.isUsable-num{
+              &:before {
+                position: absolute;
+                content: '';
+                width: rem(20px);
+                height: rem(22px);
+                background: url("../../../common/image/img00/doctorHome/remaining@2x.png") no-repeat center;
+                background-size: 100% 100%;
+                top: 50%;
+                margin-top: rem(-10px);
+                left: 0;
+              }
             }
             &.not-usable-off {
               color: #ACACAC;
@@ -891,6 +934,10 @@
                   background: #2FC5BD;
                   box-shadow: 0 4px 8px 0 rgba(89,209,202,0.40);
                   border-radius: rem(100px);
+                  &.notUsableCure{
+                    background: #E2E2E2;
+                    box-shadow: none;
+                  }
                 }
               }
             }
