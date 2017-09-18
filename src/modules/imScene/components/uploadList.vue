@@ -96,6 +96,9 @@
       }
     },
     mounted(){
+
+    },
+    activated(){
       this.getUploadList();
     },
     methods: {
@@ -245,7 +248,7 @@
     }
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped="">
   @import "../../../../scss/library/_common-modules";
 
   .main-header.fileUpload {
@@ -256,6 +259,7 @@
   .main-inner.tc-upLoadFile {
     background-color: #ffffff;
     padding-top: rem(22px);
+    height: auto;
   }
 
   .upload-wrapper {
