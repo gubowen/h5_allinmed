@@ -27,14 +27,14 @@
             </div>
       </div>
     </transition>
-    <transition name="fade">
-      <confirm :confirmParams="{
-          'ensure':'去支付',
-          'cancel':'取消',
-          'content':'您有一份相同订单尚未过期，确定完成支付吗？'
-          }" v-if="levelShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureEvent">
-      </confirm>
-    </transition>
+    <!--<transition name="fade">-->
+      <!--<confirm :confirmParams="{-->
+          <!--'ensure':'去支付',-->
+          <!--'cancel':'取消',-->
+          <!--'content':'您有一份相同订单尚未过期，确定完成支付吗？'-->
+          <!--}" v-if="levelShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureEvent">-->
+      <!--</confirm>-->
+    <!--</transition>-->
     <transition name="fade">
       <confirm :confirmParams="{
           'ensure':'确定',
@@ -93,7 +93,7 @@
         repeatOrderType:"",
         repeatOrderFrequency:"",
         payOrderShow:false,
-        levelShow: false,
+//        levelShow: false,
         noStateShow:false,
         noMoreShow:false,
         hasCommunShow:false,
@@ -117,11 +117,10 @@
           url: XHRList.getCurrentState,
           method: "POST",
           data: {
-            customerId: this.payPopupParams.docId,
-            caseId:this.payPopupParams.caseId
+            customerId: that.payPopupParams.docId,
+            caseId:that.payPopupParams.caseId
           },
           done (data) {
-              debugger
             if (data &&data.responseObject.responseData.dataList) {
               const items = data.responseObject.responseData.dataList;
               if(items.state == 0){
@@ -138,7 +137,7 @@
                     that.payOrderShow = true;
                     that.getPrice();
                   }else{
-                    that.isHasOrder(opt);
+                    that.noOrder(opt);
                   }
                 }
               }
@@ -153,7 +152,7 @@
           url: XHRList.getVisitDetails,
           method: "POST",
           data: {
-            customerId: this.payPopupParams.docId
+            customerId: that.payPopupParams.docId
           },
           done (data) {
             if (data.responseObject.responseData.dataList) {
@@ -175,8 +174,8 @@
             url: XHRList.getConsultationId,
             method: "post",
             data: {
-              caseId: this.payPopupParams.caseId,
-              customerId: this.payPopupParams.docId,
+              caseId: that.payPopupParams.caseId,
+              customerId: that.payPopupParams.docId,
               isCreate: 1,
               isValid: 1,
               consultationType: 1,
@@ -208,8 +207,8 @@
           url: XHRList.getOrderDetails,
           method: "POST",
           data: {
-            patientId: this.payPopupParams.patientId,
-            doctorId: this.payPopupParams.docId,
+            patientId: that.payPopupParams.patientId,
+            doctorId: that.payPopupParams.docId,
             orderType: 1,
             orderSourceId: opt.consultationId,
             status: 1,
@@ -227,7 +226,7 @@
                 that.repeatConsultationId = items.orderSourceId;
                 that.repeatOrderAmount = items.orderAmount;
                 that.repeatOrderType = items.orderSourceType;
-                that.levelShow = true;
+//                that.levelShow = true;
               } else {//没有重复订单
                 that.noOrder({
                   cId: opt.consultationId,
@@ -290,7 +289,7 @@
       },
       //提示弹层关闭执行
       cancelEvent(_type){
-        this.levelShow = false;
+//        this.levelShow = false;
         this.noStateShow = false;
         this.noMoreShow = false;
         this.hasCommunShow = false;
@@ -316,7 +315,7 @@
                 orderFrequency:that.repeatOrderFrequency//聊天次数
               });
               that.closePopup();
-              that.levelShow = false;
+//              that.levelShow = false;
             }
           }
         });
@@ -331,8 +330,8 @@
           url: XHRList.getConsultationId,
           method: "post",
           data: {
-            caseId: this.payPopupParams.caseId,
-            customerId: this.payPopupParams.docId,
+            caseId: that.payPopupParams.caseId,
+            customerId: that.payPopupParams.docId,
             isCreate: 1,
             isValid: 1,
             consultationType: 1,

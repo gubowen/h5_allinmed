@@ -78,7 +78,7 @@
           ]
         },
         illnessList:"",
-        docterId:"",//医生Id
+        doctorId:"",//医生Id
         hospitalId:"",//医院Id
         docName:"",
         docTitle:""
@@ -91,7 +91,7 @@
     methods:{
       getClinicDetails(){
         const that = this;
-        this.docterId = this.$route.params.docterId;
+        this.doctorId = this.$route.params.doctorId;
         this.hospitalId = this.$route.params.hospitalId;
         this.docName = this.$route.params.docName;
         this.docTitle = this.$route.params.docTitle;
@@ -99,7 +99,7 @@
           url: XHRList.getClinicDetails,
           method: "post",
           data: {
-            customerId:that.docterId,
+            customerId:that.doctorId,
             hospitalId:that.hospitalId
           },
           headers: {
@@ -135,7 +135,7 @@
           url: XHRList.getCloseTime,
           method: "post",
           data: {
-            customerId:that.docterId,
+            customerId:that.doctorId,
             firstResult:0,
             maxResult:1,
             isAll:0
