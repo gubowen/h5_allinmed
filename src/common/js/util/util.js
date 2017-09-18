@@ -15,7 +15,7 @@ class Api {
   }
 
   ajax(param) {
-    axios.interceptors.request.use(function (config) { //在请求发出之前进行一些操作
+    axios.interceptors.request.use(function(config) { //在请求发出之前进行一些操作
       if (document.querySelector(".ev-loading")) {
         document.querySelector(".ev-loading").style.display = "block";
       }
@@ -27,10 +27,10 @@ class Api {
       url: param.url,
       method: param.method,
       data: param.data,
-      transformRequest: [function (data) {
+      transformRequest: [function(data) {
         return "paramJson=" + JSON.stringify(data);
       }],
-      headers: {'X-Requested-With': 'XMLHttpRequest'},
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
       timeout: 30000
     }).then((res) => {
       param.done(res.data);
@@ -62,7 +62,7 @@ class Api {
     return [...new Set(arr)];
   }
 
-  removeByValue = function (arr, value) {
+  removeByValue = function(arr, value) {
     for (let i = 0; i < this.length; i++) {
       if (arr[i] == val) {
         arr.splice(i, 1);
@@ -87,8 +87,7 @@ class Api {
     for (let i = 0; i < val.length; i++) {
       if (val[i].match(/[^\x00-\xff]/ig) !== null) {
         len += 2;
-      }
-      else {
+      } else {
         len += 1;
       }
     }
@@ -117,7 +116,7 @@ class Api {
   }
 
   getConnectType() {
-    let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {tyep: 'unknown'};
+    let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || { tyep: 'unknown' };
     let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'none'];
     let _browseType = this.isWXBrowse(),
       userAgentInfo = navigator.userAgent;
@@ -201,12 +200,21 @@ class Api {
      */
     let appId = "";
     let XHRUrl = "";
-    let _currentPageUrl =  (window.location.origin + window.location.pathname + window.location.search),
+    let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
       _encodeUrl = encodeURIComponent(_currentPageUrl);
-    if (env ==2) {
+
+    let envCode = "";
+
+    if (window.location.hostname.indexOf("m1") < 0) {
+      envCode = 1;
+    } else {
+      envCode = 2;
+    }
+
+    if (envCode == 1) {
       appId = "wxe8384f7b06c169ef";
       XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
-    } else if (env == 1) {
+    } else if (envCode == 2) {
       appId = "wxaa5288ad7f627608";
       XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
@@ -251,10 +259,10 @@ class Api {
   //手机号验证
   mobileCheck() {
     let _phoneCheckParams = {
-      isValid: 1,                           //	string	是		1
-      firstResult: 0,                       //	string	是	分页参数
-      maxResult: 99999,                     //  string	是	分页参数
-      customerId: '',                       //  string	是	用户id
+      isValid: 1, //  string  是   1
+      firstResult: 0, //  string  是 分页参数
+      maxResult: 99999, //  string  是 分页参数
+      customerId: '', //  string  是 用户id
     };
     //customsId获取（customerId和patientCustomerId同时存在的话取patientCustomerId）
     if (!api.getPara().openId) {
@@ -273,10 +281,9 @@ class Api {
         url: "/mcall/patient/customer/unite/v1/getById/",
         method: 'POST',
         data: _phoneCheckParams,
-        beforeSend: function () {
-        },
+        beforeSend: function() {},
         timeOut: 2000,
-        done (data) {
+        done(data) {
           localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
           if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
             let _mobile = data.responseObject.responseData.dataList.patientCustomerUnite.mobile;
@@ -295,37 +302,37 @@ class Api {
   }
 
   //时间处理  2017年05月08日 星期一 14:20 / 2017.05.08 星期一 14:20
-  timeFormate(op){
-    let _operationTime = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
-      _timeDeal = op.time.substring(0,10).replace(/\-/g, "\/"),
+  timeFormate(op) {
+    let _operationTime = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+      _timeDeal = op.time.substring(0, 10).replace(/\-/g, "\/"),
       _timesList = new Date(_timeDeal).getDay(),
-      _timeCompare = '' ,                        //  2017年05月08日 星期一 14:20
-      _timeCompares = '' ,                       //  05月08日 星期一 14:20
+      _timeCompare = '', //  2017年05月08日 星期一 14:20
+      _timeCompares = '', //  05月08日 星期一 14:20
       _week = _operationTime[_timesList],
-      _hours = op.time.substring(11,16);
+      _hours = op.time.substring(11, 16);
     switch (parseInt(op.type)) {
-      case 1:      //2017年05月08日
+      case 1: //2017年05月08日
         _timeCompare = op.time.substring(0, 4) + "年" + op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日"; //  2017年05月08日 星期一 14:20
-        _timeCompares = op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日";                                 //  05月08日 星期一 14:20
+        _timeCompares = op.time.substring(5, 7) + "月" + op.time.substring(8, 10) + "日"; //  05月08日 星期一 14:20
         break;
-      case 2:      //2017.05.08
-        _timeCompare = op.time.substring(0, 4) + "." + op.time.substring(5, 7) + "." + op.time.substring(8, 10);  //  2017.05.08 星期一 14:20
-        _timeCompares = op.time.substring(5, 7) + "." + op.time.substring(8, 10);                                  //  05.08 星期一 14:20
+      case 2: //2017.05.08
+        _timeCompare = op.time.substring(0, 4) + "." + op.time.substring(5, 7) + "." + op.time.substring(8, 10); //  2017.05.08 星期一 14:20
+        _timeCompares = op.time.substring(5, 7) + "." + op.time.substring(8, 10); //  05.08 星期一 14:20
         break;
       case 3:
         break;
     }
-    return {year:_timeCompare,years:_timeCompares,week:_week,hour:_hours};
+    return { year: _timeCompare, years: _timeCompares, week: _week, hour: _hours };
   }
 
   MillisecondToDate(msd) {
     var time = parseFloat(msd) / 1000;
     if (null != time && "" != time) {
       if (time > 60 && time < 60 * 60) {
-        time = parseInt(time / 60.0) + "分钟";//+ parseInt((parseFloat(time /60.0) -parseInt(time /60.0)) *60) +"秒";
+        time = parseInt(time / 60.0) + "分钟"; //+ parseInt((parseFloat(time /60.0) -parseInt(time /60.0)) *60) +"秒";
       } else if (time >= 60 * 60 && time < 60 * 60 * 24) {
         time = parseInt(time / 3600.0) + "小时" + parseInt((parseFloat(time / 3600.0) -
-            parseInt(time / 3600.0)) * 60) + "分钟";//+
+          parseInt(time / 3600.0)) * 60) + "分钟"; //+
         // parseInt((parseFloat((parseFloat(time /3600.0) - parseInt(time /3600.0)) *60) -
         //     parseInt((parseFloat(time /3600.0) - parseInt(time /3600.0)) *60)) *60) +"秒";
       } else if (time >= 60 * 60 * 24) {
@@ -342,7 +349,7 @@ class Api {
     var time = parseFloat(msd) / 1000;
     if (null != time && "" != time) {
       if (time > 60 && time < 60 * 60) {
-        time = parseInt(time / 60.0) + "分钟";//+ parseInt((parseFloat(time /60.0) -parseInt(time /60.0)) *60) +"秒";
+        time = parseInt(time / 60.0) + "分钟"; //+ parseInt((parseFloat(time /60.0) -parseInt(time /60.0)) *60) +"秒";
       } else if (time >= 60 * 60 && time < 60 * 60 * 24) {
         time = parseInt(time / 3600.0) + "小时"
         // parseInt((parseFloat((parseFloat(time /3600.0) - parseInt(time /3600.0)) *60) -
@@ -357,7 +364,7 @@ class Api {
 
   }
 }
-Array.prototype.removeByValue = function (val) {
+Array.prototype.removeByValue = function(val) {
   for (let i = 0; i < this.length; i++) {
     if (this[i] == val) {
       this.splice(i, 1);

@@ -3,10 +3,16 @@
     <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
-          <article><p>医生回复剩余次数</p><span>{{lastCount}}</span>
-            <p>次</p></article>
-          <article><p>对话剩余时间</p><span>{{lastTimeText}}</span>
-            <p></p></article>
+          <article>
+            <p>医生回复剩余次数</p>
+            <span>{{lastCount}}</span>
+            <p>次</p>
+          </article>
+          <article>
+            <p>对话剩余时间</p>
+            <span>{{lastTimeText}}</span>
+            <p></p>
+          </article>
         </article>
       </transition>
       <transition-group name="fadeDown" tag="section">
@@ -765,7 +771,7 @@
           idClient: "",
           from: this.userData.account,
         });
-        console.log(window.URL.createObjectURL(e.target.files[0]));
+
         this.nim.previewFile({
           type: 'image',
           fileInput: this.$refs.imageSender,
