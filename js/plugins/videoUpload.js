@@ -95,7 +95,7 @@ var videoUpload=function(options){
                                 //alert("视频过大，请联系在线客服寻求帮助");
                                 common.topTips.show({
                                     class: "videoSize-tips",
-                                    content: "视频文件过大，无法上传，请重新拍摄"
+                                    content: "上传视频请控制在60M以内"
                                 });
                                 $('.videoSize-tips').css("z-index","5");
                                 setTimeout(function(){
@@ -108,7 +108,7 @@ var videoUpload=function(options){
                             }
                         } else {
                             common.popup({
-                                text:"格式不支持，请选择mov、mp4、avi、wmv、flv"
+                                text:"请上传mp4、mov、avi、wmv、flv格式视频"
                             });
                             //alert("格式不支持，请选择mov、mp4、avi、wmv、flv");
                             uploader.removeFile(uploader.getFile(file.id));
