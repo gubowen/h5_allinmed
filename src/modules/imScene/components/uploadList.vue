@@ -259,7 +259,8 @@
   .main-inner.tc-upLoadFile {
     background-color: #ffffff;
     padding-top: rem(22px);
-    height: auto;
+    min-height: 100%;
+    box-sizing: border-box;
   }
 
   .upload-wrapper {
