@@ -34,9 +34,31 @@ class SignUp {
 
 const dictionary = {
   zh_CN: {
-    message: {
+    messages: {
+      email: () => '邮箱格式不正确哦',
+      required: (field) => "请填写" + field
+    },
+    attributes: {
+      phone: '手机号',
+      name: '姓名',
+      hospital: '医院'
+    }
+  },
+  cn: {
+    messages: {
       email: () => '请输入正确的邮箱格式',
-      required: (field) => "请输入" + field
+      required: (field) => "请填写" + field
+    },
+    attributes: {
+      phone: '手机号',
+      name: '姓名',
+      hospital: '医院'
+    }
+  },
+  en: {
+    messages: {
+      email: () => '请输入正确的邮箱格式',
+      required: (field) => "请填写" + field
     },
     attributes: {
       phone: '手机号',
@@ -50,9 +72,9 @@ Validator.updateDictionary(dictionary);
 
 Validator.extend('special', {
   messages: {
-    en: field => '请填写真实姓名，不能输入数字及特殊符号',
+    en: field => '请填写真实姓名',
     zh_CN: (field, args) => {
-      return "请填写真实姓名，不能输入数字及特殊符号"
+      return "请填写真实姓名"
     }
   },
   validate: value => {
@@ -88,5 +110,9 @@ Validator.extend('mobile', {
     return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/).test(value)
   }
 });
+
+
+
+
 
 new SignUp();

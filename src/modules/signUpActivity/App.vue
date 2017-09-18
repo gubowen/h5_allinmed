@@ -40,6 +40,7 @@
                     <li @click.stop="select(1)" :class="{'active':this.selectValue=='主任医生'}">主任医生</li>
                     <li @click.stop="select(2)" :class="{'active':this.selectValue=='副主任医生'}">副主任医生</li>
                     <li @click.stop="select(3)" :class="{'active':this.selectValue=='主治医生'}">主治医生</li>
+                    <li @click.stop="select(4)" :class="{'active':this.selectValue=='其他'}">其他</li>
                   </ul>
                 </div>
               </span>
@@ -49,7 +50,7 @@
             <div>
               <span class="apply_title">手机号</span>
               <span class="apply_text">
-                <input class="apply_text mobile" type="text" placeholder="填写真实手机号码 " maxlength="11" v-model="mobile" name="phone" v-validate="'required|mobile'"/>
+                <input class="apply_text mobile" type="tel" placeholder="填写真实手机号码 " maxlength="11" v-model="mobile" name="phone" v-validate="'required|mobile'"/>
               </span>
             </div>
             <p class="nameMobileMessage error-message" v-show="errors.has('phone')">{{errors.first('phone') }}</p>
@@ -58,14 +59,14 @@
             <div>
               <span class="apply_title">验证码</span>
               <span class="apply_text">
-                <input class="apply_checkInput" type="text" placeholder="填写短信验证码" v-model="checkInput" maxlength="4"/>
+                <input class="apply_checkInput" type="tel" placeholder="填写短信验证码" v-model="checkInput" maxlength="4"/>
                 <a class="apply_checkCode" @click="checkCode()" :class="{'on':checkClickStatus}">{{checkMessage}}</a>
               </span>
             </div>
             <p class="nameCheckMessage error-message"></p>
           </li>
         </ul>
-        <a class="saveBtn" @click="submit()"></a>
+        <a class="saveBtn" @click="validator(submit)"></a>
       </div>
 
       <!--<div class="apply_message">-->
@@ -82,7 +83,14 @@
         <img  src="../../common/image/img00/signUpActivity/04.png">
       </div>
       <img v-show="!moreFlag" src="../../common/image/img00/signUpActivity/05.png">
+      <section class="middle-tip-modal popup" :class="{'show':popupText.length>0}">
+        <figure class="middle-tip-box-text">
+          <!--<img :src="popupImg" alt=""/>-->
+          <p class="popup-text">{{popupText}}</p>
+        </figure>
+      </section>
     </div>
+
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -102,108 +110,143 @@
         moreFlag: false,
         nameCheckMessage: '',
         simulateSelectStatus:false,
-        selectValue:''
+        selectValue:'',
+        validCode:'',
+        id:'',
+        popupText:'',
+        popupImg:''
       }
     },
     methods: {
       submit(){
-        let _this = this;
-        let items = this.$validator.errors.items;
-        if (items.length > 0) {
-              return false;
-        }
-
         let data = {
-          name: _this.name,
-          hospital: _this.hospital,
-          career: _this.career,
+          doctorName: _this.name,
+          hospitalName: _this.hospital,
+          titleName: _this.career,
           mobile: _this.mobile,
+          isValid:'1',
+          sendSiteId:'',
           checkInput: _this.checkInput
         };
+        axios({
+          method: 'post',
+          url: '/mcall/tocure/cms/activity/doctor/v1/create',
+          data: data,
+          responseType: 'json',
+          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          transformRequest: [function (data) {
+            data = "paramJson=" + JSON.stringify(data);
+            return data;
+          }]
+        }).then(function (res) {
+            if(res.data.responseStatus){
 
-//        axios({
-//          method: 'post',
-//          url: '',
-//          data: data,
-//          responseType: 'json',
-//          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-//          transformRequest: [function (data) {
-//            data = "paramJson=" + JSON.stringify(data);
-//            return data;
-//          }]
-//        }).then(function (res) {
-//
-//
-//        }).catch(function (error) {
-//          console.log("请求失败：" + error);
-//        });
+            }else{
+
+            }
+          console.log(res);
+        }).catch(function (error) {
+          console.log("请求失败：" + error);
+        });
         _this.nameCheckMessage = '验证码错误';
         _this.nameCheckMessage = '验证码失效，请重新获取';
         _this.nameCheckMessage = '验证码获取次数过多，请明日再试';
 
       },
-      popup(obj) {
-        if ($(".popup").length == 0) {
-          $("body").append('<section class="middle-tip-modal popup">' +
-
-            '<figure class="middle-tip-box-text">' +
-            (obj.hasImg ? '<img src="/image/img00/login/save_loading.png" alt="">' : '') +
-            '<p class="popup-text">' + obj.text + '</p> ' +
-
-            '</figure>' +
-            '</section>');
-
-          setTimeout(function () {
-            $(".popup").addClass('show')
-          }, 100);
-        } else {
-          $(".popup").addClass('show');
-          $(".tipText").text(obj.text);
-          if (!obj.hasImg) {
-            $(".middle-tip-box-text img").hide();
-          } else {
-            $(".middle-tip-box-text img").show();
-          }
+      validator(callback){
+        let _this = this;
+        let items = this.$validator.errors.items;
+        if (items.length > 0) {
+          return false;
         }
-        setTimeout(function () {
-          // $(".popup").removeClass('show');
-          $(".popup").remove();
-        }, 3000)
+        let data = {
+          validCode:_this.validCode,
+          id : _this.id,
+          isValid:1,
+        };
+        axios({
+          method: 'post',
+          url: 'mcall/customer/send/code/v1/update',
+          data: data,
+          responseType: 'json',
+          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          transformRequest: [function (data) {
+            data = "paramJson=" + JSON.stringify(data);
+            return data;
+          }]
+        }).then(function (res) {
+          if(res.data.responseStatus){
+            if(callback){
+              callback();
+            }
+          }else{
+            _this.popup({
+                text:'验证码错误',
+                hasImg:'../../common/image/img00/signUpActivity/fail.png'
+            })
+          }
+          console.log(res);
+        }).catch(function (error) {
+          console.log("请求失败：" + error);
+        });
+
       },
       more(){
         this.moreFlag = !this.moreFlag;
       },
       checkCode(){
         let _this = this;
-//        axios({
-//          method: 'post',
-//          url: '',
-//          data: data,
-//          responseType: 'json',
-//          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-//          transformRequest: [function (data) {
-//            data = "paramJson=" + JSON.stringify(data);
-//            return data;
-//          }]
-//        }).then(function (res) {
+        let data ={
+          typeId:'6',      //	1-手机号找回密码 2-账号验证(1.绑定手机、手机号注册) 3-手机验证码快捷登录4-老患者报到5-患者注册6-医生报名
+          account:_this.mobile,      //账号
+          codeLength:'4',  //代码长度
+          accountType:'0', //0-手机 1-邮箱
+          operateType:'6'  //1-绑定手机 2－修改手机号 3-手机号找回密码 5-手机号注册 8-手机号快捷登录6-医生报名
+        };
+        axios({
+          method: 'post',
+          url: '/mcall/customer/send/code/v1/create/',
+          data: data,
+          responseType: 'json',
+          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+          transformRequest: [function (data) {
+            data = "paramJson=" + JSON.stringify(data);
+            return data;
+          }]
+        }).then(function (res) {
+            console.log(res);
+            if(res.data.responseObject.responseStatus){
+              _this.validCode  = res.data.responseObject.responseData.validCode;
+              _this.id =  res.data.responseObject.responseData.responsePk;
+              _this.popupText ='验证码已发送';
+              _this.popupImg ='../../common/image/img00/signUpActivity/successful.png';
 
-        if (!_this.checkClickStatus) {
+              setTimeout(function () {
+                  _this.popupText ='';
+                }, 2000);
 
 
-          let i = 10;
-          _this.checkMessage = i + 's';
-          _this.checkClickStatus = true;
-          _this.time = setInterval(function () {
-            i--;
-            _this.checkMessage = i + "S";
-            if (i === 0) {
-              clearInterval(_this.time);
-              _this.checkMessage = "重新获取";
-              _this.checkClickStatus = false;
-              i = 10;
+              if (!_this.checkClickStatus) {
+
+                let i = 10;
+                _this.checkMessage = i + 's';
+                _this.checkClickStatus = true;
+                _this.time = setInterval(function () {
+                  i--;
+                  _this.checkMessage = i + "S";
+                  if (i === 0) {
+                    clearInterval(_this.time);
+                    _this.checkMessage = "重新获取";
+                    _this.checkClickStatus = false;
+                    i = 10;
+                  }
+                }, 1000);
+              }
             }
-          }, 1000);
-        }
+        })
+//          .catch(function (error) {
+//          console.log("请求失败：" + error);
+//        });
       },
       validateBlur(name) {
         console.log(this.$validator);
@@ -223,11 +266,10 @@
           case 1: this.selectValue = '主任医生' ;break;
           case 2: this.selectValue = '副主任医生' ;break;
           case 3: this.selectValue = '主治医生' ;break;
+          case 4: this.selectValue = '其他' ;break;
         }
       }
-//        }).catch(function (error) {
-//          console.log("请求失败：" + error);
-//        });
+
     },
     mounted(){
 
@@ -319,7 +361,7 @@
             height:rem(68px);
             margin-top:rem(6px);
             width: 38%;
-            border-radius: 4px;
+            border-radius: rem(4px);
             background: #009BFF;
             @include font-dpr(14px);
             display: inline-block;
@@ -327,14 +369,14 @@
             cursor: pointer;
             float:right;
             &.on {
-              background: #fff;
-              color: #000;
+              background: #C9CDCF;
+              border-radius: rem(4px);
+              color: #FFFFFF;
               letter-spacing: 0;
               line-height:rem(68px);
               height:rem(68px);
               margin-top:rem(6px);
               width: 38%;
-              border-radius: 4px;
               @include font-dpr(14px);
               display: inline-block;
               text-align: center;
@@ -344,6 +386,7 @@
             }
           }
           .apply_select {
+
             @include font-dpr(15px);
             width: 100%;
             height:rem(80px);
@@ -364,24 +407,39 @@
             margin-top:0;
             width: 100%;
             left:0;
-            background: #fff;
+            background: #F4F7F9;
+            box-shadow: 0 rem(16px) rem(30px) 0 rgba(0,0,0,0.20);
+            border-radius: rem(8px);
+            z-index: 2;
             li{
+              @include font-dpr(17px);
+              color: #222222;
+              letter-spacing: 0;
               width: 100%;
               height: rem(80px);
               line-height: rem(80px);
               text-align: center;
               padding:0;
-              background: #F4F7F9;
+              background: #FFFFFF;
               display: inline-block;
               outline: none;
               border: none;
               box-sizing: border-box;
               border-bottom:1px solid #fff;
             &.active{
-              background: #fff;
+              background: #F4F7F9;
+            }
+            &:last-child{
+              border-bottom-right-radius:rem(8px);
+              border-bottom-left-radius:rem(8px);
             }
             }
           }
+        }
+        .error-message{
+          @include font-dpr(12px);
+          color: #FA787A;
+          line-height: rem(24px);
         }
       }
     }
@@ -427,9 +485,6 @@
     display: block;
   }
   .popup {
-    &.right {
-      left: 91%;
-    }
     position: absolute;
     top: 50%;
     left: 50%;
