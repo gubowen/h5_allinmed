@@ -257,11 +257,12 @@
        width: 100%;
      }
     .content-information{
+      width:100%;
+      box-sizing: border-box;
       position: absolute;
       top:rem(82px);
       left:0;
       padding: 0 rem(50px)  0 rem(50px);
-      box-sizing: border-box;
       height:rem(833px);
 
     .flagMessage {
