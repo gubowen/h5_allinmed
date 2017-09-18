@@ -10,7 +10,7 @@
                :placeholder="placeholderText"
                @input="searchEvent"
         >
-        <i class="search-cancel" @click="searchText=''" v-show="searchText.length>0">
+        <i class="search-cancel" @click="searchText='';noResult=false;messageList=[]" v-show="searchText.length>0">
           <img src="../common/image/img00/consult_V1.2/icon_searchCancel.png" alt="">
         </i>
       </div>
@@ -195,7 +195,7 @@
             params: {
               baseMessage: {
                 name: item.illnessName,
-                id: item.id,
+                id: item.illnessId,
               },
               from: "disease"
             },
@@ -207,6 +207,7 @@
 
         if (this.searchText.length === 0) {
           this.messageList=[];
+          this.noResult=false;
           return false;
         } else if (api.getByteLen(this.searchText) >= 30) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
