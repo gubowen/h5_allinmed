@@ -139,7 +139,7 @@
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom"></textarea>
+                    @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
@@ -310,7 +310,6 @@
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
                 this.showBottomTips(2);
-//                store.commit("stopLastTimeCount");
                 break;
               case 4://医生接诊
                 this.lastTimeShow = true;
@@ -821,6 +820,12 @@
         setTimeout(() => {
           document.body.scrollTop = Math.pow(10, 20);
         }, 300)
+      },
+      inputLimit(){
+        let content = this.sendTextContent;
+        if (api.getByteLen(content) > 1000){
+          this.sendTextContent=api.getStrByteLen(content);
+        }
       },
       //接诊时间倒数
       remainTimeOut(){
