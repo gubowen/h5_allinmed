@@ -29,6 +29,7 @@
           <PreviewSuggestion
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='previewSuggestion'"
             :previewSuggestionMessage="JSON.parse(msg.content)"
+            :payPopupShow.sync="payPopupShow"
           >
           </PreviewSuggestion>
           <!--支付成功-->
@@ -85,7 +86,7 @@
       <footer class="main-input-box" v-if="lastTimeShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept=".jpg,.jpeg,.png">
+          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
@@ -94,8 +95,13 @@
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
     </transition>
+    <!--支付弹层-->
+    <payPopup @paySuccess="refreashOrderTime"
+              :payPopupShow.sync="payPopupShow"
+              :payPopupParams = "payPopupDate"
+              v-if="payPopupShow">
+    </payPopup>
   </section>
-
 
 </template>
 <script type="text/ecmascript-6">
@@ -110,6 +116,8 @@
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
+
+  import payPopup from 'components/payLayer';
 
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
@@ -136,6 +144,7 @@
   };
   export default{
     data(){
+
       return {
         nim: {},
         imageProgress: {
@@ -158,6 +167,8 @@
           account: "",
           token: ""
         },
+        payPopupShow:false,//支付弹窗是否显示
+        isClick:false,//立即咨询按钮是否点击
         //聊天目标数据
         targetData: {
           account: "1_doctor00001"
@@ -255,9 +266,11 @@
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
             that.getTimeStampShowList();
+            //判断消息列表里面是否有问诊单，没有的话发送一条
+            that.hasMedicalMessage();
             setTimeout(() => {
 //              console.log(that.$el.querySelector(".main-message"));
-              if (api.getPara().suggest) {
+              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
 //                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
                 document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
@@ -266,13 +279,28 @@
               }
               that.getImageList();
               //判断消息列表里面是否有问诊单，没有的话发送一条
-              if (!that.$refs.medicalReport) {
-                that.getMedicalMessage();
-              }
+//              if (!that.$refs.medicalReport) {
+//                that.getMedicalMessage();
+//              }
             }, 600);
           },
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
+      },
+      //判断消息列表里面是否有问诊单，没有的话发送一条
+      hasMedicalMessage(){
+        let that = this;
+        let flag = true;
+        for (let i=0;i<that.msgList.length;i++){
+          console.log(i);
+          if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='medicalReport'){
+            flag = false;
+            break;
+          }
+        }
+        if (flag){
+          that.getMedicalMessage();
+        }
       },
       //获取患者问诊单
       getMedicalMessage(){
@@ -580,6 +608,10 @@
       //获取咨询价格
       getConsultPrice(){
         const that = this;
+        if (that.isClick){
+          return false;
+        }
+        that.isClick=true;
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -654,6 +686,7 @@
 //              store.commit("lastTimeCount");
               that.getLastTime();
               that.sendPayFinish();
+              that.isClick = false;//是否点击立即咨询重置
             }
           }
         })
@@ -702,12 +735,27 @@
       lastTimeText(){
         return api.MillisecondToDateNew(this.$store.state.lastTime);
       },
+//      payPopupShow(){
+//        return this.$store.state.payPopupShow;
+//      }
+      payPopupDate(){
+        return {
+          docName: this.$store.state.targetDoctor.nick,
+          docId: this.$store.state.targetDoctor.customerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().customerId,
+          from: 'checkSuggest',
+          payType: this.$store.state.targetDoctor.payType,
+        }
+      },
     },
     mounted(){
       let that = this;
-//      if(!api.checkOpenId()){
-//        api.wxGetOpenId(1);
-//      }
+
+      if(!api.checkOpenId()){
+        api.wxGetOpenId(1);
+      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      let p1 = new Promise(resolve => that.getUserBaseData());
@@ -773,6 +821,7 @@
       Triage,
       PayFinishTips,
       MiddleTips,
+      payPopup,
     }
   }
 </script>

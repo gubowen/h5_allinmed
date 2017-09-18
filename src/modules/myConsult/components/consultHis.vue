@@ -64,6 +64,9 @@
     },
     mounted(){
       api.mobileCheck();
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);    //获取openId
+      }
       this.getOrderHistoryLists();
     },
     methods: {
@@ -169,7 +172,7 @@
           switch (Number(opt.consultationLevel)){
             case 0:
             case 1:
-              consultationLevel = "普通问诊";
+              consultationLevel = "图文问诊";
               break;
             case 3:
               consultationLevel = "特需问诊";
@@ -223,7 +226,8 @@
         window.location.href = '/dist/consult.html?customerId='+api.getPara().customerId;
       },
       hrefToSuggest(opt){
-        window.location.href = '/pages/myServices/check_suggestion.html?caseId='+opt.caseId+'&diagnosisId='+opt.diagnosisId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&caseType=0';
+        window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health&suggest=1'
+//        window.location.href = '/pages/myServices/check_suggestion.html?caseId='+opt.caseId+'&diagnosisId='+opt.diagnosisId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&caseType=0';
       },
       getThisItem(opt){
         //缓存orderSourceId
@@ -235,7 +239,7 @@
           localStorage.setItem("doctorLogo",docLogo);
           window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
         }else{
-          window.location.href = '/pages/imScene/im_main_scene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
+          window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
         }
       },
       goToUploadPic(opt){

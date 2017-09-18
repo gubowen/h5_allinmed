@@ -1396,6 +1396,7 @@ common.bindCallApp=function(options,config) {
         console.log("请传入要跳转的APP地址的参数对象，如：{ios:\"allinmdios://meettingBroadcast/meetInfo\",android:\"'allin://com.allin.social:75235?data=mydata\"}");
     }
 };
+
 /**
  * @name:
  * @desc:时间处理方法

@@ -67,12 +67,17 @@
       this.listType = this.$route.params.listType;
       this.returnRouter = this.$route.params.from;
       this.$refs.searchInput.focus();
+
+      document.body.scrollTop=0;
+
       window.addEventListener("scroll", () => {
+        clearTimeout(this.scrollTimeTip);
         if (this.$refs.listBox.children.length > 1) {
-            this.$refs.searchInput.blur();
           if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
-            page++;
-            this.getMessageList(this.searchText, page)
+            this.scrollTimeTip=setTimeout(()=>{
+              page++;
+              this.getMessageList(this.searchText, page)
+            },100);
           }
         }
       });
@@ -86,9 +91,11 @@
         switch (type) {
           case "hospital":
             this.placeholderText = "请输入就诊医院名称";
+            document.title="就诊医院";
             break;
           case "disease":
             this.placeholderText = "请输入疾病名称";
+            document.title="确诊疾病";
             break;
           default:
             break;
@@ -122,7 +129,7 @@
             break;
           case "disease":
             searchData = {
-              diseaseName: searchContent
+              illnessNameQuery: searchContent
             };
             url = XHRList.disease;
             break;
@@ -199,6 +206,7 @@
       searchEvent(){
 
         if (this.searchText.length === 0) {
+          this.messageList=[];
           return false;
         } else if (api.getByteLen(this.searchText) >= 30) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
@@ -295,7 +303,7 @@
         @include font-dpr(17px);
         color: $colorTwo;
         display: block;
-        padding: rem(24px) rem(40px);
+        padding: rem(24px) rem(50px);
         line-height: rem(32px);
         cursor: pointer;
         @include ellipsis();
@@ -482,6 +490,7 @@
     background: url("/image/img00/healthInfo/dialog_overtime_arrow.png");
     background-size: contain;
     margin-left: rem(12px);
+
   }
 
   .no-result-item-add {
@@ -611,7 +620,7 @@
       @include font-dpr(16px);
       color: $colorTwo;
       display: block;
-      padding: rem(24px) rem(40px);
+      padding: rem(24px) rem(50px);
       line-height: rem(32px);
       cursor: pointer;
       &:active{

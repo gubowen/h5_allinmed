@@ -205,6 +205,7 @@
     activated(){
       this.finish = false;
       this.initData();
+       document.title = "描述病情";
     },
     mounted(){
       document.title = "描述病情";
@@ -465,7 +466,7 @@
               localStorage.removeItem("complication");
 
               that.finish=false;
-              window.location.href = '/pages/imScene/im_main_scene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&customerId=' + that.allParams.customerId+'&from=health';
+              window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&customerId=' + that.allParams.customerId+'&from=health';
             }
           }
         })
@@ -473,7 +474,7 @@
       // 填写情况验证
       validateParamsFull() {
         if (!this.visit.none && !this.visit.has) {
-          this.validateToast("请选择最近一次就诊医院");
+          this.validateToast("您还有问题未完善");
           return false;
         } else if (this.visit.has && !this.hospitalMessage.id) {
           this.validateToast("请选择最近一次就诊医院");
@@ -481,15 +482,15 @@
         }
 
         if (!this.upload.none && !this.upload.has) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("您还有问题未完善 ");
           return false;
         } else if (this.upload.has && (this.imageList1.length === 0 && this.imageList2.length === 0)) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("请上传检查资料或患处照片");
           return false;
         }
 
         if (!this.medical.none && !this.medical.has) {
-          this.validateToast("请填写药物名称");
+          this.validateToast("您还有问题未完善");
           return false;
         } else if (this.medical.has && this.medicalMessage.length === 0) {
           this.validateToast("请填写药物名称");
@@ -508,7 +509,7 @@
       contentLimit(){
         if (api.getByteLen(this.medicalMessage) > 1000) {
           this.medicalMessage = api.getStrByteLen(this.medicalMessage,1000);
-          this.validateToast("您已超过500字了")
+          this.validateToast("最多只能输入500字")
         }
       },
       getByteLen(len){
@@ -629,6 +630,7 @@
           background-color: #E5E5E5;
           p {
             color: #666666;
+            @include ellipsis();
             &.selected {
               color: #07B6AC;
             }

@@ -129,7 +129,7 @@
         </section>
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
@@ -139,11 +139,7 @@
       </footer>
     </transition>
     <!--支付弹层-->
-    <PayTypePopup
-      :payPopupShow.sync="payPopupShow"
-      @paySuccess="refreashOrderTime"
-    >
-    </PayTypePopup>
+    <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams = "payPopupDate" v-if="payPopupShow"></payPopup>
     <Loading v-if="loading"></Loading>
   </section>
 </template>
@@ -174,6 +170,7 @@
   import AudioMessage from "./audioMessage";
 
   import Loading from "components/loading";
+  import payPopup from 'components/payLayer';
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
   let nim;
@@ -215,6 +212,7 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
+
         userData: {
           account: "",
           token: ""
@@ -869,6 +867,7 @@
         })
       },
       retryClick(type){
+
         const that = this;
         switch (type) {
           case -1:
@@ -940,7 +939,7 @@
             desc = "免费";
             break;
           case 1:
-            desc = "普通";
+            desc = "图文";
             break;
           case 3:
             desc = "特需";
@@ -987,7 +986,18 @@
       },
       lastCount(){
         return this.$store.state.lastCount;
-      }
+      },
+      payPopupDate(){
+        return {
+          docName: this.$store.state.targetMsg.nick,
+          docId: api.getPara().doctorCustomerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().patientCustomerId,
+          from: 'imDoctor',
+          payType: 'pay'
+        }
+      },
     },
     mounted(){
       this.getUserBaseData();
@@ -1027,7 +1037,7 @@
       BottomTips,
       MiddleTips,
       PayFinishTips,
-      PayTypePopup,
+      payPopup,
       OutpatientInvite,
       SurgicalDrape,
       HospitalNotice,
@@ -1060,5 +1070,6 @@
     opacity: 0;
     transform: translateY(50%);
   }
+
 </style>
 

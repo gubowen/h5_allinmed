@@ -6,8 +6,8 @@
           <img src="../../../common/image/img00/doctorHome/doctorPic.png" class="docLogo">
         </figcaption>
         <div class="docNameBox">
-          <span class="docName">王玉轩</span>
-          <span class="docTitle">副主任医师</span>
+          <span class="docName">{{docName}}</span>
+          <span class="docTitle">{{docTitle}}</span>
         </div>
       </figure>
       <a href="javascript:;" class="jumpToTnfo">医生主页</a>
@@ -17,7 +17,7 @@
       <section class="illnessClaimBox">
         <h3 class="moduleTitle">门诊主治</h3>
         <article class="illnessClaimDetails" :class="{spill:isMore}">{{illnessList}}</article>
-        <img src="../../../common/image/background_wave.png" class="btnFoldFewer" v-show="isShowMore" @click="btnToMoreLess()" :class="{on:isMore}">
+        <img src="../../../common/image/img00/doctorHome/unfolded.png" class="btnFoldFewer" v-show="isShowMore" @click="btnToMoreLess()" :class="{on:isMore}">
       </section>
       <section class="clinicTimeBox">
         <h3 class="moduleTitle">出诊时间<span>(最近三周出诊安排)</span></h3>
@@ -30,18 +30,23 @@
             <span>晚上</span>
           </header>
           <section class="clinicTimeDetails">
-            <ul v-for="item in items.hospitalList[0].clinicTime">
-              <li>{{getClinicTime(item).time}}</li>
-              <li>专家</li>
-              <li>普通</li>
-              <li>特需</li>
-            </ul>
+             <template v-if="items.hospitalList[0].clinicTime.length>0">
+               <ul v-for="item in items.hospitalList[0].clinicTime">
+                 <li>{{getClinicTime(item).time}}</li>
+                 <li>{{getClinicTime(item).amClinicType}}</li>
+                 <li>{{getClinicTime(item).pmClinicType}}</li>
+                 <li>{{getClinicTime(item).nmClinicType}}</li>
+               </ul>
+             </template>
+            <template v-else>
+              <span class="noClinicTime">近三周无出诊安排</span>
+            </template>
           </section>
         </div>
       </section>
       <section class="remarkBox">
         <h3 class="moduleTitle">备注</h3>
-        <article class="remarkDetails">请先到一楼挂号，再到二楼骨科二诊室找我请先到一楼挂号，再到二楼骨科二诊室找我</article>
+        <article class="remarkDetails">{{items.hospitalList[0].remark}}</article>
       </section>
     </section>
     <loading v-show="finish"></loading>
@@ -63,10 +68,20 @@
         isShowMore:false,
         stopTimeText:"",
         stopTimeShow:false,
-        items:[],
+        items:{
+          hospitalList:[
+            {
+              hospital:"",
+              clinicTime:[],
+              remark:""
+            }
+          ]
+        },
         illnessList:"",
-        docterId:"1493879076659",//医生Id
-        hospitalId:"24362"//医院Id
+        doctorId:"",//医生Id
+        hospitalId:"",//医院Id
+        docName:"",
+        docTitle:""
       }
     },
     mounted(){
@@ -76,11 +91,15 @@
     methods:{
       getClinicDetails(){
         const that = this;
+        this.doctorId = this.$route.params.doctorId;
+        this.hospitalId = this.$route.params.hospitalId;
+        this.docName = this.$route.params.docName;
+        this.docTitle = this.$route.params.docTitle;
         api.ajax({
           url: XHRList.getClinicDetails,
           method: "post",
           data: {
-            customerId:that.docterId,
+            customerId:that.doctorId,
             hospitalId:that.hospitalId
           },
           headers: {
@@ -95,9 +114,13 @@
               that.finish =false;
               that.items = response.responseObject.responseData.dataList[0];
               that.items.illnessList.forEach((element)=>{
-                that.illnessList += element.illnessName
+                that.illnessList += element.illnessName + "、"
               })
-              that.illnessList += that.items.clinicRemark
+              if(that.items.clinicRemark.length>0){
+                that.illnessList += that.items.clinicRemark;
+              }else{
+                that.illnessList = that.illnessList.substring(0,that.illnessList.length-1);
+              }
               if(that.illnessList.length>35){
                   that.isMore = true;
                   that.isShowMore = true;
@@ -112,7 +135,7 @@
           url: XHRList.getCloseTime,
           method: "post",
           data: {
-            customerId:that.docterId,
+            customerId:that.doctorId,
             firstResult:0,
             maxResult:1,
             isAll:0
@@ -131,7 +154,7 @@
         })
       },
       getClinicTime(opt){
-        let week = "",dateTime = opt.dateTime.split("-");
+        let week = "",amClinicType,pmClinicType,nmClinicType="",dateTime = opt.dateTime.split("-");
         switch(Number(opt.dateType)){
           case 1:
             week = "周一";
@@ -155,8 +178,50 @@
             week = "周日";
             break;
         }
+        for(let i=0;i<3;i++){
+          if(opt.data && opt.data[i] && opt.data[i].timeType == 1){
+            switch(Number(opt.data[i].clinicType)){
+              case 1:
+                amClinicType = "普通";
+                break;
+              case 2:
+                amClinicType = "专家";
+                break;
+              case 3:
+                amClinicType = "特需";
+                break;
+            }
+          }else if(opt.data && opt.data[i] && opt.data[i].timeType == 2){
+            switch(Number(opt.data[i].clinicType)){
+              case 1:
+                pmClinicType = "普通";
+                break;
+              case 2:
+                pmClinicType = "专家";
+                break;
+              case 3:
+                pmClinicType = "特需";
+                break;
+            }
+          }else if(opt.data && opt.data[i] && opt.data[i].timeType == 3){
+            switch(Number(opt.data[i].clinicType)){
+              case 1:
+                nmClinicType = "普通";
+                break;
+              case 2:
+                nmClinicType = "专家";
+                break;
+              case 3:
+                nmClinicType = "特需";
+                break;
+            }
+          };
+        }
         return {
-            time:`${dateTime[1]}月${dateTime[2]}日 ${week}`
+            time:`${dateTime[1]}月${dateTime[2]}日 ${week}`,
+            amClinicType:amClinicType,
+            pmClinicType:pmClinicType,
+            nmClinicType:nmClinicType
         }
       },
       btnToMoreLess(){
@@ -170,15 +235,16 @@
 
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules";
   .clinicOrder{
-    overflow: hidden;
     min-height: 100%;
+    height:auto;
     padding-bottom:rem(100px);
     box-sizing: border-box;
     background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
     background-size:100% rem(272px);
+    border-top:1px solid transparent;
   }
   .docMessageBox{
     position:relative;
@@ -236,10 +302,10 @@
       &:after{
         display:inline-block;
         content: "";
-        vertical-align: middle;
-        width:rem(10px);
-        height:rem(12px);
-        background:url("../../../common/image/background_wave.png") no-repeat;
+        width:rem(12px);
+        height:rem(18px);
+        margin-left:rem(8px);
+        background:url("../../../common/image/img00/doctorHome/arrow.png") no-repeat;
         background-size:100% 100%;
       }
     }
@@ -270,6 +336,7 @@
           -webkit-box-orient: vertical;
           word-break: break-all;
         }
+        transition: all 0.1s;
         padding:rem(30px) rem(30px) 0;
         color: #444444;
         font-size:rem(32px);
@@ -294,12 +361,12 @@
         &:before{
           display:inline-block;
           content: "";
-          width:rem(28px);
-          height:rem(28px);
-          background:url("../../../common/image/img00/doctorMain/pay_warning@2x.png") no-repeat;
+          width:rem(25px);
+          height:rem(25px);
+          background:url("../../../common/image/img00/doctorHome/inform.png") no-repeat;
           background-size:100% 100%;
-          padding-right:rem(10px);
-          vertical-align: sub;
+          margin-right:rem(10px);
+          vertical-align: middle;
         }
       }
       .clinicTime{
@@ -357,6 +424,16 @@
             }
           }
         }
+        .noClinicTime{
+          width:100%;
+          display: inline-block;
+          @include font-dpr(14px);
+          color: #909090;
+          border-left:1px solid rgba(198,207,217,0.3);
+          border-right:1px solid rgba(198,207,217,0.3);
+          text-align: center;
+          line-height:rem(200px);
+        }
       }
     }
     .remarkBox{
@@ -369,7 +446,7 @@
       .remarkDetails{
         padding:rem(30px) ;
         @include font-dpr(16px);
-        line-height:rem(40px);
+        line-height:rem(45px);
         color: #444444;
       }
     }
@@ -398,7 +475,7 @@
   .btnFoldFewer{
     display:block;
     width:rem(20px);
-    height:rem(10px);
+    height:rem(12px);
     margin:rem(24px) auto 0;
     transition: all 0.1s;
     &.on{

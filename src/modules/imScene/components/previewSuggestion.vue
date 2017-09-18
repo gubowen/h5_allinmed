@@ -104,7 +104,7 @@
             <li class="doctor-item"
                 v-for="(item , index) in doctorObj.tempData"
             >
-              <section class="doctor-item-top">
+              <section class="doctor-item-top" @click="goDoctorHome(index)">
                 <figure class="doctor-item-img">
                   <img :src="item.logoUrl" alt="">
                 </figure>
@@ -118,11 +118,15 @@
                   <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
                 </figcaption>
               </section>
-              <section class="doctor-item-bottom">
-                <span class="go-consult">图文问诊</span>
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes" @click="goConsult(index,'free')">
+                <span class="go-consult">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
+              </section>
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes" @click="goConsult(index,'pay')">
+                <span class="go-consult">去问诊</span>
+                <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </li>
           </ul>
@@ -142,14 +146,16 @@
    * @Notify：
    * @Depend：
    *
-   * Created by 李晨阳 on 2017/8/18.
+   * Created by lichenyang on 2017/8/18.
    */
   import api from "common/js/util/util";
+  import store from "../store/store";
 
   const XHRList = {
     getCheckSuggestion: "/mcall/patient/case/diagnosis/v1/getMapList/",//预览初诊建议
     getRecommedDoctor: "/mcall/patient/recommend/v1/getMapList/",//推荐医生
-    getToken: "/mcall/im/interact/v1/refreshToken/"
+    getToken: "/mcall/im/interact/v1/refreshToken/",
+    getCurrentByCustomerId:'/mcall/customer/advice/setting/v1/getCurrentByCustomerId/',//获取是否与专业医生建立过im
   };
 
   export default{
@@ -163,6 +169,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //处置建议里的数据
@@ -172,6 +179,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //患教知识里的数据
@@ -181,6 +189,7 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
+          initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
         },
         //推荐医生的的数据
@@ -190,7 +199,8 @@
           moreData:false,//显示展开更多还是显示收起按钮
           tempData:[],//展示的数组
           lessData:[],//五条建议的数据
-          pageNum:3,//分页数据条数
+          initNum:3,//初始展示的数据条数
+          pageNum:5,//分页数据条数
         },
       }
 
@@ -291,9 +301,9 @@
       //检查检验数据
       checkSuggestData (param) {
         let that = this;
-        if (that[param].allData.length > that[param].pageNum) {
+        if (that[param].allData.length > that[param].initNum) {
           that[param].moreBoxShow = true;
-          that[param].lessData = that[param].allData.slice(0,that[param].pageNum);
+          that[param].lessData = that[param].allData.slice(0,that[param].initNum);
           that[param].tempData = that[param].lessData;
           that[param].moreData = true;
         } else {
@@ -311,6 +321,41 @@
           that[param].tempData = that[param].allData;
         }
       },
+      //去医生主页
+      goDoctorHome(index){
+        let that = this;
+        window.location.href = '/pages/myServices/doc_main.html?customerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId + '&type=2';
+      },
+      //免费问诊
+      goConsult(index,type){
+        let that = this;
+        that.$emit('update:payPopupShow', true);
+
+        store.commit("setTargetMsg", {customerId:that.doctorObj.allData[index].customerId});
+        store.commit("setTargetMsg", {nick:that.doctorObj.allData[index].fullName});
+        store.commit("setTargetMsg", {payType:type});
+
+      },
+      //获取患者是否建立过问诊 responseData.dataList.conState 0-无沟通中数据 1-有
+      goToFreeConsult(index){
+        let that = this;
+        api.ajax({
+          url: XHRList.getCurrentByCustomerId,
+          method: "POST",
+          data: {
+            customerId:	that.doctorObj.allData[index].customerId,//string	是	医生的Id	1489998833435
+            caseId:api.getPara().caseId,	//string	是
+          },
+          beforeSend(){
+
+          },
+          done(data){
+            if (data.responseObject.responseData.dataList && data.responseObject.responseStatus) {
+              console.log(data);
+            }
+          }
+        })
+      },
       //收起
       lessDataShow(param){
         let that = this;
@@ -327,8 +372,11 @@
     },
     props:{
       previewSuggestionMessage:{
-          type:Object
-      }
+        type:Object
+      },
+      payPopupShow:{
+        type:Boolean
+      },
     }
   }
 </script>
@@ -336,7 +384,7 @@
   @import "../../../../scss/library/_common-modules";
   /*展开更多的公共样式*/
   .more-box{
-    padding-top: rem(50px);
+    padding-top: rem(40px);
     @include font-dpr(14px);
     color: #909090;
     text-align: center;
@@ -387,6 +435,7 @@
           line-height: 1;
           padding: rem(0px) rem(64px);
           position: relative;
+          font-weight: bold;
           &::before{
             content: '';
             width: rem(8px);
@@ -453,6 +502,7 @@
           padding: rem(42px) rem(0px);
           margin: 0 rem(30px);
           position: relative;
+          font-weight: bold;
           .knowledge-detail{
             position: absolute;
             color: #AAAAAA;
@@ -556,6 +606,7 @@
                 line-height: 1;
                 .doctor-name{
                   color: #333333;
+                  font-weight: bold;
                   @include font-dpr(16px);
                   display: inline-block;
                   max-width: rem(160px);
@@ -613,14 +664,18 @@
             padding-left: rem(120px);
             .go-consult{
               float: right;
+              width: rem(224px);
+              text-align: center;
               background: rgba(47,197,189,0.90);
               border-radius: 52px;
-              padding: rem(12px) rem(56px);
+              padding: rem(12px);
+              box-sizing: border-box;
               color: #ffffff;
             }
             .free-consult{
               float: left;
               color: #FA787A;
+              font-weight: bold;
               margin-top: rem(12px);
             }
             .free-price{

@@ -16,11 +16,20 @@ export default new Vuex.Store({
   state: {
     consultationId: "",
     logoUrl: "",
-    lastTime:""
+    lastTime:"",
+    targetDoctor:{
+      nick:'',//医生名字
+      customerId:'',//医生id
+      payType:'pay',
+    },
+
   },
   mutations: {
     setConsultation(state, id){
       state.consultationId = id;
+    },
+    setTargetMsg(state,params){
+      state.targetDoctor= Object.assign({},state.targetDoctor,params);
     },
     setLogoUrl(state, param){
       var sex = param.sexName,
