@@ -256,9 +256,16 @@
       methods: {
         //view cureTime
         viewCureTime(){
+          let _this=this;
           this.ruleShow=true;
           this.$router.push({
-            name:'clinicDetails'
+            name:'clinicDetails',
+            params:{
+              docterId: _this.docId,
+              hospitalId: _this.hospitalId,
+              docName: _this.fullName,
+              docTitle: _this.medicalTitle
+            }
           })
         },
         //获取医生信息
@@ -280,6 +287,7 @@
                   _logoUrl = _data.logoUrlMap.logoUrl;
                 _this.fullName = _data.authMap.fullName;
                 _this.company = _data.authMap.company;
+                _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
                 _this.areasExpertise = _data.authMap.areasExpertise;
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
