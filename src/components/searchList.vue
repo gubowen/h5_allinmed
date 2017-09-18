@@ -97,7 +97,7 @@
             this.placeholderText = "请输入疾病名称";
             document.title="确诊疾病";
             break;
-          default:q
+          default:
             break;
         }
       },
