@@ -71,9 +71,10 @@
       document.body.scrollTop=0;
 
       window.addEventListener("scroll", () => {
+        clearTimeout(this.scrollTimeTip);
         if (this.$refs.listBox.children.length > 1) {
           if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
-            setTimeout(()=>{
+            this.scrollTimeTip=setTimeout(()=>{
               page++;
               this.getMessageList(this.searchText, page)
             },100);
