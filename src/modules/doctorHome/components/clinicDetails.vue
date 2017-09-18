@@ -6,8 +6,8 @@
           <img src="../../../common/image/img00/doctorHome/doctorPic.png" class="docLogo">
         </figcaption>
         <div class="docNameBox">
-          <span class="docName">王玉轩</span>
-          <span class="docTitle">副主任医师</span>
+          <span class="docName">{{docName}}</span>
+          <span class="docTitle">{{docTitle}}</span>
         </div>
       </figure>
       <a href="javascript:;" class="jumpToTnfo">医生主页</a>
@@ -68,10 +68,20 @@
         isShowMore:false,
         stopTimeText:"",
         stopTimeShow:false,
-        items:[],
+        items:{
+          hospitalList:[
+            {
+              hospital:"",
+              clinicTime:[],
+              remark:""
+            }
+          ]
+        },
         illnessList:"",
-        docterId:"1451896368262",//医生Id
-        hospitalId:"24362"//医院Id
+        docterId:"",//医生Id
+        hospitalId:"",//医院Id
+        docName:"",
+        docTitle:""
       }
     },
     mounted(){
@@ -81,6 +91,10 @@
     methods:{
       getClinicDetails(){
         const that = this;
+        this.docterId = this.$route.params.docterId;
+        this.hospitalId = this.$route.params.hospitalId;
+        this.docName = this.$route.params.docName;
+        this.docTitle = this.$route.params.docTitle;
         api.ajax({
           url: XHRList.getClinicDetails,
           method: "post",
@@ -221,15 +235,16 @@
 
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules";
   .clinicOrder{
-    overflow: hidden;
     min-height: 100%;
+    height:auto;
     padding-bottom:rem(100px);
     box-sizing: border-box;
     background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
     background-size:100% rem(272px);
+    border-top:1px solid transparent;
   }
   .docMessageBox{
     position:relative;
@@ -410,9 +425,14 @@
           }
         }
         .noClinicTime{
+          width:100%;
           display: inline-block;
+          @include font-dpr(14px);
+          color: #909090;
+          border-left:1px solid rgba(198,207,217,0.3);
+          border-right:1px solid rgba(198,207,217,0.3);
           text-align: center;
-          line-height:rem(240px);
+          line-height:rem(200px);
         }
       }
     }
@@ -426,7 +446,7 @@
       .remarkDetails{
         padding:rem(30px) ;
         @include font-dpr(16px);
-        line-height:rem(40px);
+        line-height:rem(45px);
         color: #444444;
       }
     }
