@@ -650,19 +650,17 @@
         WxPayCommon.wxCreateOrder({
           data: data,        //data为Object 参考下面给出格式
           backCreateSuccess(_data){
-            alert("创建订单成功")
             //创建订单成功  （手术必选）
           },
           backCreateError(_data){
-            alert("创建订单失败")
             //创建订单失败  (必选)
           },
           wxPaySuccess(_data){
             that.refreashOrderTime();
-            alert("支付成功")
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
+            that.isClick = false;//是否点击立即咨询重置
             //支付失败回调  (问诊/门诊类型 必选)
           }
         });
