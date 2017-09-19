@@ -3,7 +3,7 @@
     <section class="confirmBox-inner">
       <article class="confirmBox-content">
         <article>
-          <h2 v-if="confirmParams.title">{{confirmParams.title}}</h2>
+          <h2 v-if="confirmParams.title" style="font-weight:bold">{{confirmParams.title}}</h2>
           <p v-show="confirmParams.content">{{confirmParams.content}}</p>
         </article>
       </article>

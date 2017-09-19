@@ -265,24 +265,42 @@
           to: this.targetData.account,//聊天对象, 账号或者群id
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
+            console.log("dom更新前")
             that.getTimeStampShowList();
             //判断消息列表里面是否有问诊单，没有的话发送一条
             that.hasMedicalMessage();
-            setTimeout(() => {
-//              console.log(that.$el.querySelector(".main-message"));
-              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
+            that.$nextTick(function(){
+              console.log("dom更新完成")
+//              debugger;
+              if (api.getPara().suggest) {
+                console.log("有推荐医生")
+                setTimeout(function () {
+                  document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+                },2000);
 //                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
-                document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
               } else{
+                console.log("无推荐医生")
                 document.body.scrollTop = Math.pow(10, 20);
               }
               that.getImageList();
-              //判断消息列表里面是否有问诊单，没有的话发送一条
-//              if (!that.$refs.medicalReport) {
-//                that.getMedicalMessage();
+              //渲染完毕
+            });
+//            setTimeout(() => {
+////              console.log(that.$el.querySelector(".main-message"));
+//              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
+////                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
+//                document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+////                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
+//              } else{
+//                document.body.scrollTop = Math.pow(10, 20);
 //              }
-            }, 600);
+//              that.getImageList();
+//              //判断消息列表里面是否有问诊单，没有的话发送一条
+////              if (!that.$refs.medicalReport) {
+////                that.getMedicalMessage();
+////              }
+//            }, 600);
           },
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
@@ -537,7 +555,7 @@
       //聊天记录里时间戳是否显示
       getTimeStampShowFlag(msg, index){
         if (msg.type === 'custom') {
-          if (JSON.parse(msg.content).type.includes('new-') || JSON.parse(msg.content).type === "payFinishTips") {
+          if (JSON.parse(msg.content).type.includes('new-') || JSON.parse(msg.content).type === "payFinishTips" || JSON.parse(msg.content).type === "reTriageTip") {
             return false;
           } else {
             if (this.timeStampShowList[index] == 1) {
@@ -632,7 +650,7 @@
             if (data.responseObject.responseStatus) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
-              price === "0"?that.refreashOrderTime():that.buyTime(price)
+              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
             }
           }
         })
@@ -664,7 +682,7 @@
             //创建订单失败  (必选)
           },
           wxPaySuccess(_data){
-            that.refreashOrderTime();
+            that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
@@ -674,7 +692,7 @@
         });
       },
       //支付成功...刷新页面并重置时间
-      refreashOrderTime () {
+      refreashOrderTime (type) {
         const that = this;
         api.ajax({
           url: XHRList.updateCount,
@@ -691,7 +709,9 @@
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
               that.getLastTime();
-              that.sendPayFinish();
+              if(type === 'pay'){
+                that.sendPayFinish();
+              }
               that.isClick = false;//是否点击立即咨询重置
             }
           }

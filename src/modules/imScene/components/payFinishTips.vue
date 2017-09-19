@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p class='time-stamp'>以上为历史纪录</p>
+    <section class="main-message-box grey-tips">
+      <figcaption class="first-message">
+        <p>您已重新购买分诊医生的问诊，可继续提问</p>
+      </figcaption>
+    </section>
   </div>
 </template>
 <script type="text/ecmascript-6">

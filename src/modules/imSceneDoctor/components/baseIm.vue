@@ -527,12 +527,12 @@
           scene: 'p2p',
           to: this.targetData.account,
           content: JSON.stringify(data),
-          needPushNick: false,
-          pushContent: `患者<${nickName}>向您咨询，点击查看详情`,
-          pushPayload: JSON.stringify({
-            "account": "0_" + api.getPara().caseId,
-            "type": "1"
-          }),
+          // needPushNick: false,
+          // pushContent: `患者<${nickName}>向您咨询，点击查看详情`,
+          // pushPayload: JSON.stringify({
+          //   "account": "0_" + api.getPara().caseId,
+          //   "type": "1"
+          // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
           }

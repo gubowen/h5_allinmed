@@ -606,7 +606,7 @@
           padding: rem(64px) rem(28px) rem(16px);
           .questionSelectBtn {
             width: rem(284px);
-            @include font-dpr(16px);
+            @include font-dpr(18px);
             padding: rem(20px) 0;
             text-align: center;
             float: left;
