@@ -383,7 +383,9 @@
               }
             },
             fail(){
-
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
