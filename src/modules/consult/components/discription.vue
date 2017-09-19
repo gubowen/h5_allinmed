@@ -55,7 +55,7 @@
                         class="pain-level-progress"
                         :label-style="labelStyle"
                       ></vue-slider>
-                      <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">好的
+                      <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了
                       </button>
                     </section>
                   </section>
