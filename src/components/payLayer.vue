@@ -341,6 +341,7 @@
           done (data) {
             if (data.responseObject.responseData.dataList) {
               let consultationId = data.responseObject.responseData.dataList.consultationId;
+              localStorage.setItem("docId",that.payPopupParams.docId);
               sessionStorage.setItem("orderSourceId", consultationId);
               wxCommon.wxCreateOrder({
                 isTest:0,

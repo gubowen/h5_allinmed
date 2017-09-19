@@ -10,7 +10,7 @@
           <span class="docTitle">{{docTitle}}</span>
         </div>
       </figure>
-      <a href="javascript:;" class="jumpToTnfo">医生主页</a>
+      <a href="javascript:;" class="jumpToTnfo" @click="goToDocMain">医生主页</a>
     </header>
     <section class="clinicDetailsBox">
       <h2 class="hospitalName">{{items.hospitalList[0].hospital}}</h2>
@@ -228,6 +228,11 @@
         const that = this;
         that.isMore = !(that.isMore);
       },
+      goToDocMain(){
+        this.$router.push({
+          name:'doctorMain'
+        })
+      }
     },
     components:{
       loading

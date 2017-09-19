@@ -46,15 +46,15 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">持续时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">加重时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">其他症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "未填写"}}</span>
           </li>
         </ul>
       </section>
@@ -63,7 +63,7 @@
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">确诊疾病</span>
@@ -71,7 +71,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">检查资料</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList1.length!==0">
               <li v-for="(item,index) in imageList1" @click="showBigImg(item,index,1)">
                 <img :src="item">
@@ -80,7 +80,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">患处照片</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList2.length!==0">
               <li v-for="(item,index) in imageList2" @click="showBigImg(item,index,2)">
                 <img :src="item">
@@ -89,7 +89,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">服用药物</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "未填写"}}</span>
           </li>
         </ul>
       </section>

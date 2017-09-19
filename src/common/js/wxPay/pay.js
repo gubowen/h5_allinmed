@@ -207,13 +207,14 @@ export default function pay(Obj) {
     }
     //咨询支付成功后创建问诊id
     creatInquiryId (opt) {
+      debugger;
       //获取是否已经存在问诊id
       api.ajax({
         url:  "/mcall/customer/case/consultation/v1/getMapById/",
         method: "POST",
         data: {
-          caseId: api.getpara().caseId,
-          customerId: api.getpara().customerId,
+          caseId: api.getPara().caseId,
+          customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId"),
           consultationType: 1,
           siteId: 17
         },
@@ -223,18 +224,19 @@ export default function pay(Obj) {
               url:  "/mcall/customer/case/consultation/v1/create/",
               method: "POST",
               data: {
-                caseId: api.getpara().caseId,
-                customerId: api.getpara().customerId,
-                patientCustomerId: api.getpara().patientCustomerId,
-                patientId: api.getpara().patientId,
+                caseId: api.getPara().caseId,
+                customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId") ,
+                patientCustomerId: api.getPara().patientCustomerId,
+                patientId: api.getPara().patientId,
                 consultationType: 1,
                 consultationState: -1,
                 consultationLevel: localStorage.getItem("orderPayType"),
                 siteId: 17,
-                caseType: api.getpara().caseType
+                caseType: api.getPara().caseType
               },
               done (d) {
                 if (d.responseObject.responseStatus) {
+                  localStorage.removeItem("docId");
                   sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                   opt.queryCallBack(d.responseObject.responsePk);
                 }

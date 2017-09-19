@@ -96,7 +96,7 @@
       </footer>
     </transition>
     <!--支付弹层-->
-    <payPopup @paySuccess="refreashOrderTime"
+    <payPopup @paySuccess="toUpLoadTimes"
               :payPopupShow.sync="payPopupShow"
               :payPopupParams = "payPopupDate"
               v-if="payPopupShow">
@@ -404,7 +404,7 @@
           data: {
             caseId: api.getPara().caseId,
             customerId: api.getPara().shuntCustomerId,
-            patientCustomerId: api.getPara().customerId,
+            patientCustomerId: api.getPara().patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 0,
             consultationState: 0,
@@ -643,7 +643,7 @@
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
         let data = {
-          patientCustomerId: api.getPara().customerId, //	string	是	患者所属用户id
+          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
           patientId: api.getPara().patientId,         // 	string	是	患者id
           doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
           orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
@@ -693,6 +693,27 @@
               that.getLastTime();
               that.sendPayFinish();
               that.isClick = false;//是否点击立即咨询重置
+            }
+          }
+        })
+      },
+      toUpLoadTimes(opt) {
+        let that = this;
+        debugger
+        api.ajax({
+          url: XHRList.updateCount,
+          method: 'POST',
+          data: {
+            consultationId: sessionStorage.getItem("orderSourceId"),
+            frequency: opt.orderFrequency,
+            frequencyType: 2,
+            consultationState: -1,
+            consultationLevel: opt.orderType
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              localStorage.setItem("sendTips", JSON.stringify(opt));
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
             }
           }
         })
@@ -750,7 +771,7 @@
           docId: this.$store.state.targetDoctor.customerId,
           caseId: api.getPara().caseId,
           patientId: api.getPara().patientId,
-          patientCustomerId: api.getPara().customerId,
+          patientCustomerId: api.getPara().patientCustomerId,
           from: 'checkSuggest',
           payType: this.$store.state.targetDoctor.payType,
         }
