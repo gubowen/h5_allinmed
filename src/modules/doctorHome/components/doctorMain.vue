@@ -134,15 +134,15 @@
       getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
       getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
       isReceiveClinic: "/mcall/customer/clinic/setting/v1/getMapById/",                    //是否接受门诊 responseData.dataList.isReceive
-      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
+//      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
       getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",                    //问诊详情
-      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
-      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
-      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
-      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
+//      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
+//      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
+//      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
+//      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
       updateTime: "/mcall/customer/case/consultation/v1/updateFrequency/",                 //更新次数
-      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
-      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
+//      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
+//      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
       getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
       getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
       getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
@@ -169,7 +169,7 @@
           isShowCureStatus:true,
           isUsableNum:false,
           isCureStatusText:'',
-          docId:api.getPara().doctorId,                        //医生ID
+          docId:api.getPara().doctorCustomerId,                //医生ID
           caseId:api.getPara().caseId,                         //病历ID
           patientId:api.getPara().patientId,                   //患者ID
           patientCustomerId:api.getPara().patientCustomerId,   //患者所属用户ID
@@ -205,27 +205,27 @@
               maxResult: 9999,
             },
             getDocMainParams: {
-              customerId:api.getPara().doctorId,
+              customerId:api.getPara().doctorCustomerId,
               logoUseFlag: 3
             },
             isReceiveClinicParams:{
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               hospitalId: ""
             },
             isCreateChatParams:{
               patientId: api.getPara().patientId,    //患者ID
-              doctorId: api.getPara().doctorId,      // 医生ID
+              doctorId: api.getPara().doctorCustomerId,      // 医生ID
               orderType: 1,
               orderSourceType: 0,
               sortType: 2
             },
             currentByCustomerIdParams: {
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               caseId: api.getPara().caseId
             },
             getConsultationIdParams:{
               caseId: api.getPara().caseId,
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               isCreate: 1,
               isValid: 1,
               consultationType: 1,
@@ -234,7 +234,7 @@
             },
             createConsultationIdParams:{
               caseId: api.getPara().caseId,
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               patientCustomerId: api.getPara().patientCustomerId,
               patientId: api.getPara().patientId,
               consultationType: 1,
@@ -244,7 +244,7 @@
               caseType: 0
             },
             getGoodsInfoParams:{
-              customerId: api.getPara().doctorId
+              customerId: api.getPara().doctorCustomerId
             }
           }
         }
@@ -301,7 +301,7 @@
                 _this.summary = _data.authMap.summary;                 //个人简介
                 let _hospitalLevel = _data.authMap.hospitalLevel;     //三甲
                 _this.isTop = _data.authMap.is_top;                    //全国   1-是 0-否
-                _this.areasExpertise = _data.authMap.areasExpertise;
+                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
                 _this.yesteryearOperationNum = _data.authMap.yesteryearOperationNum;
                 _this.illnessMapList = _data.illnessMapList;
@@ -347,6 +347,11 @@
                     _this.hospitalLevel="一级";
                     break;
                 }
+                //专科字符串
+                let _areasExpertiseArr=_areasExpertise.split(",");
+                _areasExpertiseArr.forEach((element,index) => {
+                  _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                });
                 //是否接受门诊
                 _this.getIsReceiveClinic();
               }
@@ -431,7 +436,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("免费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
@@ -444,7 +449,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("收费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
