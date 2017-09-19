@@ -650,7 +650,7 @@
             if (data.responseObject.responseStatus) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
-              price === "0"?that.refreashOrderTime():that.buyTime(price)
+              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
             }
           }
         })
@@ -682,7 +682,7 @@
             //创建订单失败  (必选)
           },
           wxPaySuccess(_data){
-            that.refreashOrderTime();
+            that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
@@ -692,7 +692,7 @@
         });
       },
       //支付成功...刷新页面并重置时间
-      refreashOrderTime () {
+      refreashOrderTime (type) {
         const that = this;
         api.ajax({
           url: XHRList.updateCount,
@@ -709,7 +709,9 @@
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
               that.getLastTime();
-              that.sendPayFinish();
+              if(type === 'pay'){
+                that.sendPayFinish();
+              }
               that.isClick = false;//是否点击立即咨询重置
             }
           }
