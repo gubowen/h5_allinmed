@@ -86,7 +86,7 @@ $(function () {
                         console.log(_dataList);
                         //判断是否认证并且存起来给多点执政医院用
                         that.config.state = _dataList.authMap.state;
-                        if(_dataList.authMap.state == 1 || _dataList.authMap.state == 2){
+                        if(_dataList.authMap.state == 8){
                             //把联系医生二维码存起来
                             // that.config.qrCodeUrl = _dataList.authMap.qrCodeUrl;
                             that.addCode();
