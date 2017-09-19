@@ -22,8 +22,8 @@
       <article class="medical-report-box" data-clientid="" @click="goToDetail">
         <header class="medical-report-title">问诊单</header>
         <section class="medical-report-content">
-          <p class="patient-info"><span>患者 : </span><span class="patient-name">{{medicalReportMessage.data.patientName}} </span><span class="patient-age">{{medicalReportMessage.data.sexName}} {{medicalReportMessage.data.age}}岁</span></p>
-          <p class="case-describe"><span>主诉 : </span><span class="case-describe-main">{{mainCase}}</span></p>
+          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName}}&nbsp</span><span class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
+          <p class="case-describe"><span>主诉：</span><span class="case-describe-main">{{mainCase}}</span></p>
         </section>
         <footer class="medical-report-footer">查看已提交信息</footer>
       </article>
@@ -138,16 +138,25 @@
     .medical-report-content{
       height: rem(152px);
       @include font-dpr(16px);
-      padding: rem(38px) rem(40px) rem(0px);
+      padding: rem(38px) rem(0px) rem(0px) rem(40px);
       box-sizing: border-box;
       color: #555555;
       line-height: 1;
       .patient-info{
+        span{
+          display: inline-block;
+          vertical-align: text-bottom;
+        }
+        line-height: 1.2;
         .patient-name{
           color: #333333;
           font-weight: bold;
+          display: inline-block;
+          max-width: rem(160px);
+          @include ellipsis();
         }
         .patient-age{
+          margin-left: rem(10px);
           @include font-dpr(14px);
         }
       }

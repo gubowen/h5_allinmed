@@ -780,9 +780,9 @@
     mounted(){
       let that = this;
 
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
+//      if(!api.checkOpenId()){
+//        api.wxGetOpenId(1);
+//      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      let p1 = new Promise(resolve => that.getUserBaseData());
