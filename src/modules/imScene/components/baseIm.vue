@@ -704,19 +704,19 @@
           url: XHRList.updateCount,
           method: 'POST',
           data: {
-            consultationId: sessionStorage.getItem(orderSourceId),
+            consultationId: sessionStorage.getItem("orderSourceId"),
             frequency: opt.orderFrequency,
             frequencyType: 2,
             consultationState: -1,
             consultationLevel: opt.orderType
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              localStorage.setItem("sendTips", JSON.stringify(opt));
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
+            }
           }
         })
-          .done(function (data) {
-            if (data.responseObject.responseStatus) {
-              localStorage.setItem("sendTips",JSON.stringify(opt));
-              window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
-            }
-          });
       },
       //支付成功回调
       sendPayFinish(){
