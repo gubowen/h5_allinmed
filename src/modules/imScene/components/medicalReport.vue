@@ -153,6 +153,9 @@
       }
       .case-describe{
         margin-top: rem(20px);
+        span{
+          vertical-align: middle;
+        }
         .case-describe-main{
           font-weight: bold;
           display: inline-block;
@@ -160,7 +163,7 @@
           white-space:nowrap;
           overflow:hidden;
           text-overflow:ellipsis;
-          vertical-align: sub;
+          /*vertical-align: sub;*/
           line-height: 1.2;
         }
       }

@@ -4,28 +4,23 @@
       <section class="doctor-personalInfo">
         <div class="doctor-personalInfoBox">
           <div class="doc-personalInfo-left">
-            <!--<span class="personInfo-tips">唯医骨科认证</span>-->
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="false">骨科</span><span class="doc-presents">副主任医师</span><span class="doc-presents-two" v-show="false">博士生导师</span>
+              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitle.length>0">{{medicalTitle}}</span><span class="doc-presents-two" v-show="false">博士生导师</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
             <div class="doc-personPicBox">
               <img :src="logoUrl"  alt="">
               <span class="doc-presentAge" v-show="false">从医36年</span>
-              <!--<span class="doc-personPicTips">从医36年</span>-->
             </div>
           </div>
         </div>
-        <!--<div class="doc-presentInfo">-->
-          <!--<span class="doc-presents">副主任医师</span><span class="doc-presentAge">从医36年</span>-->
-        <!--</div>-->
-        <div class="doc-personalAddress">
-          <p>上海交通大学医学院附属第一人民医院</p>
+        <div class="doc-personalAddress" v-show="company.length>0">
+          <p>{{company}}</p>
         </div>
-        <div class="doc-personal-labelBox" v-show="false">
-          <span class="doc-perLabel-item">三甲</span><span class="doc-perLabel-item">全国top10骨科医院</span>
+        <div class="doc-personal-labelBox" v-show="hospitalLevel.length>0||isTop==1">
+          <span class="doc-perLabel-item" v-show="hospitalLevel.length>0">{{hospitalLevel}}</span><span class="doc-perLabel-item" v-show="isTop==1">全国top10骨科医院</span>
         </div>
       </section>
       <!--网上问诊-->
@@ -38,22 +33,24 @@
           <!--图文问诊-->
           <section class="doc-onlineForChart">
             <section class="onlineForChart-left">
-              <p>图文问诊<span>{{generalPrice}}元</span></p>
+              <p>图文问诊<span v-show="generalPrice.length>0">{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
               <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
-          <section class="doc-onlineForFree" v-show="true">
+          <section class="doc-onlineForFree" v-show="inquiryState>0">
             <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable}" ></section>
           </section>
         </section>
       </section>
       <!--专科信息-->
-      <section class="college-infoBox doc-commonSty">
-        <section class="doc-commonTitle" v-show="areasExpertise.length>0">
-          <p class="doc-titleLeft doc-majorItem">专科：{{areasExpertise}}</p>
+      <section class="college-infoBox doc-commonSty" v-show="areasExpertise.length>0||illnessMapList.length>0||operationMapList.length>0||precedingYearOperationNum.length>0||yesteryearOperationNum.length>0">
+        <section class="doc-commonTitle " v-show="areasExpertise.length>0">
+          <section class="overFlowHidden">
+            <p class="doc-titleLeft doc-majorItem">专科：{{areasExpertise}}</p>
+          </section>
         </section>
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
@@ -64,8 +61,8 @@
             <p class="collegeItem-left">擅治手术</p>
             <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}、</span></p>
           </section>
-          <p class="doc-collegeBoxItem-totalNum" v-show="precedingYearOperationNum.length>0&&yesteryearOperationNum.length>0">近年独立完成的骨科手术病历数</p>
-          <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum.length>0&&yesteryearOperationNum.length>0">
+          <p class="doc-collegeBoxItem-totalNum" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">近年独立完成的骨科手术病历数</p>
+          <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">
             <section class="doc-medicalNumBox">
               <span class="doc-medicalYear">{{yesteryear}}年</span>
               <span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span>
@@ -89,14 +86,14 @@
           <li class="doc-hospitalItem">{{company}}</li>
         </ul>
       </section>
-      <!--个人简介斯蒂芬-->
-      <section class="individual-infoBox doc-commonSty" v-show="isPersonalShow">
+      <!--个人简介-->
+      <section class="individual-infoBox doc-commonSty" >
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
         </section>
-        <section class="individual-textBox">
-          <p>北京协和医和医学进步奖。掌握了一套非手术治疗颈肩腰腿痛的有效疗法，即洛阳正骨治筋疗法。优值牵引法：采用床头多功能牵引架，根据患者不同的病情采用相对应的牵引角度、牵引重量、牵引时间，进行牵引治疗以达正骨理筋的治疗。</p>
+        <section class="individual-textBox" v-show="summary.length>0">
+          <p>{{summary}}</p>
         </section>
       </section>
     </section>
@@ -105,7 +102,7 @@
     </transition>
     <!--支付弹层-->
     <payPopup v-if="payPopupShow" @paySuccess="paySuccessBack" @docCallBack="docStatusChange" :payPopupShow.sync="payPopupShow" :payPopupParams = "{
-        docName:docName,
+        docName:fullName,
         docId:docId,
         caseId:caseId,
         patientId:patientId,
@@ -172,7 +169,6 @@
           isShowCureStatus:true,
           isUsableNum:false,
           isCureStatusText:'',
-          docName:'王国强',                     //医生姓名
           docId:api.getPara().doctorId,                        //医生ID
           caseId:api.getPara().caseId,                         //病历ID
           patientId:api.getPara().patientId,                   //患者ID
@@ -183,7 +179,11 @@
           logoUrl:'',           //头像
           fullName:'',          //姓名
           company:"",           //医院
+          hospitalId:'',        //医院Id
           medicalTitle:"",      //职称
+          department:'',        //科室
+          hospitalLevel:'',     //三甲
+          isTop:'',             //全国top10   1-是 0-否
           areasExpertise:"",    //专科
           illnessMapList:"",    //擅长疾病
           operationMapList:"",  //擅长手术
@@ -192,11 +192,12 @@
           yesteryearOperationNum:"",                    //前年
           precedingYear:new Date().getFullYear()-1,    //去年年份
           precedingYearOperationNum:"",                 //去年
+          inquiryState:"",                         //问诊是否设置免费   >0 开通
           outpatientClinic:"",                     //门诊是否设置
           isUseCureForFree:"",                     //是否使用过免费问诊
-          isOpenCure:false,                        //是否开启问诊
-          isNotUsable:false,                       //是否可用
-          isPersonalShow:false,                    //个人简介是否显示
+          isOpenCure:false,                       //是否开启问诊
+          isNotUsable:false,                      //是否可用
+          summary:"",                              //个人简介内容
           params: {
             getPersonalProParams: {
               customerId: "1461229672002",
@@ -209,7 +210,7 @@
             },
             isReceiveClinicParams:{
               customerId: api.getPara().doctorId,
-              hospitalId: "24362"
+              hospitalId: ""
             },
             isCreateChatParams:{
               patientId: api.getPara().patientId,    //患者ID
@@ -253,7 +254,7 @@
         let _this=this;
         this.getPersonalProDate();
         this.getDocInfo();
-        this.getIsReceiveClinic();
+//        this.getIsReceiveClinic();
         this.isCreateChatForFree();
         this.questionStatus({callBack:(data)=>{
           _this.checkPatientState(data);
@@ -286,10 +287,9 @@
             beforeSend: function () {
               _this.finish = true;
             },
-            timeout: 20000,
+//            timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _data = data.responseObject.responseData.dataList[0],
                   _logoUrl = _data.logoUrlMap.logoUrl;
@@ -297,6 +297,10 @@
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
+                _this.department = _data.authMap.department;           //科室
+                _this.summary = _data.authMap.summary;                 //个人简介
+                let _hospitalLevel = _data.authMap.hospitalLevel;     //三甲
+                _this.isTop = _data.authMap.is_top;                    //全国   1-是 0-否
                 _this.areasExpertise = _data.authMap.areasExpertise;
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
                 _this.yesteryearOperationNum = _data.authMap.yesteryearOperationNum;
@@ -307,6 +311,44 @@
                 } else {
                   _this.logoUrl = require("../../../common/image/img00/doctorHome/docLogo_default.jpg");
                 }
+                //三甲医院
+                switch (_hospitalLevel){
+                  case 0:
+                    _this.hospitalLevel='';
+                    break;
+                  case 1:
+                    _this.hospitalLevel="三甲";
+                    break;
+                  case 2:
+                    _this.hospitalLevel="三乙";
+                    break;
+                  case 3:
+                    _this.hospitalLevel="三丙";
+                    break;
+                  case 4:
+                    _this.hospitalLevel="二甲";
+                    break;
+                  case 5:
+                    _this.hospitalLevel="二乙";
+                    break;
+                  case 6:
+                    _this.hospitalLevel="二丙";
+                    break;
+                  case 7:
+                    _this.hospitalLevel="一甲";
+                    break;
+                  case 8:
+                    _this.hospitalLevel="一乙";
+                    break;
+                  case 9:
+                    _this.hospitalLevel="一丙";
+                    break;
+                  case 10:
+                    _this.hospitalLevel="一级";
+                    break;
+                }
+                //是否接受门诊
+                _this.getIsReceiveClinic();
               }
             },
             fail(err){
@@ -319,7 +361,6 @@
         //获取商品详情
         getGoodsInfo(){
           let _this=this;
-          console.log("5fsdfds");
           api.ajax({
             url:XHRList.getVisitDetails,
             method:"POST",
@@ -330,12 +371,10 @@
             timeout:20000,
             done(data){
               _this.finish = false;
-              console.log(data);
-              if(data&&data.responseObject&&data.responseObject.responseData){
+              if(data&&data.responseObject&&data.responseObject.responseData&&data.responseObject.responseData.dataList){
                 let _dataList = data.responseObject.responseData.dataList[0];
-                console.log(_dataList);
-                _this.generalPrice=_dataList.generalPrice;  // 图文问诊 (老接口普通问诊价格)
-
+                _this.generalPrice=_dataList.generalPrice;   // 图文问诊 (老接口普通问诊价格)
+                _this.inquiryState=_dataList.freeTimes;      //  >0 已开通免费问诊
               }
             },
             fail(){
@@ -356,7 +395,6 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let  _orderAmount = data.responseObject.responseData.dataList[0].orderAmount;
                 if (!parseInt(_orderAmount) > 0) {
@@ -387,12 +425,12 @@
           switch (_orderType){
             case 0:
               //免费
-              console.log("创建免费问诊");
+//              console.log("创建免费问诊");
               _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
-                    console.log("免费--跳页");
+//                    console.log("免费--跳页");
                     window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
@@ -400,12 +438,12 @@
               break;
             case 1:
               //图文问诊
-              console.log("创建图文问诊");
+//              console.log("创建图文问诊");
               _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
-                    console.log("收费--跳页");
+//                    console.log("收费--跳页");
                     window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
@@ -475,7 +513,6 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log(data);
               if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _dataList = data.responseObject.responseData.dataList;
                 Obj.callBack(_dataList);
@@ -525,6 +562,7 @@
         //是否接受门诊
         getIsReceiveClinic(){
           let _this = this;
+          _this.params.isReceiveClinicParams.hospitalId = _this.hospitalId;
           api.ajax({
             url: XHRList.isReceiveClinic,
             method: "POST",
@@ -535,7 +573,6 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _isReceive = data.responseObject.responseData.dataList[0].isReceive;
                 if(parseInt(_isReceive)==1){
@@ -545,10 +582,10 @@
                 }
 
               }else{
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
+//                _this.errorShow = true;
+//                setTimeout(() => {
+//                  _this.errorShow = false;
+//                }, 2000)
               }
             },
             fail(err){
@@ -571,15 +608,14 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log(data);
               if (data&&data.responseObject.responseData && data.responseObject.responseData.data_list) {
                 _this.personalIndividual=data.responseObject.responseData.data_list;
 
               }else{
-                _this.errorShow = true;
-                setTimeout(() => {
-                  _this.errorShow = false;
-                }, 2000)
+//                _this.errorShow = true;
+//                setTimeout(() => {
+//                  _this.errorShow = false;
+//                }, 2000)
               }
             },
             fail(err){
@@ -592,7 +628,7 @@
         //view individualInfo for detail
         individualInfoDetail(){
           let _this=this;
-          console.log(_this.personalIndividual);
+          _this.personalIndividual.summary=_this.summary;
           this.ruleShow=true;
           this.$router.push({
             name:'individualInfo',
@@ -638,15 +674,10 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
-  /*@import "../../../../scss/modules/_searchCommTop";*/
 
   body {
     div{
       height: 100%;
-      /*.loginBackBottom{*/
-        /*background:url("../../../common/image/background_wave.png") no-repeat bottom center;*/
-        /*background-size:100% rem(272px);*/
-      /*}*/
     }
     .doctorContent{
       background-color: #F2F2F2;
@@ -684,7 +715,7 @@
                   margin-right: rem(16px);
                 }
                 .doc-presents-two{
-                  /*margin-left: rem(16px);*/
+
                 }
               }
               .doc-presentAge{
@@ -779,6 +810,21 @@
           @include clearfix();
           padding: rem(50px) rem(60px) rem(34px) rem(30px);
           border-bottom: rem(2px) solid #F8F8F8;
+          .overFlowHidden{
+            @include clearfix();
+            position: relative;
+            &:before{
+              position: absolute;
+              content: '';
+              display: inline-block;
+              width: rem(4px);
+              height: rem(18px);
+              background-color: #2FC5BD;
+              top:50%;
+              margin-top: rem(-9px);
+              left: rem(-12px);
+            }
+          }
           .doc-titleLeft,.doc-titleRight{
             width: 50%;
             float: left;
@@ -1101,11 +1147,11 @@
               font-size: rem(32px);
               color: #666666;
               line-height: rem(45px);
-              overflow: hidden;
               display: -webkit-box;
               -webkit-line-clamp: 4;
               -webkit-box-orient: vertical;
               word-break: break-all;
+              overflow: hidden;
             }
           }
         }

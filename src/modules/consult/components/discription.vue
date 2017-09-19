@@ -16,21 +16,24 @@
                      v-for="(item , index) in question.optionList1" :data-oId="item.optionId">
               <article class="consult-question-item"
                        :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
-                       @click="selectEvent(question.questionType==2,pIndex,index,item)"
+                       @click="selectEvent(question.questionType==2,pIndex,index,item,$event)"
               >
                 <p>{{item.optionName}}</p>
                 <i class="icon-select"></i>
                 <figure class="input-area"
                         v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                         @click.stop="">
-              <textarea class="input-textarea" placeholder="填写其他情况"
-                        @input="otherReason(pIndex,index,$event)"
-                        v-model="questionList[pIndex].optionList[index].optionDesc"
-                        ref="otherEle"
-              >
-              </textarea>
-                  <p class="text-num-tips" v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100">
-                    {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
+                  <textarea class="input-textarea"
+                            placeholder="填写其他情况"
+                            @input="otherReason(pIndex,index,$event)"
+                            v-model="questionList[pIndex].optionList[index].optionDesc"
+                            ref="otherEle"
+                  >
+                  </textarea>
+                  <p class="text-num-tips" 
+                            v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100"
+                  >
+                            {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
                 </figure>
                 <transition name="fade" v-if="painLevelRender(item)">
                   <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
@@ -105,7 +108,11 @@
             </section>
           </section>
           <section class="consult-total">
-            <header class="consult-inner-title"><h2><span>您还有其他补充吗？</span></h2></header>
+            <header class="consult-inner-title">
+              <h2>
+                <span>您还有其他补充吗？</span>
+              </h2>
+            </header>
             <figure class="input-area">
               <textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"
                         @input="complicationLimit"></textarea>
@@ -409,7 +416,7 @@
           })
         });
       },
-      selectEvent(type, pIndex, index,item) {
+      selectEvent(type, pIndex, index,item,$event) {
 
         if (type) {
           this.questionList[pIndex].optionList[index].isSelected = !this.questionList[pIndex].optionList[index].isSelected;
@@ -448,10 +455,14 @@
 
 
         if (item.isAttachment==2){
-          setTimeout(()=>{
-//              console.log(this.$refs.otherEle)
-//            this.$refs.otherEle.focus();
-          },100);
+          if ($event.currentTarget.className.indexOf("selected")<0){
+            console.log($event.currentTarget)
+            const ele=$event.currentTarget;
+            setTimeout(()=>{
+              console.log(ele.querySelector("textarea"))
+              ele.querySelector("textarea").focus();
+            },100)
+          }
         }
       },
       showQueryDetail(id){

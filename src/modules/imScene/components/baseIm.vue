@@ -4,7 +4,7 @@
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">08: 00-20: 00</span></p>
+          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">08: 00-22: 00</span></p>
         </article>
       </transition>
       <transition-group name="fadeDown" tag="section">
@@ -90,7 +90,7 @@
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom"></textarea>
+                    @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
@@ -586,6 +586,7 @@
                 file: file,
                 done(error, msg){
                   that.msgList[that.msgList.length - 1] = msg;
+                  that.imageList.push(that.$refs.bigImg[that.$refs.bigImg.length-1].imageMessage.file.url);
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
@@ -603,7 +604,14 @@
         setTimeout(() => {
           //滑动到底部
           document.body.scrollTop = Math.pow(10, 20);
-        }, 600)
+        }, 300)
+      },
+      //输入框字数限制
+      inputLimit(){
+        let content = this.sendTextContent;
+        if (api.getByteLen(content) > 1000){
+          this.sendTextContent=api.getStrByteLen(content);
+        }
       },
       //获取咨询价格
       getConsultPrice(){

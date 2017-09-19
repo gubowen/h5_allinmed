@@ -139,7 +139,7 @@
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom"></textarea>
+                    @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
@@ -310,7 +310,6 @@
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
                 this.showBottomTips(2);
-//                store.commit("stopLastTimeCount");
                 break;
               case 4://医生接诊
                 this.lastTimeShow = true;
@@ -822,6 +821,12 @@
           document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
+      inputLimit(){
+        let content = this.sendTextContent;
+        if (api.getByteLen(content) > 1000){
+          this.sendTextContent=api.getStrByteLen(content);
+        }
+      },
       //接诊时间倒数
       remainTimeOut(){
         this.remainTimeCount = setInterval(() => {
@@ -910,30 +915,11 @@
         }
       },
       checkFirstBuy(){
-        if (localStorage.getItem("sendTips")&&localStorage.getItem("sendTips")==1) {
-          this.nim.sendCustomMsg({
-            scene: 'p2p',
-            to: this.targetData.account,
-            needPushNick: false,
-            pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
-            pushPayload: JSON.stringify({
-              "account": "0_" + api.getPara().caseId,
-              "type": "1"
-            }),
-            content: JSON.stringify({
-              type: "notification",
-              data: {
-                actionType: "1",
-                contentDesc: `患者已购买了您的${desc}问诊`,
-                subContentDesc: subContentDesc
-              }
-            }),
-            done (error, msg) {
-              if (!error) {
-                that.sendMessageSuccess(error, msg)
-              }
-            }
-          });
+        if (localStorage.getItem("sendTips")) {
+          let count=JSON.parse(localStorage.getItem("sendTips"));
+
+          this.sendPayFinish(count);
+          localStorage.removeItem("sendTips");
         }
       },
       sendPayFinish(count){
@@ -1007,7 +993,7 @@
     },
     mounted(){
       this.getUserBaseData();
-//      this.checkFirstBuy();
+      this.checkFirstBuy();
     },
     activated(){
       this.scrollToBottom();

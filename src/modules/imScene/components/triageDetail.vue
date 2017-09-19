@@ -148,6 +148,7 @@
           },
           done(){
             that.imageList.splice(index, 1);
+            that.uploading=false;
           }
         })
       },
