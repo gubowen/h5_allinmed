@@ -90,7 +90,7 @@
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom"></textarea>
+                    @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
         <button class="main-input-box-send" @click="sendMessage">发送</button>
       </footer>
@@ -604,7 +604,14 @@
         setTimeout(() => {
           //滑动到底部
           document.body.scrollTop = Math.pow(10, 20);
-        }, 600)
+        }, 300)
+      },
+      //输入框字数限制
+      inputLimit(){
+        let content = this.sendTextContent;
+        if (api.getByteLen(content) > 1000){
+          this.sendTextContent=api.getStrByteLen(content);
+        }
       },
       //获取咨询价格
       getConsultPrice(){
@@ -752,9 +759,9 @@
     mounted(){
       let that = this;
 
-//      if(!api.checkOpenId()){
-//        api.wxGetOpenId(1);
-//      }
+      if(!api.checkOpenId()){
+        api.wxGetOpenId(1);
+      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      let p1 = new Promise(resolve => that.getUserBaseData());
