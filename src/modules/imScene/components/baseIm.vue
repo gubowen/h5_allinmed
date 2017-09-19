@@ -4,7 +4,7 @@
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">08: 00-20: 00</span></p>
+          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">08: 00-22: 00</span></p>
         </article>
       </transition>
       <transition-group name="fadeDown" tag="section">
