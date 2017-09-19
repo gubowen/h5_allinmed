@@ -586,6 +586,7 @@
                 file: file,
                 done(error, msg){
                   that.msgList[that.msgList.length - 1] = msg;
+                  that.imageList.push(that.$refs.bigImg[that.$refs.bigImg.length-1].imageMessage.file.url);
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
@@ -751,9 +752,9 @@
     mounted(){
       let that = this;
 
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
+//      if(!api.checkOpenId()){
+//        api.wxGetOpenId(1);
+//      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      let p1 = new Promise(resolve => that.getUserBaseData());
