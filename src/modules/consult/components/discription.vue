@@ -21,7 +21,7 @@
                 <p>{{item.optionName}}</p>
                 <i class="icon-select"></i>
                 <figure class="input-area"
-                        v-show="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
+                        v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                         @click.stop="">
                   <textarea class="input-textarea"
                             placeholder="填写其他情况"
