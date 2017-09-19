@@ -480,7 +480,7 @@
                 outline: none;
                 border: none;
                 box-sizing: border-box;
-                border-bottom: 1px solid #fff;
+                border-bottom: 1px solid #F4F7F9;
                 &.active {
                   background: #F4F7F9;
                 }
