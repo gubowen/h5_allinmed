@@ -352,7 +352,7 @@
                 _areasExpertiseArr.forEach((element,index) => {
                   _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
                 });
-                document.title=`${fullName}医生`;
+                document.title=`${_this.fullName}医生`;
                 //是否接受门诊
                 _this.getIsReceiveClinic();
               }
@@ -636,8 +636,8 @@
         //view individualInfo for detail
         individualInfoDetail(){
           let _this=this,
-          _summary={summary:_this.summary},
-          _fullName={fullName:_this.fullName};
+          _summary ={summary:_this.summary},
+          _fullName ={fullName:_this.fullName};
 //          _this.personalIndividual.summary=_this.summary;
 //          _this.personalIndividual.fullName=_this.fullName;
           Object.assign(_this.personalIndividual, _summary, _fullName);
