@@ -90,7 +90,7 @@ Validator.extend('hospital', {
     }
   },
   validate: value => {
-    return !(/[`~!！？@#$%^&*()_+<>?:"{},，。\/;'[\]]/).test(value)
+    return !(/[A-Za-z`~!！？@#$%^&*()_+<>?:"{},，。\/;'[\]]/).test(value)
   }
 });
 
