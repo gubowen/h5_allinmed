@@ -34,7 +34,7 @@
           <img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">
         </figure>
         <figcaption class="main-message-content">
-          <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家</p>
+          <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家。</p>
           <p v-else-if="!timeSlot">您好！分诊服务时间为09：00-22：00，如有问题请留言，分诊医生上班后会为您答复。</p>
           <!--<p>①  与您沟通分析病情</p>-->
           <!--<p>②  根据病情推荐对症专家</p>-->
