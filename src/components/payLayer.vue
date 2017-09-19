@@ -125,7 +125,7 @@
               const items = data.responseObject.responseData.dataList;
               if(items.state == 0){
                 that.noStateShow = true;
-              }else if(items.remainNum<=0){
+              }else if(items.remainNum<=0 &&items.remainNum != -1){
                 that.noMoreShow = true;
               }else if(items.conState ==1 && that.payPopupParams.from != "imDoctor"){
                 that.hasCommunShow = true;
