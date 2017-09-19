@@ -207,7 +207,6 @@ export default function pay(Obj) {
     }
     //咨询支付成功后创建问诊id
     creatInquiryId (opt) {
-      debugger;
       //获取是否已经存在问诊id
       api.ajax({
         url:  "/mcall/customer/case/consultation/v1/getMapById/",
@@ -232,7 +231,7 @@ export default function pay(Obj) {
                 consultationState: -1,
                 consultationLevel: localStorage.getItem("orderPayType"),
                 siteId: 17,
-                caseType: api.getPara().caseType
+                caseType: 0
               },
               done (d) {
                 if (d.responseObject.responseStatus) {

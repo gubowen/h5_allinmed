@@ -18,7 +18,7 @@
     <section class="tc-searchMain">
       <section class="no-result-item-add" v-if="noResult">
         <button class="btn-primary add-result-item-btn"
-                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
+                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:-1,illnessId:-1})">
           确定
         </button>
       </section>
