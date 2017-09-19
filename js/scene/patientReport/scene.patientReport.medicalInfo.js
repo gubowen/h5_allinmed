@@ -645,7 +645,7 @@ $(function () {
                         text:"报到成功"
                     })
                     setTimeout(function () {
-                        window.location.replace("/pages/myServices/doc_main.html?caseType=10&customerId="+common.getpara().doctorId + "&patientId="+common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId="+rep.responseObject.responsePk);
+                        window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId="+common.getpara().doctorId + "&patientId="+common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId="+rep.responseObject.responsePk);
                         // https://m.allinmed.cn/pages/myServices/doc_main.html?customerId=1495762174307&patientId=1496905728860&caseId=1496905753874&patientCustomerId=1492428843567
                     },2000);
                 } else {
