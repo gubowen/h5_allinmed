@@ -71,7 +71,7 @@
         activated() {
           let _this =this;
           const _data=this.$route.params;
-//          _this.personalIndividualInfo=_data.;    //个人简介
+          _this.personalIndividualInfo=_data.summary;    //个人简介
           _this.continuingEducationList=_data.continuingEducationList;  //继续教育
           _this.educationList=_data.educationList;                      //教育
           _this.fundList=_data.fundList;                                //科研
