@@ -33,7 +33,7 @@
           <!--图文问诊-->
           <section class="doc-onlineForChart">
             <section class="onlineForChart-left">
-              <p>图文问诊<span>{{generalPrice}}元</span></p>
+              <p>图文问诊<span v-show="generalPrice.length>0">{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
               <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
@@ -47,8 +47,10 @@
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty" v-show="areasExpertise.length>0||illnessMapList.length>0||operationMapList.length>0||precedingYearOperationNum.length>0||yesteryearOperationNum.length>0">
-        <section class="doc-commonTitle" v-show="areasExpertise.length>0">
-          <p class="doc-titleLeft doc-majorItem">专科：{{areasExpertise}}</p>
+        <section class="doc-commonTitle " v-show="areasExpertise.length>0">
+          <section class="overFlowHidden">
+            <p class="doc-titleLeft doc-majorItem">专科：{{areasExpertise}}</p>
+          </section>
         </section>
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
@@ -371,7 +373,6 @@
               _this.finish = false;
               if(data&&data.responseObject&&data.responseObject.responseData&&data.responseObject.responseData.dataList){
                 let _dataList = data.responseObject.responseData.dataList[0];
-                console.log(_dataList);
                 _this.generalPrice=_dataList.generalPrice;   // 图文问诊 (老接口普通问诊价格)
                 _this.inquiryState=_dataList.freeTimes;      //  >0 已开通免费问诊
               }
@@ -424,12 +425,12 @@
           switch (_orderType){
             case 0:
               //免费
-              console.log("创建免费问诊");
+//              console.log("创建免费问诊");
               _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
-                    console.log("免费--跳页");
+//                    console.log("免费--跳页");
                     window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
@@ -437,12 +438,12 @@
               break;
             case 1:
               //图文问诊
-              console.log("创建图文问诊");
+//              console.log("创建图文问诊");
               _this.getConsultationId({callBackFn:()=>{
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
-                    console.log("收费--跳页");
+//                    console.log("收费--跳页");
                     window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
@@ -809,6 +810,21 @@
           @include clearfix();
           padding: rem(50px) rem(60px) rem(34px) rem(30px);
           border-bottom: rem(2px) solid #F8F8F8;
+          .overFlowHidden{
+            @include clearfix();
+            position: relative;
+            &:before{
+              position: absolute;
+              content: '';
+              display: inline-block;
+              width: rem(4px);
+              height: rem(18px);
+              background-color: #2FC5BD;
+              top:50%;
+              margin-top: rem(-9px);
+              left: rem(-12px);
+            }
+          }
           .doc-titleLeft,.doc-titleRight{
             width: 50%;
             float: left;
