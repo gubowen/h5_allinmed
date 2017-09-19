@@ -29,7 +29,7 @@
   }
 </script>
 <style lang="scss" scoped="">
-  body > div{
+  div{
     height: 100%;
   }
   .child-view {
