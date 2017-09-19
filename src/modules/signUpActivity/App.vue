@@ -85,7 +85,8 @@
       <img v-show="!moreFlag" src="../../common/image/img00/signUpActivity/05.png">
       <section class="middle-tip-modal popup" :class="{'show':popupText.length>0}">
         <figure class="middle-tip-box-text">
-          <!--<img :src="popupImg" alt=""/>-->
+          <img v-show="popupImg == 'successful'" src="../../common/image/img00/signUpActivity/successful.png" alt=""/>
+          <img v-show="popupImg == 'fail'" src="../../common/image/img00/signUpActivity/fail.png" alt=""/>
           <p class="popup-text">{{popupText}}</p>
         </figure>
       </section>
@@ -119,7 +120,7 @@
     },
     methods: {
       submit(){
-        let _this = this ;
+        let _this = this;
 
 
         let data = {
@@ -142,16 +143,16 @@
           }]
         }).then(function (res) {
           if (res.data.responseObject.responseStatus) {
-                 if(res.data.responseObject.responseMessage == '9X0001'){
-                   _this.popup("同一手机号码只能提交一次");
-                 }else if(res.data.responseObject.responseMessage =='success'){
-                   _this.popup("提交成功工作人员会在48小时内联系您");
-                 }
+            if (res.data.responseObject.responseMessage == '9X0001') {
+              _this.popup("同一手机号码只能提交一次");
+            } else if (res.data.responseObject.responseMessage == 'success') {
+              _this.popup("提交成功工作人员会在48小时内联系您");
+            }
           } else {
-            _this.popup("网络信号差，建议您稍后再试", '../../common/image/img00/signUpActivity/fail.png');
+            _this.popup("网络信号差，建议您稍后再试", 'fail');
           }
         }).catch(function (error) {
-          _this.popup("网络信号差，建议您稍后再试", '../../common/image/img00/signUpActivity/fail.png');
+          _this.popup("网络信号差，建议您稍后再试", 'fail');
           console.log("请求失败：" + error);
         });
       },
@@ -163,12 +164,12 @@
           return false;
         }
 
-        if (_this.name == '' || _this.hospital == ''||_this.selectValue=='' || _this.mobile == '' || _this.checkInput == '') {
+        if (_this.name == '' || _this.hospital == '' || _this.selectValue == '' || _this.mobile == '' || _this.checkInput == '') {
           _this.popup("请填写好信息");
           return false;
         }
 
-        if(_this.idKey==''){
+        if (_this.idKey == '') {
           _this.popup("请先获得验证码");
           return false;
         }
@@ -203,10 +204,10 @@
               }
             }
           } else {
-            _this.popup("网络信号差，建议您稍后再试",'../../common/image/img00/signUpActivity/fail.png');
+            _this.popup("网络信号差，建议您稍后再试", 'fail');
           }
         }).catch(function (error) {
-          _this.popup("网络信号差，建议您稍后再试",'../../common/image/img00/signUpActivity/fail.png');
+          _this.popup("网络信号差，建议您稍后再试", 'fail');
           console.log("请求失败：" + error);
         });
       },
@@ -224,7 +225,8 @@
           account: _this.mobile,      //账号
           codeLength: '4',  //代码长度
           accountType: '0', //0-手机 1-邮箱
-          operateType: '6'  //1-绑定手机 2－修改手机号 3-手机号找回密码 5-手机号注册 8-手机号快捷登录6-医生报名
+          operateType: '6',  //1-绑定手机 2－修改手机号 3-手机号找回密码 5-手机号注册 8-手机号快捷登录6-医生报名
+          mobile: _this.mobile      //账号
         };
         axios({
           method: 'post',
@@ -238,31 +240,42 @@
           }]
         }).then(function (res) {
           if (res.data.responseObject.responseStatus) {
-            _this.validCode = res.data.responseObject.responseData.validCode;
-            _this.idKey = res.data.responseObject.responsePk;
 
-            _this.popup("验证码已发送", '../../common/image/img00/signUpActivity/successful.png');
-            if (!_this.checkClickStatus) {
+            if (res.data.responseObject.responseCode == '9X0005') {
+              _this.popup("同一手机号只能注册一次");
+            } else {
+              _this.validCode = res.data.responseObject.responseData.validCode;
+              _this.idKey = res.data.responseObject.responsePk;
 
-              let i = 60;
-              _this.checkMessage = i + 's';
-              _this.checkClickStatus = true;
-              _this.time = setInterval(function () {
-                i--;
-                _this.checkMessage = i + "S";
-                if (i === 0) {
-                  clearInterval(_this.time);
-                  _this.checkMessage = "重新获取";
-                  _this.checkClickStatus = false;
-                  i = 60;
-                }
-              }, 1000);
+              _this.popup("验证码已发送", 'successful');
+              if (!_this.checkClickStatus) {
+
+                let i = 60;
+                _this.checkMessage = i + 's';
+                _this.checkClickStatus = true;
+                _this.time = setInterval(function () {
+                  i--;
+                  _this.checkMessage = i + "S";
+                  if (i === 0) {
+                    clearInterval(_this.time);
+                    _this.checkMessage = "重新获取";
+                    _this.checkClickStatus = false;
+                    i = 60;
+                  }
+                }, 1000);
+              }
             }
           } else {
-            _this.popup(res.data.responseObject.responseMessage);
+            if (res.data.responseObject.responseCode == '9X0005') {
+              _this.popup("同一手机号只能注册一次");
+            }else if(res.data.responseObject.responseCode == 'SMS0003'){
+              _this.popup("  验证码获取次数过多，请明日再试");
+
+
+            }
           }
         }).catch(function (error) {
-          _this.popup('网络信号差，建议您稍后再试','../../common/image/img00/signUpActivity/fail.png');
+          _this.popup('网络信号差，建议您稍后再试', 'fail');
           console.log("请求失败：" + error);
         });
       },
@@ -298,12 +311,15 @@
             break;
         }
       },
-      popup(text,img){
-          let _this = this ;
+      popup(text, img){
+
+        let _this = this;
         _this.popupText = text;
-        if( typeof (img) !='undefined'){
+        if (typeof (img) != 'undefined') {
+          console.log(img);
           _this.popupImg = img;
         }
+
         setTimeout(function () {
           _this.popupText = '';
           _this.popupImg = '';
@@ -315,10 +331,12 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../scss/library/_common-modules";
+
   * {
     padding: 0;
     margin: 0;
   }
+
   .banner {
     display: block;
     margin: 0 auto;
@@ -326,6 +344,7 @@
     width: 100%;
     max-width: rem(750px);
   }
+
   .content {
     max-width: rem(750px);
     margin: 0 auto;
@@ -493,6 +512,7 @@
 
     }
   }
+
   .saveBtn {
     position: absolute;
     bottom: rem(-89px);
@@ -515,10 +535,12 @@
       width: rem(684px);
     }
   }
+
   .more {
     text-align: center;
     display: block;
   }
+
   .popup {
     position: absolute;
     top: 50%;
@@ -547,13 +569,14 @@
       @include font-dpr(16px);
       color: #FFFFFF;
       & > img {
-        width: rem(50px);
-        height: rem(50px);
+        width: rem(100px);
+        height: rem(100px);
         vertical-align: top;
-        margin-bottom: rem(14px);
+        margin: 0 auto rem(14px);
       }
     }
   }
+
   .icon-down {
     background: url("../../common/image/img00/signUpActivity/unfolded.png") no-repeat;
     background-size: 100%;
@@ -563,6 +586,7 @@
     right: rem(18px);
     top: rem(18px);
   }
+
   .icon-up {
     background: url("../../common/image/img00/signUpActivity/up.png") no-repeat;
     background-size: 100%;
