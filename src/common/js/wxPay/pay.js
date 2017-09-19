@@ -232,7 +232,7 @@ export default function pay(Obj) {
                 consultationState: -1,
                 consultationLevel: localStorage.getItem("orderPayType"),
                 siteId: 17,
-                caseType: api.getPara().caseType
+                caseType: 0
               },
               done (d) {
                 if (d.responseObject.responseStatus) {

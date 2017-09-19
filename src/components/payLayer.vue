@@ -252,6 +252,7 @@
       //无重复订单去支付
       noOrder(opt){
         const that = this;
+        localStorage.setItem("docId",that.payPopupParams.docId);
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -359,6 +360,7 @@
                   isCharge: "false"                         //    string  是  true-收费  false-免费
                 },
                 backCreateSuccess: function (_data) {
+                  that.creatInquiryId();
                   that.$emit("paySuccess", {
                     orderType: 0,
                     orderAmount: 0,
@@ -381,6 +383,47 @@
           }
         })
       },
+      //免费咨询支付成功后创建问诊id
+      creatInquiryId () {
+        let that = this;
+        debugger;
+        //获取是否已经存在问诊id
+        api.ajax({
+          url:  "/mcall/customer/case/consultation/v1/getMapById/",
+          method: "POST",
+          data: {
+            caseId: that.payPopupParams.caseId,
+            customerId: that.payPopupParams.docId,
+            consultationType: 1,
+            siteId: 17
+          },
+          done (data) {
+            if (data.responseObject.responseMessage == "NO DATA"){
+              api.ajax({
+                url:  "/mcall/customer/case/consultation/v1/create/",
+                method: "POST",
+                data: {
+                  caseId: that.payPopupParams.caseId,
+                  customerId: that.payPopupParams.docId ,
+                  patientCustomerId: that.payPopupParams.patientCustomerId,
+                  patientId: that.payPopupParams.patientId,
+                  consultationType: 1,
+                  consultationState: -1,
+                  consultationLevel: 0,
+                  siteId: 17,
+                  caseType: 0
+                },
+                done (d) {
+                  if (d.responseObject.responseStatus) {
+                    localStorage.removeItem("docId");
+                    sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
+                  }
+                }
+              });
+            }
+          }
+        });
+      }
     },
     props: {
       payPopupShow: {
