@@ -96,7 +96,7 @@
       </footer>
     </transition>
     <!--支付弹层-->
-    <payPopup @paySuccess="refreashOrderTime"
+    <payPopup @paySuccess="toUpLoadTimes"
               :payPopupShow.sync="payPopupShow"
               :payPopupParams = "payPopupDate"
               v-if="payPopupShow">
@@ -696,6 +696,27 @@
             }
           }
         })
+      },
+      toUpLoadTimes(opt) {
+        let that = this;
+        debugger
+        api.ajax({
+          url: XHRList.updateCount,
+          method: 'POST',
+          data: {
+            consultationId: sessionStorage.getItem(orderSourceId),
+            frequency: opt.orderFrequency,
+            frequencyType: 2,
+            consultationState: -1,
+            consultationLevel: opt.orderType
+          }
+        })
+          .done(function (data) {
+            if (data.responseObject.responseStatus) {
+              localStorage.setItem("sendTips",JSON.stringify(opt));
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + api.getPara().patientId;
+            }
+          });
       },
       //支付成功回调
       sendPayFinish(){
