@@ -250,6 +250,7 @@
         }
       },
       mounted() {
+        document.title=`${_this.fullName}医生`;
 //        document.title="医生主页";
         let _this=this;
         this.getPersonalProDate();
@@ -352,7 +353,8 @@
                 _areasExpertiseArr.forEach((element,index) => {
                   _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
                 });
-                document.title=`${_this.fullName}医生`;
+//                document.title=`${_this.fullName}医生`;
+//                document.title=`${_this.fullName}医生`;
                 //是否接受门诊
                 _this.getIsReceiveClinic();
               }
