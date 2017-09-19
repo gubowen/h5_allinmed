@@ -324,7 +324,7 @@
       //去医生主页
       goDoctorHome(index){
         let that = this;
-        window.location.href = '/pages/myServices/doc_main.html?customerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId + '&type=2';
+        window.location.href = '/dist/doctorHome.html?doctorId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId;
       },
       //免费问诊
       goConsult(index,type){
