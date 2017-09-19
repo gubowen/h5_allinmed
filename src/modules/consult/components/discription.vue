@@ -30,7 +30,7 @@
                             ref="otherEle"
                   >
                   </textarea>
-                  <p class="text-num-tips" 
+                  <p class="text-num-tips"
                             v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100"
                   >
                             {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
