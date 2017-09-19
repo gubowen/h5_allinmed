@@ -458,8 +458,9 @@
           if ($event.currentTarget.className.indexOf("selected")<0){
             console.log($event.currentTarget)
             const ele=$event.currentTarget;
+            // 此物在IOS下似乎不能顺利好使
+            // 以后再说
             setTimeout(()=>{
-              console.log(ele.querySelector("textarea"))
               ele.querySelector("textarea").focus();
             },100)
           }

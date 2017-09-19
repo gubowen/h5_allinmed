@@ -50,7 +50,7 @@
     <!--处置建议-->
     <section class="main-message-box" v-if="treatmentObj.allData.length">
       <article class="check-suggest-box">
-        <header class="check-suggest-title">根据您的清空，为您推荐以下康复方式，请务必在医生的指导下进行</header>
+        <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
         <section class="check-suggest-bg"></section>
         <section class="check-suggest-content">
           <ul class="check-suggest-list">
@@ -71,7 +71,7 @@
     <!--患教知识-->
     <section class="main-message-box" v-if="knowledgeObj.allData.length">
       <article class="knowledge-box">
-        <header class="knowledge-title">以下骨科知识有助于您早日康复,点击查看详情</header>
+        <header class="knowledge-title">以下骨科知识有助于您早日康复，点击查看详情</header>
         <section class="knowledge-bg"></section>
         <section class="knowledge-content">
           <ul class="knowledge-list">
@@ -79,7 +79,7 @@
                 v-for="(item , index) in knowledgeObj.tempData"
                 @click="goKnowledgeDetail(index)"
             >
-              <span>{{item.knowledgeName}}</span>
+              <span class="knowledge-name">{{item.knowledgeName}}</span>
               <span class="knowledge-detail">详情</span>
             </li>
           </ul>
@@ -324,7 +324,7 @@
       //去医生主页
       goDoctorHome(index){
         let that = this;
-        window.location.href = '/pages/myServices/doc_main.html?customerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId + '&type=2';
+        window.location.href = '/dist/doctorHome.html?doctorId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId;
       },
       //免费问诊
       goConsult(index,type){
@@ -498,11 +498,14 @@
         .knowledge-item{
           color: #333333;
           box-sizing: border-box;
-          line-height: 1;
-          padding: rem(42px) rem(0px);
+          padding: rem(38px) rem(0px);
           margin: 0 rem(30px);
           position: relative;
           font-weight: bold;
+          .knowledge-name{
+            display: inline-block;
+            max-width: rem(480px);
+          }
           .knowledge-detail{
             position: absolute;
             color: #AAAAAA;
