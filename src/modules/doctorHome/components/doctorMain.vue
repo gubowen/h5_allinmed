@@ -250,7 +250,7 @@
         }
       },
       mounted() {
-        document.title=`${_this.fullName}医生`;
+//        document.title=`${_this.fullName}医生`;
 //        document.title="医生主页";
         let _this=this;
         this.getPersonalProDate();
@@ -295,6 +295,7 @@
                 let _data = data.responseObject.responseData.dataList[0],
                   _logoUrl = _data.logoUrlMap.logoUrl;
                 _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10字
+
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
@@ -353,8 +354,9 @@
                 _areasExpertiseArr.forEach((element,index) => {
                   _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
                 });
-//                document.title=`${_this.fullName}医生`;
-//                document.title=`${_this.fullName}医生`;
+                // 标题 医生姓名
+                let _fullName = _this.fullName;
+                document.title=`${_fullName}医生`;
                 //是否接受门诊
                 _this.getIsReceiveClinic();
               }
