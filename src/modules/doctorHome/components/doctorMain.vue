@@ -200,7 +200,7 @@
           summary:"",                              //个人简介内容
           params: {
             getPersonalProParams: {
-              customerId: "1461229672002",
+              customerId: api.getPara().doctorCustomerId,
               visitSiteId: 1,
               maxResult: 9999,
             },
