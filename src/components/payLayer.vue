@@ -500,7 +500,7 @@
           dd{
             display: inline-block;
             vertical-align: middle;
-            margin-left:rem(20px);
+            margin-left:rem(15px);
             &:before{
               background: #828282;
               display: inline-block;
