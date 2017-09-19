@@ -386,7 +386,6 @@
       //免费咨询支付成功后创建问诊id
       creatInquiryId () {
         let that = this;
-        debugger;
         //获取是否已经存在问诊id
         api.ajax({
           url:  "/mcall/customer/case/consultation/v1/getMapById/",
