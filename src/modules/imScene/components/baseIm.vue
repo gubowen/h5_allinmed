@@ -729,6 +729,7 @@
             //创建订单失败  (必选)
           },
           wxPaySuccess(_data){
+            console.log("支付成功")
             that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
