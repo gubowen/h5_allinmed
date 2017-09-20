@@ -71,7 +71,7 @@
           'ensure':'离开',
           'cancel':'取消',
           'title':'努力上传中\n现在离开下次还要重新上传哦'
-          }" v-if="confirmShow" :showFlag.sync="confirmShow" @cancelClickEvent="cancelEvent()"
+          }" v-if="videoLeaveConfirm" :showFlag.sync="videoLeaveConfirm" @cancelClickEvent="cancelEvent()"
         @ensureClickEvent="ensureEvent()">
       </confirm>
     </transition>
@@ -103,8 +103,9 @@
   export default{
     data(){
       return {
-        confirmShow:false,//confirm框是否显示
+        videoLeaveConfirm:false,//confirm框是否显示
         pageLeaveEnsure: false,//页面是否离开
+
         baseMessage: {},
         imageList: [],
         uploading: false,
@@ -118,7 +119,7 @@
     },
     beforeRouteLeave (to, from, next){
       if (to.name === "BaseIm") {
-        this.confirmShow = true;
+        this.videoLeaveConfirm = true;
       }
       next(this.pageLeaveEnsure)
     },
@@ -379,11 +380,11 @@
         })
       },
       cancelEvent() {
-        this.confirmShow = false;
+        this.videoLeaveConfirm = false;
         this.pageLeaveEnsure = false;
       },
       ensureEvent() {
-        this.confirmShow = false;
+        this.videoLeaveConfirm = false;
         this.pageLeaveEnsure = true;
         this.$router.go(-1);
       },
