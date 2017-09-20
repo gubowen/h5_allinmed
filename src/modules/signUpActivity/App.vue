@@ -19,7 +19,7 @@
             <div>
               <span class="apply_title">医院</span>
               <span class="apply_text">
-                <input class="hospital" type="text" placeholder="填写所在的医院" v-model="hospital" maxlength="40"   @keyup="hospitalLength()" name="hospital" v-validate="'required|hospital'"/>
+                <input class="hospital" type="text" placeholder="填写所在医院" v-model="hospital" maxlength="40"   @keyup="hospitalLength()" name="hospital" v-validate="'required|hospital'"/>
               </span>
             </div>
             <p class="nameHospitalMessage error-message" v-show="errors.has('hospital')">{{errors.first('hospital') }}</p>
@@ -35,7 +35,7 @@
                 <!--</select>-->
                 <div class="simulateSelect">
                   <i :class=" simulateSelectStatus ? 'icon-up':'icon-down'" @click.stop="simulateSelect()"></i>
-                  <input type="text" readonly placeholder="请选择" @click.stop="simulateSelect()" v-model="selectValue"/>
+                  <input type="text" readonly placeholder="选择当前职称" @click.stop="simulateSelect()" v-model="selectValue"/>
                   <ul v-show="simulateSelectStatus">
                     <li @click.stop="select(1)" :class="{'active':this.selectValue=='主任医生'}">主任医生</li>
                     <li @click.stop="select(2)" :class="{'active':this.selectValue=='副主任医生'}">副主任医生</li>
