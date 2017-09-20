@@ -65,7 +65,6 @@
               honorList:'',
               CESTimeBox:[],
               CEETimeBox:[],
-
             }
         },
         activated() {
@@ -80,7 +79,7 @@
           document.title=`${_this.fullName}医生`;
         },
         mounted() {
-
+          document.body.scrollTop = 0;
         },
         methods: {
           timeDeal(time){
