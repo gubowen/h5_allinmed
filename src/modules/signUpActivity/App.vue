@@ -10,7 +10,7 @@
             <div>
               <span class="apply_title">姓名</span>
               <span class="apply_text">
-                <input class=" name" type="text" placeholder="填写真实姓名" maxlength="40" v-model="name" name="name" v-validate="'required|special'"/>
+                <input class=" name" type="text" placeholder="填写真实姓名" maxlength="40" @keyup="nameLength()" v-model="name" name="name" v-validate="'required|special'"/>
               </span>
             </div>
             <p class="nameErrorMessage error-message" v-show="errors.has('name')">{{errors.first('name') }}</p>
@@ -19,7 +19,7 @@
             <div>
               <span class="apply_title">医院</span>
               <span class="apply_text">
-                <input class="hospital" type="text" placeholder="填写所在的医院" v-model="hospital" maxlength="40" name="hospital" v-validate="'required|hospital'"/>
+                <input class="hospital" type="text" placeholder="填写所在的医院" v-model="hospital" maxlength="40"   @keyup="hospitalLength()" name="hospital" v-validate="'required|hospital'"/>
               </span>
             </div>
             <p class="nameHospitalMessage error-message" v-show="errors.has('hospital')">{{errors.first('hospital') }}</p>
@@ -59,14 +59,21 @@
             <div>
               <span class="apply_title">验证码</span>
               <span class="apply_text">
-                <input class="apply_checkInput" type="tel" placeholder="填写短信验证码" v-model="checkInput" maxlength="4"/>
+                <input class="apply_checkInput" type="tel" placeholder="填写短信验证码" v-model="checkInput" maxlength="4" name="checkCodeValidate" v-validate="'required'"/>
                 <a class="apply_checkCode" @click="checkCode()" :class="{'on':checkClickStatus}">{{checkMessage}}</a>
               </span>
             </div>
-            <p class="nameCheckMessage error-message"></p>
+            <p class="nameCheckMessage error-message" v-show="errors.has('checkCodeValidate')">{{errors.first('checkCodeValidate') }}</p>
           </li>
         </ul>
         <a class="saveBtn" @click="validator(submit)"></a>
+        <section class="middle-tip-modal popup" :class="{'show':popupText.length>0}">
+          <figure class="middle-tip-box-text">
+            <img v-show="popupImg == 'successful'" src="../../common/image/img00/signUpActivity/successful.png" alt=""/>
+            <img v-show="popupImg == 'fail'" src="../../common/image/img00/signUpActivity/fail.png" alt=""/>
+            <p class="popup-text">{{popupText}}</p>
+          </figure>
+        </section>
       </div>
 
       <!--<div class="apply_message">-->
@@ -83,13 +90,7 @@
         <img src="../../common/image/img00/signUpActivity/04.png">
       </div>
       <img v-show="!moreFlag" src="../../common/image/img00/signUpActivity/05.png">
-      <section class="middle-tip-modal popup" :class="{'show':popupText.length>0}">
-        <figure class="middle-tip-box-text">
-          <img v-show="popupImg == 'successful'" src="../../common/image/img00/signUpActivity/successful.png" alt=""/>
-          <img v-show="popupImg == 'fail'" src="../../common/image/img00/signUpActivity/fail.png" alt=""/>
-          <p class="popup-text">{{popupText}}</p>
-        </figure>
-      </section>
+
     </div>
 
   </div>
@@ -145,8 +146,8 @@
           if (res.data.responseObject.responseStatus) {
             if (res.data.responseObject.responseMessage == '9X0001') {
               _this.popup("同一手机号码只能提交一次");
-            } else if (res.data.responseObject.responseMessage == 'success') {
-              _this.popup("提交成功工作人员会在48小时内联系您");
+            } else {
+              _this.popup("提交成功工作人员会在48小时内联系您", 'successful');
             }
           } else {
             _this.popup("网络信号差，建议您稍后再试", 'fail');
@@ -228,56 +229,56 @@
           operateType: '6',  //1-绑定手机 2－修改手机号 3-手机号找回密码 5-手机号注册 8-手机号快捷登录6-医生报名
           mobile: _this.mobile      //账号
         };
-        axios({
-          method: 'post',
-          url: '/mcall/customer/send/code/v1/create/',
-          data: data,
-          responseType: 'json',
-          header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-          transformRequest: [function (data) {
-            data = "paramJson=" + JSON.stringify(data);
-            return data;
-          }]
-        }).then(function (res) {
-          if (res.data.responseObject.responseStatus) {
+        if (!_this.checkClickStatus && !_this.errors.has('phone')) {
+          axios({
+            method: 'post',
+            url: '/mcall/customer/send/code/v1/create/',
+            data: data,
+            responseType: 'json',
+            header: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            transformRequest: [function (data) {
+              data = "paramJson=" + JSON.stringify(data);
+              return data;
+            }]
+          }).then(function (res) {
+            if (res.data.responseObject.responseStatus) {
 
-            if (res.data.responseObject.responseCode == '9X0005') {
-              _this.popup("同一手机号只能注册一次");
+              if (res.data.responseObject.responseCode == '9X0005') {
+                _this.popup("同一手机号只能注册一次");
+              } else {
+                _this.validCode = res.data.responseObject.responseData.validCode;
+                _this.idKey = res.data.responseObject.responsePk;
+
+                _this.popup("验证码已发送", 'successful');
+                if (!_this.checkClickStatus) {
+
+                  let i = 60;
+                  _this.checkMessage = i + 's';
+                  _this.checkClickStatus = true;
+                  _this.time = setInterval(function () {
+                    i--;
+                    _this.checkMessage = i + "S";
+                    if (i === 0) {
+                      clearInterval(_this.time);
+                      _this.checkMessage = "重新获取";
+                      _this.checkClickStatus = false;
+                      i = 60;
+                    }
+                  }, 1000);
+                }
+              }
             } else {
-              _this.validCode = res.data.responseObject.responseData.validCode;
-              _this.idKey = res.data.responseObject.responsePk;
-
-              _this.popup("验证码已发送", 'successful');
-              if (!_this.checkClickStatus) {
-
-                let i = 60;
-                _this.checkMessage = i + 's';
-                _this.checkClickStatus = true;
-                _this.time = setInterval(function () {
-                  i--;
-                  _this.checkMessage = i + "S";
-                  if (i === 0) {
-                    clearInterval(_this.time);
-                    _this.checkMessage = "重新获取";
-                    _this.checkClickStatus = false;
-                    i = 60;
-                  }
-                }, 1000);
+              if (res.data.responseObject.responseCode == '9X0005') {
+                _this.popup("同一手机号只能注册一次");
+              } else if (res.data.responseObject.responseCode == 'SMS0003') {
+                _this.popup("  验证码获取次数过多，请明日再试");
               }
             }
-          } else {
-            if (res.data.responseObject.responseCode == '9X0005') {
-              _this.popup("同一手机号只能注册一次");
-            }else if(res.data.responseObject.responseCode == 'SMS0003'){
-              _this.popup("  验证码获取次数过多，请明日再试");
-
-
-            }
-          }
-        }).catch(function (error) {
-          _this.popup('网络信号差，建议您稍后再试', 'fail');
-          console.log("请求失败：" + error);
-        });
+          }).catch(function (error) {
+            _this.popup('网络信号差，建议您稍后再试', 'fail');
+            console.log("请求失败：" + error);
+          });
+        }
       },
       validateBlur(name) {
         this.$validator.validateAll();
@@ -325,6 +326,46 @@
           _this.popupImg = '';
 
         }, 2000);
+      },
+      nameLength(){
+        var _this = this;
+        var len = 0;
+        let count = 0;
+        for (let i=0; i < _this.name.length; i++) {
+          var c =  _this.name.charCodeAt(i);
+          if(len<40){
+          if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+            len++;
+            count++
+          }
+          else {
+            len += 2;
+            count++
+          }
+          }else{
+            _this.name = _this.name.substr(0, count);
+          }
+        }
+      },
+      hospitalLength(){
+        var _this = this;
+        var len = 0;
+        let count = 0;
+        for (let i=0; i < _this.hospital.length; i++) {
+          var c =  _this.hospital.charCodeAt(i);
+          if(len<40){
+            if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
+              len++;
+              count++
+            }
+            else {
+              len += 2;
+              count++
+            }
+          }else{
+            _this.hospital = _this.hospital.substr(0, count);
+          }
+        }
       }
     }
   }
@@ -404,6 +445,8 @@
               border: none;
               padding-left: rem(18px);
               box-sizing: border-box;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             .apply_checkInput {
@@ -515,7 +558,7 @@
 
   .saveBtn {
     position: absolute;
-    bottom: rem(-89px);
+    bottom: rem(-115px);
     left: rem(33px);
     text-align: center;
     background: url("../../common/image/img00/signUpActivity/button.png") no-repeat;
@@ -525,7 +568,7 @@
     width: rem(684px);
     &:active {
       position: absolute;
-      bottom: rem(-89px);
+      bottom: rem(-115px);
       left: rem(33px);
       text-align: center;
       background: url("../../common/image/img00/signUpActivity/button_press.png") no-repeat;

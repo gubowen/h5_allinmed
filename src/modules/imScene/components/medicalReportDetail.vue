@@ -343,7 +343,7 @@
               display: inline-block;
               content: '';
               width: rem(4px);
-              height: rem(20px);
+              height: rem(24px);
               margin-right: rem(10px);
               background: #4CD3C6;
               vertical-align: middle;
