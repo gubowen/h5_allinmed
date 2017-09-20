@@ -48,7 +48,7 @@
 
   const XHRList = {
     hospital: "/mcall/comm/data/baseinfo/v1/getHospitalList/",
-    disease: "/mcall/cms/part/illness/relation/v1/getMapList/",
+    disease: "/mcall/comm/data/illness/v1/getMapList/",
   };
   export default{
     data(){
