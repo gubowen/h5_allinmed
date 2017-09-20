@@ -122,15 +122,21 @@
     methods: {
       submit(){
         let _this = this;
-
-
+        let sendSiteId = '17';
+        let url =window.location.search;
+        if(url){
+          if (url.indexOf("sendSiteId") != -1) {
+            sendSiteId = url.substr(url.indexOf("=")+1,url.length-1);
+          }
+        }
+        console.log();
         let data = {
           doctorName: _this.name,
           hospitalName: _this.hospital,
           titleName: _this.career,
           mobile: _this.mobile,
           isValid: '1',
-          sendSiteId: '17'
+          sendSiteId: sendSiteId
         };
         axios({
           method: 'post',
