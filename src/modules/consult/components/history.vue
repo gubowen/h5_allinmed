@@ -212,6 +212,7 @@
       document.body.scrollTop = 0;
       autosize(this.$el.querySelector(".medicineBox"));
       localStorage.setItem("hasCome", 0);
+      alert(localStorage.getItem("ImAlreadyUrl"));
     },
     methods: {
       initData () {

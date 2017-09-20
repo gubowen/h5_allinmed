@@ -821,6 +821,8 @@
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
+
+      localStorage.setItem("ImAlreadyUrl", window.location.href)
 //      let p1 = new Promise(resolve => that.getUserBaseData());
 //      let p2 = new Promise(resolve => that.triageDoctorAssign());
 //      Promise.all([p1,p2]).then(function () {
