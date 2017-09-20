@@ -745,6 +745,7 @@
             margin-top: rem(26px);
             margin-bottom: rem(14px);
             padding-left: rem(48px);
+            overflow: visible;
             &::after {
               position: absolute;
               content: '';
