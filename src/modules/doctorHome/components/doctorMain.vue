@@ -848,6 +848,9 @@
               top:50%;
               margin-top: rem(-9px);
               left: rem(-12px);
+              -webkit-border-radius: rem(100px);
+              -moz-border-radius: rem(100px);
+              border-radius: rem(100px);
             }
           }
           .doc-titleLeft,.doc-titleRight{
@@ -869,6 +872,9 @@
               top:50%;
               margin-top: rem(-9px);
               left: rem(-12px);
+              -webkit-border-radius: rem(100px);
+              -moz-border-radius: rem(100px);
+              border-radius: rem(100px);
             }
             //专科
             &.doc-majorItem{
