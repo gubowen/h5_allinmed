@@ -139,7 +139,7 @@ class Consult {
         name: "doctorMain",
         component: doctorMain,
         meta: {
-          keepAlive: true
+          keepAlive: false
         },
       },
       {

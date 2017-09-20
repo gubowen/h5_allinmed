@@ -1,18 +1,18 @@
 <template>
-  <section class="doctorContent">
+  <section class="doctorContent" >
     <section class="doctorContent-box">
       <section class="doctor-personalInfo">
         <div class="doctor-personalInfoBox">
           <div class="doc-personalInfo-left">
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitle.length>0">{{medicalTitle}}</span><span class="doc-presents-two" v-show="false">博士生导师</span>
+              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
             <div class="doc-personPicBox">
               <img :src="logoUrl"  alt="">
-              <span class="doc-presentAge" v-show="false">从医36年</span>
+              <span class="doc-presentAge" v-show="jobDoctorYear>0">从医{{jobDoctorYear}}年</span>
             </div>
           </div>
         </div>
@@ -180,6 +180,10 @@
           fullName:'',          //姓名
           company:"",           //医院
           hospitalId:'',        //医院Id
+          medicalTitleNewArr:[],
+//          hospitalTitle:"",      //职称
+//          eduTitle:"",           //职称
+//          othTitle:"",           //职称
           medicalTitle:"",      //职称
           department:'',        //科室
           hospitalLevel:'',     //三甲
@@ -250,8 +254,6 @@
         }
       },
       mounted() {
-//        document.title=`${_this.fullName}医生`;
-//        document.title="医生主页";
         let _this=this;
         this.getPersonalProDate();
         this.getDocInfo();
@@ -274,7 +276,7 @@
               doctorId: _this.docId,
               hospitalId: _this.hospitalId,
               docName: _this.fullName,
-              docTitle: _this.medicalTitle
+              docTitle: _this.medicalTitleNewArr
             }
           })
         },
@@ -294,20 +296,27 @@
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _data = data.responseObject.responseData.dataList[0],
                   _logoUrl = _data.logoUrlMap.logoUrl;
-                _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10字
-
+                _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
                 _this.department = _data.authMap.department;           //科室
                 _this.summary = _data.authMap.summary;                 //个人简介
-                let _hospitalLevel = _data.authMap.hospitalLevel;     //三甲
-                _this.isTop = _data.authMap.is_top;                    //全国   1-是 0-否
-                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
+                _this.isTop = _data.authMap.isTop;                    //全国   1-是 0-否
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
                 _this.yesteryearOperationNum = _data.authMap.yesteryearOperationNum;
                 _this.illnessMapList = _data.illnessMapList;
                 _this.operationMapList = _data.operationMapList;
+                _this.jobDoctorYear = _data.authMap.jobDoctorYear;            //从医年限
+
+                let _hospitalLevel = _data.authMap.hospitalLevelId;     //三甲
+                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
+                //职称
+                let _medicalTitleArr=_this.medicalTitle.split(",");
+                _medicalTitleArr.forEach((element,index) => {
+                  _this.medicalTitleNewArr.push(element.substring(element.indexOf("_")+1));
+                });
+                //头像
                 if (_logoUrl.length > 0) {
                   _this.logoUrl = _logoUrl;
                 } else {

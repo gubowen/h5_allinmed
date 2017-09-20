@@ -924,6 +924,11 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imStyle";
+
+  .ev-fileUpHide{
+    box-shadow: none !important;
+    border: none;
+  }
   //问诊开始结束提示样式
   .first-message {
     @include font-dpr(13px);
