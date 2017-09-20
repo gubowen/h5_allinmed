@@ -144,7 +144,7 @@
 //      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
 //      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
       getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
-      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
+//      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
       getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
       todayIsHasOrder: "/mcall/cms/pay/order/v1/getMapByCustomerId/"                       //是否当天已经预约过门诊
     };
@@ -225,7 +225,12 @@
             },
             currentByCustomerIdParams: {
               customerId: api.getPara().doctorCustomerId,
-              caseId: api.getPara().caseId
+              caseId: api.getPara().caseId,
+              patientId: api.getPara().patientId,    //患者ID
+              doctorId: api.getPara().doctorCustomerId,      // 医生ID
+              orderType: 1,
+              orderSourceType: 0,
+              sortType: 2
             },
             getConsultationIdParams:{
               caseId: api.getPara().caseId,
@@ -258,7 +263,7 @@
         this.getPersonalProDate();
         this.getDocInfo();
 //        this.getIsReceiveClinic();
-        this.isCreateChatForFree();
+//        this.isCreateChatForFree();
         this.questionStatus({callBack:(data)=>{
           _this.checkPatientState(data);
         }});
@@ -551,6 +556,7 @@
               _remainNum = cps.remainNum,
               _state = cps.state,
               _conState = cps.conState,
+              _isFree = cps.isFree,
               _consultationState = cps.consultationState;    //0-进行中  2-已拒绝
           if (_state == 1) {
             //开启问诊
@@ -579,6 +585,14 @@
           if(_consultationState==2){
             _this.isNotUsable = true;
           }
+          //是否使用过免费问诊
+          if(_isFree==0){
+            //试用过
+            _this.isUseCureForFree=true;
+          }else {
+            //未使用
+            _this.isUseCureForFree=false;
+          }
         },
         //是否接受门诊
         getIsReceiveClinic(){
@@ -595,7 +609,7 @@
             done(data) {
               _this.finish = false;
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                let _isReceive = data.responseObject.responseData.dataList[0].isReceive;
+                let _isReceive = data.responseObject.responseData.dataList[0].clinicState;   //0-未开启   1-开启
                 if(parseInt(_isReceive)==1){
                   _this.outpatientClinic = true;
                 }else {

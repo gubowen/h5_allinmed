@@ -36,11 +36,11 @@ export default new Vuex.Store({
         age = parseInt(param.age),
         img = "";
       if (age <= 12) {
-        img = "//m.allinmed.cn/image/img00/myServices/chatting_portrait_child@2x.png";
+        img = require("../../../common/image/img00/myServices/chatting_portrait_child@2x.png");
       } else if (age > 12 && age <= 59) {
-        img = (sex === "男" ? "//m.allinmed.cn/image/img00/myServices/chatting_chatting_man@2x.png" : "//m.allinmed.cn/image/img00/myServices/chatting_portrait_woman@2x.png");
+        img = (sex === "男" ? require("../../../common/image/img00/myServices/chatting_chatting_man@2x.png") : require("../../../common/image/img00/myServices/chatting_portrait_woman@2x.png"));
       } else if (age > 59) {
-        img = (sex === "男" ? "//m.allinmed.cn/image/img00/myServices/chatting_portrait_old_man@2x.png" : "//m.allinmed.cn/image/img00/myServices/chatting_portrait_old_woman@2x.png");
+        img = (sex === "男" ? require("../../../common/image/img00/myServices/chatting_portrait_old_man@2x.png") : require("../../../common/image/img00/myServices/chatting_portrait_old_woman@2x.png"));
       }
       state.logoUrl = img;
     },

@@ -57,7 +57,7 @@
     <section class="video-upLoad-box"  v-if="videoUploading">
       <section class="ev-videoUpLoading">
         <div class="tc-videoLoadingImg">
-          <img src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
+          <img src="../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
         </div>
         <p class="tc-videoLoadingText">上传中...</p>
       </section>
