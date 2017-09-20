@@ -229,7 +229,9 @@
           operateType: '6',  //1-绑定手机 2－修改手机号 3-手机号找回密码 5-手机号注册 8-手机号快捷登录6-医生报名
           mobile: _this.mobile      //账号
         };
+
         if (!_this.checkClickStatus && !_this.errors.has('phone')) {
+          _this.checkClickStatus = true;
           axios({
             method: 'post',
             url: '/mcall/customer/send/code/v1/create/',
@@ -250,11 +252,9 @@
                 _this.idKey = res.data.responseObject.responsePk;
 
                 _this.popup("验证码已发送", 'successful');
-                if (!_this.checkClickStatus) {
 
                   let i = 60;
                   _this.checkMessage = i + 's';
-                  _this.checkClickStatus = true;
                   _this.time = setInterval(function () {
                     i--;
                     _this.checkMessage = i + "S";
@@ -265,16 +265,18 @@
                       i = 60;
                     }
                   }, 1000);
-                }
               }
             } else {
               if (res.data.responseObject.responseCode == '9X0005') {
                 _this.popup("同一手机号只能注册一次");
+                _this.checkClickStatus = false;
               } else if (res.data.responseObject.responseCode == 'SMS0003') {
                 _this.popup("  验证码获取次数过多，请明日再试");
+                _this.checkClickStatus = false;
               }
             }
           }).catch(function (error) {
+            _this.checkClickStatus = false;
             _this.popup('网络信号差，建议您稍后再试', 'fail');
             console.log("请求失败：" + error);
           });
