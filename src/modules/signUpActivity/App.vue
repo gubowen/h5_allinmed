@@ -348,7 +348,6 @@
         }
       },
       hospitalLength(){
-
         var _this = this;
         var len = 0;
         let count = 0;
