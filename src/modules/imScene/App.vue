@@ -1,7 +1,10 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+
+  <!--<transition name="fadeRight">-->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  <!--</transition>-->
 </template>
 
 <script type="text/ecmascript-6">
@@ -46,10 +49,10 @@
   }
 
   .fadeRight-leave-active {
-    transition-duration: 0s;
+    /*transition-duration: 0s;*/
   }
 
-  .fadeRight-enter, .fadeRight-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeRight-enter /* .fade-leave-active in <2.1.8 */
   {
     opacity: 0;
     transform: translateX(100%);

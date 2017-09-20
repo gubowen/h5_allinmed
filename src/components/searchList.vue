@@ -18,7 +18,7 @@
     <section class="tc-searchMain">
       <section class="no-result-item-add" v-if="noResult">
         <button class="btn-primary add-result-item-btn"
-                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
+                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:-1,illnessId:-1})">
           确定
         </button>
       </section>
@@ -48,7 +48,7 @@
 
   const XHRList = {
     hospital: "/mcall/comm/data/baseinfo/v1/getHospitalList/",
-    disease: "/mcall/cms/part/illness/relation/v1/getMapList/",
+    disease: "/mcall/comm/data/illness/v1/getMapList/",
   };
   export default{
     data(){
@@ -129,7 +129,7 @@
             break;
           case "disease":
             searchData = {
-              illnessNameQuery: searchContent
+              illnessName: searchContent
             };
             url = XHRList.disease;
             break;
@@ -141,7 +141,8 @@
           isValid: "1",
           firstResult: firstResult,
           maxResult: 20,
-          cityId: ""
+          cityId: "",
+          isSolr:1
         }, searchData);
         if (!this.over) {
           api.ajax({

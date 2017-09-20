@@ -212,6 +212,7 @@
       document.body.scrollTop = 0;
       autosize(this.$el.querySelector(".medicineBox"));
       localStorage.setItem("hasCome", 0);
+
     },
     methods: {
       initData () {
@@ -466,7 +467,7 @@
               localStorage.removeItem("complication");
 
               that.finish=false;
-              window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&customerId=' + that.allParams.customerId+'&from=health';
+              window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
             }
           }
         })
@@ -606,7 +607,7 @@
           padding: rem(64px) rem(28px) rem(16px);
           .questionSelectBtn {
             width: rem(284px);
-            @include font-dpr(16px);
+            @include font-dpr(18px);
             padding: rem(20px) 0;
             text-align: center;
             float: left;

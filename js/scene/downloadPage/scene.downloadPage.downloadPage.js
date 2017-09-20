@@ -54,6 +54,7 @@ $(function () {
             common.bindCallApp({
                 ios: "tocuredt://cn.allinmed.dt",
                 android: "tocuredt://cn.allinmed.dt",
+                // ios9: "http://app.allinmd.cn/applinks.html",
                 ele: ".page-button"
             }, {
                 androidUrl: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.allinmed.dt",

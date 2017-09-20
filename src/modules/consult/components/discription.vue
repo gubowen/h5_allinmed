@@ -30,7 +30,7 @@
                             ref="otherEle"
                   >
                   </textarea>
-                  <p class="text-num-tips" 
+                  <p class="text-num-tips"
                             v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100"
                   >
                             {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
@@ -55,7 +55,7 @@
                         class="pain-level-progress"
                         :label-style="labelStyle"
                       ></vue-slider>
-                      <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">好的
+                      <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了
                       </button>
                     </section>
                   </section>
@@ -458,8 +458,9 @@
           if ($event.currentTarget.className.indexOf("selected")<0){
             console.log($event.currentTarget)
             const ele=$event.currentTarget;
+            // 此物在IOS下似乎不能顺利好使
+            // 以后再说
             setTimeout(()=>{
-              console.log(ele.querySelector("textarea"))
               ele.querySelector("textarea").focus();
             },100)
           }

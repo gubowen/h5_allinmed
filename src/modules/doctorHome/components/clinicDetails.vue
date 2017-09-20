@@ -7,10 +7,12 @@
         </figcaption>
         <div class="docNameBox">
           <span class="docName">{{docName}}</span>
-          <span class="docTitle">{{docTitle}}</span>
+          <span class="docTitle" v-show="docTitle[0]&&docTitle[0].length>0">{{docTitle[0]}}</span>
+          <span class="docTitle" v-show="docTitle[1]&&docTitle[1].length>0">{{docTitle[1]}}</span>
+          <span class="docTitle" v-show="docTitle[2]&&docTitle[2].length>0">{{docTitle[2]}}</span>
         </div>
       </figure>
-      <a href="javascript:;" class="jumpToTnfo">医生主页</a>
+      <a href="javascript:;" class="jumpToTnfo" @click="goToDocMain">医生主页</a>
     </header>
     <section class="clinicDetailsBox">
       <h2 class="hospitalName">{{items.hospitalList[0].hospital}}</h2>
@@ -81,7 +83,7 @@
         doctorId:"",//医生Id
         hospitalId:"",//医院Id
         docName:"",
-        docTitle:""
+        docTitle:[]
       }
     },
     mounted(){
@@ -110,8 +112,8 @@
             that.finish = true;
           },
           done(response){
+            that.finish =false;
             if(response && response.responseObject.responseData.dataList){
-              that.finish =false;
               that.items = response.responseObject.responseData.dataList[0];
               that.items.illnessList.forEach((element)=>{
                 that.illnessList += element.illnessName + "、"
@@ -145,8 +147,8 @@
           },
           timeout: 30000,
           done(response){
+            that.stopTimeShow = true;
             if(response && response.responseObject.responseData.dataList){
-              that.stopTimeShow = true;
               let item = response.responseObject.responseData.dataList[0];
               that.stopTimeText = `提示：${api.timeFormate({time:item.startTime,type:1}).year}-${api.timeFormate({time:item.endTime,type:1}).year}，停诊`
             }
@@ -228,6 +230,11 @@
         const that = this;
         that.isMore = !(that.isMore);
       },
+      goToDocMain(){
+        this.$router.push({
+          name:'doctorMain'
+        })
+      }
     },
     components:{
       loading

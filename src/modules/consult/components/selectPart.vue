@@ -365,13 +365,14 @@
       background: #FFFFFF;
       border: 1px solid #E0E0E0;
       box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
-      border-radius: rem(4px);
+      border-radius: rem(8px);
       line-height: 1;
       @include font-dpr(15px);
       color: #555555;
       &.on{
         border: 1px solid rgba(7,182,172,0.50);
         color: #07B6AC;
+        font-weight: bold;
       }
       &.btn-confirm{
         background: #2FC5BD;

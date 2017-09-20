@@ -1,18 +1,18 @@
 <template>
-  <section class="doctorContent">
+  <section class="doctorContent" >
     <section class="doctorContent-box">
       <section class="doctor-personalInfo">
         <div class="doctor-personalInfoBox">
           <div class="doc-personalInfo-left">
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitle.length>0">{{medicalTitle}}</span><span class="doc-presents-two" v-show="false">博士生导师</span>
+              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
             <div class="doc-personPicBox">
               <img :src="logoUrl"  alt="">
-              <span class="doc-presentAge" v-show="false">从医36年</span>
+              <span class="doc-presentAge" v-show="jobDoctorYear>0">从医{{jobDoctorYear}}年</span>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
               <p>图文问诊<span v-show="generalPrice.length>0">{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
-              <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
+              <p @click="payPopupShow=!isNotUsable&&!isOpenCure,payType='pay'" :class="{'notUsableCure':isNotUsable||isOpenCure}">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
@@ -134,15 +134,15 @@
       getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
       getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
       isReceiveClinic: "/mcall/customer/clinic/setting/v1/getMapById/",                    //是否接受门诊 responseData.dataList.isReceive
-      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
+//      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
       getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",                    //问诊详情
-      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
-      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
-      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
-      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
+//      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
+//      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
+//      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
+//      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
       updateTime: "/mcall/customer/case/consultation/v1/updateFrequency/",                 //更新次数
-      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
-      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
+//      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
+//      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
       getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
       getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
       getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
@@ -169,7 +169,7 @@
           isShowCureStatus:true,
           isUsableNum:false,
           isCureStatusText:'',
-          docId:api.getPara().doctorId,                        //医生ID
+          docId:api.getPara().doctorCustomerId,                //医生ID
           caseId:api.getPara().caseId,                         //病历ID
           patientId:api.getPara().patientId,                   //患者ID
           patientCustomerId:api.getPara().patientCustomerId,   //患者所属用户ID
@@ -180,6 +180,10 @@
           fullName:'',          //姓名
           company:"",           //医院
           hospitalId:'',        //医院Id
+          medicalTitleNewArr:[],
+//          hospitalTitle:"",      //职称
+//          eduTitle:"",           //职称
+          jobDoctorYear:"",           //职称
           medicalTitle:"",      //职称
           department:'',        //科室
           hospitalLevel:'',     //三甲
@@ -200,32 +204,32 @@
           summary:"",                              //个人简介内容
           params: {
             getPersonalProParams: {
-              customerId: "1461229672002",
+              customerId: api.getPara().doctorCustomerId,
               visitSiteId: 1,
               maxResult: 9999,
             },
             getDocMainParams: {
-              customerId:api.getPara().doctorId,
+              customerId:api.getPara().doctorCustomerId,
               logoUseFlag: 3
             },
             isReceiveClinicParams:{
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               hospitalId: ""
             },
             isCreateChatParams:{
               patientId: api.getPara().patientId,    //患者ID
-              doctorId: api.getPara().doctorId,      // 医生ID
+              doctorId: api.getPara().doctorCustomerId,      // 医生ID
               orderType: 1,
               orderSourceType: 0,
               sortType: 2
             },
             currentByCustomerIdParams: {
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               caseId: api.getPara().caseId
             },
             getConsultationIdParams:{
               caseId: api.getPara().caseId,
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               isCreate: 1,
               isValid: 1,
               consultationType: 1,
@@ -234,7 +238,7 @@
             },
             createConsultationIdParams:{
               caseId: api.getPara().caseId,
-              customerId: api.getPara().doctorId,
+              customerId: api.getPara().doctorCustomerId,
               patientCustomerId: api.getPara().patientCustomerId,
               patientId: api.getPara().patientId,
               consultationType: 1,
@@ -244,13 +248,12 @@
               caseType: 0
             },
             getGoodsInfoParams:{
-              customerId: api.getPara().doctorId
+              customerId: api.getPara().doctorCustomerId
             }
           }
         }
       },
       mounted() {
-        document.title="医生主页";
         let _this=this;
         this.getPersonalProDate();
         this.getDocInfo();
@@ -273,7 +276,7 @@
               doctorId: _this.docId,
               hospitalId: _this.hospitalId,
               docName: _this.fullName,
-              docTitle: _this.medicalTitle
+              docTitle: _this.medicalTitleNewArr
             }
           })
         },
@@ -293,19 +296,27 @@
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                 let _data = data.responseObject.responseData.dataList[0],
                   _logoUrl = _data.logoUrlMap.logoUrl;
-                _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10字
+                _this.fullName = api.getStrByteLen(_data.authMap.fullName,20);  //医生姓名 10
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
                 _this.department = _data.authMap.department;           //科室
                 _this.summary = _data.authMap.summary;                 //个人简介
-                let _hospitalLevel = _data.authMap.hospitalLevel;     //三甲
-                _this.isTop = _data.authMap.is_top;                    //全国   1-是 0-否
-                _this.areasExpertise = _data.authMap.areasExpertise;
+                _this.isTop = _data.authMap.isTop;                    //全国   1-是 0-否
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
                 _this.yesteryearOperationNum = _data.authMap.yesteryearOperationNum;
                 _this.illnessMapList = _data.illnessMapList;
                 _this.operationMapList = _data.operationMapList;
+                _this.jobDoctorYear = _data.authMap.jobDoctorYear;            //从医年限
+
+                let _hospitalLevel = _data.authMap.hospitalLevelId;     //三甲
+                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
+                //职称
+                let _medicalTitleArr=_this.medicalTitle.split(",");
+                _medicalTitleArr.forEach((element,index) => {
+                  _this.medicalTitleNewArr.push(element.substring(element.indexOf("_")+1));
+                });
+                //头像
                 if (_logoUrl.length > 0) {
                   _this.logoUrl = _logoUrl;
                 } else {
@@ -347,6 +358,14 @@
                     _this.hospitalLevel="一级";
                     break;
                 }
+                //专科字符串
+                let _areasExpertiseArr=_areasExpertise.split(",");
+                _areasExpertiseArr.forEach((element,index) => {
+                  _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                });
+                // 标题 医生姓名
+                let _fullName = _this.fullName;
+                document.title=`${_fullName}医生`;
                 //是否接受门诊
                 _this.getIsReceiveClinic();
               }
@@ -378,7 +397,9 @@
               }
             },
             fail(){
-
+              _this.finish = false;
+              _this.toastComm("网络信号差，建议您稍后再试");
+              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -431,7 +452,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("免费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
@@ -444,7 +465,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("收费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.doctorId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
@@ -552,7 +573,7 @@
             //未开启问诊
             _this.isOpenCure = true;
             _this.isCureStatusText = "医生未开启问诊";
-            _this.isNotUsable = true;
+            _this.isNotUsable = false;
           }
           //医生拒绝
           if(_consultationState==2){
@@ -627,8 +648,12 @@
         },
         //view individualInfo for detail
         individualInfoDetail(){
-          let _this=this;
-          _this.personalIndividual.summary=_this.summary;
+          let _this=this,
+          _summary ={summary:_this.summary},
+          _fullName ={fullName:_this.fullName};
+//          _this.personalIndividual.summary=_this.summary;
+//          _this.personalIndividual.fullName=_this.fullName;
+          Object.assign(_this.personalIndividual, _summary, _fullName);
           this.ruleShow=true;
           this.$router.push({
             name:'individualInfo',
@@ -694,7 +719,7 @@
               float: left;
             }
             .doc-personalInfo-left{
-              width: 70%;
+              width: 75%;
               .personInfo-name{
                 @include font-dpr(20px);
                 font-weight: bold;
@@ -730,7 +755,7 @@
               }
             }
             .doc-personalInfo-right{
-              width: 30%;
+              width: 25%;
               text-align: right;
               @include clearfix();
               .doc-personPicBox{

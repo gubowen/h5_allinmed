@@ -213,7 +213,7 @@
       goToHref(){
         window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
           "&diagnosisId=" + this.message.diagnosisId +
-          "&patientCustomerId=" + api.getPara().customerId +
+          "&patientCustomerId=" + api.getPara().patientCustomerId +
           "&patientId=" + api.getPara().patientId +
           '&caseType=0'  +
           '&shuntCustomerId=' + api.getPara().shuntCustomerId;
@@ -324,7 +324,7 @@
       //去医生主页
       goDoctorHome(index){
         let that = this;
-        window.location.href = '/dist/doctorHome.html?doctorId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().customerId;
+        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
       },
       //免费问诊
       goConsult(index,type){

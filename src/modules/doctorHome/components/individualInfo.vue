@@ -65,20 +65,21 @@
               honorList:'',
               CESTimeBox:[],
               CEETimeBox:[],
-
             }
         },
         activated() {
           let _this =this;
           const _data=this.$route.params;
-          _this.personalIndividualInfo=_data.summary;    //个人简介
+          _this.personalIndividualInfo=_data.summary;       //个人简介
+          _this.fullName=_data.fullName;                    //医生姓名
           _this.continuingEducationList=_data.continuingEducationList;  //继续教育
           _this.educationList=_data.educationList;                      //教育
           _this.fundList=_data.fundList;                                //科研
           _this.honorList=_data.honorList;                              //荣誉
+          document.title=`${_this.fullName}医生`;
         },
         mounted() {
-
+          document.body.scrollTop = 0;
         },
         methods: {
           timeDeal(time){
