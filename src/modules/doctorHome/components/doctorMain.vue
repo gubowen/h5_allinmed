@@ -36,7 +36,7 @@
               <p>图文问诊<span v-show="generalPrice.length>0">{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
-              <p @click="payPopupShow=!isNotUsable,payType='pay'" :class="{'notUsableCure':isNotUsable}">去问诊</p>
+              <p @click="payPopupShow=!isNotUsable&&!isOpenCure,payType='pay'" :class="{'notUsableCure':isNotUsable||isOpenCure}">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
@@ -183,7 +183,7 @@
           medicalTitleNewArr:[],
 //          hospitalTitle:"",      //职称
 //          eduTitle:"",           //职称
-//          othTitle:"",           //职称
+          jobDoctorYear:"",           //职称
           medicalTitle:"",      //职称
           department:'',        //科室
           hospitalLevel:'',     //三甲
@@ -573,7 +573,7 @@
             //未开启问诊
             _this.isOpenCure = true;
             _this.isCureStatusText = "医生未开启问诊";
-            _this.isNotUsable = true;
+            _this.isNotUsable = false;
           }
           //医生拒绝
           if(_consultationState==2){
