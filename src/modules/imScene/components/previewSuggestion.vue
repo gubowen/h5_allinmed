@@ -118,14 +118,14 @@
                   <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
                 </figcaption>
               </section>
-              <section class="doctor-item-bottom" v-if="item.isFreeTimes" @click="goConsult(index,'free')">
-                <span class="go-consult">免费问诊</span>
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'free')">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
-              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes" @click="goConsult(index,'pay')">
-                <span class="go-consult">去问诊</span>
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'pay')">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </li>
@@ -279,6 +279,7 @@
           method: "POST",
           data: {
             diagnosisId: that.message.diagnosisId,
+            caseId:api.getPara().caseId,
             isValid: 1,
             firstResult: 0,
             maxResult: 9999,

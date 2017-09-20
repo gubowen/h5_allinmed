@@ -467,7 +467,7 @@
               localStorage.removeItem("complication");
 
               that.finish=false;
-              window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
+              window.location.href = './imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
             }
           }
         })
