@@ -26,22 +26,22 @@
             <a href="javascript:;" class="he-videoFirstLoadBtn" id="uploadBtn"></a>
           </li>
         </ul>
-        <ul class="he-loadFiles ev-success" issubmit="0" v-if="baseMessage.type==1&&videoObj.size">
+        <ul class="he-loadFiles ev-success" issubmit="0" v-show="baseMessage.type==1&&videoObj.size">
           <li class="he-loadVideoSuccess">
             <span class="he-loadVideoSuccessBox">
             <span class="he-loadSuccessTip"></span>
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText">重新上传</a></li>
-          <li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a
-            href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>
-            <div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"
-                 style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden;"><input
-              id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17" type="file"
-              style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"
-              accept="video/mp4,video/quicktime,video/avi,video/x-ms-wmv,video/x-flv"></div>
-          </li>
+          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText" id="reloadBtn">重新上传</a></li>
+          <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
+            <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
+            <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
+                 <!--style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden;"><input-->
+              <!--id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17" type="file"-->
+              <!--style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"-->
+              <!--accept="video/mp4,video/quicktime,video/avi,video/x-ms-wmv,video/x-flv"></div>-->
+          <!--</li>-->
         </ul>
         <section class="he-videosSubmit ev-submitUpData" v-show="baseMessage.type==2">
           <button class="usable downBtn" v-show="imageList.length && !uploading" @click="submitImage" style="display: inline-block;">提交</button>
@@ -54,11 +54,13 @@
         </section>
       </section>
     </section>
-    <section class="ev-videoUpLoading" v-if="videoUploading">
-      <div class="tc-videoLoadingImg">
-        <img src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
-      </div>
-      <p class="tc-videoLoadingText">上传中...</p>
+    <section class="video-upLoad-box"  v-if="videoUploading">
+      <section class="ev-videoUpLoading">
+        <div class="tc-videoLoadingImg">
+          <img src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
+        </div>
+        <p class="tc-videoLoadingText">上传中...</p>
+      </section>
     </section>
     <transition name="fade">
       <toast :content="tip" v-show="tipShow"></toast>
@@ -248,6 +250,68 @@
           }
         });
       },
+      reloadUpload(){
+        const that = this;
+
+        Qiniu.uploader({
+          runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+          browse_button: "reloadBtn",         // 上传选择的点选按钮，必需
+          multi_selection: false,
+          uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+          domain: 'tocure',     // bucket域名，下载资源时用到，必需
+          container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
+          max_file_size: '100mb',             // 最大文件体积限制
+          flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
+          dragdrop: true,                     // 开启可拖曳上传
+          drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          chunk_size: '4mb',                  // 分块上传时，每块的体积
+          filters: {
+            mime_types: [                                   //只允许上传video
+              {title: "video", extensions: "mp4,mov,avi,wmv,flv"}
+            ],
+            prevent_duplicates: true                        //不允许选取重复文件
+          },
+          auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+          init: {
+            'FilesAdded': function (up, files) {
+              plupload.each(files, function (file) {
+                // 文件添加进队列后，处理相关的事情
+              });
+            },
+            'BeforeUpload': function (up, file) {
+              // 每个文件上传前，处理相关的事情
+            },
+            'UploadProgress': function (up, file) {
+              // 每个文件上传时，处理相关的事情
+              that.videoUploading = true;
+            },
+            'FileUploaded': function (up, file, info) {
+              that.videoUploading = false;
+              that.videoObj = file;
+              that.videoSubmitParam = JSON.parse(info);
+              that.tipShow = true;
+              setTimeout(() => {
+                that.tipShow = false;
+              }, 2000)
+            },
+            'Error': function (up, err, errTip) {
+              //上传出错时，处理相关的事情
+            },
+            'UploadComplete': function () {
+              //队列文件处理完毕后，处理相关的事情
+
+            },
+            'Key': function (up, file) {
+              // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+              // 该配置必须要在unique_names: false，save_key: false时才生效
+              var key = "";
+              // do something with key here
+              return key
+            }
+          }
+        });
+      },
       //图片提交
       submitImage(){
         const that = this;
@@ -315,6 +379,7 @@
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
+      that.reloadUpload();
     },
     components: {
       Toast
@@ -653,8 +718,16 @@
     }
   }
 
-  .ev-videoUpLoading {
+  .video-upLoad-box{
+    position: fixed;
     z-index: 5;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0);
+  }
+  .ev-videoUpLoading {
     width: rem(258px);
     height: rem(258px);
     position: fixed;
