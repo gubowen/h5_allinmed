@@ -31,7 +31,7 @@
     <section class="main-message-box">
       <article class="main-message-box-item others-message">
         <figure class="main-message-img">
-          <img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">
+          <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
         </figure>
         <figcaption class="main-message-content">
           <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家。</p>
