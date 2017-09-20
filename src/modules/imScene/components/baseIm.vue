@@ -152,6 +152,7 @@
           progress: 0,
           index: 0
         },
+        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
         consultationId: "",
         timeStampShowList: [],//时间戳数组
@@ -275,7 +276,12 @@
               if (api.getPara().suggest) {
                 console.log("有推荐医生");
                 function callBack () {
-                  document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+                  if (that.firstIn) {
+                    document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+                    that.firstIn = false;
+                  } else {
+                    return false;
+                  }
                 }
                 let MutationObserver = window.MutationObserver ||
                   window.WebKitMutationObserver ||
@@ -297,7 +303,32 @@
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
               } else{
                 console.log("无推荐医生")
-                document.body.scrollTop = Math.pow(10, 20);
+                function callBackBottom () {
+//                  debugger;
+                  if (that.firstIn) {
+                    document.body.scrollTop = Math.pow(10, 20);
+                    that.firstIn = false;
+                  } else {
+                    return false;
+                  }
+                }
+                let MutationObserver = window.MutationObserver ||
+                  window.WebKitMutationObserver ||
+                  window.MozMutationObserver;
+                if (MutationObserver) {
+                  let mo = new MutationObserver(callBackBottom);
+                  let option = {
+                    'childList': true,
+                    'subtree': true
+                  };
+
+                  mo.observe(document.body, option);
+                } else {
+                  setTimeout(function () {
+                    callBackBottom();
+                  },2000);
+                }
+//                document.body.scrollTop = Math.pow(10, 20);
               }
               that.getImageList();
               //渲染完毕
@@ -821,6 +852,8 @@
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
+
+      localStorage.setItem("ImAlreadyUrl", window.location.href)
 //      let p1 = new Promise(resolve => that.getUserBaseData());
 //      let p2 = new Promise(resolve => that.triageDoctorAssign());
 //      Promise.all([p1,p2]).then(function () {
