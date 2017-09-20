@@ -427,7 +427,7 @@
           done(error, user){
             console.log(user)
             store.commit("setTargetMsg", user);
-            document.title = user.nick + "医生";
+            document.title = `${user.nick}医生`;
           }
         });
       },

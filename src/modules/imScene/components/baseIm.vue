@@ -273,10 +273,26 @@
               console.log("dom更新完成")
 //              debugger;
               if (api.getPara().suggest) {
-                console.log("有推荐医生")
-                setTimeout(function () {
+                console.log("有推荐医生");
+                function callBack () {
                   document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
-                },2000);
+                }
+                let MutationObserver = window.MutationObserver ||
+                  window.WebKitMutationObserver ||
+                  window.MozMutationObserver;
+                if (MutationObserver) {
+                  let mo = new MutationObserver(callBack);
+                  let option = {
+                    'childList': true,
+                    'subtree': true
+                  };
+
+                  mo.observe(document.body, option);
+                } else {
+                  setTimeout(function () {
+                    callBack();
+                  },2000);
+                }
 //                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
 //                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
               } else{

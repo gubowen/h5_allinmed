@@ -129,7 +129,7 @@
             break;
           case "disease":
             searchData = {
-              illnessNameQuery: searchContent
+              illnessName: searchContent
             };
             url = XHRList.disease;
             break;
@@ -141,7 +141,8 @@
           isValid: "1",
           firstResult: firstResult,
           maxResult: 20,
-          cityId: ""
+          cityId: "",
+          isSolr:1
         }, searchData);
         if (!this.over) {
           api.ajax({
