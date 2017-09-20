@@ -55,11 +55,11 @@
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
             <p class="collegeItem-left">擅治疾病</p>
-            <p class="collegeItem-right"><span  v-for="(item,index) in illnessMapList">{{item.illnessName}}、</span></p>
+            <p class="collegeItem-right"><span  v-for="(item,index) in illnessMapList">{{item.illnessName}}{{((index==illnessMapList.length-1)?"":"、")}}</span></p>
           </section>
           <section class="doc-collegeBoxItem" v-show="operationMapList.length>0">
             <p class="collegeItem-left">擅治手术</p>
-            <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}、</span></p>
+            <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}{{((index==operationMapList.length-1)?"":"、")}}</span></p>
           </section>
           <p class="doc-collegeBoxItem-totalNum" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">近年独立完成的骨科手术病历数</p>
           <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">
@@ -366,7 +366,11 @@
                 //专科字符串
                 let _areasExpertiseArr=_areasExpertise.split(",");
                 _areasExpertiseArr.forEach((element,index) => {
-                  _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                  if(index==_areasExpertiseArr.length-1){
+                    _this.areasExpertise += element.substring(element.indexOf("_")+1);   //专科字符串
+                  }else{
+                    _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                  }
                 });
                 // 标题 医生姓名
                 let _fullName = _this.fullName;

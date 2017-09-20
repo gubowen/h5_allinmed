@@ -33,7 +33,7 @@
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText" id="reloadBtn">重新上传</a></li>
+          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a></li>
           <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
             <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
             <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
@@ -66,12 +66,12 @@
       <toast :content="tip" v-show="tipShow"></toast>
     </transition>
     <transition name="fade">
+      <!--视频上传离开的confirm-->
       <confirm
-        :confirmParams="{
-          'ensure':'离开',
-          'cancel':'取消',
-          'title':'努力上传中\n现在离开下次还要重新上传哦'
-          }" v-if="videoLeaveConfirm" :showFlag.sync="videoLeaveConfirm" @cancelClickEvent="cancelEvent()"
+        :confirmParams="videoLeaveConfirmParams"
+        v-if="videoLeaveConfirm"
+        :showFlag.sync="videoLeaveConfirm"
+        @cancelClickEvent="cancelEvent()"
         @ensureClickEvent="ensureEvent()">
       </confirm>
     </transition>
@@ -103,7 +103,8 @@
   export default{
     data(){
       return {
-        videoLeaveConfirm:false,//confirm框是否显示
+        videoLeaveConfirm:false,//上传视频离开confirm框是否显示
+        videoLeaveConfirmParams:{},//上传视频离开confirm的参数
         pageLeaveEnsure: false,//页面是否离开
 
         baseMessage: {},
@@ -118,10 +119,30 @@
       }
     },
     beforeRouteLeave (to, from, next){
-      if (to.name === "BaseIm") {
-        this.videoLeaveConfirm = true;
+      let that =this;
+//      debugger;
+      if(that.videoObj.size || that.videoUploading){
+        if (that.videoUploading) {
+          that.videoLeaveConfirmParams={
+            'ensure':'离开',
+            'cancel':'取消',
+            'title':'努力上传中',
+            'content':'现在离开，下次还要重新上传哦',
+          }
+        } else {
+          that.videoLeaveConfirmParams={
+            'ensure':'现在提交',
+            'cancel':'暂不提交',
+            'title':'要提交上传的视频么',
+            'content':'',
+          }
+        }
+        that.videoLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+        next(that.pageLeaveEnsure)
+      } else {
+        next(true);
       }
-      next(this.pageLeaveEnsure)
     },
     props: {},
     methods: {
@@ -365,6 +386,7 @@
           },
           done(){
             that.uploadVideo = false;
+            that.pageLeaveEnsure = true;
             that.$router.push({
               path: "/BaseIm",
               params: {
@@ -379,14 +401,28 @@
           }
         })
       },
+      //视频上传离开confirm取消函数
       cancelEvent() {
         this.videoLeaveConfirm = false;
         this.pageLeaveEnsure = false;
       },
+      //视频上传离开confirm离开函数
       ensureEvent() {
-        this.videoLeaveConfirm = false;
-        this.pageLeaveEnsure = true;
-        this.$router.go(-1);
+        let that = this;
+        if (that.videoUploading) {
+          that.videoLeaveConfirm = false;
+          that.pageLeaveEnsure = true;
+          that.$router.go(-1);
+        } else {
+          if(that.uploadVideo){
+            return false;
+          }
+          that.submitVideo();
+        }
+      },
+      //重新上传
+      againUpload(){
+        return false;
       },
     },
     mounted(){
