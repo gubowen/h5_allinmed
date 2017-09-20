@@ -895,7 +895,8 @@
                 consultationId: this.triageOrderSourceId,
                 frequency: "0",
                 frequencyType: "2",
-                consultationLevel: "1"
+                consultationLevel: "1",
+                consultationState:"2"
               },
               done(data) {
                 if (data.responseObject.responseData) {

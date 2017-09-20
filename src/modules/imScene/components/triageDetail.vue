@@ -65,6 +65,16 @@
     <transition name="fade">
       <toast :content="tip" v-show="tipShow"></toast>
     </transition>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'离开',
+          'cancel':'取消',
+          'title':'努力上传中\n现在离开下次还要重新上传哦'
+          }" v-if="videoLeaveConfirm" :showFlag.sync="videoLeaveConfirm" @cancelClickEvent="cancelEvent()"
+        @ensureClickEvent="ensureEvent()">
+      </confirm>
+    </transition>
   </section>
 
 </template>
@@ -81,6 +91,7 @@
   import axios from "axios";
   import Qiniu from "common/js/third-party/qiniu/qiniu";
   import Toast from "components/toast";
+  import confirm from 'components/confirm';
   const XHRList = {
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",//上传图片
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",//更新图片
@@ -92,6 +103,9 @@
   export default{
     data(){
       return {
+        videoLeaveConfirm:false,//confirm框是否显示
+        pageLeaveEnsure: false,//页面是否离开
+
         baseMessage: {},
         imageList: [],
         uploading: false,
@@ -102,6 +116,12 @@
         tipShow: false,
         uploadVideo:false,//点击提交之后，提交按钮是否可以点击
       }
+    },
+    beforeRouteLeave (to, from, next){
+      if (to.name === "BaseIm") {
+        this.videoLeaveConfirm = true;
+      }
+      next(this.pageLeaveEnsure)
     },
     props: {},
     methods: {
@@ -358,7 +378,16 @@
 
           }
         })
-      }
+      },
+      cancelEvent() {
+        this.videoLeaveConfirm = false;
+        this.pageLeaveEnsure = false;
+      },
+      ensureEvent() {
+        this.videoLeaveConfirm = false;
+        this.pageLeaveEnsure = true;
+        this.$router.go(-1);
+      },
     },
     mounted(){
 //      if (!sessionStorage.getItem("triageRoute")) {
@@ -367,6 +396,17 @@
 //
 //      this.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
 //      this.videoUpload();
+      let that = this;
+      that.imageList = [];
+      that.videoObj={};
+      that.videoSubmitParam={};
+      if (!sessionStorage.getItem("triageRoute")) {
+        sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
+      }
+
+      that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
+      that.videoUpload();
+      that.reloadUpload();
     },
     activated(){
       let that = this;
@@ -382,7 +422,8 @@
       that.reloadUpload();
     },
     components: {
-      Toast
+      Toast,
+      confirm
     }
 
   }
@@ -391,6 +432,11 @@
   @import "../../../../scss/library/_common-modules";
 
   .he-videoUpHide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     $main-color: #00D6C6;
     height: 100%;
     background-color: #ffffff;

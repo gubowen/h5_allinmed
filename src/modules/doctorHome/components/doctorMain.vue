@@ -501,7 +501,7 @@
         reloadIMTime(count){
           const _this = this;
           api.ajax({
-            url: XHRList.updateCount,
+            url: XHRList.updateTime,
             method: "POST",
             data: {
               consultationId: _this.consultationId,
