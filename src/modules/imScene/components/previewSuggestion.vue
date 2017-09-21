@@ -36,8 +36,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click="moreDataShow('checkSuggestObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click="lessDataShow('checkSuggestObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
           </section>
           <section class="check-suggest-btn" data-role="videoTriage"
                    @click="goToUpload">
@@ -61,8 +61,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="treatmentObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click="moreDataShow('treatmentObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click="lessDataShow('treatmentObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
           </section>
         </section>
       </article>
@@ -84,8 +84,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="knowledgeObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click="moreDataShow('knowledgeObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click="lessDataShow('knowledgeObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click.stop="moreDataShow('knowledgeObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj')">收起</span>
           </section>
         </section>
       </article>
@@ -131,8 +131,8 @@
             </li>
           </ul>
           <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
+            <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
           </section>
         </section>
       </article>
@@ -218,6 +218,7 @@
       this.initData();
       },
     methods:{
+
       goToHref(){
         window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
           "&diagnosisId=" + this.message.diagnosisId +
@@ -280,6 +281,7 @@
                 that.checkSuggestData('treatmentObj')
               }
             }
+              that.toBottom();
           }
         });
         api.ajax({
@@ -303,9 +305,16 @@
 //              that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
+
+              that.toBottom();
             }
           }
         })
+      },
+      toBottom(){
+        if (!api.getPara().suggest) {
+          document.body.scrollTop = Math.pow(10, 20);
+        }
       },
       //检查检验数据
       checkSuggestData (param) {
@@ -323,11 +332,12 @@
       //展示更多
       moreDataShow(param,e){
         let that = this;
-//        console.log(that.$el.querySelectorAll(this).offsetTop);
+
         if (!that[param].hasPosition){
-          that[param].position = e.path["4"].offsetTop;
+          that[param].position = e.currentTarget.parentNode.parentNode.parentNode.offsetTop;
           that[param].hasPosition = true;
         }
+
         if (that[param].allData.length-that[param].tempData.length>that[param].pageNum) {
           that[param].tempData = that[param].allData.slice(0,that[param].pageNum+that[param].tempData.length);
         } else {
@@ -386,15 +396,16 @@
     text-align: center;
     .more-box-btn{
       padding: rem(0px) rem(50px) rem(0px) rem(10px);
+
     }
-    .more-btn{
-      background: url("../../../common/image/imScene/under_arrow@2x.png") no-repeat top right;
-      background-size: rem(32px) rem(32px);
-    }
-    .less-btn{
-      background: url("../../../common/image/imScene/pack_up@2x.png") no-repeat top right;
-      background-size: rem(32px) rem(32px);
-    }
+    /*.more-btn{*/
+      /*background: url("../../../common/image/imScene/under_arrow@2x.png") no-repeat top right;*/
+      /*background-size: rem(32px) rem(32px);*/
+    /*}*/
+    /*.less-btn{*/
+      /*background: url("../../../common/image/imScene/pack_up@2x.png") no-repeat top right;*/
+      /*background-size: rem(32px) rem(32px);*/
+    /*}*/
   }
   /*检查检验样式和处置建议样式，两者一样*/
   .check-suggest-box{
