@@ -347,6 +347,7 @@
               margin-right: rem(10px);
               background: #4CD3C6;
               vertical-align: middle;
+              border-radius: 999px;
             }
           }
         }
