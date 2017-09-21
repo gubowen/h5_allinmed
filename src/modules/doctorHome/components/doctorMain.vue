@@ -65,13 +65,11 @@
           <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">
             <section class="doc-medicalNumBox">
               <span class="doc-medicalYear">{{yesteryear}}年</span>
-              <span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span>
-              <span class="doc-medicalNumText">例</span>
+              <span class="doc-delTextBox"><span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span><span class="doc-medicalNumText">例</span></span>
             </section>
             <section class="doc-medicalNumBox">
               <span class="doc-medicalYear">{{precedingYear}}年</span>
-              <span class="doc-medicalNumTotal">{{yesteryearOperationNum}}</span>
-              <span class="doc-medicalNumText">例</span>
+              <span class="doc-delTextBox"><span class="doc-medicalNumTotal">{{yesteryearOperationNum}}</span><span class="doc-medicalNumText">例</span></span>
             </section>
           </section>
         </section>
@@ -493,12 +491,14 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
+              console.log("获取consultationId成功");
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                   _this.consultationId = data.responseObject.responseData.dataList.consultationId;
                   org.callBackFn();
               }
             },
             fail(err){
+              console.log("获取consultationId失败");
               _this.finish = false;
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
@@ -523,8 +523,11 @@
             },
             done(data) {
               _this.finish = false;
+              console.log(data);
+              console.log("刷新时间...");
               if (data.responseObject.responseStatus) {
                 localStorage.setItem("sendTips",JSON.stringify(count.data));
+                count.callBack();
               }
             }
           })
@@ -1118,8 +1121,8 @@
               @include clearfix();
               .doc-medicalNumBox{
                 float: left;
-                width: rem(152px);
-                padding-left: rem(40px);
+                width: rem(120px);
+                padding-left: rem(92px);
                 position: relative;
                 &:first-child{
                   padding-left: 0;
@@ -1132,12 +1135,17 @@
                   background-color: #E2E2E2;
                   top:50%;
                   margin-top: rem(-33px);
-                  right: 0;
+                  right: rem(-46px);
                 }
                 &:last-child{
                   &:after{
                     display: none;
                   }
+                }
+                .doc-delTextBox{
+                  display: inline-block;
+                  width: 98%;
+                  text-align: right;
                 }
                 .doc-medicalYear{
                   @include font-dpr(14px);

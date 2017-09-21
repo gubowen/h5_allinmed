@@ -162,6 +162,8 @@
           next(true);
         }
         this.reloadVideoConfirm = false;
+      } else {
+        next(true);
       }
     },
     props: {},
