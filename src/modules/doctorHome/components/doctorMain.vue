@@ -6,7 +6,7 @@
           <div class="doc-personalInfo-left">
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
+              <span class="doc-major" v-show="platformId.length>0">{{platformId}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
@@ -123,7 +123,6 @@
      *
      * Created by juKun on 2017/9/11.
      */
-
     import api from 'common/js/util/util';
     import loading from 'components/loading';
     import fb from "common/js/third-party/flexible";
@@ -185,7 +184,7 @@
 //          eduTitle:"",           //职称
           jobDoctorYear:"",           //职称
           medicalTitle:"",      //职称
-          department:'',        //科室
+          platformId:'',        //科室
           hospitalLevel:'',     //三甲
           isTop:'',             //全国top10   1-是 0-否
           areasExpertise:"",    //专科
@@ -305,7 +304,7 @@
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
-                _this.department = _data.authMap.department;           //科室
+                _this.platformId = _data.authMap.platformId;           //科室
                 _this.summary = _data.authMap.summary;                 //个人简介
                 _this.isTop = _data.authMap.isTop;                    //全国   1-是 0-否
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
@@ -315,7 +314,7 @@
                 _this.jobDoctorYear = _data.authMap.jobDoctorYear;            //从医年限
 
                 let _hospitalLevel = _data.authMap.hospitalLevelId;     //三甲
-                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
+                let _areasExpertise = _data.authMap.areasExpertise;     //专科字符串
                 //职称
                 let _medicalTitleArr=_this.medicalTitle.split(",");
                 _medicalTitleArr.forEach((element,index) => {
