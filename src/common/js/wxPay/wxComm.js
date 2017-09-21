@@ -13,7 +13,7 @@ import closeOrder from "./closeOrder";
 
 class WxPayCommon {
   constructor(Obj) {
-
+  
   }
   //取消订单
   wxCloseOrder() {

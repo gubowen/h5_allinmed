@@ -137,6 +137,7 @@
                     that.payOrderShow = true;
                     that.getPrice();
                   }else{
+
                     that.noOrder(opt);
                   }
                 }
@@ -169,7 +170,8 @@
         if(isClick == 0){
           isClick = 1;
           that.repeatOrderFrequency = opt.orderFrequency;
-          let orderSourceTitle = "图文问诊",orderAmount = parseFloat(opt.orderAmount).toFixed(2);
+          let orderSourceTitle = "图文问诊",
+            orderAmount = parseFloat(opt.orderAmount).toFixed(2);
           api.ajax({
             url: XHRList.getConsultationId,
             method: "post",
@@ -235,6 +237,7 @@
                   orderAmount: opt.orderAmount,
                   orderFrequency:opt.orderFrequency
                 })
+
               }
             } else {//没有重复订单
               that.noOrder({
@@ -265,7 +268,7 @@
             orderSourceType: opt.oType,                //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
             orderAmount: opt.orderAmount,                  //	string	否	订单金额  （单位/元 保留两位小数）$(this).attr("data-price")
             status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-            body: opt.oTitle,   //   string  否  订单描述 （微信支付展示用）
+            body: opt.orderSourceTitle,   //   string  否  订单描述 （微信支付展示用）
             isCharge: "true"                    //   string  是  true-收费  false-免费
           },
           backCreateSuccess: function (_data) {
