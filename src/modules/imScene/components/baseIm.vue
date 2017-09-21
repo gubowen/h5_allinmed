@@ -849,7 +849,7 @@
       let that = this;
 
       if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
+//        api.wxGetOpenId(1);
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
