@@ -8,7 +8,7 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
-                 @change="onFileChange(item,0,$event)" v-show="imageList[item.adviceId].length===0">
+                 @change="onFileChange(item,0,$event)" v-if="imageList[item.adviceId].length===0">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -29,7 +29,7 @@
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
-          <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading">
+          <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput"
@@ -48,6 +48,16 @@
     </section>
     <transition name="fade">
       <Toast :content="errorMsg" v-if="errorShow"></Toast>
+    </transition>
+    <transition name="fade">
+      <!--图片上传离开的confirm-->
+      <confirm
+        :confirmParams="leaveConfirmParams"
+        v-if="leaveConfirm"
+        :showFlag.sync="leaveConfirm"
+        @cancelClickEvent="cancelEvent()"
+        @ensureClickEvent="ensureEvent()">
+      </confirm>
     </transition>
   </section>
 </template>
@@ -76,23 +86,67 @@
   export default{
     data(){
       return {
+        leaveConfirm:false,
+        leaveConfirmParams:{},//离开confirm的参数
+        pageLeaveEnsure:false,//是否离开页面
         uploadList: [],
+        imageListLength:false,//图片列表中是否有图片
         imageList: {},
+        toClick:false,//提交按钮是否可以点击
         errorShow: false,
         errorMsg: "",
-        loading: false
+        loading: false,//是否正在上传
       }
     },
     computed: {
+      //计算提交按钮是否可以点击
       submitFlag(){
         let flag = false;
+        let listFlag = false;
+        let uploadingFlag =false;
+        this.imageListLength=false;
+        this.toClick = false;
         for (let i in this.imageList) {
           if (this.imageList[i].length !== 0) {
-            flag = true;
-            break
+            listFlag = true;
+            this.imageListLength=true;
+            for (let j in this.imageList[i]) {
+              if(this.imageList[i][j].uploading){
+                uploadingFlag = true;
+                this.toClick = false
+              }
+            }
           }
         }
+        if (listFlag && !uploadingFlag){
+          flag =true;
+          this.toClick = true;
+        }
         return flag;
+      }
+    },
+    beforeRouteLeave (to, from, next){
+      let that =this;
+      if (that.imageListLength || that.toClick){
+        if (that.imageListLength && that.toClick){
+          that.leaveConfirmParams={
+            'ensure':'现在提交',
+            'cancel':'暂不提交',
+            'title':'要提交上传的图片么？',
+          }
+        }else {
+          that.leaveConfirmParams={
+            'ensure':'取消',
+            'cancel':'离开',
+            'title':'努力上传中',
+            'content':'现在离开，下次还要重新上传哦',
+          }
+        }
+        that.leaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+        next(that.pageLeaveEnsure);
+      } else {
+        next(true);
       }
     },
     mounted(){
@@ -100,6 +154,7 @@
     },
     activated(){
       this.getUploadList();
+      this.leaveConfirm =false;
     },
     methods: {
       getUploadList(){
@@ -181,7 +236,6 @@
           }
         })
       },
-
       onFileChange(item, index, e){
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length) {
@@ -201,50 +255,81 @@
       },
       backToImPage(){
         const that = this;
-        api.ajax({
-          url: XHRList.resetTime,
-          method: "POST",
-          data: {
-            consultationId: this.$store.state.consultationId,
-            frequency: "0",
-            frequencyType: "4",
-            consultationState: 0
-          },
-          done(data){
-            if (data.responseObject.responseStatus) {
-              console.log("定时重新启动...");
-//              that.timeoutCount(24 * 60 * 60 * 1000);
-
-              api.ajax({
-                url: XHRList.updateCase,
-                method: "POST",
-                data: {
-                  caseId: api.getPara().caseId,
-                  state: 1
-                },
-                done(data) {
-                  if (data.responseObject.responseStatus) {
-                    console.log("病例状态更新...");
-                    store.commit("setLastTime", 24 * 60 * 60 * 1000);
-                    store.commit("lastTimeCount");
-                    that.$router.push({
-                      path: "/BaseIm",
-                      query: {
-                        success: 1,
-                        queryType: "checkSuggest"
-                      }
-                    })
-                  }
-                }
-              });
-            }
+        that.pageLeaveEnsure = true;
+        that.$router.push({
+          path: "/BaseIm",
+          query: {
+            success: 1,
+            queryType: "checkSuggest"
           }
         })
-      }
+//        api.ajax({
+//          url: XHRList.resetTime,
+//          method: "POST",
+//          data: {
+//            consultationId: this.$store.state.consultationId,
+//            frequency: "0",
+//            frequencyType: "4",
+//            consultationState: 0
+//          },
+//          done(data){
+//            if (data.responseObject.responseStatus) {
+//              console.log("定时重新启动...");
+////              that.timeoutCount(24 * 60 * 60 * 1000);
+//
+//              api.ajax({
+//                url: XHRList.updateCase,
+//                method: "POST",
+//                data: {
+//                  caseId: api.getPara().caseId,
+//                  state: 1
+//                },
+//                done(data) {
+//                  if (data.responseObject.responseStatus) {
+//                    console.log("病例状态更新...");
+//                    store.commit("setLastTime", 24 * 60 * 60 * 1000);
+//                    store.commit("lastTimeCount");
+//                    that.pageLeaveEnsure = true;
+//                    that.$router.push({
+//                      path: "/BaseIm",
+//                      query: {
+//                        success: 1,
+//                        queryType: "checkSuggest"
+//                      }
+//                    })
+//                  }
+//                }
+//              });
+//            }
+//          }
+//        })
+      },
+      //取消按钮
+      cancelEvent() {
+        let that = this;
+        that.leaveConfirm = false;
+        that.pageLeaveEnsure = true;
+        that.$router.go(-1);
+//        this.leaveConfirm = false;
+//        this.pageLeaveEnsure = false;
+        console.log("取消")
+      },
+      //离开函数
+      ensureEvent() {
+        let that = this;
+        console.log("离开")
+        if (!that.toClick) {
+        this.leaveConfirm = false;
+        this.pageLeaveEnsure = false;
+        } else {
+          that.backToImPage();
+        }
+      },
     },
     components: {
       Toast,
-      Loading
+      Loading,
+      confirm
     }
   }
 </script>
@@ -269,6 +354,7 @@
     position: absolute;
     top: 0;
     right: 0;
+
     left: 0;
     bottom: 0;
     background-color: #ffffff;
@@ -539,4 +625,12 @@
     }
   }
 
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+  }
 </style>
