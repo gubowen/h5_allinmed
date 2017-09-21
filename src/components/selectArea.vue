@@ -870,7 +870,7 @@
   //医生列表
   $colorTwo: #222222;
   $colorFive: #555555;
-  .tc-mainInner{
+
     .tc-searchCommFixedTop{
       position: fixed;
       //top:rem(101px);
@@ -915,7 +915,7 @@
         margin-top: rem(-15px);
       }
     }
-  }
+
   .tc-searchCommFixedTop{
     z-index: 5;
   }

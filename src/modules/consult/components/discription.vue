@@ -792,7 +792,7 @@
         vertical-align: middle;
         width: rem(48px);
         height: rem(48px);
-        background: url(../../../common/image/img00/consult_V1.2/doubt@2x.png);
+        background: url(../../../common/image/img00/consult_V1.2/doubt2@2x.png);
         background-size: contain;
         margin-left: rem(28px);
       }
