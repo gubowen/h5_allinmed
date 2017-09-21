@@ -905,7 +905,7 @@
                     to: "1_doctor00001",
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
-                      window.location.href = '/pages/imScene/im_main_scene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
+                      window.location.href = '/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
                     }
                   });
                 }
