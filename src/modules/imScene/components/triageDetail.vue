@@ -33,7 +33,9 @@
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a></li>
+          <li class="he-videoAddBtn he-loadSuccessTextBox">
+            <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
+          </li>
           <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
             <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
             <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
@@ -75,6 +77,21 @@
         @ensureClickEvent="ensureEvent()">
       </confirm>
     </transition>
+    <transition name="fade">
+      <!--视频是否重新上传的confirm-->
+      <confirm
+        :confirmParams="{
+            'ensure':'取消',
+            'cancel':'替换',
+            'title':'重新上传后',
+            'content':'原有视频将被替换',
+          }"
+        v-if="reloadVideoConfirm"
+        :showFlag.sync="reloadVideoConfirm"
+        @cancelClickEvent="uploadEnsure()"
+        @ensureClickEvent="uploadCancel()">
+      </confirm>
+    </transition>
   </section>
 
 </template>
@@ -106,7 +123,7 @@
         videoLeaveConfirm:false,//上传视频离开confirm框是否显示
         videoLeaveConfirmParams:{},//上传视频离开confirm的参数
         pageLeaveEnsure: false,//页面是否离开
-
+        reloadVideoConfirm:false,//视频重新上传的confirm框是否显示
         baseMessage: {},
         imageList: [],
         uploading: false,
@@ -121,27 +138,30 @@
     beforeRouteLeave (to, from, next){
       let that =this;
 //      debugger;
-      if(that.videoObj.size || that.videoUploading){
-        if (that.videoUploading) {
-          that.videoLeaveConfirmParams={
-            'ensure':'离开',
-            'cancel':'取消',
-            'title':'努力上传中',
-            'content':'现在离开，下次还要重新上传哦',
+      if (that.baseMessage.type==1){
+        if(that.videoObj.size || that.videoUploading){
+          if (that.videoUploading) {
+            that.videoLeaveConfirmParams={
+              'ensure':'离开',
+              'cancel':'取消',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.videoLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的视频么',
+              'content':'',
+            }
           }
-        } else {
-          that.videoLeaveConfirmParams={
-            'ensure':'现在提交',
-            'cancel':'暂不提交',
-            'title':'要提交上传的视频么',
-            'content':'',
-          }
-        }
-        that.videoLeaveConfirm = true;
+          that.videoLeaveConfirm = true;
 //        that.pageLeaveEnsure =false;
-        next(that.pageLeaveEnsure)
-      } else {
-        next(true);
+          next(that.pageLeaveEnsure)
+        } else {
+          next(true);
+        }
+        this.reloadVideoConfirm = false;
       }
     },
     props: {},
@@ -291,68 +311,6 @@
           }
         });
       },
-      reloadUpload(){
-        const that = this;
-
-        Qiniu.uploader({
-          runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: "reloadBtn",         // 上传选择的点选按钮，必需
-          multi_selection: false,
-          uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-          domain: 'tocure',     // bucket域名，下载资源时用到，必需
-          container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
-          max_file_size: '100mb',             // 最大文件体积限制
-          flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-          dragdrop: true,                     // 开启可拖曳上传
-          drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-          chunk_size: '4mb',                  // 分块上传时，每块的体积
-          filters: {
-            mime_types: [                                   //只允许上传video
-              {title: "video", extensions: "mp4,mov,avi,wmv,flv"}
-            ],
-            prevent_duplicates: true                        //不允许选取重复文件
-          },
-          auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-          init: {
-            'FilesAdded': function (up, files) {
-              plupload.each(files, function (file) {
-                // 文件添加进队列后，处理相关的事情
-              });
-            },
-            'BeforeUpload': function (up, file) {
-              // 每个文件上传前，处理相关的事情
-            },
-            'UploadProgress': function (up, file) {
-              // 每个文件上传时，处理相关的事情
-              that.videoUploading = true;
-            },
-            'FileUploaded': function (up, file, info) {
-              that.videoUploading = false;
-              that.videoObj = file;
-              that.videoSubmitParam = JSON.parse(info);
-              that.tipShow = true;
-              setTimeout(() => {
-                that.tipShow = false;
-              }, 2000)
-            },
-            'Error': function (up, err, errTip) {
-              //上传出错时，处理相关的事情
-            },
-            'UploadComplete': function () {
-              //队列文件处理完毕后，处理相关的事情
-
-            },
-            'Key': function (up, file) {
-              // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-              // 该配置必须要在unique_names: false，save_key: false时才生效
-              var key = "";
-              // do something with key here
-              return key
-            }
-          }
-        });
-      },
       //图片提交
       submitImage(){
         const that = this;
@@ -420,9 +378,19 @@
           that.submitVideo();
         }
       },
-      //重新上传
+      //重新上传按钮
       againUpload(){
-        return false;
+        this.reloadVideoConfirm = true;
+      },
+      //重新上传confirm取消函数
+      uploadCancel() {
+        this.reloadVideoConfirm = false;
+      },
+      //重新上传confirm替换函数
+      uploadEnsure() {
+        let that = this;
+        this.reloadVideoConfirm = false;
+        this.$el.querySelector('#uploadBtn').click();
       },
     },
     mounted(){
@@ -442,7 +410,6 @@
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
-      that.reloadUpload();
     },
     activated(){
       let that = this;
