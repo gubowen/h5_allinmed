@@ -96,7 +96,6 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-
   import fb from "common/js/third-party/flexible";
   import axios from "axios";
   export default{
