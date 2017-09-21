@@ -397,7 +397,12 @@
       //视频上传离开confirm取消函数
       cancelEvent() {
         this.videoLeaveConfirm = false;
-        this.pageLeaveEnsure = false;
+        if (!this.videoUploading) {
+          this.pageLeaveEnsure = true;
+          this.$router.go(-1);
+        } else {
+          this.pageLeaveEnsure = false;
+        }
       },
       //视频上传离开confirm离开函数
       ensureEvent() {
@@ -425,7 +430,8 @@
       uploadEnsure() {
         let that = this;
         this.reloadVideoConfirm = false;
-        this.$el.querySelector('#uploadBtn').click();
+        console.log(document.querySelector('#uploadBtn'));
+        document.querySelector('#uploadBtn').click();
       },
       //图片离开取消按钮
       imgCancel() {
