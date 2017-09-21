@@ -36,7 +36,7 @@
             </li>
           </ul>
           <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click="moreDataShow('checkSuggestObj')">查看更多</span>
+            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click="moreDataShow('checkSuggestObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click="lessDataShow('checkSuggestObj')">收起</span>
           </section>
           <section class="check-suggest-btn" data-role="videoTriage"
@@ -61,7 +61,7 @@
             </li>
           </ul>
           <section class="more-box" v-if="treatmentObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click="moreDataShow('treatmentObj')">查看更多</span>
+            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click="moreDataShow('treatmentObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click="lessDataShow('treatmentObj')">收起</span>
           </section>
         </section>
@@ -84,7 +84,7 @@
             </li>
           </ul>
           <section class="more-box" v-if="knowledgeObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click="moreDataShow('knowledgeObj')">查看更多</span>
+            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click="moreDataShow('knowledgeObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click="lessDataShow('knowledgeObj')">收起</span>
           </section>
         </section>
@@ -131,7 +131,7 @@
             </li>
           </ul>
           <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="doctorObj.moreData" @click="moreDataShow('doctorObj')">查看更多</span>
+            <span class="more-box-btn more-btn" v-show="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-show="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
           </section>
         </section>
@@ -171,6 +171,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //处置建议里的数据
         treatmentObj:{
@@ -181,6 +183,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //患教知识里的数据
         knowledgeObj:{
@@ -191,6 +195,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //推荐医生的的数据
         doctorObj:{
@@ -201,6 +207,8 @@
           lessData:[],//五条建议的数据
           initNum:3,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
       }
 
@@ -313,8 +321,13 @@
         }
       },
       //展示更多
-      moreDataShow(param){
+      moreDataShow(param,e){
         let that = this;
+//        console.log(that.$el.querySelectorAll(this).offsetTop);
+        if (!that[param].hasPosition){
+          that[param].position = e.path["4"].offsetTop;
+          that[param].hasPosition = true;
+        }
         if (that[param].allData.length-that[param].tempData.length>that[param].pageNum) {
           that[param].tempData = that[param].allData.slice(0,that[param].pageNum+that[param].tempData.length);
         } else {
@@ -337,30 +350,12 @@
         store.commit("setTargetMsg", {payType:type});
 
       },
-      //获取患者是否建立过问诊 responseData.dataList.conState 0-无沟通中数据 1-有
-      goToFreeConsult(index){
-        let that = this;
-        api.ajax({
-          url: XHRList.getCurrentByCustomerId,
-          method: "POST",
-          data: {
-            customerId:	that.doctorObj.allData[index].customerId,//string	是	医生的Id	1489998833435
-            caseId:api.getPara().caseId,	//string	是
-          },
-          beforeSend(){
-
-          },
-          done(data){
-            if (data.responseObject.responseData.dataList && data.responseObject.responseStatus) {
-              console.log(data);
-            }
-          }
-        })
-      },
       //收起
       lessDataShow(param){
         let that = this;
+        document.body.scrollTop = that[param].position;
         that[param].moreData = true;
+        that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
       },
       goToUpload(){

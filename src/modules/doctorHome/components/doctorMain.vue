@@ -41,7 +41,7 @@
           </section>
           <!--免费问诊-->
           <section class="doc-onlineForFree" v-show="inquiryState>0">
-            <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable}" ></section>
+            <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable&&!isOpenCure,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable||isOpenCure}" ></section>
           </section>
         </section>
       </section>
@@ -933,7 +933,7 @@
         .online-visitsBox {
           background-color: #FFFFFF;
           .doc-commonTitle {
-            padding-right: rem(24px);
+            padding-right: rem(30px);
           }
           .doc-lastPerson {
             @include font-dpr(14px);
@@ -1087,6 +1087,7 @@
               }
               .collegeItem-right{
                 padding-left: rem(52px);
+                padding-right: rem(32px);
                 @include font-dpr(18px);
                 color: #999999;
               }
