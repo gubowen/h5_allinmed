@@ -23,7 +23,7 @@ import TriageDetail from "./components/triageDetail";
 import knowledgeDetail from "./components/knowledgeDetail";
 
 import store from "./store/store";
-fastclick.attach(document.body);
+// fastclick.attach(document.body);
 
 
 class ImScene {
@@ -78,27 +78,45 @@ class ImScene {
     }, {
       path: "/BaseIm",
       name: "BaseIm",
+      meta: {
+        keepAlive: true
+      },
       component: BaseIm
     }, {
       path: "/ShowBigImg",
       name: "showBigImg",
+      meta: {
+        keepAlive: true
+      },
       component: ShowBigImg
     }, {
       path: "/MedicalReportDetail",
       name: "MedicalReportDetail",
+      meta: {
+        keepAlive: true
+      },
       component: MedicalReportDetail
     }, {
       path: "/UploadList",
       name: "UploadList",
+      meta: {
+        keepAlive: true
+      },
       component: UploadList
     }, {
       path: "/TriageDetail",
       name: "TriageDetail",
+      meta: {
+        keepAlive: false,
+      },
       component: TriageDetail
     }, {
-        path: "/knowledgeDetail",
-        name: "knowledgeDetail",
-        component: knowledgeDetail
+      path: "/knowledgeDetail",
+      name: "knowledgeDetail",
+      meta: {
+        keepAlive: true
+      },
+      component: knowledgeDetail
       }
     ]
   }

@@ -13,7 +13,7 @@
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
           </li>
-          <li class="tc-imageUpLoadAdd" v-if="!uploading">
+          <li class="tc-imageUpLoadAdd" v-if="!uploading&&imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
               <input class="tc-upLoadInput" type="file"
@@ -33,7 +33,9 @@
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText" id="reloadBtn">重新上传</a></li>
+          <li class="he-videoAddBtn he-loadSuccessTextBox">
+            <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
+          </li>
           <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
             <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
             <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
@@ -57,13 +59,48 @@
     <section class="video-upLoad-box"  v-if="videoUploading">
       <section class="ev-videoUpLoading">
         <div class="tc-videoLoadingImg">
-          <img src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
+          <img src="../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
         </div>
         <p class="tc-videoLoadingText">上传中...</p>
       </section>
     </section>
     <transition name="fade">
       <toast :content="tip" v-show="tipShow"></toast>
+    </transition>
+    <transition name="fade">
+      <!--图片上传离开的confirm-->
+      <confirm
+        :confirmParams="imgLeaveConfirmParams"
+        v-if="imgLeaveConfirm"
+        :showFlag.sync="imgLeaveConfirm"
+        @cancelClickEvent="imgCancel()"
+        @ensureClickEvent="imgEnsure()">
+      </confirm>
+    </transition>
+    <transition name="fade">
+      <!--视频上传离开的confirm-->
+      <confirm
+        :confirmParams="videoLeaveConfirmParams"
+        v-if="videoLeaveConfirm"
+        :showFlag.sync="videoLeaveConfirm"
+        @cancelClickEvent="cancelEvent()"
+        @ensureClickEvent="ensureEvent()">
+      </confirm>
+    </transition>
+    <transition name="fade">
+      <!--视频是否重新上传的confirm-->
+      <confirm
+        :confirmParams="{
+            'ensure':'取消',
+            'cancel':'替换',
+            'title':'重新上传后',
+            'content':'原有视频将被替换',
+          }"
+        v-if="reloadVideoConfirm"
+        :showFlag.sync="reloadVideoConfirm"
+        @cancelClickEvent="uploadEnsure()"
+        @ensureClickEvent="uploadCancel()">
+      </confirm>
     </transition>
   </section>
 
@@ -81,6 +118,7 @@
   import axios from "axios";
   import Qiniu from "common/js/third-party/qiniu/qiniu";
   import Toast from "components/toast";
+  import confirm from 'components/confirm';
   const XHRList = {
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",//上传图片
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",//更新图片
@@ -92,6 +130,12 @@
   export default{
     data(){
       return {
+        imgLeaveConfirm:false,//上传图片离开confirm框是否显示
+        imgLeaveConfirmParams:{},//图片离开的参数
+        videoLeaveConfirm:false,//上传视频离开confirm框是否显示
+        videoLeaveConfirmParams:{},//上传视频离开confirm的参数
+        pageLeaveEnsure: false,//页面是否离开
+        reloadVideoConfirm:false,//视频重新上传的confirm框是否显示
         baseMessage: {},
         imageList: [],
         uploading: false,
@@ -101,6 +145,57 @@
         tip: "上传完成",
         tipShow: false,
         uploadVideo:false,//点击提交之后，提交按钮是否可以点击
+      }
+    },
+    beforeRouteLeave (to, from, next){
+      let that =this;
+//      debugger;
+      if (that.baseMessage.type==1){
+        if(that.videoObj.size || that.videoUploading){
+          if (that.videoUploading) {
+            that.videoLeaveConfirmParams={
+              'ensure':'离开',
+              'cancel':'取消',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.videoLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的视频么',
+              'content':'',
+            }
+          }
+          that.videoLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure)
+        } else {
+          next(true);
+        }
+        this.reloadVideoConfirm = false;
+      } else {
+        if(that.imageList.length){
+          if(that.uploading){
+            that.imgLeaveConfirmParams={
+              'ensure':'取消',
+              'cancel':'离开',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.imgLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的图片么？',
+            }
+          }
+          that.imgLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure);
+        } else {
+          next(true);
+        }
       }
     },
     props: {},
@@ -250,71 +345,10 @@
           }
         });
       },
-      reloadUpload(){
-        const that = this;
-
-        Qiniu.uploader({
-          runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: "reloadBtn",         // 上传选择的点选按钮，必需
-          multi_selection: false,
-          uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-          domain: 'tocure',     // bucket域名，下载资源时用到，必需
-          container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
-          max_file_size: '100mb',             // 最大文件体积限制
-          flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-          dragdrop: true,                     // 开启可拖曳上传
-          drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-          chunk_size: '4mb',                  // 分块上传时，每块的体积
-          filters: {
-            mime_types: [                                   //只允许上传video
-              {title: "video", extensions: "mp4,mov,avi,wmv,flv"}
-            ],
-            prevent_duplicates: true                        //不允许选取重复文件
-          },
-          auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-          init: {
-            'FilesAdded': function (up, files) {
-              plupload.each(files, function (file) {
-                // 文件添加进队列后，处理相关的事情
-              });
-            },
-            'BeforeUpload': function (up, file) {
-              // 每个文件上传前，处理相关的事情
-            },
-            'UploadProgress': function (up, file) {
-              // 每个文件上传时，处理相关的事情
-              that.videoUploading = true;
-            },
-            'FileUploaded': function (up, file, info) {
-              that.videoUploading = false;
-              that.videoObj = file;
-              that.videoSubmitParam = JSON.parse(info);
-              that.tipShow = true;
-              setTimeout(() => {
-                that.tipShow = false;
-              }, 2000)
-            },
-            'Error': function (up, err, errTip) {
-              //上传出错时，处理相关的事情
-            },
-            'UploadComplete': function () {
-              //队列文件处理完毕后，处理相关的事情
-
-            },
-            'Key': function (up, file) {
-              // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-              // 该配置必须要在unique_names: false，save_key: false时才生效
-              var key = "";
-              // do something with key here
-              return key
-            }
-          }
-        });
-      },
       //图片提交
       submitImage(){
         const that = this;
+        that.pageLeaveEnsure = true;
         that.$router.push({
           path: "/BaseIm",
           params: {
@@ -345,6 +379,7 @@
           },
           done(){
             that.uploadVideo = false;
+            that.pageLeaveEnsure = true;
             that.$router.push({
               path: "/BaseIm",
               params: {
@@ -358,7 +393,61 @@
 
           }
         })
-      }
+      },
+      //视频上传离开confirm取消函数
+      cancelEvent() {
+        this.videoLeaveConfirm = false;
+        this.pageLeaveEnsure = false;
+      },
+      //视频上传离开confirm离开函数
+      ensureEvent() {
+        let that = this;
+        if (that.videoUploading) {
+          that.videoLeaveConfirm = false;
+          that.pageLeaveEnsure = true;
+          that.$router.go(-1);
+        } else {
+          if(that.uploadVideo){
+            return false;
+          }
+          that.submitVideo();
+        }
+      },
+      //重新上传按钮
+      againUpload(){
+        this.reloadVideoConfirm = true;
+      },
+      //重新上传confirm取消函数
+      uploadCancel() {
+        this.reloadVideoConfirm = false;
+      },
+      //重新上传confirm替换函数
+      uploadEnsure() {
+        let that = this;
+        this.reloadVideoConfirm = false;
+        this.$el.querySelector('#uploadBtn').click();
+      },
+      //图片离开取消按钮
+      imgCancel() {
+        let that = this;
+        that.imgLeaveConfirm = false;
+        that.pageLeaveEnsure = true;
+        that.$router.go(-1);
+//        this.leaveConfirm = false;
+//        this.pageLeaveEnsure = false;
+        console.log("取消")
+      },
+      //图片离开函数
+      imgEnsure() {
+        let that = this;
+        console.log("离开");
+        if (that.uploading) {
+          this.imgLeaveConfirm = false;
+          this.pageLeaveEnsure = false;
+        } else {
+          this.submitImage();
+        }
+      },
     },
     mounted(){
 //      if (!sessionStorage.getItem("triageRoute")) {
@@ -367,6 +456,16 @@
 //
 //      this.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
 //      this.videoUpload();
+      let that = this;
+      that.imageList = [];
+      that.videoObj={};
+      that.videoSubmitParam={};
+      if (!sessionStorage.getItem("triageRoute")) {
+        sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
+      }
+
+      that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
+      that.videoUpload();
     },
     activated(){
       let that = this;
@@ -382,7 +481,8 @@
       that.reloadUpload();
     },
     components: {
-      Toast
+      Toast,
+      confirm
     }
 
   }
@@ -391,6 +491,11 @@
   @import "../../../../scss/library/_common-modules";
 
   .he-videoUpHide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     $main-color: #00D6C6;
     height: 100%;
     background-color: #ffffff;

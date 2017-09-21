@@ -130,6 +130,7 @@
           //分诊医生
           switch (Number(opt.consultationState)){
             case 0:
+            case 2:
               statusName = '问诊中';
               break;
             case 1:
