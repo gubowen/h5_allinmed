@@ -39,8 +39,8 @@
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
-          'content':'医生暂不能为您提供帮助，请医生开启问诊服务后再来沟通。',
-          'title':'暂未开启问诊服务'
+          'content':'医生关闭了今天的问诊服务，暂不能为您提供帮助',
+          'title':'今日暂不接诊'
           }" v-if="noStateShow" @cancelClickEvent="cancelEvent(1)" @ensureClickEvent="cancelEvent(1)">
       </confirm>
     </transition>
@@ -48,8 +48,8 @@
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
-          'content':'医生今日的名额已全部预约 请改日再来',
-          'title':'问诊名额已满'
+//          'content':'医生今日的名额已全部预约 请改日再来',
+          'title':'抱歉，该医生今天已经没有问诊名额了'
           }" v-if="noMoreShow" @cancelClickEvent="cancelEvent(2)" @ensureClickEvent="cancelEvent(2)">
       </confirm>
     </transition>
