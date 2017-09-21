@@ -259,7 +259,7 @@
   .main-inner.tc-upLoadFile {
     background-color: #ffffff;
     padding-top: rem(22px);
-    min-height: 100%;
+    /*height: 100%;*/
     box-sizing: border-box;
   }
 
@@ -271,7 +271,7 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: #f4f5f7;
+    background-color: #ffffff;
   }
 
   $colorTwo: #222222;
@@ -482,6 +482,7 @@
     padding-top: rem(70px);
     text-align: center;
     padding-bottom: rem(60px);
+    background-color: white;
     .tc-submitBtn {
       width: rem(570px);
       //display: block;
