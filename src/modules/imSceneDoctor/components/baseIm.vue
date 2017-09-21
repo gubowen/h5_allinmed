@@ -312,12 +312,13 @@
                 this.showBottomTips(2);
                 break;
               case 4://医生接诊
-                this.lastTimeShow = true;
+                this.lastTimeShow = false;
                 this.receiveTreatmentStatus = true;
-                store.commit("setLastCount", 3);
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
-                clearInterval(this.remainTimeCount);
+                this.showBottomTips(1);
+//                store.commit("setLastCount", 3);
+//                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
+//                store.commit("lastTimeCount");
+//                clearInterval(this.remainTimeCount);
                 break;
             }
           }
