@@ -13,7 +13,7 @@
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
           </li>
-          <li class="tc-imageUpLoadAdd" v-if="!uploading">
+          <li class="tc-imageUpLoadAdd" v-if="!uploading&&imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
               <input class="tc-upLoadInput" type="file"
@@ -68,6 +68,16 @@
       <toast :content="tip" v-show="tipShow"></toast>
     </transition>
     <transition name="fade">
+      <!--图片上传离开的confirm-->
+      <confirm
+        :confirmParams="imgLeaveConfirmParams"
+        v-if="imgLeaveConfirm"
+        :showFlag.sync="imgLeaveConfirm"
+        @cancelClickEvent="imgCancel()"
+        @ensureClickEvent="imgEnsure()">
+      </confirm>
+    </transition>
+    <transition name="fade">
       <!--视频上传离开的confirm-->
       <confirm
         :confirmParams="videoLeaveConfirmParams"
@@ -120,6 +130,8 @@
   export default{
     data(){
       return {
+        imgLeaveConfirm:false,//上传图片离开confirm框是否显示
+        imgLeaveConfirmParams:{},//图片离开的参数
         videoLeaveConfirm:false,//上传视频离开confirm框是否显示
         videoLeaveConfirmParams:{},//上传视频离开confirm的参数
         pageLeaveEnsure: false,//页面是否离开
@@ -163,7 +175,27 @@
         }
         this.reloadVideoConfirm = false;
       } else {
-        next(true);
+        if(that.imageList.length){
+          if(that.uploading){
+            that.imgLeaveConfirmParams={
+              'ensure':'取消',
+              'cancel':'离开',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.imgLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的图片么？',
+            }
+          }
+          that.imgLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure);
+        } else {
+          next(true);
+        }
       }
     },
     props: {},
@@ -316,6 +348,7 @@
       //图片提交
       submitImage(){
         const that = this;
+        that.pageLeaveEnsure = true;
         that.$router.push({
           path: "/BaseIm",
           params: {
@@ -393,6 +426,27 @@
         let that = this;
         this.reloadVideoConfirm = false;
         this.$el.querySelector('#uploadBtn').click();
+      },
+      //图片离开取消按钮
+      imgCancel() {
+        let that = this;
+        that.imgLeaveConfirm = false;
+        that.pageLeaveEnsure = true;
+        that.$router.go(-1);
+//        this.leaveConfirm = false;
+//        this.pageLeaveEnsure = false;
+        console.log("取消")
+      },
+      //图片离开函数
+      imgEnsure() {
+        let that = this;
+        console.log("离开");
+        if (that.uploading) {
+          this.imgLeaveConfirm = false;
+          this.pageLeaveEnsure = false;
+        } else {
+          this.submitImage();
+        }
       },
     },
     mounted(){
