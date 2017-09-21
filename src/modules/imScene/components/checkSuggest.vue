@@ -33,7 +33,7 @@
           </li>
         </ul>
         <section class="more-box" v-if="moreBoxShow">
-          <span class="more-box-btn more-btn" v-show="moreData" @click="moreDataShow">查看更多</span>
+          <span class="more-box-btn more-btn" v-show="moreData" @click="moreDataShow($event)">查看更多</span>
           <span class="more-box-btn less-btn" v-show="!moreData" @click="lessDataShow">收起</span>
         </section>
         <section class="check-suggest-btn" data-role="videoTriage"
@@ -61,6 +61,8 @@
         tempSuggest:[],//展示的数组
         moreSuggest:[],//最多的数组
         lessSuggest:[],//五条建议的数据
+        position:0,//记录卡片的位置
+        hasPosition:false,//卡片的位置是否已经记录
       }
     },
     mounted(){
@@ -83,14 +85,19 @@
         }
       },
       //展示更多
-      moreDataShow(){
+      moreDataShow(e){
         let that = this;
+        if (!that.hasPosition){
+          that.position = e.path["4"].offsetTop;
+          that.hasPosition = true;
+        }
         that.moreData = false;
         that.tempSuggest = that.moreSuggest;
       },
       //收起
       lessDataShow(){
         let that = this;
+        document.body.scrollTop = that.position;
         that.moreData = true;
         that.tempSuggest = that.lessSuggest;
       },
