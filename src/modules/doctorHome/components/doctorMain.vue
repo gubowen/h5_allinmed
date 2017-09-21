@@ -446,6 +446,8 @@
         },
         //支付成功回调
         paySuccessBack(data){
+            alert(data)
+          console.log(data)
           let _this=this,
               _orderAmount = data.orderAmount,         //金额
               _orderFrequency = data.orderFrequency,   //次数
@@ -467,7 +469,10 @@
             case 1:
               //图文问诊
 //              console.log("创建图文问诊");
+              alert(data);
+              console.log(data)
               _this.getConsultationId({callBackFn:()=>{
+                  alert(1)
                 _this.reloadIMTime({
                   data:data,
                   callBack:()=>{
