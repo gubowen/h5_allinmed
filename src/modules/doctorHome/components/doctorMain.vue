@@ -275,6 +275,7 @@
           this.$router.push({
             name:'clinicDetails',
             params:{
+              docLogo:_this.logoUrl,
               doctorId: _this.docId,
               hospitalId: _this.hospitalId,
               docName: _this.fullName,
