@@ -3,7 +3,7 @@
     <header class="docMessageBox">
       <figure class="docMessage">
         <figcaption class="docLogoBox">
-          <img src="../../../common/image/img00/doctorHome/doctorPic.png" class="docLogo">
+          <img :src="doctorLogo" class="docLogo">
         </figcaption>
         <div class="docNameBox">
           <span class="docName">{{docName}}</span>
@@ -83,12 +83,14 @@
         doctorId:"",//医生Id
         hospitalId:"",//医院Id
         docName:"",
-        docTitle:[]
+        docTitle:[],
+        doctorLogo:'',
       }
     },
     mounted(){
         this.getClinicDetails();
         this.getCloseTime();
+        document.title="门诊信息";
     },
     methods:{
       getClinicDetails(){
@@ -97,6 +99,7 @@
         this.hospitalId = this.$route.params.hospitalId;
         this.docName = this.$route.params.docName;
         this.docTitle = this.$route.params.docTitle;
+        this.doctorLogo = this.$route.params.docLogo;
         api.ajax({
           url: XHRList.getClinicDetails,
           method: "post",
