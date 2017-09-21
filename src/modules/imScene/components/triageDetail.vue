@@ -23,7 +23,7 @@
         </ul>
         <ul class="he-loadFiles" v-show="baseMessage.type==1&&!videoObj.size">
           <li class="he-videoAddFirstBtn" ref="upload">
-            <a href="javascript:;" class="he-videoFirstLoadBtn" id="uploadBtn"></a>
+            <a href="javascript:;" class="he-videoFirstLoadBtn" id="uploadBtn" ref="uploadBtn"></a>
           </li>
         </ul>
         <ul class="he-loadFiles ev-success" issubmit="0" v-show="baseMessage.type==1&&videoObj.size">
@@ -33,9 +33,9 @@
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox">
-            <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
-          </li>
+          <!--<li class="he-videoAddBtn he-loadSuccessTextBox">-->
+            <!--<a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>-->
+          <!--</li>-->
           <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
             <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
             <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
@@ -430,8 +430,8 @@
       uploadEnsure() {
         let that = this;
         this.reloadVideoConfirm = false;
-        console.log(document.querySelector('#uploadBtn'));
-        document.querySelector('#uploadBtn').click();
+        console.log(this.$refs.uploadBtn);
+        this.$refs.uploadBtn.click();
       },
       //图片离开取消按钮
       imgCancel() {
