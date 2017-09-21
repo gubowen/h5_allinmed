@@ -452,6 +452,7 @@
               _orderAmount = data.orderAmount,         //金额
               _orderFrequency = data.orderFrequency,   //次数
               _orderType = data.orderType;             //0-免费
+          alert(_orderType)
           switch (_orderType){
             case 0:
               //免费
