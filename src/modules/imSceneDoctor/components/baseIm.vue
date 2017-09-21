@@ -463,7 +463,7 @@
                     diagnoseConTent: dataList[0].patientCasemap.caseMain.caseMain,
                     isAttachment: dataList[0].patientCasemap.isAttachment,
                     time: dataList[0].patientCasemap.caseTime,
-                    caseUrl: "https://m.allinmed.cn/pages/app_native/reservation_list.html?caseId=" + api.getPara().caseId + "&isOrder=0"
+                    caseUrl: `${window.location.origin}/pages/app_native/reservation_list.html?caseId=${api.getPara().caseId}&isOrder=0`
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 }, dataList[0].patientCasemap.patientName);
