@@ -908,7 +908,7 @@
           }
           .doc-titleRight{
             @include font-dpr(18px);
-            color: #2FC5BD;
+            color: #07B6AC;
             text-align: right;
             position: relative;
             &:after{
