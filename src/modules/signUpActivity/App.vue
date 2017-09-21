@@ -37,9 +37,9 @@
                   <i :class=" simulateSelectStatus ? 'icon-up':'icon-down'" @click.stop="simulateSelect()"></i>
                   <input type="text" readonly placeholder="选择当前职称" @click.stop="simulateSelect()" v-model="selectValue"/>
                   <ul v-show="simulateSelectStatus">
-                    <li @click.stop="select(1)" :class="{'active':this.selectValue=='主任医生'}">主任医生</li>
-                    <li @click.stop="select(2)" :class="{'active':this.selectValue=='副主任医生'}">副主任医生</li>
-                    <li @click.stop="select(3)" :class="{'active':this.selectValue=='主治医生'}">主治医生</li>
+                    <li @click.stop="select(1)" :class="{'active':this.selectValue=='主任医师'}">主任医师</li>
+                    <li @click.stop="select(2)" :class="{'active':this.selectValue=='副主任医师'}">副主任医师</li>
+                    <li @click.stop="select(3)" :class="{'active':this.selectValue=='主治医师'}">主治医师</li>
                     <li @click.stop="select(4)" :class="{'active':this.selectValue=='其他'}">其他</li>
                   </ul>
                 </div>
@@ -303,16 +303,16 @@
           case 0:
             break;
           case 1:
-            this.selectValue = '主任医生';
-            this.career = '1_主任医生';
+            this.selectValue = '主任医师';
+            this.career = '1_主任医师';
             break;
           case 2:
-            this.selectValue = '副主任医生';
-            this.career = '2_副主任医生';
+            this.selectValue = '副主任医师';
+            this.career = '2_副主任医师';
             break;
           case 3:
-            this.selectValue = '主治医生';
-            this.career = '3_主治医生';
+            this.selectValue = '主治医师';
+            this.career = '3_主治医师';
             break;
           case 4:
             this.selectValue = '其他';
