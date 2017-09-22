@@ -820,7 +820,6 @@
           .doc-personalAddress{
             @include font-dpr(14px);
             color: #C1D0E0;
-            margin-top: rem(8px);
             p{
               position: relative;
               padding-left: rem(30px);
