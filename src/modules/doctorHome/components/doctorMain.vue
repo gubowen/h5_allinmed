@@ -85,7 +85,7 @@
         </ul>
       </section>
       <!--个人简介-->
-      <section class="individual-infoBox doc-commonSty" v-show="personalIndividual.continuingEducationList.length>0&&personalIndividual.educationList.length>0&&personalIndividual.honorList.length>0&&personalIndividual.fundList.length>0">
+      <section class="individual-infoBox doc-commonSty" v-show="isPersonalIndividualShow">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
@@ -178,6 +178,9 @@
           company:"",           //医院
           hospitalId:'',        //医院Id
           medicalTitleNewArr:[],
+          personalIndividual:[
+            ""
+          ],
 //          hospitalTitle:"",      //职称
 //          eduTitle:"",           //职称
           jobDoctorYear:"",           //职称
@@ -199,6 +202,7 @@
           isOpenCure:false,                       //是否开启问诊
           isNotUsable:false,                      //是否可用
           summary:"",                              //个人简介内容
+          isPersonalIndividualShow:false,               //个人简介是否显示
           params: {
             getPersonalProParams: {
               customerId: api.getPara().doctorCustomerId,
@@ -652,7 +656,10 @@
               _this.finish = false;
               if (data&&data.responseObject.responseData && data.responseObject.responseData.data_list) {
                 _this.personalIndividual=data.responseObject.responseData.data_list;
-
+               const _personalIndividual=data.responseObject.responseData.data_list;
+                if(_personalIndividual.continuingEducationList.length>0&&_personalIndividual.educationList.length>0&&_personalIndividual.honorList.length>0&&_personalIndividual.fundList.length>0){
+                  _this.isPersonalIndividualShow=true;
+                }
               }else{
 //                _this.errorShow = true;
 //                setTimeout(() => {
