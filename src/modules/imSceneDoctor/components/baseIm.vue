@@ -241,6 +241,7 @@
           onconnect (data) {
             console.log('连接成功');
             that.triageDoctorAssign();
+            that.checkFirstBuy();
           },
           onmyinfo(userData) {
             that.getMessageList();
@@ -995,7 +996,7 @@
     },
     mounted(){
       this.getUserBaseData();
-      this.checkFirstBuy();
+
     },
     activated(){
       this.scrollToBottom();
