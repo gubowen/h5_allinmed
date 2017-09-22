@@ -664,6 +664,7 @@
             outline: medium;
             background: #E5E5E5;
             border: none;
+            border: none;
             @include placeholder() {
               color: #AAAAAA;
             }
@@ -754,7 +755,7 @@
               left: 0;
               top: 50%;
               margin-top: rem(-24px);
-              background: url("../../../common/image/img00/consult_V1.2/doubt@2x.png") no-repeat center;
+              background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png") no-repeat center;
               background-size: 100% 100%;
             }
           }
