@@ -217,6 +217,8 @@
           onmsg (msg) {
             that.scrollToBottom();
             that.msgList.push(msg);
+
+
           }
         });
 
