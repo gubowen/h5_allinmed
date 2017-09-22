@@ -273,7 +273,7 @@
         width:rem(108px);
         height:rem(108px);
         border-radius: 50%;
-        border:2px solid #BCCBD8;
+        border:rem(2px) solid #BCCBD8;
         img{
           display:block;
           width:rem(100px);

@@ -844,7 +844,7 @@
               display: inline-block;
               color: #C1D0E0;
               padding: rem(4px) rem(16px);
-              border: 2px solid #7C97B4;
+              border: rem(2px) solid #7C97B4;
               border-radius: rem(4px);
               margin-right: rem(16px);
             }
