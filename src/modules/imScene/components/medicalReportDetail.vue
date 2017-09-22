@@ -256,7 +256,7 @@
         background: #ffffff;
         .tc-baseInfoList {
           padding-top: rem(40px);
-          background: url("../../../common/image/img00/myServices/interrogation_bg.png") no-repeat;
+          /*background: url("../../../common/image/img00/myServices/interrogation_bg.png") no-repeat;*/
           background-size: 100%;
         }
         .tc-baseInfoItem {

@@ -521,7 +521,7 @@
             right: rem(15px);
             top: 50%;
             transform: translateY(-50%);
-            background: url("../../../common/image/imScene/right_arrow@2x.png") top right no-repeat;
+            background: url("../../../common/image/imScene/right_arrow@2x.png") center right no-repeat;
             background-size: rem(28px) rem(28px);
           }
         }
