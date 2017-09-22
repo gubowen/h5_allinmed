@@ -85,7 +85,7 @@
         </ul>
       </section>
       <!--个人简介-->
-      <section class="individual-infoBox doc-commonSty" >
+      <section class="individual-infoBox doc-commonSty" v-show="personalIndividual.continuingEducationList.length>0&&personalIndividual.educationList.length>0&&personalIndividual.honorList.length>0&&personalIndividual.fundList.length>0">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
