@@ -166,8 +166,9 @@ common.bindCallApp=function(options,config) {
                 bindOpen();
             }
         }
-        debugger;
+   
 
+        
         if (isIphone) {
             if (isIOS9) { // ios9直接显示加链接
                 bindOpen(options.ios9);

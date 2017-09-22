@@ -28,13 +28,13 @@ $(function () {
         downloadBtn: function () {
             var that = this;
             $(".page-button").on("click", function () {
+              window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt";
                 // var download = {
                 //     other: that.otherEvent,
                 //     androidWX: that.androidEvent,
                 //     iphoneWX: that.iosEvent
                 // };
                 // download[that.config.browseType]();
-              window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt";
             })
 
 
