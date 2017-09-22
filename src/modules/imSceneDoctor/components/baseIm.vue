@@ -312,13 +312,13 @@
                 this.showBottomTips(2);
                 break;
               case 4://医生接诊
-                this.lastTimeShow = false;
+                this.lastTimeShow = true;
                 this.receiveTreatmentStatus = true;
-                this.showBottomTips(1);
-//                store.commit("setLastCount", 3);
-//                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-//                store.commit("lastTimeCount");
-//                clearInterval(this.remainTimeCount);
+//                this.showBottomTips(1);
+                store.commit("setLastCount", 3);
+                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
+                store.commit("lastTimeCount");
+                clearInterval(this.remainTimeCount);
                 break;
             }
           }
@@ -560,12 +560,12 @@
               that.createTriageMessage();
             } else {
               let dataList = data.responseObject.responseData.dataList;
-              that.orderSourceId = dataList[dataList.length - 1].consultationId;
+              that.orderSourceId = dataList[0].consultationId;
 
-              that.getLastTime(parseInt(dataList[dataList.length - 1].consultationState));
+              that.getLastTime(parseInt(dataList[0].consultationState));
               //未接诊则发送
 
-              if (parseInt(dataList[dataList.length - 1].consultationState) < 0) {
+              if (parseInt(dataList[0].consultationState) < 0) {
                 setTimeout(() => {
                   if (!that.$refs.medicalReport) {
                     that.getMedicalMessage();

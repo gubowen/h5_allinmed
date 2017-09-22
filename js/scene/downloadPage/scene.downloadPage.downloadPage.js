@@ -28,7 +28,9 @@ $(function () {
         downloadBtn: function () {
             var that = this;
             $(".page-button").on("click", function () {
-              window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt";
+              setTimeout(function () {
+                window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt";
+              },1000);
                 // var download = {
                 //     other: that.otherEvent,
                 //     androidWX: that.androidEvent,
