@@ -61,7 +61,7 @@
           }" v-if="hasCommunShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureCommunEvent">
       </confirm>
     </transition>
-    <loading v-show="finish"></loading>
+    <!--<loading v-show="finish"></loading>-->
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -123,12 +123,9 @@
             customerId: that.payPopupParams.docId,
             caseId:that.payPopupParams.caseId
           },
-          beforeSend(){
-            that.finish = true;
-          },
           done (data) {
-            that.finish = false;
             if (data &&data.responseObject.responseData.dataList) {
+              that.finish = false;
               const items = data.responseObject.responseData.dataList;
               if(items.state == 0){
                 that.noStateShow = true;
@@ -150,6 +147,9 @@
               }
             }
           },
+          fail(){
+            that.finish = false;
+          }
         });
       },
       //获取问诊价格
@@ -208,6 +208,9 @@
                 });
                 isClick = 0;
               }
+            },
+            fail(){
+              that.finish = false;
             }
           });
         }
