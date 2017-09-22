@@ -640,16 +640,16 @@
           }
           .selected-HospitalBtn, .selected-cureBtn {
             position: relative;
-            padding: rem(20px) 0;
+            padding: rem(38px) 0;
             &:after {
               position: absolute;
               display: block;
               content: '';
-              width: rem(28px);
-              height: rem(28px);
+              width: rem(36px);
+              height: rem(36px);
               right: 0;
               top: 50%;
-              margin-top: rem(-14px);
+              margin-top: rem(-18px);
               background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png") no-repeat center;
               background-size: 100% 100%;
             }

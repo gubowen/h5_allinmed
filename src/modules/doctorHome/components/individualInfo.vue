@@ -117,7 +117,7 @@
         border-radius: rem(8px);
         .individual-personInfo{
           padding-top: rem(38px);
-          padding-bottom: rem(62px);
+          padding-bottom: rem(38px);
           border-bottom: 2px solid #F8F8F8;
           p{
             @include font-dpr(18px);
