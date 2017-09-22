@@ -159,7 +159,7 @@
         })
       },
       getClinicTime(opt){
-        let week = "",amClinicType,pmClinicType,nmClinicType="",dateTime = opt.dateTime.split("-");
+        let week = "",amClinicType="",pmClinicType="",nmClinicType="",dateTime = opt.dateTime.split("-");
         switch(Number(opt.dateType)){
           case 1:
             week = "周一";
@@ -222,6 +222,12 @@
             }
           };
         }
+        console.log({
+          time:`${dateTime[1]}月${dateTime[2]}日 ${week}`,
+          amClinicType:amClinicType,
+          pmClinicType:pmClinicType,
+          nmClinicType:nmClinicType
+        })
         return {
             time:`${dateTime[1]}月${dateTime[2]}日 ${week}`,
             amClinicType:amClinicType,
@@ -419,6 +425,7 @@
             border-top:0;
             li{
               width:21%;
+              height:rem(100px);
               float:left;
               box-sizing:border-box;
               border-right:1px solid rgba(198,207,217,0.3);

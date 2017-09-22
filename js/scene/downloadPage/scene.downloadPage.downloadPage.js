@@ -28,12 +28,13 @@ $(function () {
         downloadBtn: function () {
             var that = this;
             $(".page-button").on("click", function () {
-                var download = {
-                    other: that.otherEvent,
-                    androidWX: that.androidEvent,
-                    iphoneWX: that.iosEvent
-                };
-                download[that.config.browseType]();
+                // var download = {
+                //     other: that.otherEvent,
+                //     androidWX: that.androidEvent,
+                //     iphoneWX: that.iosEvent
+                // };
+                // download[that.config.browseType]();
+              window.location.href="http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt";
             })
 
 
@@ -51,17 +52,17 @@ $(function () {
         //跳转app或者下载app
         otherEvent: function () {
             //公共的app启动的方法
-            common.bindCallApp({
-                ios: "tocuredt://cn.allinmed.dt",
-                android: "tocuredt://cn.allinmed.dt",
-                // ios9: "http://app.allinmd.cn/applinks.html",
-                ele: ".page-button"
-            }, {
-                androidUrl: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.allinmed.dt",
-                iosUrl: "https://itunes.apple.com/cn/app/%E5%94%AF%E5%8C%BB%E4%BC%9A%E8%AF%8A/id1186165348?mt=8",
-                androidImgPath: "/image/img00/downloadPage/ad-icon.png",
-                iosImgPath: "/image/img00/downloadPage/ios-icon.png"
-            });
+            // common.bindCallApp({
+            //     ios: "tocuredt://cn.allinmed.dt",
+            //     android: "tocuredt://cn.allinmed.dt",
+            //     // ios9: "http://app.allinmd.cn/applinks.html",
+            //     ele: ".page-button"
+            // }, {
+            //     androidUrl: "http://a.app.qq.com/o/simple.jsp?pkgname=cn.tocure.dt",
+            //     iosUrl: "https://itunes.apple.com/cn/app/%E5%94%AF%E5%8C%BB%E4%BC%9A%E8%AF%8A/id1186165348?mt=8",
+            //     androidImgPath: "/image/img00/downloadPage/ad-icon.png",
+            //     iosImgPath: "/image/img00/downloadPage/ios-icon.png"
+            // });
         },
         // appWakeUp: function () {
         //     common.bindCallApp({
