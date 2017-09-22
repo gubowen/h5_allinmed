@@ -129,7 +129,7 @@
             break;
           case "disease":
             searchData = {
-              illnessName: searchContent
+              searchParam: searchContent
             };
             url = XHRList.disease;
             break;
