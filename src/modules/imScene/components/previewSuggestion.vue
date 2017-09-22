@@ -1,4 +1,4 @@
-<template>
+ <template>
   <section>
     <!--<section class="main-message-box" :data-caseid="message.caseId">-->
       <!--<article class="main-message-box-item others-message">-->
