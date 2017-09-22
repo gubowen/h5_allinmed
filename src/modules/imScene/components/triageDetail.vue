@@ -431,8 +431,8 @@
         let that = this;
         that.reloadVideoConfirm = false;
 //        console.log(document.all);
-        console.log(this.$refs.uploadBtn["click"]);
-        this.$refs.uploadBtn["click"]();
+        console.log(document.querySelector("#uploadBtn").nextSibling.firstChild);
+        document.querySelector("#uploadBtn").nextSibling.firstChild["click"]();
 //        try{
 //          let evt = document.createEvent("Events"); //还有onchange则是HtmlEvents
 //          evt.initEvent("click",true,true);
