@@ -265,11 +265,11 @@
             patientId: that.payPopupParams.patientId,         // 	string	是	患者id
             doctorId: that.payPopupParams.docId,          //	string	是	医生id
             orderType: 1,                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
-            orderSourceId: opt.cId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+            orderSourceId: opt.consultationId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
             orderSourceType: opt.orderSourceType,                //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
             orderAmount: opt.orderAmount,                  //	string	否	订单金额  （单位/元 保留两位小数）$(this).attr("data-price")
             status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-            body: opt.orderSourceTitle,   //   string  否  订单描述 （微信支付展示用）
+            body: "图文问诊",   //   string  否  订单描述 （微信支付展示用）
             isCharge: "true"                    //   string  是  true-收费  false-免费
           },
           backCreateSuccess: function (_data) {
@@ -281,7 +281,7 @@
           wxPaySuccess: function (_data) {
             //支付成功回调  (问诊/门诊类型 必选)
             that.$emit("paySuccess", {
-              orderType: opt.oType,//0免费，其他不是
+              orderType: opt.orderSourceType,//0免费，其他不是
               orderAmount: opt.orderAmount, //价钱
               orderFrequency:opt.orderFrequency//聊天次数
             });

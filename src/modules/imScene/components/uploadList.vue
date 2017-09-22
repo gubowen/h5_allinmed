@@ -362,6 +362,7 @@
 
   $colorTwo: #222222;
   .tc-upLoadBox {
+    background-color: white;
     .middle-tip-box {
       opacity: 0.83;
       background: #545454;
