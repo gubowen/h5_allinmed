@@ -61,6 +61,7 @@
           }" v-if="hasCommunShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureCommunEvent">
       </confirm>
     </transition>
+    <loading v-show="finish"></loading>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -76,6 +77,7 @@
   import Vue from 'vue';
   import wxCommon from 'common/js/wxPay/wxComm';
   import confirm from 'components/confirm';
+  import loading from 'components/loading';
 
   const XHRList = {
     getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",//获取医生问诊价格及次数
@@ -97,6 +99,7 @@
         noStateShow:false,
         noMoreShow:false,
         hasCommunShow:false,
+        finish:false,
         priceMessage: {}
       }
     },
@@ -120,7 +123,11 @@
             customerId: that.payPopupParams.docId,
             caseId:that.payPopupParams.caseId
           },
+          beforeSend(){
+            that.finish = true;
+          },
           done (data) {
+            that.finish = false;
             if (data &&data.responseObject.responseData.dataList) {
               const items = data.responseObject.responseData.dataList;
               if(items.state == 0){
@@ -137,7 +144,6 @@
                     that.payOrderShow = true;
                     that.getPrice();
                   }else{
-
                     that.noOrder(opt);
                   }
                 }
@@ -184,7 +190,11 @@
               firstResult: 0,
               maxResult: 999
             },
+            beforeSend(){
+              that.finish = true;
+            },
             done (data) {
+              that.finish = false;
               if (data.responseObject.responseData.dataList) {
                 let consultationId = data.responseObject.responseData.dataList.consultationId;
                 sessionStorage.setItem("orderSourceId", consultationId);
@@ -365,12 +375,7 @@
                 },
                 backCreateSuccess: function (_data) {
                   that.creatInquiryId();
-                  that.$emit("paySuccess", {
-                    orderType: 0,
-                    orderAmount: 0,
-                    orderFrequency:3
-                  });
-                  that.closePopup();
+//                  that.closePopup();
                 },
                 backCreateError: function (_data) {
                   //创建订单失败  (必选)
@@ -418,10 +423,22 @@
                 },
                 done (d) {
                   if (d.responseObject.responseStatus) {
+                      debugger
                     localStorage.removeItem("docId");
                     sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
+                    that.$emit("paySuccess", {
+                      orderType: 0,
+                      orderAmount: 0,
+                      orderFrequency:3
+                    });
                   }
                 }
+              });
+            }else{
+              that.$emit("paySuccess", {
+                orderType: 0,
+                orderAmount: 0,
+                orderFrequency:3
               });
             }
           }
@@ -437,7 +454,8 @@
       }
     },
     components: {
-      confirm
+      confirm,
+      loading
     }
   }
 </script>
