@@ -492,14 +492,14 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              console.log("获取consultationId成功");
+//              console.log("获取consultationId成功");
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                   _this.consultationId = data.responseObject.responseData.dataList.consultationId;
                   org.callBackFn();
               }
             },
             fail(err){
-              console.log("获取consultationId失败");
+//              console.log("获取consultationId失败");
               _this.finish = false;
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
@@ -524,8 +524,8 @@
             },
             done(data) {
               _this.finish = false;
-              console.log(data);
-              console.log("刷新时间...");
+//              console.log(data);
+//              console.log("刷新时间...");
               if (data.responseObject.responseStatus) {
                 localStorage.setItem("sendTips",JSON.stringify(count.data));
                 count.callBack();
