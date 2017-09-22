@@ -33,9 +33,9 @@
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <!--<li class="he-videoAddBtn he-loadSuccessTextBox">-->
-            <!--<a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>-->
-          <!--</li>-->
+          <li class="he-videoAddBtn he-loadSuccessTextBox">
+            <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
+          </li>
           <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
             <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
             <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
@@ -429,9 +429,17 @@
       //重新上传confirm替换函数
       uploadEnsure() {
         let that = this;
-        this.reloadVideoConfirm = false;
-        console.log(this.$refs.uploadBtn);
-        this.$refs.uploadBtn.click();
+        that.reloadVideoConfirm = false;
+//        console.log(document.all);
+        console.log(this.$refs.uploadBtn["click"]);
+        this.$refs.uploadBtn["click"]();
+//        try{
+//          let evt = document.createEvent("Events"); //还有onchange则是HtmlEvents
+//          evt.initEvent("click",true,true);
+//          that.$refs.uploadBtn.dispatchEvent(evt);
+//        }catch(e) {
+//          alert(e);
+//        }
       },
       //图片离开取消按钮
       imgCancel() {
