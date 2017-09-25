@@ -6,7 +6,7 @@
       :class="{'my-message':contentMessage.from===userData.account,
              'others-message':contentMessage.from===targetData.account}">
       <figure class="main-message-img" v-if="contentMessage.from===targetData.account">
-        <img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">
+        <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
       </figure>
       <i class="fail-button" style="display:none">
         <img src="/image/imScene/error_tips.png" alt="">

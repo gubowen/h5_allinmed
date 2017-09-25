@@ -24,6 +24,24 @@ class SignUp {
       locale: 'zh_CN'
     };
     Vue.use(VeeValidator, config);
+    const dictionary = {
+      zh_CN: {
+        messages: {
+          email: () => '邮箱格式不正确哦',
+          required:function (n) {
+              return  "请填写"+ n
+          }
+        },
+        attributes: {
+          phone: '手机号码',
+          name: '姓名',
+          hospital: '医院名称',
+          checkCodeValidate:'短信验证码'
+        }
+      }
+    };
+
+    Validator.updateDictionary(dictionary);
     //Vue实例启动
     const app = new Vue({
       render: h => h(App)
@@ -32,43 +50,9 @@ class SignUp {
   }
 }
 
-const dictionary = {
-  zh_CN: {
-    messages: {
-      email: () => '邮箱格式不正确哦',
-      required: (field) => "请填写" + field
-    },
-    attributes: {
-      phone: '手机号',
-      name: '姓名',
-      hospital: '医院'
-    }
-  },
-  cn: {
-    messages: {
-      email: () => '请输入正确的邮箱格式',
-      required: (field) => "请填写" + field
-    },
-    attributes: {
-      phone: '手机号',
-      name: '姓名',
-      hospital: '医院'
-    }
-  },
-  en: {
-    messages: {
-      email: () => '请输入正确的邮箱格式',
-      required: (field) => "请填写" + field
-    },
-    attributes: {
-      phone: '手机号',
-      name: '姓名',
-      hospital: '医院'
-    }
-  }
-};
 
-Validator.updateDictionary(dictionary);
+
+
 
 Validator.extend('special', {
   messages: {

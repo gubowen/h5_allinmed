@@ -164,6 +164,8 @@
   import toast from 'components/toast';
   import confirm from 'components/confirm';
   import vueSlider from 'vue-slider-component';
+  import autosize from 'autosize';
+
   const XHRList = {
     query: "/mcall/cms/part/question/relation/v1/getMapList/",
     createMedicalRecord: "/mcall/customer/patient/case/v1/create/",
@@ -232,7 +234,7 @@
           this.firstConsult = true;
         }
       }
-
+      autosize(this.$el.querySelector("textarea"));
     },
     computed: {
       dotSize(){
@@ -712,7 +714,8 @@
         outline: medium;
         resize: none;
         width: 100%;
-        height: 1.6rem;
+        height: 0.6rem;
+        max-height: 1.7rem;
         border: none;
         background: none;
         @include font-dpr(18px);
@@ -792,7 +795,7 @@
         vertical-align: middle;
         width: rem(48px);
         height: rem(48px);
-        background: url(../../../common/image/img00/consult_V1.2/doubt@2x.png);
+        background: url(../../../common/image/img00/consult_V1.2/doubt2@2x.png);
         background-size: contain;
         margin-left: rem(28px);
       }
@@ -875,9 +878,10 @@
         width: 66.7%;
         position: absolute;
         bottom: rem(96px);
+        padding:rem(30px) 0;
         left: 50%;
         transform: translateX(-50%);
-
+        box-shadow: 0 rem(4px) rem(12px) 0 rgba(74,74,74,0.50);
       }
     }
   }
@@ -1235,6 +1239,15 @@
     padding: rem(60px) rem(50px);
     box-shadow: 0 rem(2px) rem(10px) 0 rgba(0, 190, 175, 0.25);
     box-sizing: border-box;
+    margin-top:0.2rem;
+    &:after{
+      content: '';
+      display: block;
+      @include triangle(rem(20px),#fff,up);
+      position: absolute;
+      top: -0.266666rem;
+      left: 33%;
+    }
     & > figure {
       width: 100%;
       img {

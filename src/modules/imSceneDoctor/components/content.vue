@@ -37,7 +37,7 @@
         return this.$store.state.logoUrl
       },
       targetLogo(){
-        return this.$store.state.targetMsg.avatar;
+        return this.$store.state.targetMsg.avatar.length===0? "/src/common/image/imScene/default.png":this.$store.state.targetMsg.avatar;
       }
     },
     props: {

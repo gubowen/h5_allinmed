@@ -9,7 +9,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var glob = require('glob');
-var env = config.build.env
+var env = config.build.env;
+var vConsolePlugin = require('vconsole-webpack-plugin');
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -74,7 +75,11 @@ var webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+    //vConsole webPack plugin
+    new vConsolePlugin({
+      enable: false // 发布代码前记得改回 false
+    }),
   ]
 })
 

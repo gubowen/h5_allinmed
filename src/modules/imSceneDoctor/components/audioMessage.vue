@@ -52,7 +52,7 @@
     },
     computed: {
       targetLogo(){
-        return this.$store.state.targetMsg.avatar;
+        return this.$store.state.targetMsg.avatar.length===0? "/src/common/image/imScene/default.png":this.$store.state.targetMsg.avatar;
       },
       formatTime(){
         const time = this.audioMessage.file.dur;

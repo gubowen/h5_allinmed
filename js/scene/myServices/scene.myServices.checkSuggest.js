@@ -241,7 +241,8 @@ $(function () {
                 firstResult: 0,
                 maxResult: 9999,
                 sortType: 1,
-                logoUseFlag: 3
+                logoUseFlag: 3,
+                caseId:common.getpara().caseId
             };
             $.ajax({
                 url: t.path.getRecommedDoctor,

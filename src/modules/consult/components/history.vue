@@ -640,16 +640,16 @@
           }
           .selected-HospitalBtn, .selected-cureBtn {
             position: relative;
-            padding: rem(20px) 0;
+            padding: rem(38px) 0;
             &:after {
               position: absolute;
               display: block;
               content: '';
-              width: rem(28px);
-              height: rem(28px);
+              width: rem(36px);
+              height: rem(36px);
               right: 0;
               top: 50%;
-              margin-top: rem(-14px);
+              margin-top: rem(-18px);
               background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png") no-repeat center;
               background-size: 100% 100%;
             }
@@ -663,6 +663,7 @@
             max-height: 1.3rem;
             outline: medium;
             background: #E5E5E5;
+            border: none;
             border: none;
             @include placeholder() {
               color: #AAAAAA;
@@ -745,6 +746,7 @@
             margin-top: rem(26px);
             margin-bottom: rem(14px);
             padding-left: rem(48px);
+            overflow: visible;
             &::after {
               position: absolute;
               content: '';
@@ -753,7 +755,7 @@
               left: 0;
               top: 50%;
               margin-top: rem(-24px);
-              background: url("../../../common/image/img00/consult_V1.2/doubt@2x.png") no-repeat center;
+              background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png") no-repeat center;
               background-size: 100% 100%;
             }
           }

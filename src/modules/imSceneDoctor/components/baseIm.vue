@@ -241,6 +241,7 @@
           onconnect (data) {
             console.log('连接成功');
             that.triageDoctorAssign();
+            that.checkFirstBuy();
           },
           onmyinfo(userData) {
             that.getMessageList();
@@ -314,6 +315,7 @@
               case 4://医生接诊
                 this.lastTimeShow = true;
                 this.receiveTreatmentStatus = true;
+//                this.showBottomTips(1);
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
@@ -463,7 +465,7 @@
                     diagnoseConTent: dataList[0].patientCasemap.caseMain.caseMain,
                     isAttachment: dataList[0].patientCasemap.isAttachment,
                     time: dataList[0].patientCasemap.caseTime,
-                    caseUrl: "https://m.allinmed.cn/pages/app_native/reservation_list.html?caseId=" + api.getPara().caseId + "&isOrder=0"
+                    caseUrl: `${window.location.origin}/pages/app_native/reservation_list.html?caseId=${api.getPara().caseId}&isOrder=0`
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 }, dataList[0].patientCasemap.patientName);
@@ -559,12 +561,12 @@
               that.createTriageMessage();
             } else {
               let dataList = data.responseObject.responseData.dataList;
-              that.orderSourceId = dataList[dataList.length - 1].consultationId;
+              that.orderSourceId = dataList[0].consultationId;
 
-              that.getLastTime(parseInt(dataList[dataList.length - 1].consultationState));
+              that.getLastTime(parseInt(dataList[0].consultationState));
               //未接诊则发送
 
-              if (parseInt(dataList[dataList.length - 1].consultationState) < 0) {
+              if (parseInt(dataList[0].consultationState) < 0) {
                 setTimeout(() => {
                   if (!that.$refs.medicalReport) {
                     that.getMedicalMessage();
@@ -895,7 +897,8 @@
                 consultationId: this.triageOrderSourceId,
                 frequency: "0",
                 frequencyType: "2",
-                consultationLevel: "1"
+                consultationLevel: "1",
+                consultationState:"2"
               },
               done(data) {
                 if (data.responseObject.responseData) {
@@ -904,7 +907,7 @@
                     to: "1_doctor00001",
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
-                      window.location.href = '/pages/imScene/im_main_scene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
+                      window.location.href = '/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
                     }
                   });
                 }
@@ -993,7 +996,7 @@
     },
     mounted(){
       this.getUserBaseData();
-      this.checkFirstBuy();
+
     },
     activated(){
       this.scrollToBottom();

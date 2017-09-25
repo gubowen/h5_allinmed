@@ -39,8 +39,8 @@
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
-          'content':'医生暂不能为您提供帮助，请医生开启问诊服务后再来沟通。',
-          'title':'暂未开启问诊服务'
+          'content':'医生关闭了今天的问诊服务，暂不能为您提供帮助',
+          'title':'今日暂不接诊'
           }" v-if="noStateShow" @cancelClickEvent="cancelEvent(1)" @ensureClickEvent="cancelEvent(1)">
       </confirm>
     </transition>
@@ -48,8 +48,8 @@
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
-          'content':'医生今日的名额已全部预约 请改日再来',
-          'title':'问诊名额已满'
+//          'content':'医生今日的名额已全部预约 请改日再来',
+          'title':'抱歉，该医生今天已经没有问诊名额了'
           }" v-if="noMoreShow" @cancelClickEvent="cancelEvent(2)" @ensureClickEvent="cancelEvent(2)">
       </confirm>
     </transition>
@@ -61,6 +61,7 @@
           }" v-if="hasCommunShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureCommunEvent">
       </confirm>
     </transition>
+    <!--<loading v-show="finish"></loading>-->
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -76,6 +77,7 @@
   import Vue from 'vue';
   import wxCommon from 'common/js/wxPay/wxComm';
   import confirm from 'components/confirm';
+  import loading from 'components/loading';
 
   const XHRList = {
     getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",//获取医生问诊价格及次数
@@ -97,6 +99,7 @@
         noStateShow:false,
         noMoreShow:false,
         hasCommunShow:false,
+        finish:false,
         priceMessage: {}
       }
     },
@@ -122,6 +125,7 @@
           },
           done (data) {
             if (data &&data.responseObject.responseData.dataList) {
+              that.finish = false;
               const items = data.responseObject.responseData.dataList;
               if(items.state == 0){
                 that.noStateShow = true;
@@ -143,6 +147,9 @@
               }
             }
           },
+          fail(){
+            that.finish = false;
+          }
         });
       },
       //获取问诊价格
@@ -169,7 +176,8 @@
         if(isClick == 0){
           isClick = 1;
           that.repeatOrderFrequency = opt.orderFrequency;
-          let orderSourceTitle = "图文问诊",orderAmount = parseFloat(opt.orderAmount).toFixed(2);
+          let orderSourceTitle = "图文问诊",
+            orderAmount = parseFloat(opt.orderAmount).toFixed(2);
           api.ajax({
             url: XHRList.getConsultationId,
             method: "post",
@@ -182,7 +190,11 @@
               firstResult: 0,
               maxResult: 999
             },
+            beforeSend(){
+              that.finish = true;
+            },
             done (data) {
+              that.finish = false;
               if (data.responseObject.responseData.dataList) {
                 let consultationId = data.responseObject.responseData.dataList.consultationId;
                 sessionStorage.setItem("orderSourceId", consultationId);
@@ -196,6 +208,9 @@
                 });
                 isClick = 0;
               }
+            },
+            fail(){
+              that.finish = false;
             }
           });
         }
@@ -235,6 +250,7 @@
                   orderAmount: opt.orderAmount,
                   orderFrequency:opt.orderFrequency
                 })
+
               }
             } else {//没有重复订单
               that.noOrder({
@@ -253,6 +269,7 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
+        debugger;
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -261,11 +278,11 @@
             patientId: that.payPopupParams.patientId,         // 	string	是	患者id
             doctorId: that.payPopupParams.docId,          //	string	是	医生id
             orderType: 1,                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
-            orderSourceId: opt.cId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
-            orderSourceType: opt.oType,                //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+            orderSourceId: opt.consultationId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+            orderSourceType: opt.orderSourceType,                //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
             orderAmount: opt.orderAmount,                  //	string	否	订单金额  （单位/元 保留两位小数）$(this).attr("data-price")
             status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-            body: opt.oTitle,   //   string  否  订单描述 （微信支付展示用）
+            body: "图文问诊",   //   string  否  订单描述 （微信支付展示用）
             isCharge: "true"                    //   string  是  true-收费  false-免费
           },
           backCreateSuccess: function (_data) {
@@ -277,7 +294,7 @@
           wxPaySuccess: function (_data) {
             //支付成功回调  (问诊/门诊类型 必选)
             that.$emit("paySuccess", {
-              orderType: opt.oType,//0免费，其他不是
+              orderType: opt.orderSourceType,//0免费，其他不是
               orderAmount: opt.orderAmount, //价钱
               orderFrequency:opt.orderFrequency//聊天次数
             });
@@ -361,12 +378,7 @@
                 },
                 backCreateSuccess: function (_data) {
                   that.creatInquiryId();
-                  that.$emit("paySuccess", {
-                    orderType: 0,
-                    orderAmount: 0,
-                    orderFrequency:3
-                  });
-                  that.closePopup();
+//                  that.closePopup();
                 },
                 backCreateError: function (_data) {
                   //创建订单失败  (必选)
@@ -414,10 +426,22 @@
                 },
                 done (d) {
                   if (d.responseObject.responseStatus) {
+                      debugger
                     localStorage.removeItem("docId");
                     sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
+                    that.$emit("paySuccess", {
+                      orderType: 0,
+                      orderAmount: 0,
+                      orderFrequency:3
+                    });
                   }
                 }
+              });
+            }else{
+              that.$emit("paySuccess", {
+                orderType: 0,
+                orderAmount: 0,
+                orderFrequency:3
               });
             }
           }
@@ -433,7 +457,8 @@
       }
     },
     components: {
-      confirm
+      confirm,
+      loading
     }
   }
 </script>

@@ -510,7 +510,7 @@ h6 {
 .popup-tips {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 0.16rem;
-  font-size: 15px;
+  font-size: 18px;
   color: #fff;
   padding: 0.4rem 0.4rem;
   -webkit-transform: scale(0) translate(-50%, -50%);
@@ -521,9 +521,9 @@ h6 {
       -ms-transform-origin: 0 0;
           transform-origin: 0 0; }
   [data-dpr="2"] .popup-tips {
-    font-size: 30px; }
+    font-size: 36px; }
   [data-dpr="3"] .popup-tips {
-    font-size: 45px; }
+    font-size: 54px; }
   .popup-tips.show {
     -webkit-transform: scale(1) translate(-50%, -50%);
         -ms-transform: scale(1) translate(-50%, -50%);

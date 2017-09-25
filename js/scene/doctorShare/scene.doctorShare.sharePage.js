@@ -154,31 +154,31 @@ $(function () {
             //     });
             // }
             that.config.state || that.config.state=="-1";
-            switch (that.config.state) {
-                case "-1":
-                    $(".authentication-tips").show();
-                    //立即认证添加事件
-                    $("#goAuthentication").text("立即认证").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-                case "3":
-                    $(".authentication-tips").show();
-                    //立即认证添加事件
-                    $("#goAuthentication").text("重新认证").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-                case "0":
-                case "5":
-                    $(".authentication-tips").show();
-                    $(".in-authentication").css("display","block");
-                    //立即认证添加事件
-                    $("#goAuthentication").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-            }
+            // switch (that.config.state) {
+            //     case "-1":
+            //         $(".authentication-tips").show();
+            //         //立即认证添加事件
+            //         $("#goAuthentication").text("立即认证").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            //     case "3":
+            //         $(".authentication-tips").show();
+            //         //立即认证添加事件
+            //         $("#goAuthentication").text("重新认证").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            //     case "0":
+            //     case "5":
+            //         $(".authentication-tips").show();
+            //         $(".in-authentication").css("display","block");
+            //         //立即认证添加事件
+            //         $("#goAuthentication").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            // }
             //医生的默认信息
             $(".doctor-info").append('<section class="info-left"><img class="doctor-icon" src="/image/img00/doctorShare/share_avatar_allin.png" alt="医生头像"></section>'+
                 '<section class="info-right">'+
@@ -369,11 +369,11 @@ $(function () {
                     })
                 });
                 // if ( $("#goAuthentication").length ){
-                $("#goAuthentication").on("click", function () {
-                    bridge.callHandler('certificationAction',function (response) {
-
-                    })
-                });
+                // $("#goAuthentication").on("click", function () {
+                //     bridge.callHandler('certificationAction',function (response) {
+                //
+                //     })
+                // });
                 // }
                 /*注册getNativeInfoHandler方法，Native调用此方法传递参数给JS*/
                 bridge.registerHandler('getNativeInfoHandler',

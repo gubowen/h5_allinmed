@@ -6,7 +6,7 @@
           <div class="doc-personalInfo-left">
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="department.length>0">{{department}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
+              <span class="doc-major" v-show="platformId.length>0">{{(platformId==1?"骨科":"手外科")}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
@@ -41,7 +41,7 @@
           </section>
           <!--免费问诊-->
           <section class="doc-onlineForFree" v-show="inquiryState>0">
-            <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable}" ></section>
+            <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable&&!isOpenCure,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable||isOpenCure}" ></section>
           </section>
         </section>
       </section>
@@ -55,23 +55,21 @@
         <section class="doc-collegeBox">
           <section class="doc-collegeBoxItem" v-show="illnessMapList.length>0">
             <p class="collegeItem-left">擅治疾病</p>
-            <p class="collegeItem-right"><span  v-for="(item,index) in illnessMapList">{{item.illnessName}}、</span></p>
+            <p class="collegeItem-right"><span  v-for="(item,index) in illnessMapList">{{item.illnessName}}{{((index==illnessMapList.length-1)?"":"、")}}</span></p>
           </section>
           <section class="doc-collegeBoxItem" v-show="operationMapList.length>0">
             <p class="collegeItem-left">擅治手术</p>
-            <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}、</span></p>
+            <p class="collegeItem-right" ><span v-for="(item,index) in operationMapList">{{item.operationName}}{{((index==operationMapList.length-1)?"":"、")}}</span></p>
           </section>
           <p class="doc-collegeBoxItem-totalNum" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">近年独立完成的骨科手术病历数</p>
           <section class="doc-medicalNumTotalBox" v-show="precedingYearOperationNum>0||yesteryearOperationNum>0">
             <section class="doc-medicalNumBox">
               <span class="doc-medicalYear">{{yesteryear}}年</span>
-              <span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span>
-              <span class="doc-medicalNumText">例</span>
+              <span class="doc-delTextBox"><span class="doc-medicalNumTotal">{{precedingYearOperationNum}}</span><span class="doc-medicalNumText">例</span></span>
             </section>
             <section class="doc-medicalNumBox">
               <span class="doc-medicalYear">{{precedingYear}}年</span>
-              <span class="doc-medicalNumTotal">{{yesteryearOperationNum}}</span>
-              <span class="doc-medicalNumText">例</span>
+              <span class="doc-delTextBox"><span class="doc-medicalNumTotal">{{yesteryearOperationNum}}</span><span class="doc-medicalNumText">例</span></span>
             </section>
           </section>
         </section>
@@ -87,7 +85,7 @@
         </ul>
       </section>
       <!--个人简介-->
-      <section class="individual-infoBox doc-commonSty" >
+      <section class="individual-infoBox doc-commonSty" v-show="isPersonalIndividualShow">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">个人简介</p>
           <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
@@ -123,7 +121,6 @@
      *
      * Created by juKun on 2017/9/11.
      */
-
     import api from 'common/js/util/util';
     import loading from 'components/loading';
     import fb from "common/js/third-party/flexible";
@@ -144,7 +141,7 @@
 //      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
 //      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
       getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
-      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
+//      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
       getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
       todayIsHasOrder: "/mcall/cms/pay/order/v1/getMapByCustomerId/"                       //是否当天已经预约过门诊
     };
@@ -181,11 +178,14 @@
           company:"",           //医院
           hospitalId:'',        //医院Id
           medicalTitleNewArr:[],
+          personalIndividual:[
+            ""
+          ],
 //          hospitalTitle:"",      //职称
 //          eduTitle:"",           //职称
           jobDoctorYear:"",           //职称
           medicalTitle:"",      //职称
-          department:'',        //科室
+          platformId:'',        //科室
           hospitalLevel:'',     //三甲
           isTop:'',             //全国top10   1-是 0-否
           areasExpertise:"",    //专科
@@ -202,6 +202,7 @@
           isOpenCure:false,                       //是否开启问诊
           isNotUsable:false,                      //是否可用
           summary:"",                              //个人简介内容
+          isPersonalIndividualShow:false,               //个人简介是否显示
           params: {
             getPersonalProParams: {
               customerId: api.getPara().doctorCustomerId,
@@ -225,7 +226,12 @@
             },
             currentByCustomerIdParams: {
               customerId: api.getPara().doctorCustomerId,
-              caseId: api.getPara().caseId
+              caseId: api.getPara().caseId,
+              patientId: api.getPara().patientId,    //患者ID
+              doctorId: api.getPara().doctorCustomerId,      // 医生ID
+              orderType: 1,
+              orderSourceType: 0,
+              sortType: 2
             },
             getConsultationIdParams:{
               caseId: api.getPara().caseId,
@@ -258,7 +264,7 @@
         this.getPersonalProDate();
         this.getDocInfo();
 //        this.getIsReceiveClinic();
-        this.isCreateChatForFree();
+//        this.isCreateChatForFree();
         this.questionStatus({callBack:(data)=>{
           _this.checkPatientState(data);
         }});
@@ -273,6 +279,7 @@
           this.$router.push({
             name:'clinicDetails',
             params:{
+              docLogo:_this.logoUrl,
               doctorId: _this.docId,
               hospitalId: _this.hospitalId,
               docName: _this.fullName,
@@ -300,7 +307,7 @@
                 _this.company = _data.authMap.company;
                 _this.hospitalId = _data.authMap.companyId;
                 _this.medicalTitle = _data.authMap.medicalTitle;
-                _this.department = _data.authMap.department;           //科室
+                _this.platformId = _data.authMap.platformId;           //科室
                 _this.summary = _data.authMap.summary;                 //个人简介
                 _this.isTop = _data.authMap.isTop;                    //全国   1-是 0-否
                 _this.precedingYearOperationNum = _data.authMap.precedingYearOperationNum;
@@ -310,7 +317,7 @@
                 _this.jobDoctorYear = _data.authMap.jobDoctorYear;            //从医年限
 
                 let _hospitalLevel = _data.authMap.hospitalLevelId;     //三甲
-                let _areasExpertise = _data.authMap.areasExpertise;   //专科字符串
+                let _areasExpertise = _data.authMap.areasExpertise;     //专科字符串
                 //职称
                 let _medicalTitleArr=_this.medicalTitle.split(",");
                 _medicalTitleArr.forEach((element,index) => {
@@ -361,7 +368,11 @@
                 //专科字符串
                 let _areasExpertiseArr=_areasExpertise.split(",");
                 _areasExpertiseArr.forEach((element,index) => {
-                  _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                  if(index==_areasExpertiseArr.length-1){
+                    _this.areasExpertise += element.substring(element.indexOf("_")+1);   //专科字符串
+                  }else{
+                    _this.areasExpertise += element.substring(element.indexOf("_")+1)+"、";   //专科字符串
+                  }
                 });
                 // 标题 医生姓名
                 let _fullName = _this.fullName;
@@ -485,12 +496,14 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
+//              console.log("获取consultationId成功");
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                   _this.consultationId = data.responseObject.responseData.dataList.consultationId;
                   org.callBackFn();
               }
             },
             fail(err){
+//              console.log("获取consultationId失败");
               _this.finish = false;
               _this.toastComm("网络信号差，建议您稍后再试");
               _this.imgUrl = _this.toastImg.wifi;
@@ -501,7 +514,7 @@
         reloadIMTime(count){
           const _this = this;
           api.ajax({
-            url: XHRList.updateCount,
+            url: XHRList.updateTime,
             method: "POST",
             data: {
               consultationId: _this.consultationId,
@@ -515,8 +528,11 @@
             },
             done(data) {
               _this.finish = false;
+//              console.log(data);
+//              console.log("刷新时间...");
               if (data.responseObject.responseStatus) {
                 localStorage.setItem("sendTips",JSON.stringify(count.data));
+                count.callBack();
               }
             }
           })
@@ -551,6 +567,7 @@
               _remainNum = cps.remainNum,
               _state = cps.state,
               _conState = cps.conState,
+              _isFree = cps.isFree,
               _consultationState = cps.consultationState;    //0-进行中  2-已拒绝
           if (_state == 1) {
             //开启问诊
@@ -579,6 +596,14 @@
           if(_consultationState==2){
             _this.isNotUsable = true;
           }
+          //是否使用过免费问诊
+          if(_isFree==0){
+            //试用过
+            _this.isUseCureForFree=true;
+          }else {
+            //未使用
+            _this.isUseCureForFree=false;
+          }
         },
         //是否接受门诊
         getIsReceiveClinic(){
@@ -595,7 +620,7 @@
             done(data) {
               _this.finish = false;
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                let _isReceive = data.responseObject.responseData.dataList[0].isReceive;
+                let _isReceive = data.responseObject.responseData.dataList[0].clinicState;   //0-未开启   1-开启
                 if(parseInt(_isReceive)==1){
                   _this.outpatientClinic = true;
                 }else {
@@ -631,7 +656,10 @@
               _this.finish = false;
               if (data&&data.responseObject.responseData && data.responseObject.responseData.data_list) {
                 _this.personalIndividual=data.responseObject.responseData.data_list;
-
+               const _personalIndividual=data.responseObject.responseData.data_list;
+                if(_personalIndividual.continuingEducationList.length>0&&_personalIndividual.educationList.length>0&&_personalIndividual.honorList.length>0&&_personalIndividual.fundList.length>0){
+                  _this.isPersonalIndividualShow=true;
+                }
               }else{
 //                _this.errorShow = true;
 //                setTimeout(() => {
@@ -728,7 +756,7 @@
                 margin-top: rem(24px);
               }
               .doc-presentInfo{
-                margin-top: rem(34px);
+                margin-top: rem(22px);
                 @include font-dpr(14px);
                 color: #C1D0E0;
                 padding-right: rem(14px);
@@ -799,7 +827,6 @@
           .doc-personalAddress{
             @include font-dpr(14px);
             color: #C1D0E0;
-            margin-top: rem(8px);
             p{
               position: relative;
               padding-left: rem(30px);
@@ -823,8 +850,8 @@
               @include font-dpr(12px);
               display: inline-block;
               color: #C1D0E0;
-              padding: rem(8px) rem(16px);
-              border: 2px solid #7C97B4;
+              padding: rem(4px) rem(16px);
+              border: rem(2px) solid #7C97B4;
               border-radius: rem(4px);
               margin-right: rem(16px);
             }
@@ -848,6 +875,9 @@
               top:50%;
               margin-top: rem(-9px);
               left: rem(-12px);
+              -webkit-border-radius: rem(100px);
+              -moz-border-radius: rem(100px);
+              border-radius: rem(100px);
             }
           }
           .doc-titleLeft,.doc-titleRight{
@@ -869,6 +899,9 @@
               top:50%;
               margin-top: rem(-9px);
               left: rem(-12px);
+              -webkit-border-radius: rem(100px);
+              -moz-border-radius: rem(100px);
+              border-radius: rem(100px);
             }
             //专科
             &.doc-majorItem{
@@ -881,7 +914,7 @@
           }
           .doc-titleRight{
             @include font-dpr(18px);
-            color: #2FC5BD;
+            color: #07B6AC;
             text-align: right;
             position: relative;
             &:after{
@@ -909,7 +942,7 @@
         .online-visitsBox {
           background-color: #FFFFFF;
           .doc-commonTitle {
-            padding-right: rem(24px);
+            padding-right: rem(30px);
           }
           .doc-lastPerson {
             @include font-dpr(14px);
@@ -976,6 +1009,7 @@
                   @include font-dpr(18px);
                   color: #444444;
                   position: relative;
+                  font-weight:bold;
                   span{
                     @include font-dpr(16px);
                     color: #7C98BC;
@@ -1002,7 +1036,7 @@
                 p{
                   @include font-dpr(18px);
                   color: #FFFFFF;
-                  padding: rem(14px) rem(22px) rem(12px) rem(26px);
+                  padding: rem(8px) rem(22px) rem(8px) rem(26px);
                   background: #2FC5BD;
                   box-shadow: 0 4px 8px 0 rgba(89,209,202,0.40);
                   border-radius: rem(100px);
@@ -1063,6 +1097,7 @@
               }
               .collegeItem-right{
                 padding-left: rem(52px);
+                padding-right: rem(32px);
                 @include font-dpr(18px);
                 color: #999999;
               }
@@ -1094,8 +1129,8 @@
               @include clearfix();
               .doc-medicalNumBox{
                 float: left;
-                width: rem(152px);
-                padding-left: rem(40px);
+                width: rem(120px);
+                padding-left: rem(92px);
                 position: relative;
                 &:first-child{
                   padding-left: 0;
@@ -1108,12 +1143,17 @@
                   background-color: #E2E2E2;
                   top:50%;
                   margin-top: rem(-33px);
-                  right: 0;
+                  right: rem(-46px);
                 }
                 &:last-child{
                   &:after{
                     display: none;
                   }
+                }
+                .doc-delTextBox{
+                  display: inline-block;
+                  width: 98%;
+                  text-align: right;
                 }
                 .doc-medicalYear{
                   @include font-dpr(14px);

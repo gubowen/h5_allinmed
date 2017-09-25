@@ -108,7 +108,7 @@
       }
     }
     .individual-main-inner{
-      padding: 0 rem(30px) rem(40px);
+      padding: rem(18px) rem(30px) rem(40px);
       background-color: #F2F2F2;
       .individual-content{
         background-color: #FFFFFF;
@@ -117,13 +117,14 @@
         border-radius: rem(8px);
         .individual-personInfo{
           padding-top: rem(38px);
-          padding-bottom: rem(62px);
+          padding-bottom: rem(38px);
           border-bottom: 2px solid #F8F8F8;
           p{
             @include font-dpr(18px);
             color: #333333;
             position: relative;
             padding-left: rem(30px);
+            font-weight: bold;
             &:before{
               display: inline-block;
               content: '';
@@ -173,7 +174,7 @@
               padding: rem(32px) rem(60px) 0;
             .education-item-address,.education-item-information{
               @include font-dpr(16px);
-              color: #2A2A2A;
+              color: #525252;
             }
             .education-item-time{
               @include font-dpr(16px);

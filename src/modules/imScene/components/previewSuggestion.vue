@@ -1,4 +1,4 @@
-<template>
+ <template>
   <section>
     <!--<section class="main-message-box" :data-caseid="message.caseId">-->
       <!--<article class="main-message-box-item others-message">-->
@@ -36,8 +36,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click="moreDataShow('checkSuggestObj')">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click="lessDataShow('checkSuggestObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
           </section>
           <section class="check-suggest-btn" data-role="videoTriage"
                    @click="goToUpload">
@@ -61,8 +61,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="treatmentObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click="moreDataShow('treatmentObj')">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click="lessDataShow('treatmentObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
           </section>
         </section>
       </article>
@@ -84,8 +84,8 @@
             </li>
           </ul>
           <section class="more-box" v-if="knowledgeObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click="moreDataShow('knowledgeObj')">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click="lessDataShow('knowledgeObj')">收起</span>
+            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click.stop="moreDataShow('knowledgeObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj')">收起</span>
           </section>
         </section>
       </article>
@@ -118,21 +118,21 @@
                   <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
                 </figcaption>
               </section>
-              <section class="doctor-item-bottom" v-if="item.isFreeTimes" @click="goConsult(index,'free')">
-                <span class="go-consult">免费问诊</span>
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
-              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes" @click="goConsult(index,'pay')">
-                <span class="go-consult">去问诊</span>
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </li>
           </ul>
           <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="doctorObj.moreData" @click="moreDataShow('doctorObj')">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
+            <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
           </section>
         </section>
       </article>
@@ -171,6 +171,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //处置建议里的数据
         treatmentObj:{
@@ -181,6 +183,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //患教知识里的数据
         knowledgeObj:{
@@ -191,6 +195,8 @@
           lessData:[],//五条建议的数据
           initNum:5,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
         //推荐医生的的数据
         doctorObj:{
@@ -201,6 +207,8 @@
           lessData:[],//五条建议的数据
           initNum:3,//初始展示的数据条数
           pageNum:5,//分页数据条数
+          position:0,//记录卡片的位置
+          hasPosition:false,//卡片的位置是否已经记录
         },
       }
 
@@ -210,6 +218,7 @@
       this.initData();
       },
     methods:{
+
       goToHref(){
         window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
           "&diagnosisId=" + this.message.diagnosisId +
@@ -272,6 +281,7 @@
                 that.checkSuggestData('treatmentObj')
               }
             }
+              that.toBottom();
           }
         });
         api.ajax({
@@ -279,6 +289,7 @@
           method: "POST",
           data: {
             diagnosisId: that.message.diagnosisId,
+            caseId:api.getPara().caseId,
             isValid: 1,
             firstResult: 0,
             maxResult: 9999,
@@ -294,9 +305,16 @@
 //              that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
+
+              that.toBottom();
             }
           }
         })
+      },
+      toBottom(){
+        if (!api.getPara().suggest) {
+          document.body.scrollTop = Math.pow(10, 20);
+        }
       },
       //检查检验数据
       checkSuggestData (param) {
@@ -312,8 +330,14 @@
         }
       },
       //展示更多
-      moreDataShow(param){
+      moreDataShow(param,e){
         let that = this;
+
+        if (!that[param].hasPosition){
+          that[param].position = e.currentTarget.parentNode.parentNode.parentNode.offsetTop;
+          that[param].hasPosition = true;
+        }
+
         if (that[param].allData.length-that[param].tempData.length>that[param].pageNum) {
           that[param].tempData = that[param].allData.slice(0,that[param].pageNum+that[param].tempData.length);
         } else {
@@ -336,30 +360,12 @@
         store.commit("setTargetMsg", {payType:type});
 
       },
-      //获取患者是否建立过问诊 responseData.dataList.conState 0-无沟通中数据 1-有
-      goToFreeConsult(index){
-        let that = this;
-        api.ajax({
-          url: XHRList.getCurrentByCustomerId,
-          method: "POST",
-          data: {
-            customerId:	that.doctorObj.allData[index].customerId,//string	是	医生的Id	1489998833435
-            caseId:api.getPara().caseId,	//string	是
-          },
-          beforeSend(){
-
-          },
-          done(data){
-            if (data.responseObject.responseData.dataList && data.responseObject.responseStatus) {
-              console.log(data);
-            }
-          }
-        })
-      },
       //收起
       lessDataShow(param){
         let that = this;
+        document.body.scrollTop = that[param].position;
         that[param].moreData = true;
+        that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
       },
       goToUpload(){
@@ -390,15 +396,16 @@
     text-align: center;
     .more-box-btn{
       padding: rem(0px) rem(50px) rem(0px) rem(10px);
+
     }
-    .more-btn{
-      background: url("../../../common/image/imScene/under_arrow@2x.png") no-repeat top right;
-      background-size: rem(32px) rem(32px);
-    }
-    .less-btn{
-      background: url("../../../common/image/imScene/pack_up@2x.png") no-repeat top right;
-      background-size: rem(32px) rem(32px);
-    }
+    /*.more-btn{*/
+      /*background: url("../../../common/image/imScene/under_arrow@2x.png") no-repeat top right;*/
+      /*background-size: rem(32px) rem(32px);*/
+    /*}*/
+    /*.less-btn{*/
+      /*background: url("../../../common/image/imScene/pack_up@2x.png") no-repeat top right;*/
+      /*background-size: rem(32px) rem(32px);*/
+    /*}*/
   }
   /*检查检验样式和处置建议样式，两者一样*/
   .check-suggest-box{
@@ -514,7 +521,7 @@
             right: rem(15px);
             top: 50%;
             transform: translateY(-50%);
-            background: url("../../../common/image/imScene/right_arrow@2x.png") top right no-repeat;
+            background: url("../../../common/image/imScene/right_arrow@2x.png") center right no-repeat;
             background-size: rem(28px) rem(28px);
           }
         }
@@ -687,16 +694,7 @@
               top: rem(12px);
               margin-left: rem(12px);
               position: relative;
-              &::before{
-                content: '';
-                display: block;
-                position: absolute;
-                width: 100%;
-                height: rem(1px);
-                left: 0;
-                top:50%;
-                background-color: #BBBBBB;;
-              }
+              text-decoration: line-through;
             }
             .general-money{
               float: left;

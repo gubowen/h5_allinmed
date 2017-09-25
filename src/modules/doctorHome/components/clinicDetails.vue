@@ -3,7 +3,7 @@
     <header class="docMessageBox">
       <figure class="docMessage">
         <figcaption class="docLogoBox">
-          <img src="../../../common/image/img00/doctorHome/doctorPic.png" class="docLogo">
+          <img :src="doctorLogo" class="docLogo">
         </figcaption>
         <div class="docNameBox">
           <span class="docName">{{docName}}</span>
@@ -83,12 +83,14 @@
         doctorId:"",//医生Id
         hospitalId:"",//医院Id
         docName:"",
-        docTitle:[]
+        docTitle:[],
+        doctorLogo:'',
       }
     },
     mounted(){
         this.getClinicDetails();
         this.getCloseTime();
+        document.title="门诊信息";
     },
     methods:{
       getClinicDetails(){
@@ -97,6 +99,7 @@
         this.hospitalId = this.$route.params.hospitalId;
         this.docName = this.$route.params.docName;
         this.docTitle = this.$route.params.docTitle;
+        this.doctorLogo = this.$route.params.docLogo;
         api.ajax({
           url: XHRList.getClinicDetails,
           method: "post",
@@ -156,7 +159,7 @@
         })
       },
       getClinicTime(opt){
-        let week = "",amClinicType,pmClinicType,nmClinicType="",dateTime = opt.dateTime.split("-");
+        let week = "",amClinicType="",pmClinicType="",nmClinicType="",dateTime = opt.dateTime.split("-");
         switch(Number(opt.dateType)){
           case 1:
             week = "周一";
@@ -219,6 +222,12 @@
             }
           };
         }
+        console.log({
+          time:`${dateTime[1]}月${dateTime[2]}日 ${week}`,
+          amClinicType:amClinicType,
+          pmClinicType:pmClinicType,
+          nmClinicType:nmClinicType
+        })
         return {
             time:`${dateTime[1]}月${dateTime[2]}日 ${week}`,
             amClinicType:amClinicType,
@@ -270,7 +279,7 @@
         width:rem(108px);
         height:rem(108px);
         border-radius: 50%;
-        border:2px solid #BCCBD8;
+        border:rem(2px) solid #BCCBD8;
         img{
           display:block;
           width:rem(100px);
@@ -416,6 +425,7 @@
             border-top:0;
             li{
               width:21%;
+              height:rem(100px);
               float:left;
               box-sizing:border-box;
               border-right:1px solid rgba(198,207,217,0.3);

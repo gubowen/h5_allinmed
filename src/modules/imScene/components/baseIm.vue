@@ -217,6 +217,8 @@
           onmsg (msg) {
             that.scrollToBottom();
             that.msgList.push(msg);
+
+
           }
         });
 
@@ -729,6 +731,7 @@
             //创建订单失败  (必选)
           },
           wxPaySuccess(_data){
+            console.log("支付成功")
             that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
@@ -756,7 +759,7 @@
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
               that.getLastTime();
-              if(type === 'pay'){
+              if(type && type === 'pay'){
                 that.sendPayFinish();
               }
               that.isClick = false;//是否点击立即咨询重置
@@ -846,7 +849,7 @@
     },
     mounted(){
       let that = this;
-
+      console.log(api)
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }
@@ -882,6 +885,7 @@
           }
         });
       }else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
+        that.refreashOrderTime();
         that.nim.sendText({
           scene: 'p2p',
           to: that.targetData.account,
@@ -940,6 +944,9 @@
     box-sizing: border-box;
     border-radius: 0.2rem;
     display: inline-block;
+  }
+  .grey-tips{
+    text-align: center;
   }
   //继续问诊样式
   .go-consult{
