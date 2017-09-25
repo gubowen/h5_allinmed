@@ -75,6 +75,11 @@
       </article>
     </section>
   </section>
+  <!--<section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">-->
+    <!--<figcaption class="first-message">-->
+      <!--<p>您已重新购买问诊，可继续向医生提问</p>-->
+    <!--</figcaption>-->
+  <!--</section>-->
 </template>
 <script type="text/ecmascript-6">
   /**
