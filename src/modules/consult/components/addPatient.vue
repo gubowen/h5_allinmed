@@ -12,7 +12,7 @@
           <!--添加患者-->
           <section class="add-patient"  v-else-if="headerShow == 2">
             <h2 class="patient-tips-top">请选择为谁问诊</h2>
-            <p class="patient-tips-bottom">为给您准确判断，请选择为谁问诊</p>
+            <p class="patient-tips-bottom">为给您准确诊断，请选择真实患者</p>
           </section>
           <!--取消添加-->
           <section class="cancel-add" v-else="headerShow == 3">
@@ -191,13 +191,13 @@
     activated(){
       //手机号校验
       api.mobileCheck();
-      document.title="为谁咨询";
+      document.title="为谁问诊";
       this.finish=false;
       this.initData();
       this.currentIndex = -1;
     },
     mounted() {
-      document.title="为谁咨询";
+      document.title="为谁问诊";
       this.getPatientList();
       this.relationshipPicker();
       this.getPatientPhone();//获取绑定的手机号

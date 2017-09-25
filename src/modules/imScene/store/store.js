@@ -11,7 +11,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 Vue.use(Vuex);
-
+let totalTimeCount;
 export default new Vuex.Store({
   state: {
     consultationId: "",
@@ -47,12 +47,17 @@ export default new Vuex.Store({
     setLastTime(state,time){
       state.lastTime=time;
     },
+    stopLastTimeCount(state){
+      clearInterval(totalTimeCount);
+      // Attention
+      // 若直接置为0，业务组件引用Vuex状态作监听体，归零直接进入另一状态
+      // state.lastTime=0;
+    },
     lastTimeCount(state){
-      let time;
-      clearInterval(time);
-      time=setInterval(()=>{
+      clearInterval(totalTimeCount);
+      totalTimeCount=setInterval(()=>{
         if (state.lastTime<=0){
-         clearInterval(time);
+         clearInterval(totalTimeCount);
         }else{
           state.lastTime=state.lastTime-1000;
         }

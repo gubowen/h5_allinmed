@@ -83,7 +83,7 @@
       </transition-group>
     </section>
     <transition name="fadeUp">
-      <footer class="main-input-box" v-if="lastTimeShow">
+      <footer class="main-input-box" v-if="inputBoxShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
           <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
@@ -160,7 +160,7 @@
         beginTimestamp: 0,
         finish: true,
         lastTimeShow: false,//顶部时间的提示和输入框是否展示
-//        inputBoxShow: false,//底部是否显示
+        inputBoxShow: false,//底部是否显示
         consultTipsShow:false,//购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
         msgList: [],//消息列表
         //用户数据
@@ -216,12 +216,22 @@
           //收到消息的回调, 会传入消息对象
           onmsg (msg) {
             that.scrollToBottom();
+            console.log("收到回复消息："+JSON.stringify(msg));
+            that.pauseTime(msg);//收到检查检验隐藏顶部框；
             that.msgList.push(msg);
 
 
           }
         });
 
+      },
+      //收到检查检验隐藏顶部框；
+      pauseTime(msg){
+        let that = this;
+        if (msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion') {
+          that.lastTimeShow = false;//顶部时间取消
+          store.commit("stopLastTimeCount");//时间计时取消
+        }
       },
       //获取页面图片消息存到数组里
       getImageList(){
@@ -354,6 +364,16 @@
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
       },
+      //判断消息列表里面是否有结束问诊，没有的话发送一条
+      hasMiddleTips () {
+        let that = this;
+        let msg = that.msgList[that.msgList.length-1];
+        if (msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5){
+          return true;
+        } else {
+          that.sendConsultState(5);
+        }
+      },
       //判断消息列表里面是否有问诊单，没有的话发送一条
       hasMedicalMessage(){
         let that = this;
@@ -367,6 +387,9 @@
         }
         if (flag){
           that.getMedicalMessage();
+        }else {
+          //判断消息列表里面是否有结束问诊，没有的话发送一条
+          that.hasMiddleTips();
         }
       },
       //获取患者问诊单
@@ -387,6 +410,7 @@
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
+                localStorage.setItem("PCIMLinks",location.href);
                 that.sendMedicalReport({
                   data: {
                     caseId: api.getPara().caseId,  //问诊单 病例ID
@@ -400,6 +424,8 @@
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 });
+                //判断消息列表里面是否有结束问诊，没有的话发送一条
+                that.hasMiddleTips();
               }
             }
           }
@@ -503,6 +529,7 @@
           },
           done(param) {
             that.inputBoxShow = true;
+            console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
@@ -510,6 +537,7 @@
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
               if (dataList.consultationFrequency == "-1") {
                 that.lastTimeShow = false;
+                that.inputBoxShow = false;
                 that.consultTipsShow = true;
               } else {
 //                time = 10000;
@@ -517,9 +545,11 @@
                   store.commit("setLastTime", time);
                   store.commit("lastTimeCount");
                   that.lastTimeShow = true;
+                  that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
                   that.lastTimeShow = false;
+                  that.inputBoxShow = false;
                   that.consultTipsShow = true;
                 }
               }
@@ -903,10 +933,12 @@
       lastTime: function (time) {
         if (time <= 0) {
           this.lastTimeShow = false;
+          this.inputBoxShow = false;
           this.consultTipsShow = true;
           this.sendConsultState(5);
         } else {
           this.lastTimeShow = true;
+          this.inputBoxShow = true;
           this.consultTipsShow = false;
         }
       },
