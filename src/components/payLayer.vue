@@ -502,6 +502,7 @@
           width: rem(36px);
           height: rem(36px);
           background: url("../common/image/img00/doctorMain/pay_close@2x.png") no-repeat center;
+          background-size:100% 100%;
         }
       }
       .inquiryTypeBox{
