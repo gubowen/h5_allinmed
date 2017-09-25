@@ -98,6 +98,7 @@
 <script type="text/ecmascript-6">
   import fb from "common/js/third-party/flexible";
   import axios from "axios";
+  import api from "common/js/util/util";
   export default{
     data(){
       return {
@@ -125,10 +126,9 @@
         let url =window.location.search;
         if(url){
           if (url.indexOf("sendSiteId") != -1) {
-            sendSiteId = url.substr(url.indexOf("=")+1,url.length-1);
+            sendSiteId = api.getPara().sendSiteId;
           }
         }
-        console.log();
         let data = {
           doctorName: _this.name,
           hospitalName: _this.hospital,
