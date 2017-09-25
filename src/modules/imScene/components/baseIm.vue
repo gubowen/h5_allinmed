@@ -217,7 +217,7 @@
           onmsg (msg) {
             that.scrollToBottom();
             console.log("收到回复消息："+JSON.stringify(msg));
-            that.pauseTime(msg);//收到问诊单隐藏顶部框；
+            that.pauseTime(msg);//收到检查检验隐藏顶部框；
             that.msgList.push(msg);
 
 
@@ -225,7 +225,7 @@
         });
 
       },
-      //收到问诊单隐藏顶部框；
+      //收到检查检验隐藏顶部框；
       pauseTime(msg){
         let that = this;
         if (msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion') {
@@ -364,6 +364,16 @@
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
       },
+      //判断消息列表里面是否有结束问诊，没有的话发送一条
+      hasMiddleTips () {
+        let that = this;
+        let msg = that.msgList[that.msgList.length-1];
+        if (msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5){
+          return true;
+        } else {
+          that.sendConsultState(5);
+        }
+      },
       //判断消息列表里面是否有问诊单，没有的话发送一条
       hasMedicalMessage(){
         let that = this;
@@ -377,6 +387,9 @@
         }
         if (flag){
           that.getMedicalMessage();
+        }else {
+          //判断消息列表里面是否有结束问诊，没有的话发送一条
+          that.hasMiddleTips();
         }
       },
       //获取患者问诊单
@@ -397,6 +410,7 @@
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
+                localStorage.setItem("PCIMLinks",location.href);
                 that.sendMedicalReport({
                   data: {
                     caseId: api.getPara().caseId,  //问诊单 病例ID
@@ -410,6 +424,8 @@
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 });
+                //判断消息列表里面是否有结束问诊，没有的话发送一条
+                that.hasMiddleTips();
               }
             }
           }
