@@ -83,7 +83,7 @@
       </transition-group>
     </section>
     <transition name="fadeUp">
-      <footer class="main-input-box" v-if="lastTimeShow">
+      <footer class="main-input-box" v-if="inputBoxShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
           <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
@@ -160,7 +160,7 @@
         beginTimestamp: 0,
         finish: true,
         lastTimeShow: false,//顶部时间的提示和输入框是否展示
-//        inputBoxShow: false,//底部是否显示
+        inputBoxShow: false,//底部是否显示
         consultTipsShow:false,//购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
         msgList: [],//消息列表
         //用户数据
@@ -216,12 +216,22 @@
           //收到消息的回调, 会传入消息对象
           onmsg (msg) {
             that.scrollToBottom();
+            console.log("收到回复消息："+JSON.stringify(msg));
+            that.pauseTime(msg);//收到问诊单隐藏顶部框；
             that.msgList.push(msg);
 
 
           }
         });
 
+      },
+      //收到问诊单隐藏顶部框；
+      pauseTime(msg){
+        let that = this;
+        if (msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion') {
+          that.lastTimeShow = false;//顶部时间取消
+          store.commit("stopLastTimeCount");//时间计时取消
+        }
       },
       //获取页面图片消息存到数组里
       getImageList(){
@@ -503,6 +513,7 @@
           },
           done(param) {
             that.inputBoxShow = true;
+            console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
@@ -510,6 +521,7 @@
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
               if (dataList.consultationFrequency == "-1") {
                 that.lastTimeShow = false;
+                that.inputBoxShow = false;
                 that.consultTipsShow = true;
               } else {
 //                time = 10000;
@@ -517,9 +529,11 @@
                   store.commit("setLastTime", time);
                   store.commit("lastTimeCount");
                   that.lastTimeShow = true;
+                  that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
                   that.lastTimeShow = false;
+                  that.inputBoxShow = false;
                   that.consultTipsShow = true;
                 }
               }
@@ -903,10 +917,12 @@
       lastTime: function (time) {
         if (time <= 0) {
           this.lastTimeShow = false;
+          this.inputBoxShow = false;
           this.consultTipsShow = true;
           this.sendConsultState(5);
         } else {
           this.lastTimeShow = true;
+          this.inputBoxShow = true;
           this.consultTipsShow = false;
         }
       },
