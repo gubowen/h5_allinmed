@@ -46,15 +46,15 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">持续时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">加重时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">其他症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>
           </li>
         </ul>
       </section>
@@ -63,11 +63,11 @@
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{treatmentName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">确诊疾病</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">检查资料</span>
@@ -89,7 +89,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">服用药物</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "未填写"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{takeMedicine}}</span>
           </li>
         </ul>
       </section>
@@ -140,6 +140,9 @@
         illnessTime: "",
         caseTime: "",
         heavyTime: "",
+        treatmentName:"",
+        illnessName:"",
+        takeMedicine:"",
         complication: "",
         resultMainList: [],
         imageList1: [],
@@ -189,10 +192,13 @@
               let caseTime = that.patientCasemap.caseTime.split(' ')[0];
 
               that.caseTime = caseTime.split('-')[0] + '年' + caseTime.split('-')[1] + '月' + caseTime.split('-')[2] + '日'
-              that.illnessTime = ((that.resultMainList[1].symptomOptions[0].optionDesc && that.resultMainList[1].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[1].symptomOptions[0].optionDesc : that.resultMainList[1].symptomOptions[0].optionName);
-              that.heavyTime = ((that.resultMainList[2].symptomOptions[0].optionDesc && that.resultMainList[2].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[2].symptomOptions[0].optionDesc : that.resultMainList[2].symptomOptions[0].optionName);
+              that.illnessTime = ((that.resultMainList[1].symptomOptions[0].optionDesc && that.resultMainList[1].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[1].symptomOptions[0].optionDesc : that.resultMainList[1].symptomOptions[0].optionName)  || "未填写";
+              that.heavyTime = ((that.resultMainList[2].symptomOptions[0].optionDesc && that.resultMainList[2].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[2].symptomOptions[0].optionDesc : that.resultMainList[2].symptomOptions[0].optionName)  || "未填写";
               that.partName = that.resultMainList[0].partName;
-              that.complication = that.patientCasemap.caseMain.caseAlong;
+              that.complication = that.patientCasemap.caseMain.caseAlong  || "未填写";
+              that.treatmentName = that.patientCasemap.treatmentName || "未填写";
+              that.illnessName = that.patientCasemap.illnessName || "未填写";
+              that.takeMedicine = that.patientCasemap.takeMedicine || "未填写";
 
               that.patientCasemap.attachmentList.forEach((element, index) => {
                 if (element.caseAttSource == 0) {
