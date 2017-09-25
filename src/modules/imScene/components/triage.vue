@@ -24,7 +24,7 @@
       </figure>
       <figcaption class="video-triage-btn" data-role="videoTriage"
                   @click="goToUpload(triageMessage.data.type)">
-                上传{{triageMessage.data.type==1?"视频":"图片"}}
+                上传{{triageMessage.data.type==1?"视频":"照片"}}
       </figcaption>
     </article>
   </section>
