@@ -135,7 +135,7 @@
           titleName: _this.career,
           mobile: _this.mobile,
           isValid: '1',
-          sendSiteId: sendSiteId
+          sendSiteId: api.getPara().sendSiteId
         };
         axios({
           method: 'post',
