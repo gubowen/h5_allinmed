@@ -759,7 +759,7 @@
                 margin-top: rem(22px);
                 @include font-dpr(14px);
                 color: #C1D0E0;
-                padding-right: rem(14px);
+                /*padding-right: rem(14px);*/
                 display: inline-block;
                 .doc-major{
                   margin-right: rem(16px);
@@ -768,7 +768,7 @@
                   margin-right: rem(16px);
                 }
                 .doc-presents-two{
-
+                  margin-right: rem(16px);
                 }
               }
               .doc-presentAge{
