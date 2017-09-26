@@ -1160,7 +1160,9 @@
                   color: #A0A0A0;
                   display: inline-block;
                   border: rem(2px) solid #CECECE;
-                  padding: rem(5px) rem(10px);
+                  padding: rem(5px) 0;
+                  width: rem(120px);
+                  text-align: center;
                   -webkit-border-radius: rem(6px);
                   -moz-border-radius: rem(6px);
                   border-radius: rem(6px);
