@@ -253,8 +253,7 @@
             customerId:opt.customerId,
             isValid:1,
             firstResult:0,
-            maxResult:999,
-            type:0
+            maxResult:999
           },
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
