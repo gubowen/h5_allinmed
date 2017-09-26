@@ -280,68 +280,69 @@
             that.msgList = obj.msgs.reverse();
             console.log("dom更新前")
             that.getTimeStampShowList();
-            //判断消息列表里面是否有问诊单，没有的话发送一条
-            that.hasMedicalMessage();
+            //循环消息列表，处理需求
+            that.loopMessage();
+            //需要更改的定位
             that.$nextTick(function(){
-              console.log("dom更新完成")
-//              debugger;
-              if (api.getPara().suggest) {
-                console.log("有推荐医生");
-                function callBack () {
-                  if (that.firstIn) {
-                    document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
-                    that.firstIn = false;
-                  } else {
-                    return false;
-                  }
-                }
-                let MutationObserver = window.MutationObserver ||
-                  window.WebKitMutationObserver ||
-                  window.MozMutationObserver;
-                if (MutationObserver) {
-                  let mo = new MutationObserver(callBack);
-                  let option = {
-                    'childList': true,
-                    'subtree': true
-                  };
-
-                  mo.observe(document.body, option);
-                } else {
-                  setTimeout(function () {
-                    callBack();
-                  },2000);
-                }
-//                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
-//                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
-              } else{
-                console.log("无推荐医生")
-                function callBackBottom () {
-//                  debugger;
-                  if (that.firstIn) {
-                    document.body.scrollTop = Math.pow(10, 20);
-                    that.firstIn = false;
-                  } else {
-                    return false;
-                  }
-                }
-                let MutationObserver = window.MutationObserver ||
-                  window.WebKitMutationObserver ||
-                  window.MozMutationObserver;
-                if (MutationObserver) {
-                  let mo = new MutationObserver(callBackBottom);
-                  let option = {
-                    'childList': true,
-                    'subtree': true
-                  };
-
-                  mo.observe(document.body, option);
-                } else {
-                  setTimeout(function () {
-                    callBackBottom();
-                  },2000);
-                }
-//                document.body.scrollTop = Math.pow(10, 20);
-              }
+//              console.log("dom更新完成")
+////              debugger;
+//              if (api.getPara().suggest) {
+//                console.log("有推荐医生");
+//                function callBack () {
+//                  if (that.firstIn) {
+//                    document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+//                    that.firstIn = false;
+//                  } else {
+//                    return false;
+//                  }
+//                }
+//                let MutationObserver = window.MutationObserver ||
+//                  window.WebKitMutationObserver ||
+//                  window.MozMutationObserver;
+//                if (MutationObserver) {
+//                  let mo = new MutationObserver(callBack);
+//                  let option = {
+//                    'childList': true,
+//                    'subtree': true
+//                  };
+//
+//                  mo.observe(document.body, option);
+//                } else {
+//                  setTimeout(function () {
+//                    callBack();
+//                  },2000);
+//                }
+////                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
+////                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
+//              } else{
+//                console.log("无推荐医生")
+//                function callBackBottom () {
+////                  debugger;
+//                  if (that.firstIn) {
+//                    document.body.scrollTop = Math.pow(10, 20);
+//                    that.firstIn = false;
+//                  } else {
+//                    return false;
+//                  }
+//                }
+//                let MutationObserver = window.MutationObserver ||
+//                  window.WebKitMutationObserver ||
+//                  window.MozMutationObserver;
+//                if (MutationObserver) {
+//                  let mo = new MutationObserver(callBackBottom);
+//                  let option = {
+//                    'childList': true,
+//                    'subtree': true
+//                  };
+//
+//                  mo.observe(document.body, option);
+//                } else {
+//                  setTimeout(function () {
+//                    callBackBottom();
+//                  },2000);
+//                }
+////                document.body.scrollTop = Math.pow(10, 20);
+//              }
               that.getImageList();
               //渲染完毕
             });
@@ -374,18 +375,24 @@
           that.sendConsultState(5);
         }
       },
-      //判断消息列表里面是否有问诊单，没有的话发送一条
-      hasMedicalMessage(){
+      //循环消息列表，处理需求
+      loopMessage(){
         let that = this;
-        let flag = true;
+        let medicalFlag = true;//是否有问诊单；
         for (let i=0;i<that.msgList.length;i++){
-          console.log(i);
+//          console.log(i);
+          //判断消息列表里面是否有问诊单，没有的话发送一条
           if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='medicalReport'){
-            flag = false;
-            break;
+            medicalFlag = false;
+          }
+          //判断消息列表里面有几条初诊建议，记录在vuex中
+          if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='previewSuggestion'){
+            store.commit("addPreviewSuggestionNum");
           }
         }
-        if (flag){
+        //如果没有初诊建议，直接定位到底部
+        that.$store.state.previewSuggestionNum || that.scrollToBottom();
+        if (medicalFlag){
           that.getMedicalMessage();
         }else {
           //判断消息列表里面是否有结束问诊，没有的话发送一条

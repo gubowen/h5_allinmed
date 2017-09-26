@@ -17,7 +17,7 @@
       </figcaption>
     </article>
   </section>-->
-
+<div>
   <section class="outpatient-nvite-box">
     <header class="outpatient-header">
       <h2>
@@ -75,11 +75,12 @@
       </article>
     </section>
   </section>
-  <!--<section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">-->
-    <!--<figcaption class="first-message">-->
-      <!--<p>您已重新购买问诊，可继续向医生提问</p>-->
-    <!--</figcaption>-->
-  <!--</section>-->
+  <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
+    <figcaption class="first-message">
+      <p>此条消息不消耗医生回复次数</p>
+    </figcaption>
+  </section>
+</div>
 </template>
 <script type="text/ecmascript-6">
   /**
