@@ -235,6 +235,9 @@
           }
         }
       });
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        localStorage.removeItem("PCIMLinks");
+      }
     },
     computed: {
 

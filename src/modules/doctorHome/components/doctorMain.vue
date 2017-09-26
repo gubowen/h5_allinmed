@@ -735,7 +735,7 @@
     .doctorContent{
       background-color: #F2F2F2;
       .doctorContent-box{
-        padding: rem(18px) rem(30px) rem(34px);
+        padding: rem(32px) rem(30px) rem(34px);
         .doctor-personalInfo{
           padding: rem(30px) rem(30px) rem(54px);
           background: url("../../../common/image/img00/doctorHome/background@2x.png") no-repeat center;
