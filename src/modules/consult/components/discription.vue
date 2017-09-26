@@ -294,7 +294,12 @@
     },
     beforeRouteLeave   (to, from, next){
       if (to.name === "selectPart") {
-        this.levelShow = true;
+        if (localStorage.getItem("PCIMLinks")!==null) {
+          this.backPopupShow = true;
+        } else {
+          this.backPopupShow = false;
+          this.levelShow = true;
+        }
       }
       next(this.pageLeaveEnsure)
     },
