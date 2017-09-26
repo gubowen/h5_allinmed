@@ -22,7 +22,8 @@ export default new Vuex.Store({
       customerId:'',//医生id
       payType:'pay',
     },
-
+    previewSuggestionNum:0,//初诊建议次数
+    renderSuggestionNum:0,//渲染出诊建议次数
   },
   mutations: {
     setConsultation(state, id){
@@ -43,6 +44,14 @@ export default new Vuex.Store({
         img = (sex === "男" ? require("../../../common/image/img00/myServices/chatting_portrait_old_man@2x.png") : require("../../../common/image/img00/myServices/chatting_portrait_old_woman@2x.png"));
       }
       state.logoUrl = img;
+    },
+    //初诊建议次数增加
+    addPreviewSuggestionNum(state){
+      state.previewSuggestionNum++;
+    },
+    //渲染初诊建议次数增加
+    addRenderSuggestionNum(state){
+      state.renderSuggestionNum++;
     },
     setLastTime(state,time){
       state.lastTime=time;

@@ -162,6 +162,8 @@
     data(){
       return {
         message:{},
+        suggestResponse:false,//检查检验预览响应是否完成
+        doctorResponse:false,//推荐医生预览是否完成
         //检查检验里的数据
         checkSuggestObj:{
           allData: [],//全部数据
@@ -210,6 +212,7 @@
           position:0,//记录卡片的位置
           hasPosition:false,//卡片的位置是否已经记录
         },
+
       }
 
       },
@@ -281,8 +284,14 @@
                 that.checkSuggestData('treatmentObj')
               }
             }
-              that.toBottom();
-          }
+            that.suggestResponse = true;
+            that.checkResponse();
+//              that.toBottom();
+          },
+          fail(){
+            that.suggestResponse = true;
+            that.checkResponse();
+          },
         });
         api.ajax({
           url: XHRList.getRecommedDoctor,
@@ -306,10 +315,35 @@
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
 
-              that.toBottom();
+//              that.toBottom();
             }
-          }
+            that.doctorResponse = true;
+            that.checkResponse();
+          },
+          fail(){
+            that.doctorResponse = true;
+            that.checkResponse();
+          },
         })
+      },
+      //检查响应是否都完成
+      checkResponse(){
+        let that = this;
+        if (that.suggestResponse && that.doctorResponse) {
+          store.commit("addRenderSuggestionNum");
+        }
+        console.log(that.$store.state.previewSuggestionNum);
+        console.log(that.$store.state.renderSuggestionNum);
+        //渲染完成后进行定位
+        if (that.$store.state.previewSuggestionNum === that.$store.state.renderSuggestionNum) {
+          that.$nextTick(function () {
+            if (!api.getPara().suggest) {
+              document.body.scrollTop = Math.pow(10, 20);
+            } else {
+              document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+            }
+          })
+        }
       },
       toBottom(){
         if (!api.getPara().suggest) {
