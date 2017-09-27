@@ -8,7 +8,7 @@
  */
 
 export default function prototype() {
-  
+
   //删除数组中某项
   Array.prototype.removeByValue = function(val) {
     for (let i = 0; i < this.length; i++) {
