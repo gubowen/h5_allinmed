@@ -377,7 +377,6 @@
                   isCharge: "false"                         //    string  是  true-收费  false-免费
                 },
                 backCreateSuccess: function (_data) {
-                  that.$emit('update:payPopupShow', false);
                   that.creatInquiryId();
 //                  that.closePopup();
                 },
