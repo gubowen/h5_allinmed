@@ -135,7 +135,7 @@
         </section>
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*">
+          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
@@ -145,7 +145,8 @@
       </footer>
     </transition>
     <!--支付弹层-->
-    <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams = "payPopupDate" v-if="payPopupShow"></payPopup>
+    <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
+              v-if="payPopupShow"></payPopup>
     <Loading v-if="loading"></Loading>
   </section>
 </template>
@@ -554,7 +555,8 @@
             consultationType: 1,
             sortType: 1,
             firstResult: 0,
-            maxResult: 9999
+            maxResult: 9999,
+            customerId: api.getPara().doctorCustomerId
           },
           done (data) {
             if (data.responseObject.responseMessage === "NO DATA") {
@@ -825,8 +827,8 @@
       },
       inputLimit(){
         let content = this.sendTextContent;
-        if (api.getByteLen(content) > 1000){
-          this.sendTextContent=api.getStrByteLen(content);
+        if (api.getByteLen(content) > 1000) {
+          this.sendTextContent = api.getStrByteLen(content);
         }
       },
       //接诊时间倒数
@@ -898,7 +900,7 @@
                 frequency: "0",
                 frequencyType: "2",
                 consultationLevel: "1",
-                consultationState:"2"
+                consultationState: "2"
               },
               done(data) {
                 if (data.responseObject.responseData) {
@@ -919,7 +921,7 @@
       },
       checkFirstBuy(){
         if (localStorage.getItem("sendTips")) {
-          let count=JSON.parse(localStorage.getItem("sendTips"));
+          let count = JSON.parse(localStorage.getItem("sendTips"));
 
           this.sendPayFinish(count);
           localStorage.removeItem("sendTips");
@@ -928,7 +930,9 @@
       sendPayFinish(count){
         const that = this;
         let desc = "",
-          subContentDesc = "";
+          subContentDesc = "",
+          contentType = "";
+
         switch (parseInt(count.orderType)) {
           case 0:
             desc = "免费";
@@ -944,8 +948,10 @@
         }
         if (parseInt(count.orderType) === 0) {
           subContentDesc = '[患者申请免费问诊]';
+          contentType = '申请';
         } else {
           subContentDesc = `[患者购买问诊]`;
+          contentType = '购买';
         }
         this.nim.sendCustomMsg({
           scene: 'p2p',
@@ -960,7 +966,7 @@
             type: "notification",
             data: {
               actionType: "1",
-              contentDesc: `患者已购买了您的${desc}问诊`,
+              contentDesc: `患者已${contentType}了您的${desc}问诊`,
               subContentDesc: subContentDesc
             }
           }),

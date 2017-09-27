@@ -638,7 +638,7 @@
           background-color: #E5E5E5;
           p {
             color: #666666;
-            @include ellipsis();
+//            @include ellipsis();
             &.selected {
               color: #07B6AC;
             }
