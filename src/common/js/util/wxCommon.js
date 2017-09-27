@@ -6,10 +6,10 @@
  *
  * Created by qiangkailiang on 2017/9/22.
  */
-
+import net from "./net";
 class WxCommon {
   constructor() {
-    
+
   }
 
   // 检测是否获取过微信OpenId
@@ -43,7 +43,7 @@ class WxCommon {
      * 1代表唯医骨科-正式线上环境
      * 2代表唯仁唯医社区-线下调试环境
      *
-     * 
+     *
      */
     let appId = "";
     let XHRUrl = "";
@@ -75,7 +75,7 @@ class WxCommon {
       "&scope=snsapi_userinfo" +
       "&state=STATE" +
       "#wechat_redirect";
-    if (this.getPara().code) {
+    if (net.getPara().code) {
       if (window.location.href.indexOf("openId") === -1) {
         window.location.href = XHRUrl +
           "?ref=" + localStorage.getItem("currentUrl") +

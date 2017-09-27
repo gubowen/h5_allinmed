@@ -7,7 +7,7 @@
  * Created by JuKun on 2017/9/22.
  */
 import ajax from "./ajax";
-import api from "./util";
+import net from "./net";
 export default function accountValidate() {
   //手机号验证
   let _phoneCheckParams = {
@@ -17,11 +17,11 @@ export default function accountValidate() {
     customerId: '', //  string  是 用户id
   };
   //customsId获取（customerId和patientCustomerId同时存在的话取patientCustomerId）
-  if (!api.getPara().openId) {
-    if (api.getPara().patientCustomerId !== undefined) {
-      _phoneCheckParams.customerId = api.getPara().patientCustomerId;
-    } else if (api.getPara().customerId !== undefined) {
-      _phoneCheckParams.customerId = api.getPara().customerId;
+  if (!net.getPara().openId) {
+    if (net.getPara().patientCustomerId !== undefined) {
+      _phoneCheckParams.customerId = net.getPara().patientCustomerId;
+    } else if (net.getPara().customerId !== undefined) {
+      _phoneCheckParams.customerId = net.getPara().customerId;
     } else {
       _phoneCheckParams.customerId = 0;
     }
