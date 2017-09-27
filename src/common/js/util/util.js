@@ -11,6 +11,8 @@ import ajax from "./ajax";
 import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
+import net from "./net";
+
 class Api {
   constructor() {
 
@@ -21,19 +23,7 @@ class Api {
   }
 
   getPara(symbol) {
-    let url = window.location.origin + window.location.pathname + window.location.search;
-
-    let param = {};
-    let str, item;
-    if (url.lastIndexOf(symbol ? symbol : "?") > 0) {
-      str = url.substring(url.lastIndexOf(symbol ? symbol : "?") + 1, url.length);
-      let arr = str.split("&");
-      for (let i = 0; i < arr.length; i++) {
-        item = arr[i].split("=");
-        param[item[0]] = decodeURIComponent(item[1]);
-      }
-    }
-    return param;
+    net.getPara(symbol);
   }
 
   removeDub(arr) {
