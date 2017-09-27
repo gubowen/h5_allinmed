@@ -23,7 +23,19 @@ class Api {
   }
 
   getPara(symbol) {
-    net.getPara(symbol);
+    let url = window.location.origin + window.location.pathname + window.location.search;
+
+    let param = {};
+    let str, item;
+    if (url.lastIndexOf(symbol ? symbol : "?") > 0) {
+      str = url.substring(url.lastIndexOf(symbol ? symbol : "?") + 1, url.length);
+      let arr = str.split("&");
+      for (let i = 0; i < arr.length; i++) {
+        item = arr[i].split("=");
+        param[item[0]] = decodeURIComponent(item[1]);
+      }
+    }
+    return param;
   }
 
   removeDub(arr) {
