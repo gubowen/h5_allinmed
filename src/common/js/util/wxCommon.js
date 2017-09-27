@@ -82,7 +82,7 @@ class WxCommon {
           "&response_type=code" +
           "&scope=snsapi_base" +
           "&state=pay" +
-          "&code=" + this.getPara().code +
+          "&code=" + net.getPara().code +
           "#wechat_redirect";
       }
     } else {
@@ -91,11 +91,11 @@ class WxCommon {
         if (!count) {
           sessionStorage.setItem("count", 1);
           if (localStorage.getItem("currentUrl") && localStorage.getItem("currentUrl").indexOf("?") != -1) {
-            window.location.href = localStorage.getItem("currentUrl") + "&openId=" + this.getPara().openId;
+            window.location.href = localStorage.getItem("currentUrl") + "&openId=" + net.getPara().openId;
           } else {
-            window.location.href = localStorage.getItem("currentUrl") + "?openId=" + this.getPara().openId;
+            window.location.href = localStorage.getItem("currentUrl") + "?openId=" + net.getPara().openId;
           }
-          localStorage.setItem("openId", this.getPara().openId);
+          localStorage.setItem("openId", net.getPara().openId);
         }
 
       } else {
