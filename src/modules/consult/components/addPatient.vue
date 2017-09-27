@@ -6,8 +6,8 @@
         <header class="patient-consult-rate add-patient-title">
           <!--无患者时的头部提示-->
           <section class="patient-tips" v-if="headerShow == 1">
-            <h2 class="patient-tips-top">请填写患者真实信息</h2>
-            <p class="patient-tips-bottom">所有信息仅您和医生可见，请放心填写</p>
+            <h2 class="patient-tips-top">添加新患者</h2>
+            <p class="patient-tips-bottom">根据国家卫计委规定，网上就诊需实名认证</p>
           </section>
           <!--添加患者-->
           <section class="add-patient"  v-else-if="headerShow == 2">
@@ -17,7 +17,7 @@
           <!--取消添加-->
           <section class="cancel-add" v-else="headerShow == 3">
             <h2 class="patient-tips-top">添加新患者</h2>
-            <p class="patient-tips-bottom">为准确判断，请填写患者的真实信息</p>
+            <p class="patient-tips-bottom">根据国家卫计委规定，网上就诊需实名认证</p>
           </section>
         </header>
         <!--渐变的中间层(新版本取消)-->
@@ -46,6 +46,14 @@
           <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
             <section class="add-patient-content-form">
               <article class="add-patient-content-item">
+                <figcaption>与患者关系</figcaption>
+                <figure class="add-patient-input">
+                  <span class="patient-relation" :class="{'on':relationClick}"
+                        @click="relationPicker.show()">{{relationShip.title}}</span>
+                  <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
                 <figcaption>患者姓名</figcaption>
                 <figure class="add-patient-input">
                   <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')" @input="inputMaxLength('username',40)"
@@ -53,7 +61,29 @@
                 </figure>
               </article>
               <article class="add-patient-content-item">
-                <figcaption>性别</figcaption>
+                <figcaption>{{credentialTitle}}</figcaption>
+                <figure class="add-patient-input">
+                  <span class="patient-credential"
+                        @click="credentialPicker.show()">{{credentialType.title}}</span>
+                  <input type="hidden" name="credentialInput" v-validate="'required'" v-model="credentialInput">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>证件号码</figcaption>
+                <figure class="add-patient-input">
+                  <input type="text" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" :placeholder="credentialPlaceholder" v-validate="'required|mobile'" name="IDNumber" v-model="IDNumber">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>出生日期</figcaption>
+                <figure class="add-patient-input">
+                  <span class="patient-relation" :class="{'on':birthClick}"
+                        @click="birthPicker.show()">{{birthData.title}}</span>
+                  <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>患者性别</figcaption>
                 <figure class="add-patient-input" id="ev-patient-sex">
                   <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="sexSelect=1">
                     <i class="add-patient-selector"></i>
@@ -65,26 +95,18 @@
                   </section>
                 </figure>
               </article>
-              <article class="add-patient-content-item">
-                <figcaption>年龄</figcaption>
-                <figure class="add-patient-input">
-                  <input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"
-                         v-model="userage">
-                </figure>
-              </article>
+              <!--<article class="add-patient-content-item">-->
+                <!--<figcaption>年龄</figcaption>-->
+                <!--<figure class="add-patient-input">-->
+                  <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
+                         <!--v-model="userage">-->
+                <!--</figure>-->
+              <!--</article>-->
               <article class="add-patient-content-item">
                 <figcaption>所在地</figcaption>
                 <figure class="add-patient-input">
                   <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
                   <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>与患者关系</figcaption>
-                <figure class="add-patient-input">
-                  <span id="ev-relationship" class="patient-relation" :class="{'on':relationClick}"
-                        @click="picker.show()">{{relationShip.title}}</span>
-                  <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
                 </figure>
               </article>
               <article class="add-patient-content-item">
@@ -94,6 +116,13 @@
                 </figure>
               </article>
             </section>
+          </section>
+          <!--联系我们消息-->
+          <section class="info-error-tips">
+            <p class="tips-box" @click="phoneShow =true">
+              <span class="tips-describe">若确认信息填写无误仍无法提交,</span>
+              <span class="tips-contact">请联系我们</span>
+            </p>
           </section>
         <!--</transition>-->
         <!--无患者提示-->
@@ -120,6 +149,17 @@
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
     </transition>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'呼叫',
+          'cancel':'取消',
+          'title':'010-59007006'
+          }" v-if="phoneShow" :showFlag.sync="phoneShow" @cancelClickEvent="cancelEvent"
+        @ensureClickEvent="ensureEvent">
+      </confirm>
+    </transition>
+    <a href="tel:010-59007006" class="make-call" ref="makeCall"></a>
   </section>
 </template>
 
@@ -133,9 +173,11 @@
    * Created by Qiangkailiang/Lichenyang on 17/7/10.
    */
   import api from 'common/js/util/util';
+  import getDate from 'common/js/util/getDate';
   import loading from 'components/loading';
   import area from 'components/selectArea';
   import Picker from 'better-picker';
+  import confirm from 'components/confirm';
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
   const XHRList = {
@@ -152,6 +194,7 @@
   export default{
     data(){
       return {
+        phoneShow:false,//拨打电话confirm框
         headerShow:2,//头部显示哪个
         patientList: [],//患者列表
         currentIndex: -1,//第几个患者
@@ -170,20 +213,37 @@
         },//选择城市参数
         cityLevel:2,//城市选择级别
         sexSelect: 1,//性别选择控制
-        picker: null,//仿ios选择器
+        relationPicker: null,//与患者关系的仿ios选择器
+        relationClick:false,//患者关系是否点击,
         relationShip: {
-          title: "选择您与患者关系",
-          id: ""
+          title: "本人",
+          id: "0"
         },//仿ios选择器确定出的与患者关系
-        count:0,//曾经是否来过
         relationInput:"",//用来验证与患者关系是否填写
+        credentialTitle:"患者证件",//证件类型需要显示的话术
+        credentialPlaceholder:'请填写患者证件号码',//证件输入框提示的话术
+        credentialPicker: null,//证件类型的仿ios选择器
+        credentialClick:false,//证件是否点击,
+        credentialType: {
+          title: "身份证",
+          id: "0"
+        },//仿ios选择器确定出的证件类型
+        credentialInput:"",//用来验证证件类型是否填写
+        birthClick:false,//出生日期是否点击,
+        birthPicker:null,//出生日期的仿ios选择器
+        birthData: {
+          title: "身份证",
+          id: "0"
+        },//仿ios选择器确定出的出生日期
+        birthInput:"",//用来验证出生日期是否填写
+        IDNumber:"",//证件号码
+        count:0,//曾经是否来过
         username: "",//添加患者名字
         userage: "",//患者年龄
         phone: "",//手机号
         errorMsg: "fuck",//提示错误的字段
         errorShow: false,//是否提示错误
         areaClick:true,//选择城市是否点击过
-        relationClick:true,//选择患者是否点击,
         listType:"city", //类型为城市
         bindPhone:"",//用户绑定的手机号
       }
@@ -199,7 +259,9 @@
     mounted() {
       document.title="为谁问诊";
       this.getPatientList();
-      this.relationshipPicker();
+      this.relationPickerInit();//患者关系选择器初始化
+      this.credentialPickerInit();//患者关系选择器初始化
+      this.birthPickerInit();//患者关系选择器初始化
       this.getPatientPhone();//获取绑定的手机号
       this.$validator.updateDictionary({
         en: {
@@ -254,6 +316,15 @@
 
 //          this.areaParam.districtId = true;
         }
+      },
+      //confirm取消
+      cancelEvent() {
+        this.phoneShow = false;
+      },
+      //confirm呼叫
+      ensureEvent() {
+        this.phoneShow = false;
+        window.location.href = "tel:010-59007006";
       },
       //获取绑定的手机号
       getPatientPhone(){
@@ -471,7 +542,7 @@
               that.phone = "";
               that.areaParam.result = "选择患者所在地";
               that.areaClick=true;//选择城市是否点击过
-              that.relationClick=true;
+//              that.relationClick=true;
               that.relationShip.title="选择您与患者关系";
               setTimeout(function () {
                 that.toSelectPart(0);
@@ -486,31 +557,112 @@
           }
         })
       },
-      relationshipPicker() {
+      //与患者关系选择器初始化
+      relationPickerInit() {
         const hospitalData = [{
           text: "本人",
           value: "0"
         }, {
-          text: "家人",
+          text: "父母",
           value: "1"
         }, {
-          text: "亲戚",
+          text: "配偶",
           value: "2"
         }, {
-          text: "朋友",
+          text: "子女（有证件）",
           value: "3"
         }, {
-          text: "其他",
+          text: "子女（无证件）",
           value: "4"
+        }, {
+          text: "其他",
+          value: "5"
         }];
-        this.picker = new Picker({
-          data: [hospitalData]
+        this.relationPicker = new Picker({
+          data: [hospitalData],//初始化的数据
+          selectedIndex:[0],//默认哪个选中
         });
-        this.picker.on('picker.select', (e, selectedVal, selectedIndex) => {
+        this.relationPicker.on('picker.select', (e, selectedVal, selectedIndex) => {
           this.relationShip.title = hospitalData[selectedVal[0]].text;
           this.relationShip.id = hospitalData[selectedVal[0]].value;
+          if (this.relationShip.id == '4') {
+            this.credentialTitle="监护人证件";//证件类型需要显示的话术
+            this.credentialPlaceholder='请填写监护人证件号码';//证件输入框提示的话术
+          } else {
+            this.credentialTitle="患者证件";//证件类型需要显示的话术
+            this.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
+          }
           this.relationClick = false;
           this.relationInput = hospitalData[selectedVal[0]].text;
+        });
+      },
+      //证件类型选择器初始化
+      credentialPickerInit () {
+        let credentialData = [{
+          text: "身份证",
+          value: "0"
+        }, {
+          text: "护照",
+          value: "1"
+        }, {
+          text: "港澳通行证",
+          value: "2"
+        }, {
+          text: "军官证",
+          value: "3"
+        }];
+        this.credentialPicker = new Picker({
+          data: [credentialData],//初始化的数据
+          selectedIndex:[0],//默认哪个选中
+        });
+        this.credentialPicker.on('picker.select', (e, selectedVal, selectedIndex) => {
+          this.credentialType.title = credentialData[selectedVal[0]].text;
+          this.credentialType.id = credentialData[selectedVal[0]].value;
+          this.credentialClick = false;
+          this.credentialInput = credentialData[selectedVal[0]].text;
+        });
+      },
+      //出生日期选择器初始化
+      birthPickerInit(){
+        //年月份数组
+        let yearArr = getDate.getYear(1900,2017).reverse(),
+          monthArr = getDate.getMonth(),
+          dayArr = getDate.getDay();
+        //年月份数据
+        let yearData = getDate.getPickerArr(yearArr),
+          monthData = getDate.getPickerArr(monthArr),
+          dayData = getDate.getPickerArr(dayArr);
+        //年月份的索引值
+        let yearChange = yearData.find((n)=>n.text === "1980").value,
+          monthChange = 0,
+          dayChange = 0;
+        this.birthPicker = new Picker({
+          data: [yearData,monthData,dayData],//初始化的数据
+          selectedIndex:[yearChange,monthChange,dayChange],//默认哪个选中
+        });
+        this.birthPicker.on('picker.select', (selectedIndex, selectedVal) => {
+          console.log('select'+selectedIndex);
+          console.log('select'+selectedVal);
+        });
+        this.birthPicker.on('picker.change', (index, selectedIndex) => {
+          console.log(index);
+          console.log('change:'+selectedIndex);
+          switch (index) {
+            case 0:
+              yearChange = selectedIndex;
+              break;
+            case 1:
+              monthChange = selectedIndex;
+              break;
+            case 2:
+              dayChange = selectedIndex;
+              break;
+          }
+          if (index === 0 || index === 1){
+//            debugger;
+            let dayDataTemp = getDate.getPickerArr(getDate.getDay(yearArr[yearChange],monthArr[monthChange]))
+            this.birthPicker.refillColumn(2,dayDataTemp);
+          }
         });
       },
       toSelectPart(index) {
@@ -554,7 +706,7 @@
             result:"选择患者所在地"
         };
         this.areaClick=true;//选择城市是否点击过
-        this.relationClick=true;//选择患者是否点击,
+//        this.relationClick=true;//选择患者是否点击,
         window.scrollTo(0,0);
       },
       openCasePage(){
@@ -565,7 +717,8 @@
     components: {
       "loading": loading,
       "selectArea": area,
-      "toast": toast
+      "toast": toast,
+      "confirm":confirm,
     }
   };
 
@@ -602,7 +755,7 @@
   .patient-consult-rate.add-patient-title{
     /*background-color: yellow;*/
     /*border-radius: rem(16px) rem(16px) 0 0;*/
-    height: rem(194px);
+    height: rem(180px);
     padding-top: rem(50px);
     padding-left: rem(14px);
     box-sizing: border-box;
@@ -626,7 +779,7 @@
   //患者咨询
   .add-patient-content {
     background-color: white;
-    margin-bottom: rem(70px);
+    margin-bottom: rem(36px);
     border-radius: rem(16px);
     padding: rem(60px) rem(24px) rem(60px) rem(64px);
     .add-patient-content-form {
@@ -734,6 +887,29 @@
     height: rem(20px);
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FAFAFA), to(#FFFFFF));
   }*/
+  //错误提示
+  .info-error-tips{
+    margin: rem(10px) rem(14px) rem(68px);
+    @include font-dpr(15px);
+    line-height: 1;
+    .tips-box{
+      padding-left: rem(32px);
+      line-height: 1;
+      background: url("../../../common/image/img00/patientConsult/error_tips.png") no-repeat left rem(2px);
+      background-size: rem(26px) rem(26px);
+      span{
+        line-height: 1;
+        display: inline-block;
+      }
+      .tips-describe{
+        color: #FA787A;
+      }
+      .tips-contact{
+        color: #2FC5BD;
+        border-bottom: 1px solid #2FC5BD;
+      }
+    }
+  }
   .patient-list {
     background-color: white;
     border-radius: rem(16px);
