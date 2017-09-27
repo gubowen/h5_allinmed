@@ -37,7 +37,9 @@
         </section>
       <!--</section>-->
     </transition>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
   </section>
+  <!--@backSuccess="backSuccessBack" @docCallBack="docStatusChange"-->
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -50,6 +52,7 @@
    */
   import loading from "components/loading";
   import api from "common/js/util/util";
+  import backPopup from "components/backToastForConsult";
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -57,6 +60,7 @@
 
     data() {
       return {
+        backPopupShow:'',
         clickDirection:"right",//用户点击的方向
         bodyImg: { //人体图像集合
           man: {
@@ -149,6 +153,11 @@
       document.title = "选择部位";
       this.currentType = this.patientType ();
       localStorage.removeItem("hasCome");
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
     },
     computed: {
       patientBody(){   //反应数据驱动...获取人体性别年龄
@@ -328,7 +337,8 @@
       },
     },
     components: {
-      'loading': loading
+      'loading': loading,
+      backPopup
     }
 
   }

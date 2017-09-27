@@ -148,6 +148,7 @@
       </section>
     </transition>
     <loading :show="!finish"></loading>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -165,6 +166,7 @@
   import confirm from 'components/confirm';
   import vueSlider from 'vue-slider-component';
   import autosize from 'autosize';
+  import backPopup from "components/backToastForConsult";
 
   const XHRList = {
     query: "/mcall/cms/part/question/relation/v1/getMapList/",
@@ -214,7 +216,8 @@
         errorMsg: "",
         errorShow: false,
         levelShow: false,
-        pageLeaveEnsure: false
+        pageLeaveEnsure: false,
+        backPopupShow: false
       }
     },
     mounted(){
@@ -235,6 +238,11 @@
         }
       }
       autosize(this.$el.querySelector("textarea"));
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
     },
     computed: {
       dotSize(){
@@ -286,7 +294,12 @@
     },
     beforeRouteLeave   (to, from, next){
       if (to.name === "selectPart") {
-        this.levelShow = true;
+        if (localStorage.getItem("PCIMLinks")!==null) {
+          this.backPopupShow = true;
+        } else {
+          this.backPopupShow = false;
+          this.levelShow = true;
+        }
       }
       next(this.pageLeaveEnsure)
     },
@@ -665,7 +678,8 @@
       loading,
       toast,
       confirm,
-      vueSlider
+      vueSlider,
+      backPopup
     },
     activated() {
       this.levelShow = false;

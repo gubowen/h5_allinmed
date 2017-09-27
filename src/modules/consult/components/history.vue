@@ -122,6 +122,7 @@
           }" v-if="levelShow&&netTipsNum==1" :showFlag.sync="levelShow" @cancelClickEvent="cancelEvent"
         @ensureClickEvent="ensureEvent"></confirm>
     </transition>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -141,6 +142,7 @@
   import autosize from 'autosize';
   import axios from "axios";
   import confirm from 'components/confirm';
+  import backPopup from "components/backToastForConsult";
 
   const XHRList = {
     upload: "/mcall/customer/patient/case/attachment/v1/create/",
@@ -165,6 +167,7 @@
         finish: false,
         upLoadTip: false,
         levelShow: false,
+        backPopupShow:false,
         uploading1: false,
         uploading2: false,
         imageList1: [],
@@ -212,7 +215,11 @@
       document.body.scrollTop = 0;
       autosize(this.$el.querySelector(".medicineBox"));
       localStorage.setItem("hasCome", 0);
-
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
     },
     methods: {
       initData () {
@@ -520,7 +527,8 @@
     components: {
       loading,
       toast,
-      confirm
+      confirm,
+      backPopup
     },
   }
 
@@ -630,7 +638,7 @@
           background-color: #E5E5E5;
           p {
             color: #666666;
-            @include ellipsis();
+//            @include ellipsis();
             &.selected {
               color: #07B6AC;
             }

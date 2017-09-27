@@ -1,0 +1,77 @@
+<template>
+  <section class="consult-main-inner">
+    <transition name="fade">
+      <confirm :confirmParams="{
+          'ensure':'继续沟通',
+          'cancel':'返回首页',
+          'content':'',
+          'title':'您的问诊单已提交\n无需重复提交'
+          }" v-if="backPopupShow" @cancelClickEvent="backHomeEvent()" @ensureClickEvent="ensureIMEvent()">
+      </confirm>
+    </transition>
+    <transition name="fade">
+      <toast :content="errorMsg" v-if="errorShow"></toast>
+    </transition>
+    <loading v-show="finish"></loading>
+  </section>
+</template>
+<script type="text/ecmascript-6">
+    /**
+     * @Desc：
+     * @Usage:
+     * @Notify：
+     * @Depend：
+     *
+     * Created by jukun on 2017/9/25.
+     */
+    import api from 'common/js/util/util';
+    import loading from 'components/loading';
+    import toast from 'components/toast';
+    import autosize from 'autosize';
+    import axios from "axios";
+    import confirm from 'components/confirm';
+
+    const XHRList = {};
+    export default {
+        data() {
+            return {
+              errorShow:false,
+              finish:false,
+              backPopupShow:true,
+              errorMsg:'',
+            }
+        },
+        activated() {
+
+        },
+        mounted() {
+
+        },
+        methods: {
+          //返回首页
+          backHomeEvent(){
+            let _this=this;
+            this.backPopupShow=false;
+            window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientCustomerId}#/addPatient`;
+          },
+          //继续沟通
+          ensureIMEvent(){
+            this.backPopupShow=false;
+            window.location.href = localStorage.getItem("PCIMLinks");
+          }
+        },
+        props: {
+          backPopupParams: {
+            type: Object
+          }
+        },
+        components: {
+            loading,
+            toast,
+            confirm
+        },
+    }
+</script>
+<style lang="scss" rel="stylesheet/scss">
+    @import "../../scss/library/_common-modules";
+</style>

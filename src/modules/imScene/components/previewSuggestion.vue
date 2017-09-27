@@ -286,7 +286,6 @@
             }
             that.suggestResponse = true;
             that.checkResponse();
-//              that.toBottom();
           },
           fail(){
             that.suggestResponse = true;
@@ -314,8 +313,6 @@
 //              that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
-
-//              that.toBottom();
             }
             that.doctorResponse = true;
             that.checkResponse();
@@ -343,11 +340,6 @@
               document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
             }
           })
-        }
-      },
-      toBottom(){
-        if (!api.getPara().suggest) {
-          document.body.scrollTop = Math.pow(10, 20);
         }
       },
       //检查检验数据

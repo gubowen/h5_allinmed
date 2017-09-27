@@ -735,7 +735,7 @@
     .doctorContent{
       background-color: #F2F2F2;
       .doctorContent-box{
-        padding: rem(18px) rem(30px) rem(34px);
+        padding: rem(32px) rem(30px) rem(34px);
         .doctor-personalInfo{
           padding: rem(30px) rem(30px) rem(54px);
           background: url("../../../common/image/img00/doctorHome/background@2x.png") no-repeat center;
@@ -759,7 +759,7 @@
                 margin-top: rem(22px);
                 @include font-dpr(14px);
                 color: #C1D0E0;
-                padding-right: rem(14px);
+                /*padding-right: rem(14px);*/
                 display: inline-block;
                 .doc-major{
                   margin-right: rem(16px);
@@ -768,7 +768,7 @@
                   margin-right: rem(16px);
                 }
                 .doc-presents-two{
-
+                  margin-right: rem(16px);
                 }
               }
               .doc-presentAge{
@@ -1160,7 +1160,9 @@
                   color: #A0A0A0;
                   display: inline-block;
                   border: rem(2px) solid #CECECE;
-                  padding: rem(5px) rem(10px);
+                  padding: rem(5px) 0;
+                  width: rem(120px);
+                  text-align: center;
                   -webkit-border-radius: rem(6px);
                   -moz-border-radius: rem(6px);
                   border-radius: rem(6px);
