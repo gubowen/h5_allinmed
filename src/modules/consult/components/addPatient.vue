@@ -229,10 +229,10 @@
           id: "0"
         },//仿ios选择器确定出的证件类型
         credentialInput:"",//用来验证证件类型是否填写
-        birthClick:false,//出生日期是否点击,
+        birthClick:true,//出生日期是否点击,
         birthPicker:null,//出生日期的仿ios选择器
         birthData: {
-          title: "身份证",
+          title: "请选择患者出生日期",
           id: "0"
         },//仿ios选择器确定出的出生日期
         birthInput:"",//用来验证出生日期是否填写
@@ -355,11 +355,8 @@
           }
         })
       },
+      //选择城市
       selectArea(){
-//        this.$el.querySelectorAll(".middle-tip-box.ev-loading")[0].style.display="none";
-//        this.showSelectArea=true;
-//        this.areaParam.result='';
-//        this.areaClick=false;
         this.$router.push({
           name:'selectArea',
           params: {
@@ -370,30 +367,11 @@
           query:this.$route.query
         })
       },
-      //键盘最大长度事件
-//      keyMaxLength(attr,length){
-//        let keyCode = event.keyCode;
-////        console.log("keyCode");
-////        let len=0;
-////        console.log(this[attr].length);
-////        for (let codePoint of this[attr]) {
-////          debugger
-////          if (this[attr].charCodeAt(codePoint) > 128) {
-////            len += 2;
-////          } else {
-////            len++;
-////          }
-////        }
-//        if (api.getByteLen(this[attr]) < length) {
-//          event.returnValue = true;
-//        } else {
-//          event.returnValue = false;
-//        }
-//      },
       //input最大长度事件
       inputMaxLength(attr,length){
         this[attr] = api.getStrByteLen(this[attr], length);
       },
+      //获取患者列表
       getPatientList() {
         const that = this;
         api.ajax({
@@ -624,6 +602,7 @@
       },
       //出生日期选择器初始化
       birthPickerInit(){
+        let that = this;
         //年月份数组
         let yearArr = getDate.getYear(1900,2017).reverse(),
           monthArr = getDate.getMonth(),
@@ -642,7 +621,17 @@
         });
         this.birthPicker.on('picker.select', (selectedIndex, selectedVal) => {
           console.log('select'+selectedIndex);
-          console.log('select'+selectedVal);
+          console.log('select'+typeof selectedVal);
+          let returnArr = selectedVal.toString().split(",");
+          console.log(yearData[returnArr[0]].value);
+          console.log(monthData[returnArr[1]]);
+          console.log(dayData[returnArr[2]]);
+          let birthTitle = yearArr[returnArr[0]] + '-' +monthArr[returnArr[1]]  +'-'+ dayArr[returnArr[2]];
+          that.birthData={
+            title:birthTitle,
+            id:birthTitle,
+          }
+          that.birthClick =false;
         });
         this.birthPicker.on('picker.change', (index, selectedIndex) => {
           console.log(index);
@@ -658,10 +647,32 @@
               dayChange = selectedIndex;
               break;
           }
+          //得到picker选择器改变后的年月日
+          let yearPicker = yearArr[yearChange],
+            monthPicker = monthArr[monthChange],
+            dayPicker = dayArr[dayChange];
           if (index === 0 || index === 1){
+            dayArr = getDate.getDay(yearPicker,monthPicker);
 //            debugger;
-            let dayDataTemp = getDate.getPickerArr(getDate.getDay(yearArr[yearChange],monthArr[monthChange]))
-            this.birthPicker.refillColumn(2,dayDataTemp);
+            dayData = getDate.getPickerArr(dayArr);
+            this.birthPicker.refillColumn(2,dayData);
+          }
+          let dataTemp = new Date();
+          //获取当前时间的年月日
+          let currentYear = dataTemp.getFullYear(),
+            currentMonth = dataTemp.getMonth()+1,
+            currentDay = dataTemp.getDate();
+          console.log(yearPicker)
+          console.log(monthPicker)
+          console.log(dayPicker)
+          //判断滑动日期是否超过当前日期
+          if (parseInt(yearPicker) === currentYear) {
+            if (parseInt(monthPicker) > currentMonth) {
+              this.birthPicker.scrollColumn(1,currentMonth-1);
+              if (parseInt(dayPicker) > currentDay){
+                this.birthPicker.scrollColumn(2,currentDay-1);
+              }
+            }
           }
         });
       },

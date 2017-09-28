@@ -819,6 +819,7 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
+              that.$emit('update:payPopupShow', false);
               localStorage.setItem("sendTips", JSON.stringify(opt));
               window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
             }
