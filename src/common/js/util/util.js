@@ -24,7 +24,6 @@ class Api {
 
   getPara(symbol) {
     let url = window.location.origin + window.location.pathname + window.location.search;
-
     let param = {};
     let str, item;
     if (url.lastIndexOf(symbol ? symbol : "?") > 0) {
@@ -151,7 +150,7 @@ class Api {
 
   //openId check
   checkOpenId() {
-    wxCommon.checkOpenId();
+    return wxCommon.checkOpenId();
   }
 
   //get openID

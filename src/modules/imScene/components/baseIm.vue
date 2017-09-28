@@ -901,7 +901,7 @@
     },
     mounted(){
       let that = this;
-      console.log(api)
+//      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }

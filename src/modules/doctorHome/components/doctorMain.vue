@@ -24,7 +24,7 @@
         </div>
       </section>
       <!--网上问诊-->
-      <section class="online-visitsBox">
+      <section class="online-visitsBox" v-show="!isDoctorID">
         <section class="doc-commonTitle">
           <p class="doc-titleLeft">网上问诊服务</p>
           <span class="doc-lastPerson" v-show="isShowCureStatus" :class="{'isUsable-num':isUsableNum,'not-usable-num':isNotUsable,'not-usable-off':isOpenCure}">{{isCureStatusText}}</span>
@@ -44,6 +44,16 @@
             <section class="onlineForFree-ticket" @click="payPopupShow=!isUseCureForFree&&!isNotUsable&&!isOpenCure,payType='free'" :class="{'isUse':isUseCureForFree,notUsable:isNotUsable||isOpenCure}" ></section>
           </section>
         </section>
+      </section>
+      <!--立即问诊-->
+      <section class="physician-immediately" v-show="isDoctorID">
+        <section class="doc-commonTitle">
+          <p class="doc-titleLeft">网上问诊服务</p>
+        </section>
+      </section>
+      <!--诊后报道-->
+      <section class="cureAfterReport" v-show="isDoctorID">
+
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty" v-show="areasExpertise.length>0||illnessMapList.length>0||operationMapList.length>0||precedingYearOperationNum.length>0||yesteryearOperationNum.length>0">
@@ -156,6 +166,7 @@
           imgUrl:'',
           RuleIcon: true,
           ruleShow:false,
+          isDoctorID:false,
           confirmContentText:'',
           errorMsg: '',
           errorShow: false,
@@ -941,6 +952,9 @@
         //网上问诊样式
         .online-visitsBox {
           background-color: #FFFFFF;
+          /*-webkit-border-radius:0 0 rem(16px) rem(16px);*/
+          /*-moz-border-radius:0 0 rem(16px) rem(16px);*/
+          /*border-radius:0 0 rem(16px) rem(16px);*/
           .doc-commonTitle {
             padding-right: rem(30px);
           }
@@ -1067,6 +1081,11 @@
               }
             }
           }
+        }
+        //立即问诊
+        .physician-immediately{
+          background-color: #ffffff;
+
         }
         //专科信息
         .college-infoBox{

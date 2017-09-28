@@ -1,6 +1,10 @@
-<template lang="html">
-    <div class="yo-scroll" :class="{'down':(state===0),'up':(state==1),refresh:(state===2),touch:touching}" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchEnd($event)">
-        <section class="inner" :style="{ transform: 'translateY(' + top + 'px)' }">
+<template>
+    <div class="scrollBox" :class="{
+                                                        'down':(state===0),
+                                                        'up':(state==1),
+                                                        'refresh':(state===2),
+                                                        'touch':touching }" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchEnd($event)">
+        <section class="scrollInner" :style="{ transform: 'translateY(' + top + 'px)' }">
             <header class="pull-refresh">
                 <slot name="pull-refresh">
                     <span class="down-tip">下拉更新</span>
@@ -14,6 +18,7 @@
                 <slot name="load-more">
                     <span v-show="downFlag === false">上拉加载更多</span>
                     <span v-show="downFlag === true">加载中……</span>
+                    <span v-show="downFlag === true">加载完成</span>
                 </slot>
             </footer>
             <!--<div class="nullData" v-show="dataList.noFlag">暂无更多数据</div>-->
@@ -30,28 +35,6 @@
    * Created by wangjingrong on 2017/8/29.
    */
     export default {
-        props: {
-            offset: {
-                type: Number,
-                default: 100 //默认高度
-            },
-            enableInfinite: {
-                type: Boolean,
-                default: true
-            },
-            enableRefresh: {
-                type: Boolean,
-                default: true
-            },
-            onRefresh: {
-                type: Function,
-                default: undefined
-            },
-            onInfinite: {
-                type: Function,
-                default: undefined
-            }
-        },
         data() {
             return {
                 top: 0,
@@ -74,12 +57,10 @@
             },
             touchMove(e) {
                 //下拉刷新
-                if(!this.enableRefresh || !this.touching) {
-                    return
-                }
+                if(!this.touching) return;
                 let diff = e.targetTouches[0].pageY - this.startY - this.startScroll;
                 if(diff > 0) e.preventDefault();
-                this.top = diff + (this.state === 2 ? this.offset : 0)
+                this.top = diff + (this.state === 2 ? this.offset : 0);
                 if(this.top > 200) this.top = 200;
                 if(this.state === 2) return;
                 if(this.top >= this.offset) {
@@ -98,7 +79,6 @@
 //                }
             },
             touchEnd(e) {
-                if(!this.enableRefresh) return;
                 this.touching = false;
                 if(this.top >= this.offset) {
                     this.refresh()
@@ -110,7 +90,7 @@
                 if(!this.enableInfinite || this.infiniteLoading) return;
 
                 let outerHeight = this.$el.clientHeight,
-                    innerHeight = this.$el.querySelector('.inner').clientHeight,
+                    innerHeight = this.$el.querySelector('.scrollInner').clientHeight,
                     scrollTop = this.$el.scrollTop,
                     ptrHeight = this.onRefresh ? this.$el.querySelector('.pull-refresh').clientHeight : 0,
                     bottom = innerHeight - outerHeight - scrollTop - ptrHeight;
@@ -148,14 +128,32 @@
             infiniteDone() {
                 this.infiniteLoading = false
             }
+        },
+        props: {
+          offset: {
+            type: Number,
+            default: 100 //默认高度
+          },
+          enableInfinite: {
+            type: Boolean,
+            default: true
+          },
+          onRefresh: {
+            type: Function,
+            default: undefined
+          },
+          onInfinite: {
+            type: Function,
+            default: undefined
+          }
         }
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../scss/library/_common-modules";
-  .yo-scroll {
+  .scrollBox {
     transition: all 0.5s linear;
-    .inner {
+    .scrollInner {
       width:100%;
       position: absolute;
       top: -(rem(200px));
@@ -203,19 +201,19 @@
     }
   }
 
-  .yo-scroll.touch .inner {
+  .scrollBox.touch .scrollInner {
     transition-duration: 0.5s;
   }
 
-  .yo-scroll.down .down-tip {
+  .scrollBox.down .down-tip {
     display: block;
   }
 
-  .yo-scroll.up .up-tip {
+  .scrollBox.up .up-tip {
     display: block;
   }
 
-  .yo-scroll.refresh .refresh-tip {
+  .scrollBox.refresh .refresh-tip {
     display: block;
   }
 </style>
