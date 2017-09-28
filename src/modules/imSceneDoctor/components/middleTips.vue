@@ -2,7 +2,7 @@
   <div>
     <section class="main-message-box grey-tips" v-if="tipsType==5">
       <figcaption class="first-message">
-        <p>医生回复仅作为建议，如需要请联系医生预约门诊</p>
+        <p>医生回复仅为建议，具体治疗需前往医院进行</p>
       </figcaption>
     </section>
     <p class="receive-treatment"><span>{{tipsContent}}</span></p>
