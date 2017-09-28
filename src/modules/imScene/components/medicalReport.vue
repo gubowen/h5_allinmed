@@ -22,7 +22,7 @@
       <article class="medical-report-box" data-clientid="" @click="goToDetail">
         <header class="medical-report-title">问诊单</header>
         <section class="medical-report-content">
-          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName}}&nbsp</span><span class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
+          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName | ellipsis(8)}}&nbsp</span><span class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
           <p class="case-describe"><span>主诉：</span><span class="case-describe-main">{{mainCase}}</span></p>
         </section>
         <footer class="medical-report-footer">查看已提交信息</footer>
@@ -107,6 +107,29 @@
           })
       }
     },
+    filters: {
+      ellipsis: function (value,len) {
+        if (!value) return ''
+        let newStr = '',
+          newLength = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value.charCodeAt(i) > 128) {
+            newLength += 2;
+          } else {
+            newLength++;
+          }
+          if (newLength <= len) {
+            newStr = newStr.concat(value[i]);
+          } else {
+            break;
+          }
+        }
+        if (newLength > len) {
+          newStr = newStr + "..."
+        }
+        return newStr;
+      }
+    },
     computed:{
       logoUrl(){
         return this.$store.state.logoUrl
@@ -152,8 +175,8 @@
           color: #333333;
           font-weight: bold;
           display: inline-block;
-          max-width: rem(160px);
-          @include ellipsis();
+          /*max-width: rem(160px);*/
+//          @include ellipsis();
         }
         .patient-age{
           margin-left: rem(10px);

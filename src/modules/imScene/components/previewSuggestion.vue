@@ -1,25 +1,5 @@
  <template>
   <section>
-    <!--<section class="main-message-box" :data-caseid="message.caseId">-->
-      <!--<article class="main-message-box-item others-message">-->
-        <!--<figure class="main-message-img">-->
-          <!--<img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">-->
-        <!--</figure>-->
-        <!--<figcaption class="check-suggestion message-result preview-suggestion" @click="goToHref">-->
-          <!--<article class="message-result-item">-->
-            <!--<header class="message-result-item-title">初诊建议</header>-->
-            <!--<section class="message-result-item-message" style="padding-bottom: 0;">-->
-              <!--<figure class="message-result-item-img">-->
-                <!--<img src="../../../../image/img00/patientConsult/dialogue_report@2x.png" alt=""></figure>-->
-              <!--<figcaption><h2>{{message.patientName}}&nbsp;&nbsp;&nbsp;{{message.createTime}}</h2>-->
-                <!--<p><span class="illness">初诊:{{message.illnessName}}</span></p>-->
-              <!--</figcaption>-->
-            <!--</section>-->
-          <!--</article>-->
-        <!--</figcaption>-->
-      <!--</article>-->
-    <!--</section>-->
-
     <!--检查检验-->
     <section class="main-message-box" v-if="checkSuggestObj.allData.length">
       <article class="check-suggest-box">
@@ -110,7 +90,7 @@
                 </figure>
                 <figcaption class="doctor-item-info">
                   <p class="doctor-base-info">
-                    <span class="doctor-name">{{item.fullName}}</span>
+                    <span class="doctor-name">{{item.fullName | ellipsis(8)}}</span>
                     <span class="doctor-post">{{item.medicalTitle}}</span>
                     <!--<span class="doctor-free">首次免费问诊</span>-->
                   </p>
@@ -402,6 +382,29 @@
         })
       }
     },
+    filters: {
+      ellipsis: function (value,len) {
+        if (!value) return ''
+        let newStr = '',
+          newLength = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value.charCodeAt(i) > 128) {
+            newLength += 2;
+          } else {
+            newLength++;
+          }
+          if (newLength <= len) {
+            newStr = newStr.concat(value[i]);
+          } else {
+            break;
+          }
+        }
+        if (newLength > len) {
+          newStr = newStr + "..."
+        }
+        return newStr;
+      }
+    },
     props:{
       previewSuggestionMessage:{
         type:Object
@@ -645,7 +648,7 @@
                   font-weight: bold;
                   @include font-dpr(16px);
                   display: inline-block;
-                  max-width: rem(160px);
+                  /*max-width: rem(160px);*/
 //                  @include ellipsis();
                   vertical-align: text-bottom;
                 }
