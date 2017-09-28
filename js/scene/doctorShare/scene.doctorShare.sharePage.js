@@ -183,7 +183,7 @@ $(function () {
             $(".doctor-info").append('<section class="info-left"><img class="doctor-icon" src="/image/img00/doctorShare/share_avatar_allin.png" alt="医生头像"></section>'+
                 '<section class="info-right">'+
                 '<p class="info-top"><span class="doctor-name">唯小宝</span><span class="doctor-post">副主任医师</span></p>'+
-                '<p class="info-middle"><span class="doctor-hospital">唯医骨科智能分诊平台</span></p>'+
+                '<p class="info-middle"><span class="doctor-hospital">唯医互联网骨科医院智能分诊平台</span></p>'+
                 // '<p class="info-bottom"><span class="subject-item">骨科</span></p>'+
                 '</section>');
             //擅长疾病默认信息

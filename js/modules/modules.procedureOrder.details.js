@@ -610,10 +610,10 @@ modules.orderDetails =function(Obj) {
                     case 1:
                         break;
                     case 2:
-                        _body = "唯医骨科-合作医院手术";
+                        _body = "唯医互联网骨科医院-合作医院手术";
                         break;
                     case 3:
-                        _body = _orderSourceType ==1?"唯医骨科-普通门诊":(_orderSourceType==2?"唯医骨科-专家门诊":"唯医骨科-特需门诊");
+                        _body = _orderSourceType ==1?"唯医互联网骨科医院-普通门诊":(_orderSourceType==2?"唯医互联网骨科医院-专家门诊":"唯医互联网骨科医院-特需门诊");
                         break;
                 }
                 _t.goPayOrder({
