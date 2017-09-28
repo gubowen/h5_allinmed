@@ -150,7 +150,7 @@ class Api {
 
   //openId check
   checkOpenId() {
-    wxCommon.checkOpenId();
+    return wxCommon.checkOpenId();
   }
 
   //get openID
