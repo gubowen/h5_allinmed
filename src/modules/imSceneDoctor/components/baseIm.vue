@@ -642,7 +642,7 @@
               if (status < 0) {
                 that.receiveTreatmentStatus = false;
                 if (receiveTime <= 0) {
-//                  that.showBottomTips(-1);
+                  that.showBottomTips(-1);
                 } else {
                   that.receiveTime = receiveTime;
                   that.remainTimeOut();
