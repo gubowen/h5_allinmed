@@ -49,7 +49,7 @@
       <section class="physician-immediately" v-show="isDoctorID">
         <section class="doc-commonTitle hasBtnForLink">
           <p class="doc-titleLeft">您是我的新患者</p>
-          <p class="doc-titleRight-bigLabel"></p>
+          <p class="doc-titleRight-bigLabel" @click="newCurePatient"></p>
         </section>
         <section class="immediately-contentBox">
           <p class="immediately-title">我可以帮您</p>
@@ -178,7 +178,7 @@
           imgUrl:'',
           RuleIcon: true,
           ruleShow:false,
-          isDoctorID:true,
+          isDoctorID:false,
           confirmContentText:'',
           errorMsg: '',
           errorShow: false,
@@ -286,13 +286,13 @@
         let _this=this;
         this.getPersonalProDate();
         this.getDocInfo();
-//        this.getIsReceiveClinic();
-//        this.isCreateChatForFree();
         this.questionStatus({callBack:(data)=>{
           _this.checkPatientState(data);
         }});
-        //test Fn
         this.getGoodsInfo();
+        if(api.getPara().isCome&&api.getPara().isCome==1){
+          _this.isDoctorID = true;
+        }
       },
       methods: {
         //view cureTime
@@ -728,6 +728,16 @@
               break;
           }
         },
+        //新患者立即问诊
+        newCurePatient(){
+          let _patientCustomerId=api.getPara().patientCustomerId;
+          window.location.href=`/dist/consult.html?customerId=${_patientCustomerId}`;
+        },
+        //诊后报道
+        newCurePatient(){
+          let _patientCustomerId=api.getPara().patientCustomerId;
+          window.location.href=`/dist/patientReport.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
+        },
         //toast提示
         toastComm(text){
           let _this = this;
@@ -893,11 +903,11 @@
               content: '';
               display: inline-block;
               width: rem(6px);
-              height: rem(22px);
+              height: rem(24px);
               background: url("../../../common/image/img00/doctorHome/Line Copy 4@2x.png") no-repeat center;
               background-size: rem(5px) rem(20px);
               top:50%;
-              margin-top: rem(-10px);
+              margin-top: rem(-12px);
               left: rem(-12px);
             }
           }
@@ -915,11 +925,11 @@
               content: '';
               display: inline-block;
               width: rem(6px);
-              height: rem(22px);
+              height: rem(24px);
               background: url("../../../common/image/img00/doctorHome/Line Copy 4@2x.png") no-repeat center;
               background-size: rem(5px) rem(20px);
               top:50%;
-              margin-top: rem(-10px);
+              margin-top: rem(-12px);
               left: rem(-12px);
             }
             //专科
@@ -976,12 +986,12 @@
             .doc-titleRight-personInfo{
               position: absolute;
               width: rem(172px);
-              height: rem(36px);
+              height: rem(34px);
               background: url("../../../common/image/img00/doctorHome/Group 5@2x.png") no-repeat center;
               background-size: 100% 100%;
               right: rem(34px);
-              top:62%;
-              margin-top: rem(-18px);
+              top:56%;
+              margin-top: rem(-17px);
             }
           }
         }
@@ -1165,7 +1175,7 @@
                   width: rem(15px);
                   height: rem(15px);
                   top:50%;
-                  margin-top: rem(-4px);
+                  margin-top: rem(-7px);
                   left:rem(32px);
                   background: url("../../../common/image/img00/doctorHome/Oval 8 Copy 14@2x.png") no-repeat center;
                   background-size: rem(8px) rem(8px);
