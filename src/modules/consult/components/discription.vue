@@ -1100,7 +1100,7 @@
       padding: rem(40px) 0;
       margin-left: rem(106px);
       margin-right: rem(60px);
-      border-bottom: rem(1px) solid #D5D5D5;
+      /*border-bottom: rem(1px) solid #D5D5D5;*/
       border-top: rem(1px) solid #D5D5D5;
       box-sizing: border-box;
       color: #666;

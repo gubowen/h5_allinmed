@@ -599,7 +599,7 @@
             background: #43CBC3;
             border-radius: rem(4px);
             vertical-align: middle;
-            margin: rem(0px) rem(8px) rem(0px) rem(30px);
+            margin: -(rem(6px)) rem(8px) rem(0px) rem(30px);
           }
         }
         /*font-weight: bold;*/
@@ -646,7 +646,7 @@
                   @include font-dpr(16px);
                   display: inline-block;
                   max-width: rem(160px);
-                  @include ellipsis();
+//                  @include ellipsis();
                   vertical-align: text-bottom;
                 }
                 .doctor-post{

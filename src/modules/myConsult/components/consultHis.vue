@@ -26,7 +26,7 @@
             <p>患者<span>{{item.patientName.length>5?item.patientName.substring(0,5)+"...":item.patientName}}</span></p>
             <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
           </div>
-          <div class="orderHistoryItemBottom" v-if="item.consultationType==0">
+          <div class="orderHistoryItemBottom" v-if="(item.consultationType==0&&item.consultationState==0&&item.state==3) || (item.consultationType==0&&(item.consultationState==0||item.consultationState==1)&&item.diagnosisId.length>1)">
             <button class="hrefBtn" v-if="item.consultationState==0&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
             <button class="hrefBtn" v-if="(item.consultationState==0||item.consultationState==1)&&item.diagnosisId.length>1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
           </div>
@@ -438,6 +438,7 @@
           height:1px;
           background: #EDEDED;
           margin-bottom:rem(32px);
+          margin-right:rem(40px);
         }
         position: relative;
         padding:0 rem(20px) rem(32px) rem(32px);
@@ -474,7 +475,7 @@
         }
       }
       .orderHistoryItemBottom{
-        margin:0 rem(32px);
+        margin:0 rem(60px) 0 rem(32px);
         border-top:1px solid #EDEDED;
         display: flex;
         display: -webkit-flex;

@@ -1,9 +1,11 @@
 <template>
-  <article class="send-count">
-    <span>{{doctorName}}医生送给您</span>
-    <em>3</em>
-    <span>次免费回答机会</span>
-  </article>
+  <section class="send-count-box">
+    <article class="send-count">
+      <span>{{doctorName}}医生送给您</span>
+      <em>3</em>
+      <span>次免费回答机会</span>
+    </article>
+  </section>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -24,14 +26,16 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
-
+  .send-count-box{
+    text-align:center;
+  }
   .send-count {
+    display:inline-block;
     background: #EDEEEE;
     border-radius: rem(12px);
     font-size: 0;
-    text-align: center;
-    margin: 0 rem(148px);
-    padding: rem(20px) rem(15px);
+    margin: 0 rem(60px);
+    padding: rem(20px) rem(30px);
     box-sizing: border-box;
     & > span {
       color: #AAAAAA;
