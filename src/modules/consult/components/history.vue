@@ -122,7 +122,17 @@
           }" v-if="levelShow&&netTipsNum==1" :showFlag.sync="levelShow" @cancelClickEvent="cancelEvent"
         @ensureClickEvent="ensureEvent"></confirm>
     </transition>
-    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'确定填写',
+          'cancel':'返回修改',
+//          'content':'确定要使用手机流量上传吗?',
+          'title':'问诊单提交后不可修改\n请确定填写信息无误'
+          }" v-if="submitTip" :showFlag.sync="submitTip" @cancelClickEvent="subCancelEvent"
+        @ensureClickEvent="submitData()"></confirm>
+    </transition>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:allParams.customerId}"></backPopup>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -168,6 +178,7 @@
         upLoadTip: false,
         levelShow: false,
         backPopupShow:false,
+        submitTip:false,
         uploading1: false,
         uploading2: false,
         imageList1: [],
@@ -391,6 +402,10 @@
       cancelEvent(){
         this.levelShow = false;
       },
+      //提交取消
+      subCancelEvent(){
+        this.submitTip = false;
+      },
       //确定
       ensureEvent(){
         this.levelShow = false;
@@ -406,9 +421,23 @@
           params: _params
         });
       },
-      // 提交参数装载
+      // 提交校验
       submitParamsInstall(){
-
+        if (!this.validateParamsFull()) {
+          return false;
+        } else { //提示用户提交后不可修改提交内容
+          if (localStorage.getItem("PCIMLinks")!==null) {
+            this.backPopupShow = true;
+          } else {
+            this.backPopupShow = false;
+            this.submitTip = true;
+          }
+        }
+      },
+      //提交数据
+      submitData(){
+        this.submitTip = false;
+        //全结果验证通过 参数装载开始...
         let joinImageDataList = function (list) {
           let result = [];
           list.forEach((element, index) => {
@@ -416,21 +445,17 @@
           });
           return result.join(",");
         };
-        if (!this.validateParamsFull()) {
-          return false;
-        } else { //全结果验证通过 参数装载开始...
-          this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
-          this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
-          this.allParams.treatmentHospitalId = this.hospitalMessage.id || "";
-          this.allParams.treatmentHospital = this.hospitalMessage.id ? this.hospitalMessage.name : "";
-          this.allParams.illnessHistoryId = this.diseaseMessage.id || "";
-          this.allParams.illnessHistory = this.diseaseMessage.id ? this.diseaseMessage.name : "";
-          this.allParams.takeMedicine = this.medicalMessage || "";
+        this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
+        this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
+        this.allParams.treatmentHospitalId = this.hospitalMessage.id || "";
+        this.allParams.treatmentHospital = this.hospitalMessage.id ? this.hospitalMessage.name : "";
+        this.allParams.illnessHistoryId = this.diseaseMessage.id || "";
+        this.allParams.illnessHistory = this.diseaseMessage.id ? this.diseaseMessage.name : "";
+        this.allParams.takeMedicine = this.medicalMessage || "";
 
-          //装载完成...
-          //数据提交开始...
-          this.paramsSubmit();
-        }
+        //装载完成...
+        //数据提交开始...
+        this.paramsSubmit();
       },
       paramsSubmit(){
         const that = this;
