@@ -379,7 +379,6 @@
       //免费问诊
       goConsult(index,type){
         let that = this;
-        alert("11111");
         that.$emit('update:payPopupShow', true);
 
         store.commit("setTargetMsg", {customerId:that.doctorObj.allData[index].customerId});
