@@ -92,7 +92,7 @@
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
-        <button class="main-input-box-send" @click="sendMessage">发送</button>
+        <p class="main-input-box-send" @click="sendMessage">发送</p>
       </footer>
     </transition>
     <!--支付弹层-->
@@ -152,7 +152,7 @@
           progress: 0,
           index: 0
         },
-        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
+//        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
         consultationId: "",
         timeStampShowList: [],//时间戳数组
@@ -369,7 +369,7 @@
       hasMiddleTips () {
         let that = this;
         let msg = that.msgList[that.msgList.length-1];
-        if (msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5){
+        if ((msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5) || !that.consultTipsShow){
           return true;
         } else {
           that.sendConsultState(5);
