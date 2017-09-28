@@ -819,7 +819,7 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              that.$emit('update:payPopupShow', false);
+              that.payPopupShow = false;
               localStorage.setItem("sendTips", JSON.stringify(opt));
               window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
             }
@@ -862,6 +862,20 @@
           }
         });
       },
+      //IOS手机微信返回按钮不刷新
+      forceRefresh(){
+        var nua = navigator.userAgent;
+        if (nua.indexOf('iPhone') > -1) {//苹果手机
+          window.onload = function () {
+            setTimeout(() => {
+              window.addEventListener("popstate", function (e) {
+                // alert("我监听到了浏览器的返回按钮事件啦");
+                self.location = document.referrer;
+              });
+            }, 500)
+          }
+        }
+      }
     },
     computed: {
       lastTime (){
@@ -893,6 +907,7 @@
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
+//      that.forceRefresh();
 
 
 //      let p1 = new Promise(resolve => that.getUserBaseData());
