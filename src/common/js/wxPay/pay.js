@@ -59,7 +59,7 @@ export default function pay(Obj) {
       let _t = this;
       let _data = {
         "total_fee": Obj.total_fee * 100,     //订单总金额
-        "body": "唯医骨科-" + Obj.body,               //订单描述
+        "body": "唯医互联网骨科医院-" + Obj.body,               //订单描述
         "trade_type": "JSAPI",         //支付模式 JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付
         "scene": 1,                     //支付场景
         "siteId": 1,                    //站点

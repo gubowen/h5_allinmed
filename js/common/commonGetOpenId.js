@@ -25,10 +25,10 @@ common.checkOpenId = function () {
 //get openID
 common.wxGetOpenId = function (env) {
   /* env环境变量参数
-   * 1代表唯医骨科-正式线上环境
+   * 1代表唯医互联网骨科医院-正式线上环境
    * 2代表唯仁唯医社区-线下调试环境
    *
-   * 08.11 目前新商户平台未申请 参数是反过来的 唯医骨科为预上线调试环境
+   * 08.11 目前新商户平台未申请 参数是反过来的 唯医互联网骨科医院为预上线调试环境
    */
   var appId = "";
   var XHRUrl = "";
@@ -42,7 +42,7 @@ common.wxGetOpenId = function (env) {
     envCode=2;
   }
 
-  
+
   if (envCode == 1) {
     appId = "wxe8384f7b06c169ef";
     XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";

@@ -49,7 +49,7 @@ class Consult {
     //   orderSourceType:'',                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
     //   orderAmount:0.01,                  //	string	否	订单金额  （单位/元 保留两位小数）
     //   status:'1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-    //   body:'唯医骨科线下预约手术支付',   //   string  否  订单描述 （微信支付展示用）
+    //   body:'唯医互联网骨科医院线下预约手术支付',   //   string  否  订单描述 （微信支付展示用）
     //   isCharge:"true"                    //   string  是  true-收费  false-免费
     // };
     // WxPayCommon.wxCreateOrder({

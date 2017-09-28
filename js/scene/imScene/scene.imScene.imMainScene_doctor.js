@@ -1286,7 +1286,7 @@ $(function () {
         '<section class="main-message-box">' +
         '<article class="main-message-box-item others-message">' +
         '<figcaption class="first-message">' +
-        '<p>已通知医生尽快接诊，医生回复将在唯医骨科官方公众号中即时通知，请保持关注，超时未回复平台将自动全额退款。</p>' +
+        '<p>已通知医生尽快接诊，医生回复将在唯医互联网骨科医院官方公众号中即时通知，请保持关注，超时未回复平台将自动全额退款。</p>' +
         '</figcaption>' +
         '</article>' +
         '</section>';
