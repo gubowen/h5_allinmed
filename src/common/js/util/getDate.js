@@ -57,12 +57,12 @@ class GetDate {
     return dayArr;
   }
   //把数组转换为picker需要的数组
-  getPickerArr (arr){
-    let pickerArr = []
+  getPickerArr (arr,temp){
+    let pickerArr = [];
     if (arr){
       arr.map(function (item, index) {
         let objTemp = {
-          "text" : item,
+          "text" : item + temp,
           "value" : index,
         }
         pickerArr.push(objTemp);

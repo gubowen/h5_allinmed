@@ -71,37 +71,30 @@
               <article class="add-patient-content-item">
                 <figcaption>证件号码</figcaption>
                 <figure class="add-patient-input">
-                  <input type="text" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" :placeholder="credentialPlaceholder" v-validate="'required|mobile'" name="IDNumber" v-model="IDNumber">
+                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" v-validate="'required'" name="IDNumber" v-model="IDNumber">
                 </figure>
               </article>
               <article class="add-patient-content-item">
                 <figcaption>出生日期</figcaption>
                 <figure class="add-patient-input">
                   <span class="patient-relation" :class="{'on':birthClick}"
-                        @click="birthPicker.show()">{{birthData.title}}</span>
+                        @click="selectBirth">{{birthData.title}}</span>
                   <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
                 </figure>
               </article>
               <article class="add-patient-content-item">
                 <figcaption>患者性别</figcaption>
                 <figure class="add-patient-input" id="ev-patient-sex">
-                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="sexSelect=1">
+                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="selectSex(1)">
                     <i class="add-patient-selector"></i>
                     <span>男</span>
                   </section>
-                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="sexSelect=2">
+                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="selectSex(2)">
                     <i class="add-patient-selector"></i>
                     <span>女</span>
                   </section>
                 </figure>
               </article>
-              <!--<article class="add-patient-content-item">-->
-                <!--<figcaption>年龄</figcaption>-->
-                <!--<figure class="add-patient-input">-->
-                  <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
-                         <!--v-model="userage">-->
-                <!--</figure>-->
-              <!--</article>-->
               <article class="add-patient-content-item">
                 <figcaption>所在地</figcaption>
                 <figure class="add-patient-input">
@@ -115,6 +108,13 @@
                   <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone" v-model="phone">
                 </figure>
               </article>
+              <!--<article class="add-patient-content-item">-->
+              <!--<figcaption>年龄</figcaption>-->
+              <!--<figure class="add-patient-input">-->
+              <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
+              <!--v-model="userage">-->
+              <!--</figure>-->
+              <!--</article>-->
             </section>
           </section>
           <!--联系我们消息-->
@@ -173,6 +173,7 @@
    * Created by Qiangkailiang/Lichenyang on 17/7/10.
    */
   import api from 'common/js/util/util';
+  import validatePlugins from 'common/js/util/validate_plugins';
   import getDate from 'common/js/util/getDate';
   import loading from 'components/loading';
   import area from 'components/selectArea';
@@ -187,7 +188,8 @@
     getPhone: "/mcall/patient/customer/unite/v1/getById/",//患者列表
     createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
     saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
-    caseList: "/mcall/customer/patient/case/v1/getCaseMapList/"//获取患者病例单
+    caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
+    IDCheckLink:"/mcall/customer/patient/baseinfo/v1/getMapList/\n",//校验证件号码重复信息
   };
 
 
@@ -212,23 +214,24 @@
           result:"选择患者所在地"
         },//选择城市参数
         cityLevel:2,//城市选择级别
-        sexSelect: 1,//性别选择控制
+        sexSelect: -1,//性别选择控制
         relationPicker: null,//与患者关系的仿ios选择器
         relationClick:false,//患者关系是否点击,
         relationShip: {
           title: "本人",
           id: "0"
         },//仿ios选择器确定出的与患者关系
-        relationInput:"",//用来验证与患者关系是否填写
+        relationInput:"本人",//用来验证与患者关系是否填写
         credentialTitle:"患者证件",//证件类型需要显示的话术
         credentialPlaceholder:'请填写患者证件号码',//证件输入框提示的话术
         credentialPicker: null,//证件类型的仿ios选择器
         credentialClick:false,//证件是否点击,
         credentialType: {
           title: "身份证",
-          id: "0"
+          id: "1"
         },//仿ios选择器确定出的证件类型
-        credentialInput:"",//用来验证证件类型是否填写
+        IDCheckFlag:false,//校验证件号码信息是否通过
+        credentialInput:"身份证",//用来验证证件类型是否填写
         birthClick:true,//出生日期是否点击,
         birthPicker:null,//出生日期的仿ios选择器
         birthData: {
@@ -239,13 +242,14 @@
         IDNumber:"",//证件号码
         count:0,//曾经是否来过
         username: "",//添加患者名字
-        userage: "",//患者年龄
+//        userage: "",//患者年龄
         phone: "",//手机号
         errorMsg: "fuck",//提示错误的字段
         errorShow: false,//是否提示错误
         areaClick:true,//选择城市是否点击过
         listType:"city", //类型为城市
         bindPhone:"",//用户绑定的手机号
+        formCheck:false,//表单是否全部验证通过
       }
     },
     activated(){
@@ -294,6 +298,14 @@
             areaInput: {
               required: '请选择患者所在地',
             },
+            //证件号码的验证规则
+            IDNumber: {
+              required: '请输入证件号码',
+            },
+            //出生日期的验证
+            birthInput:{
+              required: '请选择患者出生日期',
+            }
           }
         }
       });
@@ -354,6 +366,32 @@
             console.log(param);
           }
         })
+      },
+      //选择出生日期
+      selectBirth () {
+        let that = this;
+        if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
+          that.errorMsg = "出生日期以身份证信息为准,无需编辑";
+          that.errorShow = true;
+          setTimeout(() => {
+            that.errorShow = false;
+          }, 2000)
+        } else {
+          that.birthPicker.show();
+        }
+      },
+      //选择性别时的函数
+      selectSex (index){
+        let that = this;
+        if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
+          that.errorMsg = "性别以身份证信息为准,无需编辑";
+          that.errorShow = true;
+          setTimeout(() => {
+            that.errorShow = false;
+          }, 2000)
+        } else {
+          that.sexSelect = index;
+        }
       },
       //选择城市
       selectArea(){
@@ -436,26 +474,59 @@
           }
         })
       },
+      //点击下一步验证
       validate() {
         this.$validator.validateAll().then(result => {
           console.log(result);
           if (result) {
-            this.messageSubmit();
+//            this.messageSubmit();
             this.errorShow = false;
+            this.validateOther();//验证其他特殊的字段
           } else {
             console.log(this.$validator.errors);
+            this.formCheck = false;
             this.errorMsg = this.$validator.errors.items[0].msg;
             this.errorShow = true;
             setTimeout(() => {
               this.errorShow = false;
-            }, 2000)
+            }, 2000);
+            return;
           }
         });
       },
+      //验证其他特殊的字段
+      validateOther (){
+        let that = this;
+        if(!that.IDCheckFlag){
+          that.errorMsg = "患者证件号码已存在";
+          that.errorShow = true;
+          that.formCheck = false;
+          setTimeout(() => {
+            that.errorShow = false;
+          }, 2000);
+          return;
+        }
+        if (that.sexSelect === -1 ) {
+          that.errorMsg = "患者证件号码已存在";
+          that.errorShow = true;
+          that.formCheck = false;
+          setTimeout(() => {
+            that.errorShow = false;
+          }, 2000);
+          return;
+        }
+        that.formCheck = true;
+        if (that.formCheck) {
+          //验证完成，提交
+          that.messageSubmit();
+        }
+      },
+      //失焦事件
       validateBlur (name) {
         this.$validator.validateAll();
 //        console.log(this.errors.first(name));
-        console.log(this.errors.all());
+//        console.log(this.errors.all());
+        console.log(this.errors)
         if (this.errors.has(name)) {
 //          switch (name){
 //            case "username":
@@ -478,15 +549,92 @@
           }, 2000)
         }
       },
+      //证件号码失焦
+      IDBlur () {
+        let flag = true;
+        this.$validator.validateAll();
+        console.log(this.errors)
+        if (this.errors.has("IDNumber")) {
+          this.errorMsg = this.errors.first("IDNumber");
+          this.errorShow = true;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000);
+          return;
+        }
+        if (this.credentialType.id === "1") {
+          if (!validatePlugins.identityCard(this.IDNumber)) {
+            flag = false;
+            this.errorMsg = "请输入有效证件号码";
+            this.errorShow = true;
+            setTimeout(() => {
+              this.errorShow = false;
+            }, 2000);
+          }
+        }
+        if (flag && this.relationShip.id !== "4") {
+          this.IDCheck();
+        }
+      },
+      //校验证件号码重复信息
+      IDCheck () {
+        let that = this;
+        api.ajax({
+          url: XHRList.IDCheckLink,
+          method: "POST",
+          data: {
+            certificateId:that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
+            certificateCode:that.IDNumber,//	string	是	证件号码
+            firstResult:"0",	//string	是	分页参数
+            maxResult:"999",	//string	是	分页参数
+          },
+          beforeSend(config) {
+            that.finish = true;
+          },
+          done(data) {
+            that.finish = false;
+            if (data.responseObject.responseStatus && data.responseObject.responseMessage === "NO DATA") {
+              that.IDCheckFlag = true;
+              if (that.credentialType.id === "1") {
+                that.computeInfo();
+              }
+            } else {
+              that.IDCheckFlag = false;
+              that.errorMsg = "患者证件号码已存在";
+              that.errorShow = true;
+              setTimeout(() => {
+                that.errorShow = false;
+              }, 2000);
+            }
+          }
+        })
+      },
+      //计算用户信息
+      computeInfo () {
+        this.birthClick = false;
+        this.birthData.title=this.IDNumber.substring(6, 10) + "-" + this.IDNumber.substring(10, 12) + "-" + this.IDNumber.substring(12, 14);
+        this.birthInput =this.birthData.title;
+        //获取性别
+        if (parseInt(this.IDNumber.substr(16, 1)) % 2 == 1) {
+          this.sexSelect = 1;
+          //是男则执行代码 ...
+        } else {
+          this.sexSelect = 2;
+          //是女则执行代码 ...
+        }
+      },
       messageSubmit() {
         const that = this;
+        let dData = new Date();
+        dData.getFullYear();
+        let userage = parseInt(dData.getFullYear()) - that.birthData.id;
         api.ajax({
           url: XHRList.addPatient,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
-            patientName: this.username,
-            patientAge: this.userage,
+            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,//用户id
+            patientName: this.username,//患者姓名
+//            patientAge: this.userage,
             patientSex: this.sexSelect,
             patientRelationId: this.relationShip.id,
             mobile: this.phone,
@@ -495,7 +643,10 @@
             cityId: this.areaParam.cityId,
             city: this.areaParam.city,
             districtId: this.areaParam.districtId,
-            district: this.areaParam.district
+            district: this.areaParam.district,
+            patientBirthday:this.birthData.title,//患者出生日期
+            certificateId:this.credentialType.id,//证件类型
+            certificateCode:this.IDNumber,//证件号码
           },
           beforeSend(config) {
             that.finish = true;
@@ -515,7 +666,7 @@
                 patientSex:that.sexSelect,
               });
               //去咨询成功后，需要清除表单数据
-              that.userage = "";
+//              that.userage = "";
               that.username = "";
               that.phone = "";
               that.areaParam.result = "选择患者所在地";
@@ -569,6 +720,9 @@
           } else {
             this.credentialTitle="患者证件";//证件类型需要显示的话术
             this.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
+            if (this.IDNumber) {
+              this.IDCheck();
+            }
           }
           this.relationClick = false;
           this.relationInput = hospitalData[selectedVal[0]].text;
@@ -578,16 +732,10 @@
       credentialPickerInit () {
         let credentialData = [{
           text: "身份证",
-          value: "0"
-        }, {
-          text: "护照",
           value: "1"
         }, {
-          text: "港澳通行证",
-          value: "2"
-        }, {
           text: "军官证",
-          value: "3"
+          value: "2"
         }];
         this.credentialPicker = new Picker({
           data: [credentialData],//初始化的数据
@@ -608,11 +756,11 @@
           monthArr = getDate.getMonth(),
           dayArr = getDate.getDay();
         //年月份数据
-        let yearData = getDate.getPickerArr(yearArr),
-          monthData = getDate.getPickerArr(monthArr),
-          dayData = getDate.getPickerArr(dayArr);
+        let yearData = getDate.getPickerArr(yearArr,"年"),
+          monthData = getDate.getPickerArr(monthArr,"月"),
+          dayData = getDate.getPickerArr(dayArr,"日");
         //年月份的索引值
-        let yearChange = yearData.find((n)=>n.text === "1980").value,
+        let yearChange = yearData.find((n)=>n.text === "1980年").value,
           monthChange = 0,
           dayChange = 0;
         this.birthPicker = new Picker({
@@ -627,10 +775,11 @@
           console.log(monthData[returnArr[1]]);
           console.log(dayData[returnArr[2]]);
           let birthTitle = yearArr[returnArr[0]] + '-' +monthArr[returnArr[1]]  +'-'+ dayArr[returnArr[2]];
+          that.birthInput = birthTitle;
           that.birthData={
             title:birthTitle,
-            id:birthTitle,
-          }
+            id:yearArr[returnArr[0]],
+          };
           that.birthClick =false;
         });
         this.birthPicker.on('picker.change', (index, selectedIndex) => {
@@ -654,7 +803,7 @@
           if (index === 0 || index === 1){
             dayArr = getDate.getDay(yearPicker,monthPicker);
 //            debugger;
-            dayData = getDate.getPickerArr(dayArr);
+            dayData = getDate.getPickerArr(dayArr,"日");
             this.birthPicker.refillColumn(2,dayData);
           }
           let dataTemp = new Date();
@@ -700,7 +849,7 @@
         this.createNewPatient=false;
         this.headerShow=2;
         this.username="";//添加患者名字
-        this.userage="";//患者年龄
+//        this.userage="";//患者年龄
         this.phone = this.bindPhone;
         this. relationShip={
           title: "选择您与患者关系",

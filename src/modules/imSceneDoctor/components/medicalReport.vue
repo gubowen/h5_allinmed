@@ -9,9 +9,13 @@
               <figure class="message-result-item-img">
                 <img src="../../../../image/img00/patientConsult/dialogue_case@2x.png" alt="">
               </figure>
-              <figcaption><h2>{{medicalReportMessage.data.patientName}}问诊单</h2>
-                <p><span class="sex">性别:{{medicalReportMessage.data.sexName}}</span><span
-                  class="age">年龄:{{medicalReportMessage.data.age}}</span></p></figcaption>
+              <figcaption>
+                <h2>{{medicalReportMessage.data.patientName}}问诊单</h2>
+                <p>
+                  <span class="sex">性别:{{medicalReportMessage.data.sexName}}</span>
+                  <span class="age">年龄:{{medicalReportMessage.data.age}}</span>
+                </p>
+              </figcaption>
             </section>
           </article>
         </figcaption>
@@ -20,10 +24,11 @@
         </figure>
       </article>
     </section>
+
     <section class="main-message-box">
       <article class="main-message-box-item others-message">
         <figcaption class="first-message">
-          <p>医生会尽快接诊，回复信息将在本公众号中即时通知，请保持关注</p>
+          <p>已通知医生尽快接诊，医生回复将在公众号中即时通知，请保持关注</p>
         </figcaption>
       </article>
     </section>

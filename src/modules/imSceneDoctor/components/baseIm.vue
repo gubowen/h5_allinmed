@@ -69,7 +69,6 @@
               <p>您已重新购买问诊，可继续向医生提问</p>
             </figcaption>
           </section>
-
           <!--住院通知-->
           <HospitalNotice
             v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
@@ -141,7 +140,8 @@
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
-        <button class="main-input-box-send" @click="sendMessage">发送</button>
+        <p class="main-input-box-send" @click="sendMessage">发送</p>
+
       </footer>
     </transition>
     <!--支付弹层-->
@@ -158,6 +158,12 @@
    * @Depend：
    *
    * Created by qiangkailiang on 2017/8/16.
+   */
+
+  /*
+   * 老患者报道流程进入 from参数为report
+   * 此时被拒绝不能回去找分诊医生
+   * 底部不可点击，新状态至组件bottomTips规定为组件状态4，于状态3中区分
    */
   import api from 'common/js/util/util';
   import autosize from 'autosize';
@@ -391,7 +397,10 @@
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 1) {
-            flag = true;
+            if (this.msgList.indexOf(msg)!==0){
+              flag = true;
+            }
+
           }
         }
         return flag;
@@ -633,7 +642,7 @@
               if (status < 0) {
                 that.receiveTreatmentStatus = false;
                 if (receiveTime <= 0) {
-                  that.showBottomTips(-1);
+//                  that.showBottomTips(-1);
                 } else {
                   that.receiveTime = receiveTime;
                   that.remainTimeOut();
@@ -972,7 +981,9 @@
           }),
           done (error, msg) {
             if (!error) {
-              that.sendMessageSuccess(error, msg)
+                if (that.msgList.length!==0){
+                  that.sendMessageSuccess(error, msg)
+                }
             }
           }
         });

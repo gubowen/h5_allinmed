@@ -47,13 +47,25 @@
       </section>
       <!--立即问诊-->
       <section class="physician-immediately" v-show="isDoctorID">
-        <section class="doc-commonTitle">
-          <p class="doc-titleLeft">网上问诊服务</p>
+        <section class="doc-commonTitle hasBtnForLink">
+          <p class="doc-titleLeft">您是我的新患者</p>
+          <p class="doc-titleRight-bigLabel"></p>
+        </section>
+        <section class="immediately-contentBox">
+          <p class="immediately-title">我可以帮您</p>
+          <span class="immediately-item">1.在线问诊</span><span class="immediately-item">2.预约门诊</span>
         </section>
       </section>
       <!--诊后报道-->
       <section class="cureAfterReport" v-show="isDoctorID">
-
+        <section class="doc-commonTitle hasBtnForLink">
+          <p class="doc-titleLeft">您是我的门诊/住院患者</p>
+          <p class="doc-titleRight-bigLabel copyOne"></p>
+        </section>
+        <section class="immediately-contentBox">
+          <p class="immediately-title">我可以帮您</p>
+          <span class="immediately-item">1.在线问诊</span><span class="immediately-item">2.预约门诊</span><span class="immediately-item">3.在线复查评估</span>
+        </section>
       </section>
       <!--专科信息-->
       <section class="college-infoBox doc-commonSty" v-show="areasExpertise.length>0||illnessMapList.length>0||operationMapList.length>0||precedingYearOperationNum.length>0||yesteryearOperationNum.length>0">
@@ -96,9 +108,9 @@
       </section>
       <!--个人简介-->
       <section class="individual-infoBox doc-commonSty" v-show="isPersonalIndividualShow">
-        <section class="doc-commonTitle">
+        <section class="doc-commonTitle forPersonal">
           <p class="doc-titleLeft">个人简介</p>
-          <p class="doc-titleRight" @click="individualInfoDetail">查看全部</p>
+          <p class="doc-titleRight-personInfo" @click="individualInfoDetail"></p>
         </section>
         <section class="individual-textBox" v-show="summary.length>0">
           <p>{{summary}}</p>
@@ -166,7 +178,7 @@
           imgUrl:'',
           RuleIcon: true,
           ruleShow:false,
-          isDoctorID:false,
+          isDoctorID:true,
           confirmContentText:'',
           errorMsg: '',
           errorShow: false,
@@ -880,15 +892,13 @@
               position: absolute;
               content: '';
               display: inline-block;
-              width: rem(4px);
-              height: rem(18px);
-              background-color: #2FC5BD;
+              width: rem(6px);
+              height: rem(22px);
+              background: url("../../../common/image/img00/doctorHome/Line Copy 4@2x.png") no-repeat center;
+              background-size: rem(5px) rem(20px);
               top:50%;
-              margin-top: rem(-9px);
+              margin-top: rem(-10px);
               left: rem(-12px);
-              -webkit-border-radius: rem(100px);
-              -moz-border-radius: rem(100px);
-              border-radius: rem(100px);
             }
           }
           .doc-titleLeft,.doc-titleRight{
@@ -904,15 +914,13 @@
               position: absolute;
               content: '';
               display: inline-block;
-              width: rem(4px);
-              height: rem(18px);
-              background-color: #2FC5BD;
+              width: rem(6px);
+              height: rem(22px);
+              background: url("../../../common/image/img00/doctorHome/Line Copy 4@2x.png") no-repeat center;
+              background-size: rem(5px) rem(20px);
               top:50%;
-              margin-top: rem(-9px);
+              margin-top: rem(-10px);
               left: rem(-12px);
-              -webkit-border-radius: rem(100px);
-              -moz-border-radius: rem(100px);
-              border-radius: rem(100px);
             }
             //专科
             &.doc-majorItem{
@@ -937,8 +945,43 @@
               background: url("../../../common/image/img00/doctorHome/ more@2x.png") no-repeat center;
               background-size: 100% 100%;
               top:50%;
-              margin-top: rem(-14px);
+              margin-top: rem(-10px);
               right: rem(-28px);
+            }
+          }
+          //医生名片问诊
+          &.hasBtnForLink{
+            position: relative;
+            .doc-titleLeft{
+              width: 100%;
+            }
+            .doc-titleRight-bigLabel{
+              position: absolute;
+              width: rem(224px);
+              height: rem(92px);
+              background: url("../../../common/image/img00/doctorHome/Group 2@2x.png") no-repeat center;
+              background-size: 100% 100%;
+              right: rem(10px);
+              top:62%;
+              margin-top: rem(-46px);
+              &.copyOne{
+                background: url("../../../common/image/img00/doctorHome/Group 31@2x.png") no-repeat center;
+                background-size: 100% 100%;
+              }
+            }
+          }
+          //个人简介图标
+          &.forPersonal{
+            position: relative;
+            .doc-titleRight-personInfo{
+              position: absolute;
+              width: rem(172px);
+              height: rem(36px);
+              background: url("../../../common/image/img00/doctorHome/Group 5@2x.png") no-repeat center;
+              background-size: 100% 100%;
+              right: rem(34px);
+              top:62%;
+              margin-top: rem(-18px);
             }
           }
         }
@@ -1083,9 +1126,25 @@
           }
         }
         //立即问诊
-        .physician-immediately{
+        .physician-immediately,.cureAfterReport{
           background-color: #ffffff;
-
+          .immediately-contentBox{
+            padding:rem(28px) rem(32px) rem(56px) rem(36px);
+            @include font-dpr(16px);
+            color: #444444;
+            .immediately-title{
+              margin-bottom: rem(6px);
+            }
+            .immediately-item{
+              margin-right: rem(20px);
+            }
+          }
+        }
+        .cureAfterReport{
+          margin-top: rem(10px);
+          -webkit-border-radius: rem(16px);
+          -moz-border-radius: rem(16px);
+          border-radius: rem(16px);
         }
         //专科信息
         .college-infoBox{
@@ -1103,15 +1162,16 @@
                   display: inline-block;
                   content: '';
                   position: absolute;
-                  width: rem(8px);
-                  height: rem(8px);
+                  width: rem(15px);
+                  height: rem(15px);
                   top:50%;
                   margin-top: rem(-4px);
                   left:rem(32px);
-                  background-color: #2FC5BD;
-                  -webkit-border-radius: 50%;
-                  -moz-border-radius: 50%;
-                  border-radius: 50%;
+                  background: url("../../../common/image/img00/doctorHome/Oval 8 Copy 14@2x.png") no-repeat center;
+                  background-size: rem(8px) rem(8px);
+                  /*-webkit-border-radius: 100px;*/
+                  /*-moz-border-radius: 100px;*/
+                  /*border-radius: 100px;*/
                 }
               }
               .collegeItem-right{
