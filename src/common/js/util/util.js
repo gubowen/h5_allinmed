@@ -24,7 +24,6 @@ class Api {
 
   getPara(symbol) {
     let url = window.location.origin + window.location.pathname + window.location.search;
-
     let param = {};
     let str, item;
     if (url.lastIndexOf(symbol ? symbol : "?") > 0) {
