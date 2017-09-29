@@ -419,7 +419,7 @@
       receivedReportTips(msg){
         let flag = false;
         if (msg.type === 'custom') {
-          if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == -2) {
+          if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 6) {
             if (this.msgList.indexOf(msg) !== 0) {
               flag = true;
             }
@@ -641,7 +641,7 @@
           content: JSON.stringify({
             type: "notification",
             data: {
-              actionType: "-2",
+              actionType: "6",
               contentDesc: "患者向您报道",
               subContentDesc: "[患者向您报道]"
             }
