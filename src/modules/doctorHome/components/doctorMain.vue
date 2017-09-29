@@ -731,7 +731,7 @@
         //新患者立即问诊
         newCurePatient(){
           let _patientCustomerId=api.getPara().patientCustomerId;
-          window.location.href=`/dist/consult.html?customerId=${_patientCustomerId}`;
+          window.location.href=`/dist/consult.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
         },
         //诊后报道
         newCurePatient(){
