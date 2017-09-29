@@ -17,70 +17,70 @@
       </figcaption>
     </article>
   </section>-->
-<div>
-  <section class="outpatient-nvite-box">
-    <header class="outpatient-header">
-      <h2>
-        <span>门诊邀约单</span>
-      </h2>
-    </header>
-    <section class="outpatient-content">
-      <article class="outpatient-item-time">
-        <p>
-          <span>有效期</span>
-          <span>一次加号机会</span>
-        </p>
-        <h3 class="time-area">喵-喵</h3>
-      </article>
-      <article class="outpatient-patient-msg">
-        <article class="outpatient-patient-item">
-          <h4 class="outpatient-patient-item-title">患者</h4>
-          <p class="outpatient-patient-item-msg">
-            <span>屎来乐</span>
-            <span>男</span>
-            <span>25岁</span>
+  <div>
+    <section class="outpatient-nvite-box">
+      <header class="outpatient-header">
+        <h2>
+          <span>门诊邀约单</span>
+        </h2>
+      </header>
+      <section class="outpatient-content">
+        <article class="outpatient-item-time">
+          <p>
+            <span>有效期</span>
+            <span>一次加号机会</span>
           </p>
+          <h3 class="time-area">{{oiMessage.validPeriod}}</h3>
         </article>
-        <article class="outpatient-patient-item">
-          <h4 class="outpatient-patient-item-title">证件号码</h4>
-          <p class="outpatient-patient-item-msg">
-            <span>**************8666</span>
-          </p>
+        <article class="outpatient-patient-msg">
+          <article class="outpatient-patient-item">
+            <h4 class="outpatient-patient-item-title">患者</h4>
+            <p class="outpatient-patient-item-msg">
+              <span>{{oiMessage.patientName}}</span>
+              <span>{{oiMessage.patientSex==1?'男':'女'}}</span>
+              <span>{{oiMessage.patientAge}}岁</span>
+            </p>
+          </article>
+          <article class="outpatient-patient-item">
+            <h4 class="outpatient-patient-item-title">证件号码</h4>
+            <p class="outpatient-patient-item-msg">
+              <span>{{oiMessage.patientDocumentNumber}}</span>
+            </p>
+          </article>
         </article>
-      </article>
-      <article class="outpatient-patient-msg">
-        <article class="outpatient-patient-item">
-          <h4 class="outpatient-patient-item-title">医生</h4>
-          <p class="outpatient-patient-item-msg">
-            <span>强三皮</span>
-            <span>副主任医师</span>
-          </p>
+        <article class="outpatient-patient-msg">
+          <article class="outpatient-patient-item">
+            <h4 class="outpatient-patient-item-title">医生</h4>
+            <p class="outpatient-patient-item-msg">
+              <span>{{oiMessage.doctorName}}</span>
+              <span>{{oiMessage.doctorPosition}}</span>
+            </p>
+          </article>
+          <article class="outpatient-patient-item">
+            <h4 class="outpatient-patient-item-title">医院</h4>
+            <p class="outpatient-patient-item-msg">
+              <span>{{oiMessage.doctorHospital}}</span>
+            </p>
+          </article>
         </article>
-        <article class="outpatient-patient-item">
-          <h4 class="outpatient-patient-item-title">医院</h4>
-          <p class="outpatient-patient-item-msg">
-            <span>中国人民解放军总医院</span>
-          </p>
-        </article>
-      </article>
 
-      <article class="outpatient-base-explanation part-one">
-        <p>请以该医生在医院官网的出诊时间为准，停诊信息以医院当天公布为准</p>
-      </article>
-      <article class="outpatient-base-explanation part-two">
-        <p>有效期内患者到医生室出示邀约单，领取加号条后，到医院挂号处缴费。挂号费以医院实际为准</p>
-      </article>
-      <article class="outpatient-base-explanation part-three">
-        <p>请以上方有效期为准，逾期就诊，医生有权拒绝加号</p>
-      </article>
+        <article class="outpatient-base-explanation part-one">
+          <p>请以该医生在医院官网的出诊时间为准，停诊信息以医院当天公布为准</p>
+        </article>
+        <article class="outpatient-base-explanation part-two">
+          <p>有效期内患者到医生室出示邀约单，领取加号条后，到医院挂号处缴费。挂号费以医院实际为准</p>
+        </article>
+        <article class="outpatient-base-explanation part-three">
+          <p>请以上方有效期为准，逾期就诊，医生有权拒绝加号</p>
+        </article>
+      </section>
     </section>
-  </section>
-  <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
-    <figcaption class="first-message">
-      <p>此条消息不消耗医生回复次数</p>
-    </figcaption>
-  </section>
-</div>
+    <section class="main-message-box grey-tips">
+      <figcaption class="first-message">
+        <p>此条消息不消耗医生回复次数</p>
+      </figcaption>
+    </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -93,6 +93,20 @@
    */
   import api from "common/js/util/util";
   export default{
+    data(){
+      return {
+        oiMessage: {}
+      }
+    },
+    mounted(){
+        this.oiMessage=this.outPatientMessage.data;
+      console.log(this.outPatientMessage);
+    },
+    props: {
+      outPatientMessage: {
+        type: Object
+      }
+    },
     methods: {
       goToDocMain(){
         window.location.href = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
@@ -220,10 +234,10 @@
       text-align: center;
       flex-shrink: 0;
       @include square(rem(40px));
-      line-height:rem(40px);
+      line-height: rem(40px);
       border-radius: 50%;
       background-image: linear-gradient(-90deg, #97B6F7 0%, #7B95DC 98%);
-      margin-right:rem(24px);
+      margin-right: rem(24px);
       color: #FFFFFF;
     }
     &.part-one {
