@@ -1,76 +1,5 @@
  <template>
   <section>
-    <!--检查检验-->
-    <section class="main-message-box" v-if="checkSuggestObj.allData.length">
-      <article class="check-suggest-box">
-        <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
-        <section class="check-suggest-bg"></section>
-        <section class="check-suggest-content">
-          <ul class="check-suggest-list">
-            <li class="check-suggest-item"
-                :data-adviceid="item.adviceId"
-                :data-advicetype="item.adviceType"
-                v-for="item in checkSuggestObj.tempData"
-            >
-              <span>{{item.adviceName}}</span>
-            </li>
-          </ul>
-          <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
-          </section>
-          <section class="check-suggest-btn" data-role="videoTriage"
-                   @click="goToUpload">
-            上传检查资料
-          </section>
-        </section>
-      </article>
-    </section>
-
-    <!--处置建议-->
-    <section class="main-message-box" v-if="treatmentObj.allData.length">
-      <article class="check-suggest-box">
-        <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
-        <section class="check-suggest-bg"></section>
-        <section class="check-suggest-content">
-          <ul class="check-suggest-list">
-            <li class="check-suggest-item"
-                v-for="item in treatmentObj.tempData"
-            >
-              <span>{{item.treatmentName}}</span>
-            </li>
-          </ul>
-          <section class="more-box" v-if="treatmentObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
-          </section>
-        </section>
-      </article>
-    </section>
-
-    <!--患教知识-->
-    <section class="main-message-box" v-if="knowledgeObj.allData.length">
-      <article class="knowledge-box">
-        <header class="knowledge-title">以下骨科知识有助于您早日康复，点击查看详情</header>
-        <section class="knowledge-bg"></section>
-        <section class="knowledge-content">
-          <ul class="knowledge-list">
-            <li class="knowledge-item"
-                v-for="(item , index) in knowledgeObj.tempData"
-                @click="goKnowledgeDetail(index)"
-            >
-              <span class="knowledge-name">{{item.knowledgeName}}</span>
-              <span class="knowledge-detail">详情</span>
-            </li>
-          </ul>
-          <section class="more-box" v-if="knowledgeObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click.stop="moreDataShow('knowledgeObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj')">收起</span>
-          </section>
-        </section>
-      </article>
-    </section>
-
     <!--推荐医生-->
     <section class="main-message-box" v-if="doctorObj.allData.length">
       <article class="doctor-box">
@@ -117,6 +46,78 @@
         </section>
       </article>
     </section>
+
+    <!--患教知识-->
+    <section class="main-message-box" v-if="knowledgeObj.allData.length">
+      <article class="knowledge-box">
+        <header class="knowledge-title">以下骨科知识有助于您早日康复，点击查看详情</header>
+        <section class="knowledge-bg"></section>
+        <section class="knowledge-content">
+          <ul class="knowledge-list">
+            <li class="knowledge-item"
+                v-for="(item , index) in knowledgeObj.tempData"
+                @click="goKnowledgeDetail(index)"
+            >
+              <span class="knowledge-name">{{item.knowledgeName}}</span>
+              <span class="knowledge-detail">详情</span>
+            </li>
+          </ul>
+          <section class="more-box" v-if="knowledgeObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click.stop="moreDataShow('knowledgeObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj')">收起</span>
+          </section>
+        </section>
+      </article>
+    </section>
+
+    <!--处置建议-->
+    <section class="main-message-box" v-if="treatmentObj.allData.length">
+      <article class="check-suggest-box">
+        <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
+        <section class="check-suggest-bg"></section>
+        <section class="check-suggest-content">
+          <ul class="check-suggest-list">
+            <li class="check-suggest-item"
+                v-for="item in treatmentObj.tempData"
+            >
+              <span>{{item.treatmentName}}</span>
+            </li>
+          </ul>
+          <section class="more-box" v-if="treatmentObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
+          </section>
+        </section>
+      </article>
+    </section>
+
+    <!--检查检验-->
+    <section class="main-message-box" v-if="checkSuggestObj.allData.length">
+      <article class="check-suggest-box">
+        <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
+        <section class="check-suggest-bg"></section>
+        <section class="check-suggest-content">
+          <ul class="check-suggest-list">
+            <li class="check-suggest-item"
+                :data-adviceid="item.adviceId"
+                :data-advicetype="item.adviceType"
+                v-for="item in checkSuggestObj.tempData"
+            >
+              <span>{{item.adviceName}}</span>
+            </li>
+          </ul>
+          <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
+          </section>
+          <section class="check-suggest-btn" data-role="videoTriage"
+                   @click="goToUpload">
+            上传检查资料
+          </section>
+        </section>
+      </article>
+    </section>
+
   </section>
 </template>
 <script type="text/ecmascript-6">
