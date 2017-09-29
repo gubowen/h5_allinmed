@@ -894,10 +894,10 @@
           url: XHRList.caseReport,
           method: "POST",
           data: {
-//            customerId: api.getPara().doctorId,
-//            patientId: _this.patientId,
-            customerId: '1493879076659',
-            patientId:'1502693412278',
+            customerId: api.getPara().doctorId,
+            patientId: _this.patientId,
+//          customerId: '1493879076659',
+//          patientId:'1502693412278',
             isValid: 1,
             caseType: 10,
             caseCategory: 3,
@@ -931,7 +931,7 @@
                       _this.IMEnsureShow = true;
                     } else {
                       //_this.NOIMEnsureShow = true;
-                      that.createNewPatient = true;
+                      _this.createNewPatient = true;
                     }
                   },
                   fail(err){
