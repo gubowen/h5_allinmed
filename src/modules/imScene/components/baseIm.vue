@@ -135,7 +135,7 @@
     getToken: "/mcall/im/interact/v1/refreshToken/",
     getMedicalList: "/mcall/customer/patient/case/v1/getMapById/",
     updateMedicalList: "/mcall/customer/patient/case/v1/update/",
-    triageAssign: "/mcall/customer/case/consultation/v1/create/",
+    triageAssign: "/mcall/customer/case/consultation/v1/create/",//创建分流
     getTriageId: "/mcall/customer/case/consultation/v1/getMapById/",
     time: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",
     refresh: "/mcall/customer/case/consultation/v1/update/",
@@ -906,7 +906,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-//        api.wxGetOpenId(1);
+        api.wxGetOpenId(1);
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
