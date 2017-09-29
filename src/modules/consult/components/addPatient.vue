@@ -371,11 +371,13 @@
       selectBirth () {
         let that = this;
         if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
-          that.errorMsg = "出生日期以身份证信息为准,无需编辑";
-          that.errorShow = true;
-          setTimeout(() => {
-            that.errorShow = false;
-          }, 2000)
+          if (that.errorShow === false){
+            that.errorMsg = "出生日期以身份证信息为准,无需编辑";
+            that.errorShow = true;
+            setTimeout(() => {
+              that.errorShow = false;
+            }, 2000)
+          }
         } else {
           that.birthPicker.show();
         }
@@ -384,11 +386,13 @@
       selectSex (index){
         let that = this;
         if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
-          that.errorMsg = "性别以身份证信息为准,无需编辑";
-          that.errorShow = true;
-          setTimeout(() => {
-            that.errorShow = false;
-          }, 2000)
+          if (that.errorShow === false){
+            that.errorMsg = "性别以身份证信息为准,无需编辑";
+            that.errorShow = true;
+            setTimeout(() => {
+              that.errorShow = false;
+            }, 2000)
+          }
         } else {
           that.sexSelect = index;
         }

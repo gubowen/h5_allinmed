@@ -369,10 +369,13 @@
       hasMiddleTips () {
         let that = this;
         let msg = that.msgList[that.msgList.length-1];
-        if ((msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5) || !that.consultTipsShow){
-          return true;
-        } else {
-          that.sendConsultState(5);
+//        debugger;
+        if (msg) {
+          if ((msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5) || !that.consultTipsShow){
+            return true;
+          } else {
+            that.sendConsultState(5);
+          }
         }
       },
       //循环消息列表，处理需求
@@ -903,7 +906,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
+//        api.wxGetOpenId(1);
       }
       that.getUserBaseData();
       that.triageDoctorAssign();
