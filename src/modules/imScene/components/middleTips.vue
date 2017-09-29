@@ -30,7 +30,7 @@
           this.tipsContent = "您已重新购买分诊医生的问诊，可重新提问";
           break;
         case 5:
-          this.tipsContent = "医生回复仅作为建议，如需要请联系医生预约门诊";
+          this.tipsContent = "分诊医生的职责是为您完善就诊病历信息，诊疗意见请在分诊后与主诊专家详细沟通。";
           break;
       }
     },

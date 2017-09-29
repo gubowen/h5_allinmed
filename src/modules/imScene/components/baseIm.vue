@@ -76,7 +76,7 @@
         <!--继续问诊去购买时间-->
         <section class="main-message-box grey-tips" v-if="consultTipsShow"  :key="0">
           <figcaption class="first-message" @click="getConsultPrice()">
-            <p>分诊医生本次问诊已结束，如需继续帮助，请选择</p>
+            <p>分诊服务已结束，如需帮助，请选择</p>
             <p class="go-consult"><span>继续问诊</span></p>
           </figcaption>
         </section>
