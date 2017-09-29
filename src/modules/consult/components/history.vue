@@ -644,13 +644,13 @@
             padding: rem(20px) 0;
             text-align: center;
             float: left;
-            border: 2px solid #ECECEC;
+            border: 1px solid #ECECEC;
             border-radius: 100px;
             &.selected-right {
               float: right;
             }
             &.selected {
-              border: 2px solid #2FC5BD;
+              border: 1px solid #2FC5BD;
               color: #2FC5BD;
             }
           }

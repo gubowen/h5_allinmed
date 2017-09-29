@@ -29,9 +29,10 @@
         case 4://医生接诊
           this.tipsContent = "问诊已开始";
           break;
-        case 5:
+        case 5://问诊结束
           this.tipsContent = "问诊已结束";
           break;
+
       }
     },
     methods: {},

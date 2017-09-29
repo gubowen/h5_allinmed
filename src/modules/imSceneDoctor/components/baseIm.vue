@@ -101,6 +101,12 @@
             :audioMessage="msg"
           >
           </AudioMessage>
+          <!--患者扫码报道-->
+          <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
+            <figcaption class="first-message">
+              <p>报到成功，您可继续补充您的情况，便于医生更好了解病情</p>
+            </figcaption>
+          </section>
         </section>
       </transition-group>
     </section>
@@ -124,6 +130,12 @@
         <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
           <div>
             <span>重新支付</span>
+          </div>
+        </section>
+        <!--超时未接诊-扫码报道-->
+        <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==-1&&from==='report')">
+          <div>
+            <span>已退诊</span>
           </div>
         </section>
         <!--继续沟通-->
@@ -225,7 +237,7 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
-
+        from: api.getPara().from,
         userData: {
           account: "",
           token: ""
@@ -322,7 +334,6 @@
               case 4://医生接诊
                 this.lastTimeShow = true;
                 this.receiveTreatmentStatus = true;
-//                this.showBottomTips(1);
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
@@ -397,7 +408,19 @@
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 1) {
-            if (this.msgList.indexOf(msg)!==0){
+            if (this.msgList.indexOf(msg) !== 0) {
+              flag = true;
+            }
+
+          }
+        }
+        return flag;
+      },
+      receivedReportTips(msg){
+        let flag = false;
+        if (msg.type === 'custom') {
+          if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 6) {
+            if (this.msgList.indexOf(msg) !== 0) {
               flag = true;
             }
 
@@ -499,7 +522,7 @@
         })
       },
       //      针对老患者报道若问诊单空，则通过以下link获取name...
-      getPatientBase(){
+      getPatientBase(callback){
         const that = this;
         api.ajax({
           url: XHRList.getBaseInfo,
@@ -528,6 +551,7 @@
                 };
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign({}, that.userData, userData);
+                callback&& callback();
               }
             }
           }
@@ -575,18 +599,64 @@
               that.orderSourceId = dataList[0].consultationId;
 
               that.getLastTime(parseInt(dataList[0].consultationState));
-              //未接诊则发送
+              //未接诊则发送：
 
-              if (parseInt(dataList[0].consultationState) < 0) {
-                setTimeout(() => {
-                  if (!that.$refs.medicalReport) {
-                    that.getMedicalMessage();
-                  }
-                }, 1000);
-              }
+              that.firstMessageType(parseInt(dataList[0].consultationState))
             }
           }
         })
+      },
+      firstMessageType(state){
+        /*
+         * 场景区分：
+         * 咨询：发送问诊单
+         * 扫码问诊：发送问诊单，但被拒无法联系分诊台
+         * 扫码报道：无问诊单，发送报道提示，被拒不联系问诊单
+         *
+         * query：from=report与缓存noMR皆存在则为扫码报道
+         * 此时发送App端提示消息，被拒状态不同
+         * query：from=report则为扫码问诊与扫码报道
+         * 此时正常发送问诊单，但被拒状态不同
+         * */
+        if (state < 0) {
+          setTimeout(() => {
+            if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
+              if (!this.$refs.reportTip) {
+                this.getPatientBase(this.sendReportTipMessage());
+              }
+            } else {
+              if (!this.$refs.medicalReport) {
+                this.getMedicalMessage();
+              }
+            }
+          }, 1000);
+        }
+      },
+      //扫码报道提示语
+      sendReportTipMessage(){
+        const that=this;
+        this.nim.sendCustomMsg({
+          scene: 'p2p',
+          to: this.targetData.account,
+          content: JSON.stringify({
+            type: "notification",
+            data: {
+              actionType: "6",
+              contentDesc: "患者向您报道",
+              subContentDesc: "[患者向您报道]"
+            }
+          }),
+          needPushNick: false,
+          pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
+          pushPayload: JSON.stringify({
+            "account": "0_" + api.getPara().caseId,
+            "type": "1"
+          }),
+          done(error, msg) {
+            that.sendMessageSuccess(error, msg);
+            localStorage.removeItem("noMR");
+          }
+        });
       },
       //创建分流
       createTriageMessage(){
@@ -758,7 +828,7 @@
 
       },
       getTimeStampShowFlag(msg, index){
-        if (msg.type === 'custom') {
+        if (msg.type === 'custom' && msg.content) {
           if (JSON.parse(msg.content).type === "notification" && (JSON.parse(msg.content).data.actionType == 3 || JSON.parse(msg.content).data.actionType == 5)) {
             return false;
           } else {
@@ -981,9 +1051,9 @@
           }),
           done (error, msg) {
             if (!error) {
-                if (that.msgList.length!==0){
-                  that.sendMessageSuccess(error, msg)
-                }
+              if (that.msgList.length !== 0) {
+                that.sendMessageSuccess(error, msg)
+              }
             }
           }
         });

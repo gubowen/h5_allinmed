@@ -1,68 +1,47 @@
  <template>
   <section>
-    <!--<section class="main-message-box" :data-caseid="message.caseId">-->
-      <!--<article class="main-message-box-item others-message">-->
-        <!--<figure class="main-message-img">-->
-          <!--<img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">-->
-        <!--</figure>-->
-        <!--<figcaption class="check-suggestion message-result preview-suggestion" @click="goToHref">-->
-          <!--<article class="message-result-item">-->
-            <!--<header class="message-result-item-title">初诊建议</header>-->
-            <!--<section class="message-result-item-message" style="padding-bottom: 0;">-->
-              <!--<figure class="message-result-item-img">-->
-                <!--<img src="../../../../image/img00/patientConsult/dialogue_report@2x.png" alt=""></figure>-->
-              <!--<figcaption><h2>{{message.patientName}}&nbsp;&nbsp;&nbsp;{{message.createTime}}</h2>-->
-                <!--<p><span class="illness">初诊:{{message.illnessName}}</span></p>-->
-              <!--</figcaption>-->
-            <!--</section>-->
-          <!--</article>-->
-        <!--</figcaption>-->
-      <!--</article>-->
-    <!--</section>-->
-
-    <!--检查检验-->
-    <section class="main-message-box" v-if="checkSuggestObj.allData.length">
-      <article class="check-suggest-box">
-        <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
-        <section class="check-suggest-bg"></section>
-        <section class="check-suggest-content">
-          <ul class="check-suggest-list">
-            <li class="check-suggest-item"
-                :data-adviceid="item.adviceId"
-                :data-advicetype="item.adviceType"
-                v-for="item in checkSuggestObj.tempData"
+    <!--推荐医生-->
+    <section class="main-message-box" v-if="doctorObj.allData.length">
+      <article class="doctor-box">
+        <header class="doctor-header">
+          <h3 class="doctor-title">匹配医生</h3>
+          <p class="doctor-introduce"><span>直达三甲名医</span><span>超时未回复全额退款</span></p>
+          <!--<p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>-->
+        </header>
+        <section class="doctor-content">
+          <ul class="doctor-list">
+            <li class="doctor-item"
+                v-for="(item , index) in doctorObj.tempData"
             >
-              <span>{{item.adviceName}}</span>
+              <section class="doctor-item-top" @click="goDoctorHome(index)">
+                <figure class="doctor-item-img">
+                  <img :src="item.logoUrl" alt="">
+                </figure>
+                <figcaption class="doctor-item-info">
+                  <p class="doctor-base-info">
+                    <span class="doctor-name">{{item.fullName | ellipsis(8)}}</span>
+                    <span class="doctor-post">{{item.medicalTitle}}</span>
+                    <!--<span class="doctor-free">首次免费问诊</span>-->
+                  </p>
+                  <p class="doctor-hospital">{{item.hospitalName}}</p>
+                  <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
+                </figcaption>
+              </section>
+              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">免费问诊</span>
+                <span class="free-consult">免费问诊</span>
+                <span class="free-price">{{item.generalPrice}}元</span>
+                <!--<span class="general-money">{{item.generalPrice}}元</span>-->
+              </section>
+              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
+                <span class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">去问诊</span>
+                <span class="general-money">{{item.generalPrice}}元</span>
+              </section>
             </li>
           </ul>
-          <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
-          </section>
-          <section class="check-suggest-btn" data-role="videoTriage"
-                   @click="goToUpload">
-            上传检查资料
-          </section>
-        </section>
-      </article>
-    </section>
-
-    <!--处置建议-->
-    <section class="main-message-box" v-if="treatmentObj.allData.length">
-      <article class="check-suggest-box">
-        <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
-        <section class="check-suggest-bg"></section>
-        <section class="check-suggest-content">
-          <ul class="check-suggest-list">
-            <li class="check-suggest-item"
-                v-for="item in treatmentObj.tempData"
-            >
-              <span>{{item.treatmentName}}</span>
-            </li>
-          </ul>
-          <section class="more-box" v-if="treatmentObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
+          <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
           </section>
         </section>
       </article>
@@ -91,52 +70,54 @@
       </article>
     </section>
 
-    <!--推荐医生-->
-    <section class="main-message-box" v-if="doctorObj.allData.length">
-      <article class="doctor-box">
-        <header class="doctor-header">
-          <h3 class="doctor-title">匹配医生</h3>
-          <p class="doctor-introduce"><span>直达三甲名医</span><span>超时未回复全额退款</span></p>
-          <!--<p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>-->
-        </header>
-        <section class="doctor-content">
-          <ul class="doctor-list">
-            <li class="doctor-item"
-                v-for="(item , index) in doctorObj.tempData"
+    <!--处置建议-->
+    <section class="main-message-box" v-if="treatmentObj.allData.length">
+      <article class="check-suggest-box">
+        <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
+        <section class="check-suggest-bg"></section>
+        <section class="check-suggest-content">
+          <ul class="check-suggest-list">
+            <li class="check-suggest-item"
+                v-for="item in treatmentObj.tempData"
             >
-              <section class="doctor-item-top" @click="goDoctorHome(index)">
-                <figure class="doctor-item-img">
-                  <img :src="item.logoUrl" alt="">
-                </figure>
-                <figcaption class="doctor-item-info">
-                  <p class="doctor-base-info">
-                    <span class="doctor-name">{{item.fullName}}</span>
-                    <span class="doctor-post">{{item.medicalTitle}}</span>
-                    <!--<span class="doctor-free">首次免费问诊</span>-->
-                  </p>
-                  <p class="doctor-hospital">{{item.hospitalName}}</p>
-                  <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
-                </figcaption>
-              </section>
-              <section class="doctor-item-bottom" v-if="item.isFreeTimes">
-                <span class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">免费问诊</span>
-                <span class="free-consult">免费问诊</span>
-                <span class="free-price">{{item.generalPrice}}元</span>
-                <!--<span class="general-money">{{item.generalPrice}}元</span>-->
-              </section>
-              <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
-                <span class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">去问诊</span>
-                <span class="general-money">{{item.generalPrice}}元</span>
-              </section>
+              <span>{{item.treatmentName}}</span>
             </li>
           </ul>
-          <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
-            <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
+          <section class="more-box" v-if="treatmentObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
           </section>
         </section>
       </article>
     </section>
+
+    <!--检查检验-->
+    <section class="main-message-box" v-if="checkSuggestObj.allData.length">
+      <article class="check-suggest-box">
+        <header class="check-suggest-title">为确保分诊准确和专家问诊的效率，建议您进行以下检查并上传检查资料，分诊计时已停止，有关检查疑问您可继续向分诊医生询问，资料上传后分诊医生将继续为您服务。</header>
+        <section class="check-suggest-bg"></section>
+        <section class="check-suggest-content">
+          <ul class="check-suggest-list">
+            <li class="check-suggest-item"
+                :data-adviceid="item.adviceId"
+                :data-advicetype="item.adviceType"
+                v-for="item in checkSuggestObj.tempData"
+            >
+              <span>{{item.adviceName}}</span>
+            </li>
+          </ul>
+          <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
+            <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
+            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
+          </section>
+          <section class="check-suggest-btn" data-role="videoTriage"
+                   @click="goToUpload">
+            上传检查资料
+          </section>
+        </section>
+      </article>
+    </section>
+
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -402,6 +383,29 @@
         })
       }
     },
+    filters: {
+      ellipsis: function (value,len) {
+        if (!value) return ''
+        let newStr = '',
+          newLength = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value.charCodeAt(i) > 128) {
+            newLength += 2;
+          } else {
+            newLength++;
+          }
+          if (newLength <= len) {
+            newStr = newStr.concat(value[i]);
+          } else {
+            break;
+          }
+        }
+        if (newLength > len) {
+          newStr = newStr + "..."
+        }
+        return newStr;
+      }
+    },
     props:{
       previewSuggestionMessage:{
         type:Object
@@ -599,7 +603,7 @@
             background: #43CBC3;
             border-radius: rem(4px);
             vertical-align: middle;
-            margin: rem(0px) rem(8px) rem(0px) rem(30px);
+            margin: -(rem(6px)) rem(8px) rem(0px) rem(30px);
           }
         }
         /*font-weight: bold;*/
@@ -645,8 +649,8 @@
                   font-weight: bold;
                   @include font-dpr(16px);
                   display: inline-block;
-                  max-width: rem(160px);
-                  @include ellipsis();
+                  /*max-width: rem(160px);*/
+//                  @include ellipsis();
                   vertical-align: text-bottom;
                 }
                 .doctor-post{
