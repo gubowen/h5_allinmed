@@ -23,7 +23,7 @@
             {{transformTimeStamp(msg.time)}}</p>
           <!--问诊单-->
           <MedicalReport
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='medicalReport'"
+            v-if="receiveMedicalReport(msg)"
             :medicalReportMessage="JSON.parse(msg.content)"
             ref="medicalReport">
           </MedicalReport>
@@ -428,6 +428,15 @@
         }
         return flag;
       },
+      receiveMedicalReport(msg){
+        let flag = false;
+        if (msg.type === 'custom' && JSON.parse(msg.content).type === 'medicalReport') {
+          if (this.msgList.indexOf(msg)<=1) {
+            flag = true;
+          }
+        }
+        return flag;
+      },
       //首次回复更改为结束时提示
       firstReplyTips(msg){
         let flag = false;
@@ -551,7 +560,7 @@
                 };
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign({}, that.userData, userData);
-                callback&& callback();
+                callback && callback();
               }
             }
           }
@@ -618,6 +627,7 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
+//        this.getPatientBase(this.sendReportTipMessage());
         if (state < 0) {
           setTimeout(() => {
             if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
@@ -634,7 +644,7 @@
       },
       //扫码报道提示语
       sendReportTipMessage(){
-        const that=this;
+        const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
@@ -1083,7 +1093,7 @@
     },
     mounted(){
       this.getUserBaseData();
-
+      localStorage.setItem("APPIMLinks",location.href);
     },
     activated(){
       this.scrollToBottom();
@@ -1094,7 +1104,6 @@
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
           this.showBottomTips(1);
-
         } else {
           this.lastTimeShow = true;
           this.bottomTipsShow = false;

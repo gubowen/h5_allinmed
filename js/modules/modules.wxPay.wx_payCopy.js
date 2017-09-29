@@ -3,7 +3,7 @@
  * @Usage:  1-发起支付：
  *             modules.wxPay({
                    total_fee: 1,                         //订单总金额(单位：分)
-                   body: "唯医互联网骨科医院线下支付测试",         //订单描述
+                   body: "唯医骨科线下支付测试",         //订单描述
                    callBack:function(data){
                        if(data.responseStatus){
                           //支付成功的回调
@@ -515,7 +515,7 @@ $(function () {
     $('.ev-pay').on("click", function () {
         modules.wxPay({
             total_fee: 0.01,                    //订单总金额 (单位/元 保留两位小数)
-            body: "唯医互联网骨科医院-线下支付",       //订单描述
+            body: "唯医骨科-线下支付",       //订单描述
             callBack: function (data) {
 
             }

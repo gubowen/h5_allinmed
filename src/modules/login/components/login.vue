@@ -2,7 +2,7 @@
   <section class="loginBackBottom">
     <section class="tc-loginCommon" v-show="!loginRule">
       <section class="tc-loginTitle">
-        <p class="login-title">唯医互联网骨科医院</p>
+        <p class="login-title">唯医骨科</p>
         <p class="login-title">您身边的骨科专家</p>
         <p class="login-guideText">为了给您一个更好的就医体验，请您注册后使用</p>
       </section>
@@ -26,10 +26,10 @@
           <p>
             <span class="tc-ruleSelect" @click="RuleIcon=!RuleIcon" :class="{'active':RuleIcon}"></span>
             <span class="tc-ruleText" @click="RuleIcon=!RuleIcon">已同意</span>
-            <span class="tc-ruleDetail" @click="ruleClick">《唯医互联网骨科医院用户服务协议》</span>
+            <span class="tc-ruleDetail" @click="ruleClick">《唯医骨科用户服务协议》</span>
           </p>
         </section>
-        <section class="tc-submitBtn" @click="loginSubmit">进入唯医互联网骨科医院</section>
+        <section class="tc-submitBtn" @click="loginSubmit">进入唯医骨科</section>
       </section>
     </section>
 
@@ -143,7 +143,7 @@
       },
       mounted() {
         this.forbidShare();
-        document.title="唯医互联网骨科医院";
+        document.title="唯医骨科";
         this.$validator.updateDictionary({
           en: {
             custom: {
@@ -316,7 +316,7 @@
           let _this = this;
           if (!this.RuleIcon) {
             //未同意条款
-            _this.toastComm("请阅读并同意《唯医互联网骨科医院服务协议》");
+            _this.toastComm("请阅读并同意《唯医骨科服务协议》");
             return
           } else {
             //已同意条款
