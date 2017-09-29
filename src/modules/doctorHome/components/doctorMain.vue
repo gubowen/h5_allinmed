@@ -1005,9 +1005,9 @@
         //网上问诊样式
         .online-visitsBox {
           background-color: #FFFFFF;
-          /*-webkit-border-radius:0 0 rem(16px) rem(16px);*/
-          /*-moz-border-radius:0 0 rem(16px) rem(16px);*/
-          /*border-radius:0 0 rem(16px) rem(16px);*/
+          -webkit-border-radius:0 0 rem(16px) rem(16px);
+          -moz-border-radius:0 0 rem(16px) rem(16px);
+          border-radius:0 0 rem(16px) rem(16px);
           .doc-commonTitle {
             padding-right: rem(30px);
           }
@@ -1150,8 +1150,13 @@
             }
           }
         }
+        .physician-immediately{
+          -webkit-border-radius:0 0 rem(16px) rem(16px);
+          -moz-border-radius:0 0 rem(16px) rem(16px);
+          border-radius:0 0 rem(16px) rem(16px);
+        }
         .cureAfterReport{
-          margin-top: rem(10px);
+          margin-top: rem(16px);
           -webkit-border-radius: rem(16px);
           -moz-border-radius: rem(16px);
           border-radius: rem(16px);

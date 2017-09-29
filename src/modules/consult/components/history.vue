@@ -3,7 +3,7 @@
     <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
       <span class="consult-page page-two"></span>
       <section class="questionContainMain">
-        <section class="questionItem-common">
+        <section class="questionItem-common isComeCure">
           <p class="questionTitleCommon">有去医院就诊过吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="visit.none=true;visit.has=false" :class="{'selected':visit.none}">
@@ -75,7 +75,7 @@
             </section>
           </section>
         </section>
-        <section class="questionItem-common">
+        <section class="questionItem-common isUseDrug">
           <p class="questionTitleCommon">有正在使用的药物吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
@@ -508,22 +508,27 @@
       validateParamsFull() {
         if (!this.visit.none && !this.visit.has) {
           this.validateToast("您还有问题未完善");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isComeCure").offsetTop;
           return false;
         } else if (this.visit.has && !this.hospitalMessage.id) {
           this.validateToast("请选择最近一次就诊医院");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isComeCure").offsetTop;
           return false;
         }
 
         if (!this.upload.none && !this.upload.has) {
           this.validateToast("您还有问题未完善 ");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.upLoadResource").offsetTop;
           return false;
         } else if (this.upload.has && (this.imageList1.length === 0 && this.imageList2.length === 0)) {
           this.validateToast("请上传检查资料或患处照片");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.upLoadResource").offsetTop;
           return false;
         }
 
         if (!this.medical.none && !this.medical.has) {
           this.validateToast("您还有问题未完善");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isUseDrug").offsetTop;
           return false;
         } else if (this.medical.has && this.medicalMessage.length === 0) {
           this.validateToast("请填写药物名称");
