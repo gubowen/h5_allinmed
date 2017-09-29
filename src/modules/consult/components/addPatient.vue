@@ -118,7 +118,7 @@
             </section>
           </section>
           <!--联系我们消息-->
-          <section class="info-error-tips">
+          <section class="info-error-tips" v-if="infoErrorShow">
             <p class="tips-box" @click="phoneShow =true">
               <span class="tips-describe">若确认信息填写无误仍无法提交,</span>
               <span class="tips-contact">请联系我们</span>
@@ -250,6 +250,7 @@
         listType:"city", //类型为城市
         bindPhone:"",//用户绑定的手机号
         formCheck:false,//表单是否全部验证通过
+        infoErrorShow:false,//信息错误是否显示
       }
     },
     activated(){
