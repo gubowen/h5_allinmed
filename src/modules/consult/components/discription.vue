@@ -1259,7 +1259,7 @@
       display: block;
       @include triangle(rem(20px),#fff,up);
       position: absolute;
-      top: -0.266666rem;
+      top: -0.236666rem;
       left: 33%;
     }
     & > figure {
