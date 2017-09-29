@@ -4,7 +4,7 @@
       <template v-if="items.length <= 0 && noFriend">
         <section class="noFriendText">
           <p>您还没有任何记录</p>
-          <p>添加关心的人，在线问诊，唯医互联网骨科医院为您开启全新的就医体验</p>
+          <p>添加关心的人，在线问诊，唯医骨科为您开启全新的就医体验</p>
         </section>
         <section class="noFriendHref">
           <a @click="hrefToConsult()">去问诊&gt;&gt;</a>
