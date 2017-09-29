@@ -185,7 +185,7 @@
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
     patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
-    getPhone: "/mcall/patient/customer/unite/v1/getById/",//患者列表
+    getPhone: "/mcall/patient/customer/unite/v1/getById/",//获取患者绑定的手机号
     createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
     saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
@@ -512,7 +512,7 @@
           return;
         }
         if (that.sexSelect === -1 ) {
-          that.errorMsg = "患者证件号码已存在";
+          that.errorMsg = "请选择患者患者性别";
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {
