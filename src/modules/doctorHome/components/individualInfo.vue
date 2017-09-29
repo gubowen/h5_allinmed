@@ -159,15 +159,13 @@
                 display: inline-block;
                 content: '';
                 position: absolute;
-                width: rem(8px);
-                height: rem(8px);
+                width: rem(15px);
+                height: rem(15px);
                 top:50%;
-                margin-top: rem(-4px);
+                margin-top: rem(-7px);
                 left: rem(32px);
-                background-color: #2FC5BD;
-                -webkit-border-radius: 50%;
-                -moz-border-radius: 50%;
-                border-radius: 50%;
+                background: url("../../../common/image/img00/doctorHome/Oval 8 Copy 14@2x.png") no-repeat center;
+                background-size: rem(8px) rem(8px);
               }
             }
             .individual-education-item{

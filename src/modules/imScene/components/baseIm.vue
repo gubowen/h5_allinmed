@@ -510,7 +510,7 @@
             patientCustomerId: api.getPara().patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 0,
-            consultationState: 0,
+            consultationState: 0,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回
             siteId: 17,
             caseType: 0
           },
@@ -545,24 +545,31 @@
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
-              if (dataList.consultationFrequency == "-1") {
-                that.lastTimeShow = false;
-                that.inputBoxShow = false;
-                that.consultTipsShow = true;
-              } else {
+              //consultationFrequency 聊天次数、分诊台不需要
+//              if (dataList.consultationFrequency == "-1") {
+//                that.lastTimeShow = false;
+//                that.inputBoxShow = false;
+//                that.consultTipsShow = true;
+//              } else {
 //                time = 10000;
-                if (time > 0) {
-                  store.commit("setLastTime", time);
-                  store.commit("lastTimeCount");
-                  that.lastTimeShow = true;
+                if (dataList.consultationState === -2){
+                  that.lastTimeShow = false;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
-                  that.lastTimeShow = false;
-                  that.inputBoxShow = false;
-                  that.consultTipsShow = true;
+                  if (time > 0) {
+                    store.commit("setLastTime", time);
+                    store.commit("lastTimeCount");
+                    that.lastTimeShow = true;
+                    that.inputBoxShow = true;
+                    that.consultTipsShow = false;
+                  } else {
+                    that.lastTimeShow = false;
+                    that.inputBoxShow = false;
+                    that.consultTipsShow = true;
+                  }
                 }
-              }
+//              }
             }
           },
           fail(err) {
@@ -807,6 +814,24 @@
           }
         })
       },
+      //更新上传了检查检验
+      updateMedical () {
+        let that = this;
+        debugger
+        api.ajax({
+          url: XHRList.updateMedicalList,
+          method: 'POST',
+          data: {
+            caseId:api.getPara().caseId,
+            state:1,
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              that.refreashOrderTime();
+            }
+          }
+        })
+      },
       toUpLoadTimes(opt) {
         let that = this;
         debugger
@@ -941,7 +966,7 @@
           }
         });
       }else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
-        that.refreashOrderTime();
+        that.updateMedical();
         that.nim.sendText({
           scene: 'p2p',
           to: that.targetData.account,
