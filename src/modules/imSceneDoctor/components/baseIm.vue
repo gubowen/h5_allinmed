@@ -49,6 +49,7 @@
           <OutpatientInvite
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
             :outPatientMessage="JSON.parse(msg.content)"
+            ref="outpatientInvite"
           >
           </OutpatientInvite>
           <!--手术单-->
@@ -198,6 +199,8 @@
   import payPopup from 'components/payLayer';
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
+
+  import scrollPosition from "../api/scrollPosition";
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -208,7 +211,8 @@
     time: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
-    getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/"
+    getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/",
+    getDoctorBaseMsg:"/mcall/customer/auth/v1/getSimpleById/"
   };
   export default{
     data(){
@@ -260,7 +264,7 @@
           onconnect (data) {
             console.log('连接成功');
             that.triageDoctorAssign();
-            that.checkFirstBuy();
+
           },
           onmyinfo(userData) {
             that.getMessageList();
@@ -451,29 +455,46 @@
           scene: 'p2p',
           to: this.targetData.account,
           done(error, obj) {
-            that.msgList = obj.msgs.reverse();
-            that.msgList.forEach((element, index) => {
-              that.getTargetMessage(element);
-              that.getTimeStampShowList(element);
+            that.getDoctorMsg(()=>{
+              that.msgList = obj.msgs.reverse();
+              that.msgList.forEach((element, index) => {
+                that.getTargetMessage(element);
+                that.getTimeStampShowList(element);
+              });
+              setTimeout(() => {
+                scrollPosition(that.$refs.outpatientInvite);
+                document.body.scrollTop = Math.pow(10, 10);
+                that.getImageList();
+                that.loading = false;
+              }, 100);
             });
-
-
-            setTimeout(() => {
-              document.body.scrollTop = Math.pow(10, 10);
-              that.getImageList();
-              that.loading = false;
-            }, 100);
           },
           limit: 100
         });
-        this.nim.getUser({
-          account: this.targetData.account,
-          done(error, user){
-            console.log(user)
-            store.commit("setTargetMsg", user);
-            document.title = `${user.nick}医生`;
+      },
+      // 获取医生姓名、头像
+      // 因四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
+      // 因此通过云信SDK获取已经是不安全的方式
+      getDoctorMsg(callback){
+        api.ajax({
+          url: XHRList.getDoctorBaseMsg,
+          method: "POST",
+          data: {
+            customerId:api.getPara().doctorCustomerId,
+            logoUseFlag:5
+          },
+          done(data){
+            if (data.responseObject && data.responseObject.responseData) {
+              let dataList = data.responseObject.responseData.dataList[0];
+              store.commit("setTargetMsg",{
+                  avatar:dataList.logoUrl,
+                  nick:dataList.customerName
+              });
+              document.title = `${dataList.customerName}医生`;
+              callback&&callback();
+            }
           }
-        });
+        })
       },
       getTargetMessage(element){
         if (element.from === this.targetData.account) {
@@ -511,20 +532,18 @@
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 }, dataList[0].patientCasemap.patientName);
-                const userData = {
-                  nick: dataList[0].patientCasemap.patientName,
-                  avatar: that.$store.state.logoUrl,
-                  sign: 'newSign',
-                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
-                  email: '',
-                  birth: '',
-                  tel: '',
-                };
-
-                that.nim.updateMyInfo(userData);
-                that.userData = Object.assign({}, that.userData, userData);
-              } else if (data.responseObject.responseMessage === "NO DATA") {
-                that.getPatientBase();
+//                const userData = {
+//                  nick: dataList[0].patientCasemap.patientName,
+//                  avatar: that.$store.state.logoUrl,
+//                  sign: 'newSign',
+//                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
+//                  email: '',
+//                  birth: '',
+//                  tel: '',
+//                };
+//
+//                that.nim.updateMyInfo(userData);
+//                that.userData = Object.assign({}, that.userData, userData);
               }
             }
           }
@@ -636,7 +655,7 @@
               }
             } else {
               if (!this.$refs.medicalReport) {
-                this.getMedicalMessage();
+                this.getPatientBase(this.getMedicalMessage());
               }
             }
           }, 1000);
@@ -1011,8 +1030,8 @@
       checkFirstBuy(){
         if (localStorage.getItem("sendTips")) {
           let count = JSON.parse(localStorage.getItem("sendTips"));
+          this.getPatientBase(this.sendPayFinish(count));
 
-          this.sendPayFinish(count);
           localStorage.removeItem("sendTips");
         }
       },
@@ -1093,6 +1112,7 @@
     },
     mounted(){
       this.getUserBaseData();
+      this.checkFirstBuy();
       localStorage.setItem("APPIMLinks",location.href);
     },
     activated(){
