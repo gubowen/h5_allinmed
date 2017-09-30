@@ -7,14 +7,14 @@
           <section class="individual-baseInfo">
             <section class="individual-baseInfo-title" v-show="personalIndividualInfo.length>0">{{personalIndividualInfo}}</section>
             <section class="individual-baseInfo-item">
-              <p class="individual-baseInfoItem-title individual-education-title">教育与进修经历</p>
+              <p class="individual-baseInfoItem-title individual-education-title" v-show="continuingEducationList&&continuingEducationList.length>0||educationList&&educationList.length>0">教育与进修经历</p>
               <section class="individual-education-item" v-for="(item ,index) in continuingEducationList">
                 <span class="education-item-time">{{timeDeal(item.startTime)}}-{{timeDeal(item.endTime)}}，</span><span class="education-item-address">{{item.organization}}，</span><span class="education-item-information">{{item.cmeDesc}}</span>
               </section>
               <section class="individual-education-item" v-for="(item ,index) in educationList">
                 <span class="education-item-time">{{timeDeal(item.startTime)}}-{{timeDeal(item.endTime)}}，</span><span class="education-item-address">{{item.university}}，</span><span class="education-item-information">{{item.major}}，</span><span class="education-item-information">{{item.education}}</span>
               </section>
-              <p class="individual-baseInfoItem-title individual-education-title"> 科研成果及荣誉</p>
+              <p class="individual-baseInfoItem-title individual-education-title" v-show="honorList&&honorList.length>0||fundList&&fundList.length>0"> 科研成果及荣誉</p>
               <section class="individual-education-item" v-for="(item ,index) in honorList">
                 <span class="education-item-time">{{item.awardYear}}年，</span><span class="education-item-address">{{item.awardDepartment}}，</span><span class="education-item-information">{{item.honorName}}</span>
               </section>
