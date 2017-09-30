@@ -6,7 +6,6 @@
  *
  * Created by Qiangkailiang on 17/9/27.
  */
-
 class Net {
   constructor(){
 
@@ -14,7 +13,7 @@ class Net {
 
   getPara(symbol) {
     let url = window.location.origin + window.location.pathname + window.location.search;
-
+      
     let param = {};
     let str, item;
     if (url.lastIndexOf(symbol ? symbol : "?") > 0) {

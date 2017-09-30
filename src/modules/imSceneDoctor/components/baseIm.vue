@@ -18,51 +18,32 @@
       <transition-group name="fadeDown" tag="section">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
           <!--时间戳-->
-          <p class='time-stamp'
-             v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
+          <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
             {{transformTimeStamp(msg.time)}}</p>
           <!--问诊单-->
-          <MedicalReport
-            v-if="receiveMedicalReport(msg)"
-            :medicalReportMessage="JSON.parse(msg.content)"
-            ref="medicalReport">
+          <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
+                         ref="medicalReport">
           </MedicalReport>
           <!--医生接诊-->
-          <MiddleTips
-            v-if="receivedTreatment(msg)"
-            :tipsType="4"
-          >
+          <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
           </MiddleTips>
           <!--问诊结束-->
-          <MiddleTips
-            v-if="receivedTreatOver(msg)"
-            :tipsType="5"
-          >
+          <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
           </MiddleTips>
           <!--支付成功-->
-          <PayFinishTips
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'"
-          >
+          <PayFinishTips v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'">
           </PayFinishTips>
           <!--门诊邀约-->
-          <OutpatientInvite
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
-            :outPatientMessage="JSON.parse(msg.content)"
-            ref="outpatientInvite"
-          >
+          <OutpatientInvite v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
+                            :outPatientMessage="JSON.parse(msg.content)" ref="outpatientInvite">
           </OutpatientInvite>
           <!--手术单-->
-          <SurgicalDrape
-            v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
-            :surgicalMessage="JSON.parse(msg.content)"
-          >
+          <SurgicalDrape v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
+                         :surgicalMessage="JSON.parse(msg.content)">
           </SurgicalDrape>
           <!--赠送次数-->
-          <SendCount
-            v-if="receivedSendCount(msg)"
-            :sendCountMessage="JSON.parse(msg.content)"
-          >
+          <SendCount v-if="receivedSendCount(msg)" :sendCountMessage="JSON.parse(msg.content)">
           </SendCount>
           <!--购买问诊-->
           <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
@@ -71,36 +52,20 @@
             </figcaption>
           </section>
           <!--住院通知-->
-          <HospitalNotice
-            v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
-            :hoispitalMessage="JSON.parse(msg.content)"
-          >
+          <HospitalNotice v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
+                          :hoispitalMessage="JSON.parse(msg.content)">
           </HospitalNotice>
           <!--文本消息-->
-          <ContentText
-            v-if="msg.type==='text' && msg.text"
-            :contentMessage="msg"
-            :userData="userData"
-            :targetData="targetData">
+          <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
+                       :targetData="targetData">
           </ContentText>
           <!--图像消息-->
-          <ImageContent
-            v-if="(msg.type==='file'||msg.type==='image') && msg.file"
-            :imageMessage="msg"
-            :nim="nim"
-            ref="bigImg"
-            :imageList="imageList"
-            :imageProgress="imageProgress"
-            :currentIndex="index"
-            :userData="userData"
-            :targetData="targetData"
-          >
+          <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
+                        ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
+                        :userData="userData" :targetData="targetData">
           </ImageContent>
           <!--音频-->
-          <AudioMessage
-            v-if="msg.type==='audio'"
-            :audioMessage="msg"
-          >
+          <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
           </AudioMessage>
           <!--患者扫码报道-->
           <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
@@ -113,10 +78,7 @@
     </section>
     <!--底部提示-->
     <transition name="fadeUp">
-      <BottomTips
-        v-if="bottomTipsShow"
-        :bottomTipsType="bottomTipsType"
-      >
+      <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
       </BottomTips>
     </transition>
     <transition name="fadeUp">
@@ -181,7 +143,6 @@
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
-
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
   import ImageContent from './image';
@@ -212,10 +173,11 @@
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
     getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/",
-    getDoctorBaseMsg:"/mcall/customer/auth/v1/getSimpleById/"
+    getDoctorBaseMsg: "/mcall/customer/auth/v1/getSimpleById/"
   };
-  export default{
-    data(){
+  export default {
+
+    data() {
       return {
         nim: {},
         imageProgress: {
@@ -254,14 +216,14 @@
     },
 
     methods: {
-      connectToNim(){
+      connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
           // debug: true,
           appKey: '50c93d2ab7e207fd83231a245c07bfbc',
           account: this.userData.account,
           token: this.userData.token,
-          onconnect (data) {
+          onconnect(data) {
             console.log('连接成功');
             that.triageDoctorAssign();
 
@@ -270,23 +232,23 @@
             that.getMessageList();
             that.userData = userData;
           },
-          onwillreconnect (obj) {
+          onwillreconnect(obj) {
             console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
           },
-          ondisconnect () {
+          ondisconnect() {
             console.log("链接已中断...")
           },
           onerror: this.onError,
           onroamingmsgs(obj) {
             console.log("漫游消息...");
           },
-          onofflinemsgs (obj) {
+          onofflinemsgs(obj) {
             console.log("离线消息...");
             obj.msgs.forEach((index, element) => {
               that.msgList.push(element);
             });
           },
-          onmsg (msg) {
+          onmsg(msg) {
             console.log(msg);
             if (msg.from === that.targetData.account) {
 
@@ -308,17 +270,17 @@
           }
         });
       },
-      getFirstTargetMsg(msg){
+      getFirstTargetMsg(msg) {
         if (msg.from === this.targetData.account) {
           this.targetMsg.push(msg);
         }
       },
-      minusLastCount(msg){
+      minusLastCount(msg) {
         if (msg.type !== "custom") {
           store.commit("lastCountMinus");
         }
       },
-      receiveSpecialMessage(msg){
+      receiveSpecialMessage(msg) {
         if (msg.type === "custom") {
           if (JSON.parse(msg.content) && JSON.parse(msg.content).type === "notification") {
             let type = JSON.parse(msg.content).data.actionType;
@@ -347,15 +309,16 @@
           }
         }
       },
-      getImageList(){
+      getImageList() {
         if (this.$refs.bigImg) {
           this.$refs.bigImg.forEach((element, index) => {
             this.imageList.push(element.imageMessage.file.url);
           });
         }
       },
-      getUserBaseData(){
+      getUserBaseData() {
         const that = this;
+
         api.ajax({
           url: XHRList.getToken,
           method: "POST",
@@ -381,7 +344,7 @@
           }
         })
       },
-      receivedTreatment(msg){
+      receivedTreatment(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4) {
@@ -390,7 +353,7 @@
         }
         return flag;
       },
-      receivedTreatOver(msg){
+      receivedTreatOver(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 5) {
@@ -399,7 +362,7 @@
         }
         return flag;
       },
-      receivedSendCount(msg){
+      receivedSendCount(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 2) {
@@ -408,7 +371,7 @@
         }
         return flag;
       },
-      receivedBuyCount(msg){
+      receivedBuyCount(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 1) {
@@ -420,7 +383,7 @@
         }
         return flag;
       },
-      receivedReportTips(msg){
+      receivedReportTips(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 6) {
@@ -432,76 +395,88 @@
         }
         return flag;
       },
-      receiveMedicalReport(msg){
+      receiveMedicalReport(msg) {
         let flag = false;
         if (msg.type === 'custom' && JSON.parse(msg.content).type === 'medicalReport') {
-          if (this.msgList.indexOf(msg)<=1) {
+          if (this.msgList.indexOf(msg) <= 1) {
             flag = true;
           }
         }
         return flag;
       },
       //首次回复更改为结束时提示
-      firstReplyTips(msg){
+      firstReplyTips(msg) {
         let flag = false;
         if (this.targetMsg.indexOf(msg) === 1) {
           flag = true;
         }
         return flag;
       },
-      getMessageList () {
+      getMessageList() {
         let that = this;
         this.nim.getHistoryMsgs({
           scene: 'p2p',
           to: this.targetData.account,
           done(error, obj) {
-            that.getDoctorMsg(()=>{
+            that.getDoctorMsg(() => {
               that.msgList = obj.msgs.reverse();
               that.msgList.forEach((element, index) => {
                 that.getTargetMessage(element);
                 that.getTimeStampShowList(element);
               });
-              setTimeout(() => {
-                scrollPosition(that.$refs.outpatientInvite);
-                document.body.scrollTop = Math.pow(10, 10);
-                that.getImageList();
-                that.loading = false;
-              }, 100);
+              that.$nextTick(() => {
+//        通过动画结束判断
+//                  that.$refs.outpatientInvite[that.$refs.outpatientInvite.length-1].$el.addEventListener("transitionend",()=>{
+//
+//                    console.log(that.$refs.outpatientInvite)
+//                  });
+
+                setTimeout(() => {
+                  if (that.$refs.outpatientInvite) {
+                    scrollPosition(that.$refs.outpatientInvite);
+                  } else {
+                    document.body.scrollTop = Math.pow(10, 10);
+                  }
+                  that.getImageList();
+                  that.loading = false;
+                }, 700)
+              })
+              that.checkFirstBuy();
             });
           },
           limit: 100
         });
       },
       // 获取医生姓名、头像
-      // 因四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
+      // 四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
       // 因此通过云信SDK获取已经是不安全的方式
-      getDoctorMsg(callback){
+      getDoctorMsg(callback) {
         api.ajax({
           url: XHRList.getDoctorBaseMsg,
           method: "POST",
           data: {
-            customerId:api.getPara().doctorCustomerId,
-            logoUseFlag:5
+            customerId: api.getPara().doctorCustomerId,
+            logoUseFlag: 5
           },
-          done(data){
+          done(data) {
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList[0];
-              store.commit("setTargetMsg",{
-                  avatar:dataList.logoUrl,
-                  nick:dataList.customerName
+              store.commit("setTargetMsg", {
+                avatar: dataList.logoUrl,
+                nick: dataList.customerName
               });
               document.title = `${dataList.customerName}医生`;
-              callback&&callback();
+              callback && callback();
             }
           }
         })
       },
-      getTargetMessage(element){
+      getTargetMessage(element) {
         if (element.from === this.targetData.account) {
           this.targetMsg.push(element);
         }
       },
-      getMedicalMessage(){
+      getMedicalMessage() {
         const that = this;
         api.ajax({
           url: XHRList.getMedicalList,
@@ -532,25 +507,25 @@
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 }, dataList[0].patientCasemap.patientName);
-//                const userData = {
-//                  nick: dataList[0].patientCasemap.patientName,
-//                  avatar: that.$store.state.logoUrl,
-//                  sign: 'newSign',
-//                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
-//                  email: '',
-//                  birth: '',
-//                  tel: '',
-//                };
-//
-//                that.nim.updateMyInfo(userData);
-//                that.userData = Object.assign({}, that.userData, userData);
+                //                const userData = {
+                //                  nick: dataList[0].patientCasemap.patientName,
+                //                  avatar: that.$store.state.logoUrl,
+                //                  sign: 'newSign',
+                //                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
+                //                  email: '',
+                //                  birth: '',
+                //                  tel: '',
+                //                };
+                //
+                //                that.nim.updateMyInfo(userData);
+                //                that.userData = Object.assign({}, that.userData, userData);
               }
             }
           }
         })
       },
       //      针对老患者报道若问诊单空，则通过以下link获取name...
-      getPatientBase(callback){
+      getPatientBase(callback) {
         const that = this;
         api.ajax({
           url: XHRList.getBaseInfo,
@@ -560,7 +535,7 @@
             firstResult: "0",
             maxResult: "1"
           },
-          done(data){
+          done(data) {
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
@@ -585,7 +560,7 @@
           }
         })
       },
-      sendMedicalReport(data, nickName){
+      sendMedicalReport(data, nickName) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
@@ -603,7 +578,7 @@
         });
 
       },
-      triageDoctorAssign () {
+      triageDoctorAssign() {
         const that = this;
         //是否有分诊会话记录
         //无则创建
@@ -619,7 +594,7 @@
             maxResult: 9999,
             customerId: api.getPara().doctorCustomerId
           },
-          done (data) {
+          done(data) {
             if (data.responseObject.responseMessage === "NO DATA") {
               that.createTriageMessage();
             } else {
@@ -634,7 +609,7 @@
           }
         })
       },
-      firstMessageType(state){
+      firstMessageType(state) {
         /*
          * 场景区分：
          * 咨询：发送问诊单
@@ -646,7 +621,7 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
-//        this.getPatientBase(this.sendReportTipMessage());
+        //        this.getPatientBase(this.sendReportTipMessage());
         if (state < 0) {
           setTimeout(() => {
             if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
@@ -662,7 +637,7 @@
         }
       },
       //扫码报道提示语
-      sendReportTipMessage(){
+      sendReportTipMessage() {
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
@@ -688,7 +663,7 @@
         });
       },
       //创建分流
-      createTriageMessage(){
+      createTriageMessage() {
         const that = this;
         api.ajax({
           url: XHRList.triageAssign,
@@ -709,12 +684,12 @@
               that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
               that.getLastTime(-1);
               //初次创建分流发送问诊单
-              that.getMedicalMessage();
+              that.firstMessageType(parseInt(data.responseObject.responseData.dataList[0].consultationState))
             }
           }
         })
       },
-      getLastTime(status){
+      getLastTime(status) {
         const that = this;
         api.ajax({
           url: XHRList.time,
@@ -777,13 +752,13 @@
           }
         })
       },
-      showBottomTips(type){
+      showBottomTips(type) {
         this.bottomTipsShow = true;
         this.bottomTipsType = type;
 
         this.scrollToBottom();
       },
-      sendMessage(){
+      sendMessage() {
         if (this.sendTextContent.trim().length === 0) {
           return false;
         }
@@ -804,7 +779,7 @@
           }
         });
       },
-      sendMessageSuccess(error, msg){
+      sendMessageSuccess(error, msg) {
         this.getTimeStampShowList(msg);
         console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
         this.sendTextContent = "";
@@ -818,7 +793,7 @@
         }, 20)
       },
 
-      transformTimeStamp(time){
+      transformTimeStamp(time) {
         let format = function (num) {
           return num > 9 ? num : "0" + num;
         };
@@ -846,7 +821,7 @@
         }
         return result;
       },
-      getTimeStampShowList(element){
+      getTimeStampShowList(element) {
 
         if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
           this.beginTimestamp = element.time;
@@ -856,7 +831,7 @@
         }
 
       },
-      getTimeStampShowFlag(msg, index){
+      getTimeStampShowFlag(msg, index) {
         if (msg.type === 'custom' && msg.content) {
           if (JSON.parse(msg.content).type === "notification" && (JSON.parse(msg.content).data.actionType == 3 || JSON.parse(msg.content).data.actionType == 5)) {
             return false;
@@ -872,7 +847,7 @@
         }
       },
 
-      sendFile(e){
+      sendFile(e) {
         const that = this;
         this.msgList.push({
           file: {
@@ -886,7 +861,7 @@
         this.nim.previewFile({
           type: 'image',
           fileInput: this.$refs.imageSender,
-          uploadprogress (obj) {
+          uploadprogress(obj) {
             that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
@@ -898,7 +873,7 @@
             console.log('上传进度: ' + obj.percentage);
             console.log('上传进度文本: ' + obj.percentageText);
           },
-          done (error, file) {
+          done(error, file) {
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
             if (!error) {
@@ -913,7 +888,7 @@
                   "type": "1"
                 }),
                 type: "image",
-                done(error, msg){
+                done(error, msg) {
                   that.msgList[that.msgList.length - 1] = msg;
                   that.imageProgress = {
                     uploading: false,
@@ -928,19 +903,19 @@
           }
         });
       },
-      scrollToBottom(){
+      scrollToBottom() {
         setTimeout(() => {
           document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
-      inputLimit(){
+      inputLimit() {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
           this.sendTextContent = api.getStrByteLen(content);
         }
       },
       //接诊时间倒数
-      remainTimeOut(){
+      remainTimeOut() {
         this.remainTimeCount = setInterval(() => {
           if (this.receiveTime <= 0) {
             this.bottomTipsType(-1);
@@ -951,7 +926,7 @@
         }, 1000);
       },
       //支付成功...刷新页面并重置时间
-      refreashOrderTime (count) {
+      refreashOrderTime(count) {
         const that = this;
         let state = "";
         if (this.bottomTipsType == -1) {
@@ -989,7 +964,7 @@
           }
         })
       },
-      retryClick(type){
+      retryClick(type) {
 
         const that = this;
         switch (type) {
@@ -1027,7 +1002,7 @@
             break;
         }
       },
-      checkFirstBuy(){
+      checkFirstBuy() {
         if (localStorage.getItem("sendTips")) {
           let count = JSON.parse(localStorage.getItem("sendTips"));
           this.getPatientBase(this.sendPayFinish(count));
@@ -1035,7 +1010,7 @@
           localStorage.removeItem("sendTips");
         }
       },
-      sendPayFinish(count){
+      sendPayFinish(count) {
         const that = this;
         let desc = "",
           subContentDesc = "",
@@ -1078,7 +1053,7 @@
               subContentDesc: subContentDesc
             }
           }),
-          done (error, msg) {
+          done(error, msg) {
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg)
@@ -1089,16 +1064,16 @@
       }
     },
     computed: {
-      lastTime (){
+      lastTime() {
         return this.$store.state.lastTime;
       },
-      lastTimeText(){
+      lastTimeText() {
         return api.MillisecondToDate(this.$store.state.lastTime);
       },
-      lastCount(){
+      lastCount() {
         return this.$store.state.lastCount;
       },
-      payPopupDate(){
+      payPopupDate() {
         return {
           docName: this.$store.state.targetMsg.nick,
           docId: api.getPara().doctorCustomerId,
@@ -1110,16 +1085,16 @@
         }
       },
     },
-    mounted(){
+    mounted() {
       this.getUserBaseData();
-      this.checkFirstBuy();
-      localStorage.setItem("APPIMLinks",location.href);
+
+      localStorage.setItem("APPIMLinks", location.href);
     },
-    activated(){
+    activated() {
       this.scrollToBottom();
     },
     watch: {
-      lastTime (time) {
+      lastTime(time) {
         if (time <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
@@ -1129,7 +1104,7 @@
           this.bottomTipsShow = false;
         }
       },
-      lastCount(count){
+      lastCount(count) {
         if (count <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
@@ -1162,25 +1137,32 @@
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
 
-  .fadeDown-enter-active, .fadeDown-leave-active {
+  .fadeDown-enter-active,
+  .fadeDown-leave-active {
     transition: all ease-in-out .5s
   }
 
-  .fadeDown-enter, .fadeDown-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeDown-enter,
+  .fadeDown-leave-to
+    /* .fade-leave-active in <2.1.8 */
+
   {
     opacity: 0;
     transform: translateY(-50%);
   }
 
-  .fadeUp-enter-active, .fadeUp-leave-active {
+  .fadeUp-enter-active,
+  .fadeUp-leave-active {
     transition: all ease-in-out .5s
   }
 
-  .fadeUp-enter, .fadeUp-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeUp-enter,
+  .fadeUp-leave-to
+    /* .fade-leave-active in <2.1.8 */
+
   {
     opacity: 0;
     transform: translateY(50%);
   }
-
 </style>
 
