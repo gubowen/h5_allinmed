@@ -100,7 +100,6 @@
     },
     mounted(){
         this.oiMessage=this.outPatientMessage.data;
-      console.log(this.outPatientMessage);
     },
     props: {
       outPatientMessage: {

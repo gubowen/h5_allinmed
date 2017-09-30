@@ -6,8 +6,9 @@
  *
  * Created by Qiangkailiang on 17/9/29.
  */
-
-
-export default function scrollPosition(element){
-    console.log(element[element.length-1]);
+export default function scrollPosition(element) {
+  const ele = element[element.length - 1],
+    topHeight = ele.$el.offsetTop;
+  document.documentElement.scrollTop = topHeight;
+  console.log(topHeight)
 }

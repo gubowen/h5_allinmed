@@ -9,7 +9,7 @@
 import axios from "axios";
 
 export default function ajax(param) {
-  axios.interceptors.request.use(function(config) { //在请求发出之前进行一些操作
+  axios.interceptors.request.use(function (config) { //在请求发出之前进行一些操作
     if (document.querySelector(".ev-loading")) {
       document.querySelector(".ev-loading").style.display = "block";
     }
@@ -24,7 +24,9 @@ export default function ajax(param) {
     transformRequest: [function(data) {
       return "paramJson=" + JSON.stringify(data);
     }],
-    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    },
     timeout: 30000
   }).then((res) => {
     param.done(res.data);
