@@ -531,7 +531,7 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
 
-              window.location.href = '/dist/imSceneDoctor.html?caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
+              window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
         })
