@@ -186,8 +186,6 @@
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
 
-
-
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
@@ -274,7 +272,7 @@
       this.currentIndex = -1;
     },
     mounted() {
-      document.title = "为谁问诊";
+      document.title = "诊后报道";
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//患者关系选择器初始化
@@ -354,7 +352,6 @@
         //doctorCustomerId = 1499666656359
         //patientCustomerId =1489998682602
         //patientId = 1504666915825
-
         window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+api.getPara().customerId +'&patientId='+this.patientId +'&from=report';
        // alert("医生IM页面");
        // this.IMEnsureShow = false;
@@ -534,7 +531,7 @@
           return;
         }
         if (that.sexSelect === -1) {
-          that.errorMsg = "患者证件号码已存在";
+          that.errorMsg = "请选择患者患者性别";
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {

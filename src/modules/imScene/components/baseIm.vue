@@ -141,6 +141,7 @@
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
     getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
+    updateShunt:'/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
   };
   export default{
     data(){
@@ -746,7 +747,7 @@
             if (data.responseObject.responseStatus) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
-              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
+              price === "0"?that.againShunt('free'):that.buyTime(price)
             }
           }
         })
@@ -779,7 +780,7 @@
           },
           wxPaySuccess(_data){
             console.log("支付成功")
-            that.refreashOrderTime('pay');
+            that.againShunt('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
@@ -788,8 +789,30 @@
           }
         });
       },
-      //支付成功...刷新页面并重置时间
-      refreashOrderTime (type) {
+      //支付成功后重新分流
+      againShunt (type) {
+        let that = this;
+        api.ajax({
+          url: XHRList.updateShunt,
+          method: 'POST',
+          data: {
+            caseId:api.getPara().caseId,
+            andConsultationId:that.orderSourceId,
+            isShunt:1,//是否分流0-否1-是
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              that.getLastTime();
+              if(type && type === 'pay'){
+                that.sendPayFinish();
+              }
+              that.isClick = false;//是否点击立即咨询重置
+            }
+          }
+        })
+      },
+      //重置时间
+      refreashOrderTime () {
         const that = this;
         api.ajax({
           url: XHRList.updateCount,
@@ -806,10 +829,6 @@
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
               that.getLastTime();
-              if(type && type === 'pay'){
-                that.sendPayFinish();
-              }
-              that.isClick = false;//是否点击立即咨询重置
             }
           }
         })
@@ -817,7 +836,6 @@
       //更新上传了检查检验
       updateMedical () {
         let that = this;
-        debugger
         api.ajax({
           url: XHRList.updateMedicalList,
           method: 'POST',

@@ -18,18 +18,21 @@ $(function () {
     init: function () {
       window.onload = Log.createBrowse(2, '就诊信息');
       // this.forceRefresh();
-      let AppIMLinks = localStorage.getItem("APPIMLinks")
+      let AppIMLinks = localStorage.getItem("APPIMLinks");
 
       if(AppIMLinks){
+
         common.confirmBox({
           textCenter: true,
           content: '您已报到成功无需重复操作',
           cancel: '返回首页',
           ensure: '去沟通',
           cancelCallback: function () {
+            localStorage.removeItem('APPIMLinks');
             window.location.href='http://localhost:8080/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
           },
           ensureCallback: function () {
+            localStorage.removeItem('APPIMLinks');
             window.location.href='http://localhost:8080/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
           }
         })
@@ -661,8 +664,12 @@ $(function () {
           common.popup({
             text: "报到成功"
           })
+          debugger;
           setTimeout(function () {
-            window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId=" + common.getpara().doctorId + "&patientId=" + common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId=" + rep.responseObject.responsePk);
+          //  window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId=" + common.getpara().doctorId + "&patientId=" + common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId=" + rep.responseObject.responsePk);
+
+            window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+
             // https://m.allinmed.cn/pages/myServices/doc_main.html?customerId=1495762174307&patientId=1496905728860&caseId=1496905753874&patientCustomerId=1492428843567
           }, 2000);
         } else {
