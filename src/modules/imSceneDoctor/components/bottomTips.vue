@@ -29,17 +29,17 @@
         let type = this.bottomTipsType;
         switch (type) {
           case -1://超时未接诊...剩余接诊时间小于0
-            if (api.getPara().from === "report") {
-              this.renderMessage = "抱歉~您的问诊请求未能得到主诊专家的接诊确认，已为您退诊。";
-            } else {
-              this.renderMessage = "抱歉~由于主诊医生出诊、手术日程繁忙，未能及时接诊，已为您退诊；如需继续等待，请重新支付。";
-            }
+            this.renderMessage = "抱歉~由于主诊医生出诊、手术日程繁忙，未能及时接诊，已为您退诊；如需继续等待，请重新支付。";
             break;
           case 1://问诊已结束...问诊时间结束或问诊次数归零
             this.renderMessage = "您的问诊已结束，若希望继续问诊，请点击下方按钮完成支付后继续沟通。";
             break;
           case 2://医生拒绝咨询
-            this.renderMessage = "抱歉~您的问诊请求未能得到主诊医生的接诊确认，已为您退诊；点击下方按钮，我们会重新为您推荐医生。";
+            if (api.getPara().from === "report") {
+              this.renderMessage = "抱歉~您的问诊请求未能得到主诊专家的接诊确认，已为您退诊。";
+            }else{
+              this.renderMessage = "抱歉~您的问诊请求未能得到主诊医生的接诊确认，已为您退诊；点击下方按钮，我们会重新为您推荐医生。";
+            }
             break;
         }
       }

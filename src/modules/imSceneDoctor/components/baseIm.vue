@@ -96,7 +96,7 @@
           </div>
         </section>
         <!--超时未接诊-扫码报道-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==-1&&from==='report')">
+        <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
           <div>
             <span>已退诊</span>
           </div>
