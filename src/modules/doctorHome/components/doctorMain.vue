@@ -1028,11 +1028,11 @@
                 position: absolute;
                 content: '';
                 width: rem(20px);
-                height: rem(22px);
+                height: rem(28px);
                 background: url("../../../common/image/img00/doctorHome/remaining@2x.png") no-repeat center;
-                background-size: 100% 100%;
+                background-size: rem(20px) rem(26px);
                 top: 50%;
-                margin-top: rem(-10px);
+                margin-top: rem(-14px);
                 left: 0;
               }
             }

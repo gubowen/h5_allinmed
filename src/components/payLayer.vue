@@ -488,7 +488,6 @@
         line-height:rem(80px);
         background: #70859F;
         color: #C1D0E0;
-        opacity: 0.7;
         @include font-dpr(12px);
         .docName{
           margin-right:rem(16px);
@@ -525,36 +524,44 @@
           }
           dd{
             display: inline-block;
-            vertical-align: middle;
+            position: relative;
             margin-left:rem(15px);
+            vertical-align: middle;
             &:before{
               background: #828282;
               display: inline-block;
+              position: absolute;
               content: "";
               width: rem(6px);
               height: rem(6px);
               border-radius: 50%;
-              margin-right:rem(4px);
-              vertical-align: middle;
+              top: 50%;
+              margin-top: rem(-3px);
+              left: rem(-12px);
             }
           }
         }
         .doxCando {
           padding-top:rem(20px);
           li {
-            padding-top:rem(20px);
+            margin-top:rem(20px);
             color: #555555;
             @include font-dpr(16px);
             opacity: 0.8;
+            position: relative;
             &:before {
               display: inline-block;
               content: "";
+              position: absolute;
               margin-right: rem(12px);
-              width: rem(8px);
-              height: rem(8px);
+              width: rem(12px);
+              height: rem(12px);
               border-radius: 50%;
-              background: #2FC5BD;
-              vertical-align: middle;
+              background: url("../common/image/img00/doctorHome/Oval 8 Copy 14@2x.png") no-repeat center;
+              background-size: rem(8px) rem(8px);
+              top: 50%;
+              left: rem(-20px);
+              margin-top: rem(-6px);
             }
           }
         }
