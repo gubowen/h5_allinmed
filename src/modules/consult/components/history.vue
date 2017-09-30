@@ -157,7 +157,9 @@
   const XHRList = {
     upload: "/mcall/customer/patient/case/attachment/v1/create/",
     create: "/mcall/customer/patient/case/v2/create/",
-    triage: "/mcall/customer/case/consultation/v1/createConsultation/"
+    triage: "/mcall/customer/case/consultation/v1/createConsultation/",
+    createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/",//创建专业医生问诊
+    updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",//更新问诊次数
   };
   export default{
     data () {
@@ -471,7 +473,65 @@
           done(data) {
             if (data.responseObject.responsePk !== 0) {
               const caseId = data.responseObject.responsePk;
-              that.getTriageDoctorId(caseId);
+              //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
+              api.getPara().doctorId?that.getProfessionalDoctor(caseId):that.getTriageDoctorId(caseId);
+            }
+          }
+        })
+      },
+      //创建专业医生会话
+      getProfessionalDoctor(caseId){
+        let that = this;
+        api.ajax({
+          url:XHRList.createProfessionalConsultation,
+          method: "POST",
+          data: {
+            caseId: caseId,
+            customerId: api.getPara().doctorId,
+            patientCustomerId: that.allParams.customerId,
+            patientId: that.allParams.patientId,
+            consultationType: 1,
+            consultationState: -1,
+            consultationLevel: 0,
+            siteId: 17,
+            caseType: 0
+          },
+          done (d) {
+            if (d.responseObject.responseStatus) {
+              that.updateTimes(d.responseObject.responsePk,caseId);
+            }
+          }
+        });
+      },
+      //更新次数
+      updateTimes (consultationId,caseId) {
+        let that = this;
+//        debugger
+        api.ajax({
+          url: XHRList.updateCount,
+          method: 'POST',
+          data: {
+            consultationId: consultationId,
+            frequency: 3,
+            frequencyType: 2,
+            consultationState: -1,
+            consultationLevel: 0
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              localStorage.setItem("sendTips", JSON.stringify({
+                orderType: 0,
+                orderAmount: 0,
+                orderFrequency:3
+              }));
+              that.finish=false;
+
+              localStorage.removeItem("selectList");
+              localStorage.removeItem("secondList");
+              localStorage.removeItem("questionList");
+              localStorage.removeItem("complication");
+
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
         })
