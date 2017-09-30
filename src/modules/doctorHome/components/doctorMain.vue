@@ -680,10 +680,16 @@
               if (data && data.responseObject.responseData && data.responseObject.responseData.data_list) {
                 _this.personalIndividual = data.responseObject.responseData.data_list;
                 const _personalIndividual = data.responseObject.responseData.data_list;
-                if (_personalIndividual.continuingEducationList || _personalIndividual.educationList || _personalIndividual.honorList || _personalIndividual.fundList) {
-                  if (_personalIndividual.continuingEducationList.length > 0 || _personalIndividual.educationList.length > 0 || _personalIndividual.honorList.length > 0 || _personalIndividual.fundList.length > 0) {
-                    _this.isPersonalIndividualShow = true;
-                  }
+                if (_personalIndividual.continuingEducationList && _personalIndividual.continuingEducationList.length > 0   ) {
+                  _this.isPersonalIndividualShow = true;
+                }else if( _personalIndividual.educationList && _personalIndividual.educationList.length > 0){
+                  _this.isPersonalIndividualShow = true;
+                }else if( _personalIndividual.honorList && _personalIndividual.honorList.length > 0){
+                  _this.isPersonalIndividualShow = true;
+                }else if( _personalIndividual.fundList && _personalIndividual.fundList.length > 0){
+                  _this.isPersonalIndividualShow = true;
+                }else {
+                  _this.isPersonalIndividualShow = true;
                 }
               }
             },
