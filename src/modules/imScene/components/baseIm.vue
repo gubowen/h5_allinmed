@@ -852,7 +852,7 @@
       },
       toUpLoadTimes(opt) {
         let that = this;
-        debugger
+//        debugger
         api.ajax({
           url: XHRList.updateCount,
           method: 'POST',
