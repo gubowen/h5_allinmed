@@ -60,7 +60,7 @@
       <section class="cureAfterReport" v-show="isDoctorID">
         <section class="doc-commonTitle hasBtnForLink">
           <p class="doc-titleLeft">您是我的门诊/住院患者</p>
-          <p class="doc-titleRight-bigLabel copyOne"></p>
+          <p class="doc-titleRight-bigLabel copyOne" @click="oldCurePatient"></p>
         </section>
         <section class="immediately-contentBox">
           <p class="immediately-title">我可以帮您</p>
@@ -677,17 +677,14 @@
             timeout: 20000,
             done(data) {
               _this.finish = false;
-              if (data&&data.responseObject.responseData && data.responseObject.responseData.data_list) {
-                _this.personalIndividual=data.responseObject.responseData.data_list;
-               const _personalIndividual=data.responseObject.responseData.data_list;
-                if(_personalIndividual.continuingEducationList.length>0&&_personalIndividual.educationList.length>0&&_personalIndividual.honorList.length>0&&_personalIndividual.fundList.length>0){
-                  _this.isPersonalIndividualShow=true;
+              if (data && data.responseObject.responseData && data.responseObject.responseData.data_list) {
+                _this.personalIndividual = data.responseObject.responseData.data_list;
+                const _personalIndividual = data.responseObject.responseData.data_list;
+                if (_personalIndividual.continuingEducationList || _personalIndividual.educationList || _personalIndividual.honorList || _personalIndividual.fundList) {
+                  if (_personalIndividual.continuingEducationList.length > 0 || _personalIndividual.educationList.length > 0 || _personalIndividual.honorList.length > 0 || _personalIndividual.fundList.length > 0) {
+                    _this.isPersonalIndividualShow = true;
+                  }
                 }
-              }else{
-//                _this.errorShow = true;
-//                setTimeout(() => {
-//                  _this.errorShow = false;
-//                }, 2000)
               }
             },
             fail(err){
@@ -734,7 +731,7 @@
           window.location.href=`/dist/consult.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
         },
         //诊后报道
-        newCurePatient(){
+        oldCurePatient(){
           let _patientCustomerId=api.getPara().patientCustomerId;
           window.location.href=`/dist/patientReport.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
         },
