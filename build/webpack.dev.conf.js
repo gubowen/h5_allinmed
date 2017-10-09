@@ -29,7 +29,7 @@ let devConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     new FriendlyErrorsPlugin(),
     new vConsolePlugin({
-      enable: false // 发布代码前记得改回 false
+      enable: true // 发布代码前记得改回 false
     }),
   ]
 })
