@@ -3,8 +3,8 @@
  * @desc:
  * @example:
  * @depend:
- * @date: 2017/04/07
- * @author: lichenyang
+ * @date: 2017/09/30
+ * @author: gubowen
  */
 $(function () {
   var controller = {
@@ -21,7 +21,6 @@ $(function () {
       let AppIMLinks = localStorage.getItem("APPIMLinks");
 
       if(AppIMLinks){
-
         common.confirmBox({
           textCenter: true,
           content: '您已报到成功无需重复操作',
@@ -29,11 +28,11 @@ $(function () {
           ensure: '去沟通',
           cancelCallback: function () {
             localStorage.removeItem('APPIMLinks');
-            window.location.href='http://localhost:8080/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
+            window.location.href='/dist/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
           },
           ensureCallback: function () {
             localStorage.removeItem('APPIMLinks');
-            window.location.href='http://localhost:8080/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
+            window.location.href='/dist/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
           }
         })
       }

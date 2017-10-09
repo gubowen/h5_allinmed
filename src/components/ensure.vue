@@ -19,7 +19,7 @@
    * @Notify：
    * @Depend：
    *
-   * Created by qiangkailiang on 2017/7/27.
+   * Created by gubowen on 2017/7/27.
    */
   export default{
     data(){

@@ -173,7 +173,7 @@
    * @Notify：
    * @Depend：
    *
-   * Created by Qiangkailiang/Lichenyang on 17/7/10.
+   * Created by Qiangkailiang/Lichenyang/gubowen on 17/7/10.
    */
   import api from 'common/js/util/util';
   import validatePlugins from 'common/js/util/validate_plugins';
@@ -696,7 +696,7 @@
               that.areaClick = true;//选择城市是否点击过
 //              that.relationClick=true;
               that.relationShip.title = "选择您与患者关系";
-              window.location.href = 'http://m1.allinmed.cn/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
+              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
 
             } else {
               that.errorMsg = data.responseObject.responseMessage;

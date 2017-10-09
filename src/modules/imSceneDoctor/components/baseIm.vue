@@ -220,7 +220,7 @@
         const that = this;
         this.nim = NIM.getInstance({
           // debug: true,
-          appKey: nimEnv,
+          appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
           onconnect(data) {

@@ -186,7 +186,7 @@
         const that = this;
         this.nim = NIM.getInstance({
 //          debug: true,
-          appKey: nimEnv,
+          appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
           //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
