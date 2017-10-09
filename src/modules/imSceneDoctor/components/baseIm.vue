@@ -160,7 +160,7 @@
   import payPopup from 'components/payLayer';
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
-
+  import nimEnv from 'common/js/nimEnv/nimEnv';
   import scrollPosition from "../api/scrollPosition";
   let nim;
   const XHRList = {
@@ -220,7 +220,7 @@
         const that = this;
         this.nim = NIM.getInstance({
           // debug: true,
-          appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+          appKey: nimEnv,
           account: this.userData.account,
           token: this.userData.token,
           onconnect(data) {

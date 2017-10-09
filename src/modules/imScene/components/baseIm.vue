@@ -130,6 +130,7 @@
   import PayFinishTips from "./payFinishTips.vue";
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
+  import nimEnv from 'common/js/nimEnv/nimEnv';
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -185,7 +186,7 @@
         const that = this;
         this.nim = NIM.getInstance({
 //          debug: true,
-          appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+          appKey: nimEnv,
           account: this.userData.account,
           token: this.userData.token,
           //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段

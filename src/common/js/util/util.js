@@ -37,6 +37,17 @@ class Api {
     return param;
   }
 
+  getCookie(name) {
+    let arr;
+    const reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg)) {
+      return decodeURIComponent(arr[2]);
+    }
+    else {
+      return null;
+    }
+  }
+
   removeDub(arr) {
     return [...new Set(arr)];
   }
