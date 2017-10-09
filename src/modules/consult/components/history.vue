@@ -224,6 +224,11 @@
       this.finish = false;
       this.initData();
        document.title = "描述病情";
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
     },
     mounted(){
       document.title = "描述病情";
