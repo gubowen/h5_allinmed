@@ -226,13 +226,12 @@
        document.title = "描述病情";
       if (localStorage.getItem("PCIMLinks")!==null) {
         this.backPopupShow = true;
-        alert("123123");
       } else {
         this.backPopupShow = false;
       }
-      alert(this.backPopupShow);
-      alert("activated");
-      alert(localStorage.getItem("PCIMLinks"))
+//      alert(this.backPopupShow);
+//      alert("activated");
+//      alert(localStorage.getItem("PCIMLinks"))
     },
     mounted(){
       document.title = "描述病情";
@@ -241,13 +240,12 @@
       localStorage.setItem("hasCome", 0);
       if (localStorage.getItem("PCIMLinks")!==null) {
         this.backPopupShow = true;
-        alert("123");
       } else {
         this.backPopupShow = false;
       }
-      alert(this.backPopupShow);
-      alert("mounted");
-      alert(localStorage.getItem("PCIMLinks"))
+//      alert(this.backPopupShow);
+//      alert("mounted");
+//      alert(localStorage.getItem("PCIMLinks"))
     },
     methods: {
       initData () {
