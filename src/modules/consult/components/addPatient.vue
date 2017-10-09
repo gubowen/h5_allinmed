@@ -213,6 +213,7 @@
           district: "",
           result:"选择患者所在地"
         },//选择城市参数
+        areaClick:true,//选择城市是否点击过
         cityLevel:2,//城市选择级别
         sexSelect: -1,//性别选择控制
         relationPicker: null,//与患者关系的仿ios选择器
@@ -246,7 +247,6 @@
         phone: "",//手机号
         errorMsg: "fuck",//提示错误的字段
         errorShow: false,//是否提示错误
-        areaClick:true,//选择城市是否点击过
         listType:"city", //类型为城市
         bindPhone:"",//用户绑定的手机号
         formCheck:false,//表单是否全部验证通过
@@ -321,6 +321,47 @@
 
     },
     methods: {
+      //重置表单
+      resetForm () {
+        let that = this;
+        that.username="";//添加患者名字
+//        this.userage="";//患者年龄
+        that.phone = that.bindPhone;//手机重置为绑定的手机
+        that. relationShip={
+          title: "本人",
+          id: "0"
+        };
+        that.sexSelect = -1;//性别选择控制
+        that.areaParam={
+          provinceId: "",
+          province: "",
+          cityId: "",
+          city: "",
+          districtId: "",
+          district: "",
+          result:"选择患者所在地"
+        };
+        that.areaClick=true;//选择城市是否点击过
+        that.relationInput="本人";//用来验证与患者关系是否填写
+        that.credentialTitle="患者证件";//证件类型需要显示的话术
+        that.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
+        that.credentialType={
+          title: "身份证",
+            id: "1"
+        };//仿ios选择器确定出的证件类型
+        that.IDCheckFlag=false;//校验证件号码信息是否通过
+        that.credentialInput="身份证";//用来验证证件类型是否填写
+        that.birthClick=true;//出生日期是否点击,
+        that.birthPicker=null;//出生日期的仿ios选择器
+        that.birthData={
+          title: "请选择患者出生日期",
+          id: "0",
+        };//仿ios选择器确定出的出生日期
+        that.birthInput="";//用来验证出生日期是否填写
+        that.IDNumber="";//证件号码
+        that.formCheck=false;//表单是否全部验证通过
+        that.infoErrorShow=false;//信息错误是否显示
+      },
       initData () {
 
         if (this.$route.params.areaParam) {
@@ -663,21 +704,16 @@
               that.headerShow = 2;
               that.patientList.unshift({
                 isValid:"1",
-                patientAge:that.userage,
+                patientAge:userage,
                 patientId:data.responseObject.responsePk,
                 patientLogoUrl:null,
                 patientName:that.username,
                 patientRelationId:that.relationShip.id,
                 patientSex:that.sexSelect,
               });
+//              debugger;
               //去咨询成功后，需要清除表单数据
-//              that.userage = "";
-              that.username = "";
-              that.phone = "";
-              that.areaParam.result = "选择患者所在地";
-              that.areaClick=true;//选择城市是否点击过
-//              that.relationClick=true;
-              that.relationShip.title="选择您与患者关系";
+              that.resetForm();
               setTimeout(function () {
                 that.toSelectPart(0);
               },500);
@@ -851,26 +887,10 @@
       },
       //取消添加按钮
       cancelAddFun(){
-        this.createNewPatient=false;
-        this.headerShow=2;
-        this.username="";//添加患者名字
-//        this.userage="";//患者年龄
-        this.phone = this.bindPhone;
-        this. relationShip={
-          title: "选择您与患者关系",
-            id: ""
-        };
-        this.sexSelect = 1;
-        this.areaParam={
-          provinceId: "",
-            province: "",
-            cityId: "",
-            city: "",
-            districtId: "",
-            district: "",
-            result:"选择患者所在地"
-        };
-        this.areaClick=true;//选择城市是否点击过
+        let that = this;
+        that.createNewPatient=false;
+        that.headerShow=2;
+        that.resetForm();
 //        this.relationClick=true;//选择患者是否点击,
         window.scrollTo(0,0);
       },
