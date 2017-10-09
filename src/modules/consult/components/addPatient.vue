@@ -269,8 +269,8 @@
       document.title="为谁问诊";
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
-      this.credentialPickerInit();//患者关系选择器初始化
-      this.birthPickerInit();//患者关系选择器初始化
+      this.credentialPickerInit();//证件类型选择器初始化
+      this.birthPickerInit();//出生日期选择器初始化
       this.getPatientPhone();//获取绑定的手机号
       this.$validator.updateDictionary({
         en: {
@@ -791,6 +791,10 @@
           this.credentialType.id = credentialData[selectedVal[0]].value;
           this.credentialClick = false;
           this.credentialInput = credentialData[selectedVal[0]].text;
+          //关系选择器变动时，如果证件号码不为空，需要重新验证
+          if (this.IDNumber) {
+            this.IDBlur();
+          }
         });
       },
       //出生日期选择器初始化
