@@ -100,6 +100,7 @@
     },
     mounted(){
         this.oiMessage=this.outPatientMessage.data;
+        console.log(this.oiMessage)
     },
     props: {
       outPatientMessage: {
@@ -221,17 +222,20 @@
 
   .outpatient-base-explanation {
     margin: rem(60px) 0;
-    display: flex;
-    align-items: baseline;
+
     & > p {
       @include font-dpr(17px);
       color: #333333;
       font-weight: bold;
+      max-width: 7rem;
+      display: inline-block;
+      vertical-align: text-top;
     }
     &:before {
       content: "";
       text-align: center;
-      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: text-top;
       @include square(rem(40px));
       line-height: rem(40px);
       border-radius: 50%;

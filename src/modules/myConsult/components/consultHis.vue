@@ -250,7 +250,7 @@
           method: "post",
           data: {
             caseId:opt.caseId,
-            customerId:opt.customerId,
+            patientId:opt.patientId,
             isValid:1,
             firstResult:0,
             maxResult:999

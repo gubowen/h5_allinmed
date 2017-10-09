@@ -162,6 +162,7 @@
   import WxPayCommon from 'common/js/wxPay/wxComm';
   import nimEnv from 'common/js/nimEnv/nimEnv';
   import scrollPosition from "../api/scrollPosition";
+  console.log(nimEnv())
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -432,7 +433,7 @@
 //                  });
 
                 setTimeout(() => {
-                  if (that.$refs.outpatientInvite) {
+                  if (api.getPara().from==="push"&&that.$refs.outpatientInvite) {
                     scrollPosition(that.$refs.outpatientInvite);
                   } else {
                     document.body.scrollTop = Math.pow(10, 10);
