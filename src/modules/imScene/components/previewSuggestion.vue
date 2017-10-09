@@ -207,7 +207,7 @@
       },
     methods:{
       getSpsData(opt){
-        return `push_massage_id:${opt.customerId};keyword:${opt.fullName}`+
+        return `push_massage_id:${opt.customerId};keyword:${opt.fullName}`
       },
       goToHref(){
         window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
