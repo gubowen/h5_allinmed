@@ -10,5 +10,4 @@ export default function scrollPosition(element) {
   const ele = element[element.length - 1],
     topHeight = ele.$el.offsetTop;
   document.documentElement.scrollTop = topHeight;
-  console.log(topHeight)
 }
