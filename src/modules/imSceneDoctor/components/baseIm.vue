@@ -570,7 +570,7 @@
           to: this.targetData.account,
           content: JSON.stringify(data),
           // needPushNick: false,
-          // pushContent: `患者<${nickName}>向您咨询，点击查看详情`,
+          // pushContent: `患者<${nickName}>向您问诊，点击查看详情`,
           // pushPayload: JSON.stringify({
           //   "account": "0_" + api.getPara().caseId,
           //   "type": "1"
@@ -654,7 +654,7 @@
             }
           }),
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
+          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -771,7 +771,7 @@
           to: this.targetData.account,
           text: this.sendTextContent,
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
+          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -885,7 +885,7 @@
                 to: that.targetData.account,
                 file: file,
                 needPushNick: false,
-                pushContent: `患者<${that.userData.nick}>向您咨询，点击查看详情`,
+                pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
                 pushPayload: JSON.stringify({
                   "account": "0_" + api.getPara().caseId,
                   "type": "1"
@@ -1043,7 +1043,7 @@
           scene: 'p2p',
           to: that.targetData.account,
           needPushNick: false,
-          pushContent: `患者<${that.userData.nick}>向您咨询，点击查看详情`,
+          pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
