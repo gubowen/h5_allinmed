@@ -1,5 +1,6 @@
 <template>
-  <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
+  <div data-alcode-mod='710'>
+    <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
     <header class="part-select-title">
       <h3>点选最不适部位：</h3>
     </header>
@@ -24,7 +25,7 @@
           <!--</section>-->
         </figure>
       </section>
-      <button class="body-picture-overturn" @click="turnDirection"></button>
+      <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
     </section>
 
     <loading v-show="finish"></loading>
@@ -33,12 +34,13 @@
         <section class="part-box" :class="clickDirection" v-if="secondShow" @click.stop="secondShow=true">
           <!--<article><h2>请再确认一下不适部位</h2></article>-->
           <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList" @click="ensurePart(index)">{{item.partName}}</a>
-          <a class="btnBox-btn btn-confirm" @click='surePart'>确认</a>
+          <a class="btnBox-btn btn-confirm" @click='surePart' data-alcode='e126'>确认</a>
         </section>
       <!--</section>-->
     </transition>
     <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
   </section>
+  </div>
   <!--@backSuccess="backSuccessBack" @docCallBack="docStatusChange"-->
 </template>
 <script type="text/ecmascript-6">

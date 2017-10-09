@@ -10,8 +10,8 @@
           <a @click="hrefToConsult()">去问诊&gt;&gt;</a>
         </section>
       </template>
-      <template v-for="item in items">
-        <section class="orderHistoryItem" @click="getThisItem(item)">
+      <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem">
+        <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items">
           <article class="orderHisItemTop">
             <figure class="doctorInfo left">
               <figcaption class="docLogo left"><img :src="getImgUrl(item)"></figcaption>
@@ -27,11 +27,11 @@
             <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
           </div>
           <div class="orderHistoryItemBottom" v-if="(item.consultationType==0&&item.consultationState==0&&item.state==3) || (item.consultationType==0&&(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1)">
-            <button class="hrefBtn" v-if="item.consultationState==0&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
-            <button class="hrefBtn" v-if="(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
+            <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==0&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
+            <button data-alcode='e137' class="hrefBtn" v-if="(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
           </div>
         </section>
-      </template>
+      </div>
       <loading v-show="finish"></loading>
     </section>
   <!--</loadMore>-->

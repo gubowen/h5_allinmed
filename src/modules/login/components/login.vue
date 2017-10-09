@@ -5,7 +5,8 @@
         <p class="login-title">唯医互联网骨科医院</p>
         <p class="login-guideText">为了给您一个更好的就医体验，请您注册后使用</p>
       </section>
-      <section class="tc-loginCenter">
+      <div data-alcode-mod='706'>
+        <section class="tc-loginCenter">
         <section class="tc-loginInputBox">
           <div class="tc-loginItem tc-loginPhone">
             <span class="tc-loginPhoneIcon" :class="{'active':phoneMessage.length>0}"></span>
@@ -17,7 +18,7 @@
             <span class="tc-loginCodeIcon" :class="{'active':codeMessage.length>0}"></span>
             <input type="number" :class="{'inputActive':codeMessage.length>0}" onpaste="return false;" placeholder="输入短信验证码" v-model="codeMessage" @blur="validateBlur('codeInput')"
                    v-validate="'required|digits:4'" @keypress="codeKeyPress()" name="codeInput">
-            <span class="tc-getCode" @click="getCodeApi" :class="{'active':getCode}">{{codeTime}}</span>
+            <span data-alcode='e120' class="tc-getCode" @click="getCodeApi" :class="{'active':getCode}">{{codeTime}}</span>
             <span class="tc-inputClearCode" @click="clearCode($event)" v-show="codeMessage.length>0"></span>
           </div>
         </section>
@@ -28,8 +29,9 @@
             <span class="tc-ruleDetail" @click="ruleClick">《唯医互联网骨科医院用户服务协议》</span>
           </p>
         </section>
-        <section class="tc-submitBtn" @click="loginSubmit">登入</section>
+        <section data-alcode='e121' class="tc-submitBtn" @click="loginSubmit">登入</section>
       </section>
+      </div>
     </section>
 
     <transition name="fade">
