@@ -2,6 +2,7 @@
   <section v-if="payPopupShow">
     <transition name="fadeUp">
       <div class="mask_layer" v-if="payOrderShow">
+        <div data-alcode-mod='721'>
             <div class="onlineVisit_mask">
               <section class="docNameBox">
                   <span class="docName">{{payPopupParams.docName}}</span>提供的服务<i class="icon_close_mask" @click="closePopup"></i>
@@ -22,9 +23,10 @@
                   <li>医生48小时内未接诊全额退款</li>
                   <li>问诊5天有效</li>
                 </ul>
-                <a class="goPayment" @click="goToPay({type:1,orderAmount:priceMessage.generalPrice,orderFrequency:priceMessage.generalTimes})">购买</a>
+                <a data-alcode='e135' class="goPayment" @click="goToPay({type:1,orderAmount:priceMessage.generalPrice,orderFrequency:priceMessage.generalTimes})">购买</a>
               </section>
             </div>
+        </div>
       </div>
     </transition>
     <!--<transition name="fade">-->
