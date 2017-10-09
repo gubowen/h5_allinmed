@@ -229,6 +229,8 @@
       } else {
         this.backPopupShow = false;
       }
+      console.log("activated");
+      console.log(localStorage.getItem("PCIMLinks"))
     },
     mounted(){
       document.title = "描述病情";
@@ -240,6 +242,8 @@
       } else {
         this.backPopupShow = false;
       }
+      console.log("mounted");
+      console.log(localStorage.getItem("PCIMLinks"))
     },
     methods: {
       initData () {

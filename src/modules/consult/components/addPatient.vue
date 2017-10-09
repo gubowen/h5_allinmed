@@ -314,6 +314,8 @@
           }
         }
       });
+      console.log("添加患者");
+      console.log(localStorage.getItem("PCIMLinks"));
       if (localStorage.getItem("PCIMLinks")!==null) {
         localStorage.removeItem("PCIMLinks");
       }
