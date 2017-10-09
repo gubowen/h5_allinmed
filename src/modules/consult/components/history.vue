@@ -242,6 +242,7 @@
       } else {
         this.backPopupShow = false;
       }
+      console.log(this.backPopupShow);
       console.log("mounted");
       console.log(localStorage.getItem("PCIMLinks"))
     },
