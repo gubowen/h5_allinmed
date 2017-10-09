@@ -526,7 +526,7 @@
         .login-guideText {
           @include font-dpr(15px);
           color: #808080;
-          margin-top: rem(20px);
+          margin-top: rem(16px);
           letter-spacing: 0;
         }
       }

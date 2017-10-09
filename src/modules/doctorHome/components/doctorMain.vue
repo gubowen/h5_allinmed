@@ -1033,7 +1033,7 @@
                 background-size: rem(20px) rem(26px);
                 top: 50%;
                 margin-top: rem(-14px);
-                left: 0;
+                left: rem(-2px);
               }
             }
             &.not-usable-off {

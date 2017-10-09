@@ -19,7 +19,7 @@ import  "../../common/js/third-party/jweixin-1.0.0.js"
 import api from '../../common/js/util/util';
 import fastclick from 'fastclick';
 import WxPayCommon from '../../common/js/wxPay/wxComm';
-// import vconsole from 'vconsole';
+
 // import eruda from 'eruda'
 fastclick.attach(document.body);
 
