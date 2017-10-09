@@ -7,7 +7,7 @@
           <div class="doc-personalInfo-left">
             <p class="personInfo-name">{{fullName}}</p>
             <div class="doc-presentInfo">
-              <span class="doc-major" v-show="platformId.length>0">{{(platformId==1?"骨科":"手外科")}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[2]&&medicalTitleNewArr[2].length>0">{{medicalTitleNewArr[2]}}</span>
+              <span class="doc-major" v-show="platformId.length>0">{{(platformId==1?"骨科":"手外科")}}</span><span class="doc-presents" v-show="medicalTitleNewArr[0]&&medicalTitleNewArr[0].length>0">{{medicalTitleNewArr[0]}}</span><span class="doc-presents-two" v-show="medicalTitleNewArr[1]&&medicalTitleNewArr[1].length>0">{{medicalTitleNewArr[1]}}</span><span class="doc-presents-two" v-show="medicalTeacher.length>0">{{medicalTeacher}}</span>
             </div>
           </div>
           <div class="doc-personalInfo-right">
@@ -203,6 +203,7 @@
           company:"",           //医院
           hospitalId:'',        //医院Id
           medicalTitleNewArr:[],
+          medicalTeacher:"",
           personalIndividual:[
             ""
           ],
@@ -348,6 +349,11 @@
                 _medicalTitleArr.forEach((element,index) => {
                   _this.medicalTitleNewArr.push(element.substring(element.indexOf("_")+1));
                 });
+                if(_this.medicalTitleNewArr.indexOf("博士生导师")>0){
+                  _this.medicalTeacher="博导";
+                }else if(_this.medicalTitleNewArr.indexOf("硕士生导师")>0){
+                  _this.medicalTeacher="硕导";
+                }
                 //头像
                 if (_logoUrl.length > 0) {
                   _this.logoUrl = _logoUrl;

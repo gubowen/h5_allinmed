@@ -149,7 +149,7 @@
       </section>
     </transition>
     <loading :show="!finish"></loading>
-    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:customerId}"></backPopup>
   </section>
   </div>
 </template>
@@ -186,6 +186,7 @@
           top: "-1.5rem "
         },
         patientMessage: {},
+        customerId: '',
         finish: false,
         complication: "",
         renderList: [],
@@ -230,6 +231,7 @@
       this.patientMessage = this.$route.query;
       this.getQuestionList();
       this.finish=false;
+      this.customerId = api.getPara().customerId;
 
       setTimeout(()=>{
         document.body.scrollTop=20;
@@ -241,6 +243,7 @@
       }
       autosize(this.$el.querySelector("textarea"));
       if (localStorage.getItem("PCIMLinks")!==null) {
+
         this.backPopupShow = true;
       } else {
         this.backPopupShow = false;
