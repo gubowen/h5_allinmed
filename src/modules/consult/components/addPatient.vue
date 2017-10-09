@@ -25,7 +25,8 @@
         <!--患者咨询底部-->
         <!--患者列表-->
         <!--<transition name="fadeDown" mode="out-in">-->
-        <section class="patient-list" v-if="!createNewPatient">
+        <div data-alcode-mod='708' data-alcode-item-selector=".patient-list-item">
+          <section class="patient-list" v-if="!createNewPatient">
           <section
             :class="{'on':createNewPatient===false && currentIndex==index}"
             class="patient-list-item"
@@ -37,8 +38,9 @@
             </figcaption>
           </section>
         </section>
+        </div>
         <!--</transition>-->
-        <section class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
+        <section data-alcode='e122' class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
           <span class="add-patient-btn" :class="{'on':createNewPatient}">添加新患者</span>
         </section>
         <!--添加患者-->
@@ -127,10 +129,12 @@
         <!--</transition>-->
         <!--无患者提示-->
         <!--<transition name="fade">-->
-          <section v-if="createNewPatient">
-            <button class="btn-primary go-next" @click="validate">去问诊</button>
-            <p class="cancel-add-btn" v-if="headerShow == 3" @click="cancelAddFun()">取消添加</p>
+        <div data-alcode-mod='709'>
+            <section v-if="createNewPatient">
+            <button data-alcode='e123' class="btn-primary go-next" @click="validate">去问诊</button>
+            <p data-alcode='e124' class="cancel-add-btn" v-if="headerShow == 3" @click="cancelAddFun()">取消添加</p>
           </section>
+        </div>
         <!--</transition>-->
       </section>
     </section>

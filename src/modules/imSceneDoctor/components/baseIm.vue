@@ -1,5 +1,6 @@
 <template>
-  <section class="main-inner ev-fileUpHide">
+  <div data-alcode-mod='720'>
+    <section class="main-inner ev-fileUpHide">
     <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
@@ -102,7 +103,7 @@
           </div>
         </section>
         <!--继续沟通-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1" @click="retryClick(1)">
+        <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1" @click="retryClick(1)">
           <div>
             <span>继续沟通</span>
           </div>
@@ -124,6 +125,7 @@
               v-if="payPopupShow"></payPopup>
     <Loading v-if="loading"></Loading>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**

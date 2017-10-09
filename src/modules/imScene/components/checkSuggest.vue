@@ -1,5 +1,6 @@
 <template>
-  <section class="main-message-box">
+  <div data-alcode-mod='715'>
+    <section class="main-message-box">
     <!--<article class="main-message-box-item others-message">-->
       <!--<figure class="main-message-img">-->
         <!--<img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">-->
@@ -36,13 +37,14 @@
           <span class="more-box-btn more-btn" v-show="moreData" @click="moreDataShow($event)">查看更多</span>
           <span class="more-box-btn less-btn" v-show="!moreData" @click="lessDataShow">收起</span>
         </section>
-        <section class="check-suggest-btn" data-role="videoTriage"
+        <section data-alcode='e129' class="check-suggest-btn" data-role="videoTriage"
                     @click="goToUpload">
           上传检查资料
         </section>
       </section>
     </article>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**

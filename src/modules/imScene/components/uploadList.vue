@@ -41,10 +41,12 @@
           </li>
         </ul>
       </section>
-      <footer class="tc-upLoadSubmit">
-        <button class="tc-submitBtn" v-if="submitFlag" @click="backToImPage">提交</button>
+      <div data-alcode-mod='718'>
+        <footer class="tc-upLoadSubmit">
+        <button data-alcode='e131' class="tc-submitBtn" v-if="submitFlag" @click="backToImPage">提交</button>
         <button class="tc-submitDisabled" v-if="!submitFlag">提交</button>
       </footer>
+      </div>
     </section>
     <transition name="fade">
       <Toast :content="errorMsg" v-if="errorShow"></Toast>

@@ -1,5 +1,6 @@
 <template>
-  <section class="doctorContent" >
+  <div data-alcode-mod='719'>
+    <section class="doctorContent" >
     <section class="doctorContent-box">
       <section class="doctor-personalInfo">
         <div class="doctor-personalInfoBox">
@@ -36,7 +37,7 @@
               <p>图文问诊<span v-show="generalPrice.length>0">{{generalPrice}}元</span></p>
             </section>
             <section class="onlineForChart-right">
-              <p @click="payPopupShow=!isNotUsable&&!isOpenCure,payType='pay'" :class="{'notUsableCure':isNotUsable||isOpenCure}">去问诊</p>
+              <p data-alcode='e133' @click="payPopupShow=!isNotUsable&&!isOpenCure,payType='pay'" :class="{'notUsableCure':isNotUsable||isOpenCure}">去问诊</p>
             </section>
           </section>
           <!--免费问诊-->
@@ -133,6 +134,7 @@
     <!--支付弹层完成-->
     <loading v-show="finish"></loading>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
     /**

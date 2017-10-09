@@ -1,7 +1,8 @@
  <template>
   <section>
     <!--推荐医生-->
-    <section class="main-message-box" v-if="doctorObj.allData.length">
+    <div data-alcode-mod='716'>
+      <section class="main-message-box" v-if="doctorObj.allData.length">
       <article class="doctor-box">
         <header class="doctor-header">
           <h3 class="doctor-title">匹配医生</h3>
@@ -28,13 +29,13 @@
                 </figcaption>
               </section>
               <section class="doctor-item-bottom" v-if="item.isFreeTimes">
-                <span class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">免费问诊</span>
+                <span data-alcode='e132' class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
               <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
-                <span class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse">去问诊</span>
+                <span data-alcode='e132' class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </li>
@@ -46,6 +47,7 @@
         </section>
       </article>
     </section>
+    </div>
 
     <!--患教知识-->
     <section class="main-message-box" v-if="knowledgeObj.allData.length">
@@ -92,7 +94,8 @@
     </section>
 
     <!--检查检验-->
-    <section class="main-message-box" v-if="checkSuggestObj.allData.length">
+    <div data-alcode-mod='715'>
+      <section class="main-message-box" v-if="checkSuggestObj.allData.length">
       <article class="check-suggest-box">
         <header class="check-suggest-title">为确保分诊准确和专家问诊的效率，建议您进行以下检查并上传检查资料，分诊计时已停止，有关检查疑问您可继续向分诊医生询问，资料上传后分诊医生将继续为您服务。</header>
         <section class="check-suggest-bg"></section>
@@ -110,13 +113,14 @@
             <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
           </section>
-          <section class="check-suggest-btn" data-role="videoTriage"
+          <section data-alcode='e129' class="check-suggest-btn" data-role="videoTriage"
                    @click="goToUpload">
             上传检查资料
           </section>
         </section>
       </article>
     </section>
+    </div>
 
   </section>
 </template>
@@ -202,7 +206,9 @@
       this.initData();
       },
     methods:{
-
+      getSpsData(opt){
+        return `push_massage_id:${opt.customerId};keyword:${opt.fullName}`
+      },
       goToHref(){
         window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
           "&diagnosisId=" + this.message.diagnosisId +

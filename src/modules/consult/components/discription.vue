@@ -1,5 +1,6 @@
 <template>
-  <section class="consult-main-inner" @click="showSymptomDetail=false">
+  <div data-alcode-mod='711'>
+    <section class="consult-main-inner" @click="showSymptomDetail=false">
     <transition name="fade">
       <section class="consult-wrapper" v-show="finish" >
         <section class="consult-inner">
@@ -130,7 +131,7 @@
           </transition>
 
         </section>
-        <button class="btn-primary to-second" @click="paramsInstall">继续下一页</button>
+        <button data-alcode='e127' class="btn-primary to-second" @click="paramsInstall">继续下一页</button>
         <transition name="fade">
           <toast :content="errorMsg" v-if="errorShow"></toast>
         </transition>
@@ -150,6 +151,7 @@
     <loading :show="!finish"></loading>
     <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**

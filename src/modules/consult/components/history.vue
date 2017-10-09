@@ -1,5 +1,6 @@
 <template>
-  <section class="consult-main-inner">
+  <div data-alcode-mod='712'>
+    <section class="consult-main-inner">
     <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
       <span class="consult-page page-two"></span>
       <section class="questionContainMain">
@@ -94,7 +95,7 @@
         </section>
       </section>
       <section class="questionSubmitBtnBox">
-        <button class="questionSubmitBtn" @click="submitParamsInstall">填好了</button>
+        <button class="questionSubmitBtn" @click="submitParamsInstall" data-alcode='e128'>填好了</button>
       </section>
     </section>
     <!--<transition name="fadeRight">-->
@@ -134,6 +135,7 @@
     </transition>
     <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:allParams.customerId}"></backPopup>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
