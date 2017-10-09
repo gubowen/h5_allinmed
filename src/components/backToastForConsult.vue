@@ -53,7 +53,8 @@
             let _this=this;
             this.backPopupShow=false;
             console.log(_this.backPopupParams.patientCustomerId);
-            window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientCustomerId}#/addPatient`;
+//            _this.router=`/dist/consult.html?customerId=${_this.backPopupParams.patientCustomerId}#/addPatient`;
+            window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientCustomerId}`;
           },
           //继续沟通
           ensureIMEvent(){
