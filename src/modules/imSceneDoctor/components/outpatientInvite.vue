@@ -44,7 +44,7 @@
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">证件号码</h4>
             <p class="outpatient-patient-item-msg">
-              <span>{{oiMessage.patientDocumentNumber}}</span>
+              <span>{{formatNumber(oiMessage.patientDocumentNumber)}}</span>
             </p>
           </article>
         </article>
@@ -100,7 +100,6 @@
     },
     mounted(){
         this.oiMessage=this.outPatientMessage.data;
-        console.log(this.oiMessage)
     },
     props: {
       outPatientMessage: {
@@ -110,6 +109,14 @@
     methods: {
       goToDocMain(){
         window.location.href = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
+      },
+      formatNumber(num){
+          if (num){
+            let firstPart=num.substring(0,num.length-4);
+            let lastPart=num.substring(num.length-4,num.length);
+
+            return firstPart.replace(/[[a-zA-Z0-9]/g,"*")+lastPart;
+          }
       }
     },
     computed: {
