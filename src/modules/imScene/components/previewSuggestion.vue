@@ -285,6 +285,7 @@
           data: {
             diagnosisId: that.message.diagnosisId,
             caseId:api.getPara().caseId,
+            patientId:api.getPara().patientId,
             isValid: 1,
             firstResult: 0,
             maxResult: 9999,
