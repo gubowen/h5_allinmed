@@ -768,6 +768,10 @@
           this.credentialType.id = credentialData[selectedVal[0]].value;
           this.credentialClick = false;
           this.credentialInput = credentialData[selectedVal[0]].text;
+          //关系选择器变动时，如果证件号码不为空，需要重新验证
+          if (this.IDNumber) {
+            this.IDBlur();
+          }
         });
       },
       //出生日期选择器初始化
