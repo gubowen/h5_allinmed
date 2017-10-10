@@ -301,6 +301,7 @@
       if (to.name === "selectPart") {
         if (localStorage.getItem("PCIMLinks")!==null) {
           this.backPopupShow = true;
+          this.pageLeaveEnsure = true;
         } else {
           this.backPopupShow = false;
           this.levelShow = true;
