@@ -273,6 +273,7 @@
     },
     mounted() {
       document.title = "诊后报道";
+      localStorage.removeItem('APPIMLinks');
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//患者关系选择器初始化
