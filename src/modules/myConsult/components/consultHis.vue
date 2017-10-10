@@ -63,10 +63,10 @@
       }
     },
     mounted(){
-      api.mobileCheck();
-      if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);    //获取openId
-      }
+//      api.mobileCheck();
+//      if (!api.checkOpenId()) {
+//        api.wxGetOpenId(1);    //获取openId
+//      }
       this.getOrderHistoryLists();
     },
     methods: {
@@ -238,7 +238,11 @@
           let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
           localStorage.setItem("doctorName",opt.fullName);
           localStorage.setItem("doctorLogo",docLogo);
-          window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
+          if(opt.caseType == 10){
+            window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=report';
+          }else{
+            window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
+          }
         }else{
           window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
         }
