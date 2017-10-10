@@ -229,9 +229,6 @@
       } else {
         this.backPopupShow = false;
       }
-      alert(this.backPopupShow);
-      alert("activated");
-      alert(localStorage.getItem("PCIMLinks"))
     },
     mounted(){
       document.title = "描述病情";
@@ -243,9 +240,6 @@
       } else {
         this.backPopupShow = false;
       }
-      alert(this.backPopupShow);
-      alert("mounted");
-      alert(localStorage.getItem("PCIMLinks"))
     },
     methods: {
       initData () {
@@ -544,6 +538,7 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
 
+              that.backPopupShow=true;
               window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
@@ -572,6 +567,7 @@
               localStorage.removeItem("complication");
 
               that.finish=false;
+              that.backPopupShow=true;
               window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
             }
           }
