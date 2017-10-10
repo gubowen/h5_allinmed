@@ -229,9 +229,9 @@
       } else {
         this.backPopupShow = false;
       }
-//      alert(this.backPopupShow);
-//      alert("activated");
-//      alert(localStorage.getItem("PCIMLinks"))
+      alert(this.backPopupShow);
+      alert("activated");
+      alert(localStorage.getItem("PCIMLinks"))
     },
     mounted(){
       document.title = "描述病情";
@@ -243,9 +243,9 @@
       } else {
         this.backPopupShow = false;
       }
-//      alert(this.backPopupShow);
-//      alert("mounted");
-//      alert(localStorage.getItem("PCIMLinks"))
+      alert(this.backPopupShow);
+      alert("mounted");
+      alert(localStorage.getItem("PCIMLinks"))
     },
     methods: {
       initData () {
