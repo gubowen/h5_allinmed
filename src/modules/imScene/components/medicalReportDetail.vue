@@ -282,6 +282,8 @@
               width: rem(120px);
               height: rem(120px);
               margin: 0 auto;
+              box-shadow: 0 6px 12px 0 rgba(0,0,0,0.05);
+              border-radius:50%;
             }
           }
           .tc-baseInfoItemRight {
@@ -340,10 +342,9 @@
         background-color: #ffffff;
         .title {
           padding: rem(40px) 0 rem(40px) rem(30px);
-          border-bottom: 2px solid #F8F8F8;
+          border-bottom: 1px solid #F8F8F8;
           h3 {
-            font-weight: 600;
-            color: #666666;;
+            color: #666666;
             @include font-dpr(18px);
             &:before {
               display: inline-block;
@@ -352,7 +353,8 @@
               height: rem(24px);
               margin-right: rem(10px);
               background: #4CD3C6;
-              vertical-align: middle;
+              /*vertical-align: middle;*/
+              margin-top:-(rem(4px));
               border-radius: 999px;
             }
           }
