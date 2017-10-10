@@ -637,6 +637,7 @@
           data: {
             certificateId:that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
             certificateCode:that.IDNumber,//	string	是	证件号码
+            customerId: that.$route.query.customerId?that.$route.query.customerId:api.getPara().customerId,
             firstResult:"0",	//string	是	分页参数
             maxResult:"999",	//string	是	分页参数
           },
