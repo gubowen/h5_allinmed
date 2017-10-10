@@ -559,7 +559,7 @@
           return;
         }
         if (that.sexSelect === -1 ) {
-          that.errorMsg = "请选择患者患者性别";
+          that.errorMsg = "请选择患者性别";
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {
