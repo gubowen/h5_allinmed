@@ -77,15 +77,7 @@
                 </figure>
               </article>
               <article class="add-patient-content-item">
-                <figcaption>出生日期</figcaption>
-                <figure class="add-patient-input">
-                  <span class="patient-relation" :class="{'on':birthClick}"
-                        @click="selectBirth">{{birthData.title}}</span>
-                  <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>患者性别</figcaption>
+                <figcaption>性别</figcaption>
                 <figure class="add-patient-input" id="ev-patient-sex">
                   <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="selectSex(1)">
                     <i class="add-patient-selector"></i>
@@ -95,6 +87,14 @@
                     <i class="add-patient-selector"></i>
                     <span>女</span>
                   </section>
+                </figure>
+              </article>
+              <article class="add-patient-content-item">
+                <figcaption>出生日期</figcaption>
+                <figure class="add-patient-input">
+                  <span class="patient-relation" :class="{'on':birthClick}"
+                        @click="selectBirth">{{birthData.title}}</span>
+                  <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
                 </figure>
               </article>
               <article class="add-patient-content-item">
