@@ -36,8 +36,9 @@
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">患者</h4>
             <p class="outpatient-patient-item-msg">
-              <span>{{oiMessage.patientName}}</span>
-              <span>{{oiMessage.patientSex==1?'男':'女'}}</span>
+              <span>{{limitContent(oiMessage.patientName, 6)}}</span>
+
+              <span>{{oiMessage.patientSex == 1 ? '男' : '女'}}</span>
               <span>{{oiMessage.patientAge}}岁</span>
             </p>
           </article>
@@ -58,7 +59,7 @@
           </article>
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">医院</h4>
-            <p class="outpatient-patient-item-msg">
+            <p class="outpatient-patient-item-msg content-overflow">
               <span>{{oiMessage.doctorHospital}}</span>
             </p>
           </article>
@@ -99,7 +100,7 @@
       }
     },
     mounted(){
-        this.oiMessage=this.outPatientMessage.data;
+      this.oiMessage = this.outPatientMessage.data;
     },
     props: {
       outPatientMessage: {
@@ -107,16 +108,23 @@
       }
     },
     methods: {
+      limitContent(content, limit){
+        if (!content) {
+          return;
+        } else {
+          return (content.length > limit ? (content.substring(0, limit) + "...") : content);
+        }
+      },
       goToDocMain(){
         window.location.href = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
       },
       formatNumber(num){
-          if (num){
-            let firstPart=num.substring(0,num.length-4);
-            let lastPart=num.substring(num.length-4,num.length);
+        if (num) {
+          let firstPart = num.substring(0, num.length - 4);
+          let lastPart = num.substring(num.length - 4, num.length);
 
-            return firstPart.replace(/[[a-zA-Z0-9]/g,"*")+lastPart;
-          }
+          return firstPart.replace(/[[a-zA-Z0-9]/g, "*") + lastPart;
+        }
       }
     },
     computed: {
@@ -201,6 +209,7 @@
   .outpatient-patient-msg {
     padding: rem(44px) 0;
     border-bottom: rem(2px) solid $inner-border-color;
+
     .outpatient-patient-item {
       margin-bottom: rem(16px);
       font-size: 0;
@@ -217,6 +226,10 @@
         font-size: 0;
         display: inline-block;
         vertical-align: middle;
+        &.content-overflow {
+          @include ellipsis();
+          max-width:6rem;
+        }
         & > span {
           padding-right: rem(28px);
           display: inline-block;
