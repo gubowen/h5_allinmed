@@ -732,12 +732,12 @@
         },
         //新患者立即问诊
         newCurePatient(){
-          let _patientCustomerId=api.getPara().patientCustomerId;
+          let _patientCustomerId=api.getPara().customerId;
           window.location.href=`/dist/consult.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
         },
         //诊后报道
         oldCurePatient(){
-          let _patientCustomerId=api.getPara().patientCustomerId;
+          let _patientCustomerId=api.getPara().customerId;
           window.location.href=`/dist/patientReport.html?customerId=${_patientCustomerId}&doctorId=${this.docId}`;
         },
         //toast提示
