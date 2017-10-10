@@ -22,7 +22,7 @@
           <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
             {{transformTimeStamp(msg.time)}}</p>
           <!--问诊单-->
-          <MedicalReport v-show="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
+          <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
                          ref="medicalReport">
           </MedicalReport>
           <!--医生接诊-->
@@ -685,10 +685,10 @@
             if (data.responseObject.responseStatus) {
               console.log("用户已分流...");
               that.orderSourceId = data.responseObject.responsePk;
-              that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
+//              that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
               that.getLastTime(-1);
               //初次创建分流发送问诊单
-              that.firstMessageType(parseInt(data.responseObject.responseData.dataList[0].consultationState))
+              that.firstMessageType(-1)
             }
           }
         })
