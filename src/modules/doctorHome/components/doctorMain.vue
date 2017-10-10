@@ -155,17 +155,9 @@
       getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
       getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
       isReceiveClinic: "/mcall/customer/clinic/setting/v1/getMapById/",                    //是否接受门诊 responseData.dataList.isReceive
-//      getCloseTime: "/mcall/customer/clinic/close/v1/getMapList/",                         //停诊时间
       getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",                    //问诊详情
-//      getEducationList: "/mcall/customer/auth/v1/getAuthSupplement/",                      //教育
-//      getHospitalList: "/mcall/customer/multipoint/practice/v1/getMapById2/",              //医院列表
-//      saveOrderClinic: "/mcall/customer/clinic/v1/create/",                                //保存预约门诊
-//      changeOrderClinic: "/mcall/customer/clinic/v1/update/",                              //改变患者状态,
       updateTime: "/mcall/customer/case/consultation/v1/updateFrequency/",                 //更新次数
-//      getConsultantInfo: "/mcall/customer/case/consultation/v1/getMapById/",               //获取会诊信息
-//      triageAssign: "/mcall/customer/case/consultation/v1/create/",                        //创建会诊信息
       getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/", //获取问诊Id
-//      getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",                              //获取订单详情
       getCurrentByCustomerId: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/", //获取剩余人数和状态
       todayIsHasOrder: "/mcall/cms/pay/order/v1/getMapByCustomerId/"                       //是否当天已经预约过门诊
     };
@@ -254,7 +246,7 @@
               customerId: api.getPara().doctorCustomerId,
               caseId: api.getPara().caseId,
               patientId: api.getPara().patientId,    //患者ID
-              doctorId: api.getPara().doctorCustomerId,      // 医生ID
+//              doctorId: api.getPara().doctorCustomerId,      // 医生ID
               orderType: 1,
               orderSourceType: 0,
               sortType: 2
