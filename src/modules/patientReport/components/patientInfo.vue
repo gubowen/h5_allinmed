@@ -266,13 +266,14 @@
     activated(){
       //手机号校验
       api.mobileCheck();
-      document.title = "为谁问诊";
+      document.title = "诊后报道";
       this.finish = false;
       this.initData();
       this.currentIndex = -1;
     },
     mounted() {
       document.title = "诊后报道";
+      localStorage.removeItem('APPIMLinks');
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//患者关系选择器初始化
@@ -609,6 +610,7 @@
           data: {
             certificateId: that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
             certificateCode: that.IDNumber,//	string	是	证件号码
+            customerId: that.$route.query.customerId?that.$route.query.customerId:api.getPara().customerId,
             firstResult: "0",	//string	是	分页参数
             maxResult: "999",	//string	是	分页参数
           },
@@ -913,7 +915,8 @@
             if (res.responseObject.responseStatus) {
               if (res.responseObject.responseMessage == "NO DATA") {
                 _this.finish = false;
-                _this.createNewPatient = true;
+                //_this.createNewPatient = true;
+                window.location.href = '/pages/patientReport/medical_info.html?patientId='+_this.patientId+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
               } else {
                 _this.caseIdData = res.responseObject.responseData.dataList[0].caseId;
                 api.ajax({

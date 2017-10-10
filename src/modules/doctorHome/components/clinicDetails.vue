@@ -12,7 +12,7 @@
           <span class="docTitle" v-show="docTitle[2]&&docTitle[2].length>0">{{docTitle[2]}}</span>
         </div>
       </figure>
-      <a href="javascript:;" class="jumpToTnfo" @click="goToDocMain">医生主页</a>
+      <a href="javascript:history.go(-1)" class="jumpToTnfo">医生主页</a>
     </header>
     <section class="clinicDetailsBox">
       <h2 class="hospitalName">{{items.hospitalList[0].hospital}}</h2>
@@ -23,7 +23,7 @@
       </section>
       <section class="clinicTimeBox">
         <h3 class="moduleTitle">出诊时间<span>(最近三周出诊安排)</span></h3>
-        <article class="stopClinicDetails" v-if="stopTimeShow">{{stopTimeText}}</article>
+        <article class="stopClinicDetails" v-show="stopTimeShow">{{stopTimeText}}</article>
         <div class="clinicTime">
           <header class="clinicTimeType">
             <span>门诊日期</span>
@@ -150,8 +150,8 @@
           },
           timeout: 30000,
           done(response){
-            that.stopTimeShow = true;
             if(response && response.responseObject.responseData.dataList){
+              that.stopTimeShow = true;
               let item = response.responseObject.responseData.dataList[0];
               that.stopTimeText = `提示：${api.timeFormate({time:item.startTime,type:1}).year}-${api.timeFormate({time:item.endTime,type:1}).year}，停诊`
             }

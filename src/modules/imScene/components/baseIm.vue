@@ -951,9 +951,9 @@
     mounted(){
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
-//      if(!api.checkOpenId()){
-//        api.wxGetOpenId(1);
-//      }
+      if(!api.checkOpenId()){
+        api.wxGetOpenId(1);
+      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();

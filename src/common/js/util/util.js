@@ -63,7 +63,7 @@ class Api {
   }
 
   isWXBrowse() {
-    wxCommon.isWXBrowse();
+    return wxCommon.isWXBrowse();
   }
 
   getByteLen(val) {
