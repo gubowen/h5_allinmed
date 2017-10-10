@@ -187,6 +187,15 @@
       }
     },
     props: {},
+    beforeRouteLeave   (to, from, next){
+      if (to.name === "addPatient") {
+        if (localStorage.getItem("PCIMLinks")!==null) {
+          localStorage.removeItem("PCIMLinks");
+          this.pageLeaveEnsure = true;
+        }
+      }
+      next(this.pageLeaveEnsure)
+    },
     methods: {
       patientType () { //患者基本类型
         const age = parseInt(this.patientMessage.age);

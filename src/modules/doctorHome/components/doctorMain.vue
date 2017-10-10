@@ -186,10 +186,9 @@
           docId:api.getPara().doctorCustomerId,                //医生ID
           caseId:api.getPara().caseId,                         //病历ID
           patientId:api.getPara().patientId,                   //患者ID
-          patientCustomerId:api.getPara().patientCustomerId,   //患者所属用户ID
+          patientCustomerId:api.getPara().patientCustomerId?api.getPara().patientCustomerId:api.getPara().customerId,   //患者所属用户ID(医生主页、医生名片)
           from:'docMain',                       //来源医生主页
           payType:'',                           //是否免费
-
           logoUrl:'',           //头像
           fullName:'',          //姓名
           company:"",           //医院
@@ -285,7 +284,7 @@
           _this.checkPatientState(data);
         }});
         this.getGoodsInfo();
-        if(api.getPara().isCome&&api.getPara().isCome==1){
+        if(api.getPara().customerId&&api.getPara().customerId.length>0){
           _this.isDoctorID = true;
         }
       },

@@ -74,7 +74,7 @@
           </MiddleTips>
         </section>
         <!--继续问诊去购买时间-->
-        <div data-alcode-mod='717'>
+        <div data-alcode-mod='717' :key="0">
           <section class="main-message-box grey-tips" v-if="consultTipsShow"  :key="0">
           <figcaption data-alcode='e130' class="first-message" @click="getConsultPrice()">
             <p>分诊服务已结束，如需帮助，请选择</p>
@@ -951,9 +951,9 @@
     mounted(){
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
+//      if(!api.checkOpenId()){
+//        api.wxGetOpenId(1);
+//      }
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
