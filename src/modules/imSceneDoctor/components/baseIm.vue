@@ -1,5 +1,5 @@
 <template>
-  <div data-alcode-mod='720'>
+  <div data-alcode-mod='720' style="box-shadow: none">
     <section class="main-inner ev-fileUpHide">
     <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
       <transition name="fadeDown">
@@ -22,7 +22,7 @@
           <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
             {{transformTimeStamp(msg.time)}}</p>
           <!--问诊单-->
-          <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
+          <MedicalReport v-show="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
                          ref="medicalReport">
           </MedicalReport>
           <!--医生接诊-->
@@ -401,6 +401,7 @@
       receiveMedicalReport(msg) {
         let flag = false;
         if (msg.type === 'custom' && JSON.parse(msg.content).type === 'medicalReport') {
+
           if (this.msgList.indexOf(msg) <= 1) {
             flag = true;
           }
@@ -1139,7 +1140,9 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
-
+  .animated {
+    box-shadow: none !important;
+  }
   .fadeDown-enter-active,
   .fadeDown-leave-active {
     transition: all ease-in-out .5s
