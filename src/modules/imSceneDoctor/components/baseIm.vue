@@ -222,7 +222,7 @@
       connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
-          // debug: true,
+           debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
