@@ -405,8 +405,8 @@
             },
             fail(err){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -431,8 +431,8 @@
             },
             fail(){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -465,8 +465,8 @@
             },
             fail(err){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -527,8 +527,8 @@
             fail(err){
 //              console.log("获取consultationId失败");
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -579,8 +579,8 @@
             },
             fail(err){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -658,8 +658,8 @@
             },
             fail(err){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
@@ -694,8 +694,8 @@
             },
             fail(err){
               _this.finish = false;
-              _this.toastComm("网络信号差，建议您稍后再试");
-              _this.imgUrl = _this.toastImg.wifi;
+//              _this.toastComm("网络信号差，建议您稍后再试");
+//              _this.imgUrl = _this.toastImg.wifi;
             }
           })
         },
