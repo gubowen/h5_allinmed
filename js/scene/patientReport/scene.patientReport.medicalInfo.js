@@ -663,6 +663,8 @@ $(function () {
           common.popup({
             text: "报到成功"
           });
+          })
+          localStorage.setItem("noMR",1);
           setTimeout(function () {
           //  window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId=" + common.getpara().doctorId + "&patientId=" + common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId=" + rep.responseObject.responsePk);
 
