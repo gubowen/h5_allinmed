@@ -28,11 +28,11 @@ $(function () {
           ensure: '去沟通',
           cancelCallback: function () {
             localStorage.removeItem('APPIMLinks');
-            window.location.href='/dist/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
+            window.location.href='/dist/patientReport.html?customerId='+common.getpara().customerId+'&doctorId='+common.getpara().doctorId+'#/patientInfo';
           },
           ensureCallback: function () {
+            window.location.href=localStorage.getItem('APPIMLinks');
             localStorage.removeItem('APPIMLinks');
-            window.location.href='/dist/patientReport.html?customerId=1489998865488&doctorId=1495706796674#/patientInfo';
           }
         })
       }
@@ -662,8 +662,7 @@ $(function () {
         if (rep.responseObject.responseStatus) {
           common.popup({
             text: "报到成功"
-          })
-          debugger;
+          });
           setTimeout(function () {
           //  window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId=" + common.getpara().doctorId + "&patientId=" + common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId=" + rep.responseObject.responsePk);
 

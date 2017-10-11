@@ -532,7 +532,7 @@
           return;
         }
         if (that.sexSelect === -1) {
-          that.errorMsg = "请选择患者患者性别";
+          that.errorMsg = "请选择患者性别";
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {
@@ -892,12 +892,12 @@
       },
       //判断是否有报道病例
       caseReportFlag() {
-        const _this = this;
+        let _this = this;
         api.ajax({
           url: XHRList.caseReport,
           method: "POST",
           data: {
-            customerId: api.getPara().doctorId,
+            customerId: api.getPara().customerId,
             patientId: _this.patientId,
 //          customerId: '1493879076659',
 //          patientId:'1502693412278',
@@ -914,9 +914,10 @@
           done(res){
             if (res.responseObject.responseStatus) {
               if (res.responseObject.responseMessage == "NO DATA") {
+                  debugger;
                 _this.finish = false;
                 //_this.createNewPatient = true;
-                window.location.href = '/pages/patientReport/medical_info.html?patientId='+_this.patientId+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
+                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
               } else {
                 _this.caseIdData = res.responseObject.responseData.dataList[0].caseId;
                 api.ajax({
