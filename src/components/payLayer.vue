@@ -63,7 +63,7 @@
           }" v-if="hasCommunShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureCommunEvent">
       </confirm>
     </transition>
-    <!--<loading v-show="finish"></loading>-->
+    <loading v-if="finish"></loading>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -196,6 +196,7 @@
               that.finish = true;
             },
             done (data) {
+                debugger;
               that.finish = false;
               if (data.responseObject.responseData.dataList) {
                 let consultationId = data.responseObject.responseData.dataList.consultationId;
