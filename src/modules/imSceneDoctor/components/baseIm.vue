@@ -1,130 +1,131 @@
 <template>
   <div data-alcode-mod='720' style="box-shadow: none">
     <section class="main-inner ev-fileUpHide">
-    <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
-      <transition name="fadeDown">
-        <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
-          <article>
-            <p>医生回复剩余次数</p>
-            <span>{{lastCount}}</span>
-            <p>次</p>
+      <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
+        <transition name="fadeDown">
+          <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
+            <article>
+              <p>医生回复剩余次数</p>
+              <span>{{lastCount}}</span>
+              <p>次</p>
+            </article>
+            <article>
+              <p>对话剩余时间</p>
+              <span>{{lastTimeText}}</span>
+              <p></p>
+            </article>
           </article>
-          <article>
-            <p>对话剩余时间</p>
-            <span>{{lastTimeText}}</span>
-            <p></p>
-          </article>
-        </article>
-      </transition>
-      <transition-group name="fadeDown" tag="section">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
-          <!--时间戳-->
-          <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
-            {{transformTimeStamp(msg.time)}}</p>
-          <!--问诊单-->
-          <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
-                         ref="medicalReport">
-          </MedicalReport>
-          <!--医生接诊-->
-          <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
+        </transition>
+        <transition-group name="fadeDown" tag="section">
+          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
+            <!--时间戳-->
+            <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
+              {{transformTimeStamp(msg.time)}}</p>
+            <!--问诊单-->
+            <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
+                           ref="medicalReport">
+            </MedicalReport>
+            <!--医生接诊-->
+            <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
-          </MiddleTips>
-          <!--问诊结束-->
-          <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
-          </MiddleTips>
-          <!--支付成功-->
-          <PayFinishTips v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'">
-          </PayFinishTips>
-          <!--门诊邀约-->
-          <OutpatientInvite v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
-                            :outPatientMessage="JSON.parse(msg.content)" ref="outpatientInvite">
-          </OutpatientInvite>
-          <!--手术单-->
-          <SurgicalDrape v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
-                         :surgicalMessage="JSON.parse(msg.content)">
-          </SurgicalDrape>
-          <!--赠送次数-->
-          <SendCount v-if="receivedSendCount(msg)" :sendCountMessage="JSON.parse(msg.content)">
-          </SendCount>
-          <!--购买问诊-->
-          <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
-            <figcaption class="first-message">
-              <p>您已重新购买问诊，可继续向医生提问</p>
-            </figcaption>
+            </MiddleTips>
+            <!--问诊结束-->
+            <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
+            </MiddleTips>
+            <!--支付成功-->
+            <PayFinishTips v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'">
+            </PayFinishTips>
+            <!--门诊邀约-->
+            <OutpatientInvite v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
+                              :outPatientMessage="JSON.parse(msg.content)" ref="outpatientInvite">
+            </OutpatientInvite>
+            <!--手术单-->
+            <SurgicalDrape v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
+                           :surgicalMessage="JSON.parse(msg.content)">
+            </SurgicalDrape>
+            <!--赠送次数-->
+            <SendCount v-if="receivedSendCount(msg)" :sendCountMessage="JSON.parse(msg.content)">
+            </SendCount>
+            <!--购买问诊-->
+            <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
+              <figcaption class="first-message">
+                <p>您已重新购买问诊，可继续向医生提问</p>
+              </figcaption>
+            </section>
+            <!--住院通知-->
+            <HospitalNotice v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
+                            :hoispitalMessage="JSON.parse(msg.content)">
+            </HospitalNotice>
+            <!--文本消息-->
+            <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
+                         :targetData="targetData">
+            </ContentText>
+            <!--图像消息-->
+            <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
+                          ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
+                          :userData="userData" :targetData="targetData">
+            </ImageContent>
+            <!--音频-->
+            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
+            </AudioMessage>
+            <!--患者扫码报道-->
+            <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
+              <figcaption class="first-message">
+                <p>报到成功，您可继续补充您的情况，便于医生更好了解病情</p>
+              </figcaption>
+            </section>
           </section>
-          <!--住院通知-->
-          <HospitalNotice v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
-                          :hoispitalMessage="JSON.parse(msg.content)">
-          </HospitalNotice>
-          <!--文本消息-->
-          <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
-                       :targetData="targetData">
-          </ContentText>
-          <!--图像消息-->
-          <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
-                        ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
-                        :userData="userData" :targetData="targetData">
-          </ImageContent>
-          <!--音频-->
-          <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
-          </AudioMessage>
-          <!--患者扫码报道-->
-          <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
-            <figcaption class="first-message">
-              <p>报到成功，您可继续补充您的情况，便于医生更好了解病情</p>
-            </figcaption>
+        </transition-group>
+      </section>
+      <!--底部提示-->
+      <transition name="fadeUp">
+        <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
+        </BottomTips>
+      </transition>
+      <transition name="fadeUp">
+        <footer class="main-input-box" v-if="inputBoxShow">
+          <!--医生拒绝-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
+            <div>
+              <span>重新推荐</span>
+            </div>
           </section>
-        </section>
-      </transition-group>
-    </section>
-    <!--底部提示-->
-    <transition name="fadeUp">
-      <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
-      </BottomTips>
-    </transition>
-    <transition name="fadeUp">
-      <footer class="main-input-box" v-if="inputBoxShow">
-        <!--医生拒绝-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
-          <div>
-            <span>重新推荐</span>
-          </div>
-        </section>
-        <!--超时未接诊-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
-          <div>
-            <span>重新支付</span>
-          </div>
-        </section>
-        <!--超时未接诊-扫码报道-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
-          <div>
-            <span>已退诊</span>
-          </div>
-        </section>
-        <!--继续沟通-->
-        <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1" @click="retryClick(1)">
-          <div>
-            <span>继续沟通</span>
-          </div>
-        </section>
-        <section class="main-input-box-plus">
-          <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
-        </section>
-        <figure class="main-input-box-textarea-inner">
+          <!--超时未接诊-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
+            <div>
+              <span>重新支付</span>
+            </div>
+          </section>
+          <!--超时未接诊-扫码报道-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
+            <div>
+              <span>已退诊</span>
+            </div>
+          </section>
+          <!--继续沟通-->
+          <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1"
+                   @click="retryClick(1)">
+            <div>
+              <span>继续沟通</span>
+            </div>
+          </section>
+          <section class="main-input-box-plus">
+            <i class="icon-im-plus"></i>
+            <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
+          </section>
+          <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
-        </figure>
-        <p class="main-input-box-send" @click="sendMessage">发送</p>
+          </figure>
+          <p class="main-input-box-send" @click="sendMessage">发送</p>
 
-      </footer>
-    </transition>
-    <!--支付弹层-->
-    <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
-              v-if="payPopupShow"></payPopup>
-    <Loading v-if="loading"></Loading>
-  </section>
+        </footer>
+      </transition>
+      <!--支付弹层-->
+      <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
+                v-if="payPopupShow"></payPopup>
+      <Loading v-if="loading"></Loading>
+    </section>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -222,7 +223,7 @@
       connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
-           debug: true,
+//           debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
@@ -431,7 +432,7 @@
 //                  });
 
                 setTimeout(() => {
-                  if (api.getPara().from==="push"&&that.$refs.outpatientInvite) {
+                  if (api.getPara().from === "push" && that.$refs.outpatientInvite) {
                     scrollPosition(that.$refs.outpatientInvite);
                   } else {
                     document.body.scrollTop = Math.pow(10, 10);
@@ -553,8 +554,12 @@
                 };
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign(that.userData, userData);
+                console.log(that.userData)
 
-                callback && callback(userData);
+                setTimeout(() => {
+                  callback && callback(userData);
+                }, 1000)
+
               }
             }
           }
@@ -609,7 +614,7 @@
           }
         })
       },
-       firstMessageType(state) {
+      firstMessageType(state) {
         /*
          * 场景区分：
          * 咨询：发送问诊单
@@ -621,23 +626,21 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
-                this.getPatientBase(this.sendReportTipMessage());
+//        this.getPatientBase(this.sendReportTipMessage);
         if (state < 0) {
-          setTimeout(() => {
-            if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
-              if (!this.$refs.reportTip) {
-                this.getPatientBase(this.sendReportTipMessage());
-              }
-            } else {
-              if (!this.$refs.medicalReport) {
-                this.getPatientBase(this.getMedicalMessage());
-              }
+          if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
+            if (!this.$refs.reportTip) {
+              this.getPatientBase(this.sendReportTipMessage);
             }
-          }, 1000);
+          } else {
+            if (!this.$refs.medicalReport) {
+              this.getPatientBase(this.getMedicalMessage);
+            }
+          }
         }
       },
       //扫码报道提示语
-      sendReportTipMessage() {
+      sendReportTipMessage(userData) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
@@ -651,7 +654,7 @@
             }
           }),
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -955,7 +958,7 @@
                 that.sendPayFinish(count);
               } else {
                 that.lastTimeShow = true;
-                store.commit("setLastCount", 3);
+                store.commit("setLastCount", count);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
@@ -1137,9 +1140,11 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
+
   .animated {
     box-shadow: none !important;
   }
+
   .fadeDown-enter-active,
   .fadeDown-leave-active {
     transition: all ease-in-out .5s

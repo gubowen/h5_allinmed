@@ -786,6 +786,7 @@
           wxPaySuccess(_data){
             console.log("支付成功")
             that.againShunt('pay');
+            that.refreashOrderTime();
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
@@ -807,7 +808,7 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              that.getLastTime();
+//              that.getLastTime();
               if(type && type === 'pay'){
                 that.sendPayFinish();
               }
