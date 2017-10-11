@@ -626,23 +626,22 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
-//        this.getPatientBase(this.sendReportTipMessage());
+//        this.getPatientBase(this.sendReportTipMessage);
         if (state < 0) {
           if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
             if (!this.$refs.reportTip) {
-              this.getPatientBase(this.sendReportTipMessage());
+              this.getPatientBase(this.sendReportTipMessage);
             }
           } else {
             if (!this.$refs.medicalReport) {
-              this.getPatientBase(this.getMedicalMessage());
+              this.getPatientBase(this.getMedicalMessage);
             }
           }
         }
       },
       //扫码报道提示语
-      sendReportTipMessage() {
+      sendReportTipMessage(userData) {
         const that = this;
-        debugger;
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
@@ -655,7 +654,7 @@
             }
           }),
           needPushNick: false,
-          pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
