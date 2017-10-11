@@ -613,7 +613,7 @@
           }
         })
       },
-      firstMessageType(state) {
+       firstMessageType(state) {
         /*
          * 场景区分：
          * 咨询：发送问诊单
