@@ -651,7 +651,7 @@
             }
           }),
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
