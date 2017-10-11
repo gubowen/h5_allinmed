@@ -59,7 +59,7 @@
         </ul>
       </section>
       <section class="tc-caseDescribe tc-module">
-        <section class="tc-caseDescribeTitle title"><h3>现病史</h3></section>
+        <section class="tc-caseDescribeTitle title"><h3>诊治情况</h3></section>
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
