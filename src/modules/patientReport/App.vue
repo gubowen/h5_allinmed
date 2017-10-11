@@ -15,9 +15,8 @@
     components: {}
   }
 </script>
-<style lang="scss" scoped="">
-
-  div{
+<style lang="scss" scoped>
+  div {
     height: 100%;
   }
   .child-view {
@@ -35,6 +34,4 @@
     opacity: 0;
     transform: translate(-100%, 0);
   }
-
-
 </style>
