@@ -1017,7 +1017,8 @@
         const that = this;
         let desc = "",
           subContentDesc = "",
-          contentType = "";
+          contentType = "",
+          amount="";
 
         switch (parseInt(count.orderType)) {
           case 0:
@@ -1032,6 +1033,13 @@
           default:
             break;
         }
+
+        if (count.orderAmount){
+            amount=`(${count.orderAmount}元)`
+        }else{
+            amount="";
+        }
+
         if (parseInt(count.orderType) === 0) {
           subContentDesc = '[患者申请免费问诊]';
           contentType = '申请';
@@ -1052,7 +1060,7 @@
             type: "notification",
             data: {
               actionType: "1",
-              contentDesc: `患者已${contentType}您的${desc}问诊`,
+              contentDesc: `患者已${contentType}您的${desc}问诊${amount}`,
               subContentDesc: subContentDesc
             }
           }),
