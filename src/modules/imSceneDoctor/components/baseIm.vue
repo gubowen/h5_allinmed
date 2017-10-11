@@ -552,8 +552,8 @@
                   tel: '',
                 };
                 that.nim.updateMyInfo(userData);
-                that.userData = Object.assign({}, that.userData, userData);
-                callback && callback();
+                that.userData = Object.assign(that.userData, userData);
+                callback && callback(userData);
               }
             }
           }
@@ -620,7 +620,7 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
-        //        this.getPatientBase(this.sendReportTipMessage());
+                this.getPatientBase(this.sendReportTipMessage());
         if (state < 0) {
           setTimeout(() => {
             if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
