@@ -823,9 +823,9 @@
           console.log('select'+selectedIndex);
           console.log('select'+typeof selectedVal);
           let returnArr = selectedVal.toString().split(",");
-          console.log(yearData[returnArr[0]].value);
-          console.log(monthData[returnArr[1]]);
-          console.log(dayData[returnArr[2]]);
+//          console.log(yearData[returnArr[0]].value);
+//          console.log(monthData[returnArr[1]]);
+//          console.log(dayData[returnArr[2]]);
           let birthTitle = yearArr[returnArr[0]] + '-' +monthArr[returnArr[1]]  +'-'+ dayArr[returnArr[2]];
           that.birthInput = birthTitle;
           that.birthData={
@@ -863,15 +863,21 @@
           let currentYear = dataTemp.getFullYear(),
             currentMonth = dataTemp.getMonth()+1,
             currentDay = dataTemp.getDate();
-          console.log(yearPicker)
-          console.log(monthPicker)
-          console.log(dayPicker)
+//          console.log(yearPicker)
+//          console.log(monthPicker)
+//          console.log(dayPicker)
+          console.log(this.birthPicker)
+          console.log(this.birthPicker.selectedIndex)
           //判断滑动日期是否超过当前日期
           if (parseInt(yearPicker) === currentYear) {
             if (parseInt(monthPicker) > currentMonth) {
               this.birthPicker.scrollColumn(1,currentMonth-1);
+//              this.birthPicker.trigger("picker.change",1,currentMonth-1);
+              this.birthPicker.selectedIndex[1]=currentMonth-1;
               if (parseInt(dayPicker) > currentDay){
                 this.birthPicker.scrollColumn(2,currentDay-1);
+//                this.birthPicker.trigger("picker.change",2,currentDay-1);
+                this.birthPicker.selectedIndex[2]=currentDay-1;
               }
             }
           }
