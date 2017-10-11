@@ -149,14 +149,6 @@
       <ensure
         :ensureParams="{
           'ensure':'确定',
-          'content':'您已完成报到请直接向医生问诊'
-          }" v-if="NOIMEnsureShow" :showFlag.sync="phoneShow" @ensureClickEvent="NOIMEnsure">
-      </ensure>
-    </transition>
-    <transition name="fade">
-      <ensure
-        :ensureParams="{
-          'ensure':'确定',
           'content':'您已完成报到，请直接向医生问诊'
           }" v-if="IMEnsureShow" :showFlag.sync="phoneShow" @ensureClickEvent="IMEnsure">
       </ensure>
@@ -196,7 +188,7 @@
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
     IDCheckLink: "/mcall/customer/patient/baseinfo/v1/getMapList/\n",//校验证件号码重复信息
     caseReport: '/mcall/customer/patient/case/v1/getMapList/',  //老患者报道
-    IMFalg: '/mcall/customer/advice/setting/v1/getCurrentByCustomerId/'
+    IMFalg: '/mcall/customer/case/consultation/v1/getMapById/'
   };
 
 
@@ -348,18 +340,7 @@
       },
       IMEnsure(){
         localStorage.setItem("noMR",1);
-
-        // caseId =1504507710431
-        //doctorCustomerId = 1499666656359
-        //patientCustomerId =1489998682602
-        //patientId = 1504666915825
         window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+api.getPara().customerId +'&patientId='+this.patientId +'&from=report';
-       // alert("医生IM页面");
-       // this.IMEnsureShow = false;
-      },
-      NOIMEnsure(){
-        alert("医生主页");
-        this.NOIMEnsureShow = false;
       },
       //获取绑定的手机号
       getPatientPhone(){
@@ -846,8 +827,10 @@
           if (parseInt(yearPicker) === currentYear) {
             if (parseInt(monthPicker) > currentMonth) {
               this.birthPicker.scrollColumn(1, currentMonth - 1);
+              this.birthPicker.selectedIndex[1]=currentMonth-1;
               if (parseInt(dayPicker) > currentDay) {
                 this.birthPicker.scrollColumn(2, currentDay - 1);
+                this.birthPicker.selectedIndex[2]=currentDay-1;
               }
             }
           }
@@ -894,56 +877,59 @@
       caseReportFlag() {
         let _this = this;
         api.ajax({
-          url: XHRList.caseReport,
+          url: XHRList.IMFalg,
           method: "POST",
           data: {
-            customerId: api.getPara().customerId,
-            patientId: _this.patientId,
-//          customerId: '1493879076659',
-//          patientId:'1502693412278',
-            isValid: 1,
-            caseType: 10,
-            caseCategory: 3,
-            sortType: 1,
-            firstResult: 0,
-            maxResult: 999
+            customerId: api.getPara().doctorId,
+            patientCustomerId: api.getPara().customerId,
+            consultation_type:1,
+            is_valid:1
           },
           beforeSend(config) {
             _this.finish = true;
           },
           done(res){
             if (res.responseObject.responseStatus) {
-              if (res.responseObject.responseMessage == "NO DATA") {
-                  debugger;
-                _this.finish = false;
-                //_this.createNewPatient = true;
-                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
-              } else {
-                _this.caseIdData = res.responseObject.responseData.dataList[0].caseId;
-                api.ajax({
-                  url: XHRList.IMFalg,
-                  method: "POST",
-                  data: {
-                    customerId: api.getPara().doctorId,
-                    caseId:  _this.caseIdData
-                  },
-                  beforeSend(config) {
-                    _this.finish = true;
-                  },
-                  done(res) {
-                    let conState = res.responseObject.responseData.dataList.conState;
-                    if (conState == 1) {
-                      _this.IMEnsureShow = true;
-                    } else {
-                      //_this.NOIMEnsureShow = true;
-                      _this.createNewPatient = true;
-                    }
-                  },
-                  fail(err){
-                  }
-                })
+              if (res.responseObject.responseMessage != "NO DATA") {
+                  console.log(res);
+                _this.caseIdData =res.responseObject.responseData.dataList[0].caseId;
+                _this.IMEnsureShow = true;
               }
+            }else{
+              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
             }
+//
+//              if (res.responseObject.responseMessage == "NO DATA") {
+//                _this.finish = false;
+//                //_this.createNewPatient = true;
+//                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
+//              } else {
+//                _this.caseIdData = res.responseObject.responseData.dataList[0].caseId;
+//                api.ajax({
+//                  url: XHRList.,
+//                  method: "POST",
+//                  data: {
+//                    customerId: api.getPara().doctorId,
+//                    caseId:  _this.caseIdData
+//                  },
+//                  beforeSend(config) {
+//                    _this.finish = true;
+//                  },
+//                  done(res) {
+//                      debugger;
+//                    let conState = res.responseObject.responseData.dataList.conState;
+//                    if (conState == 1) {
+//                      _this.IMEnsureShow = true;
+//                    } else {
+//                      window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
+//
+//                    }
+//                  },
+//                  fail(err){
+//                  }
+//                })
+//              }
+            //}
           },
           fail(err) {
 

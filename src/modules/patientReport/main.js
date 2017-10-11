@@ -19,7 +19,7 @@ import valiadteMethods from '../../common/js/util/validate_methods';
 
 import fastclick from 'fastclick';
 import selectArea from 'components/selectArea';
-import medicalInfo from './components/medicalInfo';
+// import medicalInfo from './components/medicalInfo';
 import patientInfo from './components/patientInfo';
 
 fastclick.attach(document.body);
@@ -80,14 +80,14 @@ class Consult {
         path:"/",
         redirect:"/patientInfo"
       },
-      {
-        path: '/medicalInfo',
-        name: "medicalInfo",
-        component: medicalInfo,
-        meta: {
-          keepAlive: true
-        },
-      },
+      // {
+      //   path: '/medicalInfo',
+      //   name: "medicalInfo",
+      //   component: medicalInfo,
+      //   meta: {
+      //     keepAlive: true
+      //   },
+      // },
       {
         path: '/patientInfo',
         name: "patientInfo",

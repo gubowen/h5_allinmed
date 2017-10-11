@@ -644,6 +644,8 @@ $(function () {
       data.siteId = "17";//string	是	发送渠道
       data.operationId = stateTarget.find(".operation[data-required='1'] dd").attr("data-iid") || "";	//string	是	手术ID
       data.operationName = stateTarget.find(".operation[data-required='1'] dd").attr("data-name") || "";
+      data.consultationType = "1";
+      data.consultationLevel = '3';
       $.ajax({
         url: that.path.patientReport,
         type: 'POST',
@@ -663,15 +665,8 @@ $(function () {
           common.popup({
             text: "报到成功"
           });
-          })
           localStorage.setItem("noMR",1);
-          setTimeout(function () {
-          //  window.location.replace("/dist/doctorHome.html?caseType=10&doctorCustomerId=" + common.getpara().doctorId + "&patientId=" + common.getpara().patientId + "&patientCustomerId=" + common.getpara().customerId + "&caseId=" + rep.responseObject.responsePk);
-
             window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
-
-            // https://m.allinmed.cn/pages/myServices/doc_main.html?customerId=1495762174307&patientId=1496905728860&caseId=1496905753874&patientCustomerId=1492428843567
-          }, 2000);
         } else {
           common.popup({
             text: "报到失败"
