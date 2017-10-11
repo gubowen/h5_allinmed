@@ -390,7 +390,7 @@
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 6) {
-            if (this.msgList.indexOf(msg) !== 0) {
+            if (this.msgList.indexOf(msg) === 0) {
               flag = true;
             }
 
@@ -1093,6 +1093,7 @@
       this.getUserBaseData();
 
       localStorage.setItem("APPIMLinks", location.href);
+      localStorage.setItem("PCIMLinks", location.href);
     },
     activated() {
       this.scrollToBottom();
