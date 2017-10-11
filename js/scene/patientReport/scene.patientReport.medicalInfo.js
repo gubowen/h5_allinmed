@@ -667,7 +667,7 @@ $(function () {
           });
 
           localStorage.setItem("noMR",1);
-            window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+          //  window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
         } else {
           common.popup({
             text: "报到失败"

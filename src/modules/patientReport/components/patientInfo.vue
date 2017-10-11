@@ -188,7 +188,7 @@
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
     IDCheckLink: "/mcall/customer/patient/baseinfo/v1/getMapList/\n",//校验证件号码重复信息
     caseReport: '/mcall/customer/patient/case/v1/getMapList/',  //老患者报道
-    IMFalg: '/mcall/customer/case/consultation/v1/getMapById/'
+    IMFalg: ' mcall/customer/case/consultation/v1/getImInfoMap/'
   };
 
 
@@ -886,7 +886,7 @@
           method: "POST",
           data: {
             customerId: api.getPara().doctorId,
-            patientCustomerId: api.getPara().customerId,
+            patientId: _this.patientId,
             consultation_type:1,
             is_valid:1
           },
@@ -896,9 +896,10 @@
           done(res){
             if (res.responseObject.responseStatus) {
               if (res.responseObject.responseMessage != "NO DATA") {
-                  console.log(res);
                 _this.caseIdData =res.responseObject.responseData.dataList[0].caseId;
                 _this.IMEnsureShow = true;
+              }else{
+                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
               }
             }else{
               window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
