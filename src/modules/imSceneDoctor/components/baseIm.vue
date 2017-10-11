@@ -301,12 +301,7 @@
                 this.showBottomTips(2);
                 break;
               case 4://医生接诊
-                this.lastTimeShow = true;
-                this.receiveTreatmentStatus = true;
-                store.commit("setLastCount", 3);
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
-                clearInterval(this.remainTimeCount);
+                this.getLastTime(0);
                 break;
             }
           }
@@ -1053,7 +1048,7 @@
             type: "notification",
             data: {
               actionType: "1",
-              contentDesc: `患者已${contentType}了您的${desc}问诊`,
+              contentDesc: `患者已${contentType}您的${desc}问诊`,
               subContentDesc: subContentDesc
             }
           }),
