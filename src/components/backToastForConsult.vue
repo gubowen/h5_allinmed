@@ -17,9 +17,9 @@
 </template>
 <script type="text/ecmascript-6">
     /**
-     * @Desc：
-     * @Usage:
-     * @Notify：
+     * @Desc：咨询流程返回操作提示不能重复提交问诊单
+     * @Usage:   <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:allParams.customerId}"></backPopup>
+     * @Notify： 参数backPopupParams 里 patientCustomerId 为患者所属用户ID
      * @Depend：
      *
      * Created by jukun on 2017/9/25.

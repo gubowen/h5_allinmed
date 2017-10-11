@@ -33,20 +33,28 @@
             <span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">不适症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">肿胀</span>
+            <span class="tc-caseDescribeItemLeft">症状描述</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="acheType.length">
+            <span class="tc-caseDescribeItemLeft">疼痛性质</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{acheType}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="VASGrade.length">
+            <span class="tc-caseDescribeItemLeft">VAS评分</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{VASGrade}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">持续时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">加重时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">其他症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "未填写"}}</span>
           </li>
         </ul>
       </section>
@@ -55,15 +63,15 @@
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">确诊疾病</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "未填写"}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">检查资料</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList1.length!==0">
               <li v-for="(item,index) in imageList1" @click="showBigImg(item,index,1)">
                 <img :src="item">
@@ -72,7 +80,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">患处照片</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList2.length!==0">
               <li v-for="(item,index) in imageList2" @click="showBigImg(item,index,2)">
                 <img :src="item">
@@ -81,7 +89,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">服用药物</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "未填写"}}</span>
           </li>
         </ul>
       </section>
@@ -135,7 +143,10 @@
         complication: "",
         resultMainList: [],
         imageList1: [],
-        imageList2: []
+        imageList2: [],
+        symptomDescription:'',//症状描述
+        acheType:"",//疼痛类型
+        VASGrade:'',//VAS评分
       }
     },
     activated(){
@@ -164,6 +175,14 @@
               let _data = data.responseObject.responseData.dataList[0];
               that.patientCasemap = data.responseObject.responseData.dataList[0].patientCasemap;
               that.resultMainList = data.responseObject.responseData.dataList[0].resultMainList;
+              that.resultMainList[0].symptomOptions.forEach((element)=>{
+                that.symptomDescription += element.optionName + '、';
+              });
+              that.symptomDescription = that.symptomDescription.substring(0,that.symptomDescription.length-1);
+              if(that.resultMainList[0].symptomOptions[0].refQuestionList.length){
+                that.acheType=that.resultMainList[0].symptomOptions[0].refQuestionList[0].symptomOptions[0].optionName;
+                that.VASGrade=that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName + that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionDesc;//VAS评分
+              }
               let caseTime = that.patientCasemap.caseTime.split(' ')[0];
 
               that.caseTime = caseTime.split('-')[0] + '年' + caseTime.split('-')[1] + '月' + caseTime.split('-')[2] + '日'

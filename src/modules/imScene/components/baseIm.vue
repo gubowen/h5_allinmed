@@ -535,9 +535,9 @@
           method: "POST",
           data: {
             caseId: api.getPara().caseId,
-            customerId: api.getPara().shuntCustomerId,
+//            customerId: api.getPara().shuntCustomerId,
             isValid: 1,
-            consultationType: 0,
+            consultationType: 0,//咨询对象：0-分诊医生，1-专业医生
             firstResult: 0,
             maxResult: 9999
           },
@@ -747,10 +747,12 @@
             id:0,
           },
           done(data) {
-            if (data.responseObject.responseStatus) {
+            if (data.responseObject.responseStatus && data.responseObject.responseData) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
               price === "0"?that.againShunt('free'):that.buyTime(price)
+            } else {
+              console.log("获取分诊医生价格失败")
             }
           }
         })
