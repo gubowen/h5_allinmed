@@ -553,6 +553,7 @@
                 };
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign(that.userData, userData);
+
                 callback && callback(userData);
               }
             }
