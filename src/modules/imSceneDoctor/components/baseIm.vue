@@ -301,12 +301,7 @@
                 this.showBottomTips(2);
                 break;
               case 4://医生接诊
-                this.lastTimeShow = true;
-                this.receiveTreatmentStatus = true;
-                store.commit("setLastCount", 3);
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
-                clearInterval(this.remainTimeCount);
+                this.getLastTime(0);
                 break;
             }
           }
@@ -557,8 +552,9 @@
                   tel: '',
                 };
                 that.nim.updateMyInfo(userData);
-                that.userData = Object.assign({}, that.userData, userData);
-                callback && callback();
+                that.userData = Object.assign(that.userData, userData);
+
+                callback && callback(userData);
               }
             }
           }
@@ -625,7 +621,7 @@
          * query：from=report则为扫码问诊与扫码报道
          * 此时正常发送问诊单，但被拒状态不同
          * */
-        //        this.getPatientBase(this.sendReportTipMessage());
+                this.getPatientBase(this.sendReportTipMessage());
         if (state < 0) {
           setTimeout(() => {
             if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
@@ -1053,7 +1049,7 @@
             type: "notification",
             data: {
               actionType: "1",
-              contentDesc: `患者已${contentType}了您的${desc}问诊`,
+              contentDesc: `患者已${contentType}您的${desc}问诊`,
               subContentDesc: subContentDesc
             }
           }),

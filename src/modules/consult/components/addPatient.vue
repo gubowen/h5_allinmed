@@ -107,7 +107,7 @@
               <article class="add-patient-content-item">
                 <figcaption>手机号码</figcaption>
                 <figure class="add-patient-input">
-                  <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone" v-model="phone">
+                  <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
                 </figure>
               </article>
               <!--<article class="add-patient-content-item">-->
@@ -260,13 +260,11 @@
     activated(){
       //手机号校验
       api.mobileCheck();
-      document.title="为谁问诊";
       this.finish=false;
       this.initData();
       this.currentIndex = -1;
     },
     mounted() {
-      document.title="为谁问诊";
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//证件类型选择器初始化
@@ -373,7 +371,7 @@
         if (this.$route.params.areaParam) {
           this.areaParam= this.$route.params.areaParam;
           this.areaClick=false;
-
+          document.title="添加患者";
 //          this.areaParam.districtId = true;
         }
       },
@@ -482,10 +480,12 @@
             if(param.responseObject.responseMessage == "NO DATA"){
               that.createNewPatient = true;
               that.headerShow = 1;
+              document.title="添加患者";
             } else {
               that.patientList = param.responseObject.responseData.dataList.reverse();
               that.createNewPatient = false;
               that.headerShow = 2;
+              document.title="为谁问诊";
             }
           },
           fail(err) {
@@ -772,6 +772,11 @@
               this.IDCheck();
             }
           }
+          if (this.relationShip.id == '0') {
+            this.phone = this.bindPhone;
+          } else {
+            this.phone = "";
+          }
           this.relationClick = false;
           this.relationInput = hospitalData[selectedVal[0]].text;
         });
@@ -901,6 +906,7 @@
         this.createNewPatient=true;
         this.headerShow=3;
         window.scrollTo(0,0);
+        document.title="添加患者";
       },
       //取消添加按钮
       cancelAddFun(){
@@ -908,6 +914,7 @@
         that.createNewPatient=false;
         that.headerShow=2;
         that.resetForm();
+        document.title="为谁问诊";
 //        this.relationClick=true;//选择患者是否点击,
         window.scrollTo(0,0);
       },
