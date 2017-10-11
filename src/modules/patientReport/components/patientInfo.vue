@@ -87,7 +87,7 @@
             <article class="add-patient-content-item">
               <figcaption>手机号码</figcaption>
               <figure class="add-patient-input">
-                <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收回复提醒" v-validate="'required|mobile'" name="phone"
+                <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone"
                        v-model="phone">
               </figure>
             </article>
@@ -728,6 +728,11 @@
             if (this.IDNumber) {
               this.IDCheck();
             }
+          }
+          if (this.relationShip.id == '0') {
+            this.phone = this.bindPhone;
+          } else {
+            this.phone = "";
           }
           this.relationClick = false;
           this.relationInput = hospitalData[selectedVal[0]].text;
