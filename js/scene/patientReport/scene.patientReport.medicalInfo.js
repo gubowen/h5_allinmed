@@ -697,20 +697,9 @@ $(function () {
           },2000);
         }
       })
-    },
-    forceRefresh: function () {
-      var nua = navigator.userAgent;
-      if (nua.indexOf('iPhone') > -1) {//苹果手机
-        window.onload = function () {
-          setTimeout(() => {
-            window.addEventListener("popstate", function (e) {
-              // alert("我监听到了浏览器的返回按钮事件啦");
-              self.location = document.referrer;
-            });
-          }, 500)
-        }
-      }
     }
+
+
   };
   controller.init();
 });
