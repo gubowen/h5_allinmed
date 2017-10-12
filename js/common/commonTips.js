@@ -50,7 +50,7 @@ common.confirmBox = function (options, role) {
         }, 50);
         $(".confirmBox-ensureBtn").on("click", function () {
             options.ensureCallback && options.ensureCallback();
-          if(options.removeFalg){
+          if(options.removeFlag){
           }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
@@ -60,7 +60,7 @@ common.confirmBox = function (options, role) {
         });
         $(".confirmBox-cancelBtn").on("click", function () {
             options.cancelCallback && options.cancelCallback();
-          if(options.removeFalg){
+          if(options.removeFlag){
           }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
