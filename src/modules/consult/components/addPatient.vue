@@ -17,7 +17,7 @@
           <!--取消添加-->
           <section class="cancel-add" v-else="headerShow == 3">
             <h2 class="patient-tips-top">添加新患者</h2>
-            <p class="patient-tips-bottom">根据国家卫计委规定，网上就诊需实名认证</p>
+            <p class="patient-tips-bottom">根据国家卫计委相关规定，网上就诊需实名认证</p>
           </section>
         </header>
         <!--渐变的中间层(新版本取消)-->

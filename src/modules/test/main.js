@@ -8,9 +8,8 @@
  */
 import Vue from 'vue';
 import App from './App';
-import "static/css/base.css";
 import fastclick from 'fastclick';
-
+import "babel-polyfill";
 
 fastclick.attach(document.body);
 
@@ -21,9 +20,7 @@ class Test {
   }
 
   init() {
-    const app = new Vue({
-      render: h => h(App)
-    }).$mount("#test");
+    console.log("asdfasdfasdf".includes("asd"));
   }
 }
 

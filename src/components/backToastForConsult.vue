@@ -5,7 +5,7 @@
           'ensure':'继续沟通',
           'cancel':'返回首页',
           'content':'',
-          'title':'您的问诊单已提交\n无需重复提交'
+          'title':'您的问诊单已提交\n无需重复操作'
           }" v-if="backPopupShow" @cancelClickEvent="backHomeEvent()" @ensureClickEvent="ensureIMEvent()">
       </confirm>
     </transition>

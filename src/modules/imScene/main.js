@@ -23,6 +23,9 @@ import TriageDetail from "./components/triageDetail";
 import knowledgeDetail from "./components/knowledgeDetail";
 
 import store from "./store/store";
+
+import "babel-polyfill";
+
 // fastclick.attach(document.body);
 
 
