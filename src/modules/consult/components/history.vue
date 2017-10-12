@@ -126,7 +126,7 @@
     <transition name="fade">
       <confirm
         :confirmParams="{
-          'ensure':'确定填写',
+          'ensure':'确定提交',
           'cancel':'返回修改',
 //          'content':'确定要使用手机流量上传吗?',
           'title':'问诊单提交后不可修改\n请确定填写信息无误'
