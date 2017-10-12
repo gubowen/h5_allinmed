@@ -258,7 +258,7 @@
     activated(){
       //手机号校验
       api.mobileCheck();
-      document.title = "诊后报道";
+     // document.title = "填写患者信息";
       this.finish = false;
       this.initData();
       this.currentIndex = -1;
@@ -847,6 +847,7 @@
       },
       //添加患者按钮
       addFun(){
+        document.title='填写患者信息';
         this.createNewPatient = true;
         window.scrollTo(0, 0);
       },
