@@ -18,7 +18,7 @@ $(function () {
     init: function () {
       window.onload = Log.createBrowse(2, '就诊信息');
       // this.forceRefresh();
-      let AppIMLinks = localStorage.getItem("APPIMLinks");
+      var AppIMLinks = localStorage.getItem("APPIMLinks");
 
       if(AppIMLinks){
         common.confirmBox({
