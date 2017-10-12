@@ -149,7 +149,7 @@
       <ensure
         :ensureParams="{
           'ensure':'确定',
-          'content':'您已完成报到，请直接向医生问诊'
+          'content':'您已完成报到，可直接与医生沟通'
           }" v-if="IMEnsureShow" :showFlag.sync="phoneShow" @ensureClickEvent="IMEnsure">
       </ensure>
     </transition>
