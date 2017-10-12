@@ -627,27 +627,23 @@ common.confirmBox = function (options, role) {
         }, 50);
         $(".confirmBox-ensureBtn").on("click", function () {
             options.ensureCallback && options.ensureCallback();
+          if(options.removeFalg){
+          }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
-              if(options.removeFalg){
-              }else{
                 $(".confirmBox-tips").remove();
-              }
-
-            });
-            return false;
+            }); }
+          return false;
         });
         $(".confirmBox-cancelBtn").on("click", function () {
             options.cancelCallback && options.cancelCallback();
+          if(options.removeFalg){
+          }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
-              if(options.removeFalg){
-
-              }else{
                 $(".confirmBox-tips").remove();
-              }
-
             });
+          }
             return false;
         });
     } else {
