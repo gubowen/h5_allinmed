@@ -208,7 +208,7 @@
           illnessHistory: "",
           treatmentHospital: "",
           treatmentHospitalId: "",
-          caseType: 0,
+          caseType: api.getPara().doctorId?11:0,
           affectedAttId: "",
           inspectionAttId: "",
           visitSiteId: 13,
