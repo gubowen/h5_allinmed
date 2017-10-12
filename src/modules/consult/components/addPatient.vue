@@ -38,11 +38,11 @@
             </figcaption>
           </section>
         </section>
+          <section data-alcode='e122' class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
+            <span class="add-patient-btn" :class="{'on':createNewPatient}">添加新患者</span>
+          </section>
         </div>
         <!--</transition>-->
-        <section data-alcode='e122' class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
-          <span class="add-patient-btn" :class="{'on':createNewPatient}">添加新患者</span>
-        </section>
         <!--添加患者-->
         <!--<transition name="fadeUp">-->
           <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
