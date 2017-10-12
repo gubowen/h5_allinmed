@@ -20,6 +20,7 @@ $(function () {
       // this.forceRefresh();
       var AppIMLinks = localStorage.getItem("APPIMLinks");
 
+
       if(AppIMLinks){
         common.confirmBox({
           textCenter: true,
