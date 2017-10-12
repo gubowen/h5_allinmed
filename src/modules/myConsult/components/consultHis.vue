@@ -43,6 +43,9 @@
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
+
+  import "babel-polyfill";
+
   const XHRList = {
     getOrderHistoryLists:'/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
     getPicList:'/mcall/patient/recovery/advice/v1/getMapList/'//图片列表
