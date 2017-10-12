@@ -648,7 +648,7 @@ $(function () {
       data.operationId = stateTarget.find(".operation[data-required='1'] dd").attr("data-iid") || "";	//string	是	手术ID
       data.operationName = stateTarget.find(".operation[data-required='1'] dd").attr("data-name") || "";
       data.consultationType = "1";
-      data.consultationLevel = '3';
+      data.consultationLevel = '5';
       $.ajax({
         url: that.path.patientReport,
         type: 'POST',
