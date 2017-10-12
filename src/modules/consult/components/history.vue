@@ -499,7 +499,7 @@
             patientId: that.allParams.patientId,
             consultationType: 1,
             consultationState: -1,
-            consultationLevel: 0,
+            consultationLevel: 6,//咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
             siteId: 17,
             caseType: 0
           },
