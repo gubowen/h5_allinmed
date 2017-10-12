@@ -905,38 +905,6 @@
             }else{
               window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
             }
-//
-//              if (res.responseObject.responseMessage == "NO DATA") {
-//                _this.finish = false;
-//                //_this.createNewPatient = true;
-//                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
-//              } else {
-//                _this.caseIdData = res.responseObject.responseData.dataList[0].caseId;
-//                api.ajax({
-//                  url: XHRList.,
-//                  method: "POST",
-//                  data: {
-//                    customerId: api.getPara().doctorId,
-//                    caseId:  _this.caseIdData
-//                  },
-//                  beforeSend(config) {
-//                    _this.finish = true;
-//                  },
-//                  done(res) {
-//                      debugger;
-//                    let conState = res.responseObject.responseData.dataList.conState;
-//                    if (conState == 1) {
-//                      _this.IMEnsureShow = true;
-//                    } else {
-//                      window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
-//
-//                    }
-//                  },
-//                  fail(err){
-//                  }
-//                })
-//              }
-            //}
           },
           fail(err) {
 

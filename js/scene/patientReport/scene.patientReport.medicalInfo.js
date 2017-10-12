@@ -602,6 +602,7 @@ $(function () {
     },
     //报到按钮提交函数
     patientReportFun: function () {
+      $("#footerBtn").addClass("disabled").attr("disabled", "disabled");
       var that = this;
       var diseaseTarget = $(".info-ill-right.disease");//疾病选择的目标盒子
       var stateTarget = $(".info-description.on");//当前状态的目标盒子
@@ -691,6 +692,9 @@ $(function () {
           common.popup({
             text: "报到失败"
           })
+          setTimeout(function() {
+            $("#footerBtn").removeClass("disabled").removeAttr("disabled", "disabled");
+          },2000);
         }
       })
     },
