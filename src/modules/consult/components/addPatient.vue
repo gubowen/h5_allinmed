@@ -186,7 +186,7 @@
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
   const XHRList = {
-    addPatient: "/mcall/customer/patient/relation/v2/create/",//增加患者
+    addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
     patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
     getPhone: "/mcall/patient/customer/unite/v1/getById/",//获取患者绑定的手机号
