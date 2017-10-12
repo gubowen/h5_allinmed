@@ -51,26 +51,20 @@ common.confirmBox = function (options, role) {
         $(".confirmBox-ensureBtn").on("click", function () {
             options.ensureCallback && options.ensureCallback();
           if(options.removeFalg){
-
           }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
                 $(".confirmBox-tips").remove();
             }); }
-
           return false;
         });
         $(".confirmBox-cancelBtn").on("click", function () {
             options.cancelCallback && options.cancelCallback();
           if(options.removeFalg){
-
           }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
-
                 $(".confirmBox-tips").remove();
-
-
             });
           }
             return false;
