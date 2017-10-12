@@ -798,6 +798,9 @@
       },
 
       transformTimeStamp(time) {
+        if (!time) {
+          return "";
+        }
         let format = function (num) {
           return num > 9 ? num : "0" + num;
         };
@@ -840,11 +843,11 @@
           if (JSON.parse(msg.content).type === "notification" && (JSON.parse(msg.content).data.actionType == 3 || JSON.parse(msg.content).data.actionType == 5)) {
             return false;
           } else {
-              if (msg.type==='custom'&&JSON.parse(msg.content).type==="medicalReport"){
-                  if (this.msgList.indexOf(msg)>0){
-                      return false;
-                  }
+            if (msg.type === 'custom' && JSON.parse(msg.content).type === "medicalReport") {
+              if (this.msgList.indexOf(msg) > 0) {
+                return false;
               }
+            }
             if (this.timeStampShowList[index] == 1) {
               return true;
             }
