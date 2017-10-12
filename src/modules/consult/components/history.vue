@@ -539,6 +539,7 @@
               localStorage.removeItem("complication");
 
               that.backPopupShow=true;
+              that.clearPageData();
               window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
@@ -568,6 +569,7 @@
 
               that.finish=false;
               that.backPopupShow=true;
+              that.clearPageData();
               window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
             }
           }
@@ -621,6 +623,20 @@
       },
       getByteLen(len){
         return 1000-api.getByteLen(len);
+      },
+      clearPageData(){
+        let _this=this;
+        _this.visit.has=false;
+        _this.visit.none=false;
+        _this.diseaseMessage.id='';
+        _this.hospitalMessage.id='';
+        _this.upload.has=false;
+        _this.upload.none=false;
+        _this.imageList1=[];
+        _this.imageList2=[];
+        _this.medical.has=false;
+        _this.medical.none=false;
+        _this.medicalMessage='';
       }
     },
     components: {
