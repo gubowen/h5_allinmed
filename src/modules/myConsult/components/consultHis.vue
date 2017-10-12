@@ -241,7 +241,7 @@
           let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
           localStorage.setItem("doctorName",opt.fullName);
           localStorage.setItem("doctorLogo",docLogo);
-          if(opt.caseType == 10){
+          if(opt.caseType == 10 || opt.caseType == 11){
             window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=report';
           }else{
             window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
