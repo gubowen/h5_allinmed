@@ -20,7 +20,6 @@ $(function () {
       // this.forceRefresh();
       var AppIMLinksFlag = localStorage.getItem("APPIMLinks");
 
-
       if(AppIMLinksFlag){
         common.confirmBox({
           textCenter: true,
@@ -685,7 +684,7 @@ $(function () {
                 localStorage.removeItem('APPIMLinks');
               }
             });
-               window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+              // window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
           },2000)
 
         } else {
