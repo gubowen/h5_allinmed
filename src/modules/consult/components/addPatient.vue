@@ -186,7 +186,7 @@
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
   const XHRList = {
-    addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
+    addPatient: "/mcall/customer/patient/relation/v2/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
     patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
     getPhone: "/mcall/patient/customer/unite/v1/getById/",//获取患者绑定的手机号
@@ -825,8 +825,8 @@
           selectedIndex:[yearChange,monthChange,dayChange],//默认哪个选中
         });
         this.birthPicker.on('picker.select', (selectedIndex, selectedVal) => {
-          console.log('select'+selectedIndex);
-          console.log('select'+typeof selectedVal);
+          console.log('selectedIndex'+selectedIndex);
+          console.log('selectedVal'+ selectedVal);
           let returnArr = selectedVal.toString().split(",");
 //          console.log(yearData[returnArr[0]].value);
 //          console.log(monthData[returnArr[1]]);
@@ -840,7 +840,7 @@
           that.birthClick =false;
         });
         this.birthPicker.on('picker.change', (index, selectedIndex) => {
-          console.log(index);
+          console.log('index:'+index);
           console.log('change:'+selectedIndex);
           switch (index) {
             case 0:
