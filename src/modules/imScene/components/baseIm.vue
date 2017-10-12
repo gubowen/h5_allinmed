@@ -798,6 +798,7 @@
       //支付成功后重新分流
       againShunt (type) {
         let that = this;
+        console.log("分流参数："+that.orderSourceId);
         api.ajax({
           url: XHRList.updateShunt,
           method: 'POST',
