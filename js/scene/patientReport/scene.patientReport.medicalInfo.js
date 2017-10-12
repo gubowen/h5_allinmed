@@ -23,6 +23,7 @@ $(function () {
       if(AppIMLinks){
         common.confirmBox({
           textCenter: true,
+          removeFalg:true,
           content: '您已报到成功无需重复操作',
           cancel: '返回首页',
           ensure: '去沟通',
@@ -667,6 +668,7 @@ $(function () {
           });
           common.confirmBox({
             textCenter: true,
+            removeFalg:true,
             content: '您已报到成功无需重复操作',
             cancel: '返回首页',
             ensure: '去沟通',

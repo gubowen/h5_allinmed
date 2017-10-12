@@ -629,7 +629,11 @@ common.confirmBox = function (options, role) {
             options.ensureCallback && options.ensureCallback();
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
+              if(options.removeFalg){
+              }else{
                 $(".confirmBox-tips").remove();
+              }
+
             });
             return false;
         });
@@ -637,7 +641,12 @@ common.confirmBox = function (options, role) {
             options.cancelCallback && options.cancelCallback();
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
+              if(options.removeFalg){
+
+              }else{
                 $(".confirmBox-tips").remove();
+              }
+
             });
             return false;
         });
@@ -828,6 +837,7 @@ common.selectConfirmBox = function (options) {
         $(".confirmBox-tips").addClass('show');
     }
 };
+
 /**
  * @name:
  * @desc:网络，域名相关
@@ -1285,9 +1295,9 @@ common.bindCallApp=function(options,config) {
                 bindOpen();
             }
         }
+   
 
-
-
+        
         if (isIphone) {
             if (isIOS9) { // ios9直接显示加链接
                 bindOpen(options.ios9);
