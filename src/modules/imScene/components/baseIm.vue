@@ -750,7 +750,7 @@
             if (data.responseObject.responseStatus && data.responseObject.responseData) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
-              price === "0"?that.againShunt('free'):that.buyTime(price)
+              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
             } else {
               console.log("获取分诊医生价格失败")
             }
@@ -785,8 +785,7 @@
           },
           wxPaySuccess(_data){
             console.log("支付成功")
-            that.againShunt('pay');
-            that.refreashOrderTime();
+            that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
@@ -796,7 +795,7 @@
         });
       },
       //支付成功后重新分流
-      againShunt (type) {
+      againShunt () {
         let that = this;
         console.log("分流参数："+that.orderSourceId);
         api.ajax({
@@ -810,16 +809,16 @@
           done(data) {
             if (data.responseObject.responseStatus) {
 //              that.getLastTime();
-              if(type && type === 'pay'){
-                that.sendPayFinish();
-              }
+              console.log("分流成功");
               that.isClick = false;//是否点击立即咨询重置
+            } else {
+              console.log("分流失败");
             }
           }
         })
       },
       //重置时间
-      refreashOrderTime () {
+      refreashOrderTime (type) {
         const that = this;
         api.ajax({
           url: XHRList.updateCount,
@@ -835,6 +834,12 @@
 //              that.lastTimeShow = true;
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
+              if(type){
+                that.againShunt();
+                if (type === 'pay') {
+                  that.sendPayFinish();
+                }
+              }
               that.getLastTime();
             }
           }
