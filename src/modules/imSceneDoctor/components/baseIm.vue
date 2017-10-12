@@ -432,7 +432,8 @@
 //                  });
 
                 setTimeout(() => {
-                  if (api.getPara().from === "push" && that.$refs.outpatientInvite) {
+
+                  if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
                     scrollPosition(that.$refs.outpatientInvite);
                   } else {
                     document.body.scrollTop = Math.pow(10, 10);

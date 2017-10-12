@@ -123,7 +123,7 @@
           let firstPart = num.substring(0, num.length - 4);
           let lastPart = num.substring(num.length - 4, num.length);
 
-          return firstPart.replace(/[[a-zA-Z0-9]/g, "*") + lastPart;
+          return firstPart.replace(/[[a-zA-Z0-9\u4e00-\u9fa5]/g, "*") + lastPart;
         }
       }
     },

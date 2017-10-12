@@ -12,7 +12,8 @@ $(function () {
       visitStage: ["首次复诊", "第二次复诊", "第三次复诊", "三次以上"]//复诊阶段对应数组
     },
     path: {
-      patientReport: "/mcall/patient/report/v1/create/" //患者报道
+      patientReport: "/mcall/patient/report/v1/create/", //患者报道
+      getConsultationId: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",//获取问诊Id
     },
     template: {},
     init: function () {
@@ -668,26 +669,59 @@ $(function () {
           common.popup({
             text: "报到成功"
           });
+          var reportCaseId = rep.responseObject.responsePk,
+            reportConsultationId =rep.responseObject.responseData.consultationId;
           localStorage.setItem("noMR",1);
-          setTimeout(function(){
-            common.confirmBox({
-              textCenter:true,
-              removeFlag:true,
-              content: '您已报到成功无需重复操作',
-              cancel: '返回首页',
-              ensure: '去沟通',
-              cancelCallback: function () {
-                localStorage.removeItem('APPIMLinks');
-                window.location.href='/dist/patientReport.html?customerId='+common.getpara().customerId+'&doctorId='+common.getpara().doctorId+'#/patientInfo';
-              },
-              ensureCallback: function () {
-                window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
-                localStorage.removeItem('APPIMLinks');
-              }
-            });
-               window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
-          },2000)
 
+          //免费直接支付
+          sessionStorage.setItem("orderSourceId", reportConsultationId);
+          modules.createOrders({
+            isTest: 0,
+            data: {
+              caseId: reportCaseId,                //  string  是  caseId
+              patientCustomerId: common.getpara().customerId, //	string	是	患者所属用户id
+              patientId: common.getpara().patientId,         // 	string	是	患者id
+              doctorId: common.getpara().doctorId,          //	string	是	医生id
+              orderType: 1,     //	string	是	订单类型  1-咨询2-手术3-门诊预约
+              orderSourceId: reportConsultationId,                   //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+              orderSourceType: 0,               //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+              orderAmount: 0,                           //	string	否	订单金额  （单位/元 保留两位小数）
+              status: '2',                              //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
+              body: '免费问诊(扫码)',                          //    string  否  订单描述 （微信支付展示用）
+              isCharge: "false"                         //    string  是  true-收费  false-免费
+            },
+            backCreateSuccess: function (_data) {
+              debugger;
+              setTimeout(function(){
+                common.confirmBox({
+                  textCenter:true,
+                  removeFlag:true,
+                  content: '您已报到成功无需重复操作',
+                  cancel: '返回首页',
+                  ensure: '去沟通',
+                  cancelCallback: function () {
+                    localStorage.removeItem('APPIMLinks');
+                    window.location.href='/dist/patientReport.html?customerId='+common.getpara().customerId+'&doctorId='+common.getpara().doctorId+'#/patientInfo';
+                  },
+                  ensureCallback: function () {
+                    window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+                    localStorage.removeItem('APPIMLinks');
+                  }
+                });
+                window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+              },2000)
+            },
+            backCreateError: function (_data) {
+              //创建订单失败  (必选)
+            },
+            wxPaySuccess: function (_data) {
+              //支付成功回调  (问诊/门诊类型 必选)
+            },
+            wxPayError: function (_data) {
+              //支付失败回调  (问诊/门诊类型 必选)
+
+            }
+          });
         } else {
           common.popup({
             text: "报到失败"
