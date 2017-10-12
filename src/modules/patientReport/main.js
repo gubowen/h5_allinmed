@@ -70,7 +70,7 @@ class Consult {
         return {x: 0, y: 0}
       }
     });
-    Vue.use(vueg, this.router,options);
+   // Vue.use(vueg, this.router,options);
   }
 
   //路由注册
