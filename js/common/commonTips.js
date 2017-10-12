@@ -52,7 +52,11 @@ common.confirmBox = function (options, role) {
             options.ensureCallback && options.ensureCallback();
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
+              if(options.removeFalg){
+              }else{
                 $(".confirmBox-tips").remove();
+              }
+
             });
             return false;
         });
@@ -60,7 +64,12 @@ common.confirmBox = function (options, role) {
             options.cancelCallback && options.cancelCallback();
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
+              if(options.removeFalg){
+
+              }else{
                 $(".confirmBox-tips").remove();
+              }
+
             });
             return false;
         });
