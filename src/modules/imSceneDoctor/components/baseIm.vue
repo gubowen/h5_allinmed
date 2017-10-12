@@ -165,7 +165,7 @@
   import WxPayCommon from 'common/js/wxPay/wxComm';
   import nimEnv from 'common/js/nimEnv/nimEnv';
   import scrollPosition from "../api/scrollPosition";
-  console.log(nimEnv())
+
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -554,11 +554,9 @@
                 };
                 that.nim.updateMyInfo(userData);
                 that.userData = Object.assign(that.userData, userData);
-                console.log(that.userData)
 
-                setTimeout(() => {
-                  callback && callback(userData);
-                }, 1000)
+                callback && callback(userData);
+
 
               }
             }
@@ -628,15 +626,17 @@
          * */
 //        this.getPatientBase(this.sendReportTipMessage);
         if (state < 0) {
-          if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
-            if (!this.$refs.reportTip) {
-              this.getPatientBase(this.sendReportTipMessage);
+          setTimeout(() => {
+            if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
+              if (!this.$refs.reportTip) {
+                this.getPatientBase(this.sendReportTipMessage);
+              }
+            } else {
+              if (!this.$refs.medicalReport) {
+                this.getPatientBase(this.getMedicalMessage);
+              }
             }
-          } else {
-            if (!this.$refs.medicalReport) {
-              this.getPatientBase(this.getMedicalMessage);
-            }
-          }
+          }, 1000)
         }
       },
       //扫码报道提示语
@@ -839,6 +839,11 @@
           if (JSON.parse(msg.content).type === "notification" && (JSON.parse(msg.content).data.actionType == 3 || JSON.parse(msg.content).data.actionType == 5)) {
             return false;
           } else {
+              if (msg.type==='custom'&&JSON.parse(msg.content).type==="medicalReport"){
+                  if (this.msgList.indexOf(msg)>0){
+                      return false;
+                  }
+              }
             if (this.timeStampShowList[index] == 1) {
               return true;
             }
@@ -908,7 +913,7 @@
       },
       scrollToBottom() {
         setTimeout(() => {
-          document.body.scrollTop = Math.pow(10, 20);
+          document.documentElement.scrollTop = Math.pow(10, 20);
         }, 300)
       },
       inputLimit() {
@@ -958,7 +963,7 @@
                 that.sendPayFinish(count);
               } else {
                 that.lastTimeShow = true;
-                store.commit("setLastCount", count);
+                store.commit("setLastCount", count.orderFrequency);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
@@ -1018,7 +1023,7 @@
         let desc = "",
           subContentDesc = "",
           contentType = "",
-          amount="";
+          amount = "";
 
         switch (parseInt(count.orderType)) {
           case 0:
@@ -1034,10 +1039,10 @@
             break;
         }
 
-        if (count.orderAmount){
-            amount=`(${count.orderAmount}元)`
-        }else{
-            amount="";
+        if (count.orderAmount) {
+          amount = `(${count.orderAmount}元)`
+        } else {
+          amount = "";
         }
 
         if (parseInt(count.orderType) === 0) {
@@ -1098,7 +1103,6 @@
     },
     mounted() {
       this.getUserBaseData();
-
       localStorage.setItem("APPIMLinks", location.href);
       localStorage.setItem("PCIMLinks", location.href);
     },
