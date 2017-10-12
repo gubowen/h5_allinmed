@@ -179,6 +179,7 @@
   import api from 'common/js/util/util';
   import validatePlugins from 'common/js/util/validate_plugins';
   import getDate from 'common/js/util/getDate';
+//  import PickerDate from 'common/js/util/pickerDate';
   import loading from 'components/loading';
   import area from 'components/selectArea';
   import Picker from 'better-picker';
@@ -193,7 +194,7 @@
     createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
     saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
-    IDCheckLink:"/mcall/customer/patient/baseinfo/v1/getMapList/\n",//校验证件号码重复信息
+    IDCheckLink:"/mcall/customer/patient/baseinfo/v1/getMapListByCustomerId/",//校验证件号码重复信息
   };
 
 
@@ -265,6 +266,7 @@
       this.currentIndex = -1;
     },
     mounted() {
+//      console.log(PickerDate);
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//证件类型选择器初始化
@@ -550,7 +552,11 @@
       validateOther (){
         let that = this;
         if(!that.IDCheckFlag){
-          that.errorMsg = "患者证件号码已存在";
+          if (this.credentialType.id === "1" && !validatePlugins.identityCard(this.IDNumber)) {
+            that.errorMsg = "请输入有效证件号码";
+          } else {
+            that.errorMsg = "患者证件号码已存在";
+          }
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {
@@ -619,6 +625,7 @@
             flag = false;
             this.errorMsg = "请输入有效证件号码";
             this.errorShow = true;
+            this.IDCheckFlag = false;
             setTimeout(() => {
               this.errorShow = false;
             }, 2000);
