@@ -23,7 +23,7 @@ $(function () {
       if(AppIMLinks){
         common.confirmBox({
           textCenter: true,
-          removeFalg:true,
+          removeFlag:true,
           content: '您已报到成功无需重复操作',
           cancel: '返回首页',
           ensure: '去沟通',
@@ -666,23 +666,27 @@ $(function () {
           common.popup({
             text: "报到成功"
           });
-          common.confirmBox({
-            textCenter: true,
-            removeFalg:true,
-            content: '您已报到成功无需重复操作',
-            cancel: '返回首页',
-            ensure: '去沟通',
-            cancelCallback: function () {
-              localStorage.removeItem('APPIMLinks');
-              window.location.href='/dist/patientReport.html?customerId='+common.getpara().customerId+'&doctorId='+common.getpara().doctorId+'#/patientInfo';
-            },
-            ensureCallback: function () {
-              window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
-              localStorage.removeItem('APPIMLinks');
-            }
-          })
+
           localStorage.setItem("noMR",1);
-            window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+          setTimeout(function(){
+            common.confirmBox({
+              textCenter:true,
+              removeFlag:true,
+              content: '您已报到成功无需重复操作',
+              cancel: '返回首页',
+              ensure: '去沟通',
+              cancelCallback: function () {
+                localStorage.removeItem('APPIMLinks');
+                window.location.href='/dist/patientReport.html?customerId='+common.getpara().customerId+'&doctorId='+common.getpara().doctorId+'#/patientInfo';
+              },
+              ensureCallback: function () {
+                window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+                localStorage.removeItem('APPIMLinks');
+              }
+            });
+               window.location.href='/dist/imSceneDoctor.html?caseId='+rep.responseObject.responsePk +'&doctorCustomerId='+common.getpara().doctorId +'&patientCustomerId='+common.getpara().customerId +'&patientId='+common.getpara().patientId +'&from=report';
+          },2000)
+
         } else {
           common.popup({
             text: "报到失败"
