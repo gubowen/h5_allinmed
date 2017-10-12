@@ -21,6 +21,7 @@ import MedicalReportDetail from "./components/medicalReportDetail";
 
 import store from "./store/store";
 
+import "babel-polyfill";
 
 fastclick.attach(document.body);
 
