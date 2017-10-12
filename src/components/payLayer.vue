@@ -380,8 +380,8 @@
                   isCharge: "false"                         //    string  是  true-收费  false-免费
                 },
                 backCreateSuccess: function (_data) {
-                  that.creatInquiryId();
-//                  that.closePopup();
+                    debugger;
+                  that.creatInquiryId(_data);
                 },
                 backCreateError: function (_data) {
                   //创建订单失败  (必选)
@@ -399,7 +399,7 @@
         })
       },
       //免费咨询支付成功后创建问诊id
-      creatInquiryId () {
+      creatInquiryId (orderId) {
         let that = this;
         //获取是否已经存在问诊id
         api.ajax({
@@ -430,12 +430,25 @@
                 done (d) {
                   if (d.responseObject.responseStatus) {
                       debugger
+                    let orderSourceId = d.responseObject.responsePk;
                     localStorage.removeItem("docId");
-                    sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
-                    that.$emit("paySuccess", {
-                      orderType: 0,
-                      orderAmount: 0,
-                      orderFrequency:3
+                    sessionStorage.setItem("orderSourceId", orderSourceId);
+                    wxCommon.wxUpOrder({
+                      operationType:"2",
+                      orderId: orderId,
+                      orderType: "1",
+                      orderSourceId: orderSourceId,
+                      outTradeNo: "",
+                      status: '2',
+                      payTime: '1',
+                      callBack: function (data) {
+                          debugger;
+                        that.$emit("paySuccess", {
+                          orderType: 0,
+                          orderAmount: 0,
+                          orderFrequency:3
+                        });
+                      }
                     });
                   }
                 }
