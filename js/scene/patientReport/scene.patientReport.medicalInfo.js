@@ -18,10 +18,10 @@ $(function () {
     init: function () {
       window.onload = Log.createBrowse(2, '就诊信息');
       // this.forceRefresh();
-      var AppIMLinks = localStorage.getItem("APPIMLinks");
+      var AppIMLinksFlag = localStorage.getItem("APPIMLinks");
 
 
-      if(AppIMLinks){
+      if(AppIMLinksFlag){
         common.confirmBox({
           textCenter: true,
           removeFlag:true,
@@ -668,7 +668,6 @@ $(function () {
           common.popup({
             text: "报到成功"
           });
-
           localStorage.setItem("noMR",1);
           setTimeout(function(){
             common.confirmBox({
