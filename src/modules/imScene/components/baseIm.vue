@@ -424,7 +424,6 @@
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
-                localStorage.setItem("PCIMLinks",location.href);
                 that.sendMedicalReport({
                   data: {
                     caseId: api.getPara().caseId,  //问诊单 病例ID
@@ -966,7 +965,7 @@
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
-
+      localStorage.setItem("PCIMLinks",location.href);
 
 //      let p1 = new Promise(resolve => that.getUserBaseData());
 //      let p2 = new Promise(resolve => that.triageDoctorAssign());
