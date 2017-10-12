@@ -121,17 +121,6 @@
       </section>
     </section>
     <loading :show="finish"></loading>
-    <!--<transition name="fade">-->
-    <!--<section class="btnBox-tips maskers show" horizontal="" v-if="hasCase" @click="hasCase=false">-->
-    <!--<section class="horizontal-box" @click="hasCase=true">-->
-    <!--<a class="btnBox-btn btn-hollow" @click="toSelectPart(patientList[currentIndex])">新问诊</a>-->
-    <!--<a class="btnBox-btn btn-hollow" @click="openCasePage()">复诊</a>-->
-    <!--</section>-->
-    <!--</section>-->
-    <!--</transition>-->
-    <!--<transition name="fadeRight">-->
-    <!--<selectArea v-if="showSelectArea" :show.sync="showSelectArea" :level.sync="cityLevel" :areaParam.sync="areaParam" :listType="listType" class="child-view"></selectArea>-->
-    <!--</transition>-->
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
     </transition>
