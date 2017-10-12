@@ -698,6 +698,8 @@ $(function () {
         }
       })
     }
+
+
   };
   controller.init();
 });
