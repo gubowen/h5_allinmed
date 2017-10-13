@@ -66,10 +66,10 @@
         </article>
 
         <article class="outpatient-base-explanation part-one">
-          <p>请以该医生在医院官网的出诊时间为准，停诊信息以医院当天公布为准</p>
+          <p>请以医院官网的专家出诊时间为准，停诊信息以医院当天公布为准</p>
         </article>
         <article class="outpatient-base-explanation part-two">
-          <p>有效期内患者到医生室出示邀约单，领取加号条后，到医院挂号处缴费。挂号费以医院实际为准</p>
+          <p>有效期内患者到医生诊室出示邀约单，领取加号条后，到医院挂号处缴费。挂号费以医院门诊价格为准</p>
         </article>
         <article class="outpatient-base-explanation part-three">
           <p>请以上方有效期为准，逾期就诊，医生有权拒绝加号</p>
@@ -78,7 +78,7 @@
     </section>
     <section class="main-message-box grey-tips">
       <figcaption class="first-message">
-        <p>此条消息不消耗医生回复次数</p>
+        <p>此条信息不消耗医生回复次数</p>
       </figcaption>
     </section>
   </div>
