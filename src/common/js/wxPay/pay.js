@@ -73,6 +73,7 @@ export default function pay(Obj) {
         method: "POST",
         data: _data,
         done (data) {
+          console.log(data);
           if (data && data.return_msg == "OK") {
             console.log(data);
             op.dataL1 = data;
