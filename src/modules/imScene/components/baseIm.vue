@@ -802,7 +802,9 @@
           method: 'POST',
           data: {
             caseId:api.getPara().caseId,
-            andConsultationId:that.orderSourceId,
+//            andConsultationId:that.orderSourceId,
+            patientId:api.getPara().patientId,
+            patientCustomerId:api.getPara().patientCustomerId,
             isShunt:1,//是否分流0-否1-是
           },
           done(data) {

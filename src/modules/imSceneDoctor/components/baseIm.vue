@@ -49,7 +49,7 @@
             <!--购买问诊-->
             <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
               <figcaption class="first-message">
-                <p>您已重新购买问诊，可继续向医生提问</p>
+                <p>您已完成支付，可与主诊医生继续沟通</p>
               </figcaption>
             </section>
             <!--住院通知-->
@@ -296,6 +296,7 @@
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
+                this.payPopupShow=false;
                 break;
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
@@ -419,6 +420,7 @@
           to: this.targetData.account,
           done(error, obj) {
             that.getDoctorMsg(() => {
+
               that.msgList = obj.msgs.reverse();
               that.msgList.forEach((element, index) => {
                 that.getTargetMessage(element);
@@ -442,11 +444,12 @@
                   that.loading = false;
                 }, 700)
               })
-              that.checkFirstBuy();
+
             });
           },
           limit: 100
         });
+        that.checkFirstBuy();
       },
       // 获取医生姓名、头像
       // 四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
@@ -791,7 +794,7 @@
         if (!error) {
           this.msgList.push(msg);
         } else {
-          this.sendErrorTips(msg);
+//          this.sendErrorTips(msg);
         }
         setTimeout(() => {
           document.body.scrollTop = Math.pow(10, 10);
@@ -1016,20 +1019,17 @@
         }
       },
       checkFirstBuy() {
-
         if (localStorage.getItem("sendTips")) {
           let count = JSON.parse(localStorage.getItem("sendTips"));
           this.getPatientBase(this.sendPayFinish);
-
-          localStorage.removeItem("sendTips");
         }
       },
       sendPayFinish(args) {
         const that = this;
         let count="",userData="";
         if (args.nick){
-            let userData=args;
-            count=localStorage.getItem("sendTips");
+            userData=args;
+            count= JSON.parse(localStorage.getItem("sendTips"));
         }else{
             count=args;
             userData=this.userData;
@@ -1067,6 +1067,7 @@
           subContentDesc = `[患者购买问诊]`;
           contentType = '购买';
         }
+        localStorage.removeItem("sendTips");
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
@@ -1088,10 +1089,12 @@
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg)
+//                localStorage.removeItem("sendTips");
               }
             }
           }
         });
+
       }
     },
     computed: {
