@@ -80,7 +80,12 @@ $(function () {
           backCallback: function () {
             $(".info-ill-right.disease").addClass('selected').text($(".info-ill-right.disease").attr("data-partname") + " " + $(".info-ill-right.disease").attr("data-name"));
             that.footerBtnCheck();
-            document.title = "填写就诊信息";
+            document.title = "填写报道信息";
+          },
+          saveCallback:function(){
+            $(".info-ill-right.disease").addClass('selected').text($(".info-ill-right.disease").attr("data-partname") + " " + $(".info-ill-right.disease").attr("data-name"));
+            that.footerBtnCheck();
+            document.title = "填写报道信息";
           }
         })
       });
@@ -115,6 +120,10 @@ $(function () {
           targetEle: $("#operationVisitOperation"),
           type: "illness",
           backCallback: function () {
+            $("#operationVisitOperation").addClass('selected');
+            that.footerBtnCheck();
+          },
+          saveCallback:function(){
             $("#operationVisitOperation").addClass('selected');
             that.footerBtnCheck();
           }
