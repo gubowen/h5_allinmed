@@ -609,6 +609,7 @@
       },
       //证件号码失焦
       IDBlur () {
+        console.log("失焦验证")
         let flag = true;
         this.$validator.validateAll();
         console.log(this.errors)
@@ -620,6 +621,7 @@
           }, 2000);
           return;
         }
+        //如果证件类型为1 需要验证身份证号码格式
         if (this.credentialType.id === "1") {
           if (!validatePlugins.identityCard(this.IDNumber)) {
             flag = false;
@@ -631,8 +633,14 @@
             }, 2000);
           }
         }
+        //如果上面验证通过，关系不为子女（无证件），则需要验证是否存在
         if (flag && this.relationShip.id !== "4") {
           this.IDCheck();
+          return;
+        }
+        //如果关系为子女（无证件），并且上面验证通过，则把证件验证置为通过
+        if (flag) {
+          this.IDCheckFlag = true;
         }
       },
       //校验证件号码重复信息
@@ -772,6 +780,7 @@
           if (this.relationShip.id == '4') {
             this.credentialTitle="监护人证件";//证件类型需要显示的话术
             this.credentialPlaceholder='请填写监护人证件号码';//证件输入框提示的话术
+            this.IDBlur();
           } else {
             this.credentialTitle="患者证件";//证件类型需要显示的话术
             this.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
