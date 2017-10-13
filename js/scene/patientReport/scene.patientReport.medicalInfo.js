@@ -83,7 +83,7 @@ $(function () {
             document.title = "填写报道信息";
           },
           saveCallback:function(){
-            $(".info-ill-right.disease").addClass('selected').text($(".info-ill-right.disease").attr("data-partname") + " " + $(".info-ill-right.disease").attr("data-name"));
+            $(".info-ill-right.disease").addClass('selected').text($(".info-ill-right.disease").attr("data-name"));
             that.footerBtnCheck();
             document.title = "填写报道信息";
           }

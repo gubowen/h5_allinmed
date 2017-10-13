@@ -135,10 +135,10 @@ modules.searchInput = function (obj) {
                 // }
                 that.inputSearch(this);
             });
-            $("body").on("compositionstart", ".tc-searchCommInput", function (e) {
+            $("body").off().on("compositionstart", ".tc-searchCommInput", function (e) {
                 $("body").off("input propertychange",".tc-searchCommInput");
             });
-            $("body").on("compositionend", ".tc-searchCommInput", function (e) {
+            $("body").off().on("compositionend", ".tc-searchCommInput", function (e) {
                 // var t = this;
                 // console.log($(this).val().length)
                 // if ($(this).val().length === 0) {
