@@ -570,6 +570,7 @@
           scene: 'p2p',
           to: this.targetData.account,
           content: JSON.stringify(data),
+          isPushable:false,
           // needPushNick: false,
           // pushContent: `患者<${nickName}>向您问诊，点击查看详情`,
           // pushPayload: JSON.stringify({
@@ -1015,15 +1016,24 @@
         }
       },
       checkFirstBuy() {
+
         if (localStorage.getItem("sendTips")) {
           let count = JSON.parse(localStorage.getItem("sendTips"));
-          this.getPatientBase(this.sendPayFinish(count));
+          this.getPatientBase(this.sendPayFinish);
 
           localStorage.removeItem("sendTips");
         }
       },
-      sendPayFinish(count) {
+      sendPayFinish(args) {
         const that = this;
+        let count="";
+        if (args.nick){
+            let userData=args;
+            count=localStorage.getItem("sendTips");
+        }else{
+            count=args;
+        }
+
         let desc = "",
           subContentDesc = "",
           contentType = "",

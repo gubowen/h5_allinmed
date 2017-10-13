@@ -20,7 +20,7 @@ export default function nimEnv(){
       * m1线上测试环境
       * 使用云信测试账号
       * */
-    nimKey="cc919543380057b1b2f3c9d1202ce7ba";
+    nimKey="0624cbb670f686d3ca53760e4260168f";
   }else{
     /*
     * 其余任何环境
