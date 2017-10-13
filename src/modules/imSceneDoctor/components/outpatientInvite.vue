@@ -53,14 +53,14 @@
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">医生</h4>
             <p class="outpatient-patient-item-msg">
-              <span>{{oiMessage.doctorName}}</span>
+              <span>{{limitContent(oiMessage.doctorName,6)}}</span>
               <span>{{oiMessage.doctorPosition}}</span>
             </p>
           </article>
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">医院</h4>
             <p class="outpatient-patient-item-msg content-overflow">
-              <span>{{oiMessage.doctorHospital}}</span>
+              <span>{{limitContent(oiMessage.doctorHospital,6)}}</span>
             </p>
           </article>
         </article>
