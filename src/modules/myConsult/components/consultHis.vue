@@ -16,7 +16,7 @@
             <figure class="doctorInfo left">
               <figcaption class="docLogo left"><img :src="getImgUrl(item)"></figcaption>
               <section class="docType right">
-                <p class="docName"><span>{{item.consultationType==0?"唯医门诊医生":item.fullName}}</span><span class="medicalTitleRight">{{item.medicalTitle}}</span></p>
+                <p class="docName"><span>{{item.consultationType==0?"唯医门诊医生":getFullName(item)}}</span><span class="medicalTitleRight">{{item.medicalTitle}}</span></p>
                 <p class="inquiryType">{{getInquiryType(item)}}  {{getCaseTime(item.createTime)}}</p>
               </section>
             </figure>
@@ -66,10 +66,10 @@
       }
     },
     mounted(){
-      api.mobileCheck();
-      if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);    //获取openId
-      }
+//      api.mobileCheck();
+//      if (!api.checkOpenId()) {
+//        api.wxGetOpenId(1);    //获取openId
+//      }
       this.getOrderHistoryLists();
     },
     methods: {
@@ -126,6 +126,13 @@
           }
         }
         return logoImg;
+      },
+      getFullName(opt){
+          if(opt.fullName.length>6){
+              return opt.fullName.substring(0,6) + "..."
+          }else{
+              return opt.fullName;
+          }
       },
       getStatusName(opt){
         let statusName = '',fontGray='';
