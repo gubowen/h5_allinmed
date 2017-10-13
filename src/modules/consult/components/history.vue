@@ -133,7 +133,7 @@
           }" v-if="submitTip" :showFlag.sync="submitTip" @cancelClickEvent="subCancelEvent"
         @ensureClickEvent="submitData()"></confirm>
     </transition>
-    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:allParams.customerId}"></backPopup>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
   </div>
 </template>
@@ -177,6 +177,10 @@
         medical: {
           has: false,
           none: false
+        },
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorId,
         },
         finish: false,
         upLoadTip: false,

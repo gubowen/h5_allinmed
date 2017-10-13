@@ -151,7 +151,7 @@
       </transition>
       <loading :show="!finish"></loading>
       <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
-                 :backPopupParams="{patientCustomerId:customerId}"></backPopup>
+                 :backPopupParams="{patientParams:patientParams}"></backPopup>
     </section>
   </div>
 </template>
@@ -186,6 +186,10 @@
           fontSize: "0.37rem",
           color: "#909090",
           top: "-1.5rem "
+        },
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorId,
         },
         patientMessage: {},
         customerId: '',
