@@ -180,7 +180,7 @@
         },
         patientParams:{
           customerId:api.getPara().customerId,
-          doctorId:api.getPara().doctorCustomerId,
+          doctorId:api.getPara().doctorId,
         },
         finish: false,
         upLoadTip: false,
