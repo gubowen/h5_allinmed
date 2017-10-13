@@ -49,7 +49,7 @@
             <!--购买问诊-->
             <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
               <figcaption class="first-message">
-                <p>您已重新购买问诊，可继续向医生提问</p>
+                <p>您已完成支付，可与主诊医生继续沟通</p>
               </figcaption>
             </section>
             <!--住院通知-->
