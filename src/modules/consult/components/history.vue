@@ -208,7 +208,7 @@
           illnessHistory: "",
           treatmentHospital: "",
           treatmentHospitalId: "",
-          caseType: api.getPara().doctorId?11:0,
+          caseType: api.getPara().doctorId?11:0,// 类型0-咨询1-复诊2-手术直约3-首诊4-手术犹豫5-待通知入院6-已通知入院7-住院中8-已出院9-术后复诊10-老患者报到(诊后报道)11-立即问诊
           affectedAttId: "",
           inspectionAttId: "",
           visitSiteId: 13,
@@ -501,7 +501,7 @@
             consultationState: -1,
             consultationLevel: 6,//咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
             siteId: 17,
-            caseType: 0
+            caseType: 11,//从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
           },
           done (d) {
             if (d.responseObject.responseStatus) {
