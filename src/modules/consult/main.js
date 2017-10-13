@@ -26,7 +26,7 @@ import searchList from 'components/searchList';
 import fastclick from 'fastclick';
 
 import valiadteMethods from '../../common/js/util/validate_methods';
-fastclick.attach(document.body);
+// fastclick.attach(document.body);
 
 
 class Consult {
