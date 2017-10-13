@@ -878,7 +878,7 @@
             if (data.responseObject.responseStatus) {
               that.payPopupShow = false;
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              window.location.href = '/dist/imSceneDoctor.html?caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
+              window.location.href = '/dist/imSceneDoctor.html?from=im&caseId=' + api.getPara().caseId + '&doctorCustomerId=' + that.$store.state.targetDoctor.customerId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&patientId=' + api.getPara().patientId;
             }
           }
         })

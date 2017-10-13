@@ -358,7 +358,6 @@
         that.IDCheckFlag=false;//校验证件号码信息是否通过
         that.credentialInput="身份证";//用来验证证件类型是否填写
         that.birthClick=true;//出生日期是否点击,
-        that.birthPicker=null;//出生日期的仿ios选择器
         that.birthData={
           title: "请选择患者出生日期",
           id: "0",
