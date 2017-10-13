@@ -5,7 +5,7 @@
         <div data-alcode-mod='721'>
             <div class="onlineVisit_mask">
               <section class="docNameBox">
-                  <span class="docName">{{payPopupParams.docName}}</span>提供的服务<i class="icon_close_mask" @click="closePopup"></i>
+                  <span class="docName">{{getDocName()}}</span>提供的服务<i class="icon_close_mask" @click="closePopup"></i>
               </section>
               <section class="inquiryTypeBox">
                 <h2 class="imgInquiry">
@@ -153,6 +153,14 @@
             that.finish = false;
           }
         });
+      },
+      //获取医生名字
+      getDocName(){
+          if(this.payPopupParams.docName.length>6){
+            return this.payPopupParams.docName.substring(0,6) + "..."
+          }else{
+            return this.payPopupParams.docName
+          }
       },
       //获取问诊价格
       getPrice(){
