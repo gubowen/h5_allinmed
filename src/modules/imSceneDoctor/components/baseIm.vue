@@ -1026,12 +1026,13 @@
       },
       sendPayFinish(args) {
         const that = this;
-        let count="";
+        let count="",userData="";
         if (args.nick){
             let userData=args;
             count=localStorage.getItem("sendTips");
         }else{
             count=args;
+            userData=this.userData;
         }
 
         let desc = "",
@@ -1070,7 +1071,7 @@
           scene: 'p2p',
           to: that.targetData.account,
           needPushNick: false,
-          pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
