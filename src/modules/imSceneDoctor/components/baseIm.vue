@@ -1117,8 +1117,12 @@
     },
     mounted() {
       this.getUserBaseData();
-      localStorage.setItem("APPIMLinks", location.href);
-      localStorage.setItem("PCIMLinks", location.href);
+      if (api.getPara().from==="im"){
+          return ;
+      }else{
+        localStorage.setItem("APPIMLinks", location.href);
+        localStorage.setItem("PCIMLinks", location.href);
+      }
     },
     activated() {
       this.scrollToBottom();
