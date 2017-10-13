@@ -553,6 +553,8 @@
           method: "POST",
           data: {
             caseId,
+            patientId:this.allParams.patientId,
+            patientCustomerId:this.allParams.patientCustomerId,
             isShunt: 1
           },
           beforeSend () {
