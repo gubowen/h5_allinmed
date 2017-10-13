@@ -233,6 +233,10 @@
       } else {
         this.backPopupShow = false;
       }
+      if(localStorage.getItem("isSubmit")=="1"){
+        this.clearPageData();
+        localStorage.removeItem("isSubmit")
+      }
     },
     mounted(){
       document.title = "描述病情";

@@ -307,6 +307,7 @@
     },
     beforeRouteLeave   (to, from, next){
       if (to.name === "selectPart") {
+        localStorage.setItem("isSubmit","1");
         if (localStorage.getItem("PCIMLinks") !== null) {
           this.backPopupShow = true;
           this.pageLeaveEnsure = true;
