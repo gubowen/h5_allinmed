@@ -38,7 +38,7 @@
         </section>
       <!--</section>-->
     </transition>
-    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientCustomerId:patientMessage.userId}"></backPopup>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
   </div>
   <!--@backSuccess="backSuccessBack" @docCallBack="docStatusChange"-->
@@ -62,6 +62,10 @@
 
     data() {
       return {
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorCustomerId,
+        },
         backPopupShow:'',
         clickDirection:"right",//用户点击的方向
         bodyImg: { //人体图像集合
