@@ -296,6 +296,7 @@
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
+                this.payPopupShow=false;
                 break;
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
@@ -1021,7 +1022,6 @@
           let count = JSON.parse(localStorage.getItem("sendTips"));
           this.getPatientBase(this.sendPayFinish);
 
-          localStorage.removeItem("sendTips");
         }
       },
       sendPayFinish(args) {
@@ -1088,6 +1088,7 @@
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg)
+                localStorage.removeItem("sendTips");
               }
             }
           }
