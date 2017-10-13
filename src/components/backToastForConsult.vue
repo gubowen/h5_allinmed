@@ -53,7 +53,7 @@
             let _this=this;
             this.backPopupShow=false;
             if(_this.backPopupParams.patientParams.doctorId){
-              window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}&doctorCustomerId=${_this.backPopupParams.patientParams.doctorId}`;
+              window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}&doctorId=${_this.backPopupParams.patientParams.doctorId}`;
             }else{
               window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}`;
             }

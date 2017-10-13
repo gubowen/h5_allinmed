@@ -64,7 +64,7 @@
       return {
         patientParams:{
           customerId:api.getPara().customerId,
-          doctorId:api.getPara().doctorCustomerId,
+          doctorId:api.getPara().doctorId,
         },
         backPopupShow:'',
         clickDirection:"right",//用户点击的方向
