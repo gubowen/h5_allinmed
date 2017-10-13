@@ -74,6 +74,7 @@ export default function pay(Obj) {
         data: _data,
         done (data) {
           if (data && data.return_msg == "OK") {
+            console.log(data);
             op.dataL1 = data;
             localStorage.setItem("orderNumber", data.out_trade_no);
             //更新订单状态
@@ -119,6 +120,7 @@ export default function pay(Obj) {
       let _t = this,
         _data = op.dataL1,
         _timeStamp = Math.round(new Date().getTime() / 1000) + "";
+      console.log("-----pay-----");
       WeixinJSBridge.invoke('getBrandWCPayRequest', {
           "appId": _data.appid,                        //公众号名称，由商户传入
           "timeStamp": _data.timeStamp,                //时间戳，自1970年以来的秒数
