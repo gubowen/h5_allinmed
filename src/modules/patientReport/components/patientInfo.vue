@@ -111,8 +111,8 @@
         <!--无患者提示-->
         <!--<transition name="fade">-->
         <!--<section v-if="createNewPatient">-->
-          <!--<button class="btn-primary go-next" @click="validate">去问诊</button>-->
-          <!--<p class="cancel-add-btn" @click="cancelAddFun()">取消添加</p>-->
+        <!--<button class="btn-primary go-next" @click="validate">去问诊</button>-->
+        <!--<p class="cancel-add-btn" @click="cancelAddFun()">取消添加</p>-->
         <!--</section>-->
         <section v-if="createNewPatient">
           <button class="btn-primary go-next" @click="validate">下一步</button>
@@ -175,7 +175,7 @@
     createCase: "/mcall/customer/patient/case/v1/create/",//创建病例单
     saveOperation: "/mcall/customer/patient/case/v1/createReservation/",//直约手术保存曾就诊信息
     caseList: "/mcall/customer/patient/case/v1/getCaseMapList/",//获取患者病例单
-    IDCheckLink: "/mcall/customer/patient/baseinfo/v1/getMapList/\n",//校验证件号码重复信息
+    IDCheckLink: "/mcall/customer/patient/baseinfo/v1/getMapList/",//校验证件号码重复信息
     caseReport: '/mcall/customer/patient/case/v1/getMapList/',  //老患者报道
     IMFalg: '/mcall/customer/case/consultation/v1/getImInfoMap/'
   };
@@ -247,7 +247,7 @@
     activated(){
       //手机号校验
       api.mobileCheck();
-     // document.title = "填写患者信息";
+      // document.title = "填写患者信息";
       this.finish = false;
       this.initData();
       this.currentIndex = -1;
@@ -548,7 +548,7 @@
       IDBlur () {
         let flag = true;
         this.$validator.validateAll();
-        console.log(this.errors)
+        console.log(this.errors);
         if (this.errors.has("IDNumber")) {
           this.errorMsg = this.errors.first("IDNumber");
           this.errorShow = true;
@@ -562,6 +562,7 @@
             flag = false;
             this.errorMsg = "请输入有效证件号码";
             this.errorShow = true;
+            this.IDCheckFlag = false;
             setTimeout(() => {
               this.errorShow = false;
             }, 2000);
@@ -831,8 +832,8 @@
         });
       },
       toSelectPart(item) {
-         this.patientId =  item.patientId;
-         this.caseReportFlag();
+        this.patientId =  item.patientId;
+        this.caseReportFlag();
       },
       //添加患者按钮
       addFun(){
@@ -878,7 +879,9 @@
             customerId: api.getPara().doctorId,
             patientId: _this.patientId,
             consultation_type:1,
-            is_valid:1
+            is_valid:1,
+            caseType:'10',
+            caseCategory:'3'
           },
           beforeSend(config) {
             _this.finish = true;
