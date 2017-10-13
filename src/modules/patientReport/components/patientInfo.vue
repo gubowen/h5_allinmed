@@ -253,7 +253,7 @@
       this.currentIndex = -1;
     },
     mounted() {
-      document.title = "诊后报道";
+      document.title = "诊后报到";
       localStorage.removeItem('APPIMLinks');
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化

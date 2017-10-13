@@ -60,7 +60,7 @@ $(function () {
       //进入主页
       Q.reg('index', function () {
         console.log("进入主页...");
-        document.title = "填写就诊信息";
+        document.title = "填写报到信息";
         $(".he-main").show();
         $(".search-box").remove();
         $(".searchTypeSelect").html("");
