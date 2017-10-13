@@ -215,7 +215,7 @@
           takeMedicine: "",
           complication: "",
           optionList: [],
-          customerId: "",
+          customerId: api.getPara().customerId,
           patientId: "",
         }
       }
@@ -252,7 +252,7 @@
             params = this.$route.params;
             localStorage.setItem("submitParams", JSON.stringify(params))
           }
-          this.allParams.customerId = params.userId;
+//          this.allParams.customerId = params.userId;
           this.allParams.complication = params.complication;
           this.allParams.optionList = JSON.stringify(params.optionList);
           this.allParams.patientId = params.patientId;
