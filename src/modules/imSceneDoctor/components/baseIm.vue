@@ -977,6 +977,7 @@
                 that.sendPayFinish(count);
                 setTimeout(()=>{
                   that.lastTimeShow = true;
+                  that.receiveTreatmentStatus=true;
                 },200)
 
 //                console.log(count.orderFrequency);
