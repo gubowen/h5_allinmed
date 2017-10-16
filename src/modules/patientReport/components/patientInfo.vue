@@ -7,7 +7,7 @@
           <!--无患者时的头部提示-->
           <section class="patient-tips">
             <h2 class="patient-tips-top">请选择诊后报道的患者</h2>
-            <p class="patient-tips-bottom">为给您准确诊断，请选择真实姓名</p>
+            <p class="patient-tips-bottom">为给您准确诊断，请选择真实患者</p>
           </section>
         </header>
         <!--渐变的中间层(新版本取消)-->
