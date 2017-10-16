@@ -6,7 +6,7 @@
         <header class="patient-consult-rate add-patient-title" v-show="!createNewPatient">
           <!--无患者时的头部提示-->
           <section class="patient-tips">
-            <h2 class="patient-tips-top">请选择诊后报道的患者</h2>
+            <h2 class="patient-tips-top">请选择诊后报到的患者</h2>
             <p class="patient-tips-bottom">为给您准确诊断，请选择真实患者</p>
           </section>
         </header>
@@ -964,7 +964,7 @@
     /*background-color: yellow;*/
     /*border-radius: rem(16px) rem(16px) 0 0;*/
     height: rem(180px);
-    padding-top: rem(50px);
+    padding-top: rem(20px);
     padding-left: rem(14px);
     box-sizing: border-box;
     /*没有患者列表时的头部提示*/
