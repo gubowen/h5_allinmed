@@ -54,7 +54,7 @@
     }
   }
   .popup-tips{
-    position: absolute;
+    /*position: absolute;*/
     top: 50%;
     left: 50%;
   }
