@@ -1030,6 +1030,11 @@
           this.getPatientBase(this.sendPayFinish);
         }
       },
+      resetLogoUrl(){
+        if (!this.$store.state.logoUrl){
+          this.getPatientBase();
+        }
+      },
       sendPayFinish(args) {
         const that = this;
         let count="",userData="";
@@ -1133,6 +1138,7 @@
         localStorage.setItem("APPIMLinks", location.href);
         localStorage.setItem("PCIMLinks", location.href);
       }
+      this.resetLogoUrl();
     },
     activated() {
       this.scrollToBottom();
