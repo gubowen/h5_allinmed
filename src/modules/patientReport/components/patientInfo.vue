@@ -2,6 +2,14 @@
   <section class="sticky-wrapper">
     <section class="main-inner">
       <section class="main-inner-content">
+        <!--头部-->
+        <header class="patient-consult-rate add-patient-title" v-show="!createNewPatient">
+          <!--无患者时的头部提示-->
+          <section class="patient-tips">
+            <h2 class="patient-tips-top">请选择诊后报道的患者</h2>
+            <p class="patient-tips-bottom">为给您准确诊断，请选择真实患者</p>
+          </section>
+        </header>
         <!--渐变的中间层(新版本取消)-->
         <!--<section class="gradient-box"></section>-->
         <!--患者咨询底部-->
@@ -570,6 +578,11 @@
         }
         if (flag && this.relationShip.id !== "4") {
           this.IDCheck();
+          return;
+        }
+        //如果关系为子女（无证件），并且上面验证通过，则把证件验证置为通过
+        if (flag) {
+          this.IDCheckFlag = true;
         }
       },
       //校验证件号码重复信息
@@ -712,11 +725,14 @@
           if (this.relationShip.id == '4') {
             this.credentialTitle = "监护人证件";//证件类型需要显示的话术
             this.credentialPlaceholder = '请填写监护人证件号码';//证件输入框提示的话术
+            if (this.IDNumber) {
+              this.IDBlur();
+            }
           } else {
             this.credentialTitle = "患者证件";//证件类型需要显示的话术
             this.credentialPlaceholder = '请填写患者证件号码';//证件输入框提示的话术
             if (this.IDNumber) {
-              this.IDCheck();
+              this.IDBlur();
             }
           }
           if (this.relationShip.id == '0') {

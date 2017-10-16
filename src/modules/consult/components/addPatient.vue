@@ -779,12 +779,14 @@
           if (this.relationShip.id == '4') {
             this.credentialTitle="监护人证件";//证件类型需要显示的话术
             this.credentialPlaceholder='请填写监护人证件号码';//证件输入框提示的话术
-            this.IDBlur();
+            if (this.IDNumber) {
+              this.IDBlur();
+            }
           } else {
             this.credentialTitle="患者证件";//证件类型需要显示的话术
             this.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
             if (this.IDNumber) {
-              this.IDCheck();
+              this.IDBlur();
             }
           }
           if (this.relationShip.id == '0') {
