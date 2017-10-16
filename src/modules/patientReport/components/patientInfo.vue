@@ -371,7 +371,7 @@
       //选择出生日期
       selectBirth () {
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11"){
           if (that.errorShow === false){
             that.errorMsg = "出生日期以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -386,7 +386,7 @@
       //选择性别时的函数
       selectSex (index){
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "4"){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11"){
           if (that.errorShow === false){
             that.errorMsg = "性别以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -576,7 +576,7 @@
             }, 2000);
           }
         }
-        if (flag && this.relationShip.id !== "4") {
+        if (flag && this.relationShip.id !== "11") {
           this.IDCheck();
           return;
         }
@@ -701,19 +701,19 @@
           value: "0"
         }, {
           text: "父母",
-          value: "1"
-        }, {
-          text: "配偶",
-          value: "2"
-        }, {
-          text: "子女（有证件）",
           value: "3"
         }, {
+          text: "配偶",
+          value: "1"
+        }, {
+          text: "子女（有证件）",
+          value: "2"
+        }, {
           text: "子女（无证件）",
-          value: "4"
+          value: "11"
         }, {
           text: "其他",
-          value: "5"
+          value: "10"
         }];
         this.relationPicker = new Picker({
           data: [hospitalData],//初始化的数据
@@ -722,7 +722,7 @@
         this.relationPicker.on('picker.select', (e, selectedVal, selectedIndex) => {
           this.relationShip.title = hospitalData[selectedVal[0]].text;
           this.relationShip.id = hospitalData[selectedVal[0]].value;
-          if (this.relationShip.id == '4') {
+          if (this.relationShip.id == '11') {
             this.credentialTitle = "监护人证件";//证件类型需要显示的话术
             this.credentialPlaceholder = '请填写监护人证件号码';//证件输入框提示的话术
             if (this.IDNumber) {
