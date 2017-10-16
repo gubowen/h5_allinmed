@@ -28,10 +28,10 @@ fastclick.attach(document.body);
 
 class ImScene {
   constructor() {
-    // this.init();
-    if(!api.checkOpenId()){
-      api.wxGetOpenId(1);
-    }
+    this.init();
+    // if(!api.checkOpenId()){
+    //   api.wxGetOpenId(1);
+    // }
     // if (window.location.href.indexOf("openId") !== -1){
     //   this.init();
     // }else{
