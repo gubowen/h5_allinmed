@@ -976,7 +976,7 @@
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
-                alert(count.orderFrequency)
+                console.log(count.orderFrequency);
               }
             }
           }
