@@ -307,7 +307,6 @@
     },
     beforeRouteLeave   (to, from, next){
       if (to.name === "selectPart") {
-        localStorage.setItem("isSubmit","1");
         if (localStorage.getItem("PCIMLinks") !== null) {
           this.backPopupShow = true;
           this.pageLeaveEnsure = true;
@@ -680,6 +679,7 @@
         this.pageLeaveEnsure = false;
       },
       ensureEvent() {
+        localStorage.setItem("isSubmit","1");
         this.levelShow = false;
         this.pageLeaveEnsure = true;
         this.$router.go(-1);

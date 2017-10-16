@@ -961,6 +961,7 @@
             consultationLevel: count.orderType,
             consultationState: state
           },
+
           done(data) {
             if (data.responseObject.responseData) {
               if (state === -1) {
@@ -975,6 +976,7 @@
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
+                console.log(count.orderFrequency);
               }
             }
           }
