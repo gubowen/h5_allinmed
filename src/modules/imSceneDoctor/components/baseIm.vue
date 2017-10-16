@@ -971,11 +971,11 @@
                 that.bottomTipsShow = false;
                 that.sendPayFinish(count);
               } else {
-                that.lastTimeShow = true;
-                store.commit("setLastCount", count.orderFrequency);
+                store.commit("setLastCount", parseInt(count.orderFrequency));
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
+                that.lastTimeShow = true;
                 console.log(count.orderFrequency);
               }
             }
