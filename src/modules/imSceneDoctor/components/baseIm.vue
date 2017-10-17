@@ -398,7 +398,6 @@
       receiveMedicalReport(msg) {
         let flag = false;
         if (msg.type === 'custom' && JSON.parse(msg.content).type === 'medicalReport') {
-
           if (this.msgList.indexOf(msg) <= 1) {
             flag = true;
           }
@@ -622,7 +621,7 @@
          * 场景区分：
          * 咨询：发送问诊单
          * 扫码问诊：发送问诊单，但被拒无法联系分诊台
-         * 扫码报道：无问诊单，发送报道提示，被拒不联系问诊单
+         * 扫码报道：无问诊单，发送报道提示，被拒不联系分诊台
          *
          * query：from=report与缓存noMR皆存在则为扫码报道
          * 此时发送App端提示消息，被拒状态不同
