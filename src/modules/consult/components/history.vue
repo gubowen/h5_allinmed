@@ -545,6 +545,7 @@
               localStorage.removeItem("secondList");
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
+              localStorage.removeItem("noMR");
 
               that.backPopupShow=true;
               that.clearPageData();
