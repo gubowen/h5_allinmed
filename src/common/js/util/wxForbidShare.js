@@ -9,11 +9,15 @@
 
 
 import ajax from "./ajax";
-
+import net from "./net";
 
 class forbidShare {
   constructor() {
-
+      if (!net.getPara().isShare){
+        this.wxforbidShare();
+      }else{
+        return;
+      }
   }
   wxforbidShare(){
     let script = document.createElement("script");
@@ -73,5 +77,5 @@ let  fShare = new forbidShare();
 
 export default new forbidShare();
 
-fShare.wxforbidShare();
+
 
