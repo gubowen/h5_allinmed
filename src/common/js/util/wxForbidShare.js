@@ -72,9 +72,6 @@ class forbidShare {
     })
   }
 }
-
-let  fShare = new forbidShare();
-
 export default new forbidShare();
 
 
