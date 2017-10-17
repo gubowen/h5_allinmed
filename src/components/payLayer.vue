@@ -1,6 +1,6 @@
 <template>
   <section v-if="payPopupShow">
-    <transition name="fadeUp">
+    <transition name="fadeIn">
       <div class="mask_layer" v-if="payOrderShow">
         <div data-alcode-mod='721'>
             <div class="onlineVisit_mask">
@@ -29,15 +29,7 @@
         </div>
       </div>
     </transition>
-    <!--<transition name="fade">-->
-      <!--<confirm :confirmParams="{-->
-          <!--'ensure':'去支付',-->
-          <!--'cancel':'取消',-->
-          <!--'content':'您有一份相同订单尚未过期，确定完成支付吗？'-->
-          <!--}" v-if="levelShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureEvent">-->
-      <!--</confirm>-->
-    <!--</transition>-->
-    <transition name="fade">
+    <transition name="fadeIn">
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
@@ -46,7 +38,7 @@
           }" v-if="noStateShow" @cancelClickEvent="cancelEvent(1)" @ensureClickEvent="cancelEvent(1)">
       </confirm>
     </transition>
-    <transition name="fade">
+    <transition name="fadeIn">
       <confirm :confirmParams="{
           'ensure':'确定',
           'cancel':'取消',
@@ -55,7 +47,7 @@
           }" v-if="noMoreShow" @cancelClickEvent="cancelEvent(2)" @ensureClickEvent="cancelEvent(2)">
       </confirm>
     </transition>
-    <transition name="fade">
+    <transition name="fadeIn">
       <confirm :confirmParams="{
           'ensure':'去沟通',
           'cancel':'取消',
@@ -605,11 +597,19 @@
   }
 
   .fadeUp-enter-active, .fadeUp-leave-active {
-    transition: all ease-in-out .5s
+    transition: all 0.5s ease-in-out;
   }
 
   .fadeUp-enter, .fadeUp-leave-to{
     opacity: 0;
     transform: translateY(50%);
+  }
+
+  .fadeIn-enter-active, .fadeIn-leave-active {
+    transition: all 0.5s ease-in-out;
+  }
+
+  .fadeIn-enter, .fadeIn-leave-to{
+    opacity: 0;
   }
 </style>
