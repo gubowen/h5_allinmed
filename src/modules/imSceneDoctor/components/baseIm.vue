@@ -654,16 +654,16 @@
             type: "notification",
             data: {
               actionType: "6",
-              contentDesc: "患者向您报道",
-              subContentDesc: "[患者向您报道]"
+              contentDesc: "患者向您报到",
+              subContentDesc: "[患者向您报到]"
             }
           }),
-          needPushNick: false,
-          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
-          pushPayload: JSON.stringify({
-            "account": "0_" + api.getPara().caseId,
-            "type": "1"
-          }),
+//          needPushNick: false,
+//          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
+//          pushPayload: JSON.stringify({
+//            "account": "0_" + api.getPara().caseId,
+//            "type": "1"
+//          }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
             localStorage.removeItem("noMR");

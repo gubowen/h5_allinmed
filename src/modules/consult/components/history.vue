@@ -639,7 +639,9 @@
         _this.visit.has=false;
         _this.visit.none=false;
         _this.diseaseMessage.id='';
+        _this.diseaseMessage.name="医生给出的诊断(未确诊可不选)";
         _this.hospitalMessage.id='';
+        _this.hospitalMessage.name="最近一次就诊的医院";
         _this.upload.has=false;
         _this.upload.none=false;
         _this.imageList1=[];
