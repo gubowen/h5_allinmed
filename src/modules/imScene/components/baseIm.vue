@@ -186,7 +186,11 @@
       //用户连接IM聊天
       connectToNim(){
         const that = this;
+        console.log(nimEnv())
+        console.log(this.userData.account)
+        console.log(this.userData.token)
         this.nim = NIM.getInstance({
+
           debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
@@ -586,10 +590,12 @@
         if (that.sendTextContent === "") {
           return false;
         }
+        let sendTextTemp = this.sendTextContent;
+        this.sendTextContent = "";
         this.nim.sendText({
           scene: 'p2p',
           to: this.targetData.account,
-          text: this.sendTextContent,
+          text: sendTextTemp,
           done(error, obj) {
             console.log(obj)
             that.sendMessageSuccess(error, obj);
