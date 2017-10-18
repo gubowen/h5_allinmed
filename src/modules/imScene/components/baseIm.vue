@@ -586,10 +586,12 @@
         if (that.sendTextContent === "") {
           return false;
         }
+        let sendTextTemp = this.sendTextContent;
+        this.sendTextContent = "";
         this.nim.sendText({
           scene: 'p2p',
           to: this.targetData.account,
-          text: this.sendTextContent,
+          text: sendTextTemp,
           done(error, obj) {
             console.log(obj)
             that.sendMessageSuccess(error, obj);
