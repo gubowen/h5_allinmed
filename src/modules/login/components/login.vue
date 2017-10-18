@@ -559,8 +559,8 @@
               }
               input {
                 margin-bottom: 0;
-                width: rem(250px);
-                padding: rem(28px) rem(52px) rem(28px) rem(80px);
+                width: rem(277px);
+                padding: rem(28px) rem(25px) rem(28px) rem(80px);
                 &.inputActive{
                   padding: rem(28px) rem(52px) rem(28px) rem(80px);
                 }
