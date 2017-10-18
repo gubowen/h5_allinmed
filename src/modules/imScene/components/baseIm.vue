@@ -186,7 +186,11 @@
       //用户连接IM聊天
       connectToNim(){
         const that = this;
+        console.log(nimEnv())
+        console.log(this.userData.account)
+        console.log(this.userData.token)
         this.nim = NIM.getInstance({
+
           debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
