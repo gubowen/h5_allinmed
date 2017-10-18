@@ -28,7 +28,7 @@ class forbidShare {
       url: "/mcall/wx/api/v1/getJSConfig/",
       method: 'get',
       data: {
-        url: "https://m.allinmed.cn/dist/login.html"
+        url: window.location.href
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
