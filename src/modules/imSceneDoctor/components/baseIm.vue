@@ -769,11 +769,13 @@
         if (this.sendTextContent.trim().length === 0) {
           return false;
         }
+        let sendTextTemp = this.sendTextContent;
+        this.sendTextContent = "";
         const that = this;
         this.nim.sendText({
           scene: 'p2p',
           to: this.targetData.account,
-          text: this.sendTextContent,
+          text: sendTextTemp,
           needPushNick: false,
           pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
