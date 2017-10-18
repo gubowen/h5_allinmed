@@ -755,7 +755,8 @@
             if (data.responseObject.responseStatus && data.responseObject.responseData) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
-              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
+//              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
+              that.buyTime(price);
             } else {
               console.log("获取分诊医生价格失败")
             }
@@ -765,6 +766,8 @@
       //购买时间
       buyTime(price){
         const that = this;
+        let flag;
+        price === "0"?flag = "false":flag = "true";
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
         let data = {
@@ -777,13 +780,14 @@
           orderAmount: price,                  //	string	否	订单金额  （单位/元 保留两位小数）
           status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
           body: '咨询',   //   string  否  订单描述 （微信支付展示用）
-          isCharge: "true",                    //   string  是  true-收费  false-免费
+          isCharge: flag,                    //   string  是  true-收费  false-免费
           caseId: api.getPara().caseId
         };
         WxPayCommon.wxCreateOrder({
           data: data,        //data为Object 参考下面给出格式
           backCreateSuccess(_data){
             //创建订单成功  （手术必选）
+            that.refreashOrderTime('free')
           },
           backCreateError(_data){
             //创建订单失败  (必选)

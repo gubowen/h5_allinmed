@@ -155,6 +155,7 @@
   import axios from "axios";
   import confirm from 'components/confirm';
   import backPopup from "components/backToastForConsult";
+  import WxPayCommon from 'common/js/wxPay/wxComm';//微信支付的方法
 
   const XHRList = {
     upload: "/mcall/customer/patient/case/attachment/v1/create/",
@@ -162,6 +163,7 @@
     triage: "/mcall/customer/case/consultation/v1/createConsultation/",
     createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/",//创建专业医生问诊
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",//更新问诊次数
+    getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
   };
   export default{
     data () {
@@ -193,6 +195,7 @@
         imageList2: [],
         netTipsNum: 0,
         cityLevel: 2,
+        responseCaseId:"",//提交订单响应回来的caseId
         hospitalMessage: {
           name: "最近一次就诊的医院"
         },
@@ -206,6 +209,7 @@
         medicalMessage: "",
         errorMsg: "",
         errorShow: false,
+        isClick:false,//确认提交是否点击
         allParams: {
           operatorType: 0,
           illnessHistoryId: "",
@@ -487,21 +491,86 @@
           timeout: 20000,
           done(data) {
             if (data.responseObject.responsePk !== 0) {
-              const caseId = data.responseObject.responsePk;
+              that.responseCaseId = data.responseObject.responsePk;
               //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
-              api.getPara().doctorId?that.getProfessionalDoctor(caseId):that.getTriageDoctorId(caseId);
+              api.getPara().doctorId?that.getProfessionalDoctor():that.getTriageDoctorId();
             }
           }
         })
       },
+      //获取咨询价格
+      getConsultPrice(caseId){
+        const that = this;
+        if (that.isClick){
+          return false;
+        }
+        that.isClick=true;
+        api.ajax({
+          url: XHRList.getPrice,
+          method: "POST",
+          data: {
+            visitSiteId:17,	//string	是	站点
+            maxResult:999,
+            id:0,
+          },
+          done(data) {
+            if (data.responseObject.responseStatus && data.responseObject.responseData) {
+              let price = data.responseObject.responseData.dataList.firstAmount;
+              that.buyTime(price);
+            } else {
+              console.log("获取分诊医生价格失败")
+            }
+          }
+        })
+      },
+      //购买时间
+      buyTime(price){
+        const that = this;
+        let flag;
+        price === "0"?flag = "false":flag = "true";
+//        that.lastTimeShow=true;
+//        that.sendConsultState(4);
+        let data = {
+          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
+          patientId: api.getPara().patientId,         // 	string	是	患者id
+          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+          orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
+          orderSourceId: this.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+          orderSourceType: "1",                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+          orderAmount: price,                  //	string	否	订单金额  （单位/元 保留两位小数）
+          status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
+          body: '咨询',   //   string  否  订单描述 （微信支付展示用）
+          isCharge: flag,                    //   string  是  true-收费  false-免费
+          caseId: that.responseCaseId
+        };
+        WxPayCommon.wxCreateOrder({
+          data: data,        //data为Object 参考下面给出格式
+          backCreateSuccess(_data){
+            //创建订单成功  （手术必选）
+//            that.refreashOrderTime('free')
+          },
+          backCreateError(_data){
+            //创建订单失败  (必选)
+          },
+          wxPaySuccess(_data){
+            console.log("支付成功")
+//            that.refreashOrderTime('pay');
+            //支付成功回调  (问诊/门诊类型 必选)
+          },
+          wxPayError(_data){
+            that.isClick = false;//是否点击立即咨询重置
+            //支付失败回调  (问诊/门诊类型 必选)
+          }
+        });
+      },
       //创建专业医生会话
-      getProfessionalDoctor(caseId){
+      getProfessionalDoctor(){
         let that = this;
         api.ajax({
           url:XHRList.createProfessionalConsultation,
           method: "POST",
           data: {
-            caseId: caseId,
+            caseId: that.responseCaseId,
             customerId: api.getPara().doctorId,
             patientCustomerId: that.allParams.customerId,
             patientId: that.allParams.patientId,
@@ -513,13 +582,13 @@
           },
           done (d) {
             if (d.responseObject.responseStatus) {
-              that.updateTimes(d.responseObject.responsePk,caseId);
+              that.updateTimes(d.responseObject.responsePk);
             }
           }
         });
       },
       //更新次数
-      updateTimes (consultationId,caseId) {
+      updateTimes (consultationId) {
         let that = this;
 //        debugger
         api.ajax({
@@ -549,19 +618,19 @@
 
               that.backPopupShow=true;
               that.clearPageData();
-              window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + caseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
+              window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + that.responseCaseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
         })
       },
       // 获取分流ID
-      getTriageDoctorId(caseId) {
+      getTriageDoctorId() {
         const that = this;
         api.ajax({
           url: XHRList.triage,
           method: "POST",
           data: {
-            caseId,
+            caseId:that.responseCaseId,
             patientId:this.allParams.patientId,
             patientCustomerId:this.allParams.patientCustomerId,
             isShunt: 1
@@ -581,7 +650,7 @@
               that.finish=false;
               that.backPopupShow=true;
               that.clearPageData();
-              window.location.href = '/dist/imScene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
+              window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
             }
           }
         })
