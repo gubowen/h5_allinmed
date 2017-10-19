@@ -103,6 +103,7 @@
               :payPopupParams = "payPopupDate"
               v-if="payPopupShow">
     </payPopup>
+    <loading :show="finish"></loading>
   </section>
 
 </template>
@@ -120,6 +121,7 @@
   import store from "../store/store";
 
   import payPopup from 'components/payLayer';
+  import loading from 'components/loading';
 
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
@@ -743,6 +745,7 @@
           return false;
         }
         that.isClick=true;
+        that.finish = false;
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -822,6 +825,7 @@
 //              that.getLastTime();
               console.log("分流成功");
               that.isClick = false;//是否点击立即咨询重置
+              that.finish = true;
             } else {
               console.log("分流失败");
             }
@@ -1046,6 +1050,7 @@
       PayFinishTips,
       MiddleTips,
       payPopup,
+      loading,
     }
   }
 </script>
