@@ -981,7 +981,7 @@
   .patient-consult-rate.add-patient-title{
     /*background-color: yellow;*/
     /*border-radius: rem(16px) rem(16px) 0 0;*/
-    height: rem(180px);
+    /*height: rem(180px);*/
     padding-top: rem(50px);
     padding-left: rem(14px);
     box-sizing: border-box;
@@ -993,6 +993,7 @@
     }
     .patient-tips-bottom{
       margin-top: rem(10px);
+      margin-bottom: rem(36px);
       @include font-dpr(15px);
       /*padding-left: rem(32px);*/
       color: #909090;
@@ -1061,7 +1062,7 @@
         }
 
         & > input {
-          width: 100%;
+          width: 90%;
           border: none;
           background: none;
           color: #555;
