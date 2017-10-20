@@ -83,7 +83,8 @@
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",
     resetTime: "/mcall/customer/case/consultation/v1/updateFrequency/",
-    updateCase: "/mcall/customer/patient/case/v1/update/"
+    updateCase: "/mcall/customer/patient/case/v1/update/",
+    saveImage:'/mcall/customer/patient/case/attachment/v1/update/'   //图片保存
   };
   export default{
     data(){
@@ -180,7 +181,7 @@
 
         data.append('file', _file);
         data.append('paramJson', JSON.stringify({
-          caseId: api.getPara().caseId,
+          caseId:'',
           imageType: type,
           caseCategoryId: id,
         }));
@@ -257,12 +258,30 @@
       },
       backToImPage(){
         const that = this;
-        that.pageLeaveEnsure = true;
-        that.$router.push({
-          path: "/BaseIm",
-          query: {
-            success: 1,
-            queryType: "checkSuggest"
+        let _picIdList='';
+        for (let i of that.uploadList){
+          for (let k of that.imageList[i.adviceId]){
+            _picIdList+= `${k.imgId},`
+          }
+        }
+        api.ajax({
+          url: XHRList.saveImage,
+          method: "POST",
+          data: {
+            caseId:api.getPara().caseId,	    //string	是	病例id
+            idList:_picIdList.substring(0,_picIdList.length-1)	                //string	是	附件id串
+          },
+          done(data){
+            if (data&&data.responseObject&&data.responseObject.responseStatus) {
+              that.pageLeaveEnsure = true;
+              that.$router.push({
+                path: "/BaseIm",
+                query: {
+                  success: 1,
+                  queryType: "checkSuggest"
+                }
+              })
+            }
           }
         })
 //        api.ajax({
