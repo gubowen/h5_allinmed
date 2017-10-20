@@ -562,7 +562,7 @@
                 width: rem(277px);
                 padding: rem(28px) rem(25px) rem(28px) rem(80px);
                 &.inputActive{
-                  padding: rem(28px) rem(52px) rem(28px) rem(80px);
+                  padding: rem(28px) rem(25px) rem(28px) rem(80px);
                 }
               }
               .tc-getCode {
