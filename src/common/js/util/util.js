@@ -11,7 +11,7 @@ import ajax from "./ajax";
 import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
-import forbidShare from "./wxForbidShare";
+// import forbidShare from "./wxForbidShare";
 
 import net from "./net";
 
