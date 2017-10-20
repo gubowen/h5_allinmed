@@ -188,9 +188,7 @@
       //用户连接IM聊天
       connectToNim(){
         const that = this;
-        alert(nimEnv())
-        alert(this.userData.account)
-        alert(this.userData.token)
+
         this.nim = NIM.getInstance({
 
           debug: true,
