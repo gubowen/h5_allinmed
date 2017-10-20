@@ -73,7 +73,7 @@
               <article class="add-patient-content-item">
                 <figcaption>证件号码</figcaption>
                 <figure class="add-patient-input">
-                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" v-validate="'required'" name="IDNumber" v-model="IDNumber">
+                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" v-validate="" name="IDNumber" v-model="IDNumber">
                 </figure>
               </article>
               <article class="add-patient-content-item">
@@ -229,15 +229,15 @@
         },//仿ios选择器确定出的与患者关系
         relationInput:"本人",//用来验证与患者关系是否填写
         credentialTitle:"患者证件",//证件类型需要显示的话术
-        credentialPlaceholder:'请填写患者证件号码',//证件输入框提示的话术
+        credentialPlaceholder:'请填写证件号码(选填)',//证件输入框提示的话术
         credentialPicker: null,//证件类型的仿ios选择器
         credentialClick:false,//证件是否点击,
         credentialType: {
-          title: "身份证",
+          title: "身份证(选填)",
           id: "1"
         },//仿ios选择器确定出的证件类型
         IDCheckFlag:false,//校验证件号码信息是否通过
-        credentialInput:"身份证",//用来验证证件类型是否填写
+        credentialInput:"身份证(选填)",//用来验证证件类型是否填写
         birthClick:true,//出生日期是否点击,
         birthPicker:null,//出生日期的仿ios选择器
         birthData: {
@@ -350,13 +350,13 @@
         that.areaClick=true;//选择城市是否点击过
         that.relationInput="本人";//用来验证与患者关系是否填写
         that.credentialTitle="患者证件";//证件类型需要显示的话术
-        that.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
+        that.credentialPlaceholder='请填写证件号码(选填)';//证件输入框提示的话术
         that.credentialType={
-          title: "身份证",
+          title: "身份证(选填)",
             id: "1"
         };//仿ios选择器确定出的证件类型
         that.IDCheckFlag=false;//校验证件号码信息是否通过
-        that.credentialInput="身份证";//用来验证证件类型是否填写
+        that.credentialInput="身份证(选填)";//用来验证证件类型是否填写
         that.birthClick=true;//出生日期是否点击,
         that.birthData={
           title: "请选择患者出生日期",
@@ -417,7 +417,7 @@
       //选择出生日期
       selectBirth () {
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "11"){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber)){
           if (that.errorShow === false){
             that.errorMsg = "出生日期以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -432,7 +432,7 @@
       //选择性别时的函数
       selectSex (index){
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "11"){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber)){
           if (that.errorShow === false){
             that.errorMsg = "性别以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -550,12 +550,13 @@
       //验证其他特殊的字段
       validateOther (){
         let that = this;
-        if(!that.IDCheckFlag){
-          if (this.credentialType.id === "1" && !validatePlugins.identityCard(this.IDNumber)) {
-            that.errorMsg = "请输入有效证件号码";
-          } else {
-            that.errorMsg = "患者证件号码已存在";
-          }
+        if(!that.IDCheckFlag && this.IDNumber){
+          that.errorMsg = "请输入有效证件号码";
+//          if (this.credentialType.id === "1" && !validatePlugins.identityCard(this.IDNumber)) {
+//            that.errorMsg = "请输入有效证件号码";
+//          } else {
+//            that.errorMsg = "患者证件号码已存在";
+//          }
           that.errorShow = true;
           that.formCheck = false;
           setTimeout(() => {
@@ -610,6 +611,7 @@
       IDBlur () {
         console.log("失焦验证")
         let flag = true;
+        let that = this;
         this.$validator.validateAll();
         console.log(this.errors)
         if (this.errors.has("IDNumber")) {
@@ -621,7 +623,7 @@
           return;
         }
         //如果证件类型为1 需要验证身份证号码格式
-        if (this.credentialType.id === "1") {
+        if (this.credentialType.id === "1" && this.IDNumber !== "") {
           if (!validatePlugins.identityCard(this.IDNumber)) {
             flag = false;
             this.errorMsg = "请输入有效证件号码";
@@ -630,15 +632,21 @@
             setTimeout(() => {
               this.errorShow = false;
             }, 2000);
+          } else {
+            that.computeInfo();
           }
         }
         //如果上面验证通过，关系不为子女（无证件），则需要验证是否存在
-        if (flag && this.relationShip.id !== "11") {
-          this.IDCheck();
-          return;
-        }
+//        if (flag && this.relationShip.id !== "11") {
+//          this.IDCheck();
+//          return;
+//        }
         //如果关系为子女（无证件），并且上面验证通过，则把证件验证置为通过
         if (flag) {
+          that.IDCheckFlag = true;
+          if (that.credentialType.id === "1") {
+
+          }
           this.IDCheckFlag = true;
         }
       },
@@ -661,10 +669,10 @@
           done(data) {
             that.finish = false;
             if (data.responseObject.responseStatus && data.responseObject.responseMessage === "NO DATA") {
-              that.IDCheckFlag = true;
-              if (that.credentialType.id === "1") {
-                that.computeInfo();
-              }
+//              that.IDCheckFlag = true;
+//              if (that.credentialType.id === "1") {
+//                that.computeInfo();
+//              }
             } else {
               that.IDCheckFlag = false;
               that.errorMsg = "患者证件号码已存在";
@@ -778,13 +786,13 @@
           this.relationShip.id = hospitalData[selectedVal[0]].value;
           if (this.relationShip.id == '11') {
             this.credentialTitle="监护人证件";//证件类型需要显示的话术
-            this.credentialPlaceholder='请填写监护人证件号码';//证件输入框提示的话术
+            this.credentialPlaceholder='请填写证件号码(选填)';//证件输入框提示的话术
             if (this.IDNumber) {
               this.IDBlur();
             }
           } else {
             this.credentialTitle="患者证件";//证件类型需要显示的话术
-            this.credentialPlaceholder='请填写患者证件号码';//证件输入框提示的话术
+            this.credentialPlaceholder='请填写证件号码(选填)';//证件输入框提示的话术
             if (this.IDNumber) {
               this.IDBlur();
             }
@@ -801,10 +809,10 @@
       //证件类型选择器初始化
       credentialPickerInit () {
         let credentialData = [{
-          text: "身份证",
+          text: "身份证(选填)",
           value: "1"
         }, {
-          text: "军官证",
+          text: "军官证(选填)",
           value: "2"
         }];
         this.credentialPicker = new Picker({
