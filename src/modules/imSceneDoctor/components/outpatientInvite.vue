@@ -60,7 +60,7 @@
           <article class="outpatient-patient-item">
             <h4 class="outpatient-patient-item-title">医院</h4>
             <p class="outpatient-patient-item-msg content-overflow">
-              <span>{{limitContent(oiMessage.doctorHospital,6)}}</span>
+              <span>{{oiMessage.doctorHospital}}</span>
             </p>
           </article>
         </article>
