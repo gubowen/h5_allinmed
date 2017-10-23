@@ -70,7 +70,7 @@
       top: 50%;
       transform: translateY(-50%);
       margin-top: rem(18px);
-      font-size: rem(30px);
+      font-size: rem(28px);
       color: #e5e5e5;
       line-height: 1.4;
     }
