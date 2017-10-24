@@ -146,7 +146,7 @@
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
     getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
-    updateShunt:'/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
+    updateShunt:'/mcall/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
   };
   export default{
     data(){
@@ -469,7 +469,7 @@
             data: Object.assign({}, data.data, {
               patientId: api.getPara().patientId,
               consultationid: this.orderSourceId,
-              shuntCustomerId: api.getPara().shuntCustomerId
+//              shuntCustomerId: api.getPara().shuntCustomerId
             })
           }),
           done(error, msg) {
@@ -513,11 +513,11 @@
           method: "POST",
           data: {
             caseId: api.getPara().caseId,
-            customerId: api.getPara().shuntCustomerId,
+            customerId: 0,
             patientCustomerId: api.getPara().patientCustomerId,
             patientId: api.getPara().patientId,
-            consultationType: 0,
-            consultationState: 0,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回
+            consultationType: 0,//会诊类型0：患者-分诊平台1：患者-医生
+            consultationState: 4,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
             siteId: 17,
             caseType: 0
           },
@@ -774,7 +774,8 @@
         let data = {
           patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
           patientId: api.getPara().patientId,         // 	string	是	患者id
-          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+//          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+          doctorId: 0,          //	string	是	医生id
           orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
           orderSourceId: this.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
           orderSourceType: "1",                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
@@ -833,6 +834,7 @@
       //重置时间
       refreashOrderTime (type) {
         const that = this;
+        let stateStr = type?"5":"";
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
@@ -840,7 +842,8 @@
             consultationId: this.orderSourceId,
             frequency: "0",
             frequencyType: "2",
-            consultationLevel: "1"
+            consultationLevel: "1",
+            consultationState:stateStr,
           },
           done(data) {
             if (data.responseObject.responseData) {
@@ -848,7 +851,7 @@
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
               if(type){
-                that.againShunt();
+//                that.againShunt();
                 if (type === 'pay') {
                   that.sendPayFinish();
                 }
