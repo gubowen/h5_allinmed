@@ -90,7 +90,7 @@
                       @input="contentLimit"></textarea>
             <span class="qu-underline"></span>
             <p class="limit" v-show="getByteLen(medicalMessage)<=100">{{getByteLen(medicalMessage)}}</p>
-            <p class="qu-setMedicineTipText">填写示例:三七片、接骨七厘散</p>
+            <p class="qu-setMedicineTipText">填写示例:双氯芬酸钠缓释片、盐酸乙哌立松</p>
           </section>
         </section>
       </section>
