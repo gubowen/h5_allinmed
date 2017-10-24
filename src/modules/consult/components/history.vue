@@ -626,34 +626,36 @@
       // 获取分流ID
       getTriageDoctorId() {
         const that = this;
-        api.ajax({
-          url: XHRList.triage,
-          method: "POST",
-          data: {
-            caseId:that.responseCaseId,
-            patientId:this.allParams.patientId,
-            patientCustomerId:this.allParams.patientCustomerId,
-            isShunt: 1
-          },
-          beforeSend () {
-
-          },
-          done(data) {
-            if (data.responseObject.responseStatus) {
-
-
-              localStorage.removeItem("selectList");
-              localStorage.removeItem("secondList");
-              localStorage.removeItem("questionList");
-              localStorage.removeItem("complication");
-
-              that.finish=false;
-              that.backPopupShow=true;
-              that.clearPageData();
-              window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
-            }
-          }
-        })
+        that.clearPageData();
+        window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
+//        api.ajax({
+//          url: XHRList.triage,
+//          method: "POST",
+//          data: {
+//            caseId:that.responseCaseId,
+//            patientId:this.allParams.patientId,
+//            patientCustomerId:this.allParams.patientCustomerId,
+//            isShunt: 1
+//          },
+//          beforeSend () {
+//
+//          },
+//          done(data) {
+//            if (data.responseObject.responseStatus) {
+//
+//
+//              localStorage.removeItem("selectList");
+//              localStorage.removeItem("secondList");
+//              localStorage.removeItem("questionList");
+//              localStorage.removeItem("complication");
+//
+//              that.finish=false;
+//              that.backPopupShow=true;
+//              that.clearPageData();
+//              window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
+//            }
+//          }
+//        })
       },
       // 填写情况验证
       validateParamsFull() {

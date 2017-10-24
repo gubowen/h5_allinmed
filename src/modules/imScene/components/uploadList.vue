@@ -121,6 +121,7 @@
             }
           }
         }
+//        debugger;
         if (listFlag && !uploadingFlag){
           flag =true;
           this.toClick = true;
@@ -147,8 +148,14 @@
         }
         that.leaveConfirm = true;
 //        that.pageLeaveEnsure =false;
+        if (that.pageLeaveEnsure){
+          that.leaveConfirm = false;//离开之后confirm框隐藏
+          this.imageList={};//离开之后上传图片对象置为空
+        }
         next(that.pageLeaveEnsure);
       } else {
+        this.imageList={};//离开之后上传图片对象置为空
+        that.leaveConfirm = false;//离开之后confirm框隐藏
         next(true);
       }
     },
