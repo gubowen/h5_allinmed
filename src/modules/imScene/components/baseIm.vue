@@ -1032,7 +1032,9 @@
           this.lastTimeShow = false;
           this.inputBoxShow = false;
           this.consultTipsShow = true;
-          this.sendConsultState(5);
+          if (this.inputBoxShow = true) {
+            this.sendConsultState(5);
+          }
         } else {
           this.lastTimeShow = true;
           this.inputBoxShow = true;
