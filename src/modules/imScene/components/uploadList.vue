@@ -12,7 +12,7 @@
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
-            <img alt="" @click="showBigImg(img,imgIndex,1)" :src="img.blob">
+            <img alt="" @click="showBigImg(img,imgIndex,item.adviceId)" :src="img.blob">
             <span class="tc-upLoadDel" style="cursor: pointer"
                   @click="imgDelete(img,imgIndex,item.adviceId)"
                   v-show="img.uploading==false"></span>
@@ -86,6 +86,7 @@
     updateCase: "/mcall/customer/patient/case/v1/update/",
     saveImage:'/mcall/customer/patient/case/attachment/v1/update/'   //图片保存
   };
+  let refreshFlag = true;//路由进来的时候判断是否是查看大图返回来的
   export default{
     data(){
       return {
@@ -129,9 +130,23 @@
         return flag;
       }
     },
+    beforeRouteEnter (to, from, next) {
+      if (from.name === "showBigImg"){
+        refreshFlag = false;
+      }else {
+        refreshFlag = true;
+      }
+      next(true);
+    },
     beforeRouteLeave (to, from, next){
       let that =this;
+      if (to.name === 'showBigImg') {
+        next(true);
+        return;
+      }
+//      debugger;
       if (that.imageListLength || that.toClick){
+        console.log("confirm框");
         if (that.imageListLength && that.toClick){
           that.leaveConfirmParams={
             'ensure':'现在提交',
@@ -148,13 +163,16 @@
         }
         that.leaveConfirm = true;
 //        that.pageLeaveEnsure =false;
-        if (that.pageLeaveEnsure){
-          that.leaveConfirm = false;//离开之后confirm框隐藏
-          this.imageList={};//离开之后上传图片对象置为空
-        }
         next(that.pageLeaveEnsure);
+        if (that.pageLeaveEnsure){
+//          debugger;
+          that.leaveConfirm = false;//离开之后confirm框隐藏
+          that.imageList={};//离开之后上传图片对象置为空
+        }
+        that.pageLeaveEnsure = false;
       } else {
-        this.imageList={};//离开之后上传图片对象置为空
+        console.log("没有上传图片");
+        that.imageList={};//离开之后上传图片对象置为空
         that.leaveConfirm = false;//离开之后confirm框隐藏
         next(true);
       }
@@ -163,8 +181,9 @@
 
     },
     activated(){
-      this.getUploadList();
+//      debugger
       this.leaveConfirm =false;
+      refreshFlag&&this.getUploadList();
     },
     methods: {
       getUploadList(){
@@ -246,6 +265,17 @@
           }
         })
       },
+      //查看大图
+      showBigImg(item, index, type){
+        let _params = {
+          imgBlob: this["imageList"][type],
+          indexNum: index
+        };
+        this.$router.push({
+          name: "showBigImg",
+          params: _params
+        });
+      },
       onFileChange(item, index, e){
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length) {
@@ -266,6 +296,8 @@
       backToImPage(){
         const that = this;
         let _picIdList='';
+        this.leaveConfirm = false;
+//        debugger;
         for (let i of that.uploadList){
           for (let k of that.imageList[i.adviceId]){
             _picIdList+= `${k.imgId},`
@@ -347,8 +379,8 @@
         let that = this;
         console.log("离开")
         if (!that.toClick) {
-        this.leaveConfirm = false;
-        this.pageLeaveEnsure = false;
+          this.leaveConfirm = false;
+          this.pageLeaveEnsure = false;
         } else {
           that.backToImPage();
         }
