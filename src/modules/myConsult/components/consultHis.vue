@@ -141,6 +141,8 @@
           switch (Number(opt.consultationState)){
             case 0:
             case 2:
+            case 4:
+            case 5:
               statusName = '问诊中';
               break;
             case 1:
