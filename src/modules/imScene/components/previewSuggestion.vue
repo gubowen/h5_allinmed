@@ -202,7 +202,7 @@
 
       },
     mounted(){
-      this.message=this.previewSuggestionMessage.data[0];
+      this.message=this.previewSuggestionMessage.data.length?this.previewSuggestionMessage.data[0]:this.previewSuggestionMessage.data;
       this.initData();
       },
     methods:{
