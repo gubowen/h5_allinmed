@@ -357,7 +357,7 @@
         }
 
         api.ajax({
-          url: XHRList.saveImage,
+          url: XHRList.imgDelete,
           method: "POST",
           data: {
             caseId:api.getPara().caseId,	    //string	是	病例id
