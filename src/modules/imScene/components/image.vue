@@ -16,7 +16,7 @@
         <img class="im-image" @click="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img">
-        <img src="//m.allinmed.cn/image/img00/myServices/chatting_chatting_man@2x.png" alt="">
+        <img :src="logoUrl" alt="">
       </figure>
     </article>
   </section>
@@ -35,6 +35,11 @@
       return {}
     },
     computed: {
+      computed: {
+        logoUrl(){
+          return this.$store.state.logoUrl
+        }
+      },
       progress(){
         if (this.currentIndex===this.imageProgress.index){
           return this.imageProgress;

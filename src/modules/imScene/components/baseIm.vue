@@ -88,7 +88,7 @@
       <footer class="main-input-box" v-if="inputBoxShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
+          <input type="file" v-if="inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
@@ -158,6 +158,7 @@
           progress: 0,
           index: 0
         },
+        inputFlag:true,//上传图片input控制
 //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
         consultationId: "",
@@ -676,6 +677,7 @@
       //上传文件
       sendFile(e){
         const that = this;
+        that.inputFlag = false;
         this.msgList.push({
           file: {
             url: window.URL.createObjectURL(e.target.files[0]),
@@ -700,6 +702,7 @@
             console.log('上传进度文本: ' + obj.percentageText);
           },
           done (error, file) {
+            that.inputFlag = true;
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
             if (!error) {
