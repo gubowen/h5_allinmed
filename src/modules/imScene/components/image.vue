@@ -35,22 +35,19 @@
       return {}
     },
     computed: {
-      computed: {
-        logoUrl(){
-          return this.$store.state.logoUrl
-        }
+      logoUrl(){
+        return this.$store.state.logoUrl
       },
       progress(){
         if (this.currentIndex===this.imageProgress.index){
           return this.imageProgress;
         }else{
-            return {
-              uploading: false,
-              progress: 0,
-              index: 0
-            }
+          return {
+            uploading: false,
+            progress: 0,
+            index: 0
+          }
         }
-
       }
     },
     mounted(){
