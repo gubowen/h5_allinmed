@@ -257,7 +257,8 @@
           url: XHRList.getToken,
           method: "POST",
           data: {
-            accid: "0_" + api.getPara().caseId
+            accid: "0_" + api.getPara().caseId,
+            patientName:api.getPara().patientId,
           },
           beforeSend: function () {
             this.finish = false;
