@@ -626,6 +626,12 @@
       // 获取分流ID
       getTriageDoctorId() {
         const that = this;
+        localStorage.removeItem("selectList");
+        localStorage.removeItem("secondList");
+        localStorage.removeItem("questionList");
+        localStorage.removeItem("complication");
+        that.finish=false;
+        that.backPopupShow=true;
         that.clearPageData();
         window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
 //        api.ajax({
