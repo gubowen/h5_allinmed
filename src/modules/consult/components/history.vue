@@ -466,14 +466,29 @@
           });
           return result.join(",");
         };
-        this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
-        this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
-        this.allParams.treatmentHospitalId = this.hospitalMessage.id || "";
-        this.allParams.treatmentHospital = this.hospitalMessage.id ? this.hospitalMessage.name : "";
-        this.allParams.illnessHistoryId = this.diseaseMessage.id || "";
-        this.allParams.illnessHistory = this.diseaseMessage.id ? this.diseaseMessage.name : "";
-        this.allParams.takeMedicine = this.medicalMessage || "";
-
+        if(this.visit.has){
+          this.allParams.treatmentHospitalId = this.hospitalMessage.id || "";
+          this.allParams.treatmentHospital = this.hospitalMessage.id ? this.hospitalMessage.name : "";
+          this.allParams.illnessHistoryId = this.diseaseMessage.id || "";
+          this.allParams.illnessHistory = this.diseaseMessage.id ? this.diseaseMessage.name : "";
+        }else {
+          this.allParams.treatmentHospitalId = "";
+          this.allParams.treatmentHospital = "";
+          this.allParams.illnessHistoryId = "";
+          this.allParams.illnessHistory = "";
+        }
+        if(this.upload.has){
+          this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
+          this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
+        }else {
+          this.allParams.inspectionAttId = "";
+          this.allParams.affectedAttId = "";
+        }
+        if(this.medical.has){
+          this.allParams.takeMedicine = this.medicalMessage || "";
+        }else {
+          this.allParams.takeMedicine = "";
+        }
         //装载完成...
         //数据提交开始...
         this.paramsSubmit();
