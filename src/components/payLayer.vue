@@ -272,7 +272,6 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
-        debugger;
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -304,7 +303,8 @@
             that.closePopup();
           },
           wxPayError: function (_data) {
-            //支付失败回调  (问诊/门诊类型 必选)
+            //支付失败回调  (问诊/门诊类型 必选);
+            window.location.reload();
           }
         });
       },
@@ -336,7 +336,6 @@
                 orderFrequency:that.repeatOrderFrequency//聊天次数
               });
               that.closePopup();
-//              that.levelShow = false;
             }
           }
         });
@@ -380,7 +379,6 @@
                   isCharge: "false"                         //    string  是  true-收费  false-免费
                 },
                 backCreateSuccess: function (_data) {
-                    debugger;
                   that.creatInquiryId(_data);
                 },
                 backCreateError: function (_data) {
@@ -391,7 +389,7 @@
                 },
                 wxPayError: function (_data) {
                   //支付失败回调  (问诊/门诊类型 必选)
-
+                  window.location.reload();
                 }
               });
             }
@@ -429,7 +427,6 @@
                 },
                 done (d) {
                   if (d.responseObject.responseStatus) {
-                      debugger
                     let orderSourceId = d.responseObject.responsePk;
                     localStorage.removeItem("docId");
                     sessionStorage.setItem("orderSourceId", orderSourceId);
