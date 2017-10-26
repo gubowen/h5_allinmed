@@ -224,7 +224,7 @@
 
         data.append('file', _file);
         data.append('paramJson', JSON.stringify({
-          caseId: api.getPara().caseId,
+          caseId: '',
           imageType: 1,
           caseCategoryId: "",
         }));
@@ -348,15 +348,35 @@
       //图片提交
       submitImage(){
         const that = this;
-        that.pageLeaveEnsure = true;
-        that.$router.push({
-          path: "/BaseIm",
-          params: {
-            success:1,
+        let _picIdList='';
+        for (let i of that.imageList){
+          _picIdList+= `${i.imgId},`;
+//          for (let k of that.imageList[i.adviceId]){
+//            _picIdList+= `${k.imgId},`
+//          }
+        }
+
+        api.ajax({
+          url: XHRList.saveImage,
+          method: "POST",
+          data: {
+            caseId:api.getPara().caseId,	    //string	是	病例id
+            idList:_picIdList.substring(0,_picIdList.length-1)	                //string	是	附件id串
           },
-          query: {
-            success:1,
-            queryType:"triage"
+          done(data){
+            if (data&&data.responseObject&&data.responseObject.responseStatus) {
+              that.pageLeaveEnsure = true;
+              that.$router.push({
+                path: "/BaseIm",
+                params: {
+                  success:1,
+                },
+                query: {
+                  success:1,
+                  queryType:"triage"
+                }
+              })
+            }
           }
         })
       },
