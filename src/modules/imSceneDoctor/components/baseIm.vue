@@ -572,6 +572,11 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"27",
+          }),
           content: JSON.stringify(data),
           isPushable:false,
           // needPushNick: false,
@@ -650,6 +655,11 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"21",
+          }),
           content: JSON.stringify({
             type: "notification",
             data: {
@@ -775,6 +785,11 @@
         const that = this;
         this.nim.sendText({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"0",
+          }),
           to: this.targetData.account,
           text: sendTextTemp,
           needPushNick: false,
@@ -893,12 +908,16 @@
             console.log('上传进度文本: ' + obj.percentageText);
           },
           done(error, file) {
-            that.inputFlag = true;
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',
+                custom:JSON.stringify({
+                  cType:"1",
+                  cId:api.getPara().doctorCustomerId,
+                  mType:"1",
+                }),
                 to: that.targetData.account,
                 file: file,
                 needPushNick: false,
@@ -1016,6 +1035,11 @@
                   that.nim.sendText({
                     scene: 'p2p',
                     to: "1_doctor00001",
+                    custom:JSON.stringify({
+                      cType:"1",
+                      cId:api.getPara().doctorCustomerId,
+                      mType:"0",
+                    }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
                       window.location.href = '/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
@@ -1085,6 +1109,11 @@
         localStorage.removeItem("sendTips");
         this.nim.sendCustomMsg({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"33",
+          }),
           to: that.targetData.account,
           needPushNick: false,
           pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
@@ -1113,6 +1142,10 @@
       }
     },
     computed: {
+      //配合watch图片上传进度使用
+      progess () {
+        return this.imageProgress.progress;
+      },
       lastTime() {
         return this.$store.state.lastTime;
       },
@@ -1148,6 +1181,12 @@
       this.scrollToBottom();
     },
     watch: {
+      //监听上传完成，可以继续上传；
+      progess :function (newVal,oldVal) {
+        if (newVal == "0%" || newVal =="100%"){
+          this.inputFlag = true;
+        }
+      },
       lastTime(time) {
         if (time <= 0) {
           this.lastTimeShow = false;
