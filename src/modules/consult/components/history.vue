@@ -164,6 +164,7 @@
     createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/",//创建专业医生问诊
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",//更新问诊次数
     getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
+    triageAssign: "/mcall/customer/case/consultation/v1/create/",
   };
   export default{
     data () {
@@ -184,6 +185,7 @@
           customerId:api.getPara().customerId,
           doctorId:api.getPara().doctorId,
         },
+        orderSourceId:"",//进入分诊im需要orderSourceId
         finish: false,
         upLoadTip: false,
         levelShow: false,
@@ -508,9 +510,40 @@
             if (data.responseObject.responsePk !== 0) {
               that.responseCaseId = data.responseObject.responsePk;
               //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
-              api.getPara().doctorId?that.getProfessionalDoctor():that.getTriageDoctorId();
+              api.getPara().doctorId?that.getProfessionalDoctor():that.createOrderSourceId();
             } else {
               that.finish=false;
+            }
+          }
+        })
+      },
+      //获取orderSourceId
+      createOrderSourceId(){
+        const that = this;
+        if (that.isClick){
+          return false;
+        }
+        that.isClick=true;
+        api.ajax({
+          url: XHRList.triageAssign,
+          method: "POST",
+          data: {
+            caseId: that.responseCaseId,
+            customerId: 0,
+            patientCustomerId: api.getPara().customerId,
+            patientId: that.allParams.patientId,
+            consultationType: 0,//会诊类型0：患者-分诊平台1：患者-医生
+            consultationState: 4,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+            siteId: 17,
+            caseType: 0
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              console.log("获取orderSourceId成功");
+              that.orderSourceId = data.responseObject.responsePk;
+              that.getConsultPrice();
+            }else{
+              console.log("获取orderSourceId失败");
             }
           }
         })
@@ -518,10 +551,6 @@
       //获取咨询价格
       getConsultPrice(caseId){
         const that = this;
-        if (that.isClick){
-          return false;
-        }
-        that.isClick=true;
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -548,11 +577,11 @@
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
         let data = {
-          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
-          patientId: api.getPara().patientId,         // 	string	是	患者id
-          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+          patientCustomerId: api.getPara().customerId, //	string	是	患者所属用户id
+          patientId: that.allParams.patientId,         // 	string	是	患者id
+          // doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
           orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
-          orderSourceId: this.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+          orderSourceId: that.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
           orderSourceType: "1",                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
           orderAmount: price,                  //	string	否	订单金额  （单位/元 保留两位小数）
           status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
@@ -564,6 +593,7 @@
           data: data,        //data为Object 参考下面给出格式
           backCreateSuccess(_data){
             //创建订单成功  （手术必选）
+            that.getTriageDoctorId();
 //            that.refreashOrderTime('free')
           },
           backCreateError(_data){
@@ -571,11 +601,13 @@
           },
           wxPaySuccess(_data){
             console.log("支付成功")
+            that.getTriageDoctorId();
 //            that.refreashOrderTime('pay');
             //支付成功回调  (问诊/门诊类型 必选)
           },
           wxPayError(_data){
             that.isClick = false;//是否点击立即咨询重置
+            that.finish=false;
             //支付失败回调  (问诊/门诊类型 必选)
           }
         });
@@ -648,6 +680,7 @@
         localStorage.removeItem("questionList");
         localStorage.removeItem("complication");
         that.finish=false;
+        that.isClick = false;
         that.backPopupShow=true;
         that.clearPageData();
         window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
