@@ -257,6 +257,7 @@
                   item.adviceId = item.checkId || item.inspectionId;
                   item.adviceName = item.checkName|| item.inspectionName;
                   item.adviceTypeisAttachment = item.isAttachment;
+                  item.adviceType = '3';
                 });
                 that.checkSuggestData('checkSuggestObj')
               }
