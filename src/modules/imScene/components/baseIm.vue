@@ -576,7 +576,7 @@
                   that.lastTimeShow = false;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
-                } else if(dataList.consultationState === -1) {
+                } else if(dataList.consultationState === 1) {
                     that.lastTimeShow = false;
                     that.inputBoxShow = false;
                     that.consultTipsShow = true;
