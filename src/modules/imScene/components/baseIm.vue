@@ -816,7 +816,7 @@
           backCreateSuccess(_data){
             //创建订单成功  （手术必选）
             console.log("创建订单成功 ")
-            that.refreashOrderTime('free')
+            that.refreashOrderTime('free');
           },
           backCreateError(_data){
             //创建订单失败  (必选)
