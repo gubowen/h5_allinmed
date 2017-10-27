@@ -767,6 +767,7 @@
         }
         that.isClick=true;
         that.finish = false;
+        console.log("获取价格")
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -780,6 +781,7 @@
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
 //              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
+              console.log("获取分诊医生价格成功"+price);
               that.buyTime(price);
             } else {
               console.log("获取分诊医生价格失败")
@@ -794,6 +796,7 @@
         price === "0"?flag = "false":flag = "true";
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
+        console.log("走支付方法");
         let data = {
           patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
           patientId: api.getPara().patientId,         // 	string	是	患者id
@@ -812,6 +815,7 @@
           data: data,        //data为Object 参考下面给出格式
           backCreateSuccess(_data){
             //创建订单成功  （手术必选）
+            console.log("创建订单成功 ")
             that.refreashOrderTime('free')
           },
           backCreateError(_data){
@@ -858,6 +862,7 @@
       refreashOrderTime (type) {
         const that = this;
         let stateStr = type?"5":"";
+        console.log("更新时间");
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
