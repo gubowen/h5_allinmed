@@ -288,7 +288,8 @@
           to: this.targetData.account,//聊天对象, 账号或者群id
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
-            console.log("dom更新前")
+            console.log("dom更新前");
+            console.log(obj);
             that.getTimeStampShowList();
             //循环消息列表，处理需求
             that.loopMessage();
@@ -570,23 +571,24 @@
 //                that.inputBoxShow = false;
 //                that.consultTipsShow = true;
 //              } else {
-//                time = 10000;
+              //  time = 100000;
                 if (dataList.consultationState === -2){
                   that.lastTimeShow = false;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
-                } else {
-                  if (time > 0) {
-                    store.commit("setLastTime", time);
-                    store.commit("lastTimeCount");
-                    that.lastTimeShow = true;
-                    that.inputBoxShow = true;
-                    that.consultTipsShow = false;
-                  } else {
+                } else if(dataList.consultationState === -1) {
                     that.lastTimeShow = false;
                     that.inputBoxShow = false;
                     that.consultTipsShow = true;
-                  }
+                } else{
+                  if (time < 0) {
+                    time = 300000 - Math.abs(time);
+                  } 
+                  that.lastTimeShow = true;
+                  that.inputBoxShow = true;
+                  that.consultTipsShow = false;
+                  store.commit("setLastTime", time);
+                  store.commit("lastTimeCount");
                 }
 //              }
             }
