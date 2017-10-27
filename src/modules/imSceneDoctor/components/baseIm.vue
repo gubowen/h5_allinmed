@@ -573,9 +573,9 @@
           scene: 'p2p',
           to: this.targetData.account,
           custom:JSON.stringify({
-            cType:"0",
-            cId:"0",
-            mType:"0",
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"27",
           }),
           content: JSON.stringify(data),
           isPushable:false,
@@ -656,8 +656,8 @@
           scene: 'p2p',
           to: this.targetData.account,
           custom:JSON.stringify({
-            cType:"0",
-            cId:"0",
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
             mType:"21",
           }),
           content: JSON.stringify({
@@ -786,8 +786,8 @@
         this.nim.sendText({
           scene: 'p2p',
           custom:JSON.stringify({
-            cType:"0",
-            cId:"0",
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
             mType:"0",
           }),
           to: this.targetData.account,
@@ -914,8 +914,8 @@
               let msg = that.nim.sendFile({
                 scene: 'p2p',
                 custom:JSON.stringify({
-                  cType:"0",
-                  cId:"0",
+                  cType:"1",
+                  cId:api.getPara().doctorCustomerId,
                   mType:"1",
                 }),
                 to: that.targetData.account,
@@ -1036,8 +1036,8 @@
                     scene: 'p2p',
                     to: "1_doctor00001",
                     custom:JSON.stringify({
-                      cType:"0",
-                      cId:"0",
+                      cType:"1",
+                      cId:api.getPara().doctorCustomerId,
                       mType:"0",
                     }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
@@ -1110,9 +1110,9 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           custom:JSON.stringify({
-            cType:"0",
-            cId:"0",
-            mType:"0",
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"33",
           }),
           to: that.targetData.account,
           needPushNick: false,
