@@ -861,7 +861,7 @@
       //重置时间
       refreashOrderTime (type) {
         const that = this;
-        let stateStr = type?"5":"";
+        let stateStr = type?"4":"";
         console.log("更新时间");
         api.ajax({
           url: XHRList.updateCount,
