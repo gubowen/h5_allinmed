@@ -509,6 +509,8 @@
               that.responseCaseId = data.responseObject.responsePk;
               //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
               api.getPara().doctorId?that.getProfessionalDoctor():that.getTriageDoctorId();
+            } else {
+              that.finish=false;
             }
           }
         })

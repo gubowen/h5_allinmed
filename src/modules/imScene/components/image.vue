@@ -40,11 +40,19 @@
       },
       progress(){
         if (this.currentIndex===this.imageProgress.index){
-          return this.imageProgress;
+          // return this.imageProgress;
+          if (this.imageProgress.progress.includes(".")){
+            let returnObj = Object.assign(this.imageProgress,{
+              progress:`${this.imageProgress.progress.split(".")[0]}%`
+            })
+            return returnObj;
+          } else {
+            return this.imageProgress;
+          }
         }else{
           return {
             uploading: false,
-            progress: 0,
+            progress: "0",
             index: 0
           }
         }

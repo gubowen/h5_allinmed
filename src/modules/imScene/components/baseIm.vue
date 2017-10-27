@@ -155,7 +155,7 @@
         nim: {},
         imageProgress: {
           uploading: false,
-          progress: 0,
+          progress: "0%",
           index: 0
         },
         inputFlag:true,//上传图片input控制
@@ -455,6 +455,11 @@
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"27",
+          }),
           to: this.targetData.account,
           content: JSON.stringify(data),
           done(error, msg) {
@@ -465,6 +470,11 @@
         //分诊台刷新患者
         this.nim.sendCustomMsg({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"32",
+          }),
           to: this.targetData.account,
           content: JSON.stringify({
             type: "new-health",
@@ -598,6 +608,11 @@
           scene: 'p2p',
           to: this.targetData.account,
           text: sendTextTemp,
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"0",
+          }),
           done(error, obj) {
             console.log(obj)
             that.sendMessageSuccess(error, obj);
@@ -703,13 +718,17 @@
             console.log('上传进度文本: ' + obj.percentageText);
           },
           done (error, file) {
-            that.inputFlag = true;
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',
                 to: that.targetData.account,
+                custom:JSON.stringify({
+                  cType:"0",
+                  cId:"0",
+                  mType:"1",
+                }),
                 file: file,
                 done(error, msg){
                   that.msgList[that.msgList.length - 1] = msg;
@@ -910,6 +929,11 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"32",
+          }),
           content: JSON.stringify({
             type: "payFinishTips"
           }),
@@ -926,6 +950,11 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"24",
+          }),
           content: JSON.stringify({
             type: "notification",
             data:{
@@ -956,6 +985,10 @@
       }
     },
     computed: {
+      //配合watch图片上传进度使用
+      progess () {
+        return this.imageProgress.progress;
+      },
       lastTime (){
         return this.$store.state.lastTime;
       },
@@ -1009,6 +1042,11 @@
       if (that.$route.query && that.$route.query.queryType === "triage") {
         that.nim.sendText({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"0",
+          }),
           to: that.targetData.account,
           text: "患者已上传视诊资料",
           done(error, obj) {
@@ -1019,6 +1057,11 @@
         that.updateMedical();
         that.nim.sendText({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"0",
+          }),
           to: that.targetData.account,
           text: "患者已上传检查资料",
           done(error, obj) {
@@ -1031,6 +1074,12 @@
       });
     },
     watch: {
+      //监听上传完成，可以继续上传；
+      progess :function (newVal,oldVal) {
+        if (newVal == "0%" || newVal =="100%"){
+          this.inputFlag = true;
+        }
+      },
       lastTime: function (time) {
         if (time <= 0) {
           this.lastTimeShow = false;
