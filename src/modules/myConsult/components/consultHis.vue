@@ -297,11 +297,13 @@
                   })
                 })
               };
+              console.log()
               that.$router.push({
                 name: "uploadPic",
                 params: {
                   hisPicLists: hisPicLists,
                   caseId:opt.caseId,
+                  consultationId:opt.consultationId,
                   from: that.$route.name,
                 },
                 query: that.$route.query
