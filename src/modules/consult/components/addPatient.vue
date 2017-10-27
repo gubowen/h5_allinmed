@@ -267,6 +267,9 @@
     },
     mounted() {
 //      console.log(PickerDate);
+      if(!api.checkOpenId()){
+        api.wxGetOpenId(1);
+      }
       this.getPatientList();
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//证件类型选择器初始化
