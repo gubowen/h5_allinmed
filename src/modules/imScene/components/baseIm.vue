@@ -816,7 +816,7 @@
           backCreateSuccess(_data){
             //创建订单成功  （手术必选）
             console.log("创建订单成功 ")
-            that.refreashOrderTime('free')
+            that.refreashOrderTime('free');
           },
           backCreateError(_data){
             //创建订单失败  (必选)
@@ -861,7 +861,7 @@
       //重置时间
       refreashOrderTime (type) {
         const that = this;
-        let stateStr = type?"5":"";
+        let stateStr = type?"4":"";
         console.log("更新时间");
         api.ajax({
           url: XHRList.updateCount,
