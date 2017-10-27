@@ -1026,7 +1026,7 @@
               data: {
                 consultationId: this.triageOrderSourceId,
                 frequency: "0",
-                frequencyType: "2",
+                frequencyType: "5",
                 consultationLevel: "1",
                 consultationState: "2"
               },
