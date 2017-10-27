@@ -224,12 +224,12 @@
           },
           //收到消息的回调, 会传入消息对象
           onmsg (msg) {
-            that.scrollToBottom();
-            console.log("收到回复消息："+JSON.stringify(msg));
-            that.pauseTime(msg);//收到检查检验隐藏顶部框；
-            that.msgList.push(msg);
-
-
+            if (msg.from === that.targetData.account) {
+              that.scrollToBottom();
+              console.log("收到回复消息："+JSON.stringify(msg));
+              that.pauseTime(msg);//收到检查检验隐藏顶部框；
+              that.msgList.push(msg);
+            }
           }
         });
 
