@@ -32,7 +32,9 @@ class Consult {
   init() {
     // eruda.init();
     //注册时数据最新
-    api.wxGetOpenId(1);    //获取openId
+    if(!api.checkOpenId()){
+      api.wxGetOpenId(1);    //获取openId
+    }
 
     //路由系统注册
     Vue.use(VeeValidator);
