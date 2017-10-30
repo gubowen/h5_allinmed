@@ -150,7 +150,6 @@
   };
   export default{
     data(){
-
       return {
         nim: {},
         imageProgress: {
@@ -181,7 +180,8 @@
         targetData: {
           account: "1_doctor00001"
         },
-        sendTextContent: ""//文本消息
+        sendTextContent: "",//文本消息
+        cId:'0',//聊天消息拓展字段的customerId
       }
     },
 
@@ -458,7 +458,7 @@
           scene: 'p2p',
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"27",
           }),
           to: this.targetData.account,
@@ -473,7 +473,7 @@
           scene: 'p2p',
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"32",
           }),
           to: this.targetData.account,
@@ -562,6 +562,7 @@
             console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
+              that.cId = dataList.customerId;
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
@@ -611,7 +612,7 @@
           text: sendTextTemp,
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"0",
           }),
           done(error, obj) {
@@ -727,7 +728,7 @@
                 to: that.targetData.account,
                 custom:JSON.stringify({
                   cType:"0",
-                  cId:"0",
+                  cId:that.cId,
                   mType:"1",
                 }),
                 file: file,
@@ -937,7 +938,7 @@
           to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"32",
           }),
           content: JSON.stringify({
@@ -958,7 +959,7 @@
           to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"24",
           }),
           content: JSON.stringify({
@@ -1050,7 +1051,7 @@
           scene: 'p2p',
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"0",
           }),
           to: that.targetData.account,
@@ -1065,7 +1066,7 @@
           scene: 'p2p',
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:that.cId,
             mType:"0",
           }),
           to: that.targetData.account,
