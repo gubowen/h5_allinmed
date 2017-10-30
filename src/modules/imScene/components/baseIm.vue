@@ -576,19 +576,18 @@
                   that.lastTimeShow = false;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
-                } else if(dataList.consultationState === 1) {
+                } else {
+                  if (time > 0) {
+                    store.commit("setLastTime", time);
+                    store.commit("lastTimeCount");
+                    that.lastTimeShow = true;
+                    that.inputBoxShow = true;
+                    that.consultTipsShow = false;
+                  } else {
                     that.lastTimeShow = false;
                     that.inputBoxShow = false;
                     that.consultTipsShow = true;
-                } else{
-                  if (time < 0) {
-                    time = 300000 - Math.abs(time);
-                  } 
-                  that.lastTimeShow = true;
-                  that.inputBoxShow = true;
-                  that.consultTipsShow = false;
-                  store.commit("setLastTime", time);
-                  store.commit("lastTimeCount");
+                  }
                 }
 //              }
             }
