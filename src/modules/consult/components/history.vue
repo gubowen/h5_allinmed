@@ -20,7 +20,7 @@
           </section>
         </section>
         <section class="questionItem-common upLoadResource">
-          <p class="questionTitleCommon">有患病处照片或检查资料吗？</p>
+          <p class="questionTitleCommon">有X光片/CT等影像资料吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="upload.none=true;upload.has=false" :class="{'selected':upload.none}">
               没有</p>

@@ -15,7 +15,7 @@
             <p class="patient-tips-bottom">为给您准确诊断，请选择真实患者</p>
           </section>
           <!--取消添加-->
-          <section class="cancel-add" v-else="headerShow == 3">
+          <section class="cancel-add" v-else-if="headerShow == 3">
             <h2 class="patient-tips-top">添加新患者</h2>
             <p class="patient-tips-bottom">根据国家卫计委相关规定，网上就诊需实名认证</p>
           </section>
@@ -28,10 +28,11 @@
         <div data-alcode-mod='708' data-alcode-item-selector=".patient-list-item">
           <section class="patient-list" v-if="!createNewPatient">
           <section
+            @click="toSelectPart(index)"
             :class="{'on':createNewPatient===false && currentIndex==index}"
             class="patient-list-item"
-            v-for="(item,index) in patientList"
-            @click="toSelectPart(index)"
+            v-for="(item, index) in patientList"
+            :key="index"
           >
             <figcaption>
               {{item.patientName}}
@@ -73,7 +74,7 @@
               <article class="add-patient-content-item">
                 <figcaption>证件号码</figcaption>
                 <figure class="add-patient-input">
-                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" v-validate="" name="IDNumber" v-model="IDNumber">
+                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
                 </figure>
               </article>
               <article class="add-patient-content-item">
@@ -1267,7 +1268,7 @@
     transition: all ease-in-out .5s
   }
   .fadeUp-leave-active{
-    /*transition: opacity 0s*/
+    transition: opacity 0s
   }
   .fadeUp-enter /* .fade-leave-active in <2.1.8 */
   {
