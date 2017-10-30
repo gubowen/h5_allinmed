@@ -75,6 +75,10 @@
       //初始化数据
       initData () {
         let that = this;
+        //检查检验Imagetype手动改为3，与pc展示相对应
+        that.checkSuggestMessage.data.map((item, index) =>{
+          Object.assign(item,{adviceType:3});
+        });
         if (that.checkSuggestMessage.data.length > 5) {
           that.moreBoxShow = true;
           that.moreSuggest = that.checkSuggestMessage.data;
