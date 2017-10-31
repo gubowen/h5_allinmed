@@ -71,7 +71,7 @@
 
 </script>
 
-<style lang="scss" rel="stylesheet/scss" scoped="">
+<style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   .tc-articleDetails{
     width: 100%;
