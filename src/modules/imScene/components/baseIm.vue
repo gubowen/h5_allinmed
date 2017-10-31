@@ -863,7 +863,6 @@
       //重置时间
       refreashOrderTime (type) {
         const that = this;
-        let stateStr = type?"4":"";
         let typeStr = type?"2":"6";
         console.log("更新时间");
         let data = {
@@ -871,9 +870,8 @@
           frequency: "0",
           frequencyType: typeStr,
           consultationLevel: "1",
-          consultationState:stateStr,
         };
-        !!type && Object.assign(data,{customerId:"0"});//付款回调参数传customerId
+        !!type && Object.assign(data,{customerId:"0",consultationState:"4",});//付款回调参数传customerId
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
