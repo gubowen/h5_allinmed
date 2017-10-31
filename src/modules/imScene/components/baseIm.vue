@@ -877,7 +877,7 @@
           method: "POST",
           data: data,
           done(data) {
-            if (data.responseObject.responseData) {
+            if (data.responseObject.responseData && data.responseObject.responseStatus) {
 //              that.lastTimeShow = true;
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
@@ -888,6 +888,8 @@
                 }
               }
               that.getLastTime();
+            } else {
+              console.log("重置时间失败")
             }
           }
         })
