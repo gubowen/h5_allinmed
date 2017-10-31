@@ -75,6 +75,9 @@
           onTransitionStart(swiper){
 //            console.log(swiper)
           },
+          onSlideChangeStart: function(swiper){
+          window.scrollTo(0,0);
+          }
           // more Swiper configs and callbacks...
           // ...
         }
@@ -97,7 +100,7 @@
 //      this.swiper.slideTo(_imgNum, 1000, false)
     },
     activated(){
-
+      window.scrollTo(0,0);
       this.imageListBox = this.$route.params.imgBlob;
       let _imgNum = this.$route.params.indexNum;
       this.swiper.slideTo(_imgNum, 0, false)
