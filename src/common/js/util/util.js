@@ -19,6 +19,15 @@ class Api {
   constructor() {
 
   }
+  //禁止分享
+  // forbidShare(){
+  //   if (!net.getPara().isShare){
+  //     forbidShare.wxforbidShare();
+  //   }else{
+  //     return;
+  //   }
+  // }
+
 
   ajax(param) {
     ajax(param);
