@@ -70,7 +70,6 @@
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);    //获取openId
       }
-      api.forbidShare();
       this.getOrderHistoryLists();
     },
     methods: {

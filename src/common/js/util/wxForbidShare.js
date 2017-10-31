@@ -12,7 +12,13 @@ import ajax from "./ajax";
 import net from "./net";
 
 class forbidShare {
-  constructor() {}
+  constructor() {
+      if (!net.getPara().isShare){
+        this.wxforbidShare();
+      }else{
+        return;
+      }
+  }
   wxforbidShare(){
     let script = document.createElement("script");
     script.type = "text/javascript";
