@@ -865,16 +865,18 @@
         const that = this;
         let stateStr = type?"4":"";
         console.log("更新时间");
+        let data = {
+          consultationId: this.orderSourceId,
+          frequency: "0",
+          frequencyType: "2",
+          consultationLevel: "1",
+          consultationState:stateStr,
+        };
+        !!type && Object.assign(data,{customerId:"0"});
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
-          data: {
-            consultationId: this.orderSourceId,
-            frequency: "0",
-            frequencyType: "2",
-            consultationLevel: "1",
-            consultationState:stateStr,
-          },
+          data: data,
           done(data) {
             if (data.responseObject.responseData) {
 //              that.lastTimeShow = true;
