@@ -1089,6 +1089,7 @@
     },
     activated(){
       let that = this;
+      document.body.scrollTop = 1;    
       if (that.$route.query && that.$route.query.queryType === "triage") {
 //        that.nim.sendText({
 //          scene: 'p2p',
