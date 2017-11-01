@@ -178,7 +178,7 @@
       }
     },
     mounted(){
-
+      api.forbidShare();
     },
     activated(){
 //      debugger

@@ -14,17 +14,21 @@ class WxCommon {
 
   // 检测是否获取过微信OpenId
   checkOpenId() {
-    let _openId = localStorage.getItem("openId"),
-      _checkKey = '';
-    if (_openId != null) {
-      _checkKey = true;
-    } else {
-      _checkKey = false;
-      if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
-        sessionStorage.removeItem("count");
+    if (window.location.origin !== "localhost") {
+
+
+      let _openId = localStorage.getItem("openId"),
+        _checkKey = '';
+      if (_openId != null) {
+        _checkKey = true;
+      } else {
+        _checkKey = false;
+        if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
+          sessionStorage.removeItem("count");
+        }
       }
+      return _checkKey;
     }
-    return _checkKey;
   }
 
   isWXBrowse() {

@@ -91,6 +91,7 @@
         this.getClinicDetails();
         this.getCloseTime();
         document.title="门诊信息";
+        api.forbidShare();
     },
     methods:{
       getClinicDetails(){

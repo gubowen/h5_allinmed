@@ -29,8 +29,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/mcall':{
-        target:'http://m1.allinmed.cn',
-        changeOrigin:true
+        target:'https://m1.allinmed.cn',
+        changeOrigin:true,
+        secure: false
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

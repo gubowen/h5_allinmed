@@ -257,6 +257,7 @@
       } else {
         this.backPopupShow = false;
       }
+      api.forbidShare();
     },
     computed: {
       dotSize(){

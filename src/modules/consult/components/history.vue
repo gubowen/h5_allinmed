@@ -254,6 +254,7 @@
       } else {
         this.backPopupShow = false;
       }
+      api.forbidShare();
     },
     methods: {
       initData () {

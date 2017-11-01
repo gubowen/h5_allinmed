@@ -59,6 +59,42 @@
             :currentIndex="index"
           >
           </ImageContent>
+          <!--上传视诊-->
+          <section class="main-message-box">
+            <article
+              class="main-message-box-item my-message"
+              :data-clientid="msg.idClient"
+              v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
+            >
+              <i class="fail-button" style="display:none">
+                <img src="/image/imScene/error_tips.png" alt="">
+              </i>
+              <figcaption class="main-message-content">
+                <p>患者已上传视诊资料</p>
+              </figcaption>
+              <figure class="main-message-img" v-if="msg.from===userData.account">
+                <img :src="logoUrl" alt="">
+              </figure>
+            </article>
+          </section>
+          <!--上传检查检验-->
+          <section class="main-message-box">
+            <article
+              class="main-message-box-item my-message"
+              :data-clientid="msg.idClient"
+              v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
+            >
+              <i class="fail-button" style="display:none">
+                <img src="/image/imScene/error_tips.png" alt="">
+              </i>
+              <figcaption class="main-message-content">
+                <p>患者已上传检查资料</p>
+              </figcaption>
+              <figure class="main-message-img" v-if="msg.from===userData.account">
+                <img :src="logoUrl" alt="">
+              </figure>
+            </article>
+          </section>
           <!--继续问诊-->
           <MiddleTips
             v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4"
@@ -1005,6 +1041,9 @@
       lastTimeText(){
         return api.MillisecondToDateNew(this.$store.state.lastTime);
       },
+      logoUrl(){
+        return this.$store.state.logoUrl
+      },
 //      payPopupShow(){
 //        return this.$store.state.payPopupShow;
 //      }
@@ -1026,6 +1065,7 @@
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }
+      api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
@@ -1049,35 +1089,66 @@
     },
     activated(){
       let that = this;
+      document.body.scrollTop = 1;    
       if (that.$route.query && that.$route.query.queryType === "triage") {
-        that.nim.sendText({
+//        that.nim.sendText({
+//          scene: 'p2p',
+//          custom:JSON.stringify({
+//            cType:"0",
+//            cId:that.cId,
+//            mType:"0",
+//          }),
+//          to: that.targetData.account,
+//          text: "患者已上传视诊资料",
+//          done(error, obj) {
+//            that.sendMessageSuccess(error, obj);
+//          }
+//        });
+        console.log(that.$route)
+        that.nim.sendCustomMsg({
           scene: 'p2p',
+          to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
             mType:"0",
           }),
-          to: that.targetData.account,
-          text: "患者已上传视诊资料",
-          done(error, obj) {
-            that.sendMessageSuccess(error, obj);
+          content: JSON.stringify({
+            type: "triageSendTips",
+            data:{
+              actionType:that.$route.query.triageType,
+            }
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
           }
-        });
+        })
       }else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
         that.updateMedical();
-        that.nim.sendText({
+        that.nim.sendCustomMsg({
           scene: 'p2p',
+          to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
             mType:"0",
           }),
-          to: that.targetData.account,
-          text: "患者已上传检查资料",
-          done(error, obj) {
-            that.sendMessageSuccess(error, obj);
+          content: JSON.stringify({
+            type: "checkSuggestSendTips",
+            data:{
+              actionType:that.$route.query.queryType,
+            }
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
           }
-        });
+        })
       }
       that.$router.push({
         query: {}
@@ -1092,12 +1163,13 @@
       },
       lastTime: function (time) {
         if (time <= 0) {
+          if (this.inputBoxShow) {
+            this.sendConsultState(5);
+          }
           this.lastTimeShow = false;
           this.inputBoxShow = false;
           this.consultTipsShow = true;
-          if (this.inputBoxShow = true) {
-            this.sendConsultState(5);
-          }
+          
         } else {
           this.lastTimeShow = true;
           this.inputBoxShow = true;
