@@ -206,6 +206,7 @@
         showPainProgress: false,
         hasSelectedLevel: false,
         painSecondList: [],
+        hasSecondQuestionId:"",//拥有二级问题的选项目前是疼痛；
         secondQuestionList: {},
         secondOptionsList: [],
         selectList: [],
@@ -380,6 +381,7 @@
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
                 that.renderList = dataList;
+                that.hasSecondQuestionId = dataList[0].optionList1[0].optionId;
                 that.getBaseIdList(dataList)
               }
             }
@@ -448,11 +450,19 @@
       selectEvent(type, pIndex, index, item, $event) {
 
         if (type) {
+          // debugger;
           this.questionList[pIndex].optionList[index].isSelected = !this.questionList[pIndex].optionList[index].isSelected;
           if (this.questionList[pIndex].optionList[index].isSelected) {
-            this.selectList[pIndex].optionIdList.push(this.questionList[pIndex].optionList[index].optionId);
+            // debugger;
+            console.log(this.questionList[pIndex].optionList[index].optionId);
+            if (this.questionList[pIndex].optionList[index].optionId == this.hasSecondQuestionId ){
+              this.selectList[pIndex].optionIdList.unshift(this.questionList[pIndex].optionList[index].optionId);
+            } else {
+              this.selectList[pIndex].optionIdList.push(this.questionList[pIndex].optionList[index].optionId);
+            }
             api.removeDub(this.selectList[pIndex].optionIdList)
           } else {
+            // debugger;
             this.selectList[pIndex].optionIdList.removeByValue(this.questionList[pIndex].optionList[index].optionId)
           }
         } else {
