@@ -154,6 +154,7 @@
     },
     mounted(){
       this.getMedicalReport();
+      api.forbidShare();
     },
     methods: {
       getMedicalReport() {

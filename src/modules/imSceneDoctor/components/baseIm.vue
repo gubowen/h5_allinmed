@@ -1176,6 +1176,7 @@
         localStorage.setItem("PCIMLinks", location.href);
       }
       this.resetLogoUrl();
+      api.forbidShare();
     },
     activated() {
       this.scrollToBottom();

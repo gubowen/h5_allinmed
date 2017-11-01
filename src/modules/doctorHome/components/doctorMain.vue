@@ -288,6 +288,7 @@
         if(api.getPara().customerId&&api.getPara().customerId.length>0){
           _this.isDoctorID = true;
         }
+        api.forbidShare();
       },
       methods: {
         //view cureTime

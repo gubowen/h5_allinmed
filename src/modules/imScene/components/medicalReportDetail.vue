@@ -157,6 +157,7 @@
     },
     mounted(){
       this.getMedicalReport();
+      api.forbidShare();
     },
     computed: {
 

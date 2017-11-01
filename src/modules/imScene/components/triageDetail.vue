@@ -500,6 +500,7 @@
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
+      api.forbidShare();
     },
     activated(){
       let that = this;

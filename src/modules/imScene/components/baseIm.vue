@@ -1026,6 +1026,7 @@
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }
+      api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
