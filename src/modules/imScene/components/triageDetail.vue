@@ -373,7 +373,8 @@
                 },
                 query: {
                   success:1,
-                  queryType:"triage"
+                  queryType:"triage",
+                  triageType:"image"
                 }
               })
             }
@@ -407,7 +408,8 @@
               },
               query: {
                 success:1,
-                queryType:"triage"
+                queryType:"triage",
+                triageType:"video"
               }
             })
 
