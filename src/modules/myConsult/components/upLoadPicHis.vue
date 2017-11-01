@@ -92,6 +92,7 @@
     },
     mounted(){
       this.getUploadList();
+      api.forbidShare();
     },
     methods: {
       getUploadList(){
