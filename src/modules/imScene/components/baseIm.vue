@@ -1163,12 +1163,13 @@
       },
       lastTime: function (time) {
         if (time <= 0) {
+          if (this.inputBoxShow) {
+            this.sendConsultState(5);
+          }
           this.lastTimeShow = false;
           this.inputBoxShow = false;
           this.consultTipsShow = true;
-          if (this.inputBoxShow = true) {
-            this.sendConsultState(5);
-          }
+          
         } else {
           this.lastTimeShow = true;
           this.inputBoxShow = true;
