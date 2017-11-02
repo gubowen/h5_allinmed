@@ -654,7 +654,7 @@
                   that.consultTipsShow = true;
                 }
               }
-              if (dataList.consultationState === 0 && time <= 0) {
+              if ((dataList.consultationState == 0 || dataList.consultationState == 4 ||dataList.consultationState == 5) && time <= 0) {
                 that.refreshState();
               }
             }
@@ -1093,7 +1093,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-        // api.wxGetOpenId(1);
+         api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
