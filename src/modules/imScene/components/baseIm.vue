@@ -579,6 +579,25 @@
           }
         })
       },
+      // 
+      refreshState() {
+        const that = this;
+        api.ajax({
+          url: XHRList.refresh,
+          method: "POST",
+          data: {
+            consultationId: that.orderSourceId,
+            consultationState: 1,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              console.log("状态更新成功");
+            } else {
+              console.log('状态更新失败' + data); 
+            }
+          }
+        })
+      },
       //获取剩余时间
       getLastTime(){
         const that = this;
@@ -609,24 +628,26 @@
 //                that.consultTipsShow = true;
 //              } else {
               //  time = 100000;
-                if (dataList.consultationState === -2){
-                  that.lastTimeShow = false;
+              if (dataList.consultationState === -2){
+                that.lastTimeShow = false;
+                that.inputBoxShow = true;
+                that.consultTipsShow = false;
+              } else {
+                if (time > 0) {
+                  store.commit("setLastTime", time);
+                  store.commit("lastTimeCount");
+                  that.lastTimeShow = true;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
-                  if (time > 0) {
-                    store.commit("setLastTime", time);
-                    store.commit("lastTimeCount");
-                    that.lastTimeShow = true;
-                    that.inputBoxShow = true;
-                    that.consultTipsShow = false;
-                  } else {
-                    that.lastTimeShow = false;
-                    that.inputBoxShow = false;
-                    that.consultTipsShow = true;
-                  }
+                  that.lastTimeShow = false;
+                  that.inputBoxShow = false;
+                  that.consultTipsShow = true;
                 }
-//              }
+              }
+              if (dataList.consultationState === 0 && time <= 0) {
+                that.refreshState();
+              }
             }
           },
           fail(err) {
@@ -1165,6 +1186,7 @@
         if (time <= 0) {
           if (this.inputBoxShow) {
             this.sendConsultState(5);
+            this.refreshState();
           }
           this.lastTimeShow = false;
           this.inputBoxShow = false;
