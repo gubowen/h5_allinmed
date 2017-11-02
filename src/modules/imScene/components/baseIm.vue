@@ -265,10 +265,18 @@
               console.log("收到回复消息："+JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
+              that.getCId(msg);
             }
           }
         });
 
+      },
+      //每次收到消息更新cId(分诊台医生id);
+      getCId(msg){
+        console.log(!!msg.custom);
+        if (!!msg.custom){
+          that.cId =  JSON.parse(msg.custom).cId;
+        }
       },
       //收到检查检验隐藏顶部框；
       pauseTime(msg){
@@ -617,7 +625,7 @@
             console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
-              that.cId = dataList.customerId;
+              // that.cId = dataList.customerId;
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
@@ -1132,7 +1140,7 @@
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
-            mType:"0",
+            mType:"34",
           }),
           content: JSON.stringify({
             type: "triageSendTips",
