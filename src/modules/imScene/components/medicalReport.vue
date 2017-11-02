@@ -95,7 +95,7 @@
       },
       getTimeSlot (){
         let timeTamp = parseInt(this.medicalReportMessage.data.time.split(" ")[1].split(":")[0]);
-        if(timeTamp< 8 || timeTamp>21){
+        if(timeTamp< 9 || timeTamp>21){
           this.timeSlot=false;
         }else {
           this.timeSlot=true;
