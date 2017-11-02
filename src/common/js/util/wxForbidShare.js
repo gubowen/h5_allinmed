@@ -20,9 +20,9 @@ class forbidShare {
     document.getElementsByTagName("body")[0].appendChild(script);
     ajax({
       url: "/mcall/wx/api/v1/getJSConfig/",
-      method: 'get',
+      method: 'post',
       data: {
-        url: "m.allinmed.cn/dist/consult.html"
+        url: window.location.href
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
