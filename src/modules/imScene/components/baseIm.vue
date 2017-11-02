@@ -273,6 +273,7 @@
       },
       //每次收到消息更新cId(分诊台医生id);
       getCId(msg){
+        const that = this;
         console.log(!!msg.custom);
         if (!!msg.custom){
           that.cId =  JSON.parse(msg.custom).cId;
@@ -625,7 +626,7 @@
             console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
-              // that.cId = dataList.customerId;
+              that.cId = dataList.customerId;
               let time = parseInt(dataList.remainingTime);//responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
               time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
@@ -1092,7 +1093,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
+        // api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
