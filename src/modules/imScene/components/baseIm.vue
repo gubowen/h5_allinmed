@@ -265,10 +265,19 @@
               console.log("收到回复消息："+JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
+              that.getCId(msg);
             }
           }
         });
 
+      },
+      //每次收到消息更新cId(分诊台医生id);
+      getCId(msg){
+        const that = this;
+        console.log(!!msg.custom);
+        if (!!msg.custom){
+          that.cId =  JSON.parse(msg.custom).cId;
+        }
       },
       //收到检查检验隐藏顶部框；
       pauseTime(msg){
@@ -579,6 +588,25 @@
           }
         })
       },
+      // 
+      refreshState() {
+        const that = this;
+        api.ajax({
+          url: XHRList.refresh,
+          method: "POST",
+          data: {
+            consultationId: that.orderSourceId,
+            consultationState: 1,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              console.log("状态更新成功");
+            } else {
+              console.log('状态更新失败' + data); 
+            }
+          }
+        })
+      },
       //获取剩余时间
       getLastTime(){
         const that = this;
@@ -609,24 +637,26 @@
 //                that.consultTipsShow = true;
 //              } else {
               //  time = 100000;
-                if (dataList.consultationState === -2){
-                  that.lastTimeShow = false;
+              if (dataList.consultationState === -2){
+                that.lastTimeShow = false;
+                that.inputBoxShow = true;
+                that.consultTipsShow = false;
+              } else {
+                if (time > 0) {
+                  store.commit("setLastTime", time);
+                  store.commit("lastTimeCount");
+                  that.lastTimeShow = true;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
-                  if (time > 0) {
-                    store.commit("setLastTime", time);
-                    store.commit("lastTimeCount");
-                    that.lastTimeShow = true;
-                    that.inputBoxShow = true;
-                    that.consultTipsShow = false;
-                  } else {
-                    that.lastTimeShow = false;
-                    that.inputBoxShow = false;
-                    that.consultTipsShow = true;
-                  }
+                  that.lastTimeShow = false;
+                  that.inputBoxShow = false;
+                  that.consultTipsShow = true;
                 }
-//              }
+              }
+              if (dataList.consultationState === 0 && time <= 0) {
+                that.refreshState();
+              }
             }
           },
           fail(err) {
@@ -1063,7 +1093,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
+        // api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
@@ -1111,7 +1141,7 @@
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
-            mType:"0",
+            mType:"34",
           }),
           content: JSON.stringify({
             type: "triageSendTips",
@@ -1165,6 +1195,7 @@
         if (time <= 0) {
           if (this.inputBoxShow) {
             this.sendConsultState(5);
+            this.refreshState();
           }
           this.lastTimeShow = false;
           this.inputBoxShow = false;
