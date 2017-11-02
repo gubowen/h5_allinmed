@@ -77,13 +77,9 @@
     },
     mounted(){
       api.mobileCheck();
-      siteSwitch.weChatJudge((ua) => {
-        if (!api.checkOpenId()) {
-          api.wxGetOpenId(1);    //获取openId
-        }
-      }, (ua) => {
-        console.log(ua);
-      })
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);    //获取openId
+      }
 
       api.forbidShare();
       this.getOrderHistoryLists();
