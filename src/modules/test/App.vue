@@ -1,6 +1,6 @@
 <template>
   <div>
-
+      this is simple vue demo for development
   </div>
 </template>
 <script type="text/ecmascript-6">
