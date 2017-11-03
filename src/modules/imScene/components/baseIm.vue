@@ -60,11 +60,12 @@
           >
           </ImageContent>
           <!--上传视诊-->
-          <section class="main-message-box">
+          <section class="main-message-box"
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
+          >
             <article
               class="main-message-box-item my-message"
               :data-clientid="msg.idClient"
-              v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
             >
               <i class="fail-button" style="display:none">
                 <img src="/image/imScene/error_tips.png" alt="">
@@ -78,11 +79,12 @@
             </article>
           </section>
           <!--上传检查检验-->
-          <section class="main-message-box">
+          <section class="main-message-box"
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
+          >
             <article
               class="main-message-box-item my-message"
               :data-clientid="msg.idClient"
-              v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
             >
               <i class="fail-button" style="display:none">
                 <img src="/image/imScene/error_tips.png" alt="">
@@ -1093,7 +1095,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-         api.wxGetOpenId(1);
+        //  api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
