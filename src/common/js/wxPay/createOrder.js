@@ -40,7 +40,9 @@
  * Fixed to ECMAScript6 by qiangkailiang on 2017/08/18
  */
 import api from "../util/util";
+import siteSwitch from "../siteSwitch/siteSwitch";
 import pay from "./pay";
+import MPay from "./MPay";
 export default function createOrders(Obj){
   const XHRList={
     createOrder:"/mcall/cms/pay/order/v1/create/",    //创建订单
@@ -101,7 +103,11 @@ export default function createOrders(Obj){
         case 1:
         case 3:
           if(Obj.data.isCharge==="true"){
-            this.goWxPay();
+            siteSwitch.weChatJudge((ua)=>{
+              this.goWxPay(ua);
+            },(ua)=>{
+              this.goH5Pay(ua);
+            });
           }else{
             Obj.backCreateSuccess(this.orderId);  //成功回调
           }
@@ -127,6 +133,25 @@ export default function createOrders(Obj){
           }else{
             Obj.wxPayError();          //支付失败回调
           }
+        }
+      })
+    }
+    //H5支付
+    goH5Pay(){
+      const that= this;
+      MPay({
+        isTest:0, //0-线上 1-线下
+        orderId:this.orderId,             //订单ID
+        orderType:Obj.data.orderType,            //	string	是	订单类型  1-咨询2-手术3-门诊预约
+        orderSourceId:Obj.data.orderSourceId,    //	string	是	来源id，  对应咨询id,手术单id，门诊预约id
+        total_fee: Obj.data.orderAmount,   //订单总金额
+        body: Obj.data.body,               //订单描述
+        callBack: function (data) {
+          // if(data.responseStatus ==="true"){
+          //   Obj.wxPaySuccess();        //支付成功回调
+          // }else{
+          //   Obj.wxPayError();          //支付失败回调
+          // }
         }
       })
     }

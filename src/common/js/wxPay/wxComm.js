@@ -8,12 +8,13 @@
  */
 import upOrder from './upOrderStatus';
 import pay from './pay';
+import MPay from './MPay';
 import createOrders from './createOrder';
 import closeOrder from "./closeOrder";
 
 class WxPayCommon {
   constructor(Obj) {
-  
+
   }
   //取消订单
   wxCloseOrder() {
@@ -30,6 +31,10 @@ class WxPayCommon {
   //微信支付
   wxPay(Obj){
     pay(Obj);
+  }
+  //H5支付
+  H5Pay(Obj){
+    MPay(Obj);
   }
 }
 export default new WxPayCommon();
