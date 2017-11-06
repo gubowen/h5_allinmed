@@ -49,7 +49,10 @@
          });
       },
       viewResultH5Pay(){
-        console.log("H5支付结果查看")
+        console.log("H5支付结果查看");
+        WxPayCommon.PayResult({
+          out_trade_no:''       //微信订单号
+        });
       }
     }
   }
