@@ -58,7 +58,7 @@ class WxCommon {
     if (window.location.origin.includes("localhost")) {
       return false;
     }
-    if (!window.location.hostname.includes("m1")) {
+    if (!window.location.hostname.includes("m9")) {
       envCode = 1;
     } else {
       envCode = 2;
