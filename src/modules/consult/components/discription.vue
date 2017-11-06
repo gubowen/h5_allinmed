@@ -609,7 +609,6 @@
           if (this.$el.querySelectorAll("[data-oid='" + this.secondQuestionList[i].refOptionId + "'] .pain-level-secondList").length !== 0) {
             finalSubmitParam.optionList.push(this.secondQuestionList[i])
           }
-
         }
 
         for (let j = 0; j < finalSubmitParam.optionList.length; j++) {
