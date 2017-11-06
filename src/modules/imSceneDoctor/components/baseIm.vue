@@ -117,7 +117,7 @@
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
           </figure>
-          <p class="main-input-box-send" @click="sendMessage">发送</p>
+          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
 
         </footer>
       </transition>
