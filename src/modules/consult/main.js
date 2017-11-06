@@ -31,6 +31,8 @@ import valiadteMethods from '../../common/js/util/validate_methods';
 
 class Consult {
   constructor() {
+    //ios中Safari禁止缩放（并不能完全禁止）
+    api.banZoom();
     this.init();
   }
 
