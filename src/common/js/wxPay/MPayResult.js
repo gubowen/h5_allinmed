@@ -21,6 +21,7 @@ export default function (Obj) {
     }
 
     init() {
+      //获取token
       wxString.wxGetToken({
         callBack: (data) => {
           console.log(data);
@@ -35,9 +36,9 @@ export default function (Obj) {
           "out_trade_no": _t.op.out_trade_no,   //_out_trade_no
           "scene": 1,
           "roleId": 2,
-          "nonceStr": rv._nonceStr,
+          "nonceStr": rv._nonceStr,            //随机数(前端生成32位随机数)
           "siteId": 1,
-          "token": rv._token
+          "token": rv._token                   //token(后台获取)
         };
       api.ajax({
         url: XHRList.payResultUrl,
