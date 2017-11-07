@@ -117,7 +117,7 @@
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
           </figure>
-          <p class="main-input-box-send" @click="sendMessage">发送</p>
+          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
 
         </footer>
       </transition>
@@ -910,6 +910,7 @@
           done(error, file) {
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
+            console.log(file);
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',
@@ -1176,6 +1177,7 @@
         localStorage.setItem("PCIMLinks", location.href);
       }
       this.resetLogoUrl();
+      api.forbidShare();
     },
     activated() {
       this.scrollToBottom();

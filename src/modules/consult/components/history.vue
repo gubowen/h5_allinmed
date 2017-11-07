@@ -221,7 +221,7 @@
           caseType: api.getPara().doctorId?11:0,// 类型0-咨询1-复诊2-手术直约3-首诊4-手术犹豫5-待通知入院6-已通知入院7-住院中8-已出院9-术后复诊10-老患者报到(诊后报道)11-立即问诊
           affectedAttId: "",
           inspectionAttId: "",
-          visitSiteId: 13,
+          visitSiteId: 17,
           takeMedicine: "",
           complication: "",
           optionList: [],
@@ -254,6 +254,7 @@
       } else {
         this.backPopupShow = false;
       }
+      api.forbidShare();
     },
     methods: {
       initData () {

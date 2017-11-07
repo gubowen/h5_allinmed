@@ -33,7 +33,7 @@
       this.initData();
     },
     mounted() {
-
+      api.forbidShare();
     },
     computed: {
 

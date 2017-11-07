@@ -20,9 +20,9 @@ class forbidShare {
     document.getElementsByTagName("body")[0].appendChild(script);
     ajax({
       url: "/mcall/wx/api/v1/getJSConfig/",
-      method: 'get',
+      method: 'POST',
       data: {
-        url: window.location.href
+        url: encodeURIComponent(window.location.href.split('#')[0])
       },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

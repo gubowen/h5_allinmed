@@ -212,7 +212,7 @@
         selectList: [],
         resultParam: {
           caseId: "",
-          visitSiteId: 13,
+          visitSiteId: 17,
           optionList: [],
           patientId: "",
           optionDesc: "",
@@ -257,6 +257,7 @@
       } else {
         this.backPopupShow = false;
       }
+      api.forbidShare();
     },
     computed: {
       dotSize(){
@@ -610,7 +611,6 @@
           if (this.$el.querySelectorAll("[data-oid='" + this.secondQuestionList[i].refOptionId + "'] .pain-level-secondList").length !== 0) {
             finalSubmitParam.optionList.push(this.secondQuestionList[i])
           }
-
         }
 
         for (let j = 0; j < finalSubmitParam.optionList.length; j++) {

@@ -58,7 +58,7 @@ class WxCommon {
     if (window.location.origin.includes("localhost")) {
       return false;
     }
-    if (!window.location.hostname.includes("m1")) {
+    if (!window.location.hostname.includes("m9")) {
       envCode = 1;
     } else {
       envCode = 2;
@@ -69,7 +69,7 @@ class WxCommon {
       XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     } else if (envCode == 2) {
       appId = "wxaa5288ad7f627608";
-      XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
+      XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
 
     let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +

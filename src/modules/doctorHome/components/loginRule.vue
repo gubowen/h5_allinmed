@@ -157,7 +157,7 @@
 
       },
       mounted() {
-
+        api.forbidShare();
       },
       methods: {},
       components: {

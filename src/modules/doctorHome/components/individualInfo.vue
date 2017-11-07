@@ -80,6 +80,7 @@
         },
         mounted() {
           document.body.scrollTop = 0;
+          api.forbidShare();
         },
         methods: {
           timeDeal(time){

@@ -59,6 +59,44 @@
             :currentIndex="index"
           >
           </ImageContent>
+          <!--上传视诊-->
+          <section class="main-message-box"
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
+          >
+            <article
+              class="main-message-box-item my-message"
+              :data-clientid="msg.idClient"
+            >
+              <i class="fail-button" style="display:none">
+                <img src="/image/imScene/error_tips.png" alt="">
+              </i>
+              <figcaption class="main-message-content">
+                <p>患者已上传视诊资料</p>
+              </figcaption>
+              <figure class="main-message-img" v-if="msg.from===userData.account">
+                <img :src="logoUrl" alt="">
+              </figure>
+            </article>
+          </section>
+          <!--上传检查检验-->
+          <section class="main-message-box"
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
+          >
+            <article
+              class="main-message-box-item my-message"
+              :data-clientid="msg.idClient"
+            >
+              <i class="fail-button" style="display:none">
+                <img src="/image/imScene/error_tips.png" alt="">
+              </i>
+              <figcaption class="main-message-content">
+                <p>患者已上传检查资料</p>
+              </figcaption>
+              <figure class="main-message-img" v-if="msg.from===userData.account">
+                <img :src="logoUrl" alt="">
+              </figure>
+            </article>
+          </section>
           <!--继续问诊-->
           <MiddleTips
             v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4"
@@ -94,7 +132,7 @@
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
                     @click="scrollToBottom" @input="inputLimit"></textarea>
         </figure>
-        <p class="main-input-box-send" @click="sendMessage">发送</p>
+        <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
       </footer>
     </transition>
     <!--支付弹层-->
@@ -192,7 +230,7 @@
 
         this.nim = NIM.getInstance({
 
-          debug: true,
+//          debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
@@ -229,10 +267,19 @@
               console.log("收到回复消息："+JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
+              that.getCId(msg);
             }
           }
         });
 
+      },
+      //每次收到消息更新cId(分诊台医生id);
+      getCId(msg){
+        const that = this;
+        console.log(!!msg.custom);
+        if (!!msg.custom){
+          that.cId =  JSON.parse(msg.custom).cId;
+        }
       },
       //收到检查检验隐藏顶部框；
       pauseTime(msg){
@@ -543,6 +590,25 @@
           }
         })
       },
+      //
+      refreshState() {
+        const that = this;
+        api.ajax({
+          url: XHRList.refresh,
+          method: "POST",
+          data: {
+            consultationId: that.orderSourceId,
+            consultationState: 1,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              console.log("状态更新成功");
+            } else {
+              console.log('状态更新失败' + data);
+            }
+          }
+        })
+      },
       //获取剩余时间
       getLastTime(){
         const that = this;
@@ -573,24 +639,26 @@
 //                that.consultTipsShow = true;
 //              } else {
               //  time = 100000;
-                if (dataList.consultationState === -2){
-                  that.lastTimeShow = false;
+              if (dataList.consultationState === -2){
+                that.lastTimeShow = false;
+                that.inputBoxShow = true;
+                that.consultTipsShow = false;
+              } else {
+                if (time > 0) {
+                  store.commit("setLastTime", time);
+                  store.commit("lastTimeCount");
+                  that.lastTimeShow = true;
                   that.inputBoxShow = true;
                   that.consultTipsShow = false;
                 } else {
-                  if (time > 0) {
-                    store.commit("setLastTime", time);
-                    store.commit("lastTimeCount");
-                    that.lastTimeShow = true;
-                    that.inputBoxShow = true;
-                    that.consultTipsShow = false;
-                  } else {
-                    that.lastTimeShow = false;
-                    that.inputBoxShow = false;
-                    that.consultTipsShow = true;
-                  }
+                  that.lastTimeShow = false;
+                  that.inputBoxShow = false;
+                  that.consultTipsShow = true;
                 }
-//              }
+              }
+              if ((dataList.consultationState == 0 || dataList.consultationState == 4 ||dataList.consultationState == 5) && time <= 0) {
+                that.refreshState();
+              }
             }
           },
           fail(err) {
@@ -724,6 +792,7 @@
             // show file to the user
             if (!error) {
               let msg = that.nim.sendFile({
+
                 scene: 'p2p',
                 to: that.targetData.account,
                 custom:JSON.stringify({
@@ -1005,6 +1074,9 @@
       lastTimeText(){
         return api.MillisecondToDateNew(this.$store.state.lastTime);
       },
+      logoUrl(){
+        return this.$store.state.logoUrl
+      },
 //      payPopupShow(){
 //        return this.$store.state.payPopupShow;
 //      }
@@ -1024,8 +1096,9 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
+         api.wxGetOpenId(1);
       }
+      api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
@@ -1049,35 +1122,66 @@
     },
     activated(){
       let that = this;
+      document.body.scrollTop = 1;
       if (that.$route.query && that.$route.query.queryType === "triage") {
-        that.nim.sendText({
+//        that.nim.sendText({
+//          scene: 'p2p',
+//          custom:JSON.stringify({
+//            cType:"0",
+//            cId:that.cId,
+//            mType:"0",
+//          }),
+//          to: that.targetData.account,
+//          text: "患者已上传视诊资料",
+//          done(error, obj) {
+//            that.sendMessageSuccess(error, obj);
+//          }
+//        });
+        console.log(that.$route)
+        that.nim.sendCustomMsg({
           scene: 'p2p',
+          to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
-            mType:"0",
+            mType:"34",
           }),
-          to: that.targetData.account,
-          text: "患者已上传视诊资料",
-          done(error, obj) {
-            that.sendMessageSuccess(error, obj);
+          content: JSON.stringify({
+            type: "triageSendTips",
+            data:{
+              actionType:that.$route.query.triageType,
+            }
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
           }
-        });
+        })
       }else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
         that.updateMedical();
-        that.nim.sendText({
+        that.nim.sendCustomMsg({
           scene: 'p2p',
+          to: that.targetData.account,
           custom:JSON.stringify({
             cType:"0",
             cId:that.cId,
             mType:"0",
           }),
-          to: that.targetData.account,
-          text: "患者已上传检查资料",
-          done(error, obj) {
-            that.sendMessageSuccess(error, obj);
+          content: JSON.stringify({
+            type: "checkSuggestSendTips",
+            data:{
+              actionType:that.$route.query.queryType,
+            }
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
           }
-        });
+        })
       }
       that.$router.push({
         query: {}
@@ -1092,12 +1196,14 @@
       },
       lastTime: function (time) {
         if (time <= 0) {
+          if (this.inputBoxShow) {
+            this.sendConsultState(5);
+            this.refreshState();
+          }
           this.lastTimeShow = false;
           this.inputBoxShow = false;
           this.consultTipsShow = true;
-          if (this.inputBoxShow = true) {
-            this.sendConsultState(5);
-          }
+
         } else {
           this.lastTimeShow = true;
           this.inputBoxShow = true;

@@ -65,6 +65,7 @@
         lessSuggest:[],//五条建议的数据
         position:0,//记录卡片的位置
         hasPosition:false,//卡片的位置是否已经记录
+        paramsData:[],//上传检查检验的参数
       }
     },
     mounted(){
@@ -76,7 +77,8 @@
       initData () {
         let that = this;
         //检查检验Imagetype手动改为3，与pc展示相对应
-        that.checkSuggestMessage.data.map((item, index) =>{
+        that.paramsData = that.checkSuggestMessage.data
+        that.paramsData.map((item, index) => {
           Object.assign(item,{adviceType:3});
         });
         if (that.checkSuggestMessage.data.length > 5) {
@@ -111,7 +113,7 @@
         localStorage.removeItem("upload");
         this.$router.push({
           name: "UploadList",
-          params: this.checkSuggestMessage.data
+          params: this.paramsData
         })
       }
     },
