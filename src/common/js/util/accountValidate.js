@@ -19,9 +19,9 @@ export default function accountValidate() {
   //customsId获取（customerId和patientCustomerId同时存在的话取patientCustomerId）
   if (!net.getPara().openId) {
     if (net.getPara().patientCustomerId !== undefined) {
-      _phoneCheckParams.customerId = net.getPara().patientCustomerId.length>0?0:net.getPara().patientCustomerId;
+      _phoneCheckParams.customerId = net.getPara().patientCustomerId.length===0?0:net.getPara().patientCustomerId;
     } else if (net.getPara().customerId !== undefined) {
-      _phoneCheckParams.customerId = net.getPara().customerId.length>0?0:net.getPara().customerId;
+      _phoneCheckParams.customerId = net.getPara().customerId.length===0?0:net.getPara().customerId;
     } else {
       _phoneCheckParams.customerId = 0;
     }
