@@ -15,7 +15,7 @@ export default function nimEnv(){
   let nimKey="";
 
 
-  if (host==="m1.allinmed.cn"&&env==="online"){
+  if (host==="m9.allinmed.cn"&&env==="online"){
       /*
       * m1线上测试环境
       * 使用云信测试账号
