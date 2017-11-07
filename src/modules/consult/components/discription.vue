@@ -1,145 +1,159 @@
 <template>
-  <section class="consult-main-inner" @click="showSymptomDetail=false">
-    <transition name="fade">
-      <section class="consult-wrapper" v-show="finish" >
-        <section class="consult-inner">
-          <span class="consult-page page-one"></span>
-          <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
-            <header class="consult-inner-title">
-              <h2>
-                <span>{{question.questionName}}</span>
-                <em v-if="question.questionType==2">(可多选)</em>
-              </h2>
-            </header>
-            <section class="consult-question-inner"
-                     :class="{mSelector:question.questionType==2,sSelector:question.questionType==1}"
-                     v-for="(item , index) in question.optionList1" :data-oId="item.optionId">
-              <article class="consult-question-item"
-                       :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
-                       @click="selectEvent(question.questionType==2,pIndex,index)"
-              >
-                <p>{{item.optionName}}</p>
-                <i class="icon-select"></i>
-                <figure class="input-area"
-                        v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
-                        @click.stop="">
-              <textarea class="input-textarea" placeholder="填写其他情况"
-                        @input="otherReason(pIndex,index,$event)"
-                        v-model="questionList[pIndex].optionList[index].optionDesc">
-              </textarea>
-                  <p class="text-num-tips" v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100">
-                    {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
-                </figure>
-                <transition name="fade" v-if="painLevelRender(item)">
-                  <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
-                    <section class="pain-level-box">
-                      <h3>告诉我您的疼痛程度</h3>
-                      <p class="pain-level-content">
-                        {{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}
+  <div data-alcode-mod='711'>
+    <section class="consult-main-inner" @click="showSymptomDetail=false">
+      <transition name="fade">
+        <section class="consult-wrapper" v-show="finish">
+          <section class="consult-inner">
+            <span class="consult-page page-one"></span>
+            <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
+              <header class="consult-inner-title">
+                <h2>
+                  <span>{{question.questionName}}</span>
+                  <em v-if="question.questionType==2">(可多选)</em>
+                </h2>
+              </header>
+              <section class="consult-question-inner"
+                       :class="{mSelector:question.questionType==2,sSelector:question.questionType==1}"
+                       v-for="(item , index) in question.optionList1" :data-oId="item.optionId">
+                <article class="consult-question-item"
+                         :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
+                         @click="selectEvent(question.questionType==2,pIndex,index,item,$event)"
+                >
+                  <p>{{item.optionName}}</p>
+                  <i class="icon-select"></i>
+                  <figure class="input-area"
+                          v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
+                          @click.stop="">
+                  <textarea class="input-textarea"
+                            placeholder="填写其他情况"
+                            @input="otherReason(pIndex,index,$event)"
+                            v-model="questionList[pIndex].optionList[index].optionDesc"
+                            ref="otherEle"
+                  >
+                  </textarea>
+                    <p class="text-num-tips"
+                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=100"
+                    >
+                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}</p>
+                  </figure>
+                  <transition name="fade" v-if="painLevelRender(item)">
+                    <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
+                      <section class="pain-level-box">
+                        <h3>告诉我您的疼痛程度</h3>
+                        <p class="pain-level-content">
+                          {{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}
                       </p>
-                      <vue-slider
-                        ref="slider"
-                        v-model="painValue"
-                        :piecewise-label="true"
-                        :max="10"
-                        :min="0"
-                        :value="2"
-                        :dot-size="dotSize"
-                        :tooltip="false"
-                        :class="painLevelClass"
-                        class="pain-level-progress"
-                        :label-style="labelStyle"
-                      ></vue-slider>
-                      <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">好的
-                      </button>
+                        <vue-slider
+                          ref="slider"
+                          v-model="painValue"
+                          :piecewise-label="true"
+                          :max="10"
+                          :min="0"
+                          :value="2"
+                          :dot-size="dotSize"
+                          :tooltip="false"
+                          :class="painLevelClass"
+                          class="pain-level-progress"
+                          :label-style="labelStyle"
+                        ></vue-slider>
+                        <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了
+
+                        </button>
+                      </section>
+                    </section>
+                  </transition>
+                </article>
+                <transition name="fadeDown">
+                  <section class="second-wrapper"
+                           v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected">
+                    <section class="pain-level-secondList"
+                             :class="{mSelector:scItem.questionType==2,sSelector:scItem.questionType==1}"
+                             @click.stop="showSymptomDetail=false"
+                             v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected"
+                             v-for="(scItem,scIndex) in item.questionList2"
+                             :data-qId="scItem.questionId">
+                      <section class="pain-level-title-box" @click.stop="">
+                        <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass"
+                                @click.stop="showPainProgress=true;showSymptomDetail=false">
+                          <i class="icon-pain-level-tips"></i>
+                          <p>
+                            <em>疼痛等级：</em><span>{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span>
+                          </p>
+                        </header>
+                      </section>
+                      <header class="consult-inner-title" v-if="scItem.questionType!=3">
+                        <h2>
+                          <span>{{scItem.questionName}}</span>
+                        </h2>
+                      </header>
+                      <article
+                        v-if="scItem.questionType!=3" class="consult-question-item"
+                        v-for="(scoItem,scoIndex) in scItem.optionList2"
+                        @click.stop="secondClickEvent(scItem.questionType==2,scIndex,scoIndex,index,pIndex)"
+                        :class="{'selected':questionList[pIndex].optionList[index].questionList[scIndex].optionList[scoIndex].isSelected }"
+                        :data-oId="scoItem.optionId"
+                      >
+                        <p>{{scoItem.optionName}}</p>
+                        <span class="detail-tips" v-if="scoItem.isAttachment==1"
+                              @click.stop="showQueryDetail(scoItem.optionId)">什么是{{scoItem.optionName}}</span>
+                        <section class="symptom-detail-desc" v-if="showSymptomDetail && scoItem.isAttachment==1">
+                          <figure>
+                            <img :src="symptomDetail.img" alt="">
+                          </figure>
+                          <figcaption>{{symptomDetail.content}}</figcaption>
+                        </section>
+                        <i class="icon-select"></i>
+                      </article>
                     </section>
                   </section>
                 </transition>
-              </article>
-              <transition name="fadeDown">
-                <section class="second-wrapper"
-                         v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected">
-                  <section class="pain-level-secondList"
-                           :class="{mSelector:scItem.questionType==2,sSelector:scItem.questionType==1}"
-                           @click.stop="showSymptomDetail=false"
-                           v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected"
-                           v-for="(scItem,scIndex) in item.questionList2"
-                           :data-qId="scItem.questionId">
-                    <section class="pain-level-title-box" @click.stop="">
-                      <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass"
-                              @click.stop="showPainProgress=true;showSymptomDetail=false">
-                        <i class="icon-pain-level-tips"></i>
-                        <p>
-                          <em>疼痛等级：</em><span>{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span>
-                        </p>
-                      </header>
-                    </section>
-                    <header class="consult-inner-title" v-if="scItem.questionType!=3">
-                      <h2>
-                        <span>{{scItem.questionName}}</span>
-                      </h2>
-                    </header>
-                    <article
-                      v-if="scItem.questionType!=3" class="consult-question-item"
-                      v-for="(scoItem,scoIndex) in scItem.optionList2"
-                      @click.stop="secondClickEvent(scItem.questionType==2,scIndex,scoIndex,index,pIndex)"
-                      :class="{'selected':questionList[pIndex].optionList[index].questionList[scIndex].optionList[scoIndex].isSelected }"
-                      :data-oId="scoItem.optionId"
-                    >
-                      <p>{{scoItem.optionName}}</p>
-                      <span class="detail-tips" v-if="scoItem.isAttachment==1"
-                            @click.stop="showQueryDetail(scoItem.optionId)">什么是{{scoItem.optionName}}</span>
-                      <section class="symptom-detail-desc" v-if="showSymptomDetail && scoItem.isAttachment==1">
-                        <figure>
-                          <img :src="symptomDetail.img" alt="">
-                        </figure>
-                        <figcaption>{{symptomDetail.content}}</figcaption>
-                      </section>
-                      <i class="icon-select"></i>
-                    </article>
-                  </section>
-                </section>
-              </transition>
+              </section>
             </section>
-          </section>
-          <section class="consult-total">
-            <header class="consult-inner-title"><h2><span>您还有其他补充吗？</span></h2></header>
-            <figure class="input-area">
+            <section class="consult-total">
+              <header class="consult-inner-title">
+                <h2>
+                  <span>您还有其他补充吗？</span>
+                </h2>
+              </header>
+              <figure class="input-area">
               <textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"
                         @input="complicationLimit"></textarea>
-              <p class="text-num-tips" v-show="getByteLen(complication)<=100">
-                {{getByteLen(complication)}}</p>
-            </figure>
-          </section>
-          <transition name="fade">
-            <section class="welcome-tips" v-if="firstConsult" @click="firstConsult=false">
-              <figure @click.stop="firstConsult=true">
-                <img src="../../../common/image/img00/consult_V1.2/popups@2x.png" alt="">
-                <button class="btn-primary welcome-tips-ensure" @click.stop="firstConsult=false">好的</button>
+                <p class="text-num-tips" v-show="getByteLen(complication)<=100">
+                  {{getByteLen(complication)}}</p>
               </figure>
             </section>
-          </transition>
+            <transition name="fade">
+              <section class="welcome-tips" v-if="firstConsult" @click="firstConsult=false">
+                <figure @click.stop="firstConsult=true">
+                  <img src="../../../common/image/img00/consult_V1.2/popups@2x.png" alt="">
+                  <button class="btn-primary welcome-tips-ensure" @click.stop="firstConsult=false">好的</button>
+                </figure>
+              </section>
+            </transition>
 
-        </section>
-        <button class="btn-primary to-second" @click="paramsInstall">继续下一页</button>
-        <transition name="fade">
-          <toast :content="errorMsg" v-if="errorShow"></toast>
-        </transition>
-        <transition name="fade">
-          <confirm
-            :confirmParams="{
+          </section>
+          <button data-alcode='e127' class="btn-primary to-second" @click="paramsInstall">继续下一页</button>
+          <transition name="fade">
+            <toast :content="errorMsg" v-if="errorShow"></toast>
+          </transition>
+          <transition name="fade">
+            <confirm
+              :confirmParams="{
           'ensure':'离开',
           'cancel':'取消',
           'title':'您还未提交\n现在离开还需重新填写'
           }" v-if="levelShow" :showFlag.sync="levelShow" @cancelClickEvent="cancelEvent"
-            @ensureClickEvent="ensureEvent">
-          </confirm>
-        </transition>
+              @ensureClickEvent="ensureEvent">
+            </confirm>
+          </transition>
 
-      </section>
-    </transition>
-    <loading :show="!finish"></loading>
-  </section>
+        </section>
+      </transition>
+      <loading :show="!finish"></loading>
+      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
+                 :backPopupParams="{patientParams:patientParams}"></backPopup>
+    </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -155,6 +169,9 @@
   import toast from 'components/toast';
   import confirm from 'components/confirm';
   import vueSlider from 'vue-slider-component';
+  import autosize from 'autosize';
+  import backPopup from "components/backToastForConsult";
+
   const XHRList = {
     query: "/mcall/cms/part/question/relation/v1/getMapList/",
     createMedicalRecord: "/mcall/customer/patient/case/v1/create/",
@@ -170,7 +187,12 @@
           color: "#909090",
           top: "-1.5rem "
         },
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorId,
+        },
         patientMessage: {},
+        customerId: '',
         finish: false,
         complication: "",
         renderList: [],
@@ -184,12 +206,13 @@
         showPainProgress: false,
         hasSelectedLevel: false,
         painSecondList: [],
+        hasSecondQuestionId:"",//拥有二级问题的选项目前是疼痛；
         secondQuestionList: {},
         secondOptionsList: [],
         selectList: [],
         resultParam: {
           caseId: "",
-          visitSiteId: 13,
+          visitSiteId: 17,
           optionList: [],
           patientId: "",
           optionDesc: "",
@@ -203,27 +226,38 @@
         errorMsg: "",
         errorShow: false,
         levelShow: false,
-        pageLeaveEnsure: false
+        pageLeaveEnsure: false,
+        backPopupShow: false
       }
     },
     mounted(){
 //      if (localStorage.getItem("consultParams")&&localStorage.getItem("consultParams").length !== 0) {
 //        this.selectList = JSON.parse(localStorage.getItem("consultParams"));
 //      }
-      document.title = "描述情况";
+      document.title = "描述病情";
       this.patientMessage = this.$route.query;
       this.getQuestionList();
-      this.finish=true;
+      this.finish = false;
+      this.customerId = api.getPara().customerId;
 
-      setTimeout(()=>{
-        document.body.scrollTop=20;
-      },300);
-      if (this.$route.query.count == 0) {
-        if (!localStorage.getItem("hasCome") || localStorage.getItem("hasCome") != 0) {
-          this.firstConsult = true;
+      setTimeout(() => {
+        document.body.scrollTop = 20;
+      }, 300);
+      if (!api.getPara().doctorId) {
+        if (this.$route.query.count == 0) {
+          if (!localStorage.getItem("hasCome") || localStorage.getItem("hasCome") != 0) {
+            this.firstConsult = true;
+          }
         }
       }
+      autosize(this.$el.querySelector("textarea"));
+      if (localStorage.getItem("PCIMLinks") !== null) {
 
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
+      api.forbidShare();
     },
     computed: {
       dotSize(){
@@ -275,7 +309,13 @@
     },
     beforeRouteLeave   (to, from, next){
       if (to.name === "selectPart") {
-        this.levelShow = true;
+        if (localStorage.getItem("PCIMLinks") !== null) {
+          this.backPopupShow = true;
+          this.pageLeaveEnsure = true;
+        } else {
+          this.backPopupShow = false;
+          this.levelShow = true;
+        }
       }
       next(this.pageLeaveEnsure)
     },
@@ -342,6 +382,7 @@
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
                 that.renderList = dataList;
+                that.hasSecondQuestionId = dataList[0].optionList1[0].optionId;
                 that.getBaseIdList(dataList)
               }
             }
@@ -407,13 +448,22 @@
           })
         });
       },
-      selectEvent(type, pIndex, index) {
+      selectEvent(type, pIndex, index, item, $event) {
+
         if (type) {
+          // debugger;
           this.questionList[pIndex].optionList[index].isSelected = !this.questionList[pIndex].optionList[index].isSelected;
           if (this.questionList[pIndex].optionList[index].isSelected) {
-            this.selectList[pIndex].optionIdList.push(this.questionList[pIndex].optionList[index].optionId);
+            // debugger;
+            console.log(this.questionList[pIndex].optionList[index].optionId);
+            if (this.questionList[pIndex].optionList[index].optionId == this.hasSecondQuestionId ){
+              this.selectList[pIndex].optionIdList.unshift(this.questionList[pIndex].optionList[index].optionId);
+            } else {
+              this.selectList[pIndex].optionIdList.push(this.questionList[pIndex].optionList[index].optionId);
+            }
             api.removeDub(this.selectList[pIndex].optionIdList)
           } else {
+            // debugger;
             this.selectList[pIndex].optionIdList.removeByValue(this.questionList[pIndex].optionList[index].optionId)
           }
         } else {
@@ -440,6 +490,19 @@
               }
             }
           })
+        }
+
+
+        if (item.isAttachment == 2) {
+          if ($event.currentTarget.className.indexOf("selected") < 0) {
+            console.log($event.currentTarget)
+            const ele = $event.currentTarget;
+            // 此物在IOS下似乎不能顺利好使
+            // 以后再说
+            setTimeout(() => {
+              ele.querySelector("textarea").focus();
+            }, 100)
+          }
         }
       },
       showQueryDetail(id){
@@ -496,10 +559,10 @@
         return flag;
       },
       otherReason(pIndex, index, e) {
-        let ranges =(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig);
+        let ranges = (/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig);
 
         if (ranges.test(this.questionList[pIndex].optionList[index].optionDesc)) {
-          this.questionList[pIndex].optionList[index].optionDesc=this.questionList[pIndex].optionList[index].optionDesc.replace(ranges,"");
+          this.questionList[pIndex].optionList[index].optionDesc = this.questionList[pIndex].optionList[index].optionDesc.replace(ranges, "");
         }
         let content = this.questionList[pIndex].optionList[index].optionDesc;
         if (api.getByteLen(content) > 1000) {
@@ -508,7 +571,7 @@
           setTimeout(() => {
             this.errorShow = false;
           }, 2000);
-          this.errorMsg = "您已超过500字了";
+          this.errorMsg = "最多只能输入500字";
           return false;
         }
         this.selectList[pIndex].optionDesc = content;
@@ -546,7 +609,6 @@
           if (this.$el.querySelectorAll("[data-oid='" + this.secondQuestionList[i].refOptionId + "'] .pain-level-secondList").length !== 0) {
             finalSubmitParam.optionList.push(this.secondQuestionList[i])
           }
-
         }
 
         for (let j = 0; j < finalSubmitParam.optionList.length; j++) {
@@ -606,10 +668,10 @@
         return flag;
       },
       complicationLimit(){
-        let ranges =(/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig);
+        let ranges = (/[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig);
 
         if (ranges.test(this.complication)) {
-          this.complication=this.complication.replace(ranges,"");
+          this.complication = this.complication.replace(ranges, "");
         }
         let content = this.complication;
         if (api.getByteLen(content) > 1000) {
@@ -627,6 +689,7 @@
         this.pageLeaveEnsure = false;
       },
       ensureEvent() {
+        localStorage.setItem("isSubmit","1");
         this.levelShow = false;
         this.pageLeaveEnsure = true;
         this.$router.go(-1);
@@ -639,7 +702,8 @@
       loading,
       toast,
       confirm,
-      vueSlider
+      vueSlider,
+      backPopup
     },
     activated() {
       this.levelShow = false;
@@ -688,7 +752,8 @@
         outline: medium;
         resize: none;
         width: 100%;
-        height: 1.6rem;
+        height: 0.6rem;
+        max-height: 1.7rem;
         border: none;
         background: none;
         @include font-dpr(18px);
@@ -768,7 +833,7 @@
         vertical-align: middle;
         width: rem(48px);
         height: rem(48px);
-        background: url(../../../common/image/img00/consult_V1.2/doubt@2x.png);
+        background: url(../../../common/image/img00/consult_V1.2/doubt2@2x.png);
         background-size: contain;
         margin-left: rem(28px);
       }
@@ -851,9 +916,10 @@
         width: 66.7%;
         position: absolute;
         bottom: rem(96px);
+        padding: rem(30px) 0;
         left: 50%;
         transform: translateX(-50%);
-
+        box-shadow: 0 rem(4px) rem(12px) 0 rgba(74, 74, 74, 0.50);
       }
     }
   }
@@ -1058,7 +1124,7 @@
       padding: rem(40px) 0;
       margin-left: rem(106px);
       margin-right: rem(60px);
-      border-bottom: rem(1px) solid #D5D5D5;
+      /*border-bottom: rem(1px) solid #D5D5D5;*/
       border-top: rem(1px) solid #D5D5D5;
       box-sizing: border-box;
       color: #666;
@@ -1155,7 +1221,7 @@
       display: inline-block;
       position: relative;
       width: 6rem;
-      em{
+      em {
         font-style: normal;
         vertical-align: middle;
       }
@@ -1211,6 +1277,15 @@
     padding: rem(60px) rem(50px);
     box-shadow: 0 rem(2px) rem(10px) 0 rgba(0, 190, 175, 0.25);
     box-sizing: border-box;
+    margin-top: 0.2rem;
+    &:after {
+      content: '';
+      display: block;
+      @include triangle(rem(20px), #fff, up);
+      position: absolute;
+      top: -0.236666rem;
+      left: 33%;
+    }
     & > figure {
       width: 100%;
       img {

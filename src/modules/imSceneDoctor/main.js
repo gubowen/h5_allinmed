@@ -21,6 +21,7 @@ import MedicalReportDetail from "./components/medicalReportDetail";
 
 import store from "./store/store";
 
+import "babel-polyfill";
 
 fastclick.attach(document.body);
 
@@ -28,12 +29,11 @@ fastclick.attach(document.body);
 class ImScene {
   constructor() {
     this.init();
-    // if (window.location.href.indexOf("openId") !== -1){
-    //   this.init();
-    // }else{
+    // if(!api.checkOpenId()){
     //   api.wxGetOpenId(1);
+    // }else{
+    //   this.init();
     // }
-
   }
 
   init() {
@@ -72,7 +72,7 @@ class ImScene {
     this.router = new VueRouter({
       routes: this.routes,
     });
-    Vue.use(vueg, this.router, options);
+    // Vue.use(vueg, this.router, options);
   }
 
   routerStart() {

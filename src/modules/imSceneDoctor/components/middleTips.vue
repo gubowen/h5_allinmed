@@ -2,7 +2,7 @@
   <div>
     <section class="main-message-box grey-tips" v-if="tipsType==5">
       <figcaption class="first-message">
-        <p>医生回复仅作为建议，如需要请联系医生预约门诊</p>
+        <p>医生回复仅为建议，具体治疗需前往医院进行</p>
       </figcaption>
     </section>
     <p class="receive-treatment"><span>{{tipsContent}}</span></p>
@@ -29,9 +29,10 @@
         case 4://医生接诊
           this.tipsContent = "问诊已开始";
           break;
-        case 5:
+        case 5://问诊结束
           this.tipsContent = "问诊已结束";
           break;
+
       }
     },
     methods: {},

@@ -86,7 +86,7 @@ $(function () {
                         console.log(_dataList);
                         //判断是否认证并且存起来给多点执政医院用
                         that.config.state = _dataList.authMap.state;
-                        if(_dataList.authMap.state == 1 || _dataList.authMap.state == 2){
+                        if(_dataList.authMap.state == 8){
                             //把联系医生二维码存起来
                             // that.config.qrCodeUrl = _dataList.authMap.qrCodeUrl;
                             that.addCode();
@@ -154,31 +154,31 @@ $(function () {
             //     });
             // }
             that.config.state || that.config.state=="-1";
-            switch (that.config.state) {
-                case "-1":
-                    $(".authentication-tips").show();
-                    //立即认证添加事件
-                    $("#goAuthentication").text("立即认证").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-                case "3":
-                    $(".authentication-tips").show();
-                    //立即认证添加事件
-                    $("#goAuthentication").text("重新认证").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-                case "0":
-                case "5":
-                    $(".authentication-tips").show();
-                    $(".in-authentication").css("display","block");
-                    //立即认证添加事件
-                    $("#goAuthentication").on("click",function () {
-                        // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
-                    });
-                    break;
-            }
+            // switch (that.config.state) {
+            //     case "-1":
+            //         $(".authentication-tips").show();
+            //         //立即认证添加事件
+            //         $("#goAuthentication").text("立即认证").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            //     case "3":
+            //         $(".authentication-tips").show();
+            //         //立即认证添加事件
+            //         $("#goAuthentication").text("重新认证").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            //     case "0":
+            //     case "5":
+            //         $(".authentication-tips").show();
+            //         $(".in-authentication").css("display","block");
+            //         //立即认证添加事件
+            //         $("#goAuthentication").on("click",function () {
+            //             // window.location.href = "//m.allinmed.cn/pages/app_native/authentication.html?customerId=" + that.config.customerId;
+            //         });
+            //         break;
+            // }
             //医生的默认信息
             $(".doctor-info").append('<section class="info-left"><img class="doctor-icon" src="/image/img00/doctorShare/share_avatar_allin.png" alt="医生头像"></section>'+
                 '<section class="info-right">'+
@@ -194,7 +194,7 @@ $(function () {
             $(".operation-case-list").html('<li class="operation-case-item"><span class="operation-case-year">2016手术病例数:</span><span class="operation-case-num">100台</span></li>'+
                 '<li class="operation-case-item"><span class="operation-case-year">2015手术病例数:</span><span class="operation-case-num">80台</span></li>');
             //添加默认执医
-            $("#hospitalName").append('<p class="module-detail">唯医互联网骨科医院</p>');
+            $("#hospitalName").append('<p class="module-detail">唯医骨科</p>');
         },
         //获取多点执医
         addHospital:function () {
@@ -350,7 +350,7 @@ $(function () {
 
                 });
                 bridge.registerHandler('returnCustomerId', function (data, responseCallback) {
-                    // log('ObjC called testJavascriptHandler with', data);
+                    // alert('ObjC called testJavascriptHandler with'+ data);
                     if (!common.getpara().customerId) {
                         // that.config.customerId=JSON.parse(data).customerId;
                         //window.location.href = '//m.allinmed.cn/pages/doctorShare/share_page.html?customerId=' + JSON.parse(data).customerId;
@@ -369,11 +369,11 @@ $(function () {
                     })
                 });
                 // if ( $("#goAuthentication").length ){
-                $("#goAuthentication").on("click", function () {
-                    bridge.callHandler('certificationAction',function (response) {
-
-                    })
-                });
+                // $("#goAuthentication").on("click", function () {
+                //     bridge.callHandler('certificationAction',function (response) {
+                //
+                //     })
+                // });
                 // }
                 /*注册getNativeInfoHandler方法，Native调用此方法传递参数给JS*/
                 bridge.registerHandler('getNativeInfoHandler',

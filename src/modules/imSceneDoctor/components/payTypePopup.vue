@@ -97,7 +97,7 @@
   import VueAwesomeSwiper from 'vue-awesome-swiper';
   import wxCommon from 'common/js/wxPay/wxComm';
   import confirm from 'components/confirm';
-
+  
   // mount with global
   Vue.use(VueAwesomeSwiper);
   const XHRList = {

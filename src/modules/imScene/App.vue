@@ -1,7 +1,13 @@
 <template>
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+
+  <!--<transition name="fadeRight">-->
+  <div style="width: 100%;height: 100%;">
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
+  </div>
+  <!--</transition>-->
 </template>
 
 <script type="text/ecmascript-6">
@@ -46,10 +52,10 @@
   }
 
   .fadeRight-leave-active {
-    transition-duration: 0s;
+    /*transition-duration: 0s;*/
   }
 
-  .fadeRight-enter, .fadeRight-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeRight-enter /* .fade-leave-active in <2.1.8 */
   {
     opacity: 0;
     transform: translateX(100%);

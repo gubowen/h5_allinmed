@@ -1,5 +1,6 @@
 <template>
-  <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
+  <div data-alcode-mod='710'>
+    <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
     <header class="part-select-title">
       <h3>点选最不适部位：</h3>
     </header>
@@ -24,7 +25,7 @@
           <!--</section>-->
         </figure>
       </section>
-      <button class="body-picture-overturn" @click="turnDirection"></button>
+      <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
     </section>
 
     <loading v-show="finish"></loading>
@@ -33,11 +34,14 @@
         <section class="part-box" :class="clickDirection" v-if="secondShow" @click.stop="secondShow=true">
           <!--<article><h2>请再确认一下不适部位</h2></article>-->
           <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList" @click="ensurePart(index)">{{item.partName}}</a>
-          <a class="btnBox-btn btn-confirm" @click='surePart'>确认</a>
+          <a class="btnBox-btn btn-confirm" @click='surePart' data-alcode='e126'>确认</a>
         </section>
       <!--</section>-->
     </transition>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
+  </div>
+  <!--@backSuccess="backSuccessBack" @docCallBack="docStatusChange"-->
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -50,6 +54,7 @@
    */
   import loading from "components/loading";
   import api from "common/js/util/util";
+  import backPopup from "components/backToastForConsult";
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -57,6 +62,11 @@
 
     data() {
       return {
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorId,
+        },
+        backPopupShow:'',
         clickDirection:"right",//用户点击的方向
         bodyImg: { //人体图像集合
           man: {
@@ -149,6 +159,12 @@
       document.title = "选择部位";
       this.currentType = this.patientType ();
       localStorage.removeItem("hasCome");
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
+      api.forbidShare();
     },
     computed: {
       patientBody(){   //反应数据驱动...获取人体性别年龄
@@ -176,6 +192,15 @@
       }
     },
     props: {},
+    beforeRouteLeave   (to, from, next){
+      if (to.name === "addPatient") {
+        if (localStorage.getItem("PCIMLinks")!==null) {
+          localStorage.removeItem("PCIMLinks");
+          this.pageLeaveEnsure = true;
+        }
+      }
+      next(this.pageLeaveEnsure)
+    },
     methods: {
       patientType () { //患者基本类型
         const age = parseInt(this.patientMessage.age);
@@ -328,7 +353,8 @@
       },
     },
     components: {
-      'loading': loading
+      'loading': loading,
+      backPopup
     }
 
   }
@@ -365,13 +391,14 @@
       background: #FFFFFF;
       border: 1px solid #E0E0E0;
       box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
-      border-radius: rem(4px);
+      border-radius: rem(8px);
       line-height: 1;
       @include font-dpr(15px);
       color: #555555;
       &.on{
         border: 1px solid rgba(7,182,172,0.50);
         color: #07B6AC;
+        font-weight: bold;
       }
       &.btn-confirm{
         background: #2FC5BD;

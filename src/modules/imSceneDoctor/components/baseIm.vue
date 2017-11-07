@@ -1,151 +1,132 @@
 <template>
-  <section class="main-inner ev-fileUpHide">
-    <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
-      <transition name="fadeDown">
-        <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
-          <article><p>医生回复剩余次数</p><span>{{lastCount}}</span>
-            <p>次</p></article>
-          <article><p>对话剩余时间</p><span>{{lastTimeText}}</span>
-            <p></p></article>
-        </article>
-      </transition>
-      <transition-group name="fadeDown" tag="section">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
-          <!--时间戳-->
-          <p class='time-stamp'
-             v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
-            {{transformTimeStamp(msg.time)}}</p>
-          <!--问诊单-->
-          <MedicalReport
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='medicalReport'"
-            :medicalReportMessage="JSON.parse(msg.content)"
-            ref="medicalReport">
-          </MedicalReport>
-          <!--医生接诊-->
-          <MiddleTips
-            v-if="receivedTreatment(msg)"
-            :tipsType="4"
-          >
+  <div data-alcode-mod='720' style="box-shadow: none">
+    <section class="main-inner ev-fileUpHide">
+      <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
+        <transition name="fadeDown">
+          <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
+            <article>
+              <p>医生回复剩余次数</p>
+              <span>{{lastCount}}</span>
+              <p>次</p>
+            </article>
+            <article>
+              <p>对话剩余时间</p>
+              <span>{{lastTimeText}}</span>
+              <p></p>
+            </article>
+          </article>
+        </transition>
+        <transition-group name="fadeDown" tag="section">
+          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
+            <!--时间戳-->
+            <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
+              {{transformTimeStamp(msg.time)}}</p>
+            <!--问诊单-->
+            <MedicalReport v-if="receiveMedicalReport(msg)" :medicalReportMessage="JSON.parse(msg.content)"
+                           ref="medicalReport">
+            </MedicalReport>
+            <!--医生接诊-->
+            <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
-          </MiddleTips>
-          <!--问诊结束-->
-          <MiddleTips
-            v-if="receivedTreatOver(msg)"
-            :tipsType="5"
-          >
-          </MiddleTips>
-          <!--支付成功-->
-          <PayFinishTips
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'"
-          >
-          </PayFinishTips>
-          <!--门诊邀约-->
-          <OutpatientInvite
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
-            :outPatientMessage="JSON.parse(msg.content)"
-          >
-          </OutpatientInvite>
-          <!--手术单-->
-          <SurgicalDrape
-            v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
-            :surgicalMessage="JSON.parse(msg.content)"
-          >
-          </SurgicalDrape>
-          <!--赠送次数-->
-          <SendCount
-            v-if="receivedSendCount(msg)"
-            :sendCountMessage="JSON.parse(msg.content)"
-          >
-          </SendCount>
-          <!--购买问诊-->
-          <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
-            <figcaption class="first-message">
-              <p>您已重新购买问诊，可继续向医生提问</p>
-            </figcaption>
+            </MiddleTips>
+            <!--问诊结束-->
+            <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
+            </MiddleTips>
+            <!--支付成功-->
+            <PayFinishTips v-if="msg.type==='custom' && JSON.parse(msg.content).type==='payFinishTips'">
+            </PayFinishTips>
+            <!--门诊邀约-->
+            <OutpatientInvite v-if="msg.type==='custom' && JSON.parse(msg.content).type==='outpatientInvite'"
+                              :outPatientMessage="JSON.parse(msg.content)" ref="outpatientInvite">
+            </OutpatientInvite>
+            <!--手术单-->
+            <SurgicalDrape v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='surgicalDrape'"
+                           :surgicalMessage="JSON.parse(msg.content)">
+            </SurgicalDrape>
+            <!--赠送次数-->
+            <SendCount v-if="receivedSendCount(msg)" :sendCountMessage="JSON.parse(msg.content)">
+            </SendCount>
+            <!--购买问诊-->
+            <section class="main-message-box grey-tips" v-if="receivedBuyCount(msg)">
+              <figcaption class="first-message">
+                <p>您已完成支付，可与主诊医生继续沟通</p>
+              </figcaption>
+            </section>
+            <!--住院通知-->
+            <HospitalNotice v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
+                            :hoispitalMessage="JSON.parse(msg.content)">
+            </HospitalNotice>
+            <!--文本消息-->
+            <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
+                         :targetData="targetData">
+            </ContentText>
+            <!--图像消息-->
+            <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
+                          ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
+                          :userData="userData" :targetData="targetData">
+            </ImageContent>
+            <!--音频-->
+            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
+            </AudioMessage>
+            <!--患者扫码报道-->
+            <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
+              <figcaption class="first-message">
+                <p>报到成功，您可继续补充您的情况，便于医生更好了解病情</p>
+              </figcaption>
+            </section>
           </section>
-
-          <!--住院通知-->
-          <HospitalNotice
-            v-if="msg.type==='custom'&&JSON.parse(msg.content).type==='hospitalNotice'"
-            :hoispitalMessage="JSON.parse(msg.content)"
-          >
-          </HospitalNotice>
-          <!--文本消息-->
-          <ContentText
-            v-if="msg.type==='text' && msg.text"
-            :contentMessage="msg"
-            :userData="userData"
-            :targetData="targetData">
-          </ContentText>
-          <!--图像消息-->
-          <ImageContent
-            v-if="(msg.type==='file'||msg.type==='image') && msg.file"
-            :imageMessage="msg"
-            :nim="nim"
-            ref="bigImg"
-            :imageList="imageList"
-            :imageProgress="imageProgress"
-            :currentIndex="index"
-            :userData="userData"
-            :targetData="targetData"
-          >
-          </ImageContent>
-          <!--音频-->
-          <AudioMessage
-            v-if="msg.type==='audio'"
-            :audioMessage="msg"
-          >
-          </AudioMessage>
-        </section>
-      </transition-group>
-    </section>
-    <!--底部提示-->
-    <transition name="fadeUp">
-      <BottomTips
-        v-if="bottomTipsShow"
-        :bottomTipsType="bottomTipsType"
-      >
-      </BottomTips>
-    </transition>
-    <transition name="fadeUp">
-      <footer class="main-input-box" v-if="inputBoxShow">
-        <!--医生拒绝-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
-          <div>
-            <span>重新推荐</span>
-          </div>
-        </section>
-        <!--超时未接诊-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
-          <div>
-            <span>重新支付</span>
-          </div>
-        </section>
-        <!--继续沟通-->
-        <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1" @click="retryClick(1)">
-          <div>
-            <span>继续沟通</span>
-          </div>
-        </section>
-        <section class="main-input-box-plus">
-          <i class="icon-im-plus"></i>
-          <input type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
-        </section>
-        <figure class="main-input-box-textarea-inner">
+        </transition-group>
+      </section>
+      <!--底部提示-->
+      <transition name="fadeUp">
+        <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
+        </BottomTips>
+      </transition>
+      <transition name="fadeUp">
+        <footer class="main-input-box" v-if="inputBoxShow">
+          <!--医生拒绝-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
+            <div>
+              <span>重新推荐</span>
+            </div>
+          </section>
+          <!--超时未接诊-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
+            <div>
+              <span>重新支付</span>
+            </div>
+          </section>
+          <!--超时未接诊-扫码报道-->
+          <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
+            <div>
+              <span>已退诊</span>
+            </div>
+          </section>
+          <!--继续沟通-->
+          <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1"
+                   @click="retryClick(1)">
+            <div>
+              <span>继续沟通</span>
+            </div>
+          </section>
+          <section class="main-input-box-plus">
+            <i class="icon-im-plus"></i>
+            <input v-if="inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
+          </section>
+          <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom"></textarea>
-        </figure>
-        <button class="main-input-box-send" @click="sendMessage">发送</button>
-      </footer>
-    </transition>
-    <!--支付弹层-->
-    <PayTypePopup
-      :payPopupShow.sync="payPopupShow"
-      @paySuccess="refreashOrderTime"
-    >
-    </PayTypePopup>
-    <Loading v-if="loading"></Loading>
-  </section>
+                    @click="scrollToBottom" @input="inputLimit"></textarea>
+          </figure>
+          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
+
+        </footer>
+      </transition>
+      <!--支付弹层-->
+      <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
+                v-if="payPopupShow"></payPopup>
+      <Loading v-if="loading"></Loading>
+    </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -156,10 +137,15 @@
    *
    * Created by qiangkailiang on 2017/8/16.
    */
+
+  /*
+   * 老患者报道流程进入 from参数为report
+   * 此时被拒绝不能回去找分诊医生
+   * 底部不可点击，新状态至组件bottomTips规定为组件状态4，于状态3中区分
+   */
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
-
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
   import ImageContent from './image';
@@ -174,8 +160,12 @@
   import AudioMessage from "./audioMessage";
 
   import Loading from "components/loading";
+  import payPopup from 'components/payLayer';
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
+  import nimEnv from 'common/js/nimEnv/nimEnv';
+  import scrollPosition from "../api/scrollPosition";
+
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -186,10 +176,12 @@
     time: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
-    getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/"
+    getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/",
+    getDoctorBaseMsg: "/mcall/customer/auth/v1/getSimpleById/"
   };
-  export default{
-    data(){
+  export default {
+
+    data() {
       return {
         nim: {},
         imageProgress: {
@@ -197,6 +189,7 @@
           progress: 0,
           index: 0
         },
+        inputFlag:true,//上传图片input控制
         loading: true,
         payPopupShow: false,
         shuntCustomerId: "",
@@ -215,6 +208,7 @@
         inputBoxShow: false,
         msgList: [],
         targetMsg: [],
+        from: api.getPara().from,
         userData: {
           account: "",
           token: ""
@@ -227,38 +221,39 @@
     },
 
     methods: {
-      connectToNim(){
+      connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
-          // debug: true,
-          appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+           debug: true,
+          appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
-          onconnect (data) {
+          onconnect(data) {
             console.log('连接成功');
             that.triageDoctorAssign();
+
           },
           onmyinfo(userData) {
             that.getMessageList();
             that.userData = userData;
           },
-          onwillreconnect (obj) {
+          onwillreconnect(obj) {
             console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
           },
-          ondisconnect () {
+          ondisconnect() {
             console.log("链接已中断...")
           },
           onerror: this.onError,
           onroamingmsgs(obj) {
             console.log("漫游消息...");
           },
-          onofflinemsgs (obj) {
+          onofflinemsgs(obj) {
             console.log("离线消息...");
             obj.msgs.forEach((index, element) => {
               that.msgList.push(element);
             });
           },
-          onmsg (msg) {
+          onmsg(msg) {
             console.log(msg);
             if (msg.from === that.targetData.account) {
 
@@ -280,17 +275,17 @@
           }
         });
       },
-      getFirstTargetMsg(msg){
+      getFirstTargetMsg(msg) {
         if (msg.from === this.targetData.account) {
           this.targetMsg.push(msg);
         }
       },
-      minusLastCount(msg){
+      minusLastCount(msg) {
         if (msg.type !== "custom") {
           store.commit("lastCountMinus");
         }
       },
-      receiveSpecialMessage(msg){
+      receiveSpecialMessage(msg) {
         if (msg.type === "custom") {
           if (JSON.parse(msg.content) && JSON.parse(msg.content).type === "notification") {
             let type = JSON.parse(msg.content).data.actionType;
@@ -302,33 +297,29 @@
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
+                this.payPopupShow=false;
                 break;
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
                 this.showBottomTips(2);
-//                store.commit("stopLastTimeCount");
                 break;
               case 4://医生接诊
-                this.lastTimeShow = true;
-                this.receiveTreatmentStatus = true;
-                store.commit("setLastCount", 3);
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
-                clearInterval(this.remainTimeCount);
+                this.getLastTime(0);
                 break;
             }
           }
         }
       },
-      getImageList(){
+      getImageList() {
         if (this.$refs.bigImg) {
           this.$refs.bigImg.forEach((element, index) => {
             this.imageList.push(element.imageMessage.file.url);
           });
         }
       },
-      getUserBaseData(){
+      getUserBaseData() {
         const that = this;
+
         api.ajax({
           url: XHRList.getToken,
           method: "POST",
@@ -354,7 +345,7 @@
           }
         })
       },
-      receivedTreatment(msg){
+      receivedTreatment(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4) {
@@ -363,7 +354,7 @@
         }
         return flag;
       },
-      receivedTreatOver(msg){
+      receivedTreatOver(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 5) {
@@ -372,7 +363,7 @@
         }
         return flag;
       },
-      receivedSendCount(msg){
+      receivedSendCount(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 2) {
@@ -381,59 +372,115 @@
         }
         return flag;
       },
-      receivedBuyCount(msg){
+      receivedBuyCount(msg) {
         let flag = false;
         if (msg.type === 'custom') {
           if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 1) {
+            if (this.msgList.indexOf(msg) !== 0) {
+              flag = true;
+            }
+
+          }
+        }
+        return flag;
+      },
+      receivedReportTips(msg) {
+        let flag = false;
+        if (msg.type === 'custom') {
+          if (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 6) {
+            if (this.msgList.indexOf(msg) === 0) {
+              flag = true;
+            }
+
+          }
+        }
+        return flag;
+      },
+      receiveMedicalReport(msg) {
+        let flag = false;
+        if (msg.type === 'custom' && JSON.parse(msg.content).type === 'medicalReport') {
+          if (this.msgList.indexOf(msg) <= 1) {
             flag = true;
           }
         }
         return flag;
       },
       //首次回复更改为结束时提示
-      firstReplyTips(msg){
+      firstReplyTips(msg) {
         let flag = false;
         if (this.targetMsg.indexOf(msg) === 1) {
           flag = true;
         }
         return flag;
       },
-      getMessageList () {
+      getMessageList() {
         let that = this;
         this.nim.getHistoryMsgs({
           scene: 'p2p',
           to: this.targetData.account,
           done(error, obj) {
-            that.msgList = obj.msgs.reverse();
-            that.msgList.forEach((element, index) => {
-              that.getTargetMessage(element);
-              that.getTimeStampShowList(element);
+            that.getDoctorMsg(() => {
+
+              that.msgList = obj.msgs.reverse();
+              that.msgList.forEach((element, index) => {
+                that.getTargetMessage(element);
+                that.getTimeStampShowList(element);
+              });
+              that.$nextTick(() => {
+//        通过动画结束判断
+//                  that.$refs.outpatientInvite[that.$refs.outpatientInvite.length-1].$el.addEventListener("transitionend",()=>{
+//
+//                    console.log(that.$refs.outpatientInvite)
+//                  });
+
+                setTimeout(() => {
+
+                  if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
+                    scrollPosition(that.$refs.outpatientInvite);
+                  } else {
+                    document.body.scrollTop = Math.pow(10, 10);
+                  }
+                  that.getImageList();
+                  that.loading = false;
+                }, 700)
+              })
+
             });
-
-
-            setTimeout(() => {
-              document.body.scrollTop = Math.pow(10, 10);
-              that.getImageList();
-              that.loading = false;
-            }, 100);
           },
           limit: 100
         });
-        this.nim.getUser({
-          account: this.targetData.account,
-          done(error, user){
-            console.log(user)
-            store.commit("setTargetMsg", user);
-            document.title = user.nick + "医生";
-          }
-        });
+        that.checkFirstBuy();
       },
-      getTargetMessage(element){
+      // 获取医生姓名、头像
+      // 四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
+      // 因此通过云信SDK获取已经是不安全的方式
+      getDoctorMsg(callback) {
+        api.ajax({
+          url: XHRList.getDoctorBaseMsg,
+          method: "POST",
+          data: {
+            customerId: api.getPara().doctorCustomerId,
+            logoUseFlag: 5
+          },
+          done(data) {
+            if (data.responseObject && data.responseObject.responseData) {
+              let dataList = data.responseObject.responseData.dataList[0];
+              store.commit("setTargetMsg", {
+                avatar: dataList.logoUrl,
+                nick: dataList.customerName
+              });
+              document.title = `${dataList.customerName}医生`;
+              callback && callback();
+            }
+          }
+        })
+      },
+      getTargetMessage(element) {
         if (element.from === this.targetData.account) {
           this.targetMsg.push(element);
         }
       },
-      getMedicalMessage(){
+      getMedicalMessage() {
         const that = this;
         api.ajax({
           url: XHRList.getMedicalList,
@@ -460,31 +507,29 @@
                     diagnoseConTent: dataList[0].patientCasemap.caseMain.caseMain,
                     isAttachment: dataList[0].patientCasemap.isAttachment,
                     time: dataList[0].patientCasemap.caseTime,
-                    caseUrl: "https://m.allinmed.cn/pages/app_native/reservation_list.html?caseId=" + api.getPara().caseId + "&isOrder=0"
+                    caseUrl: `${window.location.origin}/pages/app_native/reservation_list.html?caseId=${api.getPara().caseId}&isOrder=0`
                   },
                   type: "medicalReport"  //自定义类型 问诊单
                 }, dataList[0].patientCasemap.patientName);
-                const userData = {
-                  nick: dataList[0].patientCasemap.patientName,
-                  avatar: that.$store.state.logoUrl,
-                  sign: 'newSign',
-                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
-                  email: '',
-                  birth: '',
-                  tel: '',
-                };
-
-                that.nim.updateMyInfo(userData);
-                that.userData = Object.assign({}, that.userData, userData);
-              } else if (data.responseObject.responseMessage === "NO DATA") {
-                  that.getPatientBase();
+                //                const userData = {
+                //                  nick: dataList[0].patientCasemap.patientName,
+                //                  avatar: that.$store.state.logoUrl,
+                //                  sign: 'newSign',
+                //                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
+                //                  email: '',
+                //                  birth: '',
+                //                  tel: '',
+                //                };
+                //
+                //                that.nim.updateMyInfo(userData);
+                //                that.userData = Object.assign({}, that.userData, userData);
               }
             }
           }
         })
       },
       //      针对老患者报道若问诊单空，则通过以下link获取name...
-      getPatientBase(){
+      getPatientBase(callback) {
         const that = this;
         api.ajax({
           url: XHRList.getBaseInfo,
@@ -494,7 +539,7 @@
             firstResult: "0",
             maxResult: "1"
           },
-          done(data){
+          done(data) {
             if (data.responseObject && data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
@@ -512,31 +557,41 @@
                   tel: '',
                 };
                 that.nim.updateMyInfo(userData);
-                that.userData = Object.assign({}, that.userData, userData);
+                that.userData = Object.assign(that.userData, userData);
+
+                callback && callback(userData);
+
+
               }
             }
           }
         })
       },
-      sendMedicalReport(data, nickName){
+      sendMedicalReport(data, nickName) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
-          content: JSON.stringify(data),
-          needPushNick: false,
-          pushContent: `患者<${nickName}>向您咨询，点击查看详情`,
-          pushPayload: JSON.stringify({
-            "account": "0_" + api.getPara().caseId,
-            "type": "1"
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"27",
           }),
+          content: JSON.stringify(data),
+          isPushable:false,
+          // needPushNick: false,
+          // pushContent: `患者<${nickName}>向您问诊，点击查看详情`,
+          // pushPayload: JSON.stringify({
+          //   "account": "0_" + api.getPara().caseId,
+          //   "type": "1"
+          // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
           }
         });
 
       },
-      triageDoctorAssign () {
+      triageDoctorAssign() {
         const that = this;
         //是否有分诊会话记录
         //无则创建
@@ -549,31 +604,84 @@
             consultationType: 1,
             sortType: 1,
             firstResult: 0,
-            maxResult: 9999
+            maxResult: 9999,
+            customerId: api.getPara().doctorCustomerId
           },
-          done (data) {
+          done(data) {
             if (data.responseObject.responseMessage === "NO DATA") {
               that.createTriageMessage();
             } else {
               let dataList = data.responseObject.responseData.dataList;
-              that.orderSourceId = dataList[dataList.length - 1].consultationId;
+              that.orderSourceId = dataList[0].consultationId;
 
-              that.getLastTime(parseInt(dataList[dataList.length - 1].consultationState));
-              //未接诊则发送
+              that.getLastTime(parseInt(dataList[0].consultationState));
+              //未接诊则发送：
 
-              if (parseInt(dataList[dataList.length - 1].consultationState) < 0) {
-                setTimeout(() => {
-                  if (!that.$refs.medicalReport) {
-                    that.getMedicalMessage();
-                  }
-                }, 1000);
-              }
+              that.firstMessageType(parseInt(dataList[0].consultationState))
             }
           }
         })
       },
+      firstMessageType(state) {
+        /*
+         * 场景区分：
+         * 咨询：发送问诊单
+         * 扫码问诊：发送问诊单，但被拒无法联系分诊台
+         * 扫码报道：无问诊单，发送报道提示，被拒不联系分诊台
+         *
+         * query：from=report与缓存noMR皆存在则为扫码报道
+         * 此时发送App端提示消息，被拒状态不同
+         * query：from=report则为扫码问诊与扫码报道
+         * 此时正常发送问诊单，但被拒状态不同
+         * */
+//        this.getPatientBase(this.sendReportTipMessage);
+        if (state < 0) {
+          setTimeout(() => {
+            if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
+              if (!this.$refs.reportTip) {
+                this.getPatientBase(this.sendReportTipMessage);
+              }
+            } else {
+              if (!this.$refs.medicalReport) {
+                this.getPatientBase(this.getMedicalMessage);
+              }
+            }
+          }, 1000)
+        }
+      },
+      //扫码报道提示语
+      sendReportTipMessage(userData) {
+        const that = this;
+        this.nim.sendCustomMsg({
+          scene: 'p2p',
+          to: this.targetData.account,
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"21",
+          }),
+          content: JSON.stringify({
+            type: "notification",
+            data: {
+              actionType: "6",
+              contentDesc: "患者向您报到",
+              subContentDesc: "[患者向您报到]"
+            }
+          }),
+//          needPushNick: false,
+//          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
+//          pushPayload: JSON.stringify({
+//            "account": "0_" + api.getPara().caseId,
+//            "type": "1"
+//          }),
+          done(error, msg) {
+            that.sendMessageSuccess(error, msg);
+            localStorage.removeItem("noMR");
+          }
+        });
+      },
       //创建分流
-      createTriageMessage(){
+      createTriageMessage() {
         const that = this;
         api.ajax({
           url: XHRList.triageAssign,
@@ -591,15 +699,15 @@
             if (data.responseObject.responseStatus) {
               console.log("用户已分流...");
               that.orderSourceId = data.responseObject.responsePk;
-              that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
+//              that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
               that.getLastTime(-1);
               //初次创建分流发送问诊单
-              that.getMedicalMessage();
+              that.firstMessageType(-1)
             }
           }
         })
       },
-      getLastTime(status){
+      getLastTime(status) {
         const that = this;
         api.ajax({
           url: XHRList.time,
@@ -662,23 +770,30 @@
           }
         })
       },
-      showBottomTips(type){
+      showBottomTips(type) {
         this.bottomTipsShow = true;
         this.bottomTipsType = type;
 
         this.scrollToBottom();
       },
-      sendMessage(){
+      sendMessage() {
         if (this.sendTextContent.trim().length === 0) {
           return false;
         }
+        let sendTextTemp = this.sendTextContent;
+        this.sendTextContent = "";
         const that = this;
         this.nim.sendText({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"0",
+          }),
           to: this.targetData.account,
-          text: this.sendTextContent,
+          text: sendTextTemp,
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您咨询，点击查看详情`,
+          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -689,21 +804,24 @@
           }
         });
       },
-      sendMessageSuccess(error, msg){
+      sendMessageSuccess(error, msg) {
         this.getTimeStampShowList(msg);
         console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
         this.sendTextContent = "";
         if (!error) {
           this.msgList.push(msg);
         } else {
-          this.sendErrorTips(msg);
+//          this.sendErrorTips(msg);
         }
         setTimeout(() => {
           document.body.scrollTop = Math.pow(10, 10);
         }, 20)
       },
 
-      transformTimeStamp(time){
+      transformTimeStamp(time) {
+        if (!time) {
+          return "";
+        }
         let format = function (num) {
           return num > 9 ? num : "0" + num;
         };
@@ -731,7 +849,7 @@
         }
         return result;
       },
-      getTimeStampShowList(element){
+      getTimeStampShowList(element) {
 
         if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
           this.beginTimestamp = element.time;
@@ -741,11 +859,16 @@
         }
 
       },
-      getTimeStampShowFlag(msg, index){
-        if (msg.type === 'custom') {
+      getTimeStampShowFlag(msg, index) {
+        if (msg.type === 'custom' && msg.content) {
           if (JSON.parse(msg.content).type === "notification" && (JSON.parse(msg.content).data.actionType == 3 || JSON.parse(msg.content).data.actionType == 5)) {
             return false;
           } else {
+            if (msg.type === 'custom' && JSON.parse(msg.content).type === "medicalReport") {
+              if (this.msgList.indexOf(msg) > 0) {
+                return false;
+              }
+            }
             if (this.timeStampShowList[index] == 1) {
               return true;
             }
@@ -757,8 +880,9 @@
         }
       },
 
-      sendFile(e){
+      sendFile(e) {
         const that = this;
+        that.inputFlag = false;
         this.msgList.push({
           file: {
             url: window.URL.createObjectURL(e.target.files[0])
@@ -767,11 +891,11 @@
           idClient: "",
           from: this.userData.account,
         });
-        console.log(window.URL.createObjectURL(e.target.files[0]));
+
         this.nim.previewFile({
           type: 'image',
           fileInput: this.$refs.imageSender,
-          uploadprogress (obj) {
+          uploadprogress(obj) {
             that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
@@ -783,22 +907,28 @@
             console.log('上传进度: ' + obj.percentage);
             console.log('上传进度文本: ' + obj.percentageText);
           },
-          done (error, file) {
+          done(error, file) {
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
+            console.log(file);
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',
+                custom:JSON.stringify({
+                  cType:"1",
+                  cId:api.getPara().doctorCustomerId,
+                  mType:"1",
+                }),
                 to: that.targetData.account,
                 file: file,
                 needPushNick: false,
-                pushContent: `患者<${that.userData.nick}>向您咨询，点击查看详情`,
+                pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
                 pushPayload: JSON.stringify({
                   "account": "0_" + api.getPara().caseId,
                   "type": "1"
                 }),
                 type: "image",
-                done(error, msg){
+                done(error, msg) {
                   that.msgList[that.msgList.length - 1] = msg;
                   that.imageProgress = {
                     uploading: false,
@@ -813,13 +943,19 @@
           }
         });
       },
-      scrollToBottom(){
+      scrollToBottom() {
         setTimeout(() => {
-          document.body.scrollTop = Math.pow(10, 20);
+          document.documentElement.scrollTop = Math.pow(10, 20);
         }, 300)
       },
+      inputLimit() {
+        let content = this.sendTextContent;
+        if (api.getByteLen(content) > 1000) {
+          this.sendTextContent = api.getStrByteLen(content);
+        }
+      },
       //接诊时间倒数
-      remainTimeOut(){
+      remainTimeOut() {
         this.remainTimeCount = setInterval(() => {
           if (this.receiveTime <= 0) {
             this.bottomTipsType(-1);
@@ -830,7 +966,7 @@
         }, 1000);
       },
       //支付成功...刷新页面并重置时间
-      refreashOrderTime (count) {
+      refreashOrderTime(count) {
         const that = this;
         let state = "";
         if (this.bottomTipsType == -1) {
@@ -849,6 +985,7 @@
             consultationLevel: count.orderType,
             consultationState: state
           },
+
           done(data) {
             if (data.responseObject.responseData) {
               if (state === -1) {
@@ -858,17 +995,23 @@
                 that.bottomTipsShow = false;
                 that.sendPayFinish(count);
               } else {
-                that.lastTimeShow = true;
-                store.commit("setLastCount", 3);
+                store.commit("setLastCount", parseInt(count.orderFrequency));
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
+                setTimeout(()=>{
+                  that.lastTimeShow = true;
+                  that.receiveTreatmentStatus=true;
+                },200)
+
+//                console.log(count.orderFrequency);
               }
             }
           }
         })
       },
-      retryClick(type){
+      retryClick(type) {
+
         const that = this;
         switch (type) {
           case -1:
@@ -884,17 +1027,23 @@
               data: {
                 consultationId: this.triageOrderSourceId,
                 frequency: "0",
-                frequencyType: "2",
-                consultationLevel: "1"
+                frequencyType: "5",
+                consultationLevel: "1",
+                consultationState: "2"
               },
               done(data) {
                 if (data.responseObject.responseData) {
                   that.nim.sendText({
                     scene: 'p2p',
                     to: "1_doctor00001",
+                    custom:JSON.stringify({
+                      cType:"1",
+                      cId:api.getPara().doctorCustomerId,
+                      mType:"0",
+                    }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
-                      window.location.href = '/pages/imScene/im_main_scene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
+                      window.location.href = '/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&customerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
                     }
                   });
                 }
@@ -904,16 +1053,39 @@
             break;
         }
       },
-      sendPayFinish(count){
+      checkFirstBuy() {
+        if (localStorage.getItem("sendTips")) {
+          let count = JSON.parse(localStorage.getItem("sendTips"));
+          this.getPatientBase(this.sendPayFinish);
+        }
+      },
+      resetLogoUrl(){
+        if (!this.$store.state.logoUrl){
+          this.getPatientBase();
+        }
+      },
+      sendPayFinish(args) {
         const that = this;
+        let count="",userData="";
+        if (args.nick){
+            userData=args;
+            count= JSON.parse(localStorage.getItem("sendTips"));
+        }else{
+            count=args;
+            userData=this.userData;
+        }
+
         let desc = "",
-          subContentDesc = "";
+          subContentDesc = "",
+          contentType = "",
+          amount = "";
+
         switch (parseInt(count.orderType)) {
           case 0:
             desc = "免费";
             break;
           case 1:
-            desc = "普通";
+            desc = "图文";
             break;
           case 3:
             desc = "特需";
@@ -921,16 +1093,31 @@
           default:
             break;
         }
+
+        if (count.orderAmount) {
+          amount = `(${count.orderAmount}元)`
+        } else {
+          amount = "";
+        }
+
         if (parseInt(count.orderType) === 0) {
           subContentDesc = '[患者申请免费问诊]';
+          contentType = '申请';
         } else {
           subContentDesc = `[患者购买问诊]`;
+          contentType = '购买';
         }
+        localStorage.removeItem("sendTips");
         this.nim.sendCustomMsg({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"1",
+            cId:api.getPara().doctorCustomerId,
+            mType:"33",
+          }),
           to: that.targetData.account,
           needPushNick: false,
-          pushContent: `患者<${that.userData.nick}>向您咨询，点击查看详情`,
+          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -939,45 +1126,80 @@
             type: "notification",
             data: {
               actionType: "1",
-              contentDesc: `患者已购买了您的${desc}问诊`,
+              contentDesc: `患者已${contentType}您的${desc}问诊${amount}`,
               subContentDesc: subContentDesc
             }
           }),
-          done (error, msg) {
+          done(error, msg) {
             if (!error) {
-              that.sendMessageSuccess(error, msg)
+              if (that.msgList.length !== 0) {
+                that.sendMessageSuccess(error, msg)
+//                localStorage.removeItem("sendTips");
+              }
             }
           }
         });
+
       }
     },
     computed: {
-      lastTime (){
+      //配合watch图片上传进度使用
+      progess () {
+        return this.imageProgress.progress;
+      },
+      lastTime() {
         return this.$store.state.lastTime;
       },
-      lastTimeText(){
+      lastTimeText() {
         return api.MillisecondToDate(this.$store.state.lastTime);
       },
-      lastCount(){
+      lastCount() {
         return this.$store.state.lastCount;
-      }
+      },
+      payPopupDate() {
+        return {
+          docName: this.$store.state.targetMsg.nick,
+          docId: api.getPara().doctorCustomerId,
+          caseId: api.getPara().caseId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().patientCustomerId,
+          from: 'imDoctor',
+          payType: 'pay'
+        }
+      },
     },
-    mounted(){
+    mounted() {
       this.getUserBaseData();
+      if (api.getPara().from==="im"){
+          return ;
+      }else{
+        localStorage.setItem("APPIMLinks", location.href);
+        localStorage.setItem("PCIMLinks", location.href);
+      }
+      this.resetLogoUrl();
+      api.forbidShare();
+    },
+    activated() {
+      this.scrollToBottom();
     },
     watch: {
-      lastTime (time) {
+      //监听上传完成，可以继续上传；
+      progess :function (newVal,oldVal) {
+        if (newVal == "0%" || newVal =="100%"){
+          this.inputFlag = true;
+        }
+      },
+      lastTime(time) {
         if (time <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
           this.showBottomTips(1);
-
         } else {
           this.lastTimeShow = true;
           this.bottomTipsShow = false;
         }
       },
-      lastCount(count){
+      lastCount(count) {
         if (count <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
@@ -996,7 +1218,7 @@
       BottomTips,
       MiddleTips,
       PayFinishTips,
-      PayTypePopup,
+      payPopup,
       OutpatientInvite,
       SurgicalDrape,
       HospitalNotice,
@@ -1010,21 +1232,33 @@
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
 
-  .fadeDown-enter-active, .fadeDown-leave-active {
+  .animated {
+    box-shadow: none !important;
+  }
+
+  .fadeDown-enter-active,
+  .fadeDown-leave-active {
     transition: all ease-in-out .5s
   }
 
-  .fadeDown-enter, .fadeDown-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeDown-enter,
+  .fadeDown-leave-to
+    /* .fade-leave-active in <2.1.8 */
+
   {
     opacity: 0;
     transform: translateY(-50%);
   }
 
-  .fadeUp-enter-active, .fadeUp-leave-active {
+  .fadeUp-enter-active,
+  .fadeUp-leave-active {
     transition: all ease-in-out .5s
   }
 
-  .fadeUp-enter, .fadeUp-leave-to /* .fade-leave-active in <2.1.8 */
+  .fadeUp-enter,
+  .fadeUp-leave-to
+    /* .fade-leave-active in <2.1.8 */
+
   {
     opacity: 0;
     transform: translateY(50%);

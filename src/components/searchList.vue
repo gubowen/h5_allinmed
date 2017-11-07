@@ -10,19 +10,20 @@
                :placeholder="placeholderText"
                @input="searchEvent"
         >
-        <i class="search-cancel" @click="searchText=''" v-show="searchText.length>0">
+        <i class="search-cancel" @click="searchText='';noResult=false;messageList=[]" v-show="searchText.length>0">
           <img src="../common/image/img00/consult_V1.2/icon_searchCancel.png" alt="">
         </i>
       </div>
     </section>
     <section class="tc-searchMain">
       <section class="no-result-item-add" v-if="noResult">
-        <button class="btn-primary add-result-item-btn" @click="backToPast({hospitalName:searchText,illnessName:searchText,id:0})">
-          保存
+        <button class="btn-primary add-result-item-btn"
+                @click="backToPast({hospitalName:searchText,illnessName:searchText,id:-1,illnessId:-1})">
+          确定
         </button>
       </section>
-      <section class="tc-searchContentInner ev-initList" style="">
-        <section class="searchResult">
+      <section class="tc-searchContentInner ev-initList">
+        <section class="searchResult" ref="listBox">
           <p class="searchResultItem" v-for="item in messageList" @click="backToPast(item)">
             {{listType === "hospital" ? item.hospitalName : item.illnessName}}</p>
         </section>
@@ -47,7 +48,7 @@
 
   const XHRList = {
     hospital: "/mcall/comm/data/baseinfo/v1/getHospitalList/",
-    disease: "/mcall/cms/part/illness/relation/v1/getMapList/",
+    disease: "/mcall/comm/data/illness/v1/getMapList/",
   };
   export default{
     data(){
@@ -57,32 +58,44 @@
         searchText: '',
         placeholderText: "",
         finish: false,
-        noResult: false
+        noResult: false,
+        over: false
       }
     },
     mounted(){
       let page = 0;
       this.listType = this.$route.params.listType;
       this.returnRouter = this.$route.params.from;
+      this.$refs.searchInput.focus();
+
+      document.body.scrollTop=0;
 
       window.addEventListener("scroll", () => {
-        if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
-          page++;
-          this.getMessageList(this.searchText, page)
+        clearTimeout(this.scrollTimeTip);
+        if (this.$refs.listBox.children.length > 1) {
+          if (document.body.scrollTop + document.body.clientHeight >= document.body.scrollHeight) {
+            this.scrollTimeTip=setTimeout(()=>{
+              page++;
+              this.getMessageList(this.searchText, page)
+            },100);
+          }
         }
       });
 
       this.getPlaceHolder(this.listType);
       this.limitChinese();
+
     },
     methods: {
       getPlaceHolder(type){
         switch (type) {
           case "hospital":
             this.placeholderText = "请输入就诊医院名称";
+            document.title="就诊医院";
             break;
           case "disease":
             this.placeholderText = "请输入疾病名称";
+            document.title="确诊疾病";
             break;
           default:
             break;
@@ -116,7 +129,7 @@
             break;
           case "disease":
             searchData = {
-              diseaseName: searchContent
+              searchParam: searchContent
             };
             url = XHRList.disease;
             break;
@@ -126,34 +139,43 @@
 
         let data = Object.assign({}, {
           isValid: "1",
-          firstResult: 0,
-          maxResult: maxResult,
-          cityId: ""
+          firstResult: firstResult,
+          maxResult: 20,
+          cityId: "",
+          isSolr:1
         }, searchData);
-        api.ajax({
-          url: url,
-          method: "POST",
-          data: data,
-          beforeSend(config) {
-
-          },
-          done(param) {
-            console.log(param)
-
-            if (param.responseObject.responseData) {
-              let dataList = param.responseObject.responseData.dataList;
-              if (dataList && dataList.length !== 0) {
-                that.messageList = dataList;
-                that.loading = false;
-              } else {
-                that.noResult = true;
+        if (!this.over) {
+          api.ajax({
+            url: url,
+            method: "POST",
+            data: data,
+            done(param) {
+              if (param.responseObject.responseData) {
+                let dataList = param.responseObject.responseData.dataList;
+                if (dataList && dataList.length !== 0) {
+                  if (page === 0) {
+                    that.messageList = dataList;
+                  } else {
+                    dataList.forEach((element, index) => {
+                      that.messageList.push(element);
+                    });
+                  }
+                  that.noResult = false;
+                  that.loading = false;
+                } else {
+                  that.over = true;
+                  if (page === 0) {
+                    that.messageList = [];
+                    that.noResult = true;
+                  }
+                }
               }
-            }
-          },
-          fail(err) {
+            },
+            fail(err) {
 
-          }
-        })
+            }
+          })
+        }
       },
       backToPast(item){
         if (this.listType === "hospital") {
@@ -174,7 +196,7 @@
             params: {
               baseMessage: {
                 name: item.illnessName,
-                id: item.id,
+                id: item.illnessId,
               },
               from: "disease"
             },
@@ -185,13 +207,18 @@
       searchEvent(){
 
         if (this.searchText.length === 0) {
+          this.messageList=[];
+          this.noResult=false;
           return false;
-        } else if (api.getByteLen(this.searchText.length >= 30)) {
+        } else if (api.getByteLen(this.searchText) >= 30) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
         } else {
           clearTimeout(this.searchTimeout);
           this.searchTimeout = setTimeout(() => {
-            this.getMessageList(this.searchText, 0);
+            if (this.searchText.trim().length > 0) {
+              this.over = false;
+              this.getMessageList(this.searchText, 0);
+            }
           }, 300);
         }
       }
@@ -278,9 +305,10 @@
         @include font-dpr(17px);
         color: $colorTwo;
         display: block;
-        padding: rem(24px) rem(40px);
+        padding: rem(24px) rem(50px);
         line-height: rem(32px);
         cursor: pointer;
+        @include ellipsis();
         &.selected {
           background-color: #F9FBFB;
         }
@@ -464,6 +492,7 @@
     background: url("/image/img00/healthInfo/dialog_overtime_arrow.png");
     background-size: contain;
     margin-left: rem(12px);
+
   }
 
   .no-result-item-add {
@@ -487,7 +516,7 @@
     }
     .add-result-item-btn {
       width: rem(360px);
-      height:rem(100px);
+      height: rem(100px);
       display: block;
       margin: 0 auto;
       margin-top: rem(302px);
@@ -593,9 +622,12 @@
       @include font-dpr(16px);
       color: $colorTwo;
       display: block;
-      padding: rem(24px) rem(40px);
+      padding: rem(24px) rem(50px);
       line-height: rem(32px);
       cursor: pointer;
+      &:active{
+        background-color: #F9FBFB;
+      }
       &.selected {
         background-color: #F9FBFB;
       }

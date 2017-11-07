@@ -627,18 +627,23 @@ common.confirmBox = function (options, role) {
         }, 50);
         $(".confirmBox-ensureBtn").on("click", function () {
             options.ensureCallback && options.ensureCallback();
+          if(options.removeFlag){
+          }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
                 $(".confirmBox-tips").remove();
-            });
-            return false;
+            }); }
+          return false;
         });
         $(".confirmBox-cancelBtn").on("click", function () {
             options.cancelCallback && options.cancelCallback();
+          if(options.removeFlag){
+          }else{
             $(".confirmBox-tips").removeClass('show');
             $(".confirmBox-tips").on("transitionend WebkitTransitionEnd", function () {
                 $(".confirmBox-tips").remove();
             });
+          }
             return false;
         });
     } else {
@@ -828,6 +833,7 @@ common.selectConfirmBox = function (options) {
         $(".confirmBox-tips").addClass('show');
     }
 };
+
 /**
  * @name:
  * @desc:网络，域名相关
@@ -1285,8 +1291,9 @@ common.bindCallApp=function(options,config) {
                 bindOpen();
             }
         }
-        debugger;
+   
 
+        
         if (isIphone) {
             if (isIOS9) { // ios9直接显示加链接
                 bindOpen(options.ios9);
@@ -1396,6 +1403,7 @@ common.bindCallApp=function(options,config) {
         console.log("请传入要跳转的APP地址的参数对象，如：{ios:\"allinmdios://meettingBroadcast/meetInfo\",android:\"'allin://com.allin.social:75235?data=mydata\"}");
     }
 };
+
 /**
  * @name:
  * @desc:时间处理方法
@@ -1815,10 +1823,19 @@ common.wxGetOpenId = function (env) {
   var XHRUrl = "";
   var _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
     _encodeUrl = encodeURIComponent(_currentPageUrl);
-  if (env == 1) {
+  var envCode="";
+
+  if (window.location.hostname.indexOf("m1")<0){
+    envCode=1;
+  }else{
+    envCode=2;
+  }
+
+
+  if (envCode == 1) {
     appId = "wxe8384f7b06c169ef";
     XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
-  } else if (env == 2) {
+  } else if (envCode == 2) {
     appId = "wxaa5288ad7f627608";
     XHRUrl = "http://m1.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
   }

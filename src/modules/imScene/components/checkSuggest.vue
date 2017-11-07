@@ -1,5 +1,6 @@
 <template>
-  <section class="main-message-box">
+  <div data-alcode-mod='715'>
+    <section class="main-message-box">
     <!--<article class="main-message-box-item others-message">-->
       <!--<figure class="main-message-img">-->
         <!--<img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">-->
@@ -20,7 +21,7 @@
       <!--</figcaption>-->
     <!--</article>-->
     <article class="check-suggest-box">
-      <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
+      <header class="check-suggest-title">为确保分诊准确和专家问诊的效率，建议您进行以下检查并上传检查资料，分诊计时已停止，有关检查疑问您可继续向分诊医生询问，资料上传后分诊医生将继续为您服务。</header>
       <section class="check-suggest-bg"></section>
       <section class="check-suggest-content">
         <ul class="check-suggest-list">
@@ -33,16 +34,17 @@
           </li>
         </ul>
         <section class="more-box" v-if="moreBoxShow">
-          <span class="more-box-btn more-btn" v-show="moreData" @click="moreDataShow">查看更多</span>
+          <span class="more-box-btn more-btn" v-show="moreData" @click="moreDataShow($event)">查看更多</span>
           <span class="more-box-btn less-btn" v-show="!moreData" @click="lessDataShow">收起</span>
         </section>
-        <section class="check-suggest-btn" data-role="videoTriage"
+        <section data-alcode='e129' class="check-suggest-btn" data-role="videoTriage"
                     @click="goToUpload">
           上传检查资料
         </section>
       </section>
     </article>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -61,6 +63,9 @@
         tempSuggest:[],//展示的数组
         moreSuggest:[],//最多的数组
         lessSuggest:[],//五条建议的数据
+        position:0,//记录卡片的位置
+        hasPosition:false,//卡片的位置是否已经记录
+        paramsData:[],//上传检查检验的参数
       }
     },
     mounted(){
@@ -71,6 +76,11 @@
       //初始化数据
       initData () {
         let that = this;
+        //检查检验Imagetype手动改为3，与pc展示相对应
+        that.paramsData = that.checkSuggestMessage.data
+        that.paramsData.map((item, index) => {
+          Object.assign(item,{adviceType:3});
+        });
         if (that.checkSuggestMessage.data.length > 5) {
           that.moreBoxShow = true;
           that.moreSuggest = that.checkSuggestMessage.data;
@@ -83,14 +93,19 @@
         }
       },
       //展示更多
-      moreDataShow(){
+      moreDataShow(e){
         let that = this;
+        if (!that.hasPosition){
+          that.position = e.path["4"].offsetTop;
+          that.hasPosition = true;
+        }
         that.moreData = false;
         that.tempSuggest = that.moreSuggest;
       },
       //收起
       lessDataShow(){
         let that = this;
+        document.body.scrollTop = that.position;
         that.moreData = true;
         that.tempSuggest = that.lessSuggest;
       },
@@ -98,7 +113,7 @@
         localStorage.removeItem("upload");
         this.$router.push({
           name: "UploadList",
-          params: this.checkSuggestMessage.data
+          params: this.paramsData
         })
       }
     },
@@ -145,6 +160,7 @@
           box-sizing: border-box;
           padding: rem(0px) rem(58px);
           position: relative;
+          font-weight: bold;
           &::before{
             content: '';
             width: rem(8px);

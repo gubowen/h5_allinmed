@@ -33,7 +33,7 @@
       this.initData();
     },
     mounted() {
-
+      api.forbidShare();
     },
     computed: {
 
@@ -74,7 +74,14 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   .tc-articleDetails{
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
     padding:0 rem(40px);
+    box-sizing: border-box;
     background:#FFF;
     .tc-articlTitle{
       padding:rem(54px) 0 rem(40px) 0;

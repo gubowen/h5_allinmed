@@ -20,9 +20,12 @@
   // import
   import Vue from 'vue'
   import VueAwesomeSwiper from 'vue-awesome-swiper'
+  import Swiper from 'swiper';
+  import 'swiper/dist/css/swiper.css';
 
   // mount with global
   Vue.use(VueAwesomeSwiper);
+
 
   // If used in Nuxt.js/SSR, you should keep it only in browser build environment
   // The `Process. BROWSER_BUILD` itself is just a feature, it is only valid in Nuxt.js, you need to modify it according to your own procedures, such as: in vue official ssr scaffolding it should be` process.browser`
@@ -57,7 +60,7 @@
           grabCursor : true,
           setWrapperSize :true,
           zoom : true,
-//          zoomToggle :false,
+          // zoomToggle :false,
           autoHeight: true,
           pagination : '.swiper-pagination',
           paginationType:'fraction',
@@ -75,6 +78,9 @@
           onTransitionStart(swiper){
 //            console.log(swiper)
           },
+          onSlideChangeStart: function(swiper){
+          window.scrollTo(0,0);
+          }
           // more Swiper configs and callbacks...
           // ...
         }
@@ -97,7 +103,7 @@
 //      this.swiper.slideTo(_imgNum, 1000, false)
     },
     activated(){
-
+      window.scrollTo(0,0);
       this.imageListBox = this.$route.params.imgBlob;
       let _imgNum = this.$route.params.indexNum;
       this.swiper.slideTo(_imgNum, 0, false)
@@ -123,28 +129,28 @@
         top:rem(20px);
         width: 100%;
         text-align: center;
-        position: absolute;
+        position: fixed;
       }
       .swiper-wrapper{
-        height: 100% !important;
+        // height: 100% !important;
         .swiper-slide{
-          float: left;
-          &:before{
-            content: '';
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
-          }
-          .swiper-zoom-container{
-            display: inline-block;
-            vertical-align: middle;
-            width: 100%;
-          }
+          // float: left;
+          // &:before{
+          //   content: '';
+          //   display: inline-block;
+          //   vertical-align: middle;
+          //   height: 100%;
+          // }
+          // .swiper-zoom-container{
+          //   display: inline-block;
+          //   vertical-align: middle;
+          //   width: 100%;
+          // }
           .swiper-zoom-container > img{
             min-width: 100%;
             width: 100%;
             vertical-align: middle;
-            height: auto !important;
+            // height: auto !important;
           }
         }
       }

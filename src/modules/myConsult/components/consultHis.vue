@@ -10,28 +10,28 @@
           <a @click="hrefToConsult()">去问诊&gt;&gt;</a>
         </section>
       </template>
-      <template v-for="item in items">
-        <section class="orderHistoryItem" @click="getThisItem(item)">
+      <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem">
+        <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items" v-if="item.patientId&&item.patientId.length>0">
           <article class="orderHisItemTop">
             <figure class="doctorInfo left">
               <figcaption class="docLogo left"><img :src="getImgUrl(item)"></figcaption>
               <section class="docType right">
-                <p class="docName"><span>{{item.consultationType==0?"唯医门诊医生":item.fullName}}</span><span class="medicalTitleRight">{{item.medicalTitle}}</span></p>
+                <p class="docName"><span>{{item.consultationType==0?"唯医门诊医生":getFullName(item)}}</span><span class="medicalTitleRight">{{item.medicalTitle}}</span></p>
                 <p class="inquiryType">{{getInquiryType(item)}}  {{getCaseTime(item.createTime)}}</p>
               </section>
             </figure>
             <div class="doctorState right" :class="getStatusName(item).fontGray">{{getStatusName(item).statusName}}</div>
           </article>
           <div class="orderHistoryItemCenter">
-            <p>患者<span>{{item.patientName.length>5?item.patientName.substring(0,5)+"...":item.patientName}}</span></p>
+            <p>患者<span>{{item.patientName&&item.patientName.length>5?item.patientName.substring(0,5)+"...":item.patientName}}</span></p>
             <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
           </div>
-          <div class="orderHistoryItemBottom" v-if="item.consultationType==0">
-            <button class="hrefBtn" v-if="item.consultationState==0&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
-            <button class="hrefBtn" v-if="(item.consultationState==0||item.consultationState==1)&&item.diagnosisId.length>1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
+          <div class="orderHistoryItemBottom" v-if="(item.consultationType==0&&item.consultationState==0&&item.state==3) || (item.consultationType==0&&(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1)">
+            <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==0&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
+            <button data-alcode='e137' class="hrefBtn" v-if="(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
           </div>
         </section>
-      </template>
+      </div>
       <loading v-show="finish"></loading>
     </section>
   <!--</loadMore>-->
@@ -43,6 +43,9 @@
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
+
+  import "babel-polyfill";
+
   const XHRList = {
     getOrderHistoryLists:'/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
     getPicList:'/mcall/patient/recovery/advice/v1/getMapList/'//图片列表
@@ -64,6 +67,10 @@
     },
     mounted(){
       api.mobileCheck();
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);    //获取openId
+      }
+      api.forbidShare();
       this.getOrderHistoryLists();
     },
     methods: {
@@ -121,12 +128,22 @@
         }
         return logoImg;
       },
+      getFullName(opt){
+          if(opt.fullName.length>6){
+              return opt.fullName.substring(0,6) + "..."
+          }else{
+              return opt.fullName;
+          }
+      },
       getStatusName(opt){
         let statusName = '',fontGray='';
         if(opt.consultationType==0){
           //分诊医生
           switch (Number(opt.consultationState)){
             case 0:
+            case 2:
+            case 4:
+            case 5:
               statusName = '问诊中';
               break;
             case 1:
@@ -169,7 +186,7 @@
           switch (Number(opt.consultationLevel)){
             case 0:
             case 1:
-              consultationLevel = "普通问诊";
+              consultationLevel = "图文问诊";
               break;
             case 3:
               consultationLevel = "特需问诊";
@@ -223,7 +240,7 @@
         window.location.href = '/dist/consult.html?customerId='+api.getPara().customerId;
       },
       hrefToSuggest(opt){
-        window.location.href = '/pages/myServices/check_suggestion.html?caseId='+opt.caseId+'&diagnosisId='+opt.diagnosisId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&caseType=0';
+        window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health&suggest=1'
       },
       getThisItem(opt){
         //缓存orderSourceId
@@ -233,9 +250,13 @@
           let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
           localStorage.setItem("doctorName",opt.fullName);
           localStorage.setItem("doctorLogo",docLogo);
-          window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
+          if(opt.caseType == 10 || opt.caseType == 11){
+            window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=report';
+          }else{
+            window.location.href = '/dist/imSceneDoctor.html?caseId='+opt.caseId+'&doctorCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId;
+          }
         }else{
-          window.location.href = '/pages/imScene/im_main_scene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&customerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
+          window.location.href = '/dist/imScene.html?caseId='+opt.caseId+'&shuntCustomerId='+opt.customerId+'&patientCustomerId='+api.getPara().customerId+'&patientId='+opt.patientId+'&from=health'
         }
       },
       goToUploadPic(opt){
@@ -245,11 +266,10 @@
           method: "post",
           data: {
             caseId:opt.caseId,
-            customerId:opt.customerId,
+            patientId:opt.patientId,
             isValid:1,
             firstResult:0,
-            maxResult:999,
-            type:0
+            maxResult:999
           },
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -278,11 +298,13 @@
                   })
                 })
               };
+              console.log()
               that.$router.push({
                 name: "uploadPic",
                 params: {
                   hisPicLists: hisPicLists,
                   caseId:opt.caseId,
+                  consultationId:opt.consultationId,
                   from: that.$route.name,
                 },
                 query: that.$route.query
@@ -434,6 +456,7 @@
           height:1px;
           background: #EDEDED;
           margin-bottom:rem(32px);
+          margin-right:rem(40px);
         }
         position: relative;
         padding:0 rem(20px) rem(32px) rem(32px);
@@ -470,7 +493,7 @@
         }
       }
       .orderHistoryItemBottom{
-        margin:0 rem(32px);
+        margin:0 rem(60px) 0 rem(32px);
         border-top:1px solid #EDEDED;
         display: flex;
         display: -webkit-flex;

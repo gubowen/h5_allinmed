@@ -41,13 +41,21 @@
       return {}
     },
     computed: {
-      progress(){
-        if (this.currentIndex === this.imageProgress.index) {
-          return this.imageProgress;
-        } else {
+     progress(){
+        if (this.currentIndex===this.imageProgress.index){
+          // return this.imageProgress;
+          if (this.imageProgress.progress.includes(".")){
+            let returnObj = Object.assign(this.imageProgress,{
+              progress:`${this.imageProgress.progress.split(".")[0]}%`
+            })
+            return returnObj;
+          } else {
+            return this.imageProgress;
+          }
+        }else{
           return {
             uploading: false,
-            progress: 0,
+            progress: "0",
             index: 0
           }
         }
@@ -57,7 +65,7 @@
         return this.$store.state.logoUrl
       },
       targetLogo(){
-        return this.$store.state.targetMsg.avatar;
+        return this.$store.state.targetMsg.avatar.length===0? "/src/common/image/imScene/default.png":this.$store.state.targetMsg.avatar;
       }
 
     },

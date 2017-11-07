@@ -915,6 +915,7 @@ $(function () {
             localStorage.setItem("doctorName", $(".docDetails > h3").text());
             localStorage.setItem("doctorLogo", $(".docLogo").attr("src"));
             localStorage.setItem("imOpen", "open");
+            localStorage.setItem("sendTips",1);
             window.location.href = '/dist/imSceneDoctor.html?caseId=' + common.getpara().caseId + '&doctorCustomerId=' + common.getpara().customerId + '&patientCustomerId=' + common.getpara().patientCustomerId + '&patientId=' + common.getpara().patientId;
           }
         });
@@ -1250,6 +1251,7 @@ $(function () {
           wxPaySuccess: function (_data) {
             //支付成功回调  (问诊/门诊类型 必选)
             t.changeStatus(obj.clinicId);
+            localStorage.setItem("sendTips",1);
             window.location.href = '/dist/imSceneDoctor.html?caseId=' + common.getpara().caseId + '&doctorCustomerId=' + common.getpara().customerId + '&patientCustomerId=' + common.getpara().patientCustomerId + '&patientId=' + common.getpara().patientId;
             localStorage.removeItem("triageAssign");
           },
@@ -1328,6 +1330,7 @@ $(function () {
               if (data.responseStatus == "true") {
                 //支付成功
                 t.changeStatus(obj.clinicId);
+                localStorage.setItem("sendTips",1);
                 window.location.href = '/dist/imSceneDoctor.html?caseId=' + common.getpara().caseId + '&doctorCustomerId=' + common.getpara().customerId + '&patientCustomerId=' + common.getpara().patientCustomerId + '&patientId=' + common.getpara().patientId;
               }
             }

@@ -128,14 +128,14 @@ html .picker .picker-panel .picker-content .mask-top, .picker .picker-panel .pic
 }
 
 html .picker .picker-panel .picker-content .mask-top {
-  top: -0.1rem;
+  top: -0.2rem;
   height: 1.1rem;
   background: -webkit-gradient(linear, left bottom, left top, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 0.8)));
   border-bottom: 1px solid #ccc;
 }
 
 html .picker .picker-panel .picker-content .mask-bottom {
-  bottom: -1.36rem;
+  bottom: -1.6rem;
   height: 2.93333rem;
   border-top: 1px solid #ccc;
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 0.8)));
@@ -157,26 +157,26 @@ html .picker .picker-panel .wheel-wrapper .wheel {
   width: 1%;
   height: 3.2rem;
   overflow: hidden;
-  font-size: 21px;
+  font-size: 20px;
 }
 
 html[data-dpr="2"] .picker .picker-panel .wheel-wrapper .wheel {
-  font-size: 42px;
+  font-size: 40px;
 }
 
 html[data-dpr="3"] .picker .picker-panel .wheel-wrapper .wheel {
-  font-size: 63px;
+  font-size: 60px;
 }
 
 html .picker .picker-panel .wheel-wrapper .wheel .wheel-scroll {
   margin-top: 0.90667rem;
-  line-height: 0.8rem;
 }
 
 html .picker .picker-panel .wheel-wrapper .wheel .wheel-scroll .wheel-item {
   overflow: hidden;
   white-space: nowrap;
-  height:auto;
+  height:1rem;
+  line-height: 1rem;
   color: #333;
 }
 

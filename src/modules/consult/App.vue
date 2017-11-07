@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%;height: 100%;">
-    <keep-alive>
+    <keep-alive style="height:100%">
       <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
@@ -30,6 +30,9 @@
 </script>
 <style lang="scss" scoped="">
 
+  div{
+    height: 100%;
+  }
   .child-view {
     position: absolute;
     width: 100%;

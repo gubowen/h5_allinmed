@@ -1,9 +1,10 @@
 <template>
-  <section class="consult-main-inner">
+  <div data-alcode-mod='712'>
+    <section class="consult-main-inner">
     <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
       <span class="consult-page page-two"></span>
       <section class="questionContainMain">
-        <section class="questionItem-common">
+        <section class="questionItem-common isComeCure">
           <p class="questionTitleCommon">有去医院就诊过吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="visit.none=true;visit.has=false" :class="{'selected':visit.none}">
@@ -19,7 +20,7 @@
           </section>
         </section>
         <section class="questionItem-common upLoadResource">
-          <p class="questionTitleCommon">有患病处照片或检查资料吗？</p>
+          <p class="questionTitleCommon">有X光片/CT等影像资料吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="upload.none=true;upload.has=false" :class="{'selected':upload.none}">
               没有</p>
@@ -75,7 +76,7 @@
             </section>
           </section>
         </section>
-        <section class="questionItem-common">
+        <section class="questionItem-common isUseDrug">
           <p class="questionTitleCommon">有正在使用的药物吗？</p>
           <section class="questionContain-center">
             <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
@@ -89,12 +90,12 @@
                       @input="contentLimit"></textarea>
             <span class="qu-underline"></span>
             <p class="limit" v-show="getByteLen(medicalMessage)<=100">{{getByteLen(medicalMessage)}}</p>
-            <p class="qu-setMedicineTipText">填写示例:三七片、接骨七厘散</p>
+            <p class="qu-setMedicineTipText">填写示例:双氯芬酸钠缓释片、盐酸乙哌立松</p>
           </section>
         </section>
       </section>
       <section class="questionSubmitBtnBox">
-        <button class="questionSubmitBtn" @click="submitParamsInstall">填好了</button>
+        <button class="questionSubmitBtn" @click="submitParamsInstall" data-alcode='e128'>填好了</button>
       </section>
     </section>
     <!--<transition name="fadeRight">-->
@@ -122,7 +123,19 @@
           }" v-if="levelShow&&netTipsNum==1" :showFlag.sync="levelShow" @cancelClickEvent="cancelEvent"
         @ensureClickEvent="ensureEvent"></confirm>
     </transition>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'确定提交',
+          'cancel':'返回修改',
+//          'content':'确定要使用手机流量上传吗?',
+          'title':'问诊单提交后不可修改\n请确定填写信息无误'
+          }" v-if="submitTip" :showFlag.sync="submitTip" @cancelClickEvent="subCancelEvent"
+        @ensureClickEvent="submitData()"></confirm>
+    </transition>
+    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
+  </div>
 </template>
 <script type="text/ecmascript-6">
   /**
@@ -134,18 +147,24 @@
    * Created by qiangkailiang/jukun on 2017/7/25.
    */
 
-  import selectArea from 'components/selectArea';
+  // import selectArea from 'components/selectArea';
   import api from 'common/js/util/util';
   import loading from 'components/loading';
   import toast from 'components/toast';
   import autosize from 'autosize';
   import axios from "axios";
   import confirm from 'components/confirm';
+  import backPopup from "components/backToastForConsult";
+  import WxPayCommon from 'common/js/wxPay/wxComm';//微信支付的方法
 
   const XHRList = {
     upload: "/mcall/customer/patient/case/attachment/v1/create/",
     create: "/mcall/customer/patient/case/v2/create/",
-    triage: "/mcall/customer/case/consultation/v1/createConsultation/"
+    triage: "/mcall/customer/case/consultation/v1/createConsultation/",
+    createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/",//创建专业医生问诊
+    updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",//更新问诊次数
+    getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
+    triageAssign: "/mcall/customer/case/consultation/v1/create/",
   };
   export default{
     data () {
@@ -162,15 +181,23 @@
           has: false,
           none: false
         },
+        patientParams:{
+          customerId:api.getPara().customerId,
+          doctorId:api.getPara().doctorId,
+        },
+        orderSourceId:"",//进入分诊im需要orderSourceId
         finish: false,
         upLoadTip: false,
         levelShow: false,
+        backPopupShow:false,
+        submitTip:false,
         uploading1: false,
         uploading2: false,
         imageList1: [],
         imageList2: [],
         netTipsNum: 0,
         cityLevel: 2,
+        responseCaseId:"",//提交订单响应回来的caseId
         hospitalMessage: {
           name: "最近一次就诊的医院"
         },
@@ -184,20 +211,21 @@
         medicalMessage: "",
         errorMsg: "",
         errorShow: false,
+        isClick:false,//确认提交是否点击
         allParams: {
           operatorType: 0,
           illnessHistoryId: "",
           illnessHistory: "",
           treatmentHospital: "",
           treatmentHospitalId: "",
-          caseType: 0,
+          caseType: api.getPara().doctorId?11:0,// 类型0-咨询1-复诊2-手术直约3-首诊4-手术犹豫5-待通知入院6-已通知入院7-住院中8-已出院9-术后复诊10-老患者报到(诊后报道)11-立即问诊
           affectedAttId: "",
           inspectionAttId: "",
-          visitSiteId: 13,
+          visitSiteId: 17,
           takeMedicine: "",
           complication: "",
           optionList: [],
-          customerId: "",
+          customerId: api.getPara().customerId,
           patientId: "",
         }
       }
@@ -205,12 +233,28 @@
     activated(){
       this.finish = false;
       this.initData();
+       document.title = "描述病情";
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
+      if(localStorage.getItem("isSubmit")=="1"){
+        this.clearPageData();
+        localStorage.removeItem("isSubmit")
+      }
     },
     mounted(){
-      document.title = "描述情况";
+      document.title = "描述病情";
       document.body.scrollTop = 0;
       autosize(this.$el.querySelector(".medicineBox"));
       localStorage.setItem("hasCome", 0);
+      if (localStorage.getItem("PCIMLinks")!==null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
+      api.forbidShare();
     },
     methods: {
       initData () {
@@ -223,7 +267,7 @@
             params = this.$route.params;
             localStorage.setItem("submitParams", JSON.stringify(params))
           }
-          this.allParams.customerId = params.userId;
+//          this.allParams.customerId = params.userId;
           this.allParams.complication = params.complication;
           this.allParams.optionList = JSON.stringify(params.optionList);
           this.allParams.patientId = params.patientId;
@@ -382,6 +426,10 @@
       cancelEvent(){
         this.levelShow = false;
       },
+      //提交取消
+      subCancelEvent(){
+        this.submitTip = false;
+      },
       //确定
       ensureEvent(){
         this.levelShow = false;
@@ -397,9 +445,23 @@
           params: _params
         });
       },
-      // 提交参数装载
+      // 提交校验
       submitParamsInstall(){
-
+        if (!this.validateParamsFull()) {
+          return false;
+        } else { //提示用户提交后不可修改提交内容
+          if (localStorage.getItem("PCIMLinks")!==null) {
+            this.backPopupShow = true;
+          } else {
+            this.backPopupShow = false;
+            this.submitTip = true;
+          }
+        }
+      },
+      //提交数据
+      submitData(){
+        this.submitTip = false;
+        //全结果验证通过 参数装载开始...
         let joinImageDataList = function (list) {
           let result = [];
           list.forEach((element, index) => {
@@ -407,21 +469,32 @@
           });
           return result.join(",");
         };
-        if (!this.validateParamsFull()) {
-          return false;
-        } else { //全结果验证通过 参数装载开始...
-          this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
-          this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
+        if(this.visit.has){
           this.allParams.treatmentHospitalId = this.hospitalMessage.id || "";
           this.allParams.treatmentHospital = this.hospitalMessage.id ? this.hospitalMessage.name : "";
           this.allParams.illnessHistoryId = this.diseaseMessage.id || "";
           this.allParams.illnessHistory = this.diseaseMessage.id ? this.diseaseMessage.name : "";
-          this.allParams.takeMedicine = this.medicalMessage || "";
-
-          //装载完成...
-          //数据提交开始...
-          this.paramsSubmit();
+        }else {
+          this.allParams.treatmentHospitalId = "";
+          this.allParams.treatmentHospital = "";
+          this.allParams.illnessHistoryId = "";
+          this.allParams.illnessHistory = "";
         }
+        if(this.upload.has){
+          this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
+          this.allParams.affectedAttId = joinImageDataList(this.imageList2) || "";
+        }else {
+          this.allParams.inspectionAttId = "";
+          this.allParams.affectedAttId = "";
+        }
+        if(this.medical.has){
+          this.allParams.takeMedicine = this.medicalMessage || "";
+        }else {
+          this.allParams.takeMedicine = "";
+        }
+        //装载完成...
+        //数据提交开始...
+        this.paramsSubmit();
       },
       paramsSubmit(){
         const that = this;
@@ -436,60 +509,236 @@
           timeout: 20000,
           done(data) {
             if (data.responseObject.responsePk !== 0) {
-              const caseId = data.responseObject.responsePk;
-              that.getTriageDoctorId(caseId);
+              that.responseCaseId = data.responseObject.responsePk;
+              //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
+              api.getPara().doctorId?that.getProfessionalDoctor():that.createOrderSourceId();
+            } else {
+              that.finish=false;
             }
           }
         })
       },
-      // 获取分流ID
-      getTriageDoctorId(caseId) {
+      //获取orderSourceId
+      createOrderSourceId(){
         const that = this;
+        if (that.isClick){
+          return false;
+        }
+        that.isClick=true;
         api.ajax({
-          url: XHRList.triage,
+          url: XHRList.triageAssign,
           method: "POST",
           data: {
-            caseId,
-            isShunt: 1
-          },
-          beforeSend () {
-
+            caseId: that.responseCaseId,
+            customerId: 0,
+            patientCustomerId: api.getPara().customerId,
+            patientId: that.allParams.patientId,
+            consultationType: 0,//会诊类型0：患者-分诊平台1：患者-医生
+            consultationState: 4,//会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+            siteId: 17,
+            caseType: 0
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-
+              console.log("获取orderSourceId成功");
+              that.orderSourceId = data.responseObject.responsePk;
+              that.getConsultPrice();
+            }else{
+              console.log("获取orderSourceId失败");
+            }
+          }
+        })
+      },
+      //获取咨询价格
+      getConsultPrice(caseId){
+        const that = this;
+        api.ajax({
+          url: XHRList.getPrice,
+          method: "POST",
+          data: {
+            visitSiteId:17,	//string	是	站点
+            maxResult:999,
+            id:0,
+          },
+          done(data) {
+            if (data.responseObject.responseStatus && data.responseObject.responseData) {
+              let price = data.responseObject.responseData.dataList.firstAmount;
+              that.buyTime(price);
+            } else {
+              console.log("获取分诊医生价格失败")
+            }
+          }
+        })
+      },
+      //购买时间
+      buyTime(price){
+        const that = this;
+        let flag;
+        price === "0"?flag = "false":flag = "true";
+//        that.lastTimeShow=true;
+//        that.sendConsultState(4);
+        let data = {
+          patientCustomerId: api.getPara().customerId, //	string	是	患者所属用户id
+          patientId: that.allParams.patientId,         // 	string	是	患者id
+          // doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+          orderType: '1',                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
+          orderSourceId: that.orderSourceId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+          orderSourceType: "1",                //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+          orderAmount: price,                  //	string	否	订单金额  （单位/元 保留两位小数）
+          status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
+          body: '咨询',   //   string  否  订单描述 （微信支付展示用）
+          isCharge: flag,                    //   string  是  true-收费  false-免费
+          caseId: that.responseCaseId
+        };
+        WxPayCommon.wxCreateOrder({
+          data: data,        //data为Object 参考下面给出格式
+          backCreateSuccess(_data){
+            //创建订单成功  （手术必选）
+            that.getTriageDoctorId();
+//            that.refreashOrderTime('free')
+          },
+          backCreateError(_data){
+            //创建订单失败  (必选)
+          },
+          wxPaySuccess(_data){
+            console.log("支付成功")
+            that.getTriageDoctorId();
+//            that.refreashOrderTime('pay');
+            //支付成功回调  (问诊/门诊类型 必选)
+          },
+          wxPayError(_data){
+            that.isClick = false;//是否点击立即咨询重置
+            that.finish=false;
+            //支付失败回调  (问诊/门诊类型 必选)
+          }
+        });
+      },
+      //创建专业医生会话
+      getProfessionalDoctor(){
+        let that = this;
+        api.ajax({
+          url:XHRList.createProfessionalConsultation,
+          method: "POST",
+          data: {
+            caseId: that.responseCaseId,
+            customerId: api.getPara().doctorId,
+            patientCustomerId: that.allParams.customerId,
+            patientId: that.allParams.patientId,
+            consultationType: 1,
+            consultationState: -1,
+            consultationLevel: 6,//咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
+            siteId: 17,
+            caseType: 11,//从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
+          },
+          done (d) {
+            if (d.responseObject.responseStatus) {
+              that.updateTimes(d.responseObject.responsePk);
+            }
+          }
+        });
+      },
+      //更新次数
+      updateTimes (consultationId) {
+        let that = this;
+//        debugger
+        api.ajax({
+          url: XHRList.updateCount,
+          method: 'POST',
+          data: {
+            consultationId: consultationId,
+            frequency: 3,
+            frequencyType: 2,
+            consultationState: -1,
+            consultationLevel: 0
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              localStorage.setItem("sendTips", JSON.stringify({
+                orderType: 0,
+                orderAmount: 0,
+                orderFrequency:3
+              }));
+              that.finish=false;
 
               localStorage.removeItem("selectList");
               localStorage.removeItem("secondList");
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
+              localStorage.removeItem("noMR");
 
-              that.finish=false;
-              window.location.href = '/pages/imScene/im_main_scene.html?caseId=' + caseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&customerId=' + that.allParams.customerId+'&from=health';
+              that.backPopupShow=true;
+              that.clearPageData();
+              window.location.href = '/dist/imSceneDoctor.html?from=report&caseId=' + that.responseCaseId + '&doctorCustomerId=' + api.getPara().doctorId + '&patientCustomerId=' + that.allParams.customerId + '&patientId=' + that.allParams.patientId;
             }
           }
         })
       },
+      // 获取分流ID
+      getTriageDoctorId() {
+        const that = this;
+        localStorage.removeItem("selectList");
+        localStorage.removeItem("secondList");
+        localStorage.removeItem("questionList");
+        localStorage.removeItem("complication");
+        that.finish=false;
+        that.isClick = false;
+        that.backPopupShow=true;
+        that.clearPageData();
+        window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
+//        api.ajax({
+//          url: XHRList.triage,
+//          method: "POST",
+//          data: {
+//            caseId:that.responseCaseId,
+//            patientId:this.allParams.patientId,
+//            patientCustomerId:this.allParams.patientCustomerId,
+//            isShunt: 1
+//          },
+//          beforeSend () {
+//
+//          },
+//          done(data) {
+//            if (data.responseObject.responseStatus) {
+//
+//
+//              localStorage.removeItem("selectList");
+//              localStorage.removeItem("secondList");
+//              localStorage.removeItem("questionList");
+//              localStorage.removeItem("complication");
+//
+//              that.finish=false;
+//              that.backPopupShow=true;
+//              that.clearPageData();
+//              window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
+//            }
+//          }
+//        })
+      },
       // 填写情况验证
       validateParamsFull() {
         if (!this.visit.none && !this.visit.has) {
-          this.validateToast("请选择最近一次就诊医院");
+          this.validateToast("您还有问题未完善");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isComeCure").offsetTop;
           return false;
         } else if (this.visit.has && !this.hospitalMessage.id) {
           this.validateToast("请选择最近一次就诊医院");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isComeCure").offsetTop;
           return false;
         }
 
         if (!this.upload.none && !this.upload.has) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("您还有问题未完善 ");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.upLoadResource").offsetTop;
           return false;
         } else if (this.upload.has && (this.imageList1.length === 0 && this.imageList2.length === 0)) {
-          this.validateToast("请上传检查资料或患处照片 ");
+          this.validateToast("请上传检查资料或患处照片");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.upLoadResource").offsetTop;
           return false;
         }
 
         if (!this.medical.none && !this.medical.has) {
-          this.validateToast("请填写药物名称");
+          this.validateToast("您还有问题未完善");
+          document.body.scrollTop = this.$el.querySelector(".questionItem-common.isUseDrug").offsetTop;
           return false;
         } else if (this.medical.has && this.medicalMessage.length === 0) {
           this.validateToast("请填写药物名称");
@@ -508,18 +757,34 @@
       contentLimit(){
         if (api.getByteLen(this.medicalMessage) > 1000) {
           this.medicalMessage = api.getStrByteLen(this.medicalMessage,1000);
-          this.validateToast("您已超过500字了")
+          this.validateToast("最多只能输入500字")
         }
       },
       getByteLen(len){
         return 1000-api.getByteLen(len);
+      },
+      clearPageData(){
+        let _this=this;
+        _this.visit.has=false;
+        _this.visit.none=false;
+        _this.diseaseMessage.id='';
+        _this.diseaseMessage.name="医生给出的诊断(未确诊可不选)";
+        _this.hospitalMessage.id='';
+        _this.hospitalMessage.name="最近一次就诊的医院";
+        _this.upload.has=false;
+        _this.upload.none=false;
+        _this.imageList1=[];
+        _this.imageList2=[];
+        _this.medical.has=false;
+        _this.medical.none=false;
+        _this.medicalMessage='';
       }
     },
     components: {
-      selectArea,
       loading,
       toast,
-      confirm
+      confirm,
+      backPopup
     },
   }
 
@@ -606,17 +871,17 @@
           padding: rem(64px) rem(28px) rem(16px);
           .questionSelectBtn {
             width: rem(284px);
-            @include font-dpr(16px);
+            @include font-dpr(18px);
             padding: rem(20px) 0;
             text-align: center;
             float: left;
-            border: 2px solid #ECECEC;
+            border: 1px solid #ECECEC;
             border-radius: 100px;
             &.selected-right {
               float: right;
             }
             &.selected {
-              border: 2px solid #2FC5BD;
+              border: 1px solid #2FC5BD;
               color: #2FC5BD;
             }
           }
@@ -629,6 +894,7 @@
           background-color: #E5E5E5;
           p {
             color: #666666;
+//            @include ellipsis();
             &.selected {
               color: #07B6AC;
             }
@@ -638,16 +904,16 @@
           }
           .selected-HospitalBtn, .selected-cureBtn {
             position: relative;
-            padding: rem(20px) 0;
+            padding: rem(38px) 0;
             &:after {
               position: absolute;
               display: block;
               content: '';
-              width: rem(28px);
-              height: rem(28px);
+              width: rem(36px);
+              height: rem(36px);
               right: 0;
               top: 50%;
-              margin-top: rem(-14px);
+              margin-top: rem(-18px);
               background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png") no-repeat center;
               background-size: 100% 100%;
             }
@@ -661,6 +927,7 @@
             max-height: 1.3rem;
             outline: medium;
             background: #E5E5E5;
+            border: none;
             border: none;
             @include placeholder() {
               color: #AAAAAA;
@@ -743,6 +1010,7 @@
             margin-top: rem(26px);
             margin-bottom: rem(14px);
             padding-left: rem(48px);
+            overflow: visible;
             &::after {
               position: absolute;
               content: '';
@@ -751,7 +1019,7 @@
               left: 0;
               top: 50%;
               margin-top: rem(-24px);
-              background: url("../../../common/image/img00/consult_V1.2/doubt@2x.png") no-repeat center;
+              background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png") no-repeat center;
               background-size: 100% 100%;
             }
           }

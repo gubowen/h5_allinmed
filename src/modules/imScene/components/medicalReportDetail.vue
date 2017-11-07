@@ -33,37 +33,45 @@
             <span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">不适症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">肿胀</span>
+            <span class="tc-caseDescribeItemLeft">症状描述</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="acheType.length">
+            <span class="tc-caseDescribeItemLeft">疼痛性质</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{acheType}}</span>
+          </li>
+          <li class="tc-caseDescribeItem" v-if="VASGrade.length">
+            <span class="tc-caseDescribeItemLeft">VAS评分</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{VASGrade}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">持续时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">加重时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">其他症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>
           </li>
         </ul>
       </section>
       <section class="tc-caseDescribe tc-module">
-        <section class="tc-caseDescribeTitle title"><h3>现病史</h3></section>
+        <section class="tc-caseDescribeTitle title"><h3>诊治情况</h3></section>
         <ul class="tc-caseDescribeList">
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">曾就诊医院</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.treatmentName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{treatmentName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">确诊疾病</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.illnessName || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessName}}</span>
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">检查资料</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList1.length!==0">
               <li v-for="(item,index) in imageList1" @click="showBigImg(item,index,1)">
                 <img :src="item">
@@ -72,7 +80,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">患处照片</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"无":"&nbsp&nbsp"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList2.length!==0">
               <li v-for="(item,index) in imageList2" @click="showBigImg(item,index,2)">
                 <img :src="item">
@@ -81,7 +89,7 @@
           </li>
           <li class="tc-caseDescribeItem">
             <span class="tc-caseDescribeItemLeft">服用药物</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{patientCasemap.takeMedicine || "无"}}</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{takeMedicine}}</span>
           </li>
         </ul>
       </section>
@@ -132,10 +140,16 @@
         illnessTime: "",
         caseTime: "",
         heavyTime: "",
+        treatmentName:"",
+        illnessName:"",
+        takeMedicine:"",
         complication: "",
         resultMainList: [],
         imageList1: [],
-        imageList2: []
+        imageList2: [],
+        symptomDescription:'',//症状描述
+        acheType:"",//疼痛类型
+        VASGrade:'',//VAS评分
       }
     },
     activated(){
@@ -143,6 +157,10 @@
     },
     mounted(){
       this.getMedicalReport();
+      api.forbidShare();
+    },
+    computed: {
+
     },
     methods: {
       getMedicalReport() {
@@ -164,13 +182,28 @@
               let _data = data.responseObject.responseData.dataList[0];
               that.patientCasemap = data.responseObject.responseData.dataList[0].patientCasemap;
               that.resultMainList = data.responseObject.responseData.dataList[0].resultMainList;
+              that.resultMainList[0].symptomOptions.forEach((element)=>{
+                    if(element.optionDesc.length>0){
+                      that.symptomDescription += element.optionDesc + '、'
+                    }else{
+                      that.symptomDescription += element.optionName + '、';
+                    }
+                });
+              that.symptomDescription = that.symptomDescription.substring(0,that.symptomDescription.length-1);
+              if(that.resultMainList[0].symptomOptions[0].refQuestionList.length){
+                that.acheType=that.resultMainList[0].symptomOptions[0].refQuestionList[0].symptomOptions[0].optionName;
+                that.VASGrade=that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName + that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionDesc;//VAS评分
+              }
               let caseTime = that.patientCasemap.caseTime.split(' ')[0];
 
               that.caseTime = caseTime.split('-')[0] + '年' + caseTime.split('-')[1] + '月' + caseTime.split('-')[2] + '日'
-              that.illnessTime = ((that.resultMainList[1].symptomOptions[0].optionDesc && that.resultMainList[1].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[1].symptomOptions[0].optionDesc : that.resultMainList[1].symptomOptions[0].optionName);
-              that.heavyTime = ((that.resultMainList[2].symptomOptions[0].optionDesc && that.resultMainList[2].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[2].symptomOptions[0].optionDesc : that.resultMainList[2].symptomOptions[0].optionName);
+              that.illnessTime = ((that.resultMainList[1].symptomOptions[0].optionDesc && that.resultMainList[1].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[1].symptomOptions[0].optionDesc : that.resultMainList[1].symptomOptions[0].optionName)  || "未填写";
+              that.heavyTime = ((that.resultMainList[2].symptomOptions[0].optionDesc && that.resultMainList[2].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[2].symptomOptions[0].optionDesc : that.resultMainList[2].symptomOptions[0].optionName)  || "未填写";
               that.partName = that.resultMainList[0].partName;
-              that.complication = that.patientCasemap.caseMain.caseAlong;
+              that.complication = that.patientCasemap.caseMain.caseAlong  || "未填写";
+              that.treatmentName = that.patientCasemap.treatmentName || "未填写";
+              that.illnessName = that.patientCasemap.illnessName || "未填写";
+              that.takeMedicine = that.patientCasemap.takeMedicine || "未填写";
 
               that.patientCasemap.attachmentList.forEach((element, index) => {
                 if (element.caseAttSource == 0) {
@@ -234,7 +267,7 @@
         background: #ffffff;
         .tc-baseInfoList {
           padding-top: rem(40px);
-          background: url("../../../common/image/img00/myServices/interrogation_bg.png") no-repeat;
+          /*background: url("../../../common/image/img00/myServices/interrogation_bg.png") no-repeat;*/
           background-size: 100%;
         }
         .tc-baseInfoItem {
@@ -254,6 +287,8 @@
               width: rem(120px);
               height: rem(120px);
               margin: 0 auto;
+              box-shadow: 0 6px 12px 0 rgba(0,0,0,0.05);
+              border-radius:50%;
             }
           }
           .tc-baseInfoItemRight {
@@ -312,19 +347,20 @@
         background-color: #ffffff;
         .title {
           padding: rem(40px) 0 rem(40px) rem(30px);
-          border-bottom: 2px solid #F8F8F8;
+          border-bottom: 1px solid #F8F8F8;
           h3 {
-            font-weight: 600;
-            color: #666666;;
+            color: #666666;
             @include font-dpr(18px);
             &:before {
               display: inline-block;
               content: '';
               width: rem(4px);
-              height: rem(20px);
+              height: rem(24px);
               margin-right: rem(10px);
               background: #4CD3C6;
-              vertical-align: middle;
+              /*vertical-align: middle;*/
+              margin-top:-(rem(4px));
+              border-radius: 999px;
             }
           }
         }

@@ -13,35 +13,37 @@
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
           </li>
-          <li class="tc-imageUpLoadAdd" v-if="!uploading">
+          <li class="tc-imageUpLoadAdd" v-if="!uploading&&imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
-              <input class="tc-upLoadInput" type="file"
+              <input class="tc-upLoadInput" type="file" accept="image/gif,image/jpeg,image/jpg,image/png"
                      @change="onFileChange(imageList[imageList.length],imageList.length,$event)">
             </a>
           </li>
         </ul>
         <ul class="he-loadFiles" v-show="baseMessage.type==1&&!videoObj.size">
           <li class="he-videoAddFirstBtn" ref="upload">
-            <a href="javascript:;" class="he-videoFirstLoadBtn" id="uploadBtn"></a>
+            <a href="javascript:;" class="he-videoFirstLoadBtn" id="uploadBtn" ref="uploadBtn"></a>
           </li>
         </ul>
-        <ul class="he-loadFiles ev-success" issubmit="0" v-if="baseMessage.type==1&&videoObj.size">
+        <ul class="he-loadFiles ev-success" issubmit="0" v-show="baseMessage.type==1&&videoObj.size">
           <li class="he-loadVideoSuccess">
             <span class="he-loadVideoSuccessBox">
             <span class="he-loadSuccessTip"></span>
             <span class="he-loadSuccessText">已上传</span>
           </span>
           </li>
-          <li class="he-videoAddBtn he-loadSuccessTextBox"><a href="javascript:;" class="he-reLoadText">重新上传</a></li>
-          <li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a
-            href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>
-            <div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"
-                 style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden;"><input
-              id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17" type="file"
-              style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"
-              accept="video/mp4,video/quicktime,video/avi,video/x-ms-wmv,video/x-flv"></div>
+          <li class="he-videoAddBtn he-loadSuccessTextBox">
+            <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
           </li>
+          <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
+            <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
+            <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
+                 <!--style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden;"><input-->
+              <!--id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17" type="file"-->
+              <!--style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"-->
+              <!--accept="video/mp4,video/quicktime,video/avi,video/x-ms-wmv,video/x-flv"></div>-->
+          <!--</li>-->
         </ul>
         <section class="he-videosSubmit ev-submitUpData" v-show="baseMessage.type==2">
           <button class="usable downBtn" v-show="imageList.length && !uploading" @click="submitImage" style="display: inline-block;">提交</button>
@@ -54,14 +56,51 @@
         </section>
       </section>
     </section>
-    <section class="ev-videoUpLoading" v-if="videoUploading">
-      <div class="tc-videoLoadingImg">
-        <img src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
-      </div>
-      <p class="tc-videoLoadingText">上传中...</p>
+    <section class="video-upLoad-box"  v-if="videoUploading">
+      <section class="ev-videoUpLoading">
+        <div class="tc-videoLoadingImg">
+          <img src="../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
+        </div>
+        <p class="tc-videoLoadingText">上传中...</p>
+      </section>
     </section>
     <transition name="fade">
       <toast :content="tip" v-show="tipShow"></toast>
+    </transition>
+    <transition name="fade">
+      <!--图片上传离开的confirm-->
+      <confirm
+        :confirmParams="imgLeaveConfirmParams"
+        v-if="imgLeaveConfirm"
+        :showFlag.sync="imgLeaveConfirm"
+        @cancelClickEvent="imgCancel()"
+        @ensureClickEvent="imgEnsure()">
+      </confirm>
+    </transition>
+    <transition name="fade">
+      <!--视频上传离开的confirm-->
+      <confirm
+        :confirmParams="videoLeaveConfirmParams"
+        v-if="videoLeaveConfirm"
+        :showFlag.sync="videoLeaveConfirm"
+        @cancelClickEvent="cancelEvent()"
+        @ensureClickEvent="ensureEvent()">
+      </confirm>
+    </transition>
+    <transition name="fade">
+      <!--视频是否重新上传的confirm-->
+      <confirm
+        :confirmParams="{
+            'ensure':'取消',
+            'cancel':'替换',
+            'title':'重新上传后',
+            'content':'原有视频将被替换',
+          }"
+        v-if="reloadVideoConfirm"
+        :showFlag.sync="reloadVideoConfirm"
+        @cancelClickEvent="uploadEnsure()"
+        @ensureClickEvent="uploadCancel()">
+      </confirm>
     </transition>
   </section>
 
@@ -79,6 +118,7 @@
   import axios from "axios";
   import Qiniu from "common/js/third-party/qiniu/qiniu";
   import Toast from "components/toast";
+  import confirm from 'components/confirm';
   const XHRList = {
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",//上传图片
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",//更新图片
@@ -90,6 +130,12 @@
   export default{
     data(){
       return {
+        imgLeaveConfirm:false,//上传图片离开confirm框是否显示
+        imgLeaveConfirmParams:{},//图片离开的参数
+        videoLeaveConfirm:false,//上传视频离开confirm框是否显示
+        videoLeaveConfirmParams:{},//上传视频离开confirm的参数
+        pageLeaveEnsure: false,//页面是否离开
+        reloadVideoConfirm:false,//视频重新上传的confirm框是否显示
         baseMessage: {},
         imageList: [],
         uploading: false,
@@ -99,6 +145,57 @@
         tip: "上传完成",
         tipShow: false,
         uploadVideo:false,//点击提交之后，提交按钮是否可以点击
+      }
+    },
+    beforeRouteLeave (to, from, next){
+      let that =this;
+//      debugger;
+      if (that.baseMessage.type==1){
+        if(that.videoObj.size || that.videoUploading){
+          if (that.videoUploading) {
+            that.videoLeaveConfirmParams={
+              'ensure':'离开',
+              'cancel':'取消',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.videoLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的视频么',
+              'content':'',
+            }
+          }
+          that.videoLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure)
+        } else {
+          next(true);
+        }
+        this.reloadVideoConfirm = false;
+      } else {
+        if(that.imageList.length){
+          if(that.uploading){
+            that.imgLeaveConfirmParams={
+              'ensure':'取消',
+              'cancel':'离开',
+              'title':'努力上传中',
+              'content':'现在离开，下次还要重新上传哦',
+            }
+          } else {
+            that.imgLeaveConfirmParams={
+              'ensure':'现在提交',
+              'cancel':'暂不提交',
+              'title':'要提交上传的图片么？',
+            }
+          }
+          that.imgLeaveConfirm = true;
+//        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure);
+        } else {
+          next(true);
+        }
       }
     },
     props: {},
@@ -127,7 +224,7 @@
 
         data.append('file', _file);
         data.append('paramJson', JSON.stringify({
-          caseId: api.getPara().caseId,
+          caseId: '',
           imageType: 1,
           caseCategoryId: "",
         }));
@@ -148,6 +245,7 @@
           },
           done(){
             that.imageList.splice(index, 1);
+            that.uploading=false;
           }
         })
       },
@@ -194,7 +292,7 @@
           multi_selection: false,
           uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
           get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-          domain: 'tocure',     // bucket域名，下载资源时用到，必需
+          domain: 'allinmed',     // bucket域名，下载资源时用到，必需
           container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
           max_file_size: '100mb',             // 最大文件体积限制
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
@@ -250,14 +348,36 @@
       //图片提交
       submitImage(){
         const that = this;
-        that.$router.push({
-          path: "/BaseIm",
-          params: {
-            success:1,
+        let _picIdList='';
+        for (let i of that.imageList){
+          _picIdList+= `${i.imgId},`;
+//          for (let k of that.imageList[i.adviceId]){
+//            _picIdList+= `${k.imgId},`
+//          }
+        }
+
+        api.ajax({
+          url: XHRList.imgDelete,
+          method: "POST",
+          data: {
+            caseId:api.getPara().caseId,	    //string	是	病例id
+            idList:_picIdList.substring(0,_picIdList.length-1)	                //string	是	附件id串
           },
-          query: {
-            success:1,
-            queryType:"triage"
+          done(data){
+            if (data&&data.responseObject&&data.responseObject.responseStatus) {
+              that.pageLeaveEnsure = true;
+              that.$router.push({
+                path: "/BaseIm",
+                params: {
+                  success:1,
+                },
+                query: {
+                  success:1,
+                  queryType:"triage",
+                  triageType:"image"
+                }
+              })
+            }
           }
         })
       },
@@ -280,6 +400,7 @@
           },
           done(){
             that.uploadVideo = false;
+            that.pageLeaveEnsure = true;
             that.$router.push({
               path: "/BaseIm",
               params: {
@@ -287,13 +408,82 @@
               },
               query: {
                 success:1,
-                queryType:"triage"
+                queryType:"triage",
+                triageType:"video"
               }
             })
 
           }
         })
-      }
+      },
+      //视频上传离开confirm取消函数
+      cancelEvent() {
+        this.videoLeaveConfirm = false;
+        if (!this.videoUploading) {
+          this.pageLeaveEnsure = true;
+          this.$router.go(-1);
+        } else {
+          this.pageLeaveEnsure = false;
+        }
+      },
+      //视频上传离开confirm离开函数
+      ensureEvent() {
+        let that = this;
+        if (that.videoUploading) {
+          that.videoLeaveConfirm = false;
+          that.pageLeaveEnsure = true;
+          that.$router.go(-1);
+        } else {
+          if(that.uploadVideo){
+            return false;
+          }
+          that.submitVideo();
+        }
+      },
+      //重新上传按钮
+      againUpload(){
+        this.reloadVideoConfirm = true;
+      },
+      //重新上传confirm取消函数
+      uploadCancel() {
+        this.reloadVideoConfirm = false;
+      },
+      //重新上传confirm替换函数
+      uploadEnsure() {
+        let that = this;
+        that.reloadVideoConfirm = false;
+//        console.log(document.all);
+        console.log(document.querySelector("#uploadBtn").nextSibling.firstChild);
+        document.querySelector("#uploadBtn").nextSibling.firstChild["click"]();
+//        try{
+//          let evt = document.createEvent("Events"); //还有onchange则是HtmlEvents
+//          evt.initEvent("click",true,true);
+//          that.$refs.uploadBtn.dispatchEvent(evt);
+//        }catch(e) {
+//          alert(e);
+//        }
+      },
+      //图片离开取消按钮
+      imgCancel() {
+        let that = this;
+        that.imgLeaveConfirm = false;
+        that.pageLeaveEnsure = true;
+        that.$router.go(-1);
+//        this.leaveConfirm = false;
+//        this.pageLeaveEnsure = false;
+        console.log("取消")
+      },
+      //图片离开函数
+      imgEnsure() {
+        let that = this;
+        console.log("离开");
+        if (that.uploading) {
+          this.imgLeaveConfirm = false;
+          this.pageLeaveEnsure = false;
+        } else {
+          this.submitImage();
+        }
+      },
     },
     mounted(){
 //      if (!sessionStorage.getItem("triageRoute")) {
@@ -302,6 +492,17 @@
 //
 //      this.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
 //      this.videoUpload();
+      let that = this;
+      that.imageList = [];
+      that.videoObj={};
+      that.videoSubmitParam={};
+      if (!sessionStorage.getItem("triageRoute")) {
+        sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
+      }
+
+      that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
+      that.videoUpload();
+      api.forbidShare();
     },
     activated(){
       let that = this;
@@ -314,9 +515,11 @@
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
+      that.reloadUpload();
     },
     components: {
-      Toast
+      Toast,
+      confirm
     }
 
   }
@@ -325,6 +528,11 @@
   @import "../../../../scss/library/_common-modules";
 
   .he-videoUpHide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     $main-color: #00D6C6;
     height: 100%;
     background-color: #ffffff;
@@ -652,8 +860,16 @@
     }
   }
 
-  .ev-videoUpLoading {
+  .video-upLoad-box{
+    position: fixed;
     z-index: 5;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0);
+  }
+  .ev-videoUpLoading {
     width: rem(258px);
     height: rem(258px);
     position: fixed;

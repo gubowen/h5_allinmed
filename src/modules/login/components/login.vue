@@ -2,11 +2,11 @@
   <section class="loginBackBottom">
     <section class="tc-loginCommon" v-show="!loginRule">
       <section class="tc-loginTitle">
-        <p class="login-title">唯医骨科</p>
-        <p class="login-title">您身边的骨科专家</p>
+        <p class="login-title">唯医互联网骨科医院</p>
         <p class="login-guideText">为了给您一个更好的就医体验，请您注册后使用</p>
       </section>
-      <section class="tc-loginCenter">
+      <div data-alcode-mod='706'>
+        <section class="tc-loginCenter">
         <section class="tc-loginInputBox">
           <div class="tc-loginItem tc-loginPhone">
             <span class="tc-loginPhoneIcon" :class="{'active':phoneMessage.length>0}"></span>
@@ -18,7 +18,7 @@
             <span class="tc-loginCodeIcon" :class="{'active':codeMessage.length>0}"></span>
             <input type="number" :class="{'inputActive':codeMessage.length>0}" onpaste="return false;" placeholder="输入短信验证码" v-model="codeMessage" @blur="validateBlur('codeInput')"
                    v-validate="'required|digits:4'" @keypress="codeKeyPress()" name="codeInput">
-            <span class="tc-getCode" @click="getCodeApi" :class="{'active':getCode}">{{codeTime}}</span>
+            <span data-alcode='e120' class="tc-getCode" @click="getCodeApi" :class="{'active':getCode}">{{codeTime}}</span>
             <span class="tc-inputClearCode" @click="clearCode($event)" v-show="codeMessage.length>0"></span>
           </div>
         </section>
@@ -26,11 +26,12 @@
           <p>
             <span class="tc-ruleSelect" @click="RuleIcon=!RuleIcon" :class="{'active':RuleIcon}"></span>
             <span class="tc-ruleText" @click="RuleIcon=!RuleIcon">已同意</span>
-            <span class="tc-ruleDetail" @click="ruleClick">《唯医骨科用户服务协议》</span>
+            <span class="tc-ruleDetail" @click="ruleClick">《唯医互联网骨科医院用户服务协议》</span>
           </p>
         </section>
-        <section class="tc-submitBtn" @click="loginSubmit">进入唯医骨科</section>
+        <section data-alcode='e121' class="tc-submitBtn" @click="loginSubmit">登入</section>
       </section>
+      </div>
     </section>
 
     <transition name="fade">
@@ -160,6 +161,7 @@
           }
         });
 //        this.mobileCheck();
+        api.forbidShare();
       },
 //      beforeRouteLeave (to, from, next) {
 //        // 导航离开该组件的对应路由时调用
@@ -467,7 +469,7 @@
       height: 100%;
 
       .tc-loginTitle {
-        padding: rem(72px) 0 rem(86px) rem(64px);
+        padding: rem(94px) 0 rem(74px) rem(48px);
         .login-title {
           @include font-dpr(26px);
           color: #222222;
@@ -477,7 +479,7 @@
         .login-guideText {
           @include font-dpr(15px);
           color: #808080;
-          margin-top: rem(20px);
+          margin-top: rem(16px);
           letter-spacing: 0;
         }
       }
@@ -496,7 +498,7 @@
               background: #FBFBFB;
               border-radius: 6px;
               height: rem(34px);
-              padding: rem(24px) rem(64px) rem(32px) rem(80px);
+              padding: rem(28px) rem(64px) rem(28px) rem(80px);
               margin-bottom: rem(32px);
               border-style: none;
               @include font-dpr(17px);
@@ -558,10 +560,10 @@
               }
               input {
                 margin-bottom: 0;
-                width: rem(250px);
-                padding: rem(24px) rem(52px) rem(32px) rem(80px);
+                width: rem(277px);
+                padding: rem(28px) rem(25px) rem(28px) rem(80px);
                 &.inputActive{
-                  padding: rem(28px) rem(52px) rem(28px) rem(80px);
+                  padding: rem(28px) rem(25px) rem(28px) rem(80px);
                 }
               }
               .tc-getCode {

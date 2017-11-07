@@ -22,8 +22,8 @@
       <article class="medical-report-box" data-clientid="" @click="goToDetail">
         <header class="medical-report-title">问诊单</header>
         <section class="medical-report-content">
-          <p class="patient-info"><span>患者 : </span><span class="patient-name">{{medicalReportMessage.data.patientName}} </span><span class="patient-age">{{medicalReportMessage.data.sexName}} {{medicalReportMessage.data.age}}岁</span></p>
-          <p class="case-describe"><span>主诉 : </span><span class="case-describe-main">{{mainCase}}</span></p>
+          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName | ellipsis(8)}}&nbsp</span><span class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
+          <p class="case-describe"><span>主诉：</span><span class="case-describe-main">{{mainCase}}</span></p>
         </section>
         <footer class="medical-report-footer">查看已提交信息</footer>
       </article>
@@ -31,10 +31,11 @@
     <section class="main-message-box">
       <article class="main-message-box-item others-message">
         <figure class="main-message-img">
-          <img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">
+          <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
         </figure>
         <figcaption class="main-message-content">
-          <p>您好！分诊医生正在详细阅读您提交的资料，将在5分钟内答复，并根据情况为您推荐对症专家</p>
+          <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将尽快给您答复，并根据情况为您推荐对症专家。</p>
+          <p v-else-if="!timeSlot">您好！分诊服务时间为09：00-22：00，如有问题请留言，分诊医生上班后会为您答复。</p>
           <!--<p>①  与您沟通分析病情</p>-->
           <!--<p>②  根据病情推荐对症专家</p>-->
           <!--<p>分诊医生通常会在5分钟内回复，请您耐心等候</p>-->
@@ -60,11 +61,13 @@
   export default{
     data(){
       return{
-        mainCase:""//患者主诉详情
+        mainCase:"",//患者主诉详情
+        timeSlot:true,//是否再服务时间段
       }
     },
     mounted(){
       this.getCaseMain();
+      this.getTimeSlot();
       store.commit("setLogoUrl",this.medicalReportMessage.data)
     },
     methods:{
@@ -90,10 +93,41 @@
           }
         })
       },
+      getTimeSlot (){
+        let timeTamp = parseInt(this.medicalReportMessage.data.time.split(" ")[1].split(":")[0]);
+        if(timeTamp< 9 || timeTamp>21){
+          this.timeSlot=false;
+        }else {
+          this.timeSlot=true;
+        }
+      },
       goToDetail(){
           this.$router.push({
             name:"MedicalReportDetail",
           })
+      }
+    },
+    filters: {
+      ellipsis: function (value,len) {
+        if (!value) return ''
+        let newStr = '',
+          newLength = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value.charCodeAt(i) > 128) {
+            newLength += 2;
+          } else {
+            newLength++;
+          }
+          if (newLength <= len) {
+            newStr = newStr.concat(value[i]);
+          } else {
+            break;
+          }
+        }
+        if (newLength > len) {
+          newStr = newStr + "..."
+        }
+        return newStr;
       }
     },
     computed:{
@@ -127,27 +161,41 @@
     .medical-report-content{
       height: rem(152px);
       @include font-dpr(16px);
-      padding: rem(38px) rem(40px) rem(0px);
+      padding: rem(38px) rem(0px) rem(0px) rem(40px);
       box-sizing: border-box;
       color: #555555;
       line-height: 1;
       .patient-info{
+        span{
+          display: inline-block;
+          vertical-align: text-bottom;
+        }
+        line-height: 1.2;
         .patient-name{
           color: #333333;
+          font-weight: bold;
+          display: inline-block;
+          /*max-width: rem(160px);*/
+//          @include ellipsis();
         }
         .patient-age{
+          margin-left: rem(10px);
           @include font-dpr(14px);
         }
       }
       .case-describe{
         margin-top: rem(20px);
+        span{
+          vertical-align: middle;
+        }
         .case-describe-main{
+          font-weight: bold;
           display: inline-block;
           width: rem(520px);
           white-space:nowrap;
           overflow:hidden;
           text-overflow:ellipsis;
-          vertical-align: sub;
+          /*vertical-align: sub;*/
           line-height: 1.2;
         }
       }

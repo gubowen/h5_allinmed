@@ -61,6 +61,7 @@
     getToken: "/mcall/im/interact/v1/refreshToken/",                                                //获取token
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",                //上传图片
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",               //历史图片删除
+    updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",    //更新时间
     updateConsultState:'/mcall/customer/patient/case/v1/update/'                       //更新上传成功后状态
   };
   export default{
@@ -91,6 +92,7 @@
     },
     mounted(){
       this.getUploadList();
+      api.forbidShare();
     },
     methods: {
       getUploadList(){
@@ -196,7 +198,7 @@
           },
           done(data){
             if (data.responseObject.responseStatus) {
-              that.getUserBaseData(that.$route.params.caseId);
+              that.getUserBaseData(that.$route.params.caseId,that.$route.params.consultationId);
               that.$router.push({
                 path:"/consultHis"
               })
@@ -206,7 +208,7 @@
           }
         })
       },
-      getUserBaseData(caseId){
+      getUserBaseData(caseId,consultationId){
         const that = this;
         api.ajax({
           url: XHRList.getToken,
@@ -220,12 +222,12 @@
                 account: "0_" + caseId,
                 token: param.responseObject.responseData.token
               }
-              that.connectToNim();
+              that.connectToNim(consultationId);
             }
           }
         })
       },
-      connectToNim(){
+      connectToNim(cid){
         const that = this;
         this.nim = NIM.getInstance({
           // debug: true,
@@ -234,7 +236,7 @@
           token: that.userData.token,
           onconnect (data) {
             console.log('连接成功');
-            that.nimSendSuccess();
+            that.nimSendSuccess(cid);
           },
           onwillreconnect (obj) {
             console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
@@ -244,16 +246,41 @@
           }
         });
       },
-      nimSendSuccess(){
+      nimSendSuccess(cd){
         let that = this;
         that.nim.sendText({
           scene: 'p2p',
+          custom:JSON.stringify({
+            cType:"0",
+            cId:"0",
+            mType:"0",
+          }),
           to: "1_doctor00001",
           text: "患者已上传检查资料",
           done(error, obj) {
-            console.log( "患者已上传检查资料")
+            console.log( "患者已上传检查资料");
+            that.refreashOrderTime(cd);
           }
         });
+      },
+      refreashOrderTime (consultationId) {
+        let that = this;
+        api.ajax({
+          url: XHRList.updateCount,
+          method: "POST",
+          data: {
+            consultationId: consultationId,
+            frequency: "0",
+            frequencyType: "2",
+            consultationLevel: "1",
+            consultationState:"",
+          },
+          done(data) {
+            if (data.responseObject.responseData) {
+              console.log("更新时间成功");
+            }
+          }
+        })
       },
     },
     components: {

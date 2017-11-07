@@ -41,10 +41,11 @@
       display: inline-block;
       vertical-align: top;
       max-width: rem(510px);
-      padding: rem(20px) rem(30px);
+      padding: rem(34px) rem(36px);
+      //line-height: 1;
       margin: 0 rem(30px);
       border-radius: rem(21px);
-      @include font-dpr(15px);
+      @include font-dpr(17px);
       word-break: break-all;
       box-sizing: border-box;
 
@@ -143,7 +144,7 @@
   }
 
   .main-input-box-send {
-    @include font-dpr(15px);
+    @include font-dpr(17px);
     color: #B6B6B6;
     height: rem(50px);
     position: absolute;
@@ -368,7 +369,7 @@
 
 .time-stamp {
   @include font-dpr(12px);
-  color: #3F4249;
+  color: #aaaaaa;
   text-align: center;
   margin: rem(40px) 0;
 }

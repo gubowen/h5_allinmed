@@ -135,51 +135,51 @@ modules.searchInput = function (obj) {
                 // }
                 that.inputSearch(this);
             });
-            $("body").on("compositionstart", ".tc-searchCommInput", function (e) {
-                $("body").off("input propertychange",".tc-searchCommInput");
-            });
-            $("body").on("compositionend", ".tc-searchCommInput", function (e) {
-                // var t = this;
-                // console.log($(this).val().length)
-                // if ($(this).val().length === 0) {
-                //     $(".ev-initList").show();
-                //     $(".ev-searchList").hide();
-                //     $(".tc-search-noResult").hide();
-                // } else {
-                //     clearTimeout(that.i);
-                //     that.i = setTimeout(function () {
-                //         if ($(t).val().length === 0) {
-                //             return false;
-                //         } else {
-                //             $(".ev-initList").hide();
-                //             $(".ev-searchList").show();
-                //             that.getSearchResult(that.config.data);
-                //         }
-                //     }, 300);
-                // }
-                that.inputSearch(this);
-                $("body").on("input propertychange", ".tc-searchCommInput", function (e) {
-                    // var t = this;
-                    // console.log($(this).val().length)
-                    // if ($(this).val().length === 0) {
-                    //     $(".ev-initList").show();
-                    //     $(".ev-searchList").hide();
-                    //     $(".tc-search-noResult").hide();
-                    // } else {
-                    //     clearTimeout(that.i);
-                    //     that.i = setTimeout(function () {
-                    //         if ($(t).val().length === 0) {
-                    //             return false;
-                    //         } else {
-                    //             $(".ev-initList").hide();
-                    //             $(".ev-searchList").show();
-                    //             that.getSearchResult(that.config.data);
-                    //         }
-                    //     }, 300);
-                    // }
-                    that.inputSearch(this);
-                });
-            });
+            // $("body").off().on("compositionstart", ".tc-searchCommInput", function (e) {
+            //     $("body").off("input propertychange",".tc-searchCommInput");
+            // });
+            // $("body").off().on("compositionend", ".tc-searchCommInput", function (e) {
+            //     // var t = this;
+            //     // console.log($(this).val().length)
+            //     // if ($(this).val().length === 0) {
+            //     //     $(".ev-initList").show();
+            //     //     $(".ev-searchList").hide();
+            //     //     $(".tc-search-noResult").hide();
+            //     // } else {
+            //     //     clearTimeout(that.i);
+            //     //     that.i = setTimeout(function () {
+            //     //         if ($(t).val().length === 0) {
+            //     //             return false;
+            //     //         } else {
+            //     //             $(".ev-initList").hide();
+            //     //             $(".ev-searchList").show();
+            //     //             that.getSearchResult(that.config.data);
+            //     //         }
+            //     //     }, 300);
+            //     // }
+            //     that.inputSearch(this);
+            //     $("body").on("input propertychange", ".tc-searchCommInput", function (e) {
+            //         // var t = this;
+            //         // console.log($(this).val().length)
+            //         // if ($(this).val().length === 0) {
+            //         //     $(".ev-initList").show();
+            //         //     $(".ev-searchList").hide();
+            //         //     $(".tc-search-noResult").hide();
+            //         // } else {
+            //         //     clearTimeout(that.i);
+            //         //     that.i = setTimeout(function () {
+            //         //         if ($(t).val().length === 0) {
+            //         //             return false;
+            //         //         } else {
+            //         //             $(".ev-initList").hide();
+            //         //             $(".ev-searchList").show();
+            //         //             that.getSearchResult(that.config.data);
+            //         //         }
+            //         //     }, 300);
+            //         // }
+            //         that.inputSearch(this);
+            //     });
+            // });
         },
         //input 搜索事件
         inputSearch:function (current) {

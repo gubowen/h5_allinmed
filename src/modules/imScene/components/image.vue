@@ -16,7 +16,7 @@
         <img class="im-image" @click="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img">
-        <img src="//m.allinmed.cn/image/img00/myServices/chatting_chatting_man@2x.png" alt="">
+        <img :src="logoUrl" alt="">
       </figure>
     </article>
   </section>
@@ -35,17 +35,27 @@
       return {}
     },
     computed: {
+      logoUrl(){
+        return this.$store.state.logoUrl
+      },
       progress(){
         if (this.currentIndex===this.imageProgress.index){
-          return this.imageProgress;
+          // return this.imageProgress;
+          if (this.imageProgress.progress.includes(".")){
+            let returnObj = Object.assign(this.imageProgress,{
+              progress:`${this.imageProgress.progress.split(".")[0]}%`
+            })
+            return returnObj;
+          } else {
+            return this.imageProgress;
+          }
         }else{
-            return {
-              uploading: false,
-              progress: 0,
-              index: 0
-            }
+          return {
+            uploading: false,
+            progress: "0",
+            index: 0
+          }
         }
-
       }
     },
     mounted(){

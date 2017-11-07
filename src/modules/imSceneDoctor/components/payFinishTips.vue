@@ -1,6 +1,7 @@
 <template>
   <div>
     <p class='time-stamp'>以上为历史纪录</p>
+    
   </div>
 </template>
 <script type="text/ecmascript-6">
