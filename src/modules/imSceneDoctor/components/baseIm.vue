@@ -910,6 +910,7 @@
           done(error, file) {
             console.log('上传image' + (!error ? '成功' : '失败'));
             // show file to the user
+            console.log(file);
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',

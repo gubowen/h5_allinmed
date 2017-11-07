@@ -230,7 +230,7 @@
 
         this.nim = NIM.getInstance({
 
-          debug: true,
+//          debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
@@ -590,7 +590,7 @@
           }
         })
       },
-      // 
+      //
       refreshState() {
         const that = this;
         api.ajax({
@@ -604,7 +604,7 @@
             if (data.responseObject.responseStatus) {
               console.log("状态更新成功");
             } else {
-              console.log('状态更新失败' + data); 
+              console.log('状态更新失败' + data);
             }
           }
         })
@@ -792,6 +792,7 @@
             // show file to the user
             if (!error) {
               let msg = that.nim.sendFile({
+
                 scene: 'p2p',
                 to: that.targetData.account,
                 custom:JSON.stringify({
@@ -1121,7 +1122,7 @@
     },
     activated(){
       let that = this;
-      document.body.scrollTop = 1;    
+      document.body.scrollTop = 1;
       if (that.$route.query && that.$route.query.queryType === "triage") {
 //        that.nim.sendText({
 //          scene: 'p2p',
@@ -1202,7 +1203,7 @@
           this.lastTimeShow = false;
           this.inputBoxShow = false;
           this.consultTipsShow = true;
-          
+
         } else {
           this.lastTimeShow = true;
           this.inputBoxShow = true;

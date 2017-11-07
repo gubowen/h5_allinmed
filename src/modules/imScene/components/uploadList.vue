@@ -178,6 +178,7 @@
       }
     },
     mounted(){
+
       api.forbidShare();
     },
     activated(){
