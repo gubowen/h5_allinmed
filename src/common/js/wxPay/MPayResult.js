@@ -43,6 +43,9 @@ export default function (Obj) {
       api.ajax({
         url: XHRList.payResultUrl,
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         data: _data,
         done(data) {
           console.log("======支付结果=====", data);
