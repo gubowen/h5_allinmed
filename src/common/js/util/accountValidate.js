@@ -14,18 +14,18 @@ export default function accountValidate() {
     isValid: 1, //  string  是   1
     firstResult: 0, //  string  是 分页参数
     maxResult: 99999, //  string  是 分页参数
-    customerId: '', //  string  是 用户id
+    customerId: 0, //  string  是 用户id
   };
   //customsId获取（customerId和patientCustomerId同时存在的话取patientCustomerId）
-  if (!net.getPara().openId) {
-    if (net.getPara().patientCustomerId !== undefined) {
-      _phoneCheckParams.customerId = net.getPara().patientCustomerId.length===0?0:net.getPara().patientCustomerId;
-    } else if (net.getPara().customerId !== undefined) {
-      _phoneCheckParams.customerId = net.getPara().customerId.length===0?0:net.getPara().customerId;
-    } else {
-      _phoneCheckParams.customerId = 0;
-    }
+
+  if (net.getPara().patientCustomerId !== undefined) {
+    _phoneCheckParams.customerId = net.getPara().patientCustomerId.length === 0 ? 0 : net.getPara().patientCustomerId;
+  } else if (net.getPara().customerId !== undefined) {
+    _phoneCheckParams.customerId = net.getPara().customerId.length === 0 ? 0 : net.getPara().customerId;
+  } else {
+    _phoneCheckParams.customerId = 0;
   }
+
   if (parseInt(_phoneCheckParams.customerId) > 0) {
     return true;
   } else {
@@ -33,7 +33,8 @@ export default function accountValidate() {
       url: "/mcall/patient/customer/unite/v1/getById/",
       method: 'POST',
       data: _phoneCheckParams,
-      beforeSend: function() {},
+      beforeSend: function () {
+      },
       timeOut: 2000,
       done(data) {
         localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
