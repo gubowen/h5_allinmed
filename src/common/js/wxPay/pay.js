@@ -34,25 +34,26 @@ export default function pay(Obj) {
     //ready函数
     wxReady () {
       let _t = this;
-      if (wxStrings.checkToken()) {
-        _t.prepaidOrder({
-          token: localStorage.getItem("token"),
-          nonceStr: localStorage.getItem("nonceStr")
-        }); //生成预支付订单
-      } else {
-        wxStrings.wxGetToken({
-          callBack: function (data) {
-            if (data.data.responseStatus) {
-              op.token = data.data.responseData.token;  //token
-              op.nonceStr = data.nonceStr;              //随机数
-              _t.prepaidOrder({
-                token:op.token,
-                nonceStr:op.nonceStr
-              }); //生成预支付订单
-            }
+      wxStrings.wxGetToken({
+        callBack: function (data) {
+          if (data.data.responseStatus) {
+            op.token = data.data.responseData.token;  //token
+            op.nonceStr = data.nonceStr;              //随机数
+            _t.prepaidOrder({
+              token:op.token,
+              nonceStr:op.nonceStr
+            }); //生成预支付订单
           }
-        });
-      }
+        }
+      });
+      // if (wxStrings.checkToken()) {
+      //   _t.prepaidOrder({
+      //     token: localStorage.getItem("token"),
+      //     nonceStr: localStorage.getItem("nonceStr")
+      //   }); //生成预支付订单
+      // } else {
+      //
+      // }
     }
     //生成预支付订单
     prepaidOrder (pv) {
