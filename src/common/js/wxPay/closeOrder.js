@@ -25,24 +25,25 @@ export default function closeOrder(Obj) {
     }
     checkToken () {
       let _t = this;
-      if (strings.checkToken()) {
-        _t.closeOrderRequest({
-          _token: localStorage.getItem("token"),                    //token
-          _nonceStr: localStorage.getItem("nonceStr")               //随机数
-        });
-      } else {
-        strings.wxGetToken({
-          callBack: function (data) {
-            if (data.data.responseStatus) {
-              console.log(data);
-              _t.closeOrderRequest({
-                _token: data.data.responseData.token ? data.data.responseData.token : '',  //token
-                _nonceStr: data.nonceStr ? data.nonceStr : ''                              //随机数
-              });
-            }
+      strings.wxGetToken({
+        callBack: function (data) {
+          if (data.data.responseStatus) {
+            console.log(data);
+            _t.closeOrderRequest({
+              _token: data.data.responseData.token ? data.data.responseData.token : '',  //token
+              _nonceStr: data.nonceStr ? data.nonceStr : ''                              //随机数
+            });
           }
-        });
-      }
+        }
+      });
+      // if (strings.checkToken()) {
+      //   _t.closeOrderRequest({
+      //     _token: localStorage.getItem("token"),                    //token
+      //     _nonceStr: localStorage.getItem("nonceStr")               //随机数
+      //   });
+      // } else {
+      //
+      // }
     }
     closeOrderRequest(rv) {
       let _data = {
