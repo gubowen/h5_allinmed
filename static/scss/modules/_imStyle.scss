@@ -16,6 +16,20 @@
   padding-bottom: rem(270px);
   box-sizing: border-box;
   padding-top: 0.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  & > section{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
 }
 
 .main-message-box {
@@ -104,7 +118,7 @@
 
 //输入区
 .main-input-box {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   left: 0;

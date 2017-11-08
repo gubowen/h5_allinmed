@@ -316,8 +316,10 @@
           this.backPopupShow = false;
           this.levelShow = true;
         }
+      } else {
+        this.pageLeaveEnsure = true;
       }
-      next(this.pageLeaveEnsure)
+      next(this.pageLeaveEnsure);
     },
     methods: {
       secondClickEvent(type, scIndex, scoIndex, index, pIndex) {

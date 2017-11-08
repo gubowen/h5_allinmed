@@ -14,11 +14,11 @@ class WxCommon {
 
   // 检测是否获取过微信OpenId
   checkOpenId() {
-    if (window.location.origin !== "localhost") {
-
-
+    if (this.isWXBrowse() === "other") {
+      return true;
+    } else {
       let _openId = localStorage.getItem("openId"),
-        _checkKey = '';
+      _checkKey = '';
       if (_openId != null) {
         _checkKey = true;
       } else {
