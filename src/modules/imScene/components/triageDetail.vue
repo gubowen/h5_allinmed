@@ -373,7 +373,8 @@
                 },
                 query: {
                   success:1,
-                  queryType:"triage"
+                  queryType:"triage",
+                  triageType:"image"
                 }
               })
             }
@@ -407,7 +408,8 @@
               },
               query: {
                 success:1,
-                queryType:"triage"
+                queryType:"triage",
+                triageType:"video"
               }
             })
 
@@ -500,6 +502,7 @@
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
+      api.forbidShare();
     },
     activated(){
       let that = this;

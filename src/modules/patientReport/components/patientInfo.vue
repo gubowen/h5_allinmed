@@ -312,7 +312,8 @@
       });
       if (localStorage.getItem("PCIMLinks") !== null) {
         localStorage.removeItem("PCIMLinks");
-      }
+      };
+      api.forbidShare();
     },
     computed: {},
     filters: {},

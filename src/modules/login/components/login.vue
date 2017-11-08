@@ -161,6 +161,7 @@
           }
         });
 //        this.mobileCheck();
+        api.forbidShare();
       },
 //      beforeRouteLeave (to, from, next) {
 //        // 导航离开该组件的对应路由时调用

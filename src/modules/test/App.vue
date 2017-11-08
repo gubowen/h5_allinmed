@@ -20,7 +20,7 @@
       askH5Pay(){
         console.log("============H5支付啊===========");
          let  data={
-           caseId:'',                         //  string  是  caseId
+           caseId:'1509972059074',                         //  string  是  caseId
            patientCustomerId:'1489998682602', //	string	是	患者所属用户id
            patientId:'1491471348694',         // 	string	是	患者id
            doctorId:'1234567890123',          //	string	是	医生id
@@ -49,7 +49,10 @@
          });
       },
       viewResultH5Pay(){
-        console.log("H5支付结果查看")
+        console.log("H5支付结果查看");
+        WxPayCommon.PayResult({
+          out_trade_no:''       //微信订单号
+        });
       }
     }
   }

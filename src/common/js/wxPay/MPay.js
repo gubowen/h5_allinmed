@@ -66,6 +66,7 @@ export default function MPay(Obj) {
       api.ajax({
         url:  XHRList.prepayPth,
         method: "POST",
+
         data: _data,
         done (data) {
           console.log(data);
@@ -73,7 +74,7 @@ export default function MPay(Obj) {
             console.log(data);
             op.dataL1 = data;
             localStorage.setItem("orderNumber", data.out_trade_no);
-            this.h5AskPay(data);   //H5支付
+            _t.h5AskPay(data);   //H5支付
             //更新订单状态
             // upOrder({
             //   operationType: '1',                  //操作类型  1-生成订单  2-已支付  3-支付失败  4-取消  5-退款 6-已完成
@@ -104,7 +105,7 @@ export default function MPay(Obj) {
         _data = op.dataL1,
         _timeStamp = Math.round(new Date().getTime() / 1000) + "";
       console.log("-----pay-----");
-      //window.location.href = _data.MWEB_URL;
+      window.location.href = _data.mweb_url;
     }
     paySuccess () {
       upOrder({
@@ -169,6 +170,9 @@ export default function MPay(Obj) {
       api.ajax({
         url:  "/mcall/customer/case/consultation/v1/getMapById/",
         method: "POST",
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         data: {
           caseId: api.getPara().caseId,
           customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId"),
@@ -180,6 +184,9 @@ export default function MPay(Obj) {
             api.ajax({
               url:  "/mcall/customer/case/consultation/v1/create/",
               method: "POST",
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
               data: {
                 caseId: api.getPara().caseId,
                 customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId") ,

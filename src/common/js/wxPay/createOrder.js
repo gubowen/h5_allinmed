@@ -78,6 +78,9 @@ export default function createOrders(Obj){
       api.ajax({
         url:XHRList.createOrder,
         method: "POST",
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         data:this.createOrderData,
         done(data){
           if (data&&data.responseObject&&data.responseObject.responsePk){

@@ -164,6 +164,7 @@
       } else {
         this.backPopupShow = false;
       }
+      api.forbidShare();
     },
     computed: {
       patientBody(){   //反应数据驱动...获取人体性别年龄
