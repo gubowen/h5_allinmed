@@ -371,6 +371,15 @@
         that.IDNumber="";//证件号码
         that.formCheck=false;//表单是否全部验证通过
         that.infoErrorShow=false;//信息错误是否显示
+
+        // 选择器无法复位，先删除再重新初始化
+        console.log(document.getElementsByClassName('picker'));
+        for (let i =document.getElementsByClassName('picker').length-1; i>=0; i --) {
+          document.getElementsByTagName('body')[0].removeChild(document.getElementsByClassName('picker')[i])
+        }
+        this.relationPickerInit();//患者关系选择器初始化
+        this.credentialPickerInit();//证件类型选择器初始化
+        this.birthPickerInit();//出生日期选择器初始化
       },
       initData () {
 
