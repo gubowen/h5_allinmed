@@ -42,16 +42,21 @@ export default function (Obj) {
             "token":localStorage.getItem("token")                   //token(后台获取)
           };
       console.log(_data);
-      api.ajax({
-        url: XHRList.payResultUrl,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: _data,
-        done(data) {
-          console.log("======支付结果=====", data);
-        }
+      return new Promise(function(resolve, reject) {
+        api.ajax({
+          url: XHRList.payResultUrl,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: _data,
+          done(data) {
+            resolve(data);
+          },
+          fail(err){
+            reject(err);
+          }
+        })
       })
     }
   }
