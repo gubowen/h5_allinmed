@@ -41,6 +41,7 @@ export default function (Obj) {
             "siteId": 1,
             "token":localStorage.getItem("token")                   //token(后台获取)
           };
+      console.log(_data);
       api.ajax({
         url: XHRList.payResultUrl,
         method: 'POST',
