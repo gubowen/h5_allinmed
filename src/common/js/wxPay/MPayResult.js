@@ -22,24 +22,25 @@ export default function (Obj) {
 
     init() {
       //获取token
-      wxString.wxGetToken({
-        callBack: (data) => {
-          console.log(data);
-          this.apiData();
-        }
-      });
+      // wxString.wxGetToken({
+      //   callBack: (data) => {
+      //     console.log(data);
+      //     this.apiData(data);
+      //   }
+      // });
+      this.apiData();
     }
     //api
     apiData(){
       let _t = this,
-        _data = {
-          "out_trade_no": _t.op.out_trade_no,   //_out_trade_no
-          "scene": 1,
-          "roleId": 2,
-          "nonceStr": rv._nonceStr,            //随机数(前端生成32位随机数)
-          "siteId": 1,
-          "token": rv._token                   //token(后台获取)
-        };
+          _data = {
+            "out_trade_no": Obj.out_trade_no,   //_out_trade_no
+            "scene": 1,
+            "roleId": 2,
+            "nonceStr": localStorage.getItem("nonceStr"),            //随机数(前端生成32位随机数)
+            "siteId": 1,
+            "token":localStorage.getItem("token")                   //token(后台获取)
+          };
       api.ajax({
         url: XHRList.payResultUrl,
         method: 'POST',
@@ -50,7 +51,6 @@ export default function (Obj) {
         done(data) {
           console.log("======支付结果=====", data);
         }
-
       })
     }
   }
