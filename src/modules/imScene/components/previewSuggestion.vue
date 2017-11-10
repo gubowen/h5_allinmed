@@ -42,7 +42,7 @@
           </ul>
           <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
             <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj')">收起</span>
+            <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj',$event)">收起</span>
           </section>
         </section>
       </article>
@@ -66,7 +66,7 @@
           </ul>
           <section class="more-box" v-if="knowledgeObj.moreBoxShow">
             <span class="more-box-btn more-btn" v-show="knowledgeObj.moreData" @click.stop="moreDataShow('knowledgeObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj')">收起</span>
+            <span class="more-box-btn less-btn" v-show="!knowledgeObj.moreData" @click.stop="lessDataShow('knowledgeObj',$event)">收起</span>
           </section>
         </section>
       </article>
@@ -87,7 +87,7 @@
           </ul>
           <section class="more-box" v-if="treatmentObj.moreBoxShow">
             <span class="more-box-btn more-btn" v-show="treatmentObj.moreData" @click.stop="moreDataShow('treatmentObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj')">收起</span>
+            <span class="more-box-btn less-btn" v-show="!treatmentObj.moreData" @click.stop="lessDataShow('treatmentObj',$event)">收起</span>
           </section>
         </section>
       </article>
@@ -111,7 +111,7 @@
           </ul>
           <section class="more-box" v-if="checkSuggestObj.moreBoxShow">
             <span class="more-box-btn more-btn" v-show="checkSuggestObj.moreData" @click.stop="moreDataShow('checkSuggestObj',$event)">查看更多</span>
-            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj')">收起</span>
+            <span class="more-box-btn less-btn" v-show="!checkSuggestObj.moreData" @click.stop="lessDataShow('checkSuggestObj',$event)">收起</span>
           </section>
           <section data-alcode='e129' class="check-suggest-btn" data-role="videoTriage"
                    @click="goToUpload">
@@ -324,9 +324,10 @@
         if (that.$store.state.previewSuggestionNum === that.$store.state.renderSuggestionNum) {
           that.$nextTick(function () {
             if (!api.getPara().suggest) {
-              document.body.scrollTop = Math.pow(10, 20);
+              that.scrollToBottom();
             } else {
-              document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+              that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
+              // document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
             }
           })
         }
@@ -348,17 +349,21 @@
       moreDataShow(param,e){
         let that = this;
 
-        if (!that[param].hasPosition){
-          that[param].position = e.currentTarget.parentNode.parentNode.parentNode.offsetTop;
-          that[param].hasPosition = true;
-        }
-
+        //第一个版本的记录位置，换成better-scroll不需要了
+        // if (!that[param].hasPosition){
+        //   that[param].position = e.currentTarget.parentNode.parentNode.parentNode.offsetTop;
+        //   that[param].hasPosition = true;
+        // }
+        console.log(e);
         if (that[param].allData.length-that[param].tempData.length>that[param].pageNum) {
           that[param].tempData = that[param].allData.slice(0,that[param].pageNum+that[param].tempData.length);
         } else {
           that[param].moreData = false;
           that[param].tempData = that[param].allData;
         }
+        that.$nextTick(function () {
+          that.refreshScroll();
+        })
       },
       //去医生主页
       goDoctorHome(index){
@@ -376,12 +381,17 @@
 
       },
       //收起
-      lessDataShow(param){
+      lessDataShow(param,e){
         let that = this;
-        document.body.scrollTop = that[param].position;
+        // document.body.scrollTop = that[param].position;
         that[param].moreData = true;
         that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
+        console.log(e.srcElement.parentElement.parentElement.parentElement);
+        that.$nextTick(function () {
+          // that.refreshScroll();
+          that.scrollElement(e.srcElement.parentElement.parentElement.parentElement.parentElement)
+        })
       },
       goToUpload(){
         localStorage.removeItem("upload");
@@ -420,6 +430,18 @@
       },
       payPopupShow:{
         type:Boolean
+      },
+      scrollToBottom: {
+        type: Function,
+        default: null
+      },
+      scrollElement: {
+        type: Function,
+        default: null
+      },
+      refreshScroll: {
+        type: Function,
+        default: null
       },
     }
   }

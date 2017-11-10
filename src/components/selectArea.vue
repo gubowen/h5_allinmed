@@ -19,7 +19,7 @@
       </section>
       <section class="tc-searchContentInner ev-initList" v-show="searchResult">
         <header class="tc-searchDocArea">
-          <i class="tc-searchDocAreaLeft"></i>
+          <!-- <i class="tc-searchDocAreaLeft"></i> -->
           <span class="tc-searchAreaName">{{cityTitle}}</span>
         </header>
         <section class="searchResult" v-for="(item,pIndex) in letterAreaList">
@@ -629,7 +629,7 @@
           .tc-searchAreaName{
             @include font-dpr(13px);
             color: #909090;
-            padding-left: rem(10px);
+            // padding-left: rem(10px);
             &.tc-selectIllnessName{
               padding-left: 0;
             }
@@ -938,7 +938,7 @@
         .tc-searchAreaName {
           @include font-dpr(13px);
           color: #909090;
-          padding-left: rem(10px);
+          // padding-left: rem(10px);
           &.tc-selectIllnessName {
             padding-left: 0;
           }

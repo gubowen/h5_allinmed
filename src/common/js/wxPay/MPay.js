@@ -63,6 +63,7 @@ export default function MPay(Obj) {
         "nonceStr": pv.nonceStr,         //随机数
         "token": pv.token
       };
+      console.log(_data);
       api.ajax({
         url:  XHRList.prepayPth,
         method: "POST",

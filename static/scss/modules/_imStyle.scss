@@ -20,16 +20,18 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 1.3rem;
+  bottom: 0;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  //& > section{
-  //  position: absolute;
-  //  left: 0;
-  //  right: 0;
-  //  bottom: 0;
-  //  top: 0;
-  //}
+  & > section{
+    &.padding-top{
+      padding-top: rem(50px);
+    }
+    &.padding-bottom{
+      padding-bottom: rem(250px);
+    }  
+    padding-bottom: rem(180px)
+  }
 }
 
 .main-message-box {
