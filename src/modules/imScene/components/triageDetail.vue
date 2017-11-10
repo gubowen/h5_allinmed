@@ -16,7 +16,7 @@
           <li class="tc-imageUpLoadAdd" v-if="!uploading&&imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
-              <input class="tc-upLoadInput" type="file" accept="image/gif,image/jpeg,image/jpg,image/png"
+              <input class="tc-upLoadInput" type="file" accept="image/*"
                      @change="onFileChange(imageList[imageList.length],imageList.length,$event)">
             </a>
           </li>
