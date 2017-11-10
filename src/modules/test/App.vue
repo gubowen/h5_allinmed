@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="H-pay" @click="askH5Pay()">H5支付</p>
-    <p class="H-viewPay" @click="viewResultH5Pay()">查询支付结果</p>
+    <p class="H-viewPay" v-if="payShow" @click="payHide">支付成功</p>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -10,11 +10,14 @@
   export default{
     data(){
       return {
-
+        payShow:false
       }
     },
     mounted(){
-
+      if(localStorage.getItem("askPay") == 1){
+        this.payShow = true;
+        this.viewResultH5Pay();
+      }
     },
     methods:{
       askH5Pay(){
@@ -51,8 +54,17 @@
       viewResultH5Pay(){
         console.log("H5支付结果查看");
         WxPayCommon.PayResult({
-          out_trade_no:''       //微信订单号
-        });
+          out_trade_no:localStorage.getItem("orderNumber")       //微信订单号
+        }).then(function (data) {
+          console.log("查看回调");
+          console.log(data)
+        }).catch(function (err) {
+          console.log("望天，接口错误");
+        })
+      },
+      payHide(){
+        localStorage.removeItem('askPay');
+        this.payShow=false
       }
     }
   }
