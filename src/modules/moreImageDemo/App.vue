@@ -12,7 +12,8 @@
   export default{
       data(){
         return {
-          localIdList:[]
+          localIdList:[],
+          serverIdList:[]
         }
       },
       mounted(){
@@ -28,17 +29,24 @@
               success: function (res) {
                 that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                 console.log("选择图片成功");
-                that.uploadImages(res.localIds);
+                that.localIdList.forEach(function (value) {
+                  that.uploadImages(value);
+                })
               }
             })
         },
-        uploadImages(imageList){
+        uploadImages(imageUrl){
+          let that = this;
           wx.uploadImage({
-            localId: imageList, // 需要上传的图片的本地ID，由chooseImage接口获得
+            localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
             isShowProgressTips: 1, // 默认为1，显示进度提示
-            success: function (res) {
-              let serverIds = res.serverId; // 返回图片的服务器端ID
-              console.log(serverIds)
+            success: function (data) {
+              that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
+              console.log(that.serverIdList);
+            },
+            fail:function (err) {
+              console.log("上传失败");
+              console.log(err);
             }
           });
         }
