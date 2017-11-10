@@ -6,7 +6,7 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file" @change="onFileChange(item,0,$event)" v-show="imageList[item.adviceId].length===0">
+          <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(item,0,$event)" v-show="imageList[item.adviceId].length===0">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -20,13 +20,13 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file" @change="onFileChange(img,imgIndex,$event)" v-show="imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(img,imgIndex,$event)" v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file" @change="onFileChange(item,imageList[item.adviceId].length,$event)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(item,imageList[item.adviceId].length,$event)"/>
               </span>
             </a>
           </li>

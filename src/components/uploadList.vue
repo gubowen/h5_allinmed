@@ -7,7 +7,7 @@
                 :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+          <input class="ev-upLoadInput" accept="image/*" type="file"
                  @change="onFileChange(item,0,$event)" v-show="imageList[item.adviceId].length===0">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
@@ -24,7 +24,7 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+              <input class="ev-upLoadInput" accept="image/*" type="file"
                      @change="onFileChange(img,imgIndex,$event)"
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
@@ -33,7 +33,7 @@
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput"
-                       accept="image/gif,image/jpeg,image/jpg,image/png"
+                       accept="image/*"
                        type="file"
                        @change="onFileChange(item,imageList[item.adviceId].length,$event)"/>
               </span>

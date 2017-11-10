@@ -41,12 +41,12 @@
                     <loading v-if="item.uploading"></loading>
                     <figure class="upload-fail" v-if="item.fail">
                       <p>重新上传</p>
-                      <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+                      <input class="ev-upLoadInput" accept="image/*" type="file"
                              @change="onFileChange($event,1,index)">
                     </figure>
                   </li>
                   <li class="ev-upLoadAdd" v-if="uploading1===false&&imageList1.length<9">
-                    <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+                    <input class="ev-upLoadInput" accept="image/*" type="file"
                            @change="onFileChange($event,1)">
                   </li>
                 </ul>
@@ -63,12 +63,12 @@
                     <loading v-if="item.uploading"></loading>
                     <figure class="upload-fail" v-if="item.fail">
                       <p>重新上传</p>
-                      <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+                      <input class="ev-upLoadInput" accept="image/*" type="file"
                              @change="onFileChange($event,2,index)">
                     </figure>
                   </li>
                   <li class="ev-upLoadAdd" v-if="uploading2===false&&imageList2.length<9">
-                    <input class="ev-upLoadInput" accept="image/gif,image/jpeg,image/jpg,image/png" type="file"
+                    <input class="ev-upLoadInput" accept="image/*" type="file"
                            @change="onFileChange($event,2)">
                   </li>
                 </ul>
