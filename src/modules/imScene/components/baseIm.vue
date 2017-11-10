@@ -1,6 +1,6 @@
 <template>
   <section class="main-inner ev-fileUpHide">
-    <section class="main-message">
+    <section class="main-message" ref="wrapper">
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
@@ -173,6 +173,8 @@
 
   import WxPayCommon from 'common/js/wxPay/wxComm';
   import nimEnv from 'common/js/nimEnv/nimEnv';
+
+  import BScroll from "better-scroll";
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -820,7 +822,10 @@
       scrollToBottom(){
         setTimeout(() => {
           //滑动到底部
-          document.body.scrollTop = Math.pow(10, 20);
+          let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
+          let el=list[list.length-1];
+          this.scroll.scrollToElement(el,1000);
+//          document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
       //输入框字数限制
@@ -1061,6 +1066,18 @@
             }, 500)
           }
         }
+      },
+      initScroll(){
+        if (!this.$refs.wrapper) {
+          return;
+        }
+          this.scroll=new BScroll(this.$refs.wrapper,{
+            probeType:1,
+            click:true
+          })
+      },
+      refreshScroll(){
+        this.scroll && this.scroll.refresh();
       }
     },
     computed: {
@@ -1111,6 +1128,9 @@
 //      }).catch(function () {
 //        console.log("页面加载失败");
 //      })
+      setTimeout(()=>{
+        this.initScroll();
+      },20)
     },
     //组件更新之前的生命钩子
     beforeUpdate(){
@@ -1188,6 +1208,11 @@
       });
     },
     watch: {
+      msgList(){
+        setTimeout(()=>{
+          this.refreshScroll();
+        },20)
+      },
       //监听上传完成，可以继续上传；
       progess :function (newVal,oldVal) {
         if (newVal == "0%" || newVal =="100%"){
