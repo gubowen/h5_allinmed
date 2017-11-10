@@ -1,9 +1,9 @@
 <template>
   <div style="width: 100%;height: 100%;">
     <ul class="uploadImgBox">
-      <!--<li v-for="item in localIdList"><img :src="item.url"></li>-->
+      <li v-for="item in localIdList"><img :src="item"></li>
     </ul>
-    <button class="uploadImgBtn" @click="uploadImgs">点击我上传图片</button>
+    <button class="uploadImgBtn" @click="chooseImages">点击我上传图片</button>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -19,17 +19,28 @@
         api.forbidShare();
       },
       methods:{
-        uploadImgs(){
+        chooseImages(){
+          let that = this;
           wx.chooseImage({
               count: 9, // 默认9
               sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
               sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
               success: function (res) {
-                let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                console.log(localIds);
+                that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                 console.log("选择图片成功");
+                that.uploadImages(res.localIds);
               }
             })
+        },
+        uploadImages(imageList){
+          wx.uploadImage({
+            localId: imageList, // 需要上传的图片的本地ID，由chooseImage接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+              let serverIds = res.serverId; // 返回图片的服务器端ID
+              console.log(serverIds)
+            }
+          });
         }
       }
   }
