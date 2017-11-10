@@ -13,23 +13,23 @@
   //width: 100%;
   //height: 100%;
   //overflow: auto;
-  padding-bottom: rem(270px);
+  //padding-bottom: rem(270px);
   box-sizing: border-box;
-  padding-top: 0.5rem;
+  //padding-top: 0.5rem;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 1.3rem;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  & > section{
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-  }
+  //& > section{
+  //  position: absolute;
+  //  left: 0;
+  //  right: 0;
+  //  bottom: 0;
+  //  top: 0;
+  //}
 }
 
 .main-message-box {
