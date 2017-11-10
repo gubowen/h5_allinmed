@@ -7,7 +7,7 @@
           <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">09: 00-22: 00</span></p>
         </article>
       </transition>
-      <transition-group name="fadeDown" tag="section">
+      <transition-group name="fadeDown" tag="section" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
           <!--时间戳-->
           <p class='time-stamp'
@@ -30,6 +30,9 @@
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='previewSuggestion'"
             :previewSuggestionMessage="JSON.parse(msg.content)"
             :payPopupShow.sync="payPopupShow"
+            :scrollToBottom="scrollToBottom"
+            :scrollElement='scrollElement'
+            :refreshScroll='refreshScroll'
           >
           </PreviewSuggestion>
           <!--支付成功-->
@@ -265,10 +268,10 @@
           //收到消息的回调, 会传入消息对象
           onmsg (msg) {
             if (msg.from === that.targetData.account) {
-              that.scrollToBottom();
               console.log("收到回复消息："+JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
+              that.scrollToBottom();
               that.getCId(msg);
             }
           }
@@ -340,87 +343,13 @@
             console.log("dom更新前");
             console.log(obj);
             that.getTimeStampShowList();
-            //循环消息列表，处理需求
-            that.loopMessage();
             //需要更改的定位
             that.$nextTick(function(){
-//              console.log("dom更新完成")
-////              debugger;
-//              if (api.getPara().suggest) {
-//                console.log("有推荐医生");
-//                function callBack () {
-//                  if (that.firstIn) {
-//                    document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
-//                    that.firstIn = false;
-//                  } else {
-//                    return false;
-//                  }
-//                }
-//                let MutationObserver = window.MutationObserver ||
-//                  window.WebKitMutationObserver ||
-//                  window.MozMutationObserver;
-//                if (MutationObserver) {
-//                  let mo = new MutationObserver(callBack);
-//                  let option = {
-//                    'childList': true,
-//                    'subtree': true
-//                  };
-//
-//                  mo.observe(document.body, option);
-//                } else {
-//                  setTimeout(function () {
-//                    callBack();
-//                  },2000);
-//                }
-////                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
-////                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
-//              } else{
-//                console.log("无推荐医生")
-//                function callBackBottom () {
-////                  debugger;
-//                  if (that.firstIn) {
-//                    document.body.scrollTop = Math.pow(10, 20);
-//                    that.firstIn = false;
-//                  } else {
-//                    return false;
-//                  }
-//                }
-//                let MutationObserver = window.MutationObserver ||
-//                  window.WebKitMutationObserver ||
-//                  window.MozMutationObserver;
-//                if (MutationObserver) {
-//                  let mo = new MutationObserver(callBackBottom);
-//                  let option = {
-//                    'childList': true,
-//                    'subtree': true
-//                  };
-//
-//                  mo.observe(document.body, option);
-//                } else {
-//                  setTimeout(function () {
-//                    callBackBottom();
-//                  },2000);
-//                }
-////                document.body.scrollTop = Math.pow(10, 20);
-//              }
+              //循环消息列表，处理需求
+              that.loopMessage();
               that.getImageList();
               //渲染完毕
             });
-//            setTimeout(() => {
-////              console.log(that.$el.querySelector(".main-message"));
-//              if (api.getPara().suggest && that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]) {
-////                alert(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length].offsetTop);
-//                document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
-////                console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
-//              } else{
-//                document.body.scrollTop = Math.pow(10, 20);
-//              }
-//              that.getImageList();
-//              //判断消息列表里面是否有问诊单，没有的话发送一条
-////              if (!that.$refs.medicalReport) {
-////                that.getMedicalMessage();
-////              }
-//            }, 600);
           },
           limit: 100,//本次查询的消息数量限制, 最多100条, 默认100条
         });
@@ -453,8 +382,9 @@
             store.commit("addPreviewSuggestionNum");
           }
         }
-        //如果没有初诊建议，直接定位到底部
-        that.$store.state.previewSuggestionNum || that.scrollToBottom();
+          // debugger;
+          //如果没有初诊建议，直接定位到底部
+          that.$store.state.previewSuggestionNum || that.scrollToBottom();
         if (medicalFlag){
           that.getMedicalMessage();
         }else {
@@ -698,6 +628,7 @@
         this.sendTextContent = "";
         if (!error) {
           this.msgList.push(msg);
+          this.scrollToBottom();
         } else {
           //消息发送失败的处理
           that.sendErrorTips(msg);
@@ -819,17 +750,29 @@
         });
       },
       //滑动到底部
-      scrollToBottom(){
+      scrollToBottom(element){
+        let that = this;
         setTimeout(() => {
-          //滑动到底部
-          let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
-          let el=list[list.length-1];
-          this.scroll.scrollToElement(el,1000);
+          // 滑动到底部
+          that.refreshScroll();
+          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+          console.log(heightflag);
+          that.scroll.scrollTo(0,-heightflag,500);
+          
+          //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
+          //   let el=list[list.length-1];
+          // this.scroll.scrollToElement(el,1000);
 //          document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
+      //滑动到某个元素
+      scrollElement(element){
+        let that = this;
+        that.refreshScroll();
+        this.scroll.scrollToElement(element,1000);
+      },
       //输入框字数限制
-      inputLimit(){
+      inputLimit () {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000){
           this.sendTextContent=api.getStrByteLen(content);
@@ -1143,6 +1086,7 @@
     activated(){
       let that = this;
       document.body.scrollTop = 1;
+      that.refreshScroll();
       if (that.$route.query && that.$route.query.queryType === "triage") {
 //        that.nim.sendText({
 //          scene: 'p2p',
@@ -1208,10 +1152,13 @@
       });
     },
     watch: {
-      msgList(){
+      msgList: {
+        handler(newValue, oldValue) {
         setTimeout(()=>{
           this.refreshScroll();
         },20)
+　　　　},
+　　　　deep: true
       },
       //监听上传完成，可以继续上传；
       progess :function (newVal,oldVal) {
