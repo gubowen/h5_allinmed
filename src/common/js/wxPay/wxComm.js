@@ -39,7 +39,7 @@ class WxPayCommon {
   }
   //查询支付结果 (for H5 m站支付)
   PayResult(Obj){
-    MPayResult(Obj);
+    return MPayResult(Obj);
   }
 }
 export default new WxPayCommon();
