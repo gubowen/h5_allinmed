@@ -1,6 +1,8 @@
 <template>
   <div style="width: 100%;height: 100%;">
-    <ul class="uploadImgBox"></ul>
+    <ul class="uploadImgBox">
+      <!--<li v-for="item in localIdList"><img :src="item.url"></li>-->
+    </ul>
     <button class="uploadImgBtn" @click="uploadImgs">点击我上传图片</button>
   </div>
 </template>
@@ -10,7 +12,7 @@
   export default{
       data(){
         return {
-
+          localIdList:[]
         }
       },
       mounted(){
@@ -24,6 +26,7 @@
               sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
               success: function (res) {
                 let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                console.log(localIds);
                 console.log("选择图片成功");
               }
             })
@@ -34,9 +37,20 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../scss/base";
   .uploadImgBox{
-    height:rem(500px);
+    li{
+      float:left;
+      width:30%;
+      height:rem(250px);
+      margin: rem(20px) 1.5%;
+      img{
+        width:100%;
+        height:100%;
+        display:block;
+      }
+    }
   }
   .uploadImgBtn{
+    margin-top:rem(100px);
     width:100%;
     height:rem(250px);
     display:block;
