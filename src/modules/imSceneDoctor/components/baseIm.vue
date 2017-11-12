@@ -1,7 +1,7 @@
 <template>
   <div data-alcode-mod='720' style="box-shadow: none">
-    <section class="main-inner ev-fileUpHide">
-      <section class="main-message" ref="messageBox" :class="{'bottom-tips-padding':bottomTipsShow}">
+    <section class="main-inner">
+      <section class="main-message" ref="wrapper" :class="{'bottom-tips-padding':bottomTipsShow}">
         <transition name="fadeDown">
           <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
             <article>
@@ -111,13 +111,15 @@
           </section>
           <section class="main-input-box-plus">
             <i class="icon-im-plus"></i>
-            <input v-if="inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
+            <input v-if="inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                   accept="image/*">
           </section>
           <figure class="main-input-box-textarea-inner">
-          <textarea class="main-input-box-textarea" rows="1" v-model="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom" @input="inputLimit"></textarea>
+            <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
+                      @click="scrollToBottom" @input="inputLimit" @keyup.enter="sendMessage"></textarea>
+            <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
           </figure>
-          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
+
 
         </footer>
       </transition>
@@ -165,7 +167,7 @@
   import WxPayCommon from 'common/js/wxPay/wxComm';
   import nimEnv from 'common/js/nimEnv/nimEnv';
   import scrollPosition from "../api/scrollPosition";
-
+  import BScroll from "better-scroll";
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -189,7 +191,7 @@
           progress: 0,
           index: 0
         },
-        inputFlag:true,//上传图片input控制
+        inputFlag: true,//上传图片input控制
         loading: true,
         payPopupShow: false,
         shuntCustomerId: "",
@@ -224,7 +226,7 @@
       connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
-           debug: true,
+//           debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
@@ -297,7 +299,7 @@
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
-                this.payPopupShow=false;
+                this.payPopupShow = false;
                 break;
               case 3://医生主动拒绝
                 this.lastTimeShow = false;
@@ -438,7 +440,7 @@
                   if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
                     scrollPosition(that.$refs.outpatientInvite);
                   } else {
-                    document.body.scrollTop = Math.pow(10, 10);
+                    that.scrollToBottom();
                   }
                   that.getImageList();
                   that.loading = false;
@@ -572,13 +574,13 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
-          custom:JSON.stringify({
-            cType:"1",
-            cId:api.getPara().doctorCustomerId,
-            mType:"27",
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "27",
           }),
           content: JSON.stringify(data),
-          isPushable:false,
+          isPushable: false,
           // needPushNick: false,
           // pushContent: `患者<${nickName}>向您问诊，点击查看详情`,
           // pushPayload: JSON.stringify({
@@ -655,10 +657,10 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: this.targetData.account,
-          custom:JSON.stringify({
-            cType:"1",
-            cId:api.getPara().doctorCustomerId,
-            mType:"21",
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "21",
           }),
           content: JSON.stringify({
             type: "notification",
@@ -785,10 +787,10 @@
         const that = this;
         this.nim.sendText({
           scene: 'p2p',
-          custom:JSON.stringify({
-            cType:"1",
-            cId:api.getPara().doctorCustomerId,
-            mType:"0",
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "0",
           }),
           to: this.targetData.account,
           text: sendTextTemp,
@@ -803,6 +805,7 @@
             that.sendMessageSuccess(error, obj);
           }
         });
+        this.$refs.inputTextarea.focus();
       },
       sendMessageSuccess(error, msg) {
         this.getTimeStampShowList(msg);
@@ -813,9 +816,7 @@
         } else {
 //          this.sendErrorTips(msg);
         }
-        setTimeout(() => {
-          document.body.scrollTop = Math.pow(10, 10);
-        }, 20)
+        this.scrollToBottom();
       },
 
       transformTimeStamp(time) {
@@ -914,10 +915,10 @@
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: 'p2p',
-                custom:JSON.stringify({
-                  cType:"1",
-                  cId:api.getPara().doctorCustomerId,
-                  mType:"1",
+                custom: JSON.stringify({
+                  cType: "1",
+                  cId: api.getPara().doctorCustomerId,
+                  mType: "1",
                 }),
                 to: that.targetData.account,
                 file: file,
@@ -944,8 +945,20 @@
         });
       },
       scrollToBottom() {
+        let that = this;
         setTimeout(() => {
-          document.documentElement.scrollTop = Math.pow(10, 20);
+          // 滑动到底部
+          that.refreshScroll();
+          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+          console.log(heightflag);
+          if (heightflag>=0){
+            that.scroll.scrollTo(0, -heightflag, 500);
+          }
+
+          //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
+          //   let el=list[list.length-1];
+          // this.scroll.scrollToElement(el,1000);
+          document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
       inputLimit() {
@@ -999,10 +1012,10 @@
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
                 that.sendPayFinish(count);
-                setTimeout(()=>{
+                setTimeout(() => {
                   that.lastTimeShow = true;
-                  that.receiveTreatmentStatus=true;
-                },200)
+                  that.receiveTreatmentStatus = true;
+                }, 200)
 
 //                console.log(count.orderFrequency);
               }
@@ -1036,10 +1049,10 @@
                   that.nim.sendText({
                     scene: 'p2p',
                     to: "1_doctor00001",
-                    custom:JSON.stringify({
-                      cType:"1",
-                      cId:api.getPara().doctorCustomerId,
-                      mType:"0",
+                    custom: JSON.stringify({
+                      cType: "1",
+                      cId: api.getPara().doctorCustomerId,
+                      mType: "0",
                     }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
@@ -1060,19 +1073,19 @@
         }
       },
       resetLogoUrl(){
-        if (!this.$store.state.logoUrl){
+        if (!this.$store.state.logoUrl) {
           this.getPatientBase();
         }
       },
       sendPayFinish(args) {
         const that = this;
-        let count="",userData="";
-        if (args.nick){
-            userData=args;
-            count= JSON.parse(localStorage.getItem("sendTips"));
-        }else{
-            count=args;
-            userData=this.userData;
+        let count = "", userData = "";
+        if (args.nick) {
+          userData = args;
+          count = JSON.parse(localStorage.getItem("sendTips"));
+        } else {
+          count = args;
+          userData = this.userData;
         }
 
         let desc = "",
@@ -1110,10 +1123,10 @@
         localStorage.removeItem("sendTips");
         this.nim.sendCustomMsg({
           scene: 'p2p',
-          custom:JSON.stringify({
-            cType:"1",
-            cId:api.getPara().doctorCustomerId,
-            mType:"33",
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "33",
           }),
           to: that.targetData.account,
           needPushNick: false,
@@ -1140,6 +1153,18 @@
           }
         });
 
+      },
+      initScroll(){
+        if (!this.$refs.wrapper) {
+          return;
+        }
+        this.scroll = new BScroll(this.$refs.wrapper, {
+          probeType: 1,
+          click: true
+        })
+      },
+      refreshScroll(){
+        this.scroll && this.scroll.refresh();
       }
     },
     computed: {
@@ -1170,22 +1195,33 @@
     },
     mounted() {
       this.getUserBaseData();
-      if (api.getPara().from==="im"){
-          return ;
-      }else{
+      if (api.getPara().from === "im") {
+        return;
+      } else {
         localStorage.setItem("APPIMLinks", location.href);
         localStorage.setItem("PCIMLinks", location.href);
       }
       this.resetLogoUrl();
       api.forbidShare();
+      setTimeout(() => {
+        this.initScroll();
+      }, 20)
     },
     activated() {
       this.scrollToBottom();
     },
     watch: {
+      msgList: {
+        handler(newValue, oldValue) {
+          setTimeout(() => {
+            this.refreshScroll();
+          }, 20)
+        },
+        deep: true
+      },
       //监听上传完成，可以继续上传；
-      progess :function (newVal,oldVal) {
-        if (newVal == "0%" || newVal =="100%"){
+      progess (newVal, oldVal) {
+        if (newVal == "0%" || newVal == "100%") {
           this.inputFlag = true;
         }
       },
