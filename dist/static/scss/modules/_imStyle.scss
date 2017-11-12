@@ -6,7 +6,9 @@
 *
 * Created by qiangkailiang on 2017/3/1
 */
-
+.main-inner{
+  overflow: hidden;
+}
 //聊天区
 .main-message {
   background-color: #f4f5f7;
@@ -16,20 +18,21 @@
   //padding-bottom: rem(270px);
   box-sizing: border-box;
   //padding-top: 0.5rem;
-  position: absolute;
+  //position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  overflow: scroll;
+  bottom: 1.3rem;
+  overflow: hidden;
+  height: 92%;
   -webkit-overflow-scrolling: touch;
   & > section{
-    &.padding-top{
-      padding-top: rem(50px);
-    }
-    &.padding-bottom{
-      padding-bottom: rem(250px);
-    }  
+    //&.padding-top{
+    //  padding-top: rem(50px);
+    //}
+    //&.padding-bottom{
+    //  padding-bottom: rem(250px);
+    //}
     padding-bottom: rem(180px)
   }
 }
@@ -120,7 +123,7 @@
 
 //输入区
 .main-input-box {
-  position: absolute;
+  position: relative;
   bottom: 0;
   right: 0;
   left: 0;
@@ -162,11 +165,12 @@
   .main-input-box-send {
     @include font-dpr(17px);
     color: #B6B6B6;
-    height: rem(50px);
     position: absolute;
     right: rem(40px);
     top: 50%;
-    margin-top: rem(-25px);
+    margin-top: rem(-37.5px);
+    line-height:rem(75px);
+    height: 1.3rem;
     &.on {
       color: #00D6C6;
     }

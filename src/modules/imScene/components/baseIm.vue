@@ -4,10 +4,12 @@
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">09: 00-22: 00</span></p>
+          <p class="service-time"><span class="service-time-top">服务时间</span><span class="service-time-bottom">09: 00-22: 00</span>
+          </p>
         </article>
       </transition>
-      <transition-group name="fadeDown" tag="section" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
+      <transition-group name="fadeDown" tag="section"
+                        :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
           <!--时间戳-->
           <p class='time-stamp'
@@ -64,7 +66,7 @@
           </ImageContent>
           <!--上传视诊-->
           <section class="main-message-box"
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
+                   v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
           >
             <article
               class="main-message-box-item my-message"
@@ -83,7 +85,7 @@
           </section>
           <!--上传检查检验-->
           <section class="main-message-box"
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
+                   v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'checkSuggestSendTips'"
           >
             <article
               class="main-message-box-item my-message"
@@ -116,34 +118,36 @@
         </section>
         <!--继续问诊去购买时间-->
         <div data-alcode-mod='717' :key="0">
-          <section class="main-message-box grey-tips" v-if="consultTipsShow"  :key="0">
-          <figcaption data-alcode='e130' class="first-message" @click="getConsultPrice()">
-            <p>分诊服务已结束，如需帮助，请选择</p>
-            <p class="go-consult"><span>继续问诊</span></p>
-          </figcaption>
-        </section>
+          <section class="main-message-box grey-tips" v-if="consultTipsShow" :key="0">
+            <figcaption data-alcode='e130' class="first-message" @click="getConsultPrice()">
+              <p>分诊服务已结束，如需帮助，请选择</p>
+              <p class="go-consult"><span>继续问诊</span></p>
+            </figcaption>
+          </section>
         </div>
       </transition-group>
     </section>
+    <!--支付弹层-->
+    <payPopup @paySuccess="toUpLoadTimes"
+              :payPopupShow.sync="payPopupShow"
+              :payPopupParams="payPopupDate"
+              v-if="payPopupShow">
+    </payPopup>
     <transition name="fadeUp">
       <footer class="main-input-box" v-if="inputBoxShow">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" v-if="inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"  accept="image/*" >
+          <input type="file" v-if="inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                 accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom" @input="inputLimit"></textarea>
+                    @click="scrollToBottom" @input="inputLimit" @keyup.enter="sendMessage"></textarea>
+          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
         </figure>
-        <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
+
       </footer>
     </transition>
-    <!--支付弹层-->
-    <payPopup @paySuccess="toUpLoadTimes"
-              :payPopupShow.sync="payPopupShow"
-              :payPopupParams = "payPopupDate"
-              v-if="payPopupShow">
-    </payPopup>
     <loading :show="finish"></loading>
   </section>
 
@@ -188,8 +192,8 @@
     time: "/mcall/customer/case/consultation/v1/getConsultationFrequency/",
     refresh: "/mcall/customer/case/consultation/v1/update/",
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/",
-    getPrice:'/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
-    updateShunt:'/mcall/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
+    getPrice: '/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
+    updateShunt: '/mcall/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
   };
   export default{
     data(){
@@ -200,7 +204,7 @@
           progress: "0%",
           index: 0
         },
-        inputFlag:true,//上传图片input控制
+        inputFlag: true,//上传图片input控制
 //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
         consultationId: "",
@@ -210,21 +214,21 @@
         finish: true,
         lastTimeShow: false,//顶部时间的提示和输入框是否展示
         inputBoxShow: false,//底部是否显示
-        consultTipsShow:false,//购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
+        consultTipsShow: false,//购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
         msgList: [],//消息列表
         //用户数据
         userData: {
           account: "",
           token: ""
         },
-        payPopupShow:false,//支付弹窗是否显示
-        isClick:false,//立即咨询按钮是否点击
+        payPopupShow: false,//支付弹窗是否显示
+        isClick: false,//立即咨询按钮是否点击
         //聊天目标数据
         targetData: {
           account: "1_doctor00001"
         },
         sendTextContent: "",//文本消息
-        cId:'0',//聊天消息拓展字段的customerId
+        cId: '0',//聊天消息拓展字段的customerId
       }
     },
 
@@ -235,7 +239,7 @@
 
         this.nim = NIM.getInstance({
 
-          debug: true,
+//          debug: true,
           appKey: nimEnv(),
           account: this.userData.account,
           token: this.userData.token,
@@ -258,6 +262,10 @@
           onerror: this.onError,
           onroamingmsgs(obj) {
             console.log("漫游消息...");
+            console.log(obj)
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
+            });
           },
           onofflinemsgs (obj) {
             console.log("离线消息...");
@@ -268,7 +276,7 @@
           //收到消息的回调, 会传入消息对象
           onmsg (msg) {
             if (msg.from === that.targetData.account) {
-              console.log("收到回复消息："+JSON.stringify(msg));
+              console.log("收到回复消息：" + JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
               that.scrollToBottom();
@@ -282,14 +290,14 @@
       getCId(msg){
         const that = this;
         console.log(!!msg.custom);
-        if (!!msg.custom){
-          that.cId =  JSON.parse(msg.custom).cId;
+        if (!!msg.custom) {
+          that.cId = JSON.parse(msg.custom).cId;
         }
       },
       //收到检查检验隐藏顶部框；
       pauseTime(msg){
         let that = this;
-        if (msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion') {
+        if (msg.type === 'custom' && JSON.parse(msg.content).type === 'checkSuggestion') {
           that.lastTimeShow = false;//顶部时间取消
           store.commit("stopLastTimeCount");//时间计时取消
         }
@@ -310,7 +318,7 @@
           method: "POST",
           data: {
             accid: "0_" + api.getPara().caseId,
-            patientName:api.getPara().patientId,
+            patientName: api.getPara().patientId,
           },
           beforeSend: function () {
             this.finish = false;
@@ -344,7 +352,7 @@
             console.log(obj);
             that.getTimeStampShowList();
             //需要更改的定位
-            that.$nextTick(function(){
+            that.$nextTick(function () {
               //循环消息列表，处理需求
               that.loopMessage();
               that.getImageList();
@@ -357,10 +365,10 @@
       //判断消息列表里面是否有结束问诊，没有的话发送一条
       hasMiddleTips () {
         let that = this;
-        let msg = that.msgList[that.msgList.length-1];
+        let msg = that.msgList[that.msgList.length - 1];
 //        debugger;
         if (msg) {
-          if ((msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5) || !that.consultTipsShow){
+          if ((msg.type === 'custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType === 5) || !that.consultTipsShow) {
             return true;
           } else {
             that.sendConsultState(5);
@@ -371,23 +379,23 @@
       loopMessage(){
         let that = this;
         let medicalFlag = true;//是否有问诊单；
-        for (let i=0;i<that.msgList.length;i++){
+        for (let i = 0; i < that.msgList.length; i++) {
 //          console.log(i);
           //判断消息列表里面是否有问诊单，没有的话发送一条
-          if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='medicalReport'){
+          if (that.msgList[i].type === 'custom' && JSON.parse(that.msgList[i].content).type === 'medicalReport') {
             medicalFlag = false;
           }
           //判断消息列表里面有几条初诊建议，记录在vuex中
-          if (that.msgList[i].type==='custom' && JSON.parse(that.msgList[i].content).type==='previewSuggestion'){
+          if (that.msgList[i].type === 'custom' && JSON.parse(that.msgList[i].content).type === 'previewSuggestion') {
             store.commit("addPreviewSuggestionNum");
           }
         }
-          // debugger;
-          //如果没有初诊建议，直接定位到底部
-          that.$store.state.previewSuggestionNum || that.scrollToBottom();
-        if (medicalFlag){
+        // debugger;
+        //如果没有初诊建议，直接定位到底部
+        that.$store.state.previewSuggestionNum || that.scrollToBottom();
+        if (medicalFlag) {
           that.getMedicalMessage();
-        }else {
+        } else {
           //判断消息列表里面是否有结束问诊，没有的话发送一条
           that.hasMiddleTips();
         }
@@ -435,10 +443,10 @@
         const that = this;
         this.nim.sendCustomMsg({
           scene: 'p2p',
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"27",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "27",
           }),
           to: this.targetData.account,
           content: JSON.stringify(data),
@@ -450,10 +458,10 @@
         //分诊台刷新患者
         this.nim.sendCustomMsg({
           scene: 'p2p',
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"32",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "32",
           }),
           to: this.targetData.account,
           content: JSON.stringify({
@@ -571,7 +579,7 @@
 //                that.consultTipsShow = true;
 //              } else {
               //  time = 100000;
-              if (dataList.consultationState === -2){
+              if (dataList.consultationState === -2) {
                 that.lastTimeShow = false;
                 that.inputBoxShow = true;
                 that.consultTipsShow = false;
@@ -588,7 +596,7 @@
                   that.consultTipsShow = true;
                 }
               }
-              if ((dataList.consultationState == 0 || dataList.consultationState == 4 ||dataList.consultationState == 5) && time <= 0) {
+              if ((dataList.consultationState == 0 || dataList.consultationState == 4 || dataList.consultationState == 5) && time <= 0) {
                 that.refreshState();
               }
             }
@@ -610,16 +618,18 @@
           scene: 'p2p',
           to: this.targetData.account,
           text: sendTextTemp,
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"0",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "0",
           }),
           done(error, obj) {
             console.log(obj)
             that.sendMessageSuccess(error, obj);
+
           }
         });
+        this.$refs.inputTextarea.focus();
       },
       //消息发送之后成功还是失败的函数
       sendMessageSuccess(error, msg){
@@ -635,7 +645,9 @@
         }
         setTimeout(() => {
           document.body.scrollTop = Math.pow(10, 20);
-        }, 20)
+        }, 20);
+
+
       },
       //聊天记录时间戳处理
       transformTimeStamp(time){
@@ -728,15 +740,15 @@
 
                 scene: 'p2p',
                 to: that.targetData.account,
-                custom:JSON.stringify({
-                  cType:"0",
-                  cId:that.cId,
-                  mType:"1",
+                custom: JSON.stringify({
+                  cType: "0",
+                  cId: that.cId,
+                  mType: "1",
                 }),
                 file: file,
                 done(error, msg){
                   that.msgList[that.msgList.length - 1] = msg;
-                  that.imageList.push(that.$refs.bigImg[that.$refs.bigImg.length-1].imageMessage.file.url);
+                  that.imageList.push(that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage.file.url);
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
@@ -757,50 +769,52 @@
           that.refreshScroll();
           let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
           console.log(heightflag);
-          that.scroll.scrollTo(0,-heightflag,500);
-          
+          if (heightflag>=0){
+            that.scroll.scrollTo(0, -heightflag, 500);
+          }
+
           //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
           //   let el=list[list.length-1];
           // this.scroll.scrollToElement(el,1000);
-//          document.body.scrollTop = Math.pow(10, 20);
+          document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
       //滑动到某个元素
       scrollElement(element){
         let that = this;
         that.refreshScroll();
-        this.scroll.scrollToElement(element,1000);
+        this.scroll.scrollToElement(element, 1000);
       },
       //输入框字数限制
       inputLimit () {
         let content = this.sendTextContent;
-        if (api.getByteLen(content) > 1000){
-          this.sendTextContent=api.getStrByteLen(content);
+        if (api.getByteLen(content) > 1000) {
+          this.sendTextContent = api.getStrByteLen(content);
         }
       },
       //获取咨询价格
       getConsultPrice(){
         const that = this;
-        if (that.isClick){
+        if (that.isClick) {
           return false;
         }
-        that.isClick=true;
+        that.isClick = true;
         that.finish = false;
         console.log("获取价格")
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
           data: {
-            visitSiteId:17,	//string	是	站点
-            maxResult:999,
-            id:0,
+            visitSiteId: 17,	//string	是	站点
+            maxResult: 999,
+            id: 0,
           },
           done(data) {
             if (data.responseObject.responseStatus && data.responseObject.responseData) {
               let price = data.responseObject.responseData.dataList.adviceAmount
 //              price = "0";
 //              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
-              console.log("获取分诊医生价格成功"+price);
+              console.log("获取分诊医生价格成功" + price);
               that.buyTime(price);
             } else {
               console.log("获取分诊医生价格失败")
@@ -812,7 +826,7 @@
       buyTime(price){
         const that = this;
         let flag;
-        price === "0"?flag = "false":flag = "true";
+        price === "0" ? flag = "false" : flag = "true";
 //        that.lastTimeShow=true;
 //        that.sendConsultState(4);
         console.log("走支付方法");
@@ -854,16 +868,16 @@
       //支付成功后重新分流
       againShunt () {
         let that = this;
-        console.log("分流参数："+that.orderSourceId);
+        console.log("分流参数：" + that.orderSourceId);
         api.ajax({
           url: XHRList.updateShunt,
           method: 'POST',
           data: {
-            caseId:api.getPara().caseId,
+            caseId: api.getPara().caseId,
 //            andConsultationId:that.orderSourceId,
-            patientId:api.getPara().patientId,
-            patientCustomerId:api.getPara().patientCustomerId,
-            isShunt:1,//是否分流0-否1-是
+            patientId: api.getPara().patientId,
+            patientCustomerId: api.getPara().patientCustomerId,
+            isShunt: 1,//是否分流0-否1-是
           },
           done(data) {
             if (data.responseObject.responseStatus) {
@@ -880,7 +894,7 @@
       //重置时间
       refreashOrderTime (type) {
         const that = this;
-        let typeStr = type?"2":"6";
+        let typeStr = type ? "2" : "6";
         console.log("更新时间");
         let data = {
           consultationId: this.orderSourceId,
@@ -888,7 +902,7 @@
           frequencyType: typeStr,
           consultationLevel: "1",
         };
-        !!type && Object.assign(data,{customerId:"0",consultationState:"4",});//付款回调参数传customerId
+        !!type && Object.assign(data, {customerId: "0", consultationState: "4",});//付款回调参数传customerId
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
@@ -898,7 +912,7 @@
 //              that.lastTimeShow = true;
 //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
 //              store.commit("lastTimeCount");
-              if(type){
+              if (type) {
 //                that.againShunt();
                 if (type === 'pay') {
                   that.sendPayFinish();
@@ -918,8 +932,8 @@
           url: XHRList.updateMedicalList,
           method: 'POST',
           data: {
-            caseId:api.getPara().caseId,
-            state:1,
+            caseId: api.getPara().caseId,
+            state: 1,
           },
           done(data) {
             if (data.responseObject.responseStatus) {
@@ -956,10 +970,10 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"32",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "32",
           }),
           content: JSON.stringify({
             type: "payFinishTips"
@@ -977,15 +991,15 @@
         this.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"24",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "24",
           }),
           content: JSON.stringify({
             type: "notification",
-            data:{
-              actionType:num,
+            data: {
+              actionType: num,
             }
           }),
           type: "custom",
@@ -1014,10 +1028,10 @@
         if (!this.$refs.wrapper) {
           return;
         }
-          this.scroll=new BScroll(this.$refs.wrapper,{
-            probeType:1,
-            click:true
-          })
+        this.scroll = new BScroll(this.$refs.wrapper, {
+          probeType: 1,
+          click: true
+        })
       },
       refreshScroll(){
         this.scroll && this.scroll.refresh();
@@ -1055,14 +1069,14 @@
     mounted(){
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
-      if(!api.checkOpenId()){
-         api.wxGetOpenId(1);
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();
 //      that.forceRefresh();
-      localStorage.setItem("PCIMLinks",location.href);
+      localStorage.setItem("PCIMLinks", location.href);
 
 //      let p1 = new Promise(resolve => that.getUserBaseData());
 //      let p2 = new Promise(resolve => that.triageDoctorAssign());
@@ -1071,9 +1085,9 @@
 //      }).catch(function () {
 //        console.log("页面加载失败");
 //      })
-      setTimeout(()=>{
+      setTimeout(() => {
         this.initScroll();
-      },20)
+      }, 20)
     },
     //组件更新之前的生命钩子
     beforeUpdate(){
@@ -1105,15 +1119,15 @@
         that.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"34",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "34",
           }),
           content: JSON.stringify({
             type: "triageSendTips",
-            data:{
-              actionType:that.$route.query.triageType,
+            data: {
+              actionType: that.$route.query.triageType,
             }
           }),
           type: "custom",
@@ -1123,20 +1137,20 @@
             }
           }
         })
-      }else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
+      } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
         that.updateMedical();
         that.nim.sendCustomMsg({
           scene: 'p2p',
           to: that.targetData.account,
-          custom:JSON.stringify({
-            cType:"0",
-            cId:that.cId,
-            mType:"0",
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "0",
           }),
           content: JSON.stringify({
             type: "checkSuggestSendTips",
-            data:{
-              actionType:that.$route.query.queryType,
+            data: {
+              actionType: that.$route.query.queryType,
             }
           }),
           type: "custom",
@@ -1154,15 +1168,15 @@
     watch: {
       msgList: {
         handler(newValue, oldValue) {
-        setTimeout(()=>{
-          this.refreshScroll();
-        },20)
-　　　　},
-　　　　deep: true
+          setTimeout(() => {
+            this.refreshScroll();
+          }, 20)
+        },
+        deep: true
       },
       //监听上传完成，可以继续上传；
-      progess :function (newVal,oldVal) {
-        if (newVal == "0%" || newVal =="100%"){
+      progess (newVal, oldVal) {
+        if (newVal == "0%" || newVal == "100%") {
           this.inputFlag = true;
         }
       },
@@ -1202,10 +1216,11 @@
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imStyle";
 
-  .ev-fileUpHide{
+  .ev-fileUpHide {
     box-shadow: none !important;
     border: none;
   }
+
   //问诊开始结束提示样式
   .first-message {
     @include font-dpr(13px);
@@ -1218,13 +1233,15 @@
     border-radius: 0.2rem;
     display: inline-block;
   }
-  .grey-tips{
+
+  .grey-tips {
     text-align: center;
   }
+
   //继续问诊样式
-  .go-consult{
+  .go-consult {
     text-align: center;
-    span{
+    span {
       color: #26BDB5;
       border-bottom: 1px solid #26BDB5;
       line-height: 1;

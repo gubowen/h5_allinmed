@@ -646,7 +646,7 @@
           method: 'POST',
           data: {
             consultationId: consultationId,
-            frequency: 3,
+            frequency: 30,
             frequencyType: 2,
             consultationState: -1,
             consultationLevel: 0
@@ -656,7 +656,7 @@
               localStorage.setItem("sendTips", JSON.stringify({
                 orderType: 0,
                 orderAmount: 0,
-                orderFrequency:3
+                orderFrequency:30
               }));
               that.finish=false;
 
