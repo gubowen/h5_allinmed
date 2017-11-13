@@ -36,18 +36,16 @@ export default function MPay(Obj) {
     //ready函数
     wxReady() {
       let _t = this;
-      wxStrings.wxGetToken({
-        callBack: function (data) {
-          if (data.data.responseStatus) {
-            op.token = data.data.responseData.token;  //token
-            op.nonceStr = data.nonceStr;              //随机数
-            _t.prepaidOrder({
-              token: op.token,
-              nonceStr: op.nonceStr
-            }); //生成预支付订单
-          }
+      wxStrings.wxGetToken().then(function (res) {
+        if (res.data.responseStatus) {
+          op.token = res.data.responseData.token;  //token
+          op.nonceStr = res.nonceStr;              //随机数
+          _t.prepaidOrder({
+            token: op.token,
+            nonceStr: op.nonceStr
+          }); //生成预支付订单
         }
-      });
+      })
     }
     //生成预支付订单
     prepaidOrder (pv) {
@@ -67,7 +65,6 @@ export default function MPay(Obj) {
       api.ajax({
         url:  XHRList.prepayPth,
         method: "POST",
-
         data: _data,
         done (data) {
           console.log(data);
@@ -107,7 +104,7 @@ export default function MPay(Obj) {
         _timeStamp = Math.round(new Date().getTime() / 1000) + "";
       console.log("-----pay-----");
       localStorage.setItem("askPay",1);
-      window.location.href = _data.mweb_url;
+      // window.location.href = _data.mweb_url;
     }
     paySuccess () {
       upOrder({
