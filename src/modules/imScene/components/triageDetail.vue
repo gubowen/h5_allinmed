@@ -65,7 +65,7 @@
       </section>
     </section>
     <transition name="fade">
-      <toast :content="tip" v-show="tipShow"></toast>
+      <toast :content="errorMsg" v-show="errorShow"></toast>
     </transition>
     <transition name="fade">
       <!--图片上传离开的confirm-->
@@ -145,6 +145,8 @@
         tip: "上传完成",
         tipShow: false,
         uploadVideo:false,//点击提交之后，提交按钮是否可以点击
+        errorShow:false,//toast提示框
+        errorMsg:'',//toast话术
       }
     },
     beforeRouteLeave (to, from, next){
@@ -398,20 +400,28 @@
           beforeSend(){
 
           },
-          done(){
+          done(data){
             that.uploadVideo = false;
-            that.pageLeaveEnsure = true;
-            that.$router.push({
-              path: "/BaseIm",
-              params: {
-                success:1,
-              },
-              query: {
-                success:1,
-                queryType:"triage",
-                triageType:"video"
-              }
-            })
+            if (data&&data.responseObject&&data.responseObject.responseStatus) {
+              that.pageLeaveEnsure = true;
+              that.$router.push({
+                path: "/BaseIm",
+                params: {
+                  success:1,
+                },
+                query: {
+                  success:1,
+                  queryType:"triage",
+                  triageType:"video"
+                }
+              })
+            } else {
+              that.errorMsg = "视频保存失败，请稍后再试";
+              that.errorShow = true;
+              setTimeout(() => {
+                that.errorShow = false;
+              }, 2000)
+            }
 
           }
         })
