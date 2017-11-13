@@ -958,8 +958,8 @@
           //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
           //   let el=list[list.length-1];
           // this.scroll.scrollToElement(el,1000);
-          document.body.scrollTop = Math.pow(10, 20);
-        }, 300)
+          document.getElementsByTagName("body")[0].scrollTop = Math.pow(10, 20);
+        }, 300);
       },
       inputLimit() {
         let content = this.sendTextContent;

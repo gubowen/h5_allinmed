@@ -713,7 +713,7 @@
           file: {
             url: window.URL.createObjectURL(e.target.files[0]),
           },
-          type: "file"
+          type: "image"
         });
         console.log(window.URL.createObjectURL(e.target.files[0]));
         this.nim.previewFile({
