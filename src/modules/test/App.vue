@@ -64,7 +64,7 @@
       },
       payHide(){
         localStorage.removeItem('askPay');
-        this.payShow=false
+        //this.payShow=false
       }
     }
   }
