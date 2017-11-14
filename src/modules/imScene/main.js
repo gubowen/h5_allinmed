@@ -13,7 +13,7 @@ import vueg from 'vueg';
 import Vuex from 'vuex';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
-import fastclick from 'fastclick';
+// import fastclick from 'fastclick';
 
 import BaseIm from "./components/baseIm";
 import ShowBigImg from "components/showBigImg";
