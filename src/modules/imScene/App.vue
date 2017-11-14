@@ -29,7 +29,9 @@
   }
 </script>
 <style lang="scss" scoped="">
-
+*{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
   .child-view {
     position: absolute;
     width: 100%;
