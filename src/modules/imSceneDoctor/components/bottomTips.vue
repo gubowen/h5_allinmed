@@ -57,7 +57,7 @@
   .bottom-tips-wrapper {
     width: rem(750px);
     height: rem(238px);
-    position: fixed;
+    position: absolute;
     bottom: 1.3rem;
     left: 0;
     right: 0;

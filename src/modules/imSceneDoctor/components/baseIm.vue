@@ -78,12 +78,13 @@
         </transition-group>
       </section>
       <!--底部提示-->
-      <transition name="fadeUp">
-        <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
-        </BottomTips>
-      </transition>
+
       <transition name="fadeUp">
         <footer :class="footerPosition" v-if="inputBoxShow">
+          <transition name="fadeUp">
+            <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
+            </BottomTips>
+          </transition>
           <!--医生拒绝-->
           <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
             <div>
@@ -184,8 +185,8 @@
     getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/",
     getDoctorBaseMsg: "/mcall/customer/auth/v1/getSimpleById/"
   };
-  const IS_IOS=net.browser().ios;
-  const IS_Android=net.browser().android;
+  const IS_IOS = net.browser().ios;
+  const IS_Android = net.browser().android;
   export default {
 
     data() {
@@ -224,16 +225,16 @@
           account: '2_' + api.getPara().doctorCustomerId
         },
         sendTextContent: "",
-        footerPosition:"main-input-box"
+        footerPosition: "main-input-box"
       }
     },
 
     methods: {
       setFooterPosition(){
-        if (IS_IOS){
-          this.footerPosition="main-input-box relative";
-        }else if (IS_Android){
-          this.footerPosition="main-input-box absolute"
+        if (IS_IOS) {
+          this.footerPosition = "main-input-box relative";
+        } else if (IS_Android) {
+          this.footerPosition = "main-input-box absolute"
         }
       },
       connectToNim() {
@@ -741,7 +742,7 @@
               let dataList = param.responseObject.responseData.dataList;
               let time = parseInt(dataList.remainingTime);
               let count = parseInt(dataList.consultationFrequency);
-              let receiveTime = parseInt(dataList.receiveTime);
+              let receiveTime =0// parseInt(dataList.receiveTime);
 
               that.shuntCustomerId = dataList.triageCustomerId;
               that.triageOrderSourceId = dataList.triageConsultationId;
@@ -964,7 +965,7 @@
           that.refreshScroll();
           let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
           console.log(heightflag);
-          if (heightflag>=0){
+          if (heightflag >= 0) {
             that.scroll.scrollTo(0, -heightflag, 500);
           }
 
@@ -1207,6 +1208,7 @@
       },
     },
     mounted() {
+      this.initScroll();
       this.getUserBaseData();
       if (api.getPara().from === "im") {
         return;
@@ -1214,12 +1216,11 @@
         localStorage.setItem("APPIMLinks", location.href);
         localStorage.setItem("PCIMLinks", location.href);
       }
+
       this.resetLogoUrl();
       api.forbidShare();
       this.setFooterPosition();
-      setTimeout(() => {
-        this.initScroll();
-      }, 20)
+
     },
     activated() {
       this.scrollToBottom();
@@ -1281,7 +1282,9 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
-
+  html,body{
+    overflow: hidden;
+  }
   .animated {
     box-shadow: none !important;
   }
