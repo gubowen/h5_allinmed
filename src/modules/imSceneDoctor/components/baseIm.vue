@@ -83,7 +83,7 @@
         </BottomTips>
       </transition>
       <transition name="fadeUp">
-        <footer class="main-input-box" v-if="inputBoxShow">
+        <footer :class="footerPosition" v-if="inputBoxShow">
           <!--医生拒绝-->
           <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
             <div>
@@ -148,6 +148,8 @@
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
+  import net from "common/js/util/net";
+
   import MedicalReport from './medicalReport';
   import ContentText from "./content"
   import ImageContent from './image';
@@ -168,6 +170,7 @@
   import nimEnv from 'common/js/nimEnv/nimEnv';
   import scrollPosition from "../api/scrollPosition";
   import BScroll from "better-scroll";
+
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -181,6 +184,8 @@
     getBaseInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/",
     getDoctorBaseMsg: "/mcall/customer/auth/v1/getSimpleById/"
   };
+  const IS_IOS=net.browser().ios;
+  const IS_Android=net.browser().android;
   export default {
 
     data() {
@@ -218,11 +223,19 @@
         targetData: {
           account: '2_' + api.getPara().doctorCustomerId
         },
-        sendTextContent: ""
+        sendTextContent: "",
+        footerPosition:"main-input-box"
       }
     },
 
     methods: {
+      setFooterPosition(){
+        if (IS_IOS){
+          this.footerPosition="main-input-box relative";
+        }else if (IS_Android){
+          this.footerPosition="main-input-box absolute"
+        }
+      },
       connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({
@@ -1203,6 +1216,7 @@
       }
       this.resetLogoUrl();
       api.forbidShare();
+      this.setFooterPosition();
       setTimeout(() => {
         this.initScroll();
       }, 20)

@@ -18,14 +18,15 @@
   //padding-bottom: rem(270px);
   box-sizing: border-box;
   //padding-top: 0.5rem;
-  position: absolute;
+  //position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 1.3rem;
   overflow: hidden;
-  //height: 92.5%;
+  height: 92.5%;
   -webkit-overflow-scrolling: touch;
+  z-index: 3;
   & > section{
     //&.padding-top{
     //  padding-top: rem(50px);
@@ -136,6 +137,13 @@
   box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50);
   //position: relative;
   //display: none;
+  z-index: 3;
+  &.absolute{
+    position: absolute;
+  }
+  &.relative{
+    position: relative;
+  }
   & > * {
     display: inline-block;
     vertical-align: bottom;

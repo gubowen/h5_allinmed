@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner ev-fileUpHide" style="min-height: 0;" v-if="msgList.length>0">
+  <section class="main-inner ev-fileUpHide" >
     <section class="main-message" ref="wrapper" >
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
@@ -134,7 +134,7 @@
               v-if="payPopupShow">
     </payPopup>
     <transition name="fadeUp">
-      <footer class="main-input-box" v-if="inputBoxShow">
+      <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
           <input type="file" v-if="inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
@@ -164,6 +164,7 @@
   import api from 'common/js/util/util';
   import autosize from 'autosize';
   import store from "../store/store";
+  import net from "common/js/util/net";
 
   import payPopup from 'components/payLayer';
   import loading from 'components/loading';
@@ -195,6 +196,9 @@
     getPrice: '/mcall/customer/traige/v1/getMapById/',//获取分诊医生价格
     updateShunt: '/mcall/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
   };
+
+  const IS_IOS=net.browser().ios;
+  const IS_Android=net.browser().android;
   export default{
     data(){
       return {
@@ -229,10 +233,18 @@
         },
         sendTextContent: "",//文本消息
         cId: '0',//聊天消息拓展字段的customerId
+        footerPosition:"main-input-box"
       }
     },
 
     methods: {
+        setFooterPosition(){
+           if (IS_IOS){
+               this.footerPosition="main-input-box relative";
+           }else if (IS_Android){
+               this.footerPosition="main-input-box absolute"
+           }
+        },
       //用户连接IM聊天
       connectToNim(){
         const that = this;
@@ -630,7 +642,9 @@
 
           }
         });
-        this.$refs.inputTextarea.focus();
+
+          this.$refs.inputTextarea.focus();
+
       },
       //消息发送之后成功还是失败的函数
       sendMessageSuccess(error, msg){
@@ -786,7 +800,7 @@
       inputLimit () {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content, 1000);
+          this.sendTextContent = api.getStrByteLen(content);
         }
       },
       //获取咨询价格
@@ -1074,7 +1088,7 @@
       that.triageDoctorAssign();
 //      that.forceRefresh();
       localStorage.setItem("PCIMLinks", location.href);
-
+      this.setFooterPosition();
 //      let p1 = new Promise(resolve => that.getUserBaseData());
 //      let p2 = new Promise(resolve => that.triageDoctorAssign());
 //      Promise.all([p1,p2]).then(function () {
@@ -1218,7 +1232,6 @@
   .ev-fileUpHide {
     box-shadow: none !important;
     border: none;
-    min-height: 0 !important;
   }
 
   //问诊开始结束提示样式
