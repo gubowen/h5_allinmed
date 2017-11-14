@@ -136,12 +136,12 @@
     <transition name="fade">
       <confirm
         :confirmParams="{
-          'ensure':'确定',
-          'cancel':'取消',
+          'ensure':'取消',
+          'cancel':'确定',
 //          'content':'',
-          'title':'确定删除图片？'
-          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="cancelDeletePic"
-        @ensureClickEvent="ensureDeletePic()"></confirm>
+          'title':'确定删除图片吗？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
+        @ensureClickEvent="cancelDeletePic"></confirm>
     </transition>
     <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
