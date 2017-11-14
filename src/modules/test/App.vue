@@ -10,7 +10,7 @@
   export default{
     data(){
       return {
-        payShow:false
+        payShow:true
       }
     },
     mounted(){
