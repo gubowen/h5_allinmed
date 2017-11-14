@@ -11,13 +11,13 @@
           <div class="tc-loginItem tc-loginPhone">
             <span class="tc-loginPhoneIcon" :class="{'active':phoneMessage.length>0}"></span>
             <input type="number" :class="{'inputActive':phoneMessage.length>0}" onpaste="return false;" placeholder="输入11位手机号码" v-validate="'required|mobile'" name="phone" v-model="phoneMessage"
-                   @blur="validateBlur('phone')" @keypress="onKeyPress()">
+                   @blur="validateBlur('phone')" @input="onKeyPress()">
             <span class="tc-inputClearPhone" @click="clearPhone" v-show="phoneMessage.length>0"></span>
           </div>
           <div class="tc-loginItem tc-loginCode">
             <span class="tc-loginCodeIcon" :class="{'active':codeMessage.length>0}"></span>
             <input type="number" :class="{'inputActive':codeMessage.length>0}" onpaste="return false;" placeholder="输入短信验证码" v-model="codeMessage" @blur="validateBlur('codeInput')"
-                   v-validate="'required|digits:4'" @keypress="codeKeyPress()" name="codeInput">
+                   v-validate="'required|digits:4'" @input="codeKeyPress()" name="codeInput">
             <span data-alcode='e120' class="tc-getCode" @click="getCodeApi" :class="{'active':getCode}">{{codeTime}}</span>
             <span class="tc-inputClearCode" @click="clearCode($event)" v-show="codeMessage.length>0"></span>
           </div>
@@ -183,20 +183,16 @@
           this.codeMessage = '';
         },
         onKeyPress(){
-          let keyCode = event.keyCode;
-          if ((keyCode >= 48 && keyCode <= 57&&this.phoneMessage.length<11)) {
-            event.returnValue = true;
-          } else {
-            event.returnValue = false;
-          }
+            let content = this.phoneMessage;
+            if (api.getByteLen(content) > 11) {
+              this.phoneMessage = api.getStrByteLen(content, 11);
+            }
         },
         codeKeyPress(){
-          let keyCode = event.keyCode;
-          if ((keyCode >= 48 && keyCode <= 57&&this.codeMessage.length<4)) {
-            event.returnValue = true;
-          } else {
-            event.returnValue = false;
-          }
+          let content = this.codeMessage;
+            if (api.getByteLen(content) > 4) {
+              this.codeMessage = api.getStrByteLen(content, 4);
+            }
         },
         validateBlur(name) {
           this.$validator.validateAll();
