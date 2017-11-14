@@ -55,7 +55,7 @@
           </ContentText>
           <!--图像消息-->
           <ImageContent
-            v-if="msg.type==='file' && msg.file"
+            v-if="(msg.type==='file' || msg.type==='image') && msg.file"
             :imageMessage="msg"
             :nim="nim"
             ref="bigImg"
