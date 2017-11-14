@@ -1,6 +1,6 @@
 <template>
-  <section class="main-inner ev-fileUpHide">
-    <section class="main-message" ref="wrapper">
+  <section class="main-inner ev-fileUpHide" style="min-height: 0;" v-if="msgList.length>0">
+    <section class="main-message" ref="wrapper" >
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
@@ -9,8 +9,8 @@
         </article>
       </transition>
       <transition-group name="fadeDown" tag="section"
-                        :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
+                        :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
+        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
           <p class='time-stamp'
              v-if="getTimeStampShowFlag(msg,index)">
@@ -640,15 +640,11 @@
         if (!error) {
           this.msgList.push(msg);
           this.scrollToBottom();
+          this.refreshScroll()
         } else {
           //消息发送失败的处理
           that.sendErrorTips(msg);
         }
-        setTimeout(() => {
-          document.body.scrollTop = Math.pow(10, 20);
-        }, 20);
-
-
       },
       //聊天记录时间戳处理
       transformTimeStamp(time){
@@ -790,7 +786,7 @@
       inputLimit () {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content);
+          this.sendTextContent = api.getStrByteLen(content, 1000);
         }
       },
       //获取咨询价格
@@ -1216,10 +1212,13 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imStyle";
-
+  *{
+    -webkit-backface-visibility: hidden;
+  }
   .ev-fileUpHide {
     box-shadow: none !important;
     border: none;
+    min-height: 0 !important;
   }
 
   //问诊开始结束提示样式
@@ -1269,5 +1268,6 @@
     opacity: 0;
     transform: translateY(50%);
   }
+
 </style>
 

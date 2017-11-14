@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner medical-report-detail">
+  <section class="medical-report-detail">
     <section class="tc-caseContentBox">
       <section class="tc-baseInfo">
         <ul class="tc-baseInfoList">
@@ -247,7 +247,7 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
 
-  .main-inner {
+  .medical-report-detail {
     //基本信息以下模块样式
     .tc-caseContentBox {
       background: #E6E6ED;
