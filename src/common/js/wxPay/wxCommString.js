@@ -33,8 +33,8 @@ class wxStrings {
     }
     return code.toLowerCase();
   }
-  //获取token
-  wxGetToken() {
+  //获取token(m站使用==>待统一兼容微信支付)
+  wxGetTokenPlus() {
     let _nonceStr = this.mathRandom({numberValue: 32});
     return new Promise(function (resolve, reject) {
       api.ajax({
@@ -53,6 +53,30 @@ class wxStrings {
         }
       });
     })
+  }
+  //获取token(微信中使用==>不影响线上支付)
+  wxGetToken() {
+    let _nonceStr = this.mathRandom({numberValue: 32});
+    //return new Promise(function (resolve, reject) {
+      api.ajax({
+        url: '/mcall/base/pay/external/v1/getToken/',
+        method: "POST",
+        data: {
+          "roleId": 2,
+          "nonceStr": _nonceStr,     //随机数
+          "siteId": 1
+        },
+        done (data) {
+          localStorage.setItem("validityTime", Math.round(new Date().getTime() / 1000));   //token
+          localStorage.setItem("token", data.responseData.token);   //token
+          localStorage.setItem("nonceStr", _nonceStr);              //随机数
+          //resolve({data: data, nonceStr: _nonceStr});
+          Obj.callBack({
+            data: data, nonceStr: _nonceStr
+          })
+        }
+      });
+    //})
   }
   checkToken(){
     let _validityTime = Math.round(new Date().getTime() / 1000),
