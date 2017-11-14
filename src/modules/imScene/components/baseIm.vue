@@ -614,6 +614,7 @@
         }
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
+        autosize.update(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: 'p2p',
           to: this.targetData.account,

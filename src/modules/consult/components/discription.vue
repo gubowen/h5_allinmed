@@ -83,7 +83,7 @@
                       </section>
                       <header class="consult-inner-title" v-if="scItem.questionType!=3">
                         <h2>
-                          <span>{{scItem.questionName}}</span>
+                          <span>{{scItem.questionName}}（必选）</span>
                         </h2>
                       </header>
                       <article

@@ -133,6 +133,16 @@
           }" v-if="submitTip" :showFlag.sync="submitTip" @cancelClickEvent="subCancelEvent"
         @ensureClickEvent="submitData()"></confirm>
     </transition>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'确定',
+          'cancel':'取消',
+//          'content':'',
+          'title':'确定删除图片？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="cancelDeletePic"
+        @ensureClickEvent="ensureDeletePic()"></confirm>
+    </transition>
     <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
   </section>
   </div>
@@ -187,6 +197,8 @@
         },
         orderSourceId:"",//进入分诊im需要orderSourceId
         finish: false,
+        deletePic:{},
+        deletePicTip:false,
         upLoadTip: false,
         levelShow: false,
         backPopupShow:false,
@@ -413,7 +425,20 @@
       },
       // 图片删除
       imgDelete(item, index, type){
-        this["imageList" + type].splice(index, 1);
+        this.deletePicTip=true;
+        this.deletePic.type=type;
+        this.deletePic.index=index;
+        // this["imageList" + type].splice(index, 1);
+      },
+      cancelDeletePic(){
+        this.deletePic.type='';
+        this.deletePic.index='';
+        this.deletePicTip=false;
+      },
+      ensureDeletePic(){
+        let _deletePic=this.deletePic;
+        this["imageList" + _deletePic.type].splice(_deletePic.index, 1);
+        this.deletePicTip=false;
       },
       //上传指导页
       upLoadTips(){
