@@ -36,7 +36,7 @@ export default function MPay(Obj) {
     //ready函数
     wxReady() {
       let _t = this;
-      wxStrings.wxGetToken().then(function (res) {
+      wxStrings.wxGetTokenPlus().then(function (res) {
         if (res.data.responseStatus) {
           op.token = res.data.responseData.token;  //token
           op.nonceStr = res.nonceStr;              //随机数
