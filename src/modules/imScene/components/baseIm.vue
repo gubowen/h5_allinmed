@@ -790,7 +790,7 @@
       inputLimit () {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content);
+          this.sendTextContent = api.getStrByteLen(content, 1000);
         }
       },
       //获取咨询价格
