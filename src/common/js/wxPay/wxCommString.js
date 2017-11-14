@@ -37,7 +37,7 @@ class wxStrings {
   //获取token(m站使用==>待统一兼容微信支付)
   wxGetTokenPlus() {
     let _nonceStr = this.mathRandom({numberValue: 32});
-    return new Promise(function (resolve, reject) {
+    return new Promise( (resolve, reject)=>{
       api.ajax({
         url: '/mcall/base/pay/external/v1/getToken/',
         method: "POST",
