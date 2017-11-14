@@ -8,8 +8,7 @@
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
-                 alt="loading..."
-                 @click="">
+                 alt="loading...">
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
@@ -32,7 +31,9 @@
    */
   export default{
     data(){
-      return {}
+      return {
+        imageNum:"",//图片列表中第几个
+      }
     },
     computed: {
       logoUrl(){
@@ -59,19 +60,17 @@
       }
     },
     mounted(){
-      this.imageNum = "";
       if (!this.imageMessage.file.url.includes("blob:")){
         let qualityUrl = this.nim.viewImageQuality({
           url: this.imageMessage.file.url,
           quality: 40
         });
         this.imageMessage.file.url = qualityUrl;
-        this.imageNum = this.imageList.indexOf(qualityUrl);
       }
-      setTimeout(() => {
-        document.body.scrollTop = Math.pow(10, 10);
-      }, 100);
-
+      this.imageNum = this.imageMessage.file.url;
+      // setTimeout(() => {
+      //   document.body.scrollTop = Math.pow(10, 10);
+      // }, 100);
 
     },
     methods: {
@@ -85,7 +84,7 @@
             });
             return result;
           }()),
-          indexNum: this.imageList.indexOf(this.imageMessage.file.url)
+          indexNum: this.imageList.indexOf(this.imageNum),
         };
         this.$router.push({
           name: "showBigImg",

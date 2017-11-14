@@ -9,7 +9,7 @@
         <figure class="body-picture-content">
           <img class="body-picture-img" :src="patientBody" alt="">
           <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
-          <img v-for="item in imgArray" :src="item" alt="">
+          <img v-for="item in imgArray" :src="item">
           <section class="pain-point-box">
             <div class="pain-point"
                  v-for="(item , pIndex) in pointList.front"
@@ -142,7 +142,7 @@
         },
         imgArray:[],//选择部位热点图片数组
         patientMessage: {},  //患者基本信息...由Router.params传递
-        direction: "front", //人体朝向...驱动点位切换
+        direction: "back", //人体朝向...驱动点位切换
         finish: false,  //加载态
         currentType:"",//当前患者类型
         currentTwoLevel:-1,//当前二级部位
