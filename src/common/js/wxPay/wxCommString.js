@@ -50,6 +50,9 @@ class wxStrings {
           localStorage.setItem("token", data.responseData.token);   //token
           localStorage.setItem("nonceStr", _nonceStr);              //随机数
           resolve({data: data, nonceStr: _nonceStr});
+        },
+        fail(err){
+          reject(err);
         }
       });
     })
