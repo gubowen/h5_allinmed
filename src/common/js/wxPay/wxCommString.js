@@ -55,7 +55,7 @@ class wxStrings {
     })
   }
   //获取token(微信中使用==>不影响线上支付)
-  wxGetToken() {
+  wxGetToken(Obj) {
     let _nonceStr = this.mathRandom({numberValue: 32});
     //return new Promise(function (resolve, reject) {
       api.ajax({
