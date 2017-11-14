@@ -7,6 +7,7 @@
  * Created by qiangkailiang on 2017/8/18.
  */
 import api from '../util/util'
+import "babel-polyfill";
 class wxStrings {
   constructor(Obj) {
 
