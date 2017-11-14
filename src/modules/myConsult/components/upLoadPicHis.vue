@@ -248,15 +248,21 @@
       },
       nimSendSuccess(cd){
         let that = this;
-        that.nim.sendText({
+        that.nim.sendCustomMsg({
           scene: 'p2p',
+          to: "1_doctor00001",
           custom:JSON.stringify({
             cType:"0",
-            cId:"0",
+            cId:cd,
             mType:"0",
           }),
-          to: "1_doctor00001",
-          text: "患者已上传检查资料",
+          content: JSON.stringify({
+            type: "checkSuggestSendTips",
+            data: {
+              actionType: "checkSuggest",
+            }
+          }),
+          type: "custom",
           done(error, obj) {
             console.log( "患者已上传检查资料");
             that.refreashOrderTime(cd);
