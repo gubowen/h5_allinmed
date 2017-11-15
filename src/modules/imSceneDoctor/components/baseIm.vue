@@ -1208,6 +1208,7 @@
       },
     },
     mounted() {
+      this.setFooterPosition();
       this.initScroll();
       this.getUserBaseData();
       if (api.getPara().from === "im") {
@@ -1219,7 +1220,7 @@
 
       this.resetLogoUrl();
       api.forbidShare();
-      this.setFooterPosition();
+
 
     },
     activated() {
