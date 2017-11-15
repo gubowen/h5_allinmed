@@ -56,6 +56,7 @@
   import confirm from 'components/confirm';
   import Loading from 'components/loading';
   import Toast from 'components/toast';
+  import nimEnv from 'common/js/nimEnv/nimEnv';
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",                                                //获取token
@@ -231,7 +232,7 @@
         const that = this;
         this.nim = NIM.getInstance({
           // debug: true,
-          appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+          appKey: nimEnv(),
           account: that.userData.account,
           token: that.userData.token,
           onconnect (data) {
