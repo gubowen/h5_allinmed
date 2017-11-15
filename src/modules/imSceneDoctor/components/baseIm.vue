@@ -1282,9 +1282,6 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
-  html,body{
-    overflow: hidden;
-  }
   .animated {
     box-shadow: none !important;
   }

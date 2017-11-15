@@ -5,7 +5,7 @@
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
           <p class="service-time">
-            <span class="service-time-top">服务时间</span>
+              <span class="service-time-top">服务时间</span>
             <span class="service-time-bottom">09: 00-22: 00</span>
           </p>
         </article>
@@ -143,9 +143,17 @@
                  accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
-          <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
-                    @click="scrollToBottom" @input="inputLimit" @keyup.enter="sendMessage"></textarea>
-          <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
+          <textarea class="main-input-box-textarea"
+                    rows="1" 
+                    v-model="sendTextContent" 
+                    ref="inputTextarea"
+                    @focus="autoSizeTextarea()"
+                    @blur="autoSizeTextarea()"
+                    @click="scrollToBottom" 
+                    @input="inputLimit"
+                    @keypress.enter.stop="autoSizeTextarea()">
+          </textarea>
+          <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
         </figure>
 
       </footer>
@@ -620,15 +628,26 @@
           }
         })
       },
+      // 调整输入框大小
+      autoSizeTextarea () {
+        const that = this;
+        that.sendTextContent = that.textLength;
+        autosize.update(that.$refs.inputTextarea);
+        return false;
+      },
       //点击发送消息
       sendMessage(){
         const that = this;
+        that.sendTextContent = that.textLength;
         if (that.sendTextContent === "") {
+          // autosize.update(that.$refs.inputTextarea);
+          // autosize.destroy(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
-        autosize.update(that.$refs.inputTextarea);
+        autosize.destroy(that.$refs.inputTextarea);
+        // autosize(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: 'p2p',
           to: this.targetData.account,
@@ -641,7 +660,7 @@
           done(error, obj) {
             console.log(obj)
             that.sendMessageSuccess(error, obj);
-
+            autosize(that.$refs.inputTextarea);
           }
         });
 
@@ -1077,6 +1096,10 @@
           from: 'checkSuggest',
           payType: this.$store.state.targetDoctor.payType,
         }
+      },
+      // 输入框的长度
+      textLength () {
+        return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "")
       },
     },
     mounted(){
