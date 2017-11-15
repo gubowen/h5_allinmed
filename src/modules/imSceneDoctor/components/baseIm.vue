@@ -17,7 +17,7 @@
           </article>
         </transition>
         <transition-group name="fadeDown" tag="section">
-          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
+          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()">
             <!--时间戳-->
             <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
               {{transformTimeStamp(msg.time)}}</p>
@@ -116,12 +116,12 @@
                    accept="image/*">
           </section>
           <figure class="main-input-box-textarea-inner">
-            <textarea class="main-input-box-textarea" 
-                      rows="1" 
-                      v-model="sendTextContent" 
+            <textarea class="main-input-box-textarea"
+                      rows="1"
+                      v-model="sendTextContent"
                       ref="inputTextarea"
-                      @focus="autoSizeTextarea()"
-                      @blur="autoSizeTextarea()"
+                      @focus="onFocus=true;autoSizeTextarea()"
+                      @blur="onFocus=false;autoSizeTextarea()"
                       @click="scrollToBottom"
                       @input="inputLimit"
                       @keypress.enter.stop="autoSizeTextarea()">
@@ -205,6 +205,7 @@
           progress: 0,
           index: 0
         },
+        onFocus:false,
         inputFlag: true,//上传图片input控制
         loading: true,
         payPopupShow: false,
