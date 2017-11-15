@@ -357,18 +357,12 @@
 //            _picIdList+= `${k.imgId},`
 //          }
         }
-
-        api.ajax({
-          url: XHRList.imgDelete,
-          method: "POST",
-          data: {
-            caseId:api.getPara().caseId,	    //string	是	病例id
-            idList:_picIdList.substring(0,_picIdList.length-1)	                //string	是	附件id串
-          },
-          done(data){
-            if (data&&data.responseObject&&data.responseObject.responseStatus) {
-              that.pageLeaveEnsure = true;
-              that.$router.push({
+        // console.time('1');
+        // console.time('2');
+        // console.time('3');
+        // console.time('4');
+        that.pageLeaveEnsure = true;
+        that.$router.push({
                 path: "/BaseIm",
                 params: {
                   success:1,
@@ -379,9 +373,31 @@
                   triageType:"image"
                 }
               })
-            }
-          }
-        })
+
+        // api.ajax({
+        //   url: XHRList.imgDelete,
+        //   method: "POST",
+        //   data: {
+        //     caseId:api.getPara().caseId,	    //string	是	病例id
+        //     idList:_picIdList.substring(0,_picIdList.length-1)	                //string	是	附件id串
+        //   },
+        //   done(data){
+        //     if (data&&data.responseObject&&data.responseObject.responseStatus) {
+        //       that.pageLeaveEnsure = true;
+        //       that.$router.push({
+        //         path: "/BaseIm",
+        //         params: {
+        //           success:1,
+        //         },
+        //         query: {
+        //           success:1,
+        //           queryType:"triage",
+        //           triageType:"image"
+        //         }
+        //       })
+        //     }
+        //   }
+        // })
       },
       //视频提交
       submitVideo(){

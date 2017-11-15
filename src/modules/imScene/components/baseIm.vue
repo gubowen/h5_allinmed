@@ -1146,58 +1146,128 @@
       let that = this;
       document.body.scrollTop = 1;
       that.refreshScroll();
-      if (that.$route.query && that.$route.query.queryType === "triage") {
-        console.log(that.$route)
-        that.nim.sendCustomMsg({
-          scene: 'p2p',
-          to: that.targetData.account,
-          custom: JSON.stringify({
-            cType: "0",
-            cId: that.cId,
-            mType: "34",
-            conId: that.orderSourceId,
-          }),
-          content: JSON.stringify({
-            type: "triageSendTips",
-            data: {
-              actionType: that.$route.query.triageType,
+      // console.time("main");
+      // console.timeEnd('1');
+      // let name  = that.$route.query;
+      
+      // let c = that.$route.query.queryType === "triage";
+
+      // if (!!that.$route.query) {
+        // debugger;
+        // console.timeEnd('2');
+        if (that.$route.query.queryType === "triage") {
+          // console.timeEnd('3')
+          that.nim.sendCustomMsg({
+            scene: 'p2p',
+            to: that.targetData.account,
+            custom: JSON.stringify({
+              cType: "0",
+              cId: that.cId,
+              mType: "34",
+              conId: that.orderSourceId,
+            }),
+            content: JSON.stringify({
+              type: "triageSendTips",
+              data: {
+                actionType: that.$route.query.triageType,
+              }
+            }),
+            type: "custom",
+            done (error, msg) {
+              if (!error) {
+                that.sendMessageSuccess(error, msg)
+              }
             }
-          }),
-          type: "custom",
-          done (error, msg) {
-            if (!error) {
-              that.sendMessageSuccess(error, msg)
+          })
+        // console.timeEnd('4');
+        } else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
+          that.updateMedical();
+          that.nim.sendCustomMsg({
+            scene: 'p2p',
+            to: that.targetData.account,
+            custom: JSON.stringify({
+              cType: "0",
+              cId: that.cId,
+              mType: "0",
+              conId:that.orderSourceId,
+            }),
+            content: JSON.stringify({
+              type: "checkSuggestSendTips",
+              data: {
+                actionType: that.$route.query.queryType,
+              }
+            }),
+            type: "custom",
+            done (error, msg) {
+              if (!error) {
+                that.sendMessageSuccess(error, msg)
+              }
             }
-          }
-        })
-      } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
-        that.updateMedical();
-        that.nim.sendCustomMsg({
-          scene: 'p2p',
-          to: that.targetData.account,
-          custom: JSON.stringify({
-            cType: "0",
-            cId: that.cId,
-            mType: "0",
-            conId:that.orderSourceId,
-          }),
-          content: JSON.stringify({
-            type: "checkSuggestSendTips",
-            data: {
-              actionType: that.$route.query.queryType,
-            }
-          }),
-          type: "custom",
-          done (error, msg) {
-            if (!error) {
-              that.sendMessageSuccess(error, msg)
-            }
-          }
-        })
-      }
+          })
+        }
+      // } 
       that.$router.push({
         query: {}
       });
+
+
+      // if (that.$route.query && that.$route.query.queryType === "triage") {
+        
+      //   console.log(that.$route)
+        
+      //   that.nim.sendCustomMsg({
+      //     scene: 'p2p',
+      //     to: that.targetData.account,
+      //     custom: JSON.stringify({
+      //       cType: "0",
+      //       cId: that.cId,
+      //       mType: "34",
+      //       conId: that.orderSourceId,
+      //     }),
+      //     content: JSON.stringify({
+      //       type: "triageSendTips",
+      //       data: {
+      //         actionType: that.$route.query.triageType,
+      //       }
+      //     }),
+      //     type: "custom",
+      //     done (error, msg) {
+      //       if (!error) {
+      //         that.sendMessageSuccess(error, msg)
+      //       }
+            
+      //     }
+      //   })
+      //   console.timeEnd('4');
+        
+      // } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
+      //   that.updateMedical();
+      //   that.nim.sendCustomMsg({
+      //     scene: 'p2p',
+      //     to: that.targetData.account,
+      //     custom: JSON.stringify({
+      //       cType: "0",
+      //       cId: that.cId,
+      //       mType: "0",
+      //       conId:that.orderSourceId,
+      //     }),
+      //     content: JSON.stringify({
+      //       type: "checkSuggestSendTips",
+      //       data: {
+      //         actionType: that.$route.query.queryType,
+      //       }
+      //     }),
+      //     type: "custom",
+      //     done (error, msg) {
+      //       if (!error) {
+      //         that.sendMessageSuccess(error, msg)
+      //       }
+      //     }
+      //   })
+      // }
+      // that.$router.push({
+      //   query: {}
+      // });
     },
     watch: {
       msgList: {
