@@ -14,7 +14,7 @@ class WxCommon {
 
   // 检测是否获取过微信OpenId
   checkOpenId() {
-    if (this.isWXBrowse() === "other") {
+    if (this.isWXBrowse() === "other" || !window.location.hostname.includes("m9.allinmed.cn" ||!window.location.hostname.includes("m.allinmed.cn"))) {
       return true;
     } else {
       let _openId = localStorage.getItem("openId"),
