@@ -17,7 +17,7 @@
           </article>
         </transition>
         <transition-group name="fadeDown" tag="section">
-          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()">
+          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()" @touchmove="$refs.inputTextarea.blur()">
             <!--时间戳-->
             <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
               {{transformTimeStamp(msg.time)}}</p>
