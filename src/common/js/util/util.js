@@ -12,7 +12,7 @@ import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
 import forbidShare from "./wxForbidShare";
-
+import "babel-polyfill";
 import net from "./net";
 
 class Api {
@@ -29,19 +29,19 @@ class Api {
   }
 
   banZoom () {
-    document.addEventListener('touchstart',function (event) {  
-      if(event.touches.length>1){  
-          event.preventDefault();  
-      }  
-    })  
-    var lastTouchEnd=0;  
-    document.addEventListener('touchend',function (event) {  
-        var now=(new Date()).getTime();  
-        if(now-lastTouchEnd<=300){  
-            event.preventDefault();  
-        }  
-        lastTouchEnd=now;  
-    },false)  
+    document.addEventListener('touchstart',function (event) {
+      if(event.touches.length>1){
+          event.preventDefault();
+      }
+    })
+    var lastTouchEnd=0;
+    document.addEventListener('touchend',function (event) {
+        var now=(new Date()).getTime();
+        if(now-lastTouchEnd<=300){
+            event.preventDefault();
+        }
+        lastTouchEnd=now;
+    },false)
   }
 
   ajax(param) {
