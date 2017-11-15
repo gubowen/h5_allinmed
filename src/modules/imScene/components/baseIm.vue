@@ -809,7 +809,6 @@
           if (heightflag>=0){
             that.scroll.scrollTo(0, -heightflag, 500);
           }
-
           //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
           //   let el=list[list.length-1];
           // this.scroll.scrollToElement(el,1000);

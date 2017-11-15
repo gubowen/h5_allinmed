@@ -40,9 +40,11 @@ export default function MPay(Obj) {
         if (res.data.responseStatus) {
           op.token = res.data.responseData.token;  //token
           op.nonceStr = res.nonceStr;              //随机数
+          op.ipAddr = data.data.responseData.ipAddr;  //用户ip
           _t.prepaidOrder({
             token: op.token,
-            nonceStr: op.nonceStr
+            nonceStr: op.nonceStr,
+            ipAddr:op.ipAddr
           }); //生成预支付订单
         }
       }).catch(function (err) {
@@ -61,7 +63,8 @@ export default function MPay(Obj) {
         "roleId": '2',
         // "openid": localStorage.getItem("openId"),
         "nonceStr": pv.nonceStr,         //随机数
-        "token": pv.token
+        "token": pv.token,
+        "ipAddr":pv.ipAddr               //用户的ip
       };
       console.log(_data);
       api.ajax({
