@@ -39,9 +39,11 @@ export default function pay(Obj) {
           if (data.data.responseStatus) {
             op.token = data.data.responseData.token;  //token
             op.nonceStr = data.nonceStr;              //随机数
+            op.ipAddr = data.data.responseData.ipAddr;  //ip
             _t.prepaidOrder({
               token:op.token,
-              nonceStr:op.nonceStr
+              nonceStr:op.nonceStr,
+              ipAddr:op.ipAddr
             }); //生成预支付订单
           }
         }
@@ -67,7 +69,8 @@ export default function pay(Obj) {
         "roleId": '2',
         "openid": localStorage.getItem("openId"),
         "nonceStr": pv.nonceStr,         //随机数
-        "token": pv.token
+        "token": pv.token,
+        "ipAddr":pv.ipAddr               //用户ip
       };
       api.ajax({
         url:  XHRList.prepayPth,
