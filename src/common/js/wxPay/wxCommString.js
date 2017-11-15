@@ -50,10 +50,12 @@ class wxStrings {
           localStorage.setItem("validityTime", Math.round(new Date().getTime() / 1000));   //token
           localStorage.setItem("token", data.responseData.token);   //token
           localStorage.setItem("nonceStr", _nonceStr);              //随机数
-          resolve({data: data, nonceStr: _nonceStr});
-        },
-        fail(err){
-          reject(err);
+          
+          if(data&&data.responseStatus){
+            resolve({data: data, nonceStr: _nonceStr});
+          }else{
+            reject(err);
+          }
         }
       });
     })
