@@ -116,8 +116,16 @@
                    accept="image/*">
           </section>
           <figure class="main-input-box-textarea-inner">
-            <textarea class="main-input-box-textarea" rows="1" v-model.trim="sendTextContent" ref="inputTextarea"
-                      @click="scrollToBottom" @input="inputLimit" @keyup.enter="sendMessage"></textarea>
+            <textarea class="main-input-box-textarea" 
+                      rows="1" 
+                      v-model="sendTextContent" 
+                      ref="inputTextarea"
+                      @focus="autoSizeTextarea()"
+                      @blur="autoSizeTextarea()"
+                      @click="scrollToBottom"
+                      @input="inputLimit"
+                      @keypress.enter.stop="autoSizeTextarea()">
+            </textarea>
             <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
           </figure>
 
@@ -779,6 +787,9 @@
                 that.lastTimeShow = false;
                 that.showBottomTips(1);
               }
+              that.$nextTick(() => {
+                autosize(that.$refs.inputTextarea);
+              })
             }
           },
           fail(err) {
@@ -792,13 +803,25 @@
 
         this.scrollToBottom();
       },
+      // 调整输入框大小
+      autoSizeTextarea () {
+        const that = this;
+        that.sendTextContent = that.textLength;
+        autosize.update(that.$refs.inputTextarea);
+        return false;
+      },
+      //点击发送消息
       sendMessage() {
-        if (this.sendTextContent.trim().length === 0) {
+        const that = this;
+        that.sendTextContent = that.textLength;
+        if (that.sendTextContent === "") {
+          autosize.update(that.$refs.inputTextarea);
+          // autosize.destroy(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
-        const that = this;
+        autosize.destroy(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: 'p2p',
           custom: JSON.stringify({
@@ -817,6 +840,7 @@
           done(error, obj) {
             console.log(obj);
             that.sendMessageSuccess(error, obj);
+            autosize(that.$refs.inputTextarea);
           }
         });
         this.$refs.inputTextarea.focus();
@@ -978,7 +1002,7 @@
       inputLimit() {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content);
+          this.sendTextContent = api.getStrByteLen(content,1000);
         }
       },
       //接诊时间倒数
@@ -1205,6 +1229,10 @@
           from: 'imDoctor',
           payType: 'pay'
         }
+      },
+      // 输入框的长度
+      textLength () {
+        return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "")
       },
     },
     mounted() {
