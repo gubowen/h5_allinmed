@@ -470,6 +470,7 @@
             cType: "0",
             cId: that.cId,
             mType: "27",
+            conId:that.orderSourceId,
           }),
           to: this.targetData.account,
           content: JSON.stringify(data),
@@ -485,6 +486,7 @@
             cType: "0",
             cId: that.cId,
             mType: "32",
+            conId:that.orderSourceId,
           }),
           to: this.targetData.account,
           content: JSON.stringify({
@@ -661,6 +663,7 @@
             cType: "0",
             cId: that.cId,
             mType: "0",
+            conId:that.orderSourceId,
           }),
           done(error, obj) {
             console.log(obj)
@@ -781,6 +784,7 @@
                   cType: "0",
                   cId: that.cId,
                   mType: "1",
+                  conId:that.orderSourceId,
                 }),
                 file: file,
                 done(error, msg){
@@ -1010,6 +1014,7 @@
             cType: "0",
             cId: that.cId,
             mType: "32",
+            conId:that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "payFinishTips"
@@ -1031,6 +1036,7 @@
             cType: "0",
             cId: that.cId,
             mType: "24",
+            conId:that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "notification",
@@ -1142,19 +1148,6 @@
       document.body.scrollTop = 1;
       that.refreshScroll();
       if (that.$route.query && that.$route.query.queryType === "triage") {
-//        that.nim.sendText({
-//          scene: 'p2p',
-//          custom:JSON.stringify({
-//            cType:"0",
-//            cId:that.cId,
-//            mType:"0",
-//          }),
-//          to: that.targetData.account,
-//          text: "患者已上传视诊资料",
-//          done(error, obj) {
-//            that.sendMessageSuccess(error, obj);
-//          }
-//        });
         console.log(that.$route)
         that.nim.sendCustomMsg({
           scene: 'p2p',
@@ -1163,6 +1156,7 @@
             cType: "0",
             cId: that.cId,
             mType: "34",
+            conId:that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "triageSendTips",
@@ -1186,6 +1180,7 @@
             cType: "0",
             cId: that.cId,
             mType: "0",
+            conId:that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "checkSuggestSendTips",
