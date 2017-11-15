@@ -12,7 +12,7 @@
       </transition>
       <transition-group name="fadeDown" tag="section"
                         :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()">
+        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()"  @touchmove="$refs.inputTextarea.blur()">
           <!--时间戳-->
           <p class='time-stamp'
              v-if="getTimeStampShowFlag(msg,index)">

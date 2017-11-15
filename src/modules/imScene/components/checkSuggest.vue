@@ -98,7 +98,7 @@ export default {
       }
       that.$nextTick(function() {
         if (!api.getPara().suggest) {
-          that.scrollToBottom();
+//          that.scrollToBottom();
         }
       });
     },
