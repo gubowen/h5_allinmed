@@ -45,8 +45,8 @@ export default function MPay(Obj) {
             nonceStr: op.nonceStr
           }); //生成预支付订单
         }
-      },function(res){
-        console.log("error 回调",res);
+      }).catch(function (err) {
+        console.log("h5,支付接口错误");
       })
     }
     //生成预支付订单
