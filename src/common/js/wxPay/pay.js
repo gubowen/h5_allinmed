@@ -40,6 +40,8 @@ export default function pay(Obj) {
             op.token = data.data.responseData.token;  //token
             op.nonceStr = data.nonceStr;              //随机数
             op.ipAddr = data.data.responseData.ipAddr;  //ip
+            console.log("-------------token数据--------------");
+            console.log(data);
             _t.prepaidOrder({
               token:op.token,
               nonceStr:op.nonceStr,
@@ -72,6 +74,8 @@ export default function pay(Obj) {
         "token": pv.token,
         "ipAddr":pv.ipAddr               //用户的ip
       };
+      console.log("-------------预支付参数--------------");
+      console.log(_data);
       api.ajax({
         url:  XHRList.prepayPth,
         method: "POST",
