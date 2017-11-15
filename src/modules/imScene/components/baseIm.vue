@@ -619,6 +619,9 @@
                   that.consultTipsShow = true;
                 }
               }
+              that.$nextTick(() => {
+                that.inputBoxShow && autosize(that.$refs.inputTextarea);
+              })
               if ((dataList.consultationState == 0 || dataList.consultationState == 4 || dataList.consultationState == 5) && time <= 0) {
                 that.refreshState();
               }
@@ -642,7 +645,8 @@
         that.sendTextContent = that.textLength;
         if (that.sendTextContent === "") {
           // autosize.update(that.$refs.inputTextarea);
-          // autosize.destroy(that.$refs.inputTextarea);
+          autosize.destroy(that.$refs.inputTextarea);
+          autosize(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;

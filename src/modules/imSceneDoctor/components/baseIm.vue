@@ -787,6 +787,9 @@
                 that.lastTimeShow = false;
                 that.showBottomTips(1);
               }
+              that.$nextTick(() => {
+                autosize(that.$refs.inputTextarea);
+              })
             }
           },
           fail(err) {
