@@ -70,7 +70,7 @@ export default function pay(Obj) {
         "openid": localStorage.getItem("openId"),
         "nonceStr": pv.nonceStr,         //随机数
         "token": pv.token,
-        "ipAddr":pv.ipAddr               //用户ip
+        "ipAddr":pv.ipAddr               //用户的ip
       };
       api.ajax({
         url:  XHRList.prepayPth,
