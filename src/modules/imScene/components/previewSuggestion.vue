@@ -17,7 +17,7 @@
               <section class="doctor-item-top" @click="goDoctorHome(index)">
                 <figure class="doctor-item-img">
                   <img :src="item.logoUrl" alt="">
-                </figure>
+                </figure>r
                 <figcaption class="doctor-item-info">
                   <p class="doctor-base-info">
                     <span class="doctor-name">{{item.fullName | ellipsis(8)}}</span>
@@ -274,6 +274,7 @@
             }
             that.suggestResponse = true;
             that.checkResponse();
+            that.$emit("loadCallback")
           },
           fail(){
             that.suggestResponse = true;
@@ -305,6 +306,7 @@
             }
             that.doctorResponse = true;
             that.checkResponse();
+            that.$emit("loadCallback")
           },
           fail(){
             that.doctorResponse = true;
