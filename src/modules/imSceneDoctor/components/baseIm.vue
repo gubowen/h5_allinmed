@@ -452,7 +452,7 @@
                 setTimeout(() => {
 
                   if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
-                    scrollPosition(that.$refs.outpatientInvite);
+                    that.scroll.scrollToElement(that.$refs.outpatientInvite[0].$el, 1000)
                   } else {
                     that.scrollToBottom();
                   }
@@ -742,7 +742,7 @@
               let dataList = param.responseObject.responseData.dataList;
               let time = parseInt(dataList.remainingTime);
               let count = parseInt(dataList.consultationFrequency);
-              let receiveTime =0// parseInt(dataList.receiveTime);
+              let receiveTime =parseInt(dataList.receiveTime);
 
               that.shuntCustomerId = dataList.triageCustomerId;
               that.triageOrderSourceId = dataList.triageConsultationId;
