@@ -37,6 +37,7 @@
             :scrollToBottom="scrollToBottom"
             :scrollElement='scrollElement'
             :refreshScroll='refreshScroll'
+            @loadCallback="scrollToBottom"
           >
           </PreviewSuggestion>
           <!--支付成功-->
@@ -144,12 +145,12 @@
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea"
-                    rows="1" 
-                    v-model="sendTextContent" 
+                    rows="1"
+                    v-model="sendTextContent"
                     ref="inputTextarea"
                     @focus="autoSizeTextarea()"
                     @blur="autoSizeTextarea()"
-                    @click="scrollToBottom" 
+                    @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
           </textarea>
