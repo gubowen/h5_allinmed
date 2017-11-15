@@ -265,7 +265,7 @@
           }),
           type: "custom",
           done(error, obj) {
-            console.log( "患者已上传检查资料");
+            console.log( "该患者已上传检查资料");
             that.refreashOrderTime(cd);
           }
         });
