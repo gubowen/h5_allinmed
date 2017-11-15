@@ -1,6 +1,6 @@
 <template>
   <section class="upload-wrapper">
-    <section class="main-inner tc-upLoadFile ev-delete">
+    <section class="tc-upLoadFile ev-delete">
       <section class="tc-upLoadBox" v-for="(item,index) in uploadList">
         <figure class="tc-upLoadTitle ev-upLoadList">
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId"
@@ -397,7 +397,7 @@
 <style lang="scss" rel="stylesheet/scss" scoped="">
   @import "../../../../scss/library/_common-modules";
 
-  .main-header.fileUpload {
+  .tc-upLoadFile.fileUpload {
     display: flex;
 
   }

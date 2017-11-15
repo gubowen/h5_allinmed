@@ -1,18 +1,18 @@
 <template>
-  <section class="main-inner ev-fileUpHide" >
-    <section class="main-message" ref="wrapper" >
+  <section class="main-inner ev-fileUpHide">
+    <section class="main-message" ref="wrapper">
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
           <p class="service-time">
-              <span class="service-time-top">服务时间</span>
+            <span class="service-time-top">服务时间</span>
             <span class="service-time-bottom">09: 00-22: 00</span>
           </p>
         </article>
       </transition>
       <transition-group name="fadeDown" tag="section"
                         :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
+        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()">
           <!--时间戳-->
           <p class='time-stamp'
              v-if="getTimeStampShowFlag(msg,index)">
@@ -48,9 +48,6 @@
           <CheckSuggest
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion'"
             :checkSuggestMessage="JSON.parse(msg.content)"
-            :scrollToBottom="scrollToBottom"
-            :scrollElement='scrollElement'
-            :refreshScroll='refreshScroll'
           >
           </CheckSuggest>
           <!--文本消息-->
@@ -151,8 +148,8 @@
                     rows="1"
                     v-model="sendTextContent"
                     ref="inputTextarea"
-                    @focus="autoSizeTextarea()"
-                    @blur="autoSizeTextarea()"
+                    @focus="onFocus=true;autoSizeTextarea()"
+                    @blur="onFocus=false;autoSizeTextarea()"
                     @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
@@ -211,8 +208,8 @@
     updateShunt: '/mcall/customer/case/consultation/v1/createConsultation/',//继续问诊后分流
   };
 
-  const IS_IOS=net.browser().ios;
-  const IS_Android=net.browser().android;
+  const IS_IOS = net.browser().ios;
+  const IS_Android = net.browser().android;
   export default{
     data(){
       return {
@@ -222,6 +219,7 @@
           progress: "0%",
           index: 0
         },
+        onFocus:false,
         inputFlag: true,//上传图片input控制
 //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
@@ -247,18 +245,18 @@
         },
         sendTextContent: "",//文本消息
         cId: '0',//聊天消息拓展字段的customerId
-        footerPosition:"main-input-box"
+        footerPosition: "main-input-box"
       }
     },
 
     methods: {
-        setFooterPosition(){
-           if (IS_IOS){
-               this.footerPosition="main-input-box relative";
-           }else if (IS_Android){
-               this.footerPosition="main-input-box absolute"
-           }
-        },
+      setFooterPosition(){
+        if (IS_IOS) {
+          this.footerPosition = "main-input-box relative";
+        } else if (IS_Android) {
+          this.footerPosition = "main-input-box absolute"
+        }
+      },
       //用户连接IM聊天
       connectToNim(){
         const that = this;
@@ -473,7 +471,7 @@
             cType: "0",
             cId: that.cId,
             mType: "27",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           to: this.targetData.account,
           content: JSON.stringify(data),
@@ -489,7 +487,7 @@
             cType: "0",
             cId: that.cId,
             mType: "32",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           to: this.targetData.account,
           content: JSON.stringify({
@@ -666,7 +664,7 @@
             cType: "0",
             cId: that.cId,
             mType: "0",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           done(error, obj) {
             console.log(obj)
@@ -675,7 +673,7 @@
           }
         });
 
-          this.$refs.inputTextarea.focus();
+        this.$refs.inputTextarea.focus();
 
       },
       //消息发送之后成功还是失败的函数
@@ -787,7 +785,7 @@
                   cType: "0",
                   cId: that.cId,
                   mType: "1",
-                  conId:that.orderSourceId,
+                  conId: that.orderSourceId,
                 }),
                 file: file,
                 done(error, msg){
@@ -800,7 +798,6 @@
                   };
                 }
               });
-
             }
           }
         });
@@ -812,13 +809,10 @@
           // 滑动到底部
           that.refreshScroll();
           let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
-          console.log(heightflag);
-          if (heightflag>=0){
+
+          if (heightflag >= 0) {
             that.scroll.scrollTo(0, -heightflag, 500);
           }
-          //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
-          //   let el=list[list.length-1];
-          // this.scroll.scrollToElement(el,1000);
           document.body.scrollTop = Math.pow(10, 20);
         }, 300)
       },
@@ -832,7 +826,7 @@
       inputLimit () {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content,1000);
+          this.sendTextContent = api.getStrByteLen(content, 1000);
         }
       },
       //获取咨询价格
@@ -1017,7 +1011,7 @@
             cType: "0",
             cId: that.cId,
             mType: "32",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "payFinishTips"
@@ -1039,7 +1033,7 @@
             cType: "0",
             cId: that.cId,
             mType: "24",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "notification",
@@ -1076,7 +1070,7 @@
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: 1,
           click: true,
-          swipeTime:1500,
+          swipeTime: 1500,
         })
       },
       refreshScroll(){
@@ -1160,7 +1154,7 @@
             cType: "0",
             cId: that.cId,
             mType: "34",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "triageSendTips",
