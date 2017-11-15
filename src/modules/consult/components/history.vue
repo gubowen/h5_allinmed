@@ -45,8 +45,8 @@
                              @change="onFileChange($event,1,index)">
                     </figure>
                   </li>
-                  <li class="ev-upLoadAdd" v-if="uploading1===false&&imageList1.length<9">
-                    <input class="ev-upLoadInput" accept="image/*" type="file"
+                  <li class="ev-upLoadAdd">
+                    <input class="ev-upLoadInput" accept="image/*" type="file" v-if="uploading1===false&&imageList1.length<9"
                            @change="onFileChange($event,1)">
                   </li>
                 </ul>
@@ -67,8 +67,8 @@
                              @change="onFileChange($event,2,index)">
                     </figure>
                   </li>
-                  <li class="ev-upLoadAdd" v-if="uploading2===false&&imageList2.length<9">
-                    <input class="ev-upLoadInput" accept="image/*" type="file"
+                  <li class="ev-upLoadAdd" >
+                    <input class="ev-upLoadInput" accept="image/*" type="file" v-if="uploading2===false&&imageList2.length<9"
                            @change="onFileChange($event,2)">
                   </li>
                 </ul>
