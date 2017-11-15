@@ -16,8 +16,8 @@ import discription from './components/discription';
 import history from './components/history';
 import upLoadTip from './components/upLoadTip';
 import showBigImg from 'components/showBigImg';
-import vueg from 'vueg'
-import 'vueg/css/transition-min.css';
+// import vueg from 'vueg'
+// import 'vueg/css/transition-min.css';
 import "static/css/base.css";
 import api from '../../common/js/util/util';
 import selectArea from 'components/selectArea';
@@ -88,7 +88,7 @@ class Consult {
         return {x: 0, y: 0}
       }
     });
-    Vue.use(vueg, this.router,options);
+    // Vue.use(vueg, this.router,options);
   }
 
   //路由注册
