@@ -75,9 +75,11 @@ class wxStrings {
           localStorage.setItem("token", data.responseData.token);   //token
           localStorage.setItem("nonceStr", _nonceStr);              //随机数
           //resolve({data: data, nonceStr: _nonceStr});
-          Obj.callBack({
-            data: data, nonceStr: _nonceStr
-          })
+          if(data&&data.responseData&&data.responseData.token&&data.responseData.token.length>0){
+            Obj.callBack({
+              data: data, nonceStr: _nonceStr
+            });
+          }
         }
       });
     //})
