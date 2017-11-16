@@ -835,17 +835,20 @@
         let that = this;
         setTimeout(() => {
           // 滑动到底部
-          that.refreshScroll();
-          console.log('我要滑动底部');
-          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+          that.$nextTick(() => {
+            that.refreshScroll();
+            let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+            console.log('我要滑动底部');
+            console.log(heightflag);
 
-          if (heightflag >= 0) {
-            that.scroll.scrollTo(0, -heightflag, 500);
-          }
-//          this.$refs.inputTextarea.scrollIntoView(true);
-//          this.$refs.inputTextarea.scrollIntoViewIfNeeded();
-//          document.body.scrollTop = Math.pow(10, 20);
-          window.scrollTo(0, document.body.offsetHeight);
+            if (heightflag >= 0) {
+              that.scroll.scrollTo(0, -heightflag, 500);
+            }
+  //          this.$refs.inputTextarea.scrollIntoView(true);
+  //          this.$refs.inputTextarea.scrollIntoViewIfNeeded();
+  //          document.body.scrollTop = Math.pow(10, 20);
+            window.scrollTo(0, document.body.offsetHeight);
+          })
         }, 300)
       },
       //滑动到某个元素
