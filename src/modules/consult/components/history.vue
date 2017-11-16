@@ -709,7 +709,7 @@
         that.isClick = false;
         that.backPopupShow=true;
         that.clearPageData();
-        window.location.href = '/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
+        window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
 //        api.ajax({
 //          url: XHRList.triage,
 //          method: "POST",
