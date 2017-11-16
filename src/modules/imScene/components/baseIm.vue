@@ -816,7 +816,7 @@
             that.scroll.scrollTo(0, -heightflag, 500);
           }
           document.body.scrollTop = Math.pow(10, 20);
-        }, 300)
+        }, 1000)
       },
       //滑动到某个元素
       scrollElement(element){
