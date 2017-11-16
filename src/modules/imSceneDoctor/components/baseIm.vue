@@ -120,8 +120,8 @@
                       rows="1"
                       v-model="sendTextContent"
                       ref="inputTextarea"
-                      @focus="onFocus=true;autoSizeTextarea()"
-                      @blur="onFocus=false;autoSizeTextarea()"
+                      @focus="focusFn()"
+                      @blur="blurFn()"
                       @click="scrollToBottom"
                       @input="inputLimit"
                       @keypress.enter.stop="autoSizeTextarea()">
@@ -245,6 +245,26 @@
         } else if (IS_Android) {
           this.footerPosition = "main-input-box absolute"
         }
+      },
+      focusFn(){
+        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+          $("body").css({
+            "position":"relative",
+            "bottom":"60%"
+          })
+        }
+        this.onFocus = true;
+        this.autoSizeTextarea()
+      },
+      blurFn(){
+        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+          $("body").css({
+            "position":"static",
+            "bottom":"0%"
+          })
+        }
+        this.onFocus = false;
+        this.autoSizeTextarea()
       },
       connectToNim() {
         const that = this;
@@ -1207,7 +1227,8 @@
           probeType: 1,
           click: true,
           // swipeTime:1500,
-          momentum:false,
+          momentum: true,
+          deceleration:0.01
         })
       },
       refreshScroll(){

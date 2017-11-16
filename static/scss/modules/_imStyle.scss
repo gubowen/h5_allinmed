@@ -28,6 +28,7 @@
   -webkit-overflow-scrolling: touch;
   z-index: 3;
   & > section{
+    -webkit-overflow-scrolling: touch;
     //&.padding-top{
     //  padding-top: rem(50px);
     //}
@@ -142,7 +143,7 @@
     position: absolute;
   }
   &.relative{
-    position: sticky;
+    position: relative;
   }
   & > * {
     display: inline-block;
