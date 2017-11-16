@@ -77,9 +77,6 @@
           // swiper的各种回调函数也可以出现在这个对象中，和swiper官方一样
           onTransitionStart(swiper){
 //            console.log(swiper)
-          },
-          onSlideChangeStart: function(swiper){
-          window.scrollTo(0,0);
           }
           // more Swiper configs and callbacks...
           // ...
@@ -101,14 +98,18 @@
 //      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
 ////      console.log('this is current swiper instance object', this.swiper)
 //      this.swiper.slideTo(_imgNum, 1000, false)
-    },
-    activated(){
-      window.scrollTo(0,0);
+        // window.scrollTo(0,0);
       this.imageListBox = this.$route.params.imgBlob;
       let _imgNum = this.$route.params.indexNum;
       this.swiper.slideTo(_imgNum, 0, false)
     },
-    methods:{
+    activated(){
+      // window.scrollTo(0,0);
+      // this.imageListBox = this.$route.params.imgBlob;
+      // let _imgNum = this.$route.params.indexNum;
+      // this.swiper.slideTo(_imgNum, 0, false)
+    },
+    methods:{ 
       imageClickFn(){
         this.$router.go(-1);
       }

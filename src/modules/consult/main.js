@@ -159,7 +159,7 @@ class Consult {
         name: "showBigImg",
         component: showBigImg,
         meta: {
-          keepAlive: true
+          keepAlive: false
         },
       }
     ];
