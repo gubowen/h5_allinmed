@@ -321,7 +321,7 @@
         console.log(that.$store.state.previewSuggestionNum);
         console.log(that.$store.state.renderSuggestionNum);
         //渲染完成后进行定位
-        if (that.$store.state.previewSuggestionNum === that.$store.state.renderSuggestionNum) {
+        if (that.$store.state.previewSuggestionNum <= that.$store.state.renderSuggestionNum) {
           that.$nextTick(function () {
             if (!api.getPara().suggest) {
               console.log('医生数据完成');
