@@ -27,8 +27,12 @@
   height: 92.5%;
   -webkit-overflow-scrolling: touch;
   z-index: 3;
+  transform-style: preserve-3d;transform: translate3d(0,0,0);
+
   & > section{
     -webkit-overflow-scrolling: touch;
+    transform-style: preserve-3d;
+    transform: translate3d(0,0,0);
     //&.padding-top{
     //  padding-top: rem(50px);
     //}
@@ -38,7 +42,9 @@
     padding-bottom: rem(180px)
   }
 }
-
+.main-message-wrapper{
+  transform: translate3d(0,0,0);
+}
 .main-message-box {
   margin: rem(35px) 0;
   padding: 0 rem(20px);
@@ -139,12 +145,6 @@
   //position: relative;
   //display: none;
   z-index: 1;
-  &.absolute{
-    position: absolute;
-  }
-  &.relative{
-    position: relative;
-  }
   & > * {
     display: inline-block;
     vertical-align: bottom;
@@ -179,7 +179,7 @@
     top: 50%;
     margin-top: rem(-37.5px);
     line-height:rem(75px);
-    height: 1.3rem;
+    //height: 1.3rem;
     &.on {
       color: #00D6C6;
     }
@@ -413,7 +413,7 @@
 
   //text-align: center;
   //display: none;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   left: 0;
@@ -674,7 +674,7 @@ html, body {
   //overflow: auto;
   background-color: #f4f5f7;
   padding: 0;
-  height: 100.5%;
+  height: 100%;
 }
 
 .case-list {

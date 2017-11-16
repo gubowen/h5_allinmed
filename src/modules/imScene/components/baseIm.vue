@@ -391,6 +391,7 @@
       getMessageList () {
         let that = this;
         //获取云端历史记录
+        document.body.scrollTop = 0;
         this.nim.getHistoryMsgs({
           scene: 'p2p',
           to: this.targetData.account,//聊天对象, 账号或者群id
@@ -500,6 +501,7 @@
           to: this.targetData.account,
           content: JSON.stringify(data),
           done(error, msg) {
+
             that.sendMessageSuccess(error, msg);
           }
         });
@@ -1095,8 +1097,8 @@
           return;
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
-          probeType: 1,
-          click: true,
+          probeType: 3,
+          click: false,
           // swipeTime:1500,
           momentum: true,
           deceleration:0.01
@@ -1351,7 +1353,9 @@
   * {
     -webkit-backface-visibility: hidden;
   }
-
+  html,body{
+    overflow: hidden;
+  }
   .ev-fileUpHide {
     box-shadow: none !important;
     border: none;
