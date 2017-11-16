@@ -37,7 +37,6 @@
             :scrollToBottom="scrollToBottom"
             :scrollElement='scrollElement'
             :refreshScroll='refreshScroll'
-            @loadCallback="scrollToBottom"
           >
           </PreviewSuggestion>
           <!--支付成功-->
@@ -607,7 +606,7 @@
 //                that.inputBoxShow = false;
 //                that.consultTipsShow = true;
 //              } else {
-              //  time = 100000;
+              //  time = 97192931;
               if (dataList.consultationState === -2) {
                 that.lastTimeShow = false;
                 that.inputBoxShow = true;
