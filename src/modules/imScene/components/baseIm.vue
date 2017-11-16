@@ -327,7 +327,9 @@
               console.log("收到回复消息：" + JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
-              that.scrollToBottom();
+              that.$nextTick(function () {
+                that.scrollToBottom();
+              })
               that.getCId(msg);
             }
           }
@@ -834,6 +836,7 @@
         setTimeout(() => {
           // 滑动到底部
           that.refreshScroll();
+          console.log('我要滑动底部');
           let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
 
           if (heightflag >= 0) {
@@ -1098,7 +1101,7 @@
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: 3,
-          click: false,
+          click: true,
           // swipeTime:1500,
           momentum: true,
           deceleration:0.01
@@ -1352,9 +1355,6 @@
 
   * {
     -webkit-backface-visibility: hidden;
-  }
-  html,body{
-    overflow: hidden;
   }
   .ev-fileUpHide {
     box-shadow: none !important;
