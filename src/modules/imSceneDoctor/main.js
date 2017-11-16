@@ -86,6 +86,9 @@ class ImScene {
     }, {
       path: "/ShowBigImg",
       name: "showBigImg",
+      meta: {
+        keepAlive: false
+      },
       component: ShowBigImg
     }, {
       path: "/MedicalReportDetail",
