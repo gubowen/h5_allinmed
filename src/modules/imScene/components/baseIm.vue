@@ -48,6 +48,9 @@
           <CheckSuggest
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='checkSuggestion'"
             :checkSuggestMessage="JSON.parse(msg.content)"
+            :scrollToBottom="scrollToBottom"
+            :scrollElement='scrollElement'
+            :refreshScroll='refreshScroll'
           >
           </CheckSuggest>
           <!--文本消息-->
