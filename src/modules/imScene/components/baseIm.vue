@@ -1101,7 +1101,7 @@
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: 3,
-          click: false,
+          click: true,
           // swipeTime:1500,
           momentum: true,
           deceleration:0.01
