@@ -89,7 +89,7 @@ class ImScene {
       path: "/ShowBigImg",
       name: "showBigImg",
       meta: {
-        keepAlive: true
+        keepAlive: false
       },
       component: ShowBigImg
     }, {
