@@ -324,6 +324,7 @@
         if (that.$store.state.previewSuggestionNum === that.$store.state.renderSuggestionNum) {
           that.$nextTick(function () {
             if (!api.getPara().suggest) {
+              console.log('医生数据完成');
               that.scrollToBottom();
             } else {
               that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
