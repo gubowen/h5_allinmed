@@ -123,7 +123,7 @@ export default {
       that.tempSuggest = that.lessSuggest;
       that.$nextTick(function () {
         // that.refreshScroll();
-        that.scrollElement(e.path["4"]);
+        that.scrollElement(e.srcElement.parentElement.parentElement.parentElement);
       })
     },
     goToUpload() {
