@@ -16,7 +16,7 @@ class WxCommon {
   checkOpenId() {
     if (this.isWXBrowse() === "other") {
       return true;
-    } else {
+    } else if(window.location.href.indexOf("m9.allinmed.cn")>0 || window.location.href.indexOf("m.allinmed.cn")>0){
       let _openId = localStorage.getItem("openId"),
       _checkKey = '';
       if (_openId != null) {
@@ -28,6 +28,8 @@ class WxCommon {
         }
       }
       return _checkKey;
+    }else{
+      return true;
     }
   }
 

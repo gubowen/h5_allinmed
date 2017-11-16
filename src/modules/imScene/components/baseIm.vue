@@ -1117,7 +1117,7 @@
       let that = this;
 //      let _checkOpenId=api.checkOpenId();
       if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);
+        // api.wxGetOpenId(1);
       }
       api.forbidShare();
       that.getUserBaseData();
