@@ -150,8 +150,8 @@
                     rows="1"
                     v-model="sendTextContent"
                     ref="inputTextarea"
-                    @focus="onFocus=true;autoSizeTextarea()"
-                    @blur="onFocus=false;autoSizeTextarea()"
+                    @focus="focusFn()"
+                    @blur="blurFn()"
                     @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
@@ -196,6 +196,8 @@
   import nimEnv from 'common/js/nimEnv/nimEnv';
 
   import BScroll from "better-scroll";
+
+  import "babel-polyfill";
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -221,7 +223,7 @@
           progress: "0%",
           index: 0
         },
-        onFocus:false,
+        onFocus: false,
         inputFlag: true,//上传图片input控制
 //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
         imageList: [],//页面图片数组
@@ -258,6 +260,26 @@
         } else if (IS_Android) {
           this.footerPosition = "main-input-box absolute"
         }
+      },
+      focusFn(){
+        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+          $("body").css({
+            "position":"relative",
+            "bottom":"60%"
+          })
+        }
+        this.onFocus = true;
+        this.autoSizeTextarea()
+      },
+      blurFn(){
+        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+          $("body").css({
+            "position":"static",
+            "bottom":"0%"
+          })
+        }
+        this.onFocus = false;
+        this.autoSizeTextarea()
       },
       //用户连接IM聊天
       connectToNim(){
@@ -305,7 +327,9 @@
               console.log("收到回复消息：" + JSON.stringify(msg));
               that.pauseTime(msg);//收到检查检验隐藏顶部框；
               that.msgList.push(msg);
-              that.scrollToBottom();
+              that.$nextTick(function () {
+                that.scrollToBottom();
+              })
               that.getCId(msg);
             }
           }
@@ -369,6 +393,7 @@
       getMessageList () {
         let that = this;
         //获取云端历史记录
+        document.body.scrollTop = 0;
         this.nim.getHistoryMsgs({
           scene: 'p2p',
           to: this.targetData.account,//聊天对象, 账号或者群id
@@ -478,6 +503,7 @@
           to: this.targetData.account,
           content: JSON.stringify(data),
           done(error, msg) {
+
             that.sendMessageSuccess(error, msg);
           }
         });
@@ -606,7 +632,7 @@
 //                that.inputBoxShow = false;
 //                that.consultTipsShow = true;
 //              } else {
-              //  time = 97192931;
+              //  time = 100000;
               if (dataList.consultationState === -2) {
                 that.lastTimeShow = false;
                 that.inputBoxShow = true;
@@ -809,14 +835,21 @@
         let that = this;
         setTimeout(() => {
           // 滑动到底部
-          that.refreshScroll();
-          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+          that.$nextTick(() => {
+            that.refreshScroll();
+            let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+            console.log('我要滑动底部');
+            console.log(heightflag);
 
-          if (heightflag >= 0) {
-            that.scroll.scrollTo(0, -heightflag, 500);
-          }
-          document.body.scrollTop = Math.pow(10, 20);
-        }, 1000)
+            if (heightflag >= 0) {
+              that.scroll.scrollTo(0, -heightflag, 500);
+            }
+            //          this.$refs.inputTextarea.scrollIntoView(true);
+            //          this.$refs.inputTextarea.scrollIntoViewIfNeeded();
+            //          document.body.scrollTop = Math.pow(10, 20);
+            window.scrollTo(0, document.body.offsetHeight);
+          })
+        }, 300)
       },
       //滑动到某个元素
       scrollElement(element){
@@ -1070,10 +1103,10 @@
           return;
         }
         this.scroll = new BScroll(this.$refs.wrapper, {
-          probeType: 1,
+          probeType: 3,
           click: true,
           // swipeTime:1500,
-          // momentum:false,
+          momentum: true,
           deceleration:0.01
         })
       },
@@ -1152,72 +1185,72 @@
       // console.time("main");
       // console.timeEnd('1');
       // let name  = that.$route.query;
-      
+
       // let c = that.$route.query.queryType === "triage";
 
       // if (!!that.$route.query) {
-        // debugger;
-        // console.timeEnd('2');
-        if (that.$route.query.queryType === "triage") {
-          // console.timeEnd('3')
-          that.nim.sendCustomMsg({
-            scene: 'p2p',
-            to: that.targetData.account,
-            custom: JSON.stringify({
-              cType: "0",
-              cId: that.cId,
-              mType: "34",
-              conId: that.orderSourceId,
-            }),
-            content: JSON.stringify({
-              type: "triageSendTips",
-              data: {
-                actionType: that.$route.query.triageType,
-              }
-            }),
-            type: "custom",
-            done (error, msg) {
-              if (!error) {
-                that.sendMessageSuccess(error, msg)
-              }
+      // debugger;
+      // console.timeEnd('2');
+      if (that.$route.query.queryType === "triage") {
+        // console.timeEnd('3')
+        that.nim.sendCustomMsg({
+          scene: 'p2p',
+          to: that.targetData.account,
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "34",
+            conId: that.orderSourceId,
+          }),
+          content: JSON.stringify({
+            type: "triageSendTips",
+            data: {
+              actionType: that.$route.query.triageType,
             }
-          })
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
+          }
+        })
         // console.timeEnd('4');
-        } else if (that.$route.query && that.$route.query.queryType === "checkSuggest"){
-          that.updateMedical();
-          that.nim.sendCustomMsg({
-            scene: 'p2p',
-            to: that.targetData.account,
-            custom: JSON.stringify({
-              cType: "0",
-              cId: that.cId,
-              mType: "0",
-              conId:that.orderSourceId,
-            }),
-            content: JSON.stringify({
-              type: "checkSuggestSendTips",
-              data: {
-                actionType: that.$route.query.queryType,
-              }
-            }),
-            type: "custom",
-            done (error, msg) {
-              if (!error) {
-                that.sendMessageSuccess(error, msg)
-              }
+      } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
+        that.updateMedical();
+        that.nim.sendCustomMsg({
+          scene: 'p2p',
+          to: that.targetData.account,
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "0",
+            conId: that.orderSourceId,
+          }),
+          content: JSON.stringify({
+            type: "checkSuggestSendTips",
+            data: {
+              actionType: that.$route.query.queryType,
             }
-          })
-        }
-      // } 
+          }),
+          type: "custom",
+          done (error, msg) {
+            if (!error) {
+              that.sendMessageSuccess(error, msg)
+            }
+          }
+        })
+      }
+      // }
       that.$router.push({
         query: {}
       });
 
 
       // if (that.$route.query && that.$route.query.queryType === "triage") {
-        
+
       //   console.log(that.$route)
-        
+
       //   that.nim.sendCustomMsg({
       //     scene: 'p2p',
       //     to: that.targetData.account,
@@ -1238,11 +1271,11 @@
       //       if (!error) {
       //         that.sendMessageSuccess(error, msg)
       //       }
-            
+
       //     }
       //   })
       //   console.timeEnd('4');
-        
+
       // } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
       //   that.updateMedical();
       //   that.nim.sendCustomMsg({
@@ -1322,7 +1355,8 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imStyle";
-  *{
+
+  * {
     -webkit-backface-visibility: hidden;
   }
   .ev-fileUpHide {
