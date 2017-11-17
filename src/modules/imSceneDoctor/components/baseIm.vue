@@ -276,7 +276,7 @@
           onconnect(data) {
             console.log('连接成功');
             that.triageDoctorAssign();
-
+            that.getPatientBase();
           },
           onmyinfo(userData) {
             that.getMessageList();
@@ -1276,7 +1276,7 @@
         localStorage.setItem("PCIMLinks", location.href);
       }
 
-      this.resetLogoUrl();
+//      this.resetLogoUrl();
       api.forbidShare();
 
 
