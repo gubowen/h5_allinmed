@@ -280,7 +280,7 @@
           },
           onmyinfo(userData) {
             that.getMessageList();
-            that.userData = userData;
+//            that.userData = userData;
           },
           onwillreconnect(obj) {
             console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
