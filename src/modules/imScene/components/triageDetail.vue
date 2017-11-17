@@ -303,7 +303,7 @@
           chunk_size: '4mb',                  // 分块上传时，每块的体积
           filters: {
             mime_types: [                                   //只允许上传video
-              {title: "video", extensions: "mp4,mov,avi,wmv,flv"}
+              {title: "video", extensions: ""}
             ],
             prevent_duplicates: true                        //不允许选取重复文件
           },
@@ -571,9 +571,6 @@
           &.he-videoImageBox {
             padding-left: rem(32px);
             padding-right: rem(40px);
-            .tc-imageUpLoadAdd {
-
-            }
             .tc-upLoadInput {
               cursor: pointer;
               position: absolute;
