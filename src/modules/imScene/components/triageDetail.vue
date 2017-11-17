@@ -571,9 +571,6 @@
           &.he-videoImageBox {
             padding-left: rem(32px);
             padding-right: rem(40px);
-            .tc-imageUpLoadAdd {
-
-            }
             .tc-upLoadInput {
               cursor: pointer;
               position: absolute;
