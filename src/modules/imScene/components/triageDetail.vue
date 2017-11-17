@@ -61,7 +61,7 @@
         <div class="tc-videoLoadingImg">
           <img src="../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png" alt="">
         </div>
-        <p class="tc-videoLoadingText">上传中...</p>
+        <p class="tc-videoLoadingText">上传中{{upLoadPercent}}%...</p>
       </section>
     </section>
     <transition name="fade">
@@ -119,6 +119,7 @@
   import Qiniu from "common/js/third-party/qiniu/qiniu";
   import Toast from "components/toast";
   import confirm from 'components/confirm';
+  import store from '../store/store'
   const XHRList = {
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",//上传图片
     imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",//更新图片
@@ -142,6 +143,7 @@
         videoUploading: false,//视频正在上传七牛
         videoObj: {},
         videoSubmitParam: {},
+        upLoadPercent:"",
         tip: "上传完成",
         tipShow: false,
         uploadVideo:false,//点击提交之后，提交按钮是否可以点击
@@ -199,6 +201,11 @@
           next(true);
         }
       }
+    },
+    watch: {
+            '$store.state.upLoadPercent': function () {
+                this.upLoadPercent = this.$store.state.upLoadPercent;
+            }
     },
     props: {},
     methods: {
@@ -292,18 +299,19 @@
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
           browse_button: "uploadBtn",         // 上传选择的点选按钮，必需
           multi_selection: false,
-          uptoken_url: XHRList.getToken,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-          domain: 'allinmed',     // bucket域名，下载资源时用到，必需
-          container: this.$refs.upload,             // 上传区域DOM ID，默认是browser_button的父元素
-          max_file_size: '100mb',             // 最大文件体积限制
+          uptoken_url: XHRList.getToken,      // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+          get_new_uptoken: true,              // 设置上传文件的时候是否每次都重新获取新的uptoken
+          domain: 'allinmed',                 // bucket域名，下载资源时用到，必需
+          container: this.$refs.upload,       // 上传区域DOM ID，默认是browser_button的父元素
+          max_file_size: '60mb',              // 最大文件体积限制
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
           dragdrop: true,                     // 开启可拖曳上传
           drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
           chunk_size: '4mb',                  // 分块上传时，每块的体积
           filters: {
-            mime_types: [                                   //只允许上传video
-              {title: "video", extensions: ""}
+            mime_types: [                     //只允许上传video
+              //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
+              {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
             ],
             prevent_duplicates: true                        //不允许选取重复文件
           },
@@ -312,6 +320,9 @@
             'FilesAdded': function (up, files) {
               plupload.each(files, function (file) {
                 // 文件添加进队列后，处理相关的事情
+                // var progress = new FileProgress(file, 'fsUploadProgress');
+                //             progress.setStatus("等待...");
+                //             progress.bindUploadCancel(up);
               });
             },
             'BeforeUpload': function (up, file) {
@@ -320,6 +331,7 @@
             'UploadProgress': function (up, file) {
               // 每个文件上传时，处理相关的事情
               that.videoUploading = true;
+              store.commit('upLoadPercentFn',file.percent);
             },
             'FileUploaded': function (up, file, info) {
               that.videoUploading = false;
@@ -332,6 +344,15 @@
             },
             'Error': function (up, err, errTip) {
               //上传出错时，处理相关的事情
+                if (!(/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)$/i.test(err.file.type))) {
+                  that.errorShow = true;
+                  that.errorMsg =err.code=="-601"? "当前仅支持avi、mp4、3gp、wmv、mov、flv格式的视频":"视频不能超过60M，请重新上传";
+                  setTimeout(() => {
+                    that.errorMsg = '';
+                    that.errorShow = false
+                  }, 3000);
+                  return false;     
+                }
             },
             'UploadComplete': function () {
               //队列文件处理完毕后，处理相关的事情
