@@ -17,6 +17,7 @@ export default new Vuex.Store({
     consultationId: "",
     logoUrl: "",
     lastTime:"",
+    upLoadPercent:"",
     targetDoctor:{
       nick:'',//医生名字
       customerId:'',//医生id
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     renderSuggestionNum:0,//渲染出诊建议次数
   },
   mutations: {
+    upLoadPercentFn(state,percent){
+      state.upLoadPercent = percent;
+    },
     setConsultation(state, id){
       state.consultationId = id;
     },
