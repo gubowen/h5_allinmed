@@ -311,7 +311,7 @@
           filters: {
             mime_types: [                     //只允许上传video
               //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
-              {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"}
+              {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
             ],
             prevent_duplicates: true                        //不允许选取重复文件
           },
