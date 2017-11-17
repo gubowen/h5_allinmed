@@ -29,11 +29,9 @@ fastclick.attach(document.body);
 class ImScene {
   constructor() {
     this.init();
-    // if(!api.checkOpenId()){
-    //   api.wxGetOpenId(1);
-    // }else{
-    //   this.init();
-    // }
+    if (!api.checkOpenId()) {
+      api.wxGetOpenId(1);
+    }
   }
 
   init() {
