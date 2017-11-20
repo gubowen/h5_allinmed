@@ -295,7 +295,7 @@
       videoUpload(){
         const that = this;
 
-        Qiniu.uploader({
+        let uploader=Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
           browse_button: "uploadBtn",         // 上传选择的点选按钮，必需
           multi_selection: false,
@@ -311,7 +311,7 @@
           filters: {
             mime_types: [                     //只允许上传video
               //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
-              {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
+              // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
             ],
             prevent_duplicates: true                        //不允许选取重复文件
           },
@@ -327,6 +327,20 @@
             },
             'BeforeUpload': function (up, file) {
               // 每个文件上传前，处理相关的事情
+              console.log(file.type);
+               if (!(/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)$/i.test(file.type))) {
+                  that.errorShow = true;
+                  that.errorMsg ="当前仅支持avi、mp4、3gp、wmv、mov、flv格式的视频";
+                  setTimeout(() => {
+                    that.errorMsg = '';
+                    that.errorShow = false
+                  }, 3000);
+                  // that.videoUpload();
+                  uploader.removeFile(uploader.getFile(file.id));
+                  return false;     
+                }else{
+                  console.log("123");
+                }
             },
             'UploadProgress': function (up, file) {
               // 每个文件上传时，处理相关的事情

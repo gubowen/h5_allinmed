@@ -17,7 +17,8 @@
           </article>
         </transition>
         <transition-group name="fadeDown" tag="section">
-          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()" @touchmove="$refs.inputTextarea.blur()">
+          <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index"
+                   @click.stop="$refs.inputTextarea.blur()" @touchmove="$refs.inputTextarea.blur()">
             <!--时间戳-->
             <p class='time-stamp' v-if="getTimeStampShowFlag(msg,index)||receivedTreatment(msg)">
               {{transformTimeStamp(msg.time)}}</p>
@@ -205,7 +206,7 @@
           progress: 0,
           index: 0
         },
-        onFocus:false,
+        onFocus: false,
         inputFlag: true,//上传图片input控制
         loading: true,
         payPopupShow: false,
@@ -234,7 +235,8 @@
           account: '2_' + api.getPara().doctorCustomerId
         },
         sendTextContent: "",
-        footerPosition: "main-input-box"
+        footerPosition: "main-input-box",
+        scrollHeight: document.body.scrollTop
       }
     },
 
@@ -247,24 +249,29 @@
         }
       },
       focusFn(){
-        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
-          $("body").css({
-            "position":"relative",
-            "bottom":"60%"
-          })
-        }
-        this.onFocus = true;
-        this.autoSizeTextarea()
+        this.interval = setInterval(function () {//设置一个计时器，时间设置与软键盘弹出所需时间相近
+          document.body.scrollTop = document.body.scrollHeight;//获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 100)
+//        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+//          $("body").css({
+//            "position":"relative",
+//            "bottom":"60%"
+//          })
+//        }
+//        this.onFocus = true;
+//        this.autoSizeTextarea()
       },
       blurFn(){
-        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
-          $("body").css({
-            "position":"static",
-            "bottom":"0%"
-          })
-        }
-        this.onFocus = false;
-        this.autoSizeTextarea()
+        clearInterval(this.interval);//清除计时器
+        document.body.scrollTop = this.scrollHeight;
+//        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+//          $("body").css({
+//            "position":"static",
+//            "bottom":"0%"
+//          })
+//        }
+//        this.onFocus = false;
+//        this.autoSizeTextarea()
       },
       connectToNim() {
         const that = this;
@@ -621,7 +628,7 @@
             cType: "1",
             cId: api.getPara().doctorCustomerId,
             mType: "27",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           content: JSON.stringify(data),
           isPushable: false,
@@ -705,7 +712,7 @@
             cType: "1",
             cId: api.getPara().doctorCustomerId,
             mType: "21",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           content: JSON.stringify({
             type: "notification",
@@ -715,12 +722,12 @@
               subContentDesc: "[患者向您报到]"
             }
           }),
-//          needPushNick: false,
-//          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
-//          pushPayload: JSON.stringify({
-//            "account": "0_" + api.getPara().caseId,
-//            "type": "1"
-//          }),
+          needPushNick: false,
+          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
+          pushPayload: JSON.stringify({
+            "account": "0_" + api.getPara().caseId,
+            "type": "1"
+          }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
             localStorage.removeItem("noMR");
@@ -773,7 +780,7 @@
               let dataList = param.responseObject.responseData.dataList;
               let time = parseInt(dataList.remainingTime);
               let count = parseInt(dataList.consultationFrequency);
-              let receiveTime =parseInt(dataList.receiveTime);
+              let receiveTime = parseInt(dataList.receiveTime);
 
               that.shuntCustomerId = dataList.triageCustomerId;
               that.triageOrderSourceId = dataList.triageConsultationId;
@@ -851,7 +858,7 @@
             cType: "1",
             cId: api.getPara().doctorCustomerId,
             mType: "0",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           to: this.targetData.account,
           text: sendTextTemp,
@@ -981,7 +988,7 @@
                   cType: "1",
                   cId: api.getPara().doctorCustomerId,
                   mType: "1",
-                  conId:that.orderSourceId,
+                  conId: that.orderSourceId,
                 }),
                 to: that.targetData.account,
                 file: file,
@@ -1027,7 +1034,7 @@
       inputLimit() {
         let content = this.sendTextContent;
         if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content,1000);
+          this.sendTextContent = api.getStrByteLen(content, 1000);
         }
       },
       //接诊时间倒数
@@ -1116,7 +1123,7 @@
                       cType: "1",
                       cId: api.getPara().doctorCustomerId,
                       mType: "0",
-                      conId:that.orderSourceId,
+                      conId: that.orderSourceId,
                     }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
@@ -1191,7 +1198,7 @@
             cType: "1",
             cId: api.getPara().doctorCustomerId,
             mType: "33",
-            conId:that.orderSourceId,
+            conId: that.orderSourceId,
           }),
           to: that.targetData.account,
           needPushNick: false,
@@ -1228,7 +1235,7 @@
           click: true,
           // swipeTime:1500,
           momentum: true,
-          deceleration:0.01
+          deceleration: 0.01
         })
       },
       refreshScroll(){
@@ -1341,6 +1348,7 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   @import "../../../../static/scss/modules/imDoctorStyle";
+
   .animated {
     box-shadow: none !important;
   }
