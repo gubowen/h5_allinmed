@@ -47,7 +47,7 @@
                   </li>
                   <li class="ev-upLoadAdd">
                     <input class="ev-upLoadInput" accept="image/*" type="file" v-if="uploading1===false&&imageList1.length<9"
-                           @change="onFileChange($event,1)">
+                           @change="onFileChange($event,1)" multiple>
                   </li>
                 </ul>
               </form>
@@ -327,19 +327,24 @@
       },
       onFileChange(e, type, index) {
         let files = e.target.files || e.dataTransfer.files;
+
         if (!files.length) {
           return;
         }
-        if (files[0].size > 1024 * 1024 * 5) {
-          this.errorShow = true;
-          this.errorMsg = "图片不能超过5M";
-          setTimeout(() => {
-            this.errorMsg = '';
-            this.errorShow = false
-          }, 3000);
-        } else {
-          this.upLoadPic(files, type, index);
+        console.log(files)
+        for (let i=0;i<files.length;i++){
+          if (files[i].size > 1024 * 1024 * 5) {
+            this.errorShow = true;
+            this.errorMsg = "图片不能超过5M";
+            setTimeout(() => {
+              this.errorMsg = '';
+              this.errorShow = false
+            }, 3000);
+          } else {
+            this.upLoadPic(files[i], type, index);
+          }
         }
+
       },
       uploadEvent() {
         this.upload.none = false;
@@ -363,13 +368,13 @@
             _imageType = 4;
             break;
         }
-        _data.append('file', _files[0]);
+        _data.append('file', _files);
         _data.append('paramJson', JSON.stringify({
           caseId: "",
           imageType: _imageType,
           caseCategoryId: ''
         }));
-        let blob = window.URL.createObjectURL(_files[0]);
+        let blob = window.URL.createObjectURL(_files);
 
 //        this["uploading" + type] = true;
         this.uploading1 = true;
@@ -718,7 +723,7 @@
         that.isClick = false;
         that.backPopupShow=true;
         that.clearPageData();
-        window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
+        window.location.href = '/imScene.html?caseId=' + that.responseCaseId +   '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
 //        api.ajax({
 //          url: XHRList.triage,
 //          method: "POST",
