@@ -166,6 +166,8 @@
   import confirm from 'components/confirm';
   import backPopup from "components/backToastForConsult";
   import WxPayCommon from 'common/js/wxPay/wxComm';//微信支付的方法
+  
+  import imageCompress from 'common/js/imgCompress/toCompress';
 
   const XHRList = {
     upload: "/mcall/customer/patient/case/attachment/v1/create/",
@@ -333,9 +335,9 @@
         }
         console.log(files)
         for (let i=0;i<files.length;i++){
-          if (files[i].size > 1024 * 1024 * 5) {
+          if (files[i].size > 1024 * 1024 * 10) {
             this.errorShow = true;
-            this.errorMsg = "图片不能超过5M";
+            this.errorMsg = "图片不能超过10M";
             setTimeout(() => {
               this.errorMsg = '';
               this.errorShow = false
@@ -355,7 +357,7 @@
           this.levelShow = true;
         }
       },
-      upLoadPic: function (files, type, index) {
+      upLoadPic (files, type, index) {
         let that = this,
           _files = files,
           _imageType = '',
@@ -375,7 +377,12 @@
           caseCategoryId: ''
         }));
         let blob = window.URL.createObjectURL(_files);
-
+        // imageCompress({
+        //     imgSrc: blob,
+        //     quality: 1,
+        //     width: 1280,
+        //     height: 500
+        // })
 //        this["uploading" + type] = true;
         this.uploading1 = true;
         this.uploading2 = true;
@@ -406,6 +413,7 @@
         }).then((res) => {
           if (res.data.responseObject.responseStatus) {
             let num = index ? index : that["imageList" + type].length - 1;
+            console.log(num)
             that["imageList" + type][num].imgId = res.data.responseObject.responsePk;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = false;
@@ -830,461 +838,470 @@
 
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "../../../../scss/library/_common-modules";
+@import "../../../../scss/library/_common-modules";
 
-  $main-color: #00D6C6;
+$main-color: #00d6c6;
 
-  html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
+}
+body {
+  /*background:url("../../../common/image/background_wave.png") no-repeat bottom center;*/
+  /*background-size:100% rem(272px);*/
+}
+
+//咨询问题第二页
+.consult-main-inner {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-height: 100%;
+  background: url("../../../common/image/background_wave.png") no-repeat bottom
+    center #f2f2f2;
+  background-size: 100% rem(272px);
+  border-radius: rem(8px);
+  .consult-wrapper {
+    padding: rem(30px);
   }
-  body{
-    /*background:url("../../../common/image/background_wave.png") no-repeat bottom center;*/
-    /*background-size:100% rem(272px);*/
+  .consult-page {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: rem(86px);
+    height: rem(64px);
+    &.page-one {
+      background: url("../../../common/image/img00/consult_V1.2/page number@2x.png");
+      background-size: contain;
+    }
+    &.page-two {
+      background: url("../../../common/image/img00/consult_V1.2/pagenumber02@2x.png");
+      background-size: contain;
+    }
   }
-
-  //咨询问题第二页
-  .consult-main-inner {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    min-height: 100%;
-    background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
-    background-size:100% rem(272px);
-    border-radius: rem(8px);
-    .consult-wrapper {
-      padding: rem(30px);
-    }
-    .consult-page {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: rem(86px);
-      height: rem(64px);
-      &.page-one {
-        background: url("../../../common/image/img00/consult_V1.2/page number@2x.png");
-        background-size: contain;
+  //页内公共样式
+  .questionContainMain {
+    border-radius: 16px;
+    background-color: #ffffff;
+    .questionItem-common {
+      padding-bottom: rem(68px);
+      &:first-child {
+        padding-top: rem(54px);
       }
-      &.page-two {
-        background: url("../../../common/image/img00/consult_V1.2/pagenumber02@2x.png");
-        background-size: contain;
+      &:last-child {
+        padding-bottom: rem(80px);
       }
-    }
-    //页内公共样式
-    .questionContainMain {
-      border-radius: 16px;
-      background-color: #ffffff;
-      .questionItem-common {
-        padding-bottom: rem(68px);
-        &:first-child {
-          padding-top: rem(54px);
+      //问题标题
+      .questionTitleCommon {
+        position: relative;
+        @include font-dpr(20px);
+        padding: 0 rem(64px);
+        color: #222222;
+        font-weight: bold;
+        &:after {
+          position: absolute;
+          content: "";
+          display: inline-block;
+          width: rem(16px);
+          height: rem(16px);
+          -webkit-border-radius: 50px;
+          -moz-border-radius: 50px;
+          border-radius: 50px;
+          background-color: #2fc5bd;
+          left: rem(32px);
+          top: 50%;
+          margin-top: rem(-8px);
         }
-        &:last-child {
-          padding-bottom: rem(80px);
+      }
+      //单选按钮
+      .questionContain-center {
+        @include clearfix();
+        padding: rem(64px) rem(28px) rem(16px);
+        .questionSelectBtn {
+          width: rem(284px);
+          @include font-dpr(18px);
+          padding: rem(20px) 0;
+          text-align: center;
+          float: left;
+          border: 1px solid #ececec;
+          border-radius: 100px;
+          &.selected-right {
+            float: right;
+          }
+          &.selected {
+            border: 1px solid #2fc5bd;
+            color: #2fc5bd;
+          }
         }
-        //问题标题
-        .questionTitleCommon {
+      }
+      //隐藏域内容样式
+      .questionHiddenCommon {
+        @include font-dpr(16px);
+        //display: none;
+        padding: rem(20px) rem(80px);
+        background-color: #e5e5e5;
+        p {
+          color: #666666;
+          //            @include ellipsis();
+          &.selected {
+            color: #07b6ac;
+          }
+        }
+        .selected-HospitalBtn {
+          border-bottom: 1px solid #d5d5d5;
+        }
+        .selected-HospitalBtn,
+        .selected-cureBtn {
           position: relative;
-          @include font-dpr(20px);
-          padding: 0 rem(64px);
-          color: #222222;
-          font-weight: bold;
+          padding: rem(38px) 0;
           &:after {
             position: absolute;
-            content: '';
-            display: inline-block;
-            width: rem(16px);
-            height: rem(16px);
-            -webkit-border-radius: 50px;
-            -moz-border-radius: 50px;
-            border-radius: 50px;
-            background-color: #2FC5BD;
-            left: rem(32px);
-            top: 50%;
-            margin-top: rem(-8px);
-          }
-
-        }
-        //单选按钮
-        .questionContain-center {
-          @include clearfix();
-          padding: rem(64px) rem(28px) rem(16px);
-          .questionSelectBtn {
-            width: rem(284px);
-            @include font-dpr(18px);
-            padding: rem(20px) 0;
-            text-align: center;
-            float: left;
-            border: 1px solid #ECECEC;
-            border-radius: 100px;
-            &.selected-right {
-              float: right;
-            }
-            &.selected {
-              border: 1px solid #2FC5BD;
-              color: #2FC5BD;
-            }
-          }
-        }
-        //隐藏域内容样式
-        .questionHiddenCommon {
-          @include font-dpr(16px);
-          //display: none;
-          padding: rem(20px) rem(80px);
-          background-color: #E5E5E5;
-          p {
-            color: #666666;
-//            @include ellipsis();
-            &.selected {
-              color: #07B6AC;
-            }
-          }
-          .selected-HospitalBtn {
-            border-bottom: 1px solid #D5D5D5;
-          }
-          .selected-HospitalBtn, .selected-cureBtn {
-            position: relative;
-            padding: rem(38px) 0;
-            &:after {
-              position: absolute;
-              display: block;
-              content: '';
-              width: rem(36px);
-              height: rem(36px);
-              right: 0;
-              top: 50%;
-              margin-top: rem(-18px);
-              background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png") no-repeat center;
-              background-size: 100% 100%;
-            }
-          }
-          //输入框
-          .medicineBox {
-            @include font-dpr(16px);
-            width: 100%;
-            padding-bottom: rem(16px);
-            height: 0.6rem;
-            max-height: 1.3rem;
-            outline: medium;
-            background: #E5E5E5;
-            border: none;
-            border: none;
-            @include placeholder() {
-              color: #AAAAAA;
-            }
-          }
-          .qu-underline {
             display: block;
-            height: rem(2px);
-            width: 100%;
-            background-color: #D5D5D5;
-            margin-bottom: rem(16px);
-          }
-          .qu-setMedicineTipText {
-            @include font-dpr(12px);
-            color: #AAAAAA;
-          }
-          //选择医院隐藏域
-          &.selectHospitalBox {
-            padding: rem(20px) rem(60px) rem(20px) rem(100px);
-          }
-          //填写药物隐藏域
-          &.qu-setMedicineBox {
-            padding: rem(60px) rem(60px) rem(60px) rem(106px);
-            position: relative;
-            .limit {
-              position: absolute;
-              right: rem(60px);
-              bottom: rem(60px);
-              color: #0ab375;
-              @include font-dpr(12px);
-            }
-          }
-        }
-      }
-
-    }
-    //底部按钮
-    .questionSubmitBtnBox {
-      text-align: center;
-      padding-top: rem(76px);
-      padding-bottom: rem(68px);
-      .questionSubmitBtn {
-        @include font-dpr(20px);
-        width: rem(560px);
-        height: rem(100px);
-        line-height: rem(100px);
-        background-color: #2FC5BD;
-        text-align: center;
-        color: #ffffff;
-        border-radius: rem(9999px);
-        box-shadow: 0 rem(4px) rem(12px) 0 rgba(47, 197, 189, 0.40);
-        //margin:0 auto;
-      }
-    }
-  }
-
-  //upload tips
-  .qu-upLoadGuide {
-    > img {
-      width: 100%;
-    }
-  }
-
-  .upLoadBox {
-    .upLoadCommon-box-s {
-      padding-bottom: rem(16px);
-      .qu-upFormBox-s {
-        margin-bottom: rem(26px);
-        .qu-upLoadTitle-s {
-          position: relative;
-          .tc-upLoadTitleName {
-            @include font-dpr(16px);
-            color: #666666;
-            padding-top: rem(40px);
-          }
-          .qu-upLoadTips {
-            @include font-dpr(14px);
-            color: #2FC5BD;
-            position: relative;
-            margin-top: rem(26px);
-            margin-bottom: rem(14px);
-            padding-left: rem(48px);
-            overflow: visible;
-            &::after {
-              position: absolute;
-              content: '';
-              width: rem(48px);
-              height: rem(48px);
-              left: 0;
-              top: 50%;
-              margin-top: rem(-24px);
-              background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png") no-repeat center;
-              background-size: 100% 100%;
-            }
-          }
-        }
-        .qu-upLoadItemBox-s {
-          @include clearfix();
-          padding-left: rem(26px);
-          //每个上传图片缩略图
-          .qu-upLoadItemList-s {
-            position: relative;
-            width: rem(136px);
-            height: rem(136px);
-            float: left;
-
-            margin-right: rem(30px);
-            margin-top: rem(30px);
-            img {
-              position: relative;
-              width: 100%;
-              height: 100%;
-            }
-            .qu-upLoadCover-s {
-              position: absolute;
-              display: inline-block;
-              top: 0;
-              left: 0;
-              width: rem(136px);
-              height: rem(136px);
-              //margin-top:rem(8px);
-              //margin-left:rem(8px);
-              background-color: #545454;
-              opacity: 0.63;
-              z-index: 0;
-            }
-            .qu-upLoadDel-s {
-              display: none;
-              position: absolute;
-              //display: inline-block;
-              width: rem(60px);
-              height: rem(60px);
-              top: 0;
-              right: 0;
-              background: url("../../../common/image/img00/patientConsult/symptom_photo_delete@2x.png") no-repeat;
-              background-position: top right;
-              background-size: rem(38px) rem(38px);
-              z-index: 1;
-            }
-            .qu-upLoading-s {
-              position: absolute;
-              width: rem(40px);
-              height: rem(40px);
-              top: 50%;
-              left: 50%;
-              margin-top: rem(-20px);
-              margin-left: rem(-20px);
-              background: url("../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png") no-repeat center;
-              background-size: 100% 100%;
-              animation: submitIng 1s linear infinite;
-              -webkit-animation: submitIng 1s linear infinite;
-              @keyframes submitIng {
-                0% {
-                  -webkit-transform: rotate(0deg);
-                }
-                100% {
-                  -webkit-transform: rotate(360deg);
-                }
-              }
-            }
-            .qu-upLoadAfresh-s {
-              color: #ffffff;
-              position: absolute;
-              width: rem(40px);
-              height: rem(40px);
-              top: 50%;
-              left: 50%;
-              margin-top: rem(-20px);
-              margin-left: rem(-20px);
-              background: url("../../../common/image/img00/patientConsult/symptom_refresh_loading@2x.png") no-repeat center;
-              background-size: 100% 100%;
-            }
-            .qu-upLoadAfreshText-s {
-              @include font-dpr(12px);
-              display: inline-block;
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              margin-top: rem(-17px);
-              margin-left: rem(-76px);
-              //bottom: rem(30px);
-              color: #ffffff;
-              width: rem(152px);
-              text-align: center;
-              z-index: 1;
-            }
-            .qu-fileUpRefresh-s {
-              position: absolute;
-              display: inline-block;
-              top: 0;
-              left: 0;
-              width: rem(136px);
-              height: rem(136px);
-              //margin-top:rem(8px);
-              //margin-left:rem(8px);
-              z-index: 2;
-            }
-          }
-          //原始样式
-          .tc-upLoadItemList {
-            width: rem(136px);
-            height: rem(136px);
-            float: left;
-            display: inline-block;
-            position: relative;
-            vertical-align: top;
-            margin-top: rem(30px);
-            margin-right: rem(25px);
-            border: rem(1px) solid #2FC5BD;
-
-            & > img {
-              width: 100%;
-              height: 100%;
-              vertical-align: top;
-            }
-            //上传失败
-            .upload-fail {
-              position: absolute;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              left: 0;
-              opacity: 0.83;
-              background: #545454;
-              & > input {
-                opacity: 0;
-                width: 100%;
-                height: 100%;
-              }
-              & > p {
-                @include font-dpr(12px);
-                color: #FFFFFF !important;
-                text-align: center;
-                position: absolute;
-                top: 50%;
-                width: 100%;
-                left: 50%;
-                transform: translate(-50%, -50%)
-
-              }
-            }
-          }
-
-          .tc-upLoadDel {
-            position: absolute;
-            width: 0.8rem;
-            height: 0.8rem;
-            top: 0;
+            content: "";
+            width: rem(36px);
+            height: rem(36px);
             right: 0;
-            background: url(../../../common/image/img00/patientConsult/symptom_photo_delete@2x.png) no-repeat;
-            background-position: top right;
-            background-size: 0.50667rem 0.50667rem;
-            z-index: 1;
+            top: 50%;
+            margin-top: rem(-18px);
+            background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png")
+              no-repeat center;
+            background-size: 100% 100%;
           }
+        }
+        //输入框
+        .medicineBox {
+          @include font-dpr(16px);
+          width: 100%;
+          padding-bottom: rem(16px);
+          height: 0.6rem;
+          max-height: 1.3rem;
+          outline: medium;
+          background: #e5e5e5;
+          border: none;
+          border: none;
+          @include placeholder() {
+            color: #aaaaaa;
+          }
+        }
+        .qu-underline {
+          display: block;
+          height: rem(2px);
+          width: 100%;
+          background-color: #d5d5d5;
+          margin-bottom: rem(16px);
+        }
+        .qu-setMedicineTipText {
+          @include font-dpr(12px);
+          color: #aaaaaa;
+        }
+        //选择医院隐藏域
+        &.selectHospitalBox {
+          padding: rem(20px) rem(60px) rem(20px) rem(100px);
+        }
+        //填写药物隐藏域
+        &.qu-setMedicineBox {
+          padding: rem(60px) rem(60px) rem(60px) rem(106px);
+          position: relative;
+          .limit {
+            position: absolute;
+            right: rem(60px);
+            bottom: rem(60px);
+            color: #0ab375;
+            @include font-dpr(12px);
+          }
+        }
+      }
+    }
+  }
+  //底部按钮
+  .questionSubmitBtnBox {
+    text-align: center;
+    padding-top: rem(76px);
+    padding-bottom: rem(68px);
+    .questionSubmitBtn {
+      @include font-dpr(20px);
+      width: rem(560px);
+      height: rem(100px);
+      line-height: rem(100px);
+      background-color: #2fc5bd;
+      text-align: center;
+      color: #ffffff;
+      border-radius: rem(9999px);
+      box-shadow: 0 rem(4px) rem(12px) 0 rgba(47, 197, 189, 0.4);
+      //margin:0 auto;
+    }
+  }
+}
 
-          .tc-upLoadItemList {
-            position: relative;
-            float: left;
-            .ev-loading {
-              position: absolute;
-              opacity: 0.83;
-              background: #545454;
-              .middle-tip-modal {
-                position: absolute;
-              }
-            }
+//upload tips
+.qu-upLoadGuide {
+  > img {
+    width: 100%;
+  }
+}
+
+.upLoadBox {
+  .upLoadCommon-box-s {
+    padding-bottom: rem(16px);
+    .qu-upFormBox-s {
+      margin-bottom: rem(26px);
+      .qu-upLoadTitle-s {
+        position: relative;
+        .tc-upLoadTitleName {
+          @include font-dpr(16px);
+          color: #666666;
+          padding-top: rem(40px);
+        }
+        .qu-upLoadTips {
+          @include font-dpr(14px);
+          color: #2fc5bd;
+          position: relative;
+          margin-top: rem(26px);
+          margin-bottom: rem(14px);
+          padding-left: rem(48px);
+          overflow: visible;
+          &::after {
+            position: absolute;
+            content: "";
+            width: rem(48px);
+            height: rem(48px);
+            left: 0;
+            top: 50%;
+            margin-top: rem(-24px);
+            background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png")
+              no-repeat center;
+            background-size: 100% 100%;
           }
-          //上传按钮
-          .ev-upLoadAdd {
-            box-sizing: border-box;
-            width: rem(136px);
-            height: rem(136px);
-            float: left;
-            text-align: center;
+        }
+      }
+      .qu-upLoadItemBox-s {
+        @include clearfix();
+        padding-left: rem(26px);
+        //每个上传图片缩略图
+        .qu-upLoadItemList-s {
+          position: relative;
+          width: rem(136px);
+          height: rem(136px);
+          float: left;
+
+          margin-right: rem(30px);
+          margin-top: rem(30px);
+          img {
             position: relative;
-            display: inline-block;
-            vertical-align: top;
-            margin-top: rem(30px);
-            //padding:rem(8px);
-            background: url("../../../common/image/img00/consult_V1.2/addto@2x.png") center;
-            background-size: contain;
-            //span{
-            //  display: block;
-            //  width: rem(136px);
-            //  height: rem(136px);
-            //  background: url("/image/img00/patientConsult/addto@2x.png");
-            //  background-size: 100% 100%;
-            //
-            //}
-          }
-          //上传初始化input
-          .ev-upLoadInput {
-            opacity: 0;
             width: 100%;
             height: 100%;
           }
+          .qu-upLoadCover-s {
+            position: absolute;
+            display: inline-block;
+            top: 0;
+            left: 0;
+            width: rem(136px);
+            height: rem(136px);
+            //margin-top:rem(8px);
+            //margin-left:rem(8px);
+            background-color: #545454;
+            opacity: 0.63;
+            z-index: 0;
+          }
+          .qu-upLoadDel-s {
+            display: none;
+            position: absolute;
+            //display: inline-block;
+            width: rem(60px);
+            height: rem(60px);
+            top: 0;
+            right: 0;
+            background: url("../../../common/image/img00/patientConsult/symptom_photo_delete@2x.png")
+              no-repeat;
+            background-position: top right;
+            background-size: rem(38px) rem(38px);
+            z-index: 1;
+          }
+          .qu-upLoading-s {
+            position: absolute;
+            width: rem(40px);
+            height: rem(40px);
+            top: 50%;
+            left: 50%;
+            margin-top: rem(-20px);
+            margin-left: rem(-20px);
+            background: url("../../../common/image/img00/patientConsult/symptom_photo_loading@2x.png")
+              no-repeat center;
+            background-size: 100% 100%;
+            animation: submitIng 1s linear infinite;
+            -webkit-animation: submitIng 1s linear infinite;
+            @keyframes submitIng {
+              0% {
+                -webkit-transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+              }
+            }
+          }
+          .qu-upLoadAfresh-s {
+            color: #ffffff;
+            position: absolute;
+            width: rem(40px);
+            height: rem(40px);
+            top: 50%;
+            left: 50%;
+            margin-top: rem(-20px);
+            margin-left: rem(-20px);
+            background: url("../../../common/image/img00/patientConsult/symptom_refresh_loading@2x.png")
+              no-repeat center;
+            background-size: 100% 100%;
+          }
+          .qu-upLoadAfreshText-s {
+            @include font-dpr(12px);
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: rem(-17px);
+            margin-left: rem(-76px);
+            //bottom: rem(30px);
+            color: #ffffff;
+            width: rem(152px);
+            text-align: center;
+            z-index: 1;
+          }
+          .qu-fileUpRefresh-s {
+            position: absolute;
+            display: inline-block;
+            top: 0;
+            left: 0;
+            width: rem(136px);
+            height: rem(136px);
+            //margin-top:rem(8px);
+            //margin-left:rem(8px);
+            z-index: 2;
+          }
+        }
+        //原始样式
+        .tc-upLoadItemList {
+          width: rem(136px);
+          height: rem(136px);
+          float: left;
+          display: inline-block;
+          position: relative;
+          vertical-align: top;
+          margin-top: rem(30px);
+          margin-right: rem(25px);
+          border: rem(1px) solid #2fc5bd;
+
+          & > img {
+            width: 100%;
+            height: 100%;
+            vertical-align: top;
+          }
+          //上传失败
+          .upload-fail {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0.83;
+            background: #545454;
+            & > input {
+              opacity: 0;
+              width: 100%;
+              height: 100%;
+            }
+            & > p {
+              @include font-dpr(12px);
+              color: #ffffff !important;
+              text-align: center;
+              position: absolute;
+              top: 50%;
+              width: 100%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
+        }
+
+        .tc-upLoadDel {
+          position: absolute;
+          width: 0.8rem;
+          height: 0.8rem;
+          top: 0;
+          right: 0;
+          background: url(../../../common/image/img00/patientConsult/symptom_photo_delete@2x.png)
+            no-repeat;
+          background-position: top right;
+          background-size: 0.50667rem 0.50667rem;
+          z-index: 1;
+        }
+
+        .tc-upLoadItemList {
+          position: relative;
+          float: left;
+          .ev-loading {
+            position: absolute;
+            opacity: 0.83;
+            background: #545454;
+            .middle-tip-modal {
+              position: absolute;
+            }
+          }
+        }
+        //上传按钮
+        .ev-upLoadAdd {
+          box-sizing: border-box;
+          width: rem(136px);
+          height: rem(136px);
+          float: left;
+          text-align: center;
+          position: relative;
+          display: inline-block;
+          vertical-align: top;
+          margin-top: rem(30px);
+          //padding:rem(8px);
+          background: url("../../../common/image/img00/consult_V1.2/addto@2x.png")
+            center;
+          background-size: contain;
+          //span{
+          //  display: block;
+          //  width: rem(136px);
+          //  height: rem(136px);
+          //  background: url("/image/img00/patientConsult/addto@2x.png");
+          //  background-size: 100% 100%;
+          //
+          //}
+        }
+        //上传初始化input
+        .ev-upLoadInput {
+          opacity: 0;
+          width: 100%;
+          height: 100%;
         }
       }
     }
   }
+}
 
-  .fadeRight-enter-active, .fadeRight-leave-active {
-    transition: all ease-in-out .5s;
-    transform: translateX(0);
-  }
+.fadeRight-enter-active,
+.fadeRight-leave-active {
+  transition: all ease-in-out 0.5s;
+  transform: translateX(0);
+}
 
-  .fadeRight-enter, .fadeRight-leave-to /* .fade-leave-active in <2.1.8 */
-  {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+.fadeRight-enter,
+.fadeRight-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
 
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
-  }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
-  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
-  {
-    opacity: 0;
-  }
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
