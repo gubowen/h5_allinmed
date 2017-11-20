@@ -386,14 +386,14 @@
             break;
         }
 
-        _data.append('uploadify', blob, 'image.png');
-//        _data.append('file', _files);
+
+        _data.append('file', _files);
         _data.append('paramJson', JSON.stringify({
           caseId: "",
           imageType: _imageType,
           caseCategoryId: ''
         }));
-
+        _data.append('uploadify', blob, 'image.png');
         // imageCompress({
         //     imgSrc: blob,
         //     quality: 1,
