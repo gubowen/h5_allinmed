@@ -212,6 +212,8 @@
         uploading2: false,
         imageList1: [],
         imageList2: [],
+        filesObj:{},
+        uploadIndex: 0,
         netTipsNum: 0,
         cityLevel: 2,
         responseCaseId: "",//提交订单响应回来的caseId
@@ -356,12 +358,17 @@
                 height: 500
               }, (blob) => {
                   console.log(blob)
-                this.upLoadPic(files[i], type, index, blob);
+                // this.upLoadPic(files[i], type, index, blob);
               });
             }
           }
         }
-
+        //多图上传
+        this.filesObj=files;
+        this.uploadIndex=0;
+         if(this.filesObj[this.uploadIndex]){
+          this.upLoadPic(files[this.uploadIndex], type, index);
+        }
       },
       uploadEvent() {
         this.upload.none = false;
@@ -401,8 +408,8 @@
         //     height: 500
         // })
 //        this["uploading" + type] = true;
-        this.uploading1 = true;
-        this.uploading2 = true;
+        that.uploading1 = true;
+        that.uploading2 = true;
 
         if (typeof index !== "undefined") {
           that["imageList" + type][index] = {
@@ -438,17 +445,23 @@
             that["imageList" + type][num].fail = false;
             that["imageList" + type][num].finish = true;
 //            that["uploading" + type] = false;
-            this.uploading1 = false;
-            this.uploading2 = false;
+            that.uploading1 = false;
+            that.uploading2 = false;
             that.$el.querySelectorAll(".tc-upLoadItemList.ev-imgList .ev-loading")[0].style.display = "none";
+             //上传下一张图片
+            that.uploadIndex=parseInt(that.uploadIndex)+1;
+            let totalUpNum= that["imageList" + type].length;
+            if(that.filesObj[that.uploadIndex]&&that.uploadIndex<that.filesObj.length&&totalUpNum<9){
+              that.upLoadPic(that.filesObj[that.uploadIndex], type, index);
+            }
           } else {
             let num = index ? index : that["imageList" + type].length - 1;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
             that["imageList" + type][num].finish = false;
 //            that["uploading" + type] = false;
-            this.uploading1 = false;
-            this.uploading2 = false;
+            that.uploading1 = false;
+            that.uploading2 = false;
           }
         }, (err) => {
           let num = index ? index : that["imageList" + type].length - 1;
@@ -456,8 +469,8 @@
           that["imageList" + type][num].fail = true;
           that["imageList" + type][num].finish = false;
 //            that["uploading" + type] = false;
-          this.uploading1 = false;
-          this.uploading2 = false;
+          that.uploading1 = false;
+          that.uploading2 = false;
           console.log("net error")
         });
       },
