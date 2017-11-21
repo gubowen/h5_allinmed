@@ -6,18 +6,18 @@
 *
 * Created by qiangkailiang on 2017/3/1
 */
-.main-inner{
+
+.main-inner {
   //overflow: hidden;
 }
+
 //聊天区
 .main-message {
-  background-color: #f4f5f7;
-  //width: 100%;
+  background-color: #f4f5f7; //width: 100%;
   //height: 100%;
   //overflow: auto;
   //padding-bottom: rem(270px);
-  box-sizing: border-box;
-  //padding-top: 0.5rem;
+  box-sizing: border-box; //padding-top: 0.5rem;
   //position: absolute;
   top: 0;
   left: 0;
@@ -27,24 +27,26 @@
   height: 92.5%;
   -webkit-overflow-scrolling: touch;
   z-index: 3;
-  transform-style: preserve-3d;transform: translate3d(0,0,0);
-
-  & > section{
+  transform-style: preserve-3d;
+  transform: translate3d(0, 0, 0);
+  &>section {
     -webkit-overflow-scrolling: touch;
     transform-style: preserve-3d;
-    transform: translate3d(0,0,0);
-    //&.padding-top{
+    transform: translate3d(0, 0, 0); //&.padding-top{
     //  padding-top: rem(50px);
     //}
     //&.padding-bottom{
     //  padding-bottom: rem(250px);
     //}
-    padding-bottom: rem(180px)
+    padding-bottom: rem(180px);
+    margin-top: rem(100px);
   }
 }
-.main-message-wrapper{
-  transform: translate3d(0,0,0);
+
+.main-message-wrapper {
+  transform: translate3d(0, 0, 0);
 }
+
 .main-message-box {
   margin: rem(35px) 0;
   padding: 0 rem(20px);
@@ -52,35 +54,31 @@
   font-size: 0;
   @include clearfix();
   &-item {
-
-    & > .main-message-img {
+    &>.main-message-img {
       display: inline-block;
       vertical-align: top;
-      & > img {
+      &>img {
         width: rem(60px);
         height: rem(60px);
         vertical-align: top;
         border-radius: 50%;
-
       }
     }
-    & > .main-message-content {
+    &>.main-message-content {
       display: inline-block;
       vertical-align: top;
       max-width: rem(510px);
-      padding: rem(34px) rem(36px);
-      //line-height: 1;
+      padding: rem(34px) rem(36px); //line-height: 1;
       margin: 0 rem(30px);
       border-radius: rem(21px);
       @include font-dpr(17px);
       word-break: break-all;
       box-sizing: border-box;
-
-      & > img {
+      &>img {
         //width: 100%;
         //height: 100%;
-        width:rem(150px);
-        height:rem(150px);
+        width: rem(150px);
+        height: rem(150px);
         vertical-align: middle;
       }
       .main-message-href {
@@ -91,21 +89,21 @@
     }
     &.others-message {
       float: left;
-      & > .main-message-content {
+      &>.main-message-content {
         display: inline-block;
         vertical-align: top;
         background: #FFFFFF;
         border: 0 solid #E4E9EB;
-        box-shadow: 0 1px 0 0 rgba(204,204,204,0.20);
+        box-shadow: 0 1px 0 0 rgba(204, 204, 204, 0.20);
         border-top-left-radius: 0;
-        & > p {
+        &>p {
           word-break: break-all;
         }
       }
     }
     &.my-message {
       float: right;
-      & > .main-message-content {
+      &>.main-message-content {
         display: inline-block;
         vertical-align: top;
         color: #222222;
@@ -113,11 +111,11 @@
         border: 0 solid #C2E5EA;
         box-shadow: 0 1px 0 0 #B5DAE0;
         border-top-right-radius: 0;
-        &.image-message{
+        &.image-message {
           padding: 0;
           background-color: transparent;
           position: relative;
-          .middle-tip-box{
+          .middle-tip-box {
             left: 0;
             right: 0;
             bottom: 0;
@@ -135,27 +133,23 @@
   bottom: 0;
   right: 0;
   left: 0;
-  width: 100%;
-  //height: 1.3rem;
+  width: 100%; //height: 1.3rem;
   box-sizing: border-box;
   font-size: 0;
   padding: rem(20px) rem(90px);
   background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50);
-  //position: relative;
+  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
   //display: none;
   z-index: 1;
-  & > * {
+  &>* {
     display: inline-block;
     vertical-align: bottom;
-
   }
   .main-input-box-textarea-inner {
     box-sizing: border-box;
     margin-left: rem(30px);
     max-height: 2.5rem;
     overflow: auto;
-
     .main-input-box-textarea {
       width: rem(490px);
       border-radius: rem(40px);
@@ -167,10 +161,8 @@
       border: 0 solid #E8ECEF;
       box-sizing: border-box;
       min-height: rem(60px);
-
     }
   }
-
   .main-input-box-send {
     @include font-dpr(17px);
     color: #B6B6B6;
@@ -178,8 +170,7 @@
     right: rem(40px);
     top: 50%;
     margin-top: rem(-37.5px);
-    line-height:rem(75px);
-    //height: 1.3rem;
+    line-height: rem(75px); //height: 1.3rem;
     &.on {
       color: #00D6C6;
     }
@@ -210,7 +201,6 @@
   display: inline-block;
   vertical-align: middle;
   margin: 0 rem(30px);
-
 }
 
 .message-result-item {
@@ -230,19 +220,18 @@
       vertical-align: top;
       padding: rem(28px) rem(20px);
       background: #e5faf8;
-
-      & > img {
+      &>img {
         width: rem(80px);
         height: rem(92px);
         vertical-align: top;
       }
     }
-    & > figcaption {
+    &>figcaption {
       display: inline-block;
       vertical-align: top;
       padding: rem(34px) rem(24px);
       max-width: 4.5rem;
-      & > p {
+      &>p {
         font-size: 0;
         color: #909090;
         span {
@@ -250,7 +239,7 @@
           @include font-dpr(12px);
         }
       }
-      & > h2 {
+      &>h2 {
         @include font-dpr(14px);
         color: #222;
         font-weight: normal;
@@ -267,7 +256,6 @@
     border-top-left-radius: 0;
     background: #A6C6EE;
     color: #fff;
-
   }
   .message-result-item-message {
     border: rem(1px) solid #96C0F3;
@@ -287,7 +275,6 @@
 }
 
 //测试用，接收反馈
-
 .icon-im-plus {
   @include square(rem(40px));
   background: url("../../../../src/common/image/imScene/dialog_photo_default@2x.png") no-repeat;
@@ -307,7 +294,6 @@
     .message-result-item-message {
       border-bottom-right-radius: 0;
     }
-
     &:after {
       display: none;
     }
@@ -334,14 +320,12 @@
       border-top-left-radius: 0;
       background: #A6C7EE;
       text-align: right;
-
     }
     &-bottom {
       text-align: center;
       padding: rem(30px) rem(36px);
       padding-top: 0;
       box-sizing: border-box;
-
       a {
         @include font-dpr(15px);
         display: block;
@@ -354,21 +338,18 @@
     &-message {
       background-color: #fff;
       border-bottom-right-radius: rem(21px);
-      border-bottom-left-radius: rem(21px);
-      //padding-bottom:rem(24px);
+      border-bottom-left-radius: rem(21px); //padding-bottom:rem(24px);
     }
   }
   &-item {
     @include font-dpr(14px);
     margin: rem(24px) 0;
     padding: 0 rem(48px);
-
     color: #222222;
     position: relative;
     box-sizing: border-box;
     text-indent: rem(-18px);
-
-    & > span {
+    &>span {
       padding-left: rem(12px);
     }
     &:before {
@@ -378,7 +359,6 @@
       left: rem(36px);
       display: inline-block;
       vertical-align: middle;
-
     }
   }
 }
@@ -405,23 +385,20 @@
 
 //头部时间提示
 .main-message-time {
-  @include clearfix();
-  //padding: rem(10px) 0;
+  @include clearfix(); //padding: rem(10px) 0;
   height: rem(64px);
   background: url("../../../common/image/imScene/top_hint@2x.png") no-repeat;
-  background-size: cover;
-
-  //text-align: center;
+  background-size: cover; //text-align: center;
   //display: none;
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   z-index: 5;
-  p{
+  p {
     display: inline-block;
   }
-  .residue-time{
+  .residue-time {
     line-height: rem(61px);
     margin-left: rem(30px);
     @include font-dpr(14px);
@@ -431,16 +408,17 @@
       margin-left: rem(12px);
     }
   }
-  .service-time{
+  .service-time {
     float: right;
     color: #82A3B4;
     @include font-dpr(12px);
     margin-right: rem(20px);
-    span{
+    span {
       display: block;
     }
   }
 }
+
 .prohibit-input {
   background: #00D6C6;
   box-shadow: 0 0 rem(6px) 0 rgba(226, 226, 226, 0.50);
@@ -456,9 +434,8 @@
     display: inline-block;
     vertical-align: middle;
     height: 100%;
-
   }
-  & > div {
+  &>div {
     display: inline-block;
     vertical-align: middle;
     text-align: center;
@@ -481,7 +458,6 @@
   }
 }
 
-
 .over-tips {
   @include font-dpr(12px);
   color: #CCCCCC;
@@ -500,7 +476,7 @@
     background-size: contain;
     margin-right: rem(10px);
   }
-  & > span {
+  &>span {
     display: inline-block;
     vertical-align: top;
     width: 85%;
@@ -517,12 +493,12 @@
   text-align: center;
   padding: rem(10px) 0;
   &.over {
-    p, span {
+    p,
+    span {
       color: #fa7a7c;
     }
-
   }
-  & > p {
+  &>p {
     color: #B0B4C5;
     @include font-dpr(12px);
     span {
@@ -530,7 +506,6 @@
       padding: 0 rem(5px);
     }
   }
-
 }
 
 .over-tips-bottom {
@@ -554,7 +529,6 @@
     margin-left: rem(12px);
     line-height: 1.5;
   }
-
 }
 
 .refuse-tips {
@@ -641,7 +615,6 @@
 
 .main-message-box-item {
   position: relative;
-
 }
 
 .fail-button {
@@ -653,16 +626,15 @@
   left: -1rem;
   top: 50%;
   margin-top: rem(-25px);
-  & > img{
+  &>img {
     width: 100%;
   }
 }
 
-html, body {
-  width: 100%;
-  //height: auto !important;
+html,
+body {
+  width: 100%; //height: auto !important;
   background-color: #f4f5f7;
-
 }
 
 .main-inner {
@@ -691,7 +663,6 @@ html, body {
     .time {
       width: rem(150px);
       display: inline-block;
-
     }
   }
 }
@@ -713,7 +684,7 @@ html, body {
   .middle-tip-box {
     position: absolute;
     text-align: center;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: rem(21px);
     z-index: 1;
     &:before {
@@ -727,11 +698,12 @@ html, body {
     text-align: center;
     vertical-align: middle;
     display: inline-block;
-    & > img {
-      @include circle(rem(40px), transparent);
+    &>img {
+      @include circle(rem(40px),
+      transparent);
       animation: rotate 1s linear forwards infinite;
     }
-    & > .progress{
+    &>.progress {
       @include font-dpr(14px);
       color: #fff;
     }
