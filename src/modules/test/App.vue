@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="H-pay" @click="askH5Pay()">H5支付</p>
-    <p class="H-viewPay" v-if="payShow" @click="viewResultH5Pay">支付成功</p>
+    <p class="H-viewPay" v-if="payShow" @click="payHide">支付成功</p>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -64,7 +64,7 @@
       },
       payHide(){
         localStorage.removeItem('askPay');
-        //this.payShow=false
+        this.payShow=false
       }
     }
   }

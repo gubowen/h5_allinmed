@@ -3,7 +3,7 @@
     <section class="tc-searchCommFixedTop" v-show="!addTextarea">
       <div class="tc-searchCommTop">
         <i class="tc-searchBtnPic"></i>
-        <input class="tc-searchCommInput" v-model="citySearch" :value="citySearch" type="text" :placeholder="placeholderText">
+        <input class="tc-searchCommInput" v-model="citySearch" type="text" :placeholder="placeholderText">
       </div>
     </section>
     <section class="tc-searchMain">

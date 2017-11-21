@@ -212,6 +212,8 @@
         uploading2: false,
         imageList1: [],
         imageList2: [],
+        filesObj:{},
+        uploadIndex: 0,
         netTipsNum: 0,
         cityLevel: 2,
         responseCaseId: "",//提交订单响应回来的caseId
@@ -337,8 +339,9 @@
           return;
         }
         console.log(files)
+
         for (let i = 0; i < files.length; i++) {
-          if (files[i].size > 1024 * 1024 * 15) {
+          if (files[i].size > 1024 * 1024 * 10) {
             this.errorShow = true;
             this.errorMsg = "图片不能超过10M";
             setTimeout(() => {
@@ -351,17 +354,22 @@
             reader.onload = (oFREvent) => {
               imageCompress({
                 imgSrc: oFREvent.target.result,
-                quality: 0.5,
-                width: 1280,
-                height: 500
-              }, (blob) => {
-                  console.log(blob)
-                this.upLoadPic(files[i], type, index, blob);
+                quality: 0.8,
+                width: 1920,
+                height: 1080
+              }, (base64) => {
+
+                 this.upLoadPic(files[i], type, index, base64);
               });
             }
           }
         }
-
+//        //多图上传
+//        this.filesObj=files;
+//        this.uploadIndex=0;
+//         if(this.filesObj[this.uploadIndex]){
+//          this.upLoadPic(files[this.uploadIndex], type, index);
+//        }
       },
       uploadEvent() {
         this.upload.none = false;
@@ -372,7 +380,7 @@
           this.levelShow = true;
         }
       },
-      upLoadPic (files, type, index, blob) {
+      upLoadPic (files, type, index, base64) {
         let that = this,
           _files = files,
           _imageType = '',
@@ -386,80 +394,76 @@
             break;
         }
 
-        _data.append('uploadify', blob, 'image.png');
-//        _data.append('file', _files);
-        _data.append('paramJson', JSON.stringify({
-          caseId: "",
-          imageType: _imageType,
-          caseCategoryId: ''
-        }));
+        console.log(files)
 
-        // imageCompress({
-        //     imgSrc: blob,
-        //     quality: 1,
-        //     width: 1280,
-        //     height: 500
-        // })
-//        this["uploading" + type] = true;
-        this.uploading1 = true;
-        this.uploading2 = true;
+        that.uploading1 = true;
+        that.uploading2 = true;
 
         if (typeof index !== "undefined") {
           that["imageList" + type][index] = {
-            blob: blob,
+            blob: base64,
             imgId: "",
             uploading: true,
             fail: false
           };
         } else {
           that["imageList" + type].push({
-            blob: blob,
+            blob: base64,
             imgId: "",
             uploading: true,
             fail: false
           });
         }
-        axios({
+        api.ajax({
           url: XHRList.upload,
-          method: "post",
-          data: _data,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+          method: "POST",
+          data: {
+            fileContent:base64.split(",")[1],
+            fileName:files.name,
+            caseId: "",
+            imageType: _imageType,
+            caseCategoryId: ''
           },
-          processData: false, // 不会将 data 参数序列化字符串
-          contentType: false, // 根据表单 input 提交的数据使用其默认的 contentType
           timeout: 300000,
-        }).then((res) => {
-          if (res.data.responseObject.responseStatus) {
-            let num = index ? index : that["imageList" + type].length - 1;
-            console.log(num)
-            that["imageList" + type][num].imgId = res.data.responseObject.responsePk;
-            that["imageList" + type][num].uploading = false;
-            that["imageList" + type][num].fail = false;
-            that["imageList" + type][num].finish = true;
+          done(res){
+            if (res.responseObject.responseStatus) {
+              let num = index ? index : that["imageList" + type].length - 1;
+              console.log(num)
+              that["imageList" + type][num].imgId = res.responseObject.responsePk;
+              that["imageList" + type][num].uploading = false;
+              that["imageList" + type][num].fail = false;
+              that["imageList" + type][num].finish = true;
 //            that["uploading" + type] = false;
-            this.uploading1 = false;
-            this.uploading2 = false;
-            that.$el.querySelectorAll(".tc-upLoadItemList.ev-imgList .ev-loading")[0].style.display = "none";
-          } else {
+              that.uploading1 = false;
+              that.uploading2 = false;
+              that.$el.querySelectorAll(".tc-upLoadItemList.ev-imgList .ev-loading")[0].style.display = "none";
+              //上传下一张图片
+              that.uploadIndex=parseInt(that.uploadIndex)+1;
+              let totalUpNum= that["imageList" + type].length;
+              if(that.filesObj[that.uploadIndex]&&that.uploadIndex<that.filesObj.length&&totalUpNum<9){
+                that.upLoadPic(that.filesObj[that.uploadIndex], type, index);
+              }
+            } else {
+              let num = index ? index : that["imageList" + type].length - 1;
+              that["imageList" + type][num].uploading = false;
+              that["imageList" + type][num].fail = true;
+              that["imageList" + type][num].finish = false;
+//            that["uploading" + type] = false;
+              that.uploading1 = false;
+              that.uploading2 = false;
+            }
+          },
+          fail(res){
             let num = index ? index : that["imageList" + type].length - 1;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
             that["imageList" + type][num].finish = false;
 //            that["uploading" + type] = false;
-            this.uploading1 = false;
-            this.uploading2 = false;
+            that.uploading1 = false;
+            that.uploading2 = false;
+            console.log("net error")
           }
-        }, (err) => {
-          let num = index ? index : that["imageList" + type].length - 1;
-          that["imageList" + type][num].uploading = false;
-          that["imageList" + type][num].fail = true;
-          that["imageList" + type][num].finish = false;
-//            that["uploading" + type] = false;
-          this.uploading1 = false;
-          this.uploading2 = false;
-          console.log("net error")
-        });
+        })
       },
       textAreaFocus () {
         this.$el.querySelector(".medicineBox").focus();
@@ -751,34 +755,7 @@
         that.backPopupShow = true;
         that.clearPageData();
         window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId;
-//        api.ajax({
-//          url: XHRList.triage,
-//          method: "POST",
-//          data: {
-//            caseId:that.responseCaseId,
-//            patientId:this.allParams.patientId,
-//            patientCustomerId:this.allParams.patientCustomerId,
-//            isShunt: 1
-//          },
-//          beforeSend () {
-//
-//          },
-//          done(data) {
-//            if (data.responseObject.responseStatus) {
-//
-//
-//              localStorage.removeItem("selectList");
-//              localStorage.removeItem("secondList");
-//              localStorage.removeItem("questionList");
-//              localStorage.removeItem("complication");
-//
-//              that.finish=false;
-//              that.backPopupShow=true;
-//              that.clearPageData();
-//              window.location.href = '/dist/imScene.html?caseId=' + that.responseCaseId + '&shuntCustomerId=' + data.responseObject.responseData.shuntCustomerId + '&from=health' + '&patientId=' + that.allParams.patientId + '&patientCustomerId=' + that.allParams.customerId+'&from=health';
-//            }
-//          }
-//        })
+
       },
       // 填写情况验证
       validateParamsFull() {
