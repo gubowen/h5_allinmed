@@ -7,7 +7,7 @@
  * Created by Qiangkailiang on 17/11/20.
  */
 
-export default function ImageCompress(param,compressFn) {
+export default function ImageCompress(param, compressFn) {
   const image = new Image();
   image.src = param.imgSrc;
   image.onload = () => {
@@ -21,12 +21,13 @@ export default function ImageCompress(param,compressFn) {
     ctx.drawImage(image, 0, 0, param.width, param.height);
     finalBase64 = canvas.toDataURL('image/jpeg', param.quality);
     console.log(finalBase64);
-    compressFn && compressFn(convertBase64UrlToBlob(finalBase64));
+    compressFn && compressFn(finalBase64);
   }
 }
-function convertBase64UrlToBlob(urlData){
 
-  var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
+function convertBase64UrlToBlob(urlData) {
+
+  let bytes = window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
 
   //处理异常,将ascii码小于0的转换为大于0
   var ab = new ArrayBuffer(bytes.length);
@@ -35,7 +36,9 @@ function convertBase64UrlToBlob(urlData){
     ia[i] = bytes.charCodeAt(i);
   }
 
-  return new Blob( [ab] , {type : 'image/png'});
+  return new Blob([ab], {
+    type: 'image/png'
+  });
 }
 // class ImageCompress {
 //   constructor(param) {
