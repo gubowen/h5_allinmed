@@ -40,7 +40,7 @@ export default function MPay(Obj) {
         if (res.data.responseStatus) {
           op.token = res.data.responseData.token;  //token
           op.nonceStr = res.nonceStr;              //随机数
-          op.ipAddr = data.data.responseData.ipAddr;  //用户ip
+          op.ipAddr = res.data.responseData.ipAddr;  //用户ip
           _t.prepaidOrder({
             token: op.token,
             nonceStr: op.nonceStr,
