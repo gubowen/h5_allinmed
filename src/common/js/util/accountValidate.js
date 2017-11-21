@@ -35,7 +35,7 @@ export default function accountValidate() {
       data: _phoneCheckParams,
       beforeSend: function () {
       },
-      timeOut: 2000,
+      timeout: 2000,
       done(data) {
         localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
         if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
