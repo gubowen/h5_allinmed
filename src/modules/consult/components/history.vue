@@ -213,6 +213,7 @@
         imageList1: [],
         imageList2: [],
         filesObj:{},
+        base64Arr:[],
         uploadIndex: 0,
         netTipsNum: 0,
         cityLevel: 2,
@@ -334,12 +335,14 @@
       },
       onFileChange(e, type, index) {
         let files = e.target.files || e.dataTransfer.files;
-
+        let that =this;
+        that.filesObj=files;
+         that.base64Arr = [];
+          that.uploadIndex=0;
         if (!files.length) {
           return;
         }
         console.log(files)
-
         for (let i = 0; i < files.length; i++) {
           if (files[i].size > 1024 * 1024 * 10) {
             this.errorShow = true;
@@ -349,6 +352,7 @@
               this.errorShow = false
             }, 3000);
           } else {
+            //图片压缩处理
             let reader = new FileReader();
             reader.readAsDataURL(files[i]);
             reader.onload = (oFREvent) => {
@@ -358,18 +362,14 @@
                 width: 1920,
                 height: 1080
               }, (base64) => {
-
-                 this.upLoadPic(files[i], type, index, base64);
+                that.base64Arr.push(base64);  //保存压缩图片
+                if(i==files.length-1){
+                  this.upLoadPic(files[that.uploadIndex], type, index, that.base64Arr[that.uploadIndex]);
+                }
               });
             }
           }
         }
-//        //多图上传
-//        this.filesObj=files;
-//        this.uploadIndex=0;
-//         if(this.filesObj[this.uploadIndex]){
-//          this.upLoadPic(files[this.uploadIndex], type, index);
-//        }
       },
       uploadEvent() {
         this.upload.none = false;
@@ -380,11 +380,13 @@
           this.levelShow = true;
         }
       },
+      //多图上传
       upLoadPic (files, type, index, base64) {
         let that = this,
           _files = files,
-          _imageType = '',
-          _data = new FormData();
+          _imageType = '';
+        that.uploading1 = true;
+        that.uploading2 = true;
         switch (type) {
           case 1:
             _imageType = 0;
@@ -393,12 +395,6 @@
             _imageType = 4;
             break;
         }
-
-        console.log(files)
-
-        that.uploading1 = true;
-        that.uploading2 = true;
-
         if (typeof index !== "undefined") {
           that["imageList" + type][index] = {
             blob: base64,
@@ -428,7 +424,6 @@
           done(res){
             if (res.responseObject.responseStatus) {
               let num = index ? index : that["imageList" + type].length - 1;
-              console.log(num)
               that["imageList" + type][num].imgId = res.responseObject.responsePk;
               that["imageList" + type][num].uploading = false;
               that["imageList" + type][num].fail = false;
@@ -440,8 +435,8 @@
               //上传下一张图片
               that.uploadIndex=parseInt(that.uploadIndex)+1;
               let totalUpNum= that["imageList" + type].length;
-              if(that.filesObj[that.uploadIndex]&&that.uploadIndex<that.filesObj.length&&totalUpNum<9){
-                that.upLoadPic(that.filesObj[that.uploadIndex], type, index);
+              if(that.filesObj[that.uploadIndex]!=='undefined'&&that.uploadIndex<that.filesObj.length&&totalUpNum<9){
+                that.upLoadPic(that.filesObj[that.uploadIndex], type, index,that.base64Arr[that.uploadIndex]);
               }
             } else {
               let num = index ? index : that["imageList" + type].length - 1;
