@@ -248,31 +248,33 @@
           this.footerPosition = "main-input-box absolute"
         }
       },
-      focusFn(){
-        this.interval = setInterval(function () {//设置一个计时器，时间设置与软键盘弹出所需时间相近
-          document.body.scrollTop = document.body.scrollHeight;//获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-        }, 100)
-//        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
-//          $("body").css({
-//            "position":"relative",
-//            "bottom":"60%"
-//          })
-//        }
-//        this.onFocus = true;
-//        this.autoSizeTextarea()
-      },
-      blurFn(){
-        clearInterval(this.interval);//清除计时器
-        document.body.scrollTop = this.scrollHeight;
-//        if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
-//          $("body").css({
-//            "position":"static",
-//            "bottom":"0%"
-//          })
-//        }
-//        this.onFocus = false;
-//        this.autoSizeTextarea()
-      },
+    focusFn() {
+      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+        $("body").css({
+          position: "relative",
+          bottom: "55%"
+        });
+        this.interval = setInterval(function() {
+          document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 100);
+      }
+
+      this.onFocus = true;
+      this.autoSizeTextarea();
+    },
+    blurFn() {
+      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+        $("body").css({
+          position: "static",
+          bottom: "0%"
+        });
+        clearInterval(this.interval); //清除计时器
+        document.body.scrollTop = this.bfscrolltop;
+      }
+
+      this.onFocus = false;
+      this.autoSizeTextarea();
+    },
       connectToNim() {
         const that = this;
         this.nim = NIM.getInstance({

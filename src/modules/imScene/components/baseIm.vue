@@ -249,7 +249,8 @@ export default {
       },
       sendTextContent: "", //文本消息
       cId: "0", //聊天消息拓展字段的customerId
-      footerPosition: "main-input-box"
+      footerPosition: "main-input-box",
+      bfscrolltop: document.body.scrollTop
     };
   },
 
@@ -262,22 +263,29 @@ export default {
       }
     },
     focusFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+      if (navigator.userAgent.toLowerCase().includes("11_1")) {
         $("body").css({
           position: "relative",
-          bottom: "60%"
+          bottom: "55%"
         });
+        this.interval = setInterval(function() {
+          document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 100);
       }
+
       this.onFocus = true;
       this.autoSizeTextarea();
     },
     blurFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1_1")) {
+      if (navigator.userAgent.toLowerCase().includes("11_1")) {
         $("body").css({
           position: "static",
           bottom: "0%"
         });
+        clearInterval(this.interval); //清除计时器
+        document.body.scrollTop = this.bfscrolltop;
       }
+
       this.onFocus = false;
       this.autoSizeTextarea();
     },
@@ -517,10 +525,9 @@ export default {
           that.tipNewPatient(data);
         }
       });
-
     },
-    tipNewPatient(data){
-      const that=this;
+    tipNewPatient(data) {
+      const that = this;
       //提示信息
       //分诊台刷新患者
       this.nim.sendCustomMsg({

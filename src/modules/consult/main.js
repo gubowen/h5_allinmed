@@ -135,7 +135,7 @@ class Consult {
         name: "selectArea",
         component: selectArea,
         meta: {
-          keepAlive: true
+          keepAlive: false
         },
       },
       {
