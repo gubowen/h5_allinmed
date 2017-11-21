@@ -55,6 +55,14 @@
           }" v-if="hasCommunShow" @cancelClickEvent="cancelEvent" @ensureClickEvent="ensureCommunEvent">
       </confirm>
     </transition>
+    <transition name="fadeIn">
+      <confirm :confirmParams="{
+          'ensure':'支付成功',
+          'cancel':'支付失败',
+          'title':'请确认微信支付是否已经完成'
+          }" v-if="noWXPayShow" @cancelClickEvent="closePopup()" @ensureClickEvent="viewPayResult()">
+      </confirm>
+    </transition>
     <loading v-if="finish"></loading>
   </section>
 </template>
@@ -72,6 +80,7 @@
   import wxCommon from 'common/js/wxPay/wxComm';
   import confirm from 'components/confirm';
   import loading from 'components/loading';
+  import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
   const XHRList = {
     getVisitDetails: "/mcall/customer/advice/setting/v1/getMapById/",//获取医生问诊价格及次数
@@ -89,7 +98,7 @@
         repeatOrderType:"",
         repeatOrderFrequency:"",
         payOrderShow:false,
-//        levelShow: false,
+        noWXPayShow: false,
         noStateShow:false,
         noMoreShow:false,
         hasCommunShow:false,
@@ -244,7 +253,6 @@
                 that.repeatConsultationId = items.orderSourceId;
                 that.repeatOrderAmount = items.orderAmount;
                 that.repeatOrderType = items.orderSourceType;
-//                that.levelShow = true;
               } else {//没有重复订单
                 that.noOrder({
                   cId: opt.consultationId,
@@ -272,6 +280,14 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
+        siteSwitch.weChatJudge(
+          function () {
+            that.noWXPayShow = false;
+          },
+          function () {
+            that.noWXPayShow = true;
+          }
+        );
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -282,7 +298,7 @@
             orderType: 1,                     //	string	是	订单类型  1-咨询2-手术3-门诊预约
             orderSourceId: opt.consultationId,     //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
             orderSourceType: opt.orderSourceType,                //	string	是	来源类型  问诊：1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
-            orderAmount: opt.orderAmount,                  //	string	否	订单金额  （单位/元 保留两位小数）$(this).attr("data-price")
+            orderAmount: 0.01,                  //	string	否	订单金额  （单位/元 保留两位小数）
             status: '1',                        //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
             body: "图文问诊",   //   string  否  订单描述 （微信支付展示用）
             isCharge: "true"                    //   string  是  true-收费  false-免费
@@ -310,7 +326,6 @@
       },
       //提示弹层关闭执行
       cancelEvent(_type){
-//        this.levelShow = false;
         this.noStateShow = false;
         this.noMoreShow = false;
         this.hasCommunShow = false;
@@ -459,6 +474,17 @@
             }
           }
         });
+      },
+      //查看m站支付结果
+      viewPayResult(){
+        console.log("H5支付结果查看");
+        wxCommon.PayResult({
+          outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
+        }).then(function (data) {
+          console.log("查看回调",data);
+        }).catch(function (err) {
+          console.log("望天，接口错误");
+        })
       }
     },
     props: {

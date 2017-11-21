@@ -14,28 +14,10 @@ export default function ImageCompress(param, compressFn) {
   image.onload = () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    const ratio=image.width/image.height;
-    let compressParam={
-      width:0,
-      height:0
-    };
-    if (image.width>param.width){
-        compressParam={
-          width:param.width,
-          height:param.width/ratio
-        }
-    }else if (image.height>param.height){
-      compressParam={
-        width:param.height/ratio,
-        height:param.height
-      }
-    }else{
-      compressParam={
-        width:image.width,
-        height:image.height
-      }
-    }
+
     let finalBase64 = "";
+
+    let compressParam=getRatioSize(image,param);
     canvas.width = compressParam.width;
     canvas.height = compressParam.height;
 
@@ -47,3 +29,28 @@ export default function ImageCompress(param, compressFn) {
   }
 }
 
+function getRatioSize(image,param){
+  const ratio=image.width/image.height;
+  let compressParam={
+    width:0,
+    height:0
+  };
+  if (image.width>param.width){
+      compressParam={
+        width:param.width,
+        height:param.width/ratio
+      }
+  }else if (image.height>param.height){
+    compressParam={
+      width:param.height/ratio,
+      height:param.height
+    }
+  }else{
+    compressParam={
+      width:image.width,
+      height:image.height
+    }
+  }
+
+  return compressParam;
+}

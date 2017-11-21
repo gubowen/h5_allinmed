@@ -17,9 +17,7 @@ export default function MPay(Obj) {
     prepayPth: '/mcall/base/pay/external/v1/createPrepaidOrder/',        //预支付订单
     operationOrderPth: '/mcall/customer/operation/order/v1/update/'      //手术单状态更新
   };
-  let op={
-
-  };
+  let op={};
   class payObj{
     constructor(){
       this.init();
@@ -72,7 +70,6 @@ export default function MPay(Obj) {
         method: "POST",
         data: _data,
         done (data) {
-          console.log(data);
           if (data && data.return_msg == "OK") {
             console.log(data);
             op.dataL1 = data;
@@ -88,7 +85,6 @@ export default function MPay(Obj) {
         _data = op.dataL1,
         _timeStamp = Math.round(new Date().getTime() / 1000) + "";
       console.log("-----pay-----");
-      localStorage.setItem("askPay",1);
       window.location.href = _data.mweb_url;
     }
     paySuccess () {
