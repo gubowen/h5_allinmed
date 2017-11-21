@@ -19,13 +19,13 @@
   //padding-bottom: rem(270px);
   box-sizing: border-box;
   //padding-top: 0.5rem;
-  //position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 1.3rem;
   overflow: hidden;
-  height: 92.5%;
+  // height: 92.5%;
   -webkit-overflow-scrolling: touch;
   z-index: 3;
   & > section{
@@ -35,7 +35,8 @@
     //&.padding-bottom{
     //  padding-bottom: rem(250px);
     //}
-    padding-bottom: rem(180px)
+    padding-bottom: rem(180px);
+    margin-top: rem(100px)
   }
 }
 
