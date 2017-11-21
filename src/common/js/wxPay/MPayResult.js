@@ -16,7 +16,7 @@ const XHRList = {
 export default function MPayResult(Obj) {
   const that = this;
   let  _data = {
-      "out_trade_no": Obj.out_trade_no,   //_out_trade_no
+      "outTradeNo": Obj.out_trade_no,   //_out_trade_no
       "scene": 1,
       "roleId": 2,
       "nonceStr": localStorage.getItem("nonceStr"),            //随机数(前端生成32位随机数)
