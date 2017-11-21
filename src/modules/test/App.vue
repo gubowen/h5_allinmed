@@ -54,12 +54,11 @@
       viewResultH5Pay(){
         console.log("H5支付结果查看");
         WxPayCommon.PayResult({
-          out_trade_no:localStorage.getItem("orderNumber")       //微信订单号
+          outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
-          console.log("查看回调");
-          console.log(data)
+          console.log("查看回调",data);
         }).catch(function (err) {
-          console.log("望天，接口错误");
+          console.log(err)
         })
       },
       payHide(){

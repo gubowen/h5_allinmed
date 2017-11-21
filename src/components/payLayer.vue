@@ -97,6 +97,9 @@
         repeatOrderAmount: "",
         repeatOrderType:"",
         repeatOrderFrequency:"",
+        mOrderAmount: "",
+        mOrderType:"",
+        mOrderFrequency:"",
         payOrderShow:false,
         noWXPayShow: false,
         noStateShow:false,
@@ -205,7 +208,6 @@
               that.finish = true;
             },
             done (data) {
-                debugger;
               that.finish = false;
               if (data.responseObject.responseData.dataList) {
                 let consultationId = data.responseObject.responseData.dataList.consultationId;
@@ -280,14 +282,6 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
-        siteSwitch.weChatJudge(
-          function () {
-            that.noWXPayShow = false;
-          },
-          function () {
-            that.noWXPayShow = true;
-          }
-        );
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -322,6 +316,12 @@
             //支付失败回调  (问诊/门诊类型 必选);
             window.location.reload();
           }
+        });
+        siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>{
+          that.mOrderType = opt.orderSourceType;
+          that.mOrderAmount = 0.01;//opt.orderAmount
+          that.mOrderFrequency = opt.orderFrequency;
+          that.noWXPayShow = true
         });
       },
       //提示弹层关闭执行
@@ -454,7 +454,6 @@
                       status: '2',
                       payTime: '1',
                       callBack: function (data) {
-                          debugger;
                         that.$emit("paySuccess", {
                           orderType: 0,
                           orderAmount: 0,
@@ -477,13 +476,25 @@
       },
       //查看m站支付结果
       viewPayResult(){
-        console.log("H5支付结果查看");
+        let that = this;
         wxCommon.PayResult({
           outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
+          that.finish = false;
           console.log("查看回调",data);
+          if(data.resultCode == "SUCCESS"){
+//            that.$emit("paySuccess", {
+//              orderType: that.mOrderType,//0免费，其他不是
+//              orderAmount: that.mOrderAmount, //价钱
+//              orderFrequency:that.mOrderFrequency//聊天次数
+//            });
+//            that.noWXPayShow = false;
+//            that.closePopup();
+          }else{
+            console.log("未支付成功");
+          }
         }).catch(function (err) {
-          console.log("望天，接口错误");
+          console.log(err);
         })
       }
     },

@@ -33,9 +33,9 @@ export default function MPayResult(Obj) {
       data: _data,
       done(res) {
         if(res&&res.responseData&&res.responseData.data){
-          resolve(data);
+          resolve(res.responseData.data[0]);
         }else{
-          reject(err);
+          reject(new Error("望天，接口出错了"));
         }
       }
     })
