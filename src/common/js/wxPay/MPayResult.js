@@ -21,7 +21,8 @@ export default function MPayResult(Obj) {
       "roleId": 2,
       "nonceStr": localStorage.getItem("nonceStr"),            //随机数(前端生成32位随机数)
       "siteId": 1,
-      "token":localStorage.getItem("token")                   //token(后台获取)
+      "token":localStorage.getItem("token"),                   //token(后台获取)
+      "ipAddr":localStorage.getItem("ipAddr")                   //ip地址(后台获取)
     };
   return new Promise(function(resolve, reject) {
     api.ajax({

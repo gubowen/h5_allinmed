@@ -49,6 +49,7 @@ class wxStrings {
         done (data) {
           localStorage.setItem("validityTime", Math.round(new Date().getTime() / 1000));   //token
           localStorage.setItem("token", data.responseData.token);   //token
+          localStorage.setItem("ipAddr", data.responseData.ipAddr);   //token
           localStorage.setItem("nonceStr", _nonceStr);              //随机数
           if(data&&data.responseStatus){
             resolve({data: data, nonceStr: _nonceStr});
