@@ -78,26 +78,6 @@ export default function MPay(Obj) {
             op.dataL1 = data;
             localStorage.setItem("orderNumber", data.out_trade_no);
             _t.h5AskPay(data);   //H5支付
-            //更新订单状态
-            // upOrder({
-            //   operationType: '1',                  //操作类型  1-生成订单  2-已支付  3-支付失败  4-取消  5-退款 6-已完成
-            //   orderId: Obj.orderId,                // 订单ID
-            //   outTradeNo: data.out_trade_no,       //微信支付订单Id
-            //   callBack: function (data) {
-            //     if (data && data.responseObject && data.responseObject.responseStatus) {
-            //       _t.h5AskPay();            //请求支付
-            //     } else {
-            //       // common.popup({
-            //       //   text: "订单生成失败"
-            //       // })
-            //     }
-            //   },
-            //   errorCallBack: function () {
-            //     // common.popup({
-            //     //   text: "订单生成失败"
-            //     // })
-            //   }
-            // });
           }
         }
       });
