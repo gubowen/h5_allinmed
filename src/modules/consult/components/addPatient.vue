@@ -261,6 +261,7 @@
     },
     activated(){
       //手机号校验
+      alert(4)
       api.mobileCheck();
       this.finish=false;
       this.initData();
