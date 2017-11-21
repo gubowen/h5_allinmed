@@ -130,25 +130,25 @@
       this.listType = this.$route.params.listType;
       this.level = this.$route.params.level;
       this.finish = true;
-//      this.$el.querySelectorAll(".ev-loading")[0].style.display = "none";
-//      switch (this.listType) {
-//        case "city":
-//          this.getCountry({
-//            id: "",
-//            level: this.level
-//          });
-//          break;
-//        case "hospital":
-//          this.cityTitle = "选择城市";
-//          this.getCountry({
-//            id: "",
-//            level: 3
-//          });
-//          break;
-//        case "disease":
-//          this.getPartList();
-//          break;
-//      }
+     this.$el.querySelectorAll(".ev-loading")[0].style.display = "none";
+     switch (this.listType) {
+       case "city":
+         this.getCountry({
+           id: "",
+           level: this.level
+         });
+         break;
+       case "hospital":
+         this.cityTitle = "选择城市";
+         this.getCountry({
+           id: "",
+           level: 3
+         });
+         break;
+       case "disease":
+         this.getPartList();
+         break;
+     }
     },
     activated(){
 //      初始化城市的返回结果
