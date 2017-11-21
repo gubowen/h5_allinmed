@@ -7,74 +7,43 @@
  * Created by Qiangkailiang on 17/11/20.
  */
 
+
 export default function ImageCompress(param, compressFn) {
   const image = new Image();
   image.src = param.imgSrc;
   image.onload = () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
+    const ratio=image.width/image.height;
+    let compressParam={
+      width:0,
+      height:0
+    };
+    if (image.width>param.width){
+        compressParam={
+          width:param.width,
+          height:param.width/ratio
+        }
+    }else if (image.height>param.height){
+      compressParam={
+        width:param.height/ratio,
+        height:param.height
+      }
+    }else{
+      compressParam={
+        width:image.width,
+        height:image.height
+      }
+    }
     let finalBase64 = "";
-    canvas.width = param.width;
-    canvas.height = param.height;
+    canvas.width = compressParam.width;
+    canvas.height = compressParam.height;
 
 
-    ctx.drawImage(image, 0, 0, param.width, param.height);
+    ctx.drawImage(image, 0, 0, compressParam.width, compressParam.height);
     finalBase64 = canvas.toDataURL('image/jpeg', param.quality);
-    console.log(finalBase64);
+
     compressFn && compressFn(finalBase64);
   }
 }
 
-function convertBase64UrlToBlob(urlData) {
-
-  let bytes = window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
-
-  //处理异常,将ascii码小于0的转换为大于0
-  var ab = new ArrayBuffer(bytes.length);
-  var ia = new Uint8Array(ab);
-  for (var i = 0; i < bytes.length; i++) {
-    ia[i] = bytes.charCodeAt(i);
-  }
-
-  return new Blob([ab], {
-    type: 'image/png'
-  });
-}
-// class ImageCompress {
-//   constructor(param) {
-//     this.config = param || {
-//       imgSrc: "",
-//       quality: 1,
-//       width: 1280,
-//       height: 500
-//     };
-
-//     this.createImage();
-//   }
-
-//   createCanvas(image) {
-//     const canvas = document.createElement("canvas");
-//     const ctx = canvas.getContext("2d");
-//     canvas.width = this.config.width;
-//     canvas.height = this.config.height;
-
-//     this.operateImage(canvas,ctx,image)
-//   }
-
-
-//   createImage() {
-//     const image = new Image();
-//     image.src = this.config.imgSrc;
-//     alert(5)
-//     image.onload = () => {
-//       this.createCanvas(image)
-//     }
-//   }
-
-//   operateImage(canvas, ctx,image) {
-//     let finalBase64 = "";
-//     ctx.drawImage(image, 0, 0, this.config.width, this.config.height);
-//     finalBase64 = canvas.toDataURL('image/jpeg', this.quality);
-//     console.log(finalBase64);
-//   }
-// }

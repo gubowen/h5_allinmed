@@ -358,7 +358,7 @@
                 width: 1920,
                 height: 1080
               }, (base64) => {
-                  console.log(base64)
+
                  this.upLoadPic(files[i], type, index, base64);
               });
             }
