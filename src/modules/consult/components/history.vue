@@ -717,7 +717,14 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+      siteSwitch.weChatJudge(
+        ()=>{
+          if(price>0){
+            that.noWXPayShow = false;
+          }
+        },
+        ()=>that.noWXPayShow = true
+      );
     },
     //查看m站支付结果
     viewPayResult(){
