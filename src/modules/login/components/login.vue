@@ -130,7 +130,7 @@
               customerId: "",   //  string  否  用户id
               account: "",      // string  否  手机号
               openid: "",       // string  是  微信openId
-              isUpdate: 1,     // string  否  是否换绑1 - 换
+              isUpdate: "",     // string  否  是否换绑1 - 换
             },
             phoneCheckParams: {
               isValid: 1,//	string	是		1
@@ -354,6 +354,7 @@
         },
         loginEnsureEvent(){
           this.levelShow= false;
+          this.wxBindParams.isUpdate = "1";
           this.wxBindApi();
         },
         //微信绑定手机号
