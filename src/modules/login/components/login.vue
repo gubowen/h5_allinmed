@@ -354,7 +354,7 @@
         },
         loginEnsureEvent(){
           this.levelShow= false;
-          this.wxBindParams.isUpdate = "1";
+          this.params.wxBindParams.isUpdate = "1";
           this.wxBindApi();
         },
         //微信绑定手机号
