@@ -523,7 +523,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2;
+    z-index: 3;
     .onlineVisit_mask {
       width: 100%;
       height:auto;
@@ -531,7 +531,7 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      z-index: 3;
+      z-index: 4;
       .docNameBox{
         @include clearfix();
         padding:0 rem(40px) 0 rem(60px);
