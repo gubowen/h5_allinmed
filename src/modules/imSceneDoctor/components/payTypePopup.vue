@@ -469,7 +469,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2;
+    z-index: 3;
     &.show {
       opacity: 1;
       visibility: visible;
