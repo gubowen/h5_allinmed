@@ -145,6 +145,14 @@
           }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
           @ensureClickEvent="cancelDeletePic"></confirm>
       </transition>
+      <transition name="fade">
+        <confirm :confirmParams="{
+          'ensure':'支付成功',
+          'cancel':'支付失败',
+          'title':'请确认微信支付是否已经完成'
+          }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
+        </confirm>
+      </transition>
       <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
                  :backPopupParams="{patientParams:patientParams}"></backPopup>
     </section>
@@ -169,6 +177,7 @@ import axios from "axios";
 import confirm from "components/confirm";
 import backPopup from "components/backToastForConsult";
 import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
+import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
 import imageCompress from "common/js/imgCompress/toCompress";
 
@@ -205,6 +214,7 @@ export default {
       finish: false,
       deletePic: {},
       deletePicTip: false,
+      noWXPayShow:false,
       upLoadTip: false,
       levelShow: false,
       backPopupShow: false,
@@ -707,6 +717,25 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
+      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+    },
+    //查看m站支付结果
+    viewPayResult(){
+      let that = this;
+      WxPayCommon.PayResult({
+        outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
+      }).then(function (data) {
+        console.log("查看回调",data);
+        if(data.resultCode == "SUCCESS"){
+          that.noWXPayShow = false;
+          that.getTriageDoctorId();
+        }else{
+          that.isClick = false; //是否点击立即咨询重置
+          console.log("未支付成功");
+        }
+      }).catch(function (err) {
+        console.log(err);
+      })
     },
     //创建专业医生会话
     getProfessionalDoctor() {

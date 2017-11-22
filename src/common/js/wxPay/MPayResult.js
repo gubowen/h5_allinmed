@@ -24,6 +24,7 @@ export default function MPayResult(Obj) {
       "token":localStorage.getItem("token"),                   //token(后台获取)
       "ipAddr":localStorage.getItem("ipAddr")                   //ip地址(后台获取)
     };
+  console.log(_data);
   return new Promise(function(resolve, reject) {
     api.ajax({
       url: XHRList.payResultUrl,
