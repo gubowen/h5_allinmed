@@ -6,7 +6,7 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(item,0,$event)" v-show="imageList[item.adviceId].length===0">
+          <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange($event,item,0)" v-show="imageList[item.adviceId].length===0">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -20,13 +20,13 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(img,imgIndex,$event)" v-show="imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange(img,imgIndex,$event)" v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange(item,imageList[item.adviceId].length,$event)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange(item,imageList[item.adviceId].length,$event)"/>
               </span>
             </a>
           </li>
@@ -57,6 +57,7 @@
   import Loading from 'components/loading';
   import Toast from 'components/toast';
   import nimEnv from 'common/js/nimEnv/nimEnv';
+  import imageCompress from "common/js/imgCompress/toCompress";
   let nim;
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",                                                //获取token
@@ -69,7 +70,10 @@
     data(){
       return {
         uploadList: [],
-        imageList: {},
+        imageList: {}, 
+        filesObj:{},      //多图file对象存储，用于获取每张图的信息
+        base64Arr:[],     //base64压缩后的图片
+        uploadIndex:'',   //多图上传递增索引
         errorShow: false,
         errorMsg: "",
         loading: false,
@@ -104,9 +108,9 @@
           })
         }
       },
-      upLoadPic(item, index, file){
+      upLoadPic(files,item, index, base64){
         let that = this,
-            _file = file,
+            _file = files,
             data = new FormData(),
             id = item.adviceId,
             type = item.adviceType;
@@ -117,18 +121,34 @@
           imageType: type,
           caseCategoryId: id,
         }));
-        this.imagePreview(item, index, file);
-        this.submitCreateImg(item, index, data);
+        this.imagePreview(item, index, base64);
+        this.submitCreateImg(files, item, index, base64);
       },
-      imagePreview(item, index, file){
-        let blob = window.URL.createObjectURL(file);
-        if (this.imageList[item.adviceId]) {
-          this.$set(this.imageList[item.adviceId], index, {
-            blob: blob,
+      imagePreview(item, index, base64){
+        let that = this;
+        // let blob = window.URL.createObjectURL(file);
+        // if (this.imageList[item.adviceId]) {
+        //   this.$set(this.imageList[item.adviceId], index, {
+        //     blob: blob,
+        //     imgId: "",
+        //     uploading: true,
+        //     fail: false
+        //   })
+        // }
+        if (typeof index !== "undefined") {
+          that["imageList"][item.adviceId][index] = {
+            blob: base64,
             imgId: "",
             uploading: true,
             fail: false
-          })
+          };
+        } else {
+          that["imageList"][item.adviceId].push({
+            blob: base64,
+            imgId: "",
+            uploading: true,
+            fail: false
+          });
         }
       },
       imgDelete(img, index, id){
@@ -148,45 +168,144 @@
           }
         })
       },
-      submitCreateImg(item, index, data){
+      submitCreateImg(files, item, index, base64){
         const that = this;
-        axios({
-          url: XHRList.imgCreate,
-          method: "post",
-          data: data,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          timeout: 30000,
-        }).then((res) => {
-          const data = res.data;
-          that.$set(this.imageList[item.adviceId], index, {
-            blob: data.responseObject.responseMessage.logoUrl,
-            imgId: data.responseObject.responsePk,
-            uploading: false,
-            fail: false
-          })
-          that.loading = false;
-        }, (err) => {
+        // axios({
+        //   url: XHRList.imgCreate,
+        //   method: "post",
+        //   data: data,
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded'
+        //   },
+        //   timeout: 30000,
+        // }).then((res) => {
+        //   const data = res.data;
+        //   that.$set(this.imageList[item.adviceId], index, {
+        //     blob: data.responseObject.responseMessage.logoUrl,
+        //     imgId: data.responseObject.responsePk,
+        //     uploading: false,
+        //     fail: false
+        //   })
+        //   that.loading = false;
+        // }, (err) => {
 
-        });
+        // });
+        api.ajax({
+        url: XHRList.imgCreate,
+        method: "POST",
+        data: {
+          fileContent: base64.split(",")[1].replace(/\+/g,"%2B").replace(/\n/g,""),
+          fileName: files.name,
+          extName:files.name.split(".")[1],
+          caseId: "",
+          imageType: item.adviceType,
+          caseCategoryId: ""
+        },
+        timeout: 300000,
+        done(res) {
+          if (res.responseObject.responseStatus) {
+            const data = res.data;
+            that.$set(that.imageList[item.adviceId], index, {
+              blob: res.responseObject.responseMessage.logoUrl,
+              imgId: res.responseObject.responsePk,
+              uploading: false,
+              fail: false
+            })
+            that.loading = false;
+            //上传下一张图片
+            that.uploadIndex = parseInt(that.uploadIndex) + 1;
+            let totalUpNum = that["imageList"][item.adviceId].length;
+            if (
+              that.filesObj[that.uploadIndex] !== "undefined" &&
+              that.uploadIndex < that.filesObj.length &&
+              totalUpNum < 9
+            ) {
+              that.upLoadPic(
+                that.filesObj[that.uploadIndex],
+                item,
+                index,
+                that.base64Arr[that.uploadIndex]
+              );
+            }
+          } else {
+            let num = index ? index : that["imageList" + type].length - 1;
+            that["imageList" + type][num].uploading = false;
+            that["imageList" + type][num].fail = true;
+            that["imageList" + type][num].finish = false;
+            //            that["uploading" + type] = false;
+            that.uploading1 = false;
+            that.uploading2 = false;
+          }
+        },
+        fail(res) {
+          let num = index ? index : that["imageList" + type].length - 1;
+          that["imageList" + type][num].uploading = false;
+          that["imageList" + type][num].fail = true;
+          that["imageList" + type][num].finish = false;
+          //            that["uploading" + type] = false;
+          that.uploading1 = false;
+          that.uploading2 = false;
+          console.log("net error");
+        }
+      });
       },
-      onFileChange(item, index, e){
+      onFileChange(e, item, index){
         let files = e.target.files || e.dataTransfer.files;
+        let that = this;
+        that.filesObj = files;
+        that.base64Arr = [];
+        that.uploadIndex = 0;
         if (!files.length) {
           return;
         }
+        console.log(item,index,e);
+        debugger
         this.loading = true;
-        if (files[0].size > 1024 * 1024 * 5) {
+        for (let i = 0; i < files.length; i++) {
+        if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
-          this.errorMsg = "图片不能超过5M";
+          this.errorMsg = "图片不能超过10M";
           setTimeout(() => {
-            this.errorMsg = '';
-            this.errorShow = false
+            this.errorMsg = "";
+            this.errorShow = false;
           }, 3000);
         } else {
-          this.upLoadPic(item, index, files[0]);
+          //图片压缩处理
+          let reader = new FileReader();
+          reader.readAsDataURL(files[i]);
+          reader.onload = oFREvent => {
+            imageCompress(
+              {
+                imgSrc: oFREvent.target.result,
+                quality: 0.8,
+                width: 1920,
+                height: 1080
+              },
+              base64 => {
+                that.base64Arr.push(base64); //保存压缩图片
+                if (i == files.length - 1) {
+                  this.upLoadPic(
+                    files[that.uploadIndex],
+                    item,
+                    index,
+                    that.base64Arr[that.uploadIndex]
+                  );
+                }
+              }
+            );
+          };
         }
+      }
+        // if (files[0].size > 1024 * 1024 * 5) {
+        //   this.errorShow = true;
+        //   this.errorMsg = "图片不能超过5M";
+        //   setTimeout(() => {
+        //     this.errorMsg = '';
+        //     this.errorShow = false
+        //   }, 3000);
+        // } else {
+        //   this.upLoadPic(item, index, files[0]);
+        // }
       },
       backToImPage(){
         const that = this;
