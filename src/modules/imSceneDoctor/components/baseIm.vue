@@ -725,7 +725,7 @@
             }
           }),
           needPushNick: false,
-          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${userData.nick?userData.nick:""}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -865,7 +865,7 @@
           to: this.targetData.account,
           text: sendTextTemp,
           needPushNick: false,
-          pushContent: `患者<${this.userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${this.userData.nick?this.userData.nick:""}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
@@ -995,7 +995,7 @@
                 to: that.targetData.account,
                 file: file,
                 needPushNick: false,
-                pushContent: `患者<${that.userData.nick}>向您问诊，点击查看详情`,
+                pushContent: `患者<${that.userData.nick?that.userData.nick:""}>向您问诊，点击查看详情`,
                 pushPayload: JSON.stringify({
                   "account": "0_" + api.getPara().caseId,
                   "type": "1"
@@ -1204,7 +1204,7 @@
           }),
           to: that.targetData.account,
           needPushNick: false,
-          pushContent: `患者<${userData.nick}>向您问诊，点击查看详情`,
+          pushContent: `患者<${userData.nick?userData.nick:""}>向您问诊，点击查看详情`,
           pushPayload: JSON.stringify({
             "account": "0_" + api.getPara().caseId,
             "type": "1"
