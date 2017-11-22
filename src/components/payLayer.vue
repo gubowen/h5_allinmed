@@ -542,7 +542,7 @@
         .docName{
           margin-right:rem(16px);
           font-weight:bold;
-          opacity: 0.81;
+          opacity: 0.8;
           @include font-dpr(16px);
         }
         .icon_close_mask {
