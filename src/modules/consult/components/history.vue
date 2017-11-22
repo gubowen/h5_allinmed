@@ -435,6 +435,7 @@ export default {
         data: {
           fileContent: base64.split(",")[1].replace(/\+/g,"%2B").replace(/\n/g,""),
           fileName: files.name,
+          extName:files.name.split(".")[1],
           caseId: "",
           imageType: _imageType,
           caseCategoryId: ""
