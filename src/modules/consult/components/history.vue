@@ -42,7 +42,7 @@
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
                         <input class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)">
+                               @change="onFileChange($event,1,index)" multiple>
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd">
@@ -65,13 +65,13 @@
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
                         <input class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)">
+                               @change="onFileChange($event,2,index)" multiple>
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)">
+                             @change="onFileChange($event,2)" multiple>
                     </li>
                   </ul>
                 </form>
@@ -353,7 +353,6 @@ export default {
       if (!files.length) {
         return;
       }
-      console.log(files);
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
