@@ -433,7 +433,7 @@ export default {
         url: XHRList.upload,
         method: "POST",
         data: {
-          fileContent: base64.split(",")[1],
+          fileContent: base64.split(",")[1].replace(/\+/g,"%2B").replace(/\n/g,""),
           fileName: files.name,
           caseId: "",
           imageType: _imageType,

@@ -24,7 +24,7 @@ export default function ImageCompress(param, compressFn) {
 
     ctx.drawImage(image, 0, 0, compressParam.width, compressParam.height);
     finalBase64 = canvas.toDataURL(param.quality);
-    console.log(finalBase64)
+  
     compressFn && compressFn(finalBase64);
   }
 }
