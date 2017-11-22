@@ -400,6 +400,20 @@
                 //绑定失败
 //                console.log(data);
                 _this.toastComm("绑定失败");
+                switch (data.responseObject.responseCode) {
+                  case "exception":
+                    console.log("异常");
+                    break;
+                  case "0G0001":
+                    console.log("微信账号已绑定其他账号");
+                    break;
+                  case "0G0005":
+                    console.log("微信接口访问失败");
+                    break;
+                  case "0G0003":
+                    console.log("账号已绑定其他微信");
+                    break; 
+                }
               }
             },
             fail(err){
