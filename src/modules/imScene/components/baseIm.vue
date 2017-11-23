@@ -915,7 +915,7 @@ export default {
           that.refreshScroll();
           let heightflag =
             that.$refs.wrapper.querySelector("section").offsetHeight -
-            document.body.clientHeight;
+            that.$refs.wrapper.clientHeight;
           console.log("我要滑动底部");
           console.log(heightflag);
 
