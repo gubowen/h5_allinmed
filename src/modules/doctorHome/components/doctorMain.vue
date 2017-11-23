@@ -487,7 +487,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("免费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+//                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
@@ -500,7 +500,7 @@
                   data:data,
                   callBack:()=>{
 //                    console.log("收费--跳页");
-                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
+//                    window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                   }
                 });
               }});
@@ -523,6 +523,7 @@
 //              console.log("获取consultationId成功");
               if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
                   _this.consultationId = data.responseObject.responseData.dataList.consultationId;
+                  console.log(_this.consultationId);
                   org.callBackFn();
               }
             },
@@ -537,6 +538,7 @@
         //刷新IM时间
         reloadIMTime(count){
           const _this = this;
+          console.log(count);
           api.ajax({
             url: XHRList.updateTime,
             method: "POST",
