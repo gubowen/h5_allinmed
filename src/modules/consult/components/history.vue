@@ -545,7 +545,15 @@ export default {
     submitParamsInstall() {
       if (!this.validateParamsFull()) {
         return false;
-      } else {
+      } else if(this.uploading1||this.uploading1){
+        //图片上传中
+        this.errorShow = true;
+        this.errorMsg = "图片上传中...";
+        setTimeout(() => {
+          this.errorMsg = "";
+          this.errorShow = false;
+        }, 1000);
+      }else{
         //提示用户提交后不可修改提交内容
         if (localStorage.getItem("PCIMLinks") !== null) {
           this.backPopupShow = true;
