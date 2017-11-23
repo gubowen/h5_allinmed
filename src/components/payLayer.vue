@@ -510,6 +510,7 @@
                     },
                     done (d) {
                       if (d.responseObject.responseStatus) {
+                        sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
                           orderType: that.mOrderType,//0免费，其他不是
                           orderAmount: that.mOrderAmount, //价钱
