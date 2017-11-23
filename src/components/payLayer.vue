@@ -204,9 +204,9 @@
               firstResult: 0,
               maxResult: 999
             },
-            beforeSend(){
-              that.finish = true;
-            },
+//            beforeSend(){
+//              that.finish = true;
+//            },
             done (data) {
               that.finish = false;
               if (data.responseObject.responseData.dataList) {
@@ -318,6 +318,7 @@
           }
         });
         siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>{
+          that.finish = false;
           that.mOrderType = opt.orderSourceType;
           that.mOrderAmount = opt.orderAmount;//opt.orderAmount
           that.mOrderFrequency = opt.orderFrequency;
@@ -480,16 +481,56 @@
         wxCommon.PayResult({
           outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
-          that.finish = false;
           console.log("查看回调",data);
           if(data.resultCode == "SUCCESS"){
-            that.$emit("paySuccess", {
-              orderType: that.mOrderType,//0免费，其他不是
-              orderAmount: that.mOrderAmount, //价钱
-              orderFrequency:that.mOrderFrequency//聊天次数
+            api.ajax({
+              url:  "/mcall/customer/case/consultation/v1/getMapById/",
+              method: "POST",
+              data: {
+                caseId: that.payPopupParams.caseId,
+                customerId: that.payPopupParams.docId,
+                consultationType: 1,
+                siteId: 17
+              },
+              done (data) {
+                if (data.responseObject.responseMessage == "NO DATA"){
+                  api.ajax({
+                    url:  "/mcall/customer/case/consultation/v1/create/",
+                    method: "POST",
+                    data: {
+                      caseId: that.payPopupParams.caseId,
+                      customerId: that.payPopupParams.docId ,
+                      patientCustomerId: that.payPopupParams.patientCustomerId,
+                      patientId: that.payPopupParams.patientId,
+                      consultationType: 1,
+                      consultationState: -1,
+                      consultationLevel: 1,
+                      siteId: 17,
+                      caseType: 0
+                    },
+                    done (d) {
+                      if (d.responseObject.responseStatus) {
+                        that.$emit("paySuccess", {
+                          orderType: that.mOrderType,//0免费，其他不是
+                          orderAmount: that.mOrderAmount, //价钱
+                          orderFrequency:that.mOrderFrequency//聊天次数
+                        });
+                        that.noWXPayShow = false;
+                        that.closePopup();
+                      }
+                    }
+                  });
+                }else{
+                  that.$emit("paySuccess", {
+                    orderType: that.mOrderType,//0免费，其他不是
+                    orderAmount: that.mOrderAmount, //价钱
+                    orderFrequency:that.mOrderFrequency//聊天次数
+                  });
+                  that.noWXPayShow = false;
+                  that.closePopup();
+                }
+              }
             });
-            that.noWXPayShow = false;
-//            that.closePopup();
           }else{
             console.log("未支付成功");
           }
