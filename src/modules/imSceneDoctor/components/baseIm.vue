@@ -1021,7 +1021,7 @@
         setTimeout(() => {
           // 滑动到底部
           that.refreshScroll();
-          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - document.body.clientHeight;
+          let heightflag = that.$refs.wrapper.querySelector('section').offsetHeight - that.$refs.wrapper.clientHeight;
           console.log(heightflag);
           if (heightflag >= 0) {
             that.scroll.scrollTo(0, -heightflag, 500);
