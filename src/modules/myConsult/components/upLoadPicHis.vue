@@ -170,7 +170,6 @@ export default {
               uploading: false,
               fail: false
             });
-            // that.loading = false;
             //上传下一张图片
             that.uploadIndex = parseInt(that.uploadIndex) + 1;
             let totalUpNum = that["imageList"][item.adviceId].length;
@@ -194,6 +193,7 @@ export default {
             that["imageList"][item.adviceId][num].uploading = false;
             that["imageList"][item.adviceId][num].fail = true;
             that["imageList"][item.adviceId][num].finish = true;
+            that.loading = false; //放开上传权限
           }
         },
         fail(res) {
@@ -202,6 +202,7 @@ export default {
           that["imageList"][item.adviceId][num].uploading = false;
           that["imageList"][item.adviceId][num].fail = true;
           that["imageList"][item.adviceId][num].finish = true;
+          that.loading = false;  //放开上传权限
         }
       });
     },
@@ -215,7 +216,7 @@ export default {
       if (!files.length) {
         return;
       }
-      this.loading = true;
+      this.loading = true;    //关闭上传权限
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
