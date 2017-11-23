@@ -489,7 +489,7 @@
               orderFrequency:that.mOrderFrequency//聊天次数
             });
             that.noWXPayShow = false;
-            that.closePopup();
+//            that.closePopup();
           }else{
             console.log("未支付成功");
           }
