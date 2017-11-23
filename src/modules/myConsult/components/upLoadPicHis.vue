@@ -6,7 +6,7 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-show="imageList[item.adviceId].length===0">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-show="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -161,17 +161,16 @@ export default {
         timeout: 300000,
         done(res) {
           if (res.responseObject.responseStatus) {
-            const data = res.data;
             let num = index
               ? index
-              : that["imageList"][item.adviceId].length - 1;
+              : that["imageList"][item.adviceId].length - 1;  //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
             that.$set(that.imageList[item.adviceId], num, {
               blob: res.responseObject.responseMessage.logoUrl,
               imgId: res.responseObject.responsePk,
               uploading: false,
               fail: false
             });
-            that.loading = false;
+            // that.loading = false;
             //上传下一张图片
             that.uploadIndex = parseInt(that.uploadIndex) + 1;
             let totalUpNum = that["imageList"][item.adviceId].length;
@@ -186,37 +185,19 @@ export default {
                 index,
                 that.base64Arr[that.uploadIndex]
               );
+            }else{
+              that.loading = false;
             }
           } else {
-            // let num = index ? index : that["imageList" + type].length - 1;
-            // that["imageList" + type][num].uploading = false;
-            // that["imageList" + type][num].fail = true;
-            // that["imageList" + type][num].finish = false;
-            // that.uploading1 = false;
-            // that.uploading2 = false;
+            //接口异常上传失败处理
             let num = index ? index : that["imageList"][item.adviceId].length - 1;
-              that["imageList"][item.adviceId][num].uploading = false;
-              that["imageList"][item.adviceId][num].fail = true;
-              that["imageList"][item.adviceId][num].finish = true;
-              
-
-              // that.$set(that.imageList[item.adviceId], num, {
-              // blob: res.responseObject.responseMessage.logoUrl,
-              // imgId: res.responseObject.responsePk,
-              // uploading: false,
-              // fail: true
-              // });
+            that["imageList"][item.adviceId][num].uploading = false;
+            that["imageList"][item.adviceId][num].fail = true;
+            that["imageList"][item.adviceId][num].finish = true;
           }
         },
         fail(res) {
-          // let num = index ? index : that["imageList" + type].length - 1;
-          // that["imageList" + type][num].uploading = false;
-          // that["imageList" + type][num].fail = true;
-          // that["imageList" + type][num].finish = false;
-          // that.uploading1 = false;
-          // that.uploading2 = false;
-          // console.log("net error");
-
+          //网络异常上传失败处理
           let num = index ? index : that["imageList"][item.adviceId].length - 1;
           that["imageList"][item.adviceId][num].uploading = false;
           that["imageList"][item.adviceId][num].fail = true;
@@ -273,6 +254,16 @@ export default {
     },
     backToImPage() {
       const that = this;
+      if (that.loading) {
+          //图片上传中
+        this.errorShow = true;
+        this.errorMsg = "图片上传中...";
+        setTimeout(() => {
+          this.errorMsg = "";
+          this.errorShow = false;
+        }, 1000);
+        return;
+      }
       api.ajax({
         url: XHRList.updateConsultState,
         method: "POST",

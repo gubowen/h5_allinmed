@@ -666,6 +666,7 @@
               border-radius: 50%;
               overflow: hidden;
               img{
+                border-radius: 50%;
                 width: rem(108px);
                 height: rem(108px);
               }
