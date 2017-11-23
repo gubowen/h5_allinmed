@@ -483,16 +483,11 @@
           that.finish = false;
           console.log("查看回调",data);
           if(data.resultCode == "SUCCESS"){
-            console.log({
-              orderType: that.mOrderType,
-              orderAmount: that.mOrderAmount,
-              orderFrequency:that.mOrderFrequency
-            })
-//            that.$emit("paySuccess", {
-//              orderType: that.mOrderType,//0免费，其他不是
-//              orderAmount: that.mOrderAmount, //价钱
-//              orderFrequency:that.mOrderFrequency//聊天次数
-//            });
+            that.$emit("paySuccess", {
+              orderType: that.mOrderType,//0免费，其他不是
+              orderAmount: that.mOrderAmount, //价钱
+              orderFrequency:that.mOrderFrequency//聊天次数
+            });
             that.noWXPayShow = false;
             that.closePopup();
           }else{
