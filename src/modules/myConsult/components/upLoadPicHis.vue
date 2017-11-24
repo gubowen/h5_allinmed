@@ -77,6 +77,7 @@ export default {
       errorShow: false,
       errorMsg: "",
       loading: false,
+      finish: false,
       userData: {
         account: "",
         token: ""
