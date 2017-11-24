@@ -8,7 +8,7 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                 @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0">
+                 @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -16,7 +16,7 @@
             <span class="tc-upLoadDel" style="cursor: pointer"
                   @click="imgDelete(img,imgIndex,item.adviceId)"
                   v-show="img.uploading==false"></span>
-            <div v-show="img.loading">
+            <div v-show="img.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
               <span class="tc-upLoadDel" style="cursor: pointer"></span>
@@ -29,13 +29,14 @@
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
-          <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9">
+          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput"
                        accept="image/*"
                        type="file"
                        multiple
+                       v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
               </span>
             </a>
@@ -231,7 +232,7 @@ export default {
         },
         timeout: 300000,
         done(res) {
-          if (!res.responseObject.responseStatus) {
+          if (res.responseObject.responseStatus) {
             let num = index
               ? index
               : that["imageList"][item.adviceId].length - 1;  //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
@@ -280,6 +281,9 @@ export default {
     //删除图片 走接口
     imgDelete(img, index, id) {
       const that = this;
+      if (!img.imgId>0) {
+        return;
+      }
       api.ajax({
         url: XHRList.imgDelete,
         method: "POST",
