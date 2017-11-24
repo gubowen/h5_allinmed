@@ -16,7 +16,7 @@
             <span class="tc-upLoadDel" style="cursor: pointer"
                   @click="imgDelete(img,imgIndex,item.adviceId)"
                   v-show="img.uploading==false"></span>
-            <div v-show="true">
+            <div v-show="img.loading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
               <span class="tc-upLoadDel" style="cursor: pointer"></span>
@@ -520,8 +520,8 @@ $colorTwo: #222222;
         left: 0;
         width: rem(152px);
         height: rem(152px);
-        margin-top: rem(8px);
-        margin-left: rem(8px);
+        // margin-top: rem(8px);
+        // margin-left: rem(8px);
         background-color: #000000;
         opacity: 0.63;
         z-index: 0;
