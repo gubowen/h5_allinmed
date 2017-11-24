@@ -67,8 +67,8 @@
                           :userData="userData" :targetData="targetData">
             </ImageContent>
             <!-- 视频消息 -->
-            <VideoMessage 
-                v-if="msg.type==='video' && msg.file" 
+            <VideoMessage
+                v-if="msg.type==='video' && msg.file"
                 :videoMessage="msg"
                 :userData="userData"
                 :targetData="targetData"
@@ -283,56 +283,59 @@ export default {
     },
     connectToNim() {
       const that = this;
-      this.nim = NIM.getInstance({
-        //           debug: true,
-        appKey: nimEnv(),
-        account: this.userData.account,
-        token: this.userData.token,
-        onconnect(data) {
-          console.log("连接成功");
-          that.triageDoctorAssign();
-          that.getPatientBase();
-        },
-        onmyinfo(userData) {
-          that.getMessageList();
-          //            that.userData = userData;
-        },
-        onwillreconnect(obj) {
-          console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
-        },
-        ondisconnect() {
-          console.log("链接已中断...");
-        },
-        onerror: this.onError,
-        onroamingmsgs(obj) {
-          console.log("漫游消息...");
-        },
-        onofflinemsgs(obj) {
-          console.log("离线消息...");
-          obj.msgs.forEach((index, element) => {
-            that.msgList.push(element);
-          });
-        },
-        onmsg(msg) {
-          console.log(msg);
-          if (msg.from === that.targetData.account) {
-            that.msgList.push(msg);
+      nimEnv().then((nimEnv)=>{
+        this.nim = NIM.getInstance({
+          //           debug: true,
+          appKey: nimEnv,
+          account: this.userData.account,
+          token: this.userData.token,
+          onconnect(data) {
+            console.log("连接成功");
+            that.triageDoctorAssign();
+            that.getPatientBase();
+          },
+          onmyinfo(userData) {
+            that.getMessageList();
+            //            that.userData = userData;
+          },
+          onwillreconnect(obj) {
+            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+          },
+          ondisconnect() {
+            console.log("链接已中断...");
+          },
+          onerror: this.onError,
+          onroamingmsgs(obj) {
+            console.log("漫游消息...");
+          },
+          onofflinemsgs(obj) {
+            console.log("离线消息...");
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
+            });
+          },
+          onmsg(msg) {
+            console.log(msg);
+            if (msg.from === that.targetData.account) {
+              that.msgList.push(msg);
 
-            that.scrollToBottom();
-            that.receiveSpecialMessage(msg);
-            that.getTimeStampShowList(msg);
-            that.minusLastCount(msg);
-            that.getFirstTargetMsg(msg);
-            if (msg.type === "image") {
-              let qualityUrl = that.nim.viewImageQuality({
-                url: msg.file.url,
-                quality: 40
-              });
-              that.imageList.push(qualityUrl);
+              that.scrollToBottom();
+              that.receiveSpecialMessage(msg);
+              that.getTimeStampShowList(msg);
+              that.minusLastCount(msg);
+              that.getFirstTargetMsg(msg);
+              if (msg.type === "image") {
+                let qualityUrl = that.nim.viewImageQuality({
+                  url: msg.file.url,
+                  quality: 40
+                });
+                that.imageList.push(qualityUrl);
+              }
             }
           }
-        }
-      });
+        });
+      })
+
     },
     getFirstTargetMsg(msg) {
       if (msg.from === this.targetData.account) {
