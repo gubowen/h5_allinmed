@@ -303,54 +303,55 @@ export default {
     //用户连接IM聊天
     connectToNim() {
       const that = this;
-
-      this.nim = NIM.getInstance({
-        //          debug: true,
-        appKey: nimEnv(),
-        account: this.userData.account,
-        token: this.userData.token,
-        //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
-        onconnect(data) {
-          console.log("连接成功");
-        },
-        //同步登录用户名片的回调, 会传入用户名片
-        onmyinfo(userData) {
-          that.getMessageList();
-        },
-        onwillreconnect(obj) {
-          console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
-        },
-        //断开连接后的回调
-        ondisconnect() {
-          console.log("链接已中断...");
-        },
-        //发生错误的回调, 会传入错误对象
-        onerror: this.onError,
-        onroamingmsgs(obj) {
-          console.log("漫游消息...");
-          console.log(obj);
-          obj.msgs.forEach((index, element) => {
-            that.msgList.push(element);
-          });
-        },
-        onofflinemsgs(obj) {
-          console.log("离线消息...");
-          obj.msgs.forEach((index, element) => {
-            that.msgList.push(element);
-          });
-        },
-        //收到消息的回调, 会传入消息对象
-        onmsg(msg) {
-          if (msg.from === that.targetData.account) {
-            console.log("收到回复消息：" + JSON.stringify(msg));
-            that.pauseTime(msg); //收到检查检验隐藏顶部框；
-            that.msgList.push(msg);
-            that.$nextTick(function() {
-              that.scrollToBottom();
+      nimEnv().then((nimEnv)=>{
+        this.nim = NIM.getInstance({
+          //          debug: true,
+          appKey: nimEnv,
+          account: this.userData.account,
+          token: this.userData.token,
+          //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
+          onconnect(data) {
+            console.log("连接成功");
+          },
+          //同步登录用户名片的回调, 会传入用户名片
+          onmyinfo(userData) {
+            that.getMessageList();
+          },
+          onwillreconnect(obj) {
+            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+          },
+          //断开连接后的回调
+          ondisconnect() {
+            console.log("链接已中断...");
+          },
+          //发生错误的回调, 会传入错误对象
+          onerror: this.onError,
+          onroamingmsgs(obj) {
+            console.log("漫游消息...");
+            console.log(obj);
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
             });
-            that.getCId(msg);
+          },
+          onofflinemsgs(obj) {
+            console.log("离线消息...");
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
+            });
+          },
+          //收到消息的回调, 会传入消息对象
+          onmsg(msg) {
+            if (msg.from === that.targetData.account) {
+              console.log("收到回复消息：" + JSON.stringify(msg));
+              that.pauseTime(msg); //收到检查检验隐藏顶部框；
+              that.msgList.push(msg);
+              that.$nextTick(function() {
+                that.scrollToBottom();
+              });
+              that.getCId(msg);
+            }
           }
-        }
+        });
       });
     },
     //每次收到消息更新cId(分诊台医生id);
@@ -1261,17 +1262,17 @@ export default {
     }
   },
   beforeCreate () {
-    
+
   },
   mounted() {
     let that = this;
-    if (api.getPara().from === 'doctor'){
-      setTimeout( () => {
-        let newUrl = window.location.href.replace(/&from=doctor/,'');
-        console.log(newUrl+'我是从推荐医生来的');
-        window.location.replace(newUrl);
-      },20)
-    }
+    // if (api.getPara().from === 'doctor'){
+    //   setTimeout( () => {
+    //     let newUrl = window.location.href.replace(/&from=doctor/,'');
+    //     console.log(newUrl+'我是从推荐医生来的');
+    //     window.location.replace(newUrl);
+    //   },20)
+    // }
     //      let _checkOpenId=api.checkOpenId();
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
