@@ -1260,6 +1260,13 @@ export default {
       return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "");
     }
   },
+  beforeCreate () {
+    if (api.getPara().from === 'doctor'){
+      let newUrl = window.location.href.replace(/&from=doctor/,'');
+      console.log(newUrl);
+      window.location.replace(newUrl);
+    }
+  },
   mounted() {
     let that = this;
     //      let _checkOpenId=api.checkOpenId();
