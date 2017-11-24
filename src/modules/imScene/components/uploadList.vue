@@ -226,7 +226,7 @@ export default {
             .replace(/\n/g, ""),
           fileName: files.name,
           extName: files.name.split(".")[1],
-          caseId: that.$route.params.caseId,
+          caseId: "",                        
           imageType: item.adviceType,
           caseCategoryId: ""
         },
