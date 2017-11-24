@@ -8,7 +8,8 @@
  */
 
 import api from "common/js/util/util";
-
+import ajax from "common/js/util/ajax";
+const XHRList="/mcall/im/interact/v1/getToken/";
 export default function nimEnv(){
   const env=api.getCookie("env");
   const host=window.location.host;
@@ -20,7 +21,19 @@ export default function nimEnv(){
       * m1线上测试环境
       * 使用云信测试账号
       * */
-    nimKey="8b9941431e042a5261dbcf5f0eefe450";
+      ajax({
+        url: XHRList,
+        method: "POST",
+        data: {
+          firstResult: 0,
+          maxResult:1
+        },
+        done(res){
+          if (res.responseObject.responseStatus){
+            nimKey=res.responseData.accessKey;
+          }
+        }
+      })
   }else{
     /*
     * 其余任何环境
