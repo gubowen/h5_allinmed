@@ -1263,7 +1263,7 @@ export default {
   beforeCreate () {
     if (api.getPara().from === 'doctor'){
       let newUrl = window.location.href.replace(/&from=doctor/,'');
-      console.log(newUrl);
+      console.log(newUrl+'我是从推荐医生来的');
       window.location.replace(newUrl);
     }
   },
