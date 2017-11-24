@@ -388,9 +388,6 @@
         let _picIdList='';
         for (let i of that.imageList){
           _picIdList+= `${i.imgId},`;
-//          for (let k of that.imageList[i.adviceId]){
-//            _picIdList+= `${k.imgId},`
-//          }
         }
         api.ajax({
           url: XHRList.imgDelete,

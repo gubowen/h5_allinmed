@@ -281,30 +281,31 @@ export default {
     //删除图片 走接口
     imgDelete(img, index, id) {
       const that = this;
-      if (!img.imgId>0) {
-        return;
-      }
-      api.ajax({
-        url: XHRList.imgDelete,
-        method: "POST",
-        data: {
-          id: img.imgId,
-          isValid: 0
-        },
-        beforeSend() {},
-        done(res) {
-          if (res.responseObject.responseStatus) {
-            that.imageList[id].splice(index, 1);
-          } else {
-            that.errorShow = true;
-            that.errorMsg = "删除失败，请重试！";
-            setTimeout(() => {
-              that.errorMsg = "";
-              that.errorShow = false;
-            }, 1000);
-          }
-        }
-      });
+      that.imageList[id].splice(index, 1);
+      // if (!img.imgId>0) {
+      //   return;
+      // }
+      // api.ajax({
+      //   url: XHRList.imgDelete,
+      //   method: "POST",
+      //   data: {
+      //     id: img.imgId,
+      //     isValid: 0
+      //   },
+      //   beforeSend() {},
+      //   done(res) {
+      //     if (res.responseObject.responseStatus) {
+      //       that.imageList[id].splice(index, 1);
+      //     } else {
+      //       that.errorShow = true;
+      //       that.errorMsg = "删除失败，请重试！";
+      //       setTimeout(() => {
+      //         that.errorMsg = "";
+      //         that.errorShow = false;
+      //       }, 1000);
+      //     }
+      //   }
+      // });
     },
     //查看大图
     showBigImg(item, index, type) {
@@ -480,6 +481,7 @@ $colorTwo: #222222;
       bottom: 0;
       left: 0;
       opacity: 0;
+      width: 100%;
     }
     .tc-upLoadRightIcon {
       float: right;
@@ -568,33 +570,33 @@ $colorTwo: #222222;
         background-size: rem(38px) rem(38px);
         z-index: 1;
       }
-      //.tc-upLoadAddMore{
-      //  display: inline-block;
-      //  width: 0;
-      //  height: 0;
-      //  //position: relative;
-      //  &:before{
-      //    display: inline-block;
-      //    content: '';
-      //    position: absolute;
-      //    width: rem(64px);
-      //    height:rem(2px);
-      //    background: #D8D8D8;
-      //    top: 50%;
-      //    left: 50%;
-      //    margin-left: rem(-32px);
-      //  }
-      //  &:after{
-      //    display: inline-block;
-      //    content: '';
-      //    position: absolute;
-      //    width: rem(2px);
-      //    height:rem(64px);
-      //    background: #D8D8D8;
-      //    top:50%;
-      //    margin-top: rem(-32px);
-      //  }
-      //}
+      .tc-upLoadAddMore{
+       display: inline-block;
+       width: 0;
+       height: 0;
+       //position: relative;
+       &:before{
+         display: inline-block;
+         content: '';
+         position: absolute;
+         width: rem(64px);
+         height:rem(2px);
+         background: #D8D8D8;
+         top: 50%;
+         left: 50%;
+         margin-left: rem(-32px);
+       }
+       &:after{
+         display: inline-block;
+         content: '';
+         position: absolute;
+         width: rem(2px);
+         height:rem(64px);
+         background: #D8D8D8;
+         top:50%;
+         margin-top: rem(-32px);
+       }
+      }
       .tc-upLoading {
         position: absolute;
         width: rem(40px);
@@ -666,6 +668,7 @@ $colorTwo: #222222;
         bottom: 0;
         left: 0;
         opacity: 0;
+        width: 100%;
       }
       a {
         display: block;
