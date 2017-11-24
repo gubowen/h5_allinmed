@@ -1261,14 +1261,15 @@ export default {
     }
   },
   beforeCreate () {
+    
+  },
+  mounted() {
+    let that = this;
     if (api.getPara().from === 'doctor'){
       let newUrl = window.location.href.replace(/&from=doctor/,'');
       console.log(newUrl+'我是从推荐医生来的');
       window.location.replace(newUrl);
     }
-  },
-  mounted() {
-    let that = this;
     //      let _checkOpenId=api.checkOpenId();
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
