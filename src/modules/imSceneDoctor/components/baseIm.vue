@@ -1129,7 +1129,7 @@
                     }),
                     text: `${that.$store.state.targetMsg.nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                     done(error, obj) {
-                      window.location.replace('/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health')
+                      window.location.replace('/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=doctor')
                       // window.location.href = '/dist/imScene.html?&caseId=' + api.getPara().caseId + '&patientId=' + api.getPara().patientId + '&patientCustomerId=' + api.getPara().patientCustomerId + '&shuntCustomerId=' + that.shuntCustomerId + '&from=health';
                     }
                   });
