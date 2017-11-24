@@ -86,6 +86,7 @@ export default function MPay(Obj) {
         _timeStamp = Math.round(new Date().getTime() / 1000) + "";
       console.log("-----pay-----");
       localStorage.setItem("askPay",1);
+      console.log(_data.mweb_url);
       window.location.href = _data.mweb_url;
     }
   }
