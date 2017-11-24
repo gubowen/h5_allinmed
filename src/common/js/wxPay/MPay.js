@@ -87,7 +87,7 @@ export default function MPay(Obj) {
       console.log("-----pay-----");
       localStorage.setItem("askPay",1);
       console.log(_data.mweb_url);
-      window.location.href = _data.mweb_url;
+      // window.location.href = _data.mweb_url;
     }
   }
   new payObj(Obj);
