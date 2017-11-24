@@ -1278,7 +1278,7 @@ export default {
                       api.getPara().patientCustomerId +
                       "&shuntCustomerId=" +
                       that.shuntCustomerId +
-                      "&from=health";
+                      "&from=doctor";
                   }
                 });
               }
