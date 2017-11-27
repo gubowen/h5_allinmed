@@ -622,6 +622,7 @@ export default {
         done(data) {
           if (data.responseObject.responsePk !== 0) {
             that.responseCaseId = data.responseObject.responsePk;
+            localStorage.setItem("payCaseId",that.responseCaseId);
             //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
             api.getPara().doctorId
               ? that.getProfessionalDoctor()
@@ -850,13 +851,23 @@ export default {
       that.isClick = false;
       that.backPopupShow = true;
       that.clearPageData();
-      window.location.href =
-        "/dist/imScene.html?caseId=" +
-        that.responseCaseId +
-        "&patientId=" +
-        that.allParams.patientId +
-        "&patientCustomerId=" +
-        that.allParams.customerId;
+      siteSwitch.weChatJudge(()=>{
+        window.location.href =
+          "/dist/imScene.html?caseId=" +
+          that.responseCaseId +
+          "&patientId=" +
+          that.allParams.patientId +
+          "&patientCustomerId=" +
+          that.allParams.customerId;
+      },()=>{
+        window.location.href =
+          "/dist/imScene.html?caseId=" +
+          localStorage.getItem('payCaseId') +
+          "&patientId=" +
+          localStorage.getItem('payPatientId') +
+          "&patientCustomerId=" +
+          that.allParams.customerId;
+      });
     },
     // 填写情况验证
     validateParamsFull() {

@@ -932,6 +932,7 @@
       },
       toSelectPart(index) {
         this.currentIndex = index;
+        localStorage.setItem("payPatientId",this.patientList[index].patientId);
         this.$router.push({
           name: "selectPart",
           query: {
