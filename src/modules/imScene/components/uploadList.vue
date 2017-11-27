@@ -53,6 +53,16 @@
     <transition name="fade">
       <Toast :content="errorMsg" v-if="errorShow"></Toast>
     </transition>
+     <transition name="fade">
+        <confirm
+          :confirmParams="{
+          'ensure':'取消',
+          'cancel':'确定',
+//          'content':'',
+          'title':'确定删除图片吗？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
+          @ensureClickEvent="cancelDeletePic"></confirm>
+      </transition>
     <transition name="fade">
       <!--图片上传离开的confirm-->
       <confirm
@@ -96,16 +106,18 @@ export default {
       leaveConfirm: false,
       leaveConfirmParams: {}, //离开confirm的参数
       pageLeaveEnsure: false, //是否离开页面
-      uploadList: [],         //上传列表项
+      uploadList: [], //上传列表项
       imageListLength: false, //图片列表中是否有图片
-      imageList: {},          //上传成功后的图片数组
-      filesObj: {},           //多图file对象存储，用于获取每张图的信息
-      base64Arr: [],          //base64压缩后的图片
-      uploadIndex: "",        //多图上传递增索引
-      toClick: false,         //提交按钮是否可以点击
+      imageList: {}, //上传成功后的图片数组
+      filesObj: [], //多图file对象存储，用于获取每张图的信息
+      base64Arr: [], //base64压缩后的图片
+      uploadIndex: "", //多图上传递增索引
+      toClick: false, //提交按钮是否可以点击
       errorShow: false,
       errorMsg: "",
-      loading: false          //是否正在上传
+      loading: false, //是否正在上传
+      deletePic: {},
+      deletePicTip:false, //删除图片弹层
     };
   },
   computed: {
@@ -199,8 +211,8 @@ export default {
     },
     upLoadPic(files, item, index, base64) {
       const that = this;
-       //本地图片预览处理
-       if (typeof index !== "undefined") {
+      //本地图片预览处理
+      if (typeof index !== "undefined") {
         that["imageList"][item.adviceId][index] = {
           blob: base64,
           imgId: "",
@@ -226,7 +238,7 @@ export default {
             .replace(/\n/g, ""),
           fileName: files.name,
           extName: files.name.split(".")[1],
-          caseId: "",                        
+          caseId: "",
           imageType: item.adviceType,
           caseCategoryId: ""
         },
@@ -235,7 +247,7 @@ export default {
           if (res.responseObject.responseStatus) {
             let num = index
               ? index
-              : that["imageList"][item.adviceId].length - 1;  //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
+              : that["imageList"][item.adviceId].length - 1; //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
             that.$set(that.imageList[item.adviceId], num, {
               blob: res.responseObject.responseData.logoUrl,
               imgId: res.responseObject.responsePk,
@@ -246,7 +258,7 @@ export default {
             that.uploadIndex = parseInt(that.uploadIndex) + 1;
             let totalUpNum = that["imageList"][item.adviceId].length;
             if (
-              that.filesObj[that.uploadIndex] !== "undefined" &&
+              that.filesObj[that.uploadIndex] &&
               that.uploadIndex < that.filesObj.length &&
               totalUpNum < 9
             ) {
@@ -256,12 +268,22 @@ export default {
                 index,
                 that.base64Arr[that.uploadIndex]
               );
-            }else{
-              that.loading = false;
+            } else {
+              that.loading = false; //放开上传权限
+              if (that.filesObj[that.uploadIndex]) {
+                that.errorShow = true;
+                that.errorMsg = "图片最多上传9张！";
+                setTimeout(() => {
+                  that.errorShow = false;
+                  that.errorMsg = "";
+                }, 3000);
+              }
             }
           } else {
             //接口异常上传失败处理
-            let num = index ? index : that["imageList"][item.adviceId].length - 1;
+            let num = index
+              ? index
+              : that["imageList"][item.adviceId].length - 1;
             that["imageList"][item.adviceId][num].uploading = false;
             that["imageList"][item.adviceId][num].fail = true;
             that["imageList"][item.adviceId][num].finish = true;
@@ -274,38 +296,26 @@ export default {
           that["imageList"][item.adviceId][num].uploading = false;
           that["imageList"][item.adviceId][num].fail = true;
           that["imageList"][item.adviceId][num].finish = true;
-          that.loading = false;  //放开上传权限
+          that.loading = false; //放开上传权限
         }
       });
     },
-    //删除图片 走接口
+    //删除图片
     imgDelete(img, index, id) {
       const that = this;
-      that.imageList[id].splice(index, 1);
-      // if (!img.imgId>0) {
-      //   return;
-      // }
-      // api.ajax({
-      //   url: XHRList.imgDelete,
-      //   method: "POST",
-      //   data: {
-      //     id: img.imgId,
-      //     isValid: 0
-      //   },
-      //   beforeSend() {},
-      //   done(res) {
-      //     if (res.responseObject.responseStatus) {
-      //       that.imageList[id].splice(index, 1);
-      //     } else {
-      //       that.errorShow = true;
-      //       that.errorMsg = "删除失败，请重试！";
-      //       setTimeout(() => {
-      //         that.errorMsg = "";
-      //         that.errorShow = false;
-      //       }, 1000);
-      //     }
-      //   }
-      // });
+      this.deletePicTip = true;
+      this.deletePic.type = id;
+      this.deletePic.index = index;
+    },
+    cancelDeletePic() {
+      this.deletePic.type = "";
+      this.deletePic.index = "";
+      this.deletePicTip = false;
+    },
+    ensureDeletePic() {
+      let _deletePic = this.deletePic;
+      this["imageList"][_deletePic.type].splice(_deletePic.index, 1);
+      this.deletePicTip = false;
     },
     //查看大图
     showBigImg(item, index, type) {
@@ -322,13 +332,14 @@ export default {
     onFileChange(e, item, index) {
       let files = e.target.files || e.dataTransfer.files;
       let that = this;
-      that.filesObj = files;
+      let num = index ? index : that["imageList"][item.adviceId].length - 1;
+      that.filesObj = [];
       that.base64Arr = [];
-      that.uploadIndex = 0;  //重置上传顺序索引
+      that.uploadIndex = 0; //重置上传顺序索引
       if (!files.length) {
         return;
       }
-      this.loading = true;    //关闭上传权限
+      this.loading = true; //关闭上传权限
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
@@ -336,8 +347,13 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
+            //放开上传权限（最后一张图是大于上传限制时触发）
+            if (i == files.length - 1) {
+              this.loading = false;
+            }
           }, 3000);
         } else {
+          that.filesObj.push(files[i]);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -345,14 +361,13 @@ export default {
             imageCompress(
               {
                 imgSrc: oFREvent.target.result,
-                quality: 0.8,
-    
+                quality: 0.8
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
                 if (i == files.length - 1) {
                   this.upLoadPic(
-                    files[that.uploadIndex],
+                    that.filesObj[that.uploadIndex],
                     item,
                     index,
                     that.base64Arr[that.uploadIndex]
@@ -531,31 +546,31 @@ $colorTwo: #222222;
         opacity: 0.63;
         z-index: 0;
       }
-       //上传失败
-          .upload-fail {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            opacity: 0.83;
-            background: #545454;
-            & > input {
-              opacity: 0;
-              width: 100%;
-              height: 100%;
-            }
-            & > p {
-              @include font-dpr(12px);
-              color: #ffffff !important;
-              text-align: center;
-              position: absolute;
-              top: 50%;
-              width: 100%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            }
-          }
+      //上传失败
+      .upload-fail {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0.83;
+        background: #545454;
+        & > input {
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+        }
+        & > p {
+          @include font-dpr(12px);
+          color: #ffffff !important;
+          text-align: center;
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
       .tc-upLoadDel {
         position: absolute;
         //display: inline-block;
@@ -569,32 +584,32 @@ $colorTwo: #222222;
         background-size: rem(38px) rem(38px);
         z-index: 1;
       }
-      .tc-upLoadAddMore{
-       display: inline-block;
-       width: 0;
-       height: 0;
-       //position: relative;
-       &:before{
-         display: inline-block;
-         content: '';
-         position: absolute;
-         width: rem(64px);
-         height:rem(2px);
-         background: #D8D8D8;
-         top: 50%;
-         left: 50%;
-         margin-left: rem(-32px);
-       }
-       &:after{
-         display: inline-block;
-         content: '';
-         position: absolute;
-         width: rem(2px);
-         height:rem(64px);
-         background: #D8D8D8;
-         top:50%;
-         margin-top: rem(-32px);
-       }
+      .tc-upLoadAddMore {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        //position: relative;
+        &:before {
+          display: inline-block;
+          content: "";
+          position: absolute;
+          width: rem(64px);
+          height: rem(2px);
+          background: #d8d8d8;
+          top: 50%;
+          left: 50%;
+          margin-left: rem(-32px);
+        }
+        &:after {
+          display: inline-block;
+          content: "";
+          position: absolute;
+          width: rem(2px);
+          height: rem(64px);
+          background: #d8d8d8;
+          top: 50%;
+          margin-top: rem(-32px);
+        }
       }
       .tc-upLoading {
         position: absolute;

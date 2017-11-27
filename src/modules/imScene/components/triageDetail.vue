@@ -221,7 +221,7 @@ export default {
     onFileChange(e, item, index) {
       let files = e.target.files || e.dataTransfer.files;
       let that = this;
-      that.filesObj = files;
+      that.filesObj = [];
       that.base64Arr = [];
       that.uploadIndex = 0;
       if (!files.length) {
