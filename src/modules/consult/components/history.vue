@@ -150,7 +150,7 @@
           'ensure':'支付成功',
           'cancel':'支付失败',
           'title':'请确认微信支付是否已经完成'
-          }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
+          }" v-if="noWXPayShow" @cancelClickEvent="payFail()" @ensureClickEvent="viewPayResult()">
         </confirm>
       </transition>
       <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
@@ -375,7 +375,7 @@ export default {
               {
                 imgSrc: oFREvent.target.result,
                 quality: 0.8,
-    
+
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
@@ -763,6 +763,10 @@ export default {
       }).catch(function (err) {
         console.log(err);
       })
+    },
+    //支付失败跳转
+    payFail(){
+      window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId}`;
     },
     //创建专业医生会话
     getProfessionalDoctor() {
