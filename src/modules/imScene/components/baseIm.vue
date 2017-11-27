@@ -233,6 +233,7 @@ export default {
         progress: "0%",
         index: 0
       },
+      imageLastIndex:0, //上传图片最后一张记录在数组中的位置
       noWXPayShow:false,
       onFocus: false,
       inputFlag: true, //上传图片input控制
@@ -859,6 +860,7 @@ export default {
         },
         type: "image"
       });
+      that.imageLastIndex = that.msgList.length - 1;
       console.log(window.URL.createObjectURL(e.target.files[0]));
       this.nim.previewFile({
         type: "image",
@@ -868,7 +870,7 @@ export default {
           that.imageProgress = {
             uploading: true,
             progress: obj.percentageText,
-            index: that.msgList.length - 1
+            index: that.imageLastIndex,
           };
 
           console.log("文件总大小: " + obj.total + "bytes");
@@ -891,7 +893,7 @@ export default {
               }),
               file: file,
               done(error, msg) {
-                that.msgList[that.msgList.length - 1] = msg;
+                that.msgList[that.imageLastIndex] = msg;
                 that.imageList.push(
                   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
                     .file.url
