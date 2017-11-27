@@ -71,6 +71,16 @@
     <transition name="fade">
       <toast :content="errorMsg" v-show="errorShow"></toast>
     </transition>
+      <transition name="fade">
+        <confirm
+          :confirmParams="{
+          'ensure':'取消',
+          'cancel':'确定',
+//          'content':'',
+          'title':'确定删除图片吗？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
+          @ensureClickEvent="cancelDeletePic"></confirm>
+      </transition>
     <transition name="fade">
       <!--图片上传离开的confirm-->
       <confirm
@@ -111,7 +121,7 @@
 </template>
 <script type="text/ecmascript-6">
 /**
-   * @Desc：
+   * @Desc： 视诊
    * @Usage:
    * @Notify：
    * @Depend：
@@ -149,6 +159,8 @@ export default {
       uploadIndex: "", //多图上传递增索引
       loading:false,
       uploading: false,
+      deletePic:{},
+      deletePicTip:false,    //图片删除
       videoUploading: false, //视频正在上传七牛
       videoObj: {},
       videoSubmitParam: {},
@@ -235,8 +247,13 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
+             //放开上传权限（最后一张图是大于上传限制时触发）
+            if (i == files.length - 1) {
+              this.loading = false;
+            }
           }, 3000);
         } else {
+          that.filesObj.push(files[i]);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -251,7 +268,7 @@ export default {
                 that.base64Arr.push(base64); //保存压缩图片
                 if (i == files.length - 1) {
                   this.upLoadPic(
-                    files[that.uploadIndex],
+                    that.filesObj[that.uploadIndex],
                     item,
                     index,
                     that.base64Arr[that.uploadIndex]
@@ -265,18 +282,32 @@ export default {
     },
     //删除图片
     imgDelete(item, index, id) {
-      const that = this;
+      this.deletePicTip = true;
+      this.deletePic.type = id;
+      this.deletePic.index = index;
+    },
+    //取消删除图片
+    cancelDeletePic() {
+      this.deletePic.type = "";
+      this.deletePic.index = "";
+      this.deletePicTip = false;
+    },
+    //确定删除图片
+    ensureDeletePic() {
+      let that =this;
+      let _deletePic = this.deletePic;
       api.ajax({
         url: XHRList.imgDelete,
         method: "POST",
         data: {
-          id: id,
+          id: that.deletePic.type,
           isValid: 0
         },
         beforeSend() {},
         done() {
-          that.imageList.splice(index, 1);
+          that.imageList.splice(_deletePic.index, 1);
           that.uploading = false;
+          that.deletePicTip = false;
         }
       });
     },
@@ -343,6 +374,14 @@ export default {
               );
             } else {
               that.loading = false;
+              if (that.filesObj[that.uploadIndex]) {
+                that.errorShow = true;
+                that.errorMsg = "图片最多上传9张！";
+                setTimeout(() => {
+                  that.errorShow = false;
+                  that.errorMsg = "";
+                }, 3000);
+              }
             }
           } else {
             //接口异常上传失败处理

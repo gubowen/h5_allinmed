@@ -44,7 +44,7 @@
 </template>
 <script type="text/ecmascript-6">
 /**
-   * @Desc：
+   * @Desc： 咨询历史 补全检查资料
    * @Usage:
    * @Notify：
    * @Depend：
