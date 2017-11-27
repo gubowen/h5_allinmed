@@ -272,7 +272,10 @@
         api.wxGetOpenId(1);
       }
       api.forbidShare();
-      this.getPatientList();
+      let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId;
+      if (customerIdFlag && customerIdFlag != 0){
+        this.getPatientList();
+      }
       this.relationPickerInit();//患者关系选择器初始化
       this.credentialPickerInit();//证件类型选择器初始化
       this.birthPickerInit();//出生日期选择器初始化
