@@ -280,9 +280,9 @@ export default {
           position: "relative",
           bottom: "55%"
         });
-        this.interval = setInterval(function() {
-          document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-        }, 100);
+        // this.interval = setInterval(function() {
+        //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        // }, 100);
       } else {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
@@ -294,13 +294,14 @@ export default {
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        $("body").css({
+
+        setTimeout(() => {
+                  $("body").css({
           position: "static",
           bottom: "0%"
         });
-        setTimeout(() => {
-          clearInterval(this.interval); //清除计时器
-          document.body.scrollTop = this.bfscrolltop;
+          // clearInterval(this.interval); //清除计时器
+          // document.body.scrollTop = this.bfscrolltop;
         }, 20);
       } else {
         setTimeout(() => {
