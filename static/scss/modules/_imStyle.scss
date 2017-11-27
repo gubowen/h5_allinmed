@@ -33,13 +33,16 @@
     -webkit-overflow-scrolling: touch;
     transform-style: preserve-3d;
     transform: translate3d(0, 0, 0); //&.padding-top{
+    // overflow: scroll;
+    // position: absolute;
+    // top: 0; bottom: 0;
     //  padding-top: rem(50px);
     //}
     //&.padding-bottom{
     //  padding-bottom: rem(250px);
     //}
     padding-bottom: rem(180px);
-    margin-top: rem(100px);
+    // margin-top: rem(100px);
   }
 }
 
