@@ -1448,6 +1448,11 @@ export default {
       localStorage.setItem("APPIMLinks", location.href);
       localStorage.setItem("PCIMLinks", location.href);
     }
+    if(api.getPara().showSuccess == "yes"){
+      this.payPopupShow = true;
+    }else{
+      this.payPopupShow = false;
+    }
 
     //      this.resetLogoUrl();
     api.forbidShare();

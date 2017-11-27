@@ -288,6 +288,11 @@
         if(api.getPara().customerId&&api.getPara().customerId.length>0){
           _this.isDoctorID = true;
         }
+        if(api.getPara().showSuccess == "yes"){
+          this.payPopupShow = true;
+        }else{
+          this.payPopupShow = false;
+        }
         api.forbidShare();
       },
       methods: {
