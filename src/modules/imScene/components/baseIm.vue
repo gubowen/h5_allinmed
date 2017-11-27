@@ -189,7 +189,7 @@ import net from "common/js/util/net";
 
 import payPopup from "components/payLayer";
 import loading from "components/loading";
-import confirm from 'components/confirm';
+import confirm from "components/confirm";
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
 import MedicalReport from "./medicalReport";
@@ -233,8 +233,8 @@ export default {
         progress: "0%",
         index: 0
       },
-      imageLastIndex:0, //上传图片最后一张记录在数组中的位置
-      noWXPayShow:false,
+      imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
+      noWXPayShow: false,
       onFocus: false,
       inputFlag: true, //上传图片input控制
       //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
@@ -283,6 +283,10 @@ export default {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
+      } else {
+        this.interval = setInterval(function() {
+          document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 100);
       }
 
       this.onFocus = true;
@@ -294,8 +298,15 @@ export default {
           position: "static",
           bottom: "0%"
         });
-        clearInterval(this.interval); //清除计时器
-        document.body.scrollTop = this.bfscrolltop;
+        setTimeout(() => {
+          clearInterval(this.interval); //清除计时器
+          document.body.scrollTop = this.bfscrolltop;
+        }, 20);
+      } else {
+        setTimeout(() => {
+          clearInterval(this.interval); //清除计时器
+          document.body.scrollTop = this.bfscrolltop;
+        }, 20);
       }
 
       this.onFocus = false;
@@ -304,7 +315,7 @@ export default {
     //用户连接IM聊天
     connectToNim() {
       const that = this;
-      nimEnv().then((nimEnv)=>{
+      nimEnv().then(nimEnv => {
         this.nim = NIM.getInstance({
           //          debug: true,
           appKey: nimEnv,
@@ -319,7 +330,9 @@ export default {
             that.getMessageList();
           },
           onwillreconnect(obj) {
-            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+            console.log(
+              "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
+            );
           },
           //断开连接后的回调
           ondisconnect() {
@@ -870,7 +883,7 @@ export default {
           that.imageProgress = {
             uploading: true,
             progress: obj.percentageText,
-            index: that.imageLastIndex,
+            index: that.imageLastIndex
           };
 
           console.log("文件总大小: " + obj.total + "bytes");
@@ -915,20 +928,23 @@ export default {
       setTimeout(() => {
         // 滑动到底部
         that.$nextTick(() => {
-          that.refreshScroll();
-          let heightflag =
-            that.$refs.wrapper.querySelector("section").offsetHeight -
-            that.$refs.wrapper.clientHeight;
-          console.log("我要滑动底部");
-          console.log(heightflag);
+          setTimeout(() => {
+            $(".main-message").scrollTop($(".main-message>section").height());
+          }, 20);
+          // that.refreshScroll();
+          // let heightflag =
+          //   that.$refs.wrapper.querySelector("section").offsetHeight -
+          //   that.$refs.wrapper.clientHeight;
+          // console.log("我要滑动底部");
+          // console.log(heightflag);
 
-          if (heightflag >= 0) {
-            that.scroll.scrollTo(0, -heightflag, 500);
-          }
+          // if (heightflag >= 0) {
+          //   that.scroll.scrollTo(0, -heightflag, 500);
+          // }
           //          this.$refs.inputTextarea.scrollIntoView(true);
           //          this.$refs.inputTextarea.scrollIntoViewIfNeeded();
           //          document.body.scrollTop = Math.pow(10, 20);
-          window.scrollTo(0, document.body.offsetHeight);
+          // window.scrollTo(0, document.body.offsetHeight);
         });
       }, 300);
     },
@@ -1020,25 +1036,30 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+      siteSwitch.weChatJudge(
+        () => (that.noWXPayShow = false),
+        () => (that.noWXPayShow = true)
+      );
     },
     //查看m站支付结果
-    viewPayResult(){
+    viewPayResult() {
       let that = this;
       WxPayCommon.PayResult({
-        outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
-      }).then(function (data) {
-        console.log("查看回调",data);
-        if(data.resultCode == "SUCCESS"){
-          that.noWXPayShow = false;
-          that.refreashOrderTime("pay");
-        }else{
-          that.isClick = false; //是否点击立即咨询重置
-          console.log("未支付成功");
-        }
-      }).catch(function (err) {
-        console.log(err);
+        outTradeNo: localStorage.getItem("orderNumber") //微信订单号
       })
+        .then(function(data) {
+          console.log("查看回调", data);
+          if (data.resultCode == "SUCCESS") {
+            that.noWXPayShow = false;
+            that.refreashOrderTime("pay");
+          } else {
+            that.isClick = false; //是否点击立即咨询重置
+            console.log("未支付成功");
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     },
     //支付成功后重新分流
     againShunt() {
@@ -1263,9 +1284,7 @@ export default {
       return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "");
     }
   },
-  beforeCreate () {
-
-  },
+  beforeCreate() {},
   mounted() {
     let that = this;
     // if (api.getPara().from === 'doctor'){
@@ -1293,7 +1312,7 @@ export default {
     //        console.log("页面加载失败");
     //      })
     setTimeout(() => {
-      this.initScroll();
+      // this.initScroll();
     }, 20);
   },
   //组件更新之前的生命钩子
