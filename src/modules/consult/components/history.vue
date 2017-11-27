@@ -264,6 +264,7 @@ export default {
   activated() {
     this.finish = false;
     this.initData();
+    this.isShowPaySuccess();//支付弹层
     document.title = "描述病情";
     if (localStorage.getItem("PCIMLinks") !== null) {
       this.backPopupShow = true;
@@ -737,7 +738,7 @@ export default {
     },
     //判断是否显示支付结果弹层
     isShowPaySuccess(){
-      if(api.getPara("showSuccess") == "yes"){
+      if(api.getPara().showSuccess == "yes"){
         this.noWXPayShow = true;
       }else{
         this.noWXPayShow = false;
