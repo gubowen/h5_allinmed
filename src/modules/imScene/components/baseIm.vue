@@ -1044,6 +1044,8 @@ export default {
     },
     //判断是否显示支付结果弹层
     isShowPaySuccess(){
+      localStorage.removeItem('payCaseId');
+      localStorage.removeItem('payPatientId');
       if(api.getPara().showSuccess == "yes"){
         if(sessionStorage.getItem("mOrderAmount")){
           this.payPopupShow = true;
