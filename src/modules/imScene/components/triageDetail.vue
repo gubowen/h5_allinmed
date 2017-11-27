@@ -403,8 +403,7 @@ export default {
           },
           BeforeUpload: function(up, file) {
             // 每个文件上传前，处理相关的事情
-            console.log(file.type);
-            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)$/i.test(file.type)) {
+            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(file.type)) {
               that.errorShow = true;
               that.errorMsg = "当前仅支持avi、mp4、3gp、wmv、mov、flv格式的视频";
               setTimeout(() => {
@@ -434,7 +433,7 @@ export default {
           },
           Error: function(up, err, errTip) {
             //上传出错时，处理相关的事情
-            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)$/i.test(err.file.type)) {
+            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(err.file.type)) {
               that.errorShow = true;
               that.errorMsg =
                 err.code == "-601"
