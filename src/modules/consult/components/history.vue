@@ -359,14 +359,14 @@ export default {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
           this.errorMsg = "图片不能超过10M";
+          this["uploading"+[type]] = true;    //重置input file 对象
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
+            this["uploading"+[type]] = false;  
           }, 3000);
         } else {
           that.filesObj.push(files[i]);
-          console.log(files[i]);
-          console.log(that.filesObj);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
