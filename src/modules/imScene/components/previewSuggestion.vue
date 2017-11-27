@@ -327,8 +327,11 @@
               console.log('医生数据完成');
               that.scrollToBottom();
             } else {
-              that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
+              console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
+              // that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
               // document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
+              console.log(that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].parentElement.parentElement.parentElement.parentElement))
+              that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].parentElement.parentElement.parentElement.parentElement)
             }
           })
         }
@@ -362,9 +365,9 @@
           that[param].moreData = false;
           that[param].tempData = that[param].allData;
         }
-        that.$nextTick(function () {
-          that.refreshScroll();
-        })
+        // that.$nextTick(function () {
+        //   that.refreshScroll();
+        // })
       },
       //去医生主页
       goDoctorHome(index){
@@ -388,10 +391,11 @@
         that[param].moreData = true;
         that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
-        console.log(e.srcElement.parentElement.parentElement.parentElement);
+        console.log(e.srcElement.parentElement.parentElement.parentElement.parentElement);
         that.$nextTick(function () {
           // that.refreshScroll();
-          that.scrollElement(e.srcElement.parentElement.parentElement.parentElement.parentElement)
+          // that.scrollElement(e.srcElement.parentElement.parentElement.parentElement.parentElement)
+          that.scrollElement(e.srcElement.offsetParent);
         })
       },
       goToUpload(){
