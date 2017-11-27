@@ -365,9 +365,9 @@
           that[param].moreData = false;
           that[param].tempData = that[param].allData;
         }
-        that.$nextTick(function () {
-          that.refreshScroll();
-        })
+        // that.$nextTick(function () {
+        //   that.refreshScroll();
+        // })
       },
       //去医生主页
       goDoctorHome(index){
