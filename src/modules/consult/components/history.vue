@@ -223,7 +223,7 @@ export default {
       uploading2: false,
       imageList1: [],
       imageList2: [],
-      filesObj: {},
+      filesObj: [],
       base64Arr: [],
       uploadIndex: 0,
       netTipsNum: 0,
@@ -349,7 +349,7 @@ export default {
     onFileChange(e, type, index) {
       let files = e.target.files || e.dataTransfer.files;
       let that = this;
-      that.filesObj = files;
+      that.filesObj = [];
       that.base64Arr = [];
       that.uploadIndex = 0;
       if (!files.length) {
@@ -364,6 +364,9 @@ export default {
             this.errorShow = false;
           }, 3000);
         } else {
+          that.filesObj.push(files[i]);
+          console.log(files[i]);
+          console.log(that.filesObj);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -378,7 +381,7 @@ export default {
                 that.base64Arr.push(base64); //保存压缩图片
                 if (i == files.length - 1) {
                   this.upLoadPic(
-                    files[that.uploadIndex],
+                    that.filesObj[that.uploadIndex],
                     type,
                     index,
                     that.base64Arr[that.uploadIndex]
@@ -460,7 +463,7 @@ export default {
             let totalUpNum = that["imageList" + type].length;
             if (
               that.filesObj[that.uploadIndex] !== "undefined" &&
-              that.uploadIndex < that.filesObj.length &&
+              that.uploadIndex < that.base64Arr.length &&
               totalUpNum < 9
             ) {
               that.upLoadPic(
