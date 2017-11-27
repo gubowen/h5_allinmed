@@ -928,7 +928,8 @@ export default {
         // 滑动到底部
         that.$nextTick(() => {
           setTimeout(() => {
-            $(".main-message").scrollTop($(".main-message>section").height());
+            // $(".main-message").scrollTop($(".main-message>section").height());
+            document.querySelector('.main-message').scrollTop = document.querySelector(".main-message>section").offsetHeight;  //原生的方法
           }, 20);
           // that.refreshScroll();
           // let heightflag =
@@ -950,8 +951,12 @@ export default {
     //滑动到某个元素
     scrollElement(element) {
       let that = this;
-      that.refreshScroll();
-      this.scroll.scrollToElement(element, 1000);
+      // that.refreshScroll();
+      // this.scroll.scrollToElement(element, 1000);
+      console.log('距离' + element.offsetTop)
+      // console.log("传过来的元素" + $(element).closest(".main-message-wrapper").offset().top)
+      // $(".main-message").scrollTop($(element).closest(".main-message-wrapper").offset().top)
+      document.querySelector('.main-message').scrollTop = element.offsetTop;
     },
     //输入框字数限制
     inputLimit() {
@@ -1039,6 +1044,8 @@ export default {
     },
     //判断是否显示支付结果弹层
     isShowPaySuccess(){
+      localStorage.removeItem('payCaseId');
+      localStorage.removeItem('payPatientId');
       if(api.getPara().showSuccess == "yes"){
         if(sessionStorage.getItem("mOrderAmount")){
           this.payPopupShow = true;
