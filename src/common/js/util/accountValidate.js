@@ -29,27 +29,28 @@ export default function accountValidate() {
   if (parseInt(_phoneCheckParams.customerId) > 0) {
     return true;
   } else {
-    ajax({
-      url: "/mcall/patient/customer/unite/v1/getById/",
-      method: 'POST',
-      data: _phoneCheckParams,
-      beforeSend: function () {
-      },
-      timeout: 2000,
-      done(data) {
-        localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
-        if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
-          let _mobile = data.responseObject.responseData.dataList.patientCustomerUnite.mobile;
-          if (_mobile && _mobile.length > 0) {
-            //已绑定手机号
-            return true;
-          } else {
-            //未绑定手机号
-            sessionStorage.setItem("loginBack", window.location.href);
-            window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
-          }
-        }
-      }
-    })
+    window.location.href = "/dist/login.html?customerId=0";
+    // ajax({
+    //   url: "/mcall/patient/customer/unite/v1/getById/",
+    //   method: 'POST',
+    //   data: _phoneCheckParams,
+    //   beforeSend: function () {
+    //   },
+    //   timeout: 2000,
+    //   done(data) {
+    //     localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
+    //     if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
+    //       let _mobile = data.responseObject.responseData.dataList.patientCustomerUnite.mobile;
+    //       if (_mobile && _mobile.length > 0) {
+    //         //已绑定手机号
+    //         return true;
+    //       } else {
+    //         //未绑定手机号
+    //         sessionStorage.setItem("loginBack", window.location.href);
+    //         window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+    //       }
+    //     }
+    //   }
+    // })
   }
 }
