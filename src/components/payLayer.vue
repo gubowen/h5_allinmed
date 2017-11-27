@@ -110,13 +110,21 @@
       }
     },
     mounted(){
-      this.toJudge({
-        type:0
-      });
+      if(api.getPara().showSuccess == "yes"){
+        this.noWXPayShow = true;
+      }else{
+        this.noWXPayShow = false;
+        this.toJudge({
+          type:0
+        });
+      }
     },
     methods: {
       //关闭支付弹层
       closePopup(){
+        sessionStorage.removeItem("mOrderType");
+        sessionStorage.removeItem("mOrderAmount");
+        sessionStorage.removeItem("mOrderFrequency");
         this.$emit('update:payPopupShow', false);
       },
       //判断是否还有剩余名额
@@ -282,6 +290,9 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
+        sessionStorage.setItem("mOrderType",opt.orderSourceType);
+        sessionStorage.setItem("mOrderAmount",opt.orderAmount);
+        sessionStorage.setItem("mOrderFrequency",opt.orderFrequency);
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -316,13 +327,6 @@
             //支付失败回调  (问诊/门诊类型 必选);
             window.location.reload();
           }
-        });
-        siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>{
-          that.finish = false;
-          that.mOrderType = opt.orderSourceType;
-          that.mOrderAmount = opt.orderAmount;//opt.orderAmount
-          that.mOrderFrequency = opt.orderFrequency;
-          that.noWXPayShow = true
         });
       },
       //提示弹层关闭执行
@@ -512,22 +516,20 @@
                       if (d.responseObject.responseStatus) {
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
-                          orderType: that.mOrderType,//0免费，其他不是
-                          orderAmount: that.mOrderAmount, //价钱
-                          orderFrequency:that.mOrderFrequency//聊天次数
+                          orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
+                          orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
+                          orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
                         });
-                        that.noWXPayShow = false;
                         that.closePopup();
                       }
                     }
                   });
                 }else{
                   that.$emit("paySuccess", {
-                    orderType: that.mOrderType,//0免费，其他不是
-                    orderAmount: that.mOrderAmount, //价钱
-                    orderFrequency:that.mOrderFrequency//聊天次数
+                    orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
+                    orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
+                    orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
                   });
-                  that.noWXPayShow = false;
                   that.closePopup();
                 }
               }

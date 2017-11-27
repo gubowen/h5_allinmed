@@ -161,14 +161,12 @@
 
       </footer>
     </transition>
-    <transition name="fadeUp">
-      <confirm :confirmParams="{
-          'ensure':'支付成功',
-          'cancel':'支付失败',
-          'title':'请确认微信支付是否已经完成'
-          }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
-      </confirm>
-    </transition>
+    <confirm :confirmParams="{
+        'ensure':'支付成功',
+        'cancel':'支付失败',
+        'title':'请确认微信支付是否已经完成'
+        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
+    </confirm>
     <loading :show="finish"></loading>
   </section>
 
@@ -1037,10 +1035,20 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-      siteSwitch.weChatJudge(
-        () => (that.noWXPayShow = false),
-        () => (that.noWXPayShow = true)
-      );
+//      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+    },
+    //判断是否显示支付结果弹层
+    isShowPaySuccess(){
+      if(api.getPara().showSuccess == "yes"){
+        if(sessionStorage.getItem("mOrderAmount")){
+          this.payPopupShow = true;
+        }else{
+          this.noWXPayShow = true;
+        }
+      }else{
+        this.payPopupShow = false;
+        this.noWXPayShow = false;
+      }
     },
     //查看m站支付结果
     viewPayResult() {
@@ -1315,6 +1323,7 @@ export default {
     setTimeout(() => {
       // this.initScroll();
     }, 20);
+    that.isShowPaySuccess();//支付弹层
   },
   //组件更新之前的生命钩子
   beforeUpdate() {
