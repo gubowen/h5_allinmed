@@ -30,27 +30,40 @@ export default function ImageCompress(param, compressFn) {
 }
 
 function getRatioSize(image,param){
+  let _param={
+    width:param.width||1920,
+    height:param.height||1440
+  }
+  console.log(_param)
   const ratio=image.width/image.height;
   let compressParam={
     width:0,
     height:0
   };
-  if (image.width>param.width){
+  if (ratio>=1){ //宽图...宽度大于高度
+    if (image.width>_param.width){
       compressParam={
-        width:param.width,
-        height:param.width/ratio
+        width:_param.width,
+        height:_param.width/ratio
       }
-  }else if (image.height>param.height){
-    compressParam={
-      width:param.height/ratio,
-      height:param.height
+    }else{
+      compressParam={
+        width:image.width,
+        height:image.height
+      }
     }
-  }else{
-    compressParam={
-      width:image.width,
-      height:image.height
+  }else if (ratio<1){//长图...高度大于宽度
+    if (image.height>_param.height){
+      compressParam={
+        width:_param.height*ratio,
+        height:_param.height
+      }
+    }else{
+      compressParam={
+        width:image.width,
+        height:image.height
+      }
     }
   }
-
   return compressParam;
 }
