@@ -83,11 +83,11 @@ export default function MPay(Obj) {
     h5AskPay() {
       let _t = this,
         _data = op.dataL1,
-        _timeStamp = Math.round(new Date().getTime() / 1000) + "";
+        paySuccessUrl = encodeURIComponent(window.location.href.split("#")[0]+"&showSuccess=yes#"+window.location.href.split("#")[1]);
       console.log("-----pay-----");
-      localStorage.setItem("askPay",1);
+      // localStorage.setItem("payUrl",paySuccessUrl);
       console.log(_data.mweb_url);
-      window.location.href = _data.mweb_url;
+      window.location.href = _data.mweb_url + "&redirect_url=" + paySuccessUrl;
     }
   }
   new payObj(Obj);

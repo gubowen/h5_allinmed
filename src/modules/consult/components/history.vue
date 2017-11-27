@@ -278,6 +278,7 @@ export default {
   mounted() {
     document.title = "描述病情";
     this.initData();
+    this.isShowPaySuccess();//支付弹层
     // document.body.scrollTop = 0;
     autosize(this.$el.querySelector(".medicineBox"));
     localStorage.setItem("hasCome", 0);
@@ -285,7 +286,7 @@ export default {
       this.backPopupShow = true;
     } else {
       this.backPopupShow = false;
-    }
+    };
     api.forbidShare();
   },
   beforeRouteEnter(to, from, next) {
@@ -725,14 +726,22 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-      siteSwitch.weChatJudge(
-        ()=>{
-          if(price>0){
-            that.noWXPayShow = false;
-          }
-        },
-        ()=>that.noWXPayShow = true
-      );
+//      siteSwitch.weChatJudge(
+//        ()=>{
+//          if(price>0){
+//            that.noWXPayShow = false;
+//          }
+//        },
+//        ()=>that.noWXPayShow = true
+//      );
+    },
+    //判断是否显示支付结果弹层
+    isShowPaySuccess(){
+      if(api.getPara("showSuccess") == "yes"){
+        this.noWXPayShow = true;
+      }else{
+        this.noWXPayShow = false;
+      }
     },
     //查看m站支付结果
     viewPayResult(){
