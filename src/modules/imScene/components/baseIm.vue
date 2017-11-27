@@ -1,15 +1,16 @@
 <template>
   <section class="main-inner ev-fileUpHide">
+    <transition name="fadeDown">
+      <article class="main-message-time" v-if="lastTimeShow">
+        <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
+        <p class="service-time">
+          <span class="service-time-top">服务时间</span>
+          <span class="service-time-bottom">09: 00-22: 00</span>
+        </p>
+      </article>
+    </transition>
     <section class="main-message" ref="wrapper">
-      <transition name="fadeDown">
-        <article class="main-message-time" v-if="lastTimeShow">
-          <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-          <p class="service-time">
-            <span class="service-time-top">服务时间</span>
-            <span class="service-time-bottom">09: 00-22: 00</span>
-          </p>
-        </article>
-      </transition>
+      
       <transition-group name="fadeDown" tag="section"
                         :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()"  @touchmove="$refs.inputTextarea.blur()">
