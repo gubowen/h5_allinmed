@@ -322,7 +322,7 @@ export default {
               ? index
               : that["imageList"].length - 1; //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
             that.$set(that.imageList, num, {
-              blob: res.responseObject.responseMessage.logoUrl,
+              blob: res.responseObject.responseData.logoUrl,
               imgId: res.responseObject.responsePk,
               uploading: false,
               fail: false,
