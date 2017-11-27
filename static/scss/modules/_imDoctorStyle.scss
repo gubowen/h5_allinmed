@@ -12,23 +12,27 @@
 }
 //聊天区
 .main-message {
-  background-color: #f4f5f7;
-  //width: 100%;
+  background-color: #f4f5f7; //width: 100%;
   //height: 100%;
   //overflow: auto;
   //padding-bottom: rem(270px);
-  box-sizing: border-box;
-  //padding-top: 0.5rem;
+  box-sizing: border-box; //padding-top: 0.5rem;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 1.3rem;
+  bottom: 0;
+  padding-top: 1rem;
   overflow: scroll;
   // height: 92.5%;
   -webkit-overflow-scrolling: touch;
   z-index: 3;
+  transform-style: preserve-3d;
+  transform: translate3d(0, 0, 0);
   & > section{
+    -webkit-overflow-scrolling: touch;
+    transform-style: preserve-3d;
+    transform: translate3d(0, 0, 0); //&.padding-top{
     //&.padding-top{
     //  padding-top: rem(50px);
     //}
@@ -36,7 +40,7 @@
     //  padding-bottom: rem(250px);
     //}
     padding-bottom: rem(250px);
-    margin-top: rem(100px)
+    // margin-top: rem(100px)
   }
 }
 
@@ -135,21 +139,14 @@
   bottom: 0;
   right: 0;
   left: 0;
-  width: 100%;
-  //height: 1.3rem;
+  width: 100%; //height: 1.3rem;
   box-sizing: border-box;
   font-size: 0;
   padding: rem(20px) rem(90px);
   background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50);
-  //position: relative;
+  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
   //display: none;
-  // &.absolute{
-  //   position: absolute;
-  // }
-  // &.relative{
-  //   position: a;
-  // }
+  z-index: 3;
   & > * {
     display: inline-block;
     vertical-align: bottom;

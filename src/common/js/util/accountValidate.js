@@ -29,7 +29,9 @@ export default function accountValidate() {
   if (parseInt(_phoneCheckParams.customerId) > 0) {
     return true;
   } else {
+    sessionStorage.setItem("loginBack", window.location.href);
     window.location.href = "/dist/login.html?customerId=0";
+    
     // ajax({
     //   url: "/mcall/patient/customer/unite/v1/getById/",
     //   method: 'POST',

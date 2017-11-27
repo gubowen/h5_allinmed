@@ -1,6 +1,6 @@
 <template>
   <section class="main-inner ev-fileUpHide" style="overflow:auto">
-          <transition name="fadeDown">
+      <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
           <p class="service-time">

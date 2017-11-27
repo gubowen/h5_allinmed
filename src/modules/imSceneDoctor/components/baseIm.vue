@@ -1,8 +1,7 @@
 <template>
   <div data-alcode-mod='720' style="box-shadow: none">
     <section class="main-inner">
-      <section class="main-message" ref="wrapper" :class="{'bottom-tips-padding':bottomTipsShow}">
-        <transition name="fadeDown">
+       <transition name="fadeDown">
           <article class="main-message-time" v-if="lastTimeShow&&receiveTreatmentStatus">
             <article>
               <p>医生回复剩余次数</p>
@@ -16,6 +15,8 @@
             </article>
           </article>
         </transition>
+      <section class="main-message" ref="wrapper" :class="{'bottom-tips-padding':bottomTipsShow}">
+
         <transition-group name="fadeDown" tag="section">
           <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index"
                    @click.stop="$refs.inputTextarea.blur()" @touchmove="$refs.inputTextarea.blur()">
@@ -126,7 +127,7 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-                      ref="inputTextarea"
+      
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -256,13 +257,13 @@ export default {
     },
     focusFn() {
       if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        $("body").css({
-          position: "relative",
-          bottom: "55%"
-        });
-        this.interval = setInterval(function() {
-          document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-        }, 100);
+        // $("body").css({
+        //   position: "relative",
+        //   bottom: "55%"
+        // });
+        // this.interval = setInterval(function() {
+        //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        // }, 100);
       } else {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
@@ -274,14 +275,14 @@ export default {
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        $("body").css({
-          position: "static",
-          bottom: "0%"
-        });
-        setTimeout(() => {
-          clearInterval(this.interval); //清除计时器
-          document.body.scrollTop = this.bfscrolltop;
-        }, 20);
+        // $("body").css({
+        //   position: "static",
+        //   bottom: "0%"
+        // });
+        // setTimeout(() => {
+        //   clearInterval(this.interval); //清除计时器
+        //   document.body.scrollTop = this.bfscrolltop;
+        // }, 20);
       } else {
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
@@ -921,7 +922,7 @@ export default {
           autosize(that.$refs.inputTextarea);
         }
       });
-      this.$refs.inputTextarea.focus();
+      $(".main-input-box-textarea").focus();
     },
     sendMessageSuccess(error, msg) {
       this.getTimeStampShowList(msg);
@@ -1448,9 +1449,9 @@ export default {
       localStorage.setItem("APPIMLinks", location.href);
       localStorage.setItem("PCIMLinks", location.href);
     }
-    if(api.getPara().showSuccess == "yes"){
+    if (api.getPara().showSuccess == "yes") {
       this.payPopupShow = true;
-    }else{
+    } else {
       this.payPopupShow = false;
     }
 

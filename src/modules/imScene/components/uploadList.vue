@@ -77,7 +77,7 @@
 </template>
 <script type="text/ecmascript-6">
 /**
-   * @Desc：
+   * @Desc： 上传检查检验
    * @Usage:
    * @Notify：
    * @Depend：

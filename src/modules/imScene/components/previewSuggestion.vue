@@ -10,8 +10,8 @@
           <!--<p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>-->
         </header>
         <section class="doctor-content">
-          <ul class="doctor-list">
-            <li class="doctor-item"
+          <section class="doctor-list">
+            <section class="doctor-item"
                 v-for="(item , index) in doctorObj.tempData"
             >
               <section class="doctor-item-top" @click="goDoctorHome(index)">
@@ -38,8 +38,8 @@
                 <span data-alcode='e132' class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
-            </li>
-          </ul>
+            </section>
+          </section>
           <section class="more-box doctor-more-box" v-if="doctorObj.moreBoxShow">
             <span class="more-box-btn more-btn" v-if="doctorObj.moreData" @click="moreDataShow('doctorObj',$event)">查看更多</span>
             <span class="more-box-btn less-btn" v-if="!doctorObj.moreData" @click="lessDataShow('doctorObj',$event)">收起</span>
@@ -667,8 +667,8 @@
               width: rem(108px);
               height: rem(108px);
               margin-right: rem(16px);
-              border-radius: 50%;
-              overflow: hidden;
+              // border-radius: 50%;
+              // overflow: hidden;
               img{
                 border-radius: 50%;
                 width: rem(108px);
