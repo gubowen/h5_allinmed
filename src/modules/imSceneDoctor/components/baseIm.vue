@@ -263,6 +263,10 @@ export default {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
+      } else {
+        this.interval = setInterval(function() {
+          document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 100);
       }
 
       this.onFocus = true;
@@ -274,8 +278,15 @@ export default {
           position: "static",
           bottom: "0%"
         });
-        clearInterval(this.interval); //清除计时器
-        document.body.scrollTop = this.bfscrolltop;
+        setTimeout(() => {
+          clearInterval(this.interval); //清除计时器
+          document.body.scrollTop = this.bfscrolltop;
+        }, 20);
+      } else {
+        setTimeout(() => {
+          clearInterval(this.interval); //清除计时器
+          document.body.scrollTop = this.bfscrolltop;
+        }, 20);
       }
 
       this.onFocus = false;
@@ -283,7 +294,7 @@ export default {
     },
     connectToNim() {
       const that = this;
-      nimEnv().then((nimEnv)=>{
+      nimEnv().then(nimEnv => {
         this.nim = NIM.getInstance({
           //           debug: true,
           appKey: nimEnv,
@@ -299,7 +310,9 @@ export default {
             //            that.userData = userData;
           },
           onwillreconnect(obj) {
-            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+            console.log(
+              "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
+            );
           },
           ondisconnect() {
             console.log("链接已中断...");
@@ -334,8 +347,7 @@ export default {
             }
           }
         });
-      })
-
+      });
     },
     getFirstTargetMsg(msg) {
       if (msg.from === this.targetData.account) {
@@ -1158,19 +1170,22 @@ export default {
       let that = this;
       setTimeout(() => {
         // 滑动到底部
-        that.refreshScroll();
-        let heightflag =
-          that.$refs.wrapper.querySelector("section").offsetHeight -
-          document.body.clientHeight;
-        console.log(heightflag);
-        if (heightflag >= 0) {
-          that.scroll.scrollTo(0, -heightflag, 500);
-        }
+        setTimeout(() => {
+          $(".main-message").scrollTop($(".main-message>section").height());
+        }, 20);
+        // that.refreshScroll();
+        // let heightflag =
+        //   that.$refs.wrapper.querySelector("section").offsetHeight -
+        //   document.body.clientHeight;
+        // console.log(heightflag);
+        // if (heightflag >= 0) {
+        //   that.scroll.scrollTo(0, -heightflag, 500);
+        // }
 
-        //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
-        //   let el=list[list.length-1];
-        // this.scroll.scrollToElement(el,1000);
-        document.getElementsByTagName("body")[0].scrollTop = Math.pow(10, 20);
+        // //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
+        // //   let el=list[list.length-1];
+        // // this.scroll.scrollToElement(el,1000);
+        // document.getElementsByTagName("body")[0].scrollTop = Math.pow(10, 20);
       }, 300);
     },
     inputLimit() {
@@ -1425,7 +1440,7 @@ export default {
   },
   mounted() {
     this.setFooterPosition();
-    this.initScroll();
+    // this.initScroll();
     this.getUserBaseData();
     if (api.getPara().from === "im") {
       return;

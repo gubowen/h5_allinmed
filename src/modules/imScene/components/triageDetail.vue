@@ -245,8 +245,7 @@ export default {
               {
                 imgSrc: oFREvent.target.result,
                 quality: 0.8,
-                width: 1920,
-                height: 1080
+ 
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
