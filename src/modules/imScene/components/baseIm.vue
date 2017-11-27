@@ -1,19 +1,19 @@
 <template>
-  <section class="main-inner ev-fileUpHide">
-    <transition name="fadeDown">
-      <article class="main-message-time" v-if="lastTimeShow">
-        <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-        <p class="service-time">
-          <span class="service-time-top">服务时间</span>
-          <span class="service-time-bottom">09: 00-22: 00</span>
-        </p>
-      </article>
-    </transition>
+  <section class="main-inner ev-fileUpHide" style="overflow:auto">
+          <transition name="fadeDown">
+        <article class="main-message-time" v-if="lastTimeShow">
+          <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
+          <p class="service-time">
+            <span class="service-time-top">服务时间</span>
+            <span class="service-time-bottom">09: 00-22: 00</span>
+          </p>
+        </article>
+      </transition>
     <section class="main-message" ref="wrapper">
-      
+
       <transition-group name="fadeDown" tag="section"
                         :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
-        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" @click.stop="$refs.inputTextarea.blur()"  @touchmove="$refs.inputTextarea.blur()">
+        <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
           <p class='time-stamp'
              v-if="getTimeStampShowFlag(msg,index)">
@@ -150,24 +150,27 @@
           <textarea class="main-input-box-textarea"
                     rows="1"
                     v-model="sendTextContent"
-                    ref="inputTextarea"
+      
                     @focus="focusFn()"
                     @blur="blurFn()"
                     @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
           </textarea>
+          <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
           <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
         </figure>
 
       </footer>
     </transition>
-    <confirm :confirmParams="{
-        'ensure':'支付成功',
-        'cancel':'支付失败',
-        'title':'请确认微信支付是否已经完成'
-        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
-    </confirm>
+    <transition name="fadeUp">
+      <confirm :confirmParams="{
+          'ensure':'支付成功',
+          'cancel':'支付失败',
+          'title':'请确认微信支付是否已经完成'
+          }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
+      </confirm>
+    </transition>
     <loading :show="finish"></loading>
   </section>
 
@@ -275,10 +278,10 @@ export default {
     },
     focusFn() {
       if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        $("body").css({
-          position: "relative",
-          bottom: "55%"
-        });
+        // $("body").css({
+        //   position: "relative",
+        //   bottom: "55%"
+        // });
         // this.interval = setInterval(function() {
         //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         // }, 100);
@@ -293,15 +296,14 @@ export default {
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11_1")) {
-
-        setTimeout(() => {
-                  $("body").css({
-          position: "static",
-          bottom: "0%"
-        });
+        // setTimeout(() => {
+        //   $("body").css({
+        //     position: "static",
+        //     bottom: "0%"
+        //   });
           // clearInterval(this.interval); //清除计时器
           // document.body.scrollTop = this.bfscrolltop;
-        }, 20);
+        // },20);
       } else {
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
@@ -753,7 +755,7 @@ export default {
         }
       });
 
-      this.$refs.inputTextarea.focus();
+     $(".main-input-box-textarea").focus();
     },
     //消息发送之后成功还是失败的函数
     sendMessageSuccess(error, msg) {
@@ -928,10 +930,9 @@ export default {
       setTimeout(() => {
         // 滑动到底部
         that.$nextTick(() => {
-          setTimeout(() => {
-            // $(".main-message").scrollTop($(".main-message>section").height());
-            document.querySelector('.main-message').scrollTop = document.querySelector(".main-message>section").offsetHeight;  //原生的方法
-          }, 20);
+
+            $(".main-message").scrollTop($(".main-message>section").height());
+
           // that.refreshScroll();
           // let heightflag =
           //   that.$refs.wrapper.querySelector("section").offsetHeight -
@@ -952,15 +953,12 @@ export default {
     //滑动到某个元素
     scrollElement(element) {
       let that = this;
-      // that.refreshScroll();
-      // this.scroll.scrollToElement(element, 1000);
-      console.log('距离' + element.offsetTop)
-      // console.log("传过来的元素" + $(element).closest(".main-message-wrapper").offset().top)
-      // $(".main-message").scrollTop($(element).closest(".main-message-wrapper").offset().top)
-      document.querySelector('.main-message').scrollTop = element.offsetTop;
+      that.refreshScroll();
+      this.scroll.scrollToElement(element, 1000);
     },
     //输入框字数限制
     inputLimit() {
+      this.scrollToBottom();
       let content = this.sendTextContent;
       if (api.getByteLen(content) > 1000) {
         this.sendTextContent = api.getStrByteLen(content, 1000);
@@ -1041,22 +1039,10 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-//      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
-    },
-    //判断是否显示支付结果弹层
-    isShowPaySuccess(){
-      localStorage.removeItem('payCaseId');
-      localStorage.removeItem('payPatientId');
-      if(api.getPara().showSuccess == "yes"){
-        if(sessionStorage.getItem("mOrderAmount")){
-          this.payPopupShow = true;
-        }else{
-          this.noWXPayShow = true;
-        }
-      }else{
-        this.payPopupShow = false;
-        this.noWXPayShow = false;
-      }
+      siteSwitch.weChatJudge(
+        () => (that.noWXPayShow = false),
+        () => (that.noWXPayShow = true)
+      );
     },
     //查看m站支付结果
     viewPayResult() {
@@ -1331,7 +1317,6 @@ export default {
     setTimeout(() => {
       // this.initScroll();
     }, 20);
-    that.isShowPaySuccess();//支付弹层
   },
   //组件更新之前的生命钩子
   beforeUpdate() {
