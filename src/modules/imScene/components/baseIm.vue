@@ -1037,6 +1037,7 @@ export default {
         },
         wxPayError(_data) {
           that.isClick = false; //是否点击立即咨询重置
+          window.location.reload();
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
