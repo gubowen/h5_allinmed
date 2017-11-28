@@ -6,7 +6,7 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-show="imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -23,10 +23,10 @@
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
-          <li class="tc-upLoadAdd" style="display: list-item;" v-if="imageList[item.adviceId].length>0&&!loading">
+          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length>0&&!loading"/>
               </span>
             </a>
           </li>
@@ -187,6 +187,14 @@ export default {
               );
             }else{
               that.loading = false;
+              if (that.filesObj[that.uploadIndex]) {
+                that.errorShow = true;
+                that.errorMsg = "图片最多上传9张！";
+                setTimeout(() => {
+                  that.errorShow = false;
+                  that.errorMsg = "";
+                }, 3000);
+              }
             }
           } else {
             //接口异常上传失败处理
@@ -211,7 +219,7 @@ export default {
     onFileChange(e, item, index) {
       let files = e.target.files || e.dataTransfer.files;
       let that = this;
-      that.filesObj = files;
+      that.filesObj = [];
       that.base64Arr = [];
       that.uploadIndex = 0;
       if (!files.length) {
@@ -225,8 +233,12 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
+             if (i == files.length - 1) {
+              this.loading = false;   //开启上传权限
+            }
           }, 3000);
         } else {
+          that.filesObj.push(files[i]);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -240,7 +252,7 @@ export default {
                 that.base64Arr.push(base64); //保存压缩图片
                 if (i == files.length - 1) {
                   this.upLoadPic(
-                    files[that.uploadIndex],
+                    that.filesObj[that.uploadIndex],
                     item,
                     index,
                     that.base64Arr[that.uploadIndex]
