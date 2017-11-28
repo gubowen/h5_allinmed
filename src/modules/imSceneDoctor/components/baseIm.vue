@@ -1169,25 +1169,13 @@ export default {
     },
     scrollToBottom() {
       let that = this;
-      setTimeout(() => {
-        // 滑动到底部
-        setTimeout(() => {
-          $(".main-message").scrollTop($(".main-message>section").height());
-        }, 20);
-        // that.refreshScroll();
-        // let heightflag =
-        //   that.$refs.wrapper.querySelector("section").offsetHeight -
-        //   document.body.clientHeight;
-        // console.log(heightflag);
-        // if (heightflag >= 0) {
-        //   that.scroll.scrollTo(0, -heightflag, 500);
-        // }
+        that.$nextTick(() => {
+          
+          $(".main-message").animate({
+            scrollTop: $(".main-message>section").height()
+          },300);
 
-        // //   let list=this.$refs.wrapper.getElementsByClassName("main-message-box");
-        // //   let el=list[list.length-1];
-        // // this.scroll.scrollToElement(el,1000);
-        // document.getElementsByTagName("body")[0].scrollTop = Math.pow(10, 20);
-      }, 300);
+        });
     },
     inputLimit() {
       let content = this.sendTextContent;
