@@ -373,7 +373,7 @@ export default {
                 that.base64Arr[that.uploadIndex]
               );
             } else {
-              that.loading = false;
+              that.loading = false;      //放开上传权限
               if (that.filesObj[that.uploadIndex]) {
                 that.errorShow = true;
                 that.errorMsg = "图片最多上传9张！";

@@ -59,7 +59,7 @@
           direction : 'horizontal',
           grabCursor : true,
           setWrapperSize :true,
-          zoom : true,
+          zoom : false,
           // zoomToggle :false,
           autoHeight: true,
           pagination : '.swiper-pagination',
