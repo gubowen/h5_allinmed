@@ -80,7 +80,6 @@
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);    //获取openId
       }
-
       api.forbidShare();
       this.getOrderHistoryLists();
     },
@@ -236,18 +235,6 @@
         }
         return result;
       },
-//      getCaseTime(opt){
-//          const ms = 86400000;//毫秒数
-//          let caseTime = new Date(opt.createTime),//问诊创建时间毫秒数
-//               nowTime = new Date().getTime();//当前时间毫秒数
-//          if(nowTime-caseTime<=ms){
-//              return  opt.createTime.substring(11,16)
-//          }else if(nowTime-caseTime > ms && new Date().getFullYear() == opt.createTime.substring(0,4)){
-//              return  opt.createTime.substring(5,16)
-//          }else if(new Date().getFullYear() > opt.createTime.substring(0,4)){
-//            return  opt.createTime.substring(0,16)
-//          }
-//      },
       hrefToConsult(){
         window.location.href = '/dist/consult.html?customerId=' + api.getPara().customerId;
       },
@@ -310,9 +297,8 @@
                     "adviceName": elemen.inspectionName
                   })
                 })
-              }
-              ;
-              console.log()
+              };
+              localStorage.setItem("picList",JSON.stringify(hisPicLists));
               that.$router.push({
                 name: "uploadPic",
                 params: {
