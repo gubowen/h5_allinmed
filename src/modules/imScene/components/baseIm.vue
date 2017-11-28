@@ -675,12 +675,6 @@ export default {
             let time = parseInt(dataList.remainingTime); //responseData.dataList.remainingTime 剩余时间
             store.commit("setConsultation", dataList.consultationId);
             time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
-            //consultationFrequency 聊天次数、分诊台不需要
-            //              if (dataList.consultationFrequency == "-1") {
-            //                that.lastTimeShow = false;
-            //                that.inputBoxShow = false;
-            //                that.consultTipsShow = true;
-            //              } else {
             //  time = 100000;
             if (dataList.consultationState === -2) {
               that.lastTimeShow = false;
@@ -931,7 +925,8 @@ export default {
         // 滑动到底部
         that.$nextTick(() => {
 
-            $(".main-message").scrollTop($(".main-message>section").height());
+            // $(".main-message").scrollTop($(".main-message>section").height());
+            document.querySelector('.main-message').scrollTop = document.querySelector(".main-message>section").offsetHeight;  //原生的方法
 
           // that.refreshScroll();
           // let heightflag =
@@ -987,8 +982,6 @@ export default {
             data.responseObject.responseData
           ) {
             let price = data.responseObject.responseData.dataList.adviceAmount;
-            //              price = "0";
-            //              price === "0"?that.refreashOrderTime('free'):that.buyTime(price)
             console.log("获取分诊医生价格成功" + price);
             that.buyTime(price);
           } else {
@@ -1290,14 +1283,6 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-    // if (api.getPara().from === 'doctor'){
-    //   setTimeout( () => {
-    //     let newUrl = window.location.href.replace(/&from=doctor/,'');
-    //     console.log(newUrl+'我是从推荐医生来的');
-    //     window.location.replace(newUrl);
-    //   },20)
-    // }
-    //      let _checkOpenId=api.checkOpenId();
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
@@ -1307,40 +1292,23 @@ export default {
     //      that.forceRefresh();
     localStorage.setItem("PCIMLinks", location.href);
     this.setFooterPosition();
-    //      let p1 = new Promise(resolve => that.getUserBaseData());
-    //      let p2 = new Promise(resolve => that.triageDoctorAssign());
-    //      Promise.all([p1,p2]).then(function () {
-    //        console.log("页面加载完成");
-    //      }).catch(function () {
-    //        console.log("页面加载失败");
-    //      })
     setTimeout(() => {
       // this.initScroll();
     }, 20);
   },
   //组件更新之前的生命钩子
   beforeUpdate() {
-    //      console.log("组件更新前"+document.querySelector(".main-message-wrapper"))
+    
   },
   //组件更新之后的生命钩子
   updated() {
-    //      console.log("组件更新后"+document.querySelector(".main-message-wrapper"))
+    
   },
   activated() {
     let that = this;
     document.body.scrollTop = 1;
     that.refreshScroll();
-    // console.time("main");
-    // console.timeEnd('1');
-    // let name  = that.$route.query;
-
-    // let c = that.$route.query.queryType === "triage";
-
-    // if (!!that.$route.query) {
-    // debugger;
-    // console.timeEnd('2');
     if (that.$route.query.queryType === "triage") {
-      // console.timeEnd('3')
       that.nim.sendCustomMsg({
         scene: "p2p",
         to: that.targetData.account,
@@ -1363,7 +1331,6 @@ export default {
           }
         }
       });
-      // console.timeEnd('4');
     } else if (
       that.$route.query &&
       that.$route.query.queryType === "checkSuggest"
@@ -1392,68 +1359,9 @@ export default {
         }
       });
     }
-    // }
     that.$router.push({
       query: {}
     });
-
-    // if (that.$route.query && that.$route.query.queryType === "triage") {
-
-    //   console.log(that.$route)
-
-    //   that.nim.sendCustomMsg({
-    //     scene: 'p2p',
-    //     to: that.targetData.account,
-    //     custom: JSON.stringify({
-    //       cType: "0",
-    //       cId: that.cId,
-    //       mType: "34",
-    //       conId: that.orderSourceId,
-    //     }),
-    //     content: JSON.stringify({
-    //       type: "triageSendTips",
-    //       data: {
-    //         actionType: that.$route.query.triageType,
-    //       }
-    //     }),
-    //     type: "custom",
-    //     done (error, msg) {
-    //       if (!error) {
-    //         that.sendMessageSuccess(error, msg)
-    //       }
-
-    //     }
-    //   })
-    //   console.timeEnd('4');
-
-    // } else if (that.$route.query && that.$route.query.queryType === "checkSuggest") {
-    //   that.updateMedical();
-    //   that.nim.sendCustomMsg({
-    //     scene: 'p2p',
-    //     to: that.targetData.account,
-    //     custom: JSON.stringify({
-    //       cType: "0",
-    //       cId: that.cId,
-    //       mType: "0",
-    //       conId:that.orderSourceId,
-    //     }),
-    //     content: JSON.stringify({
-    //       type: "checkSuggestSendTips",
-    //       data: {
-    //         actionType: that.$route.query.queryType,
-    //       }
-    //     }),
-    //     type: "custom",
-    //     done (error, msg) {
-    //       if (!error) {
-    //         that.sendMessageSuccess(error, msg)
-    //       }
-    //     }
-    //   })
-    // }
-    // that.$router.push({
-    //   query: {}
-    // });
   },
   watch: {
     msgList: {
