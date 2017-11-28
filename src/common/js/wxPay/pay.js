@@ -23,6 +23,7 @@ export default function pay(Obj) {
   class payObj{
     constructor(){
       this.init();
+      console.log(Obj);
     }
     init(){
       console.log("微信支付");
@@ -144,12 +145,22 @@ export default function pay(Obj) {
             //更新订单状态
             if (Obj.orderType == 1 && Obj.orderSourceId == 0) {
               //咨询创建ID
-              _t.creatInquiryId({
-                queryCallBack: function (sourceId) {
-                  Obj.orderSourceId = sourceId;
-                  _t.paySuccess();
-                }
-              })
+              if(Obj.doctorType == "shuntDoctor"){
+                _t.creatShuntInquiryId({
+                  queryCallBack: function (sourceId) {
+                    Obj.orderSourceId = sourceId;
+                    _t.paySuccess();
+                  }
+                })
+              }else{
+                _t.creatInquiryId({
+                  queryCallBack: function (sourceId) {
+                    Obj.orderSourceId = sourceId;
+                    _t.paySuccess();
+                  }
+                })
+              }
+
             } else {
               _t.paySuccess();
             }
@@ -257,56 +268,43 @@ export default function pay(Obj) {
           }
         }
       });
-    }
-  }
-  if(Obj.doctorType == "shuntDoctor"){
-    class TriagePayObj extends payObj {
-      constructor() {
-        super()
-      }
-
-      @overwrite
-      //咨询支付成功后创建问诊id
-      creatInquiryId(opt) {
-        //获取是否已经存在问诊id
-        api.ajax({
-          url: "/mcall/customer/case/consultation/v1/getMapById/",
-          method: "POST",
-          data: {
-            caseId: Obj.caseId,
-            customerId: 0,
-            consultationType: 0,
-            siteId: 17
-          },
-          done(data) {
-            if (data.responseObject.responseMessage == "NO DATA") {
-              api.ajax({
-                url: "/mcall/customer/case/consultation/v1/create/",
-                method: "POST",
-                data: {
-                  caseId: Obj.caseId,
-                  customerId: 0,
-                  patientCustomerId: Obj.patientCustomerId,
-                  patientId: Obj.patientId,
-                  consultationType: 0,
-                  consultationState: 4,
-                  siteId: 17,
-                  caseType: 0
-                },
-                done(d) {
-                  if (d.responseObject.responseStatus) {
-                    opt.queryCallBack(d.responseObject.responsePk);
-                  }
+    };
+    creatShuntInquiryId(opt) {
+      //获取是否已经存在问诊id
+      api.ajax({
+        url: "/mcall/customer/case/consultation/v1/getMapById/",
+        method: "POST",
+        data: {
+          caseId: Obj.caseId,
+          customerId: 0,
+          consultationType: 0,
+          siteId: 17
+        },
+        done(data) {
+          if (data.responseObject.responseMessage == "NO DATA") {
+            api.ajax({
+              url: "/mcall/customer/case/consultation/v1/create/",
+              method: "POST",
+              data: {
+                caseId: Obj.caseId,
+                customerId: 0,
+                patientCustomerId: Obj.patientCustomerId,
+                patientId: Obj.patientId,
+                consultationType: 0,
+                consultationState: 4,
+                siteId: 17,
+                caseType: 0
+              },
+              done(d) {
+                if (d.responseObject.responseStatus) {
+                  opt.queryCallBack(d.responseObject.responsePk);
                 }
-              });
-            }
+              }
+            });
           }
-        });
-      }
-    }
-    new TriagePayObj(Obj)
-  }else{
-    new payObj(Obj);
+        }
+      });
+    };
   }
-
+  new payObj(Obj);
 }
