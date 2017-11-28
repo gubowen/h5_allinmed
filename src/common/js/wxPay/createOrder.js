@@ -130,6 +130,10 @@ export default function createOrders(Obj){
         orderSourceId:Obj.data.orderSourceId,    //	string	是	来源id，  对应咨询id,手术单id，门诊预约id
         total_fee: Obj.data.orderAmount,   //订单总金额
         body: Obj.data.body,               //订单描述
+        doctorType: Obj.data.doctorType,     //医生类型
+        caseId:Obj.data.caseId,
+        patientCustomerId:Obj.data.patientCustomerId, //	string	是	患者所属用户id
+        patientId:Obj.data.patientId,
         callBack: function (data) {
           if(data.responseStatus ==="true"){
             Obj.wxPaySuccess();        //支付成功回调
