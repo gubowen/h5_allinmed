@@ -97,13 +97,15 @@ export default {
     }
   },
   mounted() {
-    this.getUploadList();
     api.forbidShare();
+  },
+  activated() {
+    this.getUploadList();
   },
   methods: {
     getUploadList() {
-      if (this.$route.params.hisPicLists) {
-        this.uploadList = this.$route.params.hisPicLists;
+      if (localStorage.getItem("picList")) {
+        this.uploadList = JSON.parse(localStorage.getItem("picList"));
         this.uploadList.forEach(element => {
           this.$set(this.imageList, element.adviceId, []);
         });

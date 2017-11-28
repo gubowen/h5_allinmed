@@ -56,7 +56,7 @@ class Myconsult {
         name: "uploadPic",
         component: uploadPic,
         meta: {
-          keepAlive: false
+          keepAlive: true
         }
       }
     ];
