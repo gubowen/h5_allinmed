@@ -1293,7 +1293,6 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-    sessionStorage.setItem("doctor", "强三皮");
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
