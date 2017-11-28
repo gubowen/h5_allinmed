@@ -472,6 +472,15 @@ export default {
                 index,
                 that.base64Arr[that.uploadIndex]
               );
+            }else {
+              if (that.filesObj[that.uploadIndex]) {
+                that.errorShow = true;
+                that.errorMsg = "图片最多上传9张！";
+                setTimeout(() => {
+                  that.errorShow = false;
+                  that.errorMsg = "";
+                }, 3000);
+              }
             }
           } else {
             let num = index ? index : that["imageList" + type].length - 1;
