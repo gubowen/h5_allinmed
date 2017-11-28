@@ -9,6 +9,8 @@
 import wxStrings from './wxCommString';
 import upOrder from './upOrderStatus';
 import api from '../util/util';
+import {override} from "core-decorators";
+
 export default function pay(Obj) {
   const XHRList = {
     wxBasePath: '', //微信接口配置
@@ -257,5 +259,54 @@ export default function pay(Obj) {
       });
     }
   }
-  new payObj(Obj);
+  if(Obj.doctorType == "shuntDoctor"){
+    class TriagePayObj extends payObj {
+      constructor() {
+        super()
+      }
+
+      @overwrite
+      //咨询支付成功后创建问诊id
+      creatInquiryId(opt) {
+        //获取是否已经存在问诊id
+        api.ajax({
+          url: "/mcall/customer/case/consultation/v1/getMapById/",
+          method: "POST",
+          data: {
+            caseId: Obj.caseId,
+            customerId: 0,
+            consultationType: 0,
+            siteId: 17
+          },
+          done(data) {
+            if (data.responseObject.responseMessage == "NO DATA") {
+              api.ajax({
+                url: "/mcall/customer/case/consultation/v1/create/",
+                method: "POST",
+                data: {
+                  caseId: Obj.caseId,
+                  customerId: 0,
+                  patientCustomerId: Obj.patientCustomerId,
+                  patientId: Obj.patientId,
+                  consultationType: 0,
+                  consultationState: 4,
+                  siteId: 17,
+                  caseType: 0
+                },
+                done(d) {
+                  if (d.responseObject.responseStatus) {
+                    opt.queryCallBack(d.responseObject.responsePk);
+                  }
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+    new TriagePayObj(Obj)
+  }else{
+    new payObj(Obj);
+  }
+
 }

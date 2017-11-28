@@ -365,7 +365,7 @@ export default {
             this.errorShow = false;
             if (i == files.length - 1) {
               // this.loading = false;   //开启上传权限
-              this["uploading"+[type]] = false;  
+              this["uploading"+[type]] = false;
             }
           }, 3000);
         } else {
@@ -638,7 +638,7 @@ export default {
             //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
             api.getPara().doctorId
               ? that.getProfessionalDoctor()
-              : that.createOrderSourceId();
+              : that.getConsultPrice();
           } else {
             that.finish = false;
           }
@@ -646,36 +646,36 @@ export default {
       });
     },
     //获取orderSourceId
-    createOrderSourceId() {
-      const that = this;
-      if (that.isClick) {
-        return false;
-      }
-      that.isClick = true;
-      api.ajax({
-        url: XHRList.triageAssign,
-        method: "POST",
-        data: {
-          caseId: that.responseCaseId,
-          customerId: 0,
-          patientCustomerId: api.getPara().customerId,
-          patientId: that.allParams.patientId,
-          consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
-          consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-          siteId: 17,
-          caseType: 0
-        },
-        done(data) {
-          if (data.responseObject.responseStatus) {
-            console.log("获取orderSourceId成功");
-            that.orderSourceId = data.responseObject.responsePk;
-            that.getConsultPrice();
-          } else {
-            console.log("获取orderSourceId失败");
-          }
-        }
-      });
-    },
+//    createOrderSourceId() {
+//      const that = this;
+//      if (that.isClick) {
+//        return false;
+//      }
+//      that.isClick = true;
+//      api.ajax({
+//        url: XHRList.triageAssign,
+//        method: "POST",
+//        data: {
+//          caseId: that.responseCaseId,
+//          customerId: 0,
+//          patientCustomerId: api.getPara().customerId,
+//          patientId: that.allParams.patientId,
+//          consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
+//          consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+//          siteId: 17,
+//          caseType: 0
+//        },
+//        done(data) {
+//          if (data.responseObject.responseStatus) {
+//            console.log("获取orderSourceId成功");
+//            that.orderSourceId = data.responseObject.responsePk;
+//            that.getConsultPrice();
+//          } else {
+//            console.log("获取orderSourceId失败");
+//          }
+//        }
+//      });
+//    },
     //获取咨询价格
     getConsultPrice(caseId) {
       const that = this;
@@ -712,13 +712,14 @@ export default {
         patientId: that.allParams.patientId, // 	string	是	患者id
         // doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
         orderType: "1", //	string	是	订单类型  1-咨询2-手术3-门诊预约
-        orderSourceId: that.orderSourceId, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+        orderSourceId: 0, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
         orderSourceType: "1", //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
         orderAmount: price, //	string	否	订单金额  （单位/元 保留两位小数）
         status: "1", //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
         body: "咨询", //   string  否  订单描述 （微信支付展示用）
         isCharge: flag, //   string  是  true-收费  false-免费
-        caseId: that.responseCaseId
+        caseId: that.responseCaseId,
+        doctorType: "shuntDoctor"
       };
       WxPayCommon.wxCreateOrder({
         data: data, //data为Object 参考下面给出格式
