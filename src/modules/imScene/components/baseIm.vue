@@ -301,8 +301,8 @@ export default {
         //     position: "static",
         //     bottom: "0%"
         //   });
-          // clearInterval(this.interval); //清除计时器
-          // document.body.scrollTop = this.bfscrolltop;
+        // clearInterval(this.interval); //清除计时器
+        // document.body.scrollTop = this.bfscrolltop;
         // },20);
       } else {
         setTimeout(() => {
@@ -453,26 +453,26 @@ export default {
       });
     },
     // 判断是否需要发送推荐医生
-    sendSuggestDoctor () {
+    sendSuggestDoctor() {
       let that = this;
-      let doctorName = sessionStorage.getItem('doctor');
+      let doctorName = sessionStorage.getItem("doctor");
       if (!!doctorName) {
         that.nim.sendText({
-        scene: "p2p",
-        to: that.targetData.account,
-        text: `${doctorName}拒绝了我的咨询，请重新为我匹配对症医生`,
-        custom: JSON.stringify({
-          cType: "0",
-          cId: that.cId,
-          mType: "0",
-          conId: that.orderSourceId
-        }),
-        done(error, obj) {
-          console.log(obj);
-          that.sendMessageSuccess(error, obj);
-          sessionStorage.removeItem('doctor');
-        }
-      });
+          scene: "p2p",
+          to: that.targetData.account,
+          text: `${doctorName}拒绝了我的咨询，请重新为我匹配对症医生`,
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "0",
+            conId: that.orderSourceId
+          }),
+          done(error, obj) {
+            console.log(obj);
+            that.sendMessageSuccess(error, obj);
+            sessionStorage.removeItem("doctor");
+          }
+        });
       }
     },
     //判断消息列表里面是否有结束问诊，没有的话发送一条
@@ -774,7 +774,7 @@ export default {
         }
       });
 
-     $(".main-input-box-textarea").focus();
+      $(".main-input-box-textarea").focus();
     },
     //消息发送之后成功还是失败的函数
     sendMessageSuccess(error, msg) {
@@ -946,29 +946,14 @@ export default {
     //滑动到底部
     scrollToBottom(element) {
       let that = this;
-      setTimeout(() => {
-        // 滑动到底部
-        that.$nextTick(() => {
-
-            // $(".main-message").scrollTop($(".main-message>section").height());
-            document.querySelector('.main-message').scrollTop = document.querySelector(".main-message>section").offsetHeight;  //原生的方法
-
-          // that.refreshScroll();
-          // let heightflag =
-          //   that.$refs.wrapper.querySelector("section").offsetHeight -
-          //   that.$refs.wrapper.clientHeight;
-          // console.log("我要滑动底部");
-          // console.log(heightflag);
-
-          // if (heightflag >= 0) {
-          //   that.scroll.scrollTo(0, -heightflag, 500);
-          // }
-          //          this.$refs.inputTextarea.scrollIntoView(true);
-          //          this.$refs.inputTextarea.scrollIntoViewIfNeeded();
-          //          document.body.scrollTop = Math.pow(10, 20);
-          // window.scrollTo(0, document.body.offsetHeight);
-        });
-      }, 300);
+      that.$nextTick(() => {
+        $(".main-message").animate(
+          {
+            scrollTop: $(".main-message>section").height()
+          },
+          300
+        );
+      });
     },
     //滑动到某个元素
     scrollElement(element) {
@@ -1308,7 +1293,6 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-    sessionStorage.setItem('doctor',"强三皮")
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
@@ -1323,13 +1307,9 @@ export default {
     }, 20);
   },
   //组件更新之前的生命钩子
-  beforeUpdate() {
-    
-  },
+  beforeUpdate() {},
   //组件更新之后的生命钩子
-  updated() {
-    
-  },
+  updated() {},
   activated() {
     let that = this;
     document.body.scrollTop = 1;

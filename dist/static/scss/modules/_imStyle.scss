@@ -13,11 +13,8 @@
 
 //聊天区
 .main-message {
-  background-color: #f4f5f7; //width: 100%;
-  //height: 100%;
-  //overflow: auto;
-  //padding-bottom: rem(270px);
-  box-sizing: border-box; //padding-top: 0.5rem;
+  background-color: #f4f5f7; 
+  box-sizing: border-box; 
   position: absolute;
   top: 0;
   left: 0;
@@ -33,16 +30,8 @@
   &>section {
     -webkit-overflow-scrolling: touch;
     transform-style: preserve-3d;
-    transform: translate3d(0, 0, 0); //&.padding-top{
-    // overflow: scroll;
-    // position: absolute;
-    // top: 0; bottom: 0;
-    //  padding-top: rem(50px);
-    //}
-    //&.padding-bottom{
-    //  padding-bottom: rem(250px);
-    //}
-    padding-bottom: rem(180px);
+    transform: translate3d(0, 0, 0); 
+    padding-bottom: rem(105px);
     // margin-top: rem(100px);
   }
 }
@@ -394,7 +383,7 @@
   background: url("../../../common/image/imScene/top_hint@2x.png") no-repeat;
   background-size: cover; //text-align: center;
   //display: none;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
