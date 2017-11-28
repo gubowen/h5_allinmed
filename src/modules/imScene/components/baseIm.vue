@@ -439,6 +439,8 @@ export default {
           console.log("dom更新前");
           console.log(obj);
           that.getTimeStampShowList();
+          // 判断是否需要发送推荐医生
+          that.sendSuggestDoctor();
           //需要更改的定位
           that.$nextTick(function() {
             //循环消息列表，处理需求
@@ -449,6 +451,29 @@ export default {
         },
         limit: 100 //本次查询的消息数量限制, 最多100条, 默认100条
       });
+    },
+    // 判断是否需要发送推荐医生
+    sendSuggestDoctor () {
+      let that = this;
+      let doctorName = sessionStorage.getItem('doctor');
+      if (!!doctorName) {
+        that.nim.sendText({
+        scene: "p2p",
+        to: that.targetData.account,
+        text: `${doctorName}拒绝了我的咨询，请重新为我匹配对症医生`,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "0",
+          conId: that.orderSourceId
+        }),
+        done(error, obj) {
+          console.log(obj);
+          that.sendMessageSuccess(error, obj);
+          sessionStorage.removeItem('doctor');
+        }
+      });
+      }
     },
     //判断消息列表里面是否有结束问诊，没有的话发送一条
     hasMiddleTips() {
@@ -1283,6 +1308,7 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
+    sessionStorage.setItem('doctor',"强三皮")
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }

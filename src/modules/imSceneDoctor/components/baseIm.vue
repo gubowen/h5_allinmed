@@ -1273,19 +1273,11 @@ export default {
             },
             done(data) {
               if (data.responseObject.responseData) {
-                that.nim.sendText({
-                  scene: "p2p",
-                  to: "1_doctor00001",
-                  custom: JSON.stringify({
-                    cType: "1",
-                    cId: api.getPara().doctorCustomerId,
-                    mType: "0",
-                    conId: that.orderSourceId
-                  }),
-                  text: `${that.$store.state.targetMsg
-                    .nick}拒绝了我的咨询，请重新为我匹配对症医生`,
-                  done(error, obj) {
-                    window.location.href =
+                
+                // 存储sessionStorage，给分诊医生im使用；
+                sessionStorage.setItem('doctor',that.$store.state.targetMsg.nick)
+
+                window.location.href =
                       "/dist/imScene.html?&caseId=" +
                       api.getPara().caseId +
                       "&patientId=" +
@@ -1293,10 +1285,22 @@ export default {
                       "&patientCustomerId=" +
                       api.getPara().patientCustomerId +
                       "&shuntCustomerId=" +
-                      that.shuntCustomerId +
-                      "&from=doctor";
-                  }
-                });
+                      that.shuntCustomerId 
+                // that.nim.sendText({
+                //   scene: "p2p",
+                //   to: "1_doctor00001",
+                //   custom: JSON.stringify({
+                //     cType: "1",
+                //     cId: api.getPara().doctorCustomerId,
+                //     mType: "0",
+                //     conId: that.orderSourceId
+                //   }),
+                //   text: `${that.$store.state.targetMsg
+                //     .nick}拒绝了我的咨询，请重新为我匹配对症医生`,
+                //   done(error, obj) {
+                    
+                //   }
+                // });
               }
             }
           });
