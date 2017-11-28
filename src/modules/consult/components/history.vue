@@ -363,7 +363,10 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
-            this["uploading"+[type]] = false;  
+            if (i == files.length - 1) {
+              // this.loading = false;   //开启上传权限
+              this["uploading"+[type]] = false;  
+            }
           }, 3000);
         } else {
           that.filesObj.push(files[i]);
