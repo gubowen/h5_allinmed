@@ -126,9 +126,9 @@
           </MiddleTips>
                    <!--消息撤回提示-->
          <div data-alcode-mod='717' :key="0">
-          <section class="main-message-box grey-tips" v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'deleteMsgTips' " :key="0">
+          <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
             <figcaption class="first-message">
-              <p>{{msg.to==="1_doctor0001"?"分诊医生":"您"}}撤回了一条消息</p>
+              <p>{{msg.from==="1_doctor00001"?"分诊医生":"您"}}撤回了一条消息</p>
             </figcaption>
           </section>
         </div>
@@ -179,7 +179,7 @@
         'ensure':'支付成功',
         'cancel':'支付失败',
         'title':'请确认微信支付是否已经完成'
-        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false;localStorage.removeItem('payOk');" @ensureClickEvent="viewPayResult()">
+        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
     </confirm>
     <loading :show="finish"></loading>
      <transition name="fade">
@@ -697,6 +697,25 @@ export default {
         }
       });
     },
+    showFlagDeleteTips(msg) {
+      let flag = false;
+      if (
+        msg.type === "custom" &&
+        JSON.parse(msg.content).type === "deleteMsgTips"
+      ) {
+        flag = true;
+        console.log(JSON.parse(msg.content).data);
+        let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+        this.msgList.forEach((element, index) => {
+          if (element.idClient === idClient) {
+            this.msgList.removeByValue(element);
+            return;
+          }
+        });
+        // this.msgList.removeByValue(JSON.parse(msg.content).data.deleteMsg)
+      }
+      return flag;
+    },
     deleteMsgEvent(msg) {
       const deleteMsg = new DeleteMsg(this.nim, msg);
       const deleteMsgTips = new DeleteMsgTips(
@@ -1111,8 +1130,8 @@ export default {
     isShowPaySuccess() {
       localStorage.removeItem("payCaseId");
       localStorage.removeItem("payPatientId");
-      if (localStorage.getItem("payOk") == 1) {
-        if (localStorage.getItem("mOrder")) {
+      if (api.getPara().showSuccess == "yes") {
+        if (sessionStorage.getItem("mOrderAmount")) {
           this.payPopupShow = true;
         } else {
           this.noWXPayShow = true;
@@ -1132,7 +1151,6 @@ export default {
           console.log("查看回调", data);
           if (data.resultCode == "SUCCESS") {
             that.noWXPayShow = false;
-            localStorage.removeItem("payOk");
             that.refreashOrderTime("pay");
           } else {
             that.isClick = false; //是否点击立即咨询重置
@@ -1239,13 +1257,14 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            localStorage.setItem("sendTips", JSON.stringify(opt));
             that.payPopupShow = false;
+            localStorage.setItem("sendTips", JSON.stringify(opt));
             window.location.href =
               "/dist/imSceneDoctor.html?from=im&caseId=" +
               api.getPara().caseId +
               "&doctorCustomerId=" +
-              (that.$store.state.targetDoctor.customerId || localStorage.getItem("mPayDoctorId")) +
+              (that.$store.state.targetDoctor.customerId ||
+                localStorage.getItem("mPayDoctorId")) +
               "&patientCustomerId=" +
               api.getPara().patientCustomerId +
               "&patientId=" +
