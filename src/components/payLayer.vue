@@ -495,6 +495,8 @@
           console.log("查看回调",data);
           let payDate = JSON.parse(localStorage.getItem("payDate")),
               mOrder = JSON.parse(localStorage.getItem("mOrder"));
+          alert(localStorage.getItem("payDate"));
+          alert(localStorage.getItem("mOrder"));
           if(data.resultCode == "SUCCESS"){
             api.ajax({
               url:  "/mcall/customer/case/consultation/v1/getMapById/",
@@ -523,6 +525,7 @@
                     },
                     done (d) {
                       if (d.responseObject.responseStatus) {
+                        alert(d.responseObject.responsePk);
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
                           orderType: mOrder.mOrderType,//0免费，其他不是
