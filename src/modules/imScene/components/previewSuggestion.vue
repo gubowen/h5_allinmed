@@ -131,6 +131,7 @@
    */
   import api from "common/js/util/util";
   import store from "../store/store";
+  import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
   const XHRList = {
     getCheckSuggestion: "/mcall/patient/case/diagnosis/v1/getMapList/",//预览初诊建议
@@ -303,7 +304,7 @@
             that.$nextTick(() => {
               that.checkResponse();
             })
-            
+
           },
           fail(){
             that.doctorResponse = true;
@@ -379,7 +380,11 @@
       goConsult(index,type){
         let that = this;
         that.$emit('update:payPopupShow', true);
-
+        siteSwitch.weChatJudge(()=>{
+          console.log("这是微信")
+        },()=>{
+          localStorage.setItem("mPayDoctorId",that.doctorObj.allData[index].customerId);
+        });
         store.commit("setTargetMsg", {customerId:that.doctorObj.allData[index].customerId});
         store.commit("setTargetMsg", {nick:that.doctorObj.allData[index].fullName});
         store.commit("setTargetMsg", {payType:type});

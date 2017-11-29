@@ -1230,7 +1230,7 @@ export default {
               "/dist/imSceneDoctor.html?from=im&caseId=" +
               api.getPara().caseId +
               "&doctorCustomerId=" +
-              that.$store.state.targetDoctor.customerId +
+              (that.$store.state.targetDoctor.customerId || localStorage.getItem("mPayDoctorId")) +
               "&patientCustomerId=" +
               api.getPara().patientCustomerId +
               "&patientId=" +
