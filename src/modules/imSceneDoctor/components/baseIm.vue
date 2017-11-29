@@ -189,6 +189,8 @@ import nimEnv from "common/js/nimEnv/nimEnv";
 import scrollPosition from "../api/scrollPosition";
 import BScroll from "better-scroll";
 
+
+import $ from "jquery";
 let nim;
 const XHRList = {
   getToken: "/mcall/im/interact/v1/refreshToken/",
@@ -298,7 +300,7 @@ export default {
       const that = this;
       nimEnv().then(nimEnv => {
         this.nim = NIM.getInstance({
-          //           debug: true,
+                    // debug: true,
           appKey: nimEnv,
           account: this.userData.account,
           token: this.userData.token,
