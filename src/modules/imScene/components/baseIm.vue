@@ -124,6 +124,14 @@
             :tipsType="5"
           >
           </MiddleTips>
+                   <!--消息撤回提示-->
+         <div data-alcode-mod='717' :key="0">
+          <section class="main-message-box grey-tips" v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'deleteMsgTips' " :key="0">
+            <figcaption class="first-message">
+              <p>您撤回了一条消息</p>
+            </figcaption>
+          </section>
+        </div>
         </section>
         <!--继续问诊去购买时间-->
         <div data-alcode-mod='717' :key="0">
@@ -134,6 +142,7 @@
             </figcaption>
           </section>
         </div>
+
       </transition-group>
     </section>
     <!--支付弹层-->
@@ -274,7 +283,7 @@ export default {
       bfscrolltop: document.body.scrollTop,
       toastTips: "",
       toastShow: false,
-      deleteMsgIndex:-1
+      deleteMsgIndex: -1
     };
   },
 
@@ -690,30 +699,25 @@ export default {
     },
     deleteMsgEvent(msg) {
       const deleteMsg = new DeleteMsg(this.nim, msg);
+      const deleteMsgTips = new DeleteMsgTips(
+        this.nim,
+        this.targetData.account,
+        {
+          cType: "0",
+          cId: this.cId,
+          mType: "36",
+          conId: this.orderSourceId,
+          patientName: this.$store.state.patientName,
+          deleteMsg: msg
+        }
+      );
       const _DeleteTimeLimit = "2分钟";
-      const that=this;
+      const that = this;
 
       deleteMsg
         .deleteMessage()
-        .then(msg => {
+        .then((msg) => {
           console.log(msg);
-          const deleteMsgTips = new DeleteMsgTips(this.nim, this.targetData.account, {
-            cType: "0",
-            cId: this.cId,
-            mType: "36",
-            conId: this.orderSourceId,
-            patientName: this.$store.state.patientName,
-            deleteMsg: msg
-          });
-          deleteMsgTips
-            .sendDeleteTips()
-            .then((tipsError, tipsMsg) => {
-              console.log(`撤回消息提示--发送成功`);
-              that.sendMessageSuccess(tipsError, tipsMsg);
-            })
-            .catch((tipsError, tipsMsg) => {
-              console.log(`撤回消息提示--发送失败...${tipsError}`);
-            });
         })
         .catch((error, msg) => {
           console.log(error);
@@ -724,6 +728,18 @@ export default {
               this.toastShow = false;
             }, 2000);
           }
+        });
+
+      deleteMsgTips
+        .sendDeleteTips()
+        .then((tipsMsg, tipsError) => {
+          console.log(tipsMsg);
+          this.msgList.removeByValue(msg);
+          console.log(`撤回消息提示--发送成功`);
+          that.sendMessageSuccess(tipsError, tipsMsg);
+        })
+        .catch((tipsError, tipsMsg) => {
+          console.log(`撤回消息提示--发送失败...${tipsError}`);
         });
     },
     //获取剩余时间
