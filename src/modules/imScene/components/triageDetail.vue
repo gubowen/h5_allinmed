@@ -409,21 +409,21 @@ export default {
       const that = this;
 
       let uploader = Qiniu.uploader({
-        runtimes: "html5,flash,html4", // 上传模式，依次退化
-        browse_button: "uploadBtn", // 上传选择的点选按钮，必需
+        runtimes: "html5,flash,html4",             // 上传模式，依次退化
+        browse_button: "uploadBtn",                // 上传选择的点选按钮，必需
         multi_selection: false,
-        uptoken_url: XHRList.getToken, // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-        get_new_uptoken: true, // 设置上传文件的时候是否每次都重新获取新的uptoken
-        domain: "allinmed", // bucket域名，下载资源时用到，必需
-        container: this.$refs.upload, // 上传区域DOM ID，默认是browser_button的父元素
-        max_file_size: "60mb", // 最大文件体积限制
+        uptoken_url: XHRList.getToken,             // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+        get_new_uptoken: true,                     // 设置上传文件的时候是否每次都重新获取新的uptoken
+        domain: "allinmed",                        // bucket域名，下载资源时用到，必需
+        container: this.$refs.upload,              // 上传区域DOM ID，默认是browser_button的父元素
+        max_file_size: "60mb",                     // 最大文件体积限制
         flash_swf_url: "path/of/plupload/Moxie.swf", //引入flash，相对路径
-        dragdrop: true, // 开启可拖曳上传
-        drop_element: "container", // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-        chunk_size: "4mb", // 分块上传时，每块的体积
+        dragdrop: true,                             // 开启可拖曳上传
+        drop_element: "container",                  // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+        chunk_size: "4mb",                          // 分块上传时，每块的体积
         filters: {
           mime_types: [
-            //只允许上传video
+            //只允许上传video  为兼容移动端上传视频文件，不传接收类型参数，
             //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
             // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
           ],
@@ -481,6 +481,24 @@ export default {
                 that.errorMsg = "";
                 that.errorShow = false;
               }, 3000);
+              return false;
+            }else if(err.code == '-600'){
+              that.errorShow = true;
+              that.errorMsg = "视频不能超过60M，请重新上传";
+              setTimeout(() => {
+                that.errorMsg = "";
+                that.errorShow = false;
+              }, 3000);
+              return false;
+            }else if(err.code =='-200'){
+              that.videoUploading = false;
+              that.errorShow = true;
+              that.errorMsg = "网络异常，请检查网络连接后重新上传";
+              setTimeout(() => {
+                that.errorMsg = "";
+                that.errorShow = false;
+              }, 3000);
+              uploader.removeFile(uploader.getFile(err.file.id));
               return false;
             }
           },
