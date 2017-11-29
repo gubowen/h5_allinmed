@@ -4,6 +4,13 @@
       <li v-for="item in localIdList"><img :src="item"></li>
     </ul>
     <button class="uploadImgBtn" @click="chooseImages">点击我上传图片</button>
+
+    <section style="height:100%;"></section>
+    <section class="imageLazyBox">
+      <ul class="uploadImgBox">
+        <li v-for="item in lazyImageList"><img v-lazy="item" alt=""></li>
+      </ul>
+    </section>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -13,7 +20,17 @@
       data(){
         return {
           localIdList:[],
-          serverIdList:[]
+          serverIdList:[],
+          lazyImageList:[
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+            require("../../common/image/arrow_back.png"),
+          ]
         }
       },
       mounted(){
