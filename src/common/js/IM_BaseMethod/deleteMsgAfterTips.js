@@ -17,15 +17,14 @@ export default class DeleteMsgAfterTips extends IMBaseMethods {
   constructor(nimObj, targetAccount, customParam) {
     super(nimObj)
     this.targetAccount = targetAccount;
-    this.customParam=customParam;
+    this.customParam = customParam;
   }
 
   @readonly
   sendDeleteTips() {
     const that = this;
     return new Promise((resolve, reject) => {
-        console.log(that.customParam)
-      this.nimObj.sendCustomMsg({
+        that.nimObj.sendCustomMsg({
         scene: "p2p",
         to: that.targetAccount,
         custom: that.customParam || JSON.stringify({}),
@@ -36,11 +35,13 @@ export default class DeleteMsgAfterTips extends IMBaseMethods {
             deleteMsg: that.customParam.deleteMsg || {}
           }
         }),
-        done(error, msg) {
-          if (!error) {
-            resolve(error,msg);
+        done(tipsError, tipsMsg) {
+            
+          if (!tipsError) {
+            console.log(tipsError,tipsMsg)
+            resolve(tipsMsg);
           } else {
-            reject(error, msg)
+            reject(tipsError, tipsMsg)
           }
         }
       });

@@ -24,7 +24,7 @@ export default class deleteMessage extends IMBaseMethods {
       console.log(that.nimObj)
       console.log('正在撤回消息', that.msg)
       that.nimObj.deleteMsg({
-        msg: this.msg,
+        msg: that.msg,
         done(error) {
           if (!error) {
             console.log("撤回消息成功.....");
