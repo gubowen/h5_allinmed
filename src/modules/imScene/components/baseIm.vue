@@ -691,14 +691,16 @@ export default {
     deleteMsgEvent(msg) {
       const deleteMsg = new DeleteMsg(this.nim, msg);
       const _DeleteTimeLimit = "2分钟";
+      const that=this;
+
       deleteMsg
         .deleteMessage()
         .then(msg => {
           console.log(msg);
-          const deleteMsgTips = new DeleteMsgTips(this.nim, {
+          const deleteMsgTips = new DeleteMsgTips(this.nim, this.targetData.account, {
             cType: "0",
             cId: this.cId,
-            mType: "32",
+            mType: "36",
             conId: this.orderSourceId,
             patientName: this.$store.state.patientName,
             deleteMsg: msg
