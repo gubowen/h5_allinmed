@@ -110,7 +110,7 @@
       }
     },
     mounted(){
-      if(api.getPara().showSuccess == "yes"){
+      if(localStorage.getItem("payOk") == 1){
         this.noWXPayShow = true;
       }else{
         this.noWXPayShow = false;
@@ -122,9 +122,10 @@
     methods: {
       //关闭支付弹层
       closePopup(){
-        sessionStorage.removeItem("mOrderType");
-        sessionStorage.removeItem("mOrderAmount");
-        sessionStorage.removeItem("mOrderFrequency");
+        localStorage.removeItem("mOrderType");
+        localStorage.removeItem("mOrderAmount");
+        localStorage.removeItem("mOrderFrequency");
+        localStorage.removeItem("payOk");
         this.$emit('update:payPopupShow', false);
       },
       //判断是否还有剩余名额
@@ -290,9 +291,9 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
-        sessionStorage.setItem("mOrderType",opt.orderSourceType);
-        sessionStorage.setItem("mOrderAmount",opt.orderAmount);
-        sessionStorage.setItem("mOrderFrequency",opt.orderFrequency);
+        localStorage.setItem("mOrderType",opt.orderSourceType);
+        localStorage.setItem("mOrderAmount",opt.orderAmount);
+        localStorage.setItem("mOrderFrequency",opt.orderFrequency);
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -516,9 +517,9 @@
                       if (d.responseObject.responseStatus) {
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
-                          orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
-                          orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
-                          orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
+                          orderType: localStorage.getItem("mOrderType"),//0免费，其他不是
+                          orderAmount: localStorage.getItem("mOrderAmount"), //价钱
+                          orderFrequency:localStorage.getItem("mOrderFrequency")//聊天次数
                         });
                         that.closePopup();
                       }
@@ -526,9 +527,9 @@
                   });
                 }else{
                   that.$emit("paySuccess", {
-                    orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
-                    orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
-                    orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
+                    orderType: localStorage.getItem("mOrderType"),//0免费，其他不是
+                    orderAmount: localStorage.getItem("mOrderAmount"), //价钱
+                    orderFrequency:localStorage.getItem("mOrderFrequency")//聊天次数
                   });
                   that.closePopup();
                 }

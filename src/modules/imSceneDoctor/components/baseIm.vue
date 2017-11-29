@@ -1447,7 +1447,7 @@ export default {
     }
     //以下M站支付使用
     localStorage.removeItem("mPayDoctorId");
-    if (api.getPara().showSuccess == "yes") {
+    if (localStorage.getItem("payOk") == 1) {
       this.payPopupShow = true;
     } else {
       this.payPopupShow = false;

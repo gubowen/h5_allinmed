@@ -82,12 +82,11 @@ export default function MPay(Obj) {
     //请求支付
     h5AskPay() {
       let _t = this,
-        _data = op.dataL1,
-        paySuccessUrl = encodeURIComponent(window.location.href.split("#")[0]+"&showSuccess=yes#"+window.location.href.split("#")[1]);
+        _data = op.dataL1;
       console.log("-----pay-----");
-      // localStorage.setItem("payUrl",paySuccessUrl);
+      localStorage.setItem("payOk",1);
       console.log(_data.mweb_url);
-      window.location.href = _data.mweb_url + "&redirect_url=" + paySuccessUrl;
+      window.location.href = _data.mweb_url + "&redirect_url=" + encodeURIComponent(window.location.href);
     }
   }
   new payObj(Obj);
