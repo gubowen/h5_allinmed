@@ -13,7 +13,9 @@
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content">
-        <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="showDeleteMsg">撤回</button>
+        <transition name="fade">
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</button>
+        </transition>
         <p>{{contentMessage.text}}</p>
       </figcaption>
       
@@ -47,6 +49,7 @@ export default {
   methods: {
     longTouchHandler() {
       this.showDeleteMsg = true;
+      this.$emit("longTouchEmitHandler");
     },
     deleteMsgEvent() {
       this.showDeleteMsg = false;
@@ -63,7 +66,12 @@ export default {
     userData: {
       type: Object
     },
-    
+    currentIndex:{
+      type:Number
+    },
+    deleteMsgIndex:{
+      type:Number
+    }
   }
 };
 </script>
@@ -75,5 +83,14 @@ export default {
   top: 50%;
   left: -20%;
   transform:translateY(-50%);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
