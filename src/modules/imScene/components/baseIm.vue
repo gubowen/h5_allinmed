@@ -128,7 +128,7 @@
          <div data-alcode-mod='717' :key="0">
           <section class="main-message-box grey-tips" v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'deleteMsgTips' " :key="0">
             <figcaption class="first-message">
-              <p>您撤回了一条消息</p>
+              <p>{{msg.to==="1_doctor0001"?"分诊医生":"您"}}撤回了一条消息</p>
             </figcaption>
           </section>
         </div>
@@ -179,7 +179,7 @@
         'ensure':'支付成功',
         'cancel':'支付失败',
         'title':'请确认微信支付是否已经完成'
-        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
+        }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false;localStorage.removeItem('payOk');" @ensureClickEvent="viewPayResult()">
     </confirm>
     <loading :show="finish"></loading>
      <transition name="fade">
@@ -716,8 +716,18 @@ export default {
 
       deleteMsg
         .deleteMessage()
-        .then((msg) => {
-          console.log(msg);
+        .then(msg => {
+          deleteMsgTips
+            .sendDeleteTips()
+            .then((tipsMsg, tipsError) => {
+              console.log(tipsMsg);
+              this.msgList.removeByValue(msg);
+              console.log(`撤回消息提示--发送成功`);
+              that.sendMessageSuccess(tipsError, tipsMsg);
+            })
+            .catch((tipsError, tipsMsg) => {
+              console.log(`撤回消息提示--发送失败...${tipsError}`);
+            });
         })
         .catch((error, msg) => {
           console.log(error);
@@ -728,18 +738,6 @@ export default {
               this.toastShow = false;
             }, 2000);
           }
-        });
-
-      deleteMsgTips
-        .sendDeleteTips()
-        .then((tipsMsg, tipsError) => {
-          console.log(tipsMsg);
-          this.msgList.removeByValue(msg);
-          console.log(`撤回消息提示--发送成功`);
-          that.sendMessageSuccess(tipsError, tipsMsg);
-        })
-        .catch((tipsError, tipsMsg) => {
-          console.log(`撤回消息提示--发送失败...${tipsError}`);
         });
     },
     //获取剩余时间
@@ -1113,8 +1111,8 @@ export default {
     isShowPaySuccess() {
       localStorage.removeItem("payCaseId");
       localStorage.removeItem("payPatientId");
-      if (api.getPara().showSuccess == "yes") {
-        if (sessionStorage.getItem("mOrderAmount")) {
+      if (localStorage.getItem("payOk") == 1) {
+        if (localStorage.getItem("mOrder")) {
           this.payPopupShow = true;
         } else {
           this.noWXPayShow = true;
@@ -1134,6 +1132,7 @@ export default {
           console.log("查看回调", data);
           if (data.resultCode == "SUCCESS") {
             that.noWXPayShow = false;
+            localStorage.removeItem("payOk");
             that.refreashOrderTime("pay");
           } else {
             that.isClick = false; //是否点击立即咨询重置
@@ -1240,8 +1239,8 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            that.payPopupShow = false;
             localStorage.setItem("sendTips", JSON.stringify(opt));
+            that.payPopupShow = false;
             window.location.href =
               "/dist/imSceneDoctor.html?from=im&caseId=" +
               api.getPara().caseId +

@@ -754,7 +754,7 @@ export default {
     },
     //判断是否显示支付结果弹层
     isShowPaySuccess(){
-      if(api.getPara().showSuccess == "yes"){
+      if(localStorage.getItem("payOk") == 1){
         this.noWXPayShow = true;
       }else{
         this.noWXPayShow = false;
@@ -768,6 +768,7 @@ export default {
       }).then(function (data) {
         console.log("查看回调",data);
         if(data.resultCode == "SUCCESS"){
+          localStorage.removeItem("payOk");
           that.noWXPayShow = false;
           that.getTriageDoctorId();
         }else{
@@ -780,6 +781,7 @@ export default {
     },
     //支付失败跳转
     payFail(){
+      localStorage.removeItem("payOk");
       window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId}`;
     },
     //创建专业医生会话

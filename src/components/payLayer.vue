@@ -110,7 +110,13 @@
       }
     },
     mounted(){
-      if(api.getPara().showSuccess == "yes"){
+      siteSwitch.weChatJudge(()=>{
+        console.log("这是微信呦")
+      },()=>{
+        localStorage.setItem("payDate",JSON.stringify(this.payPopupParams))
+      });
+
+      if(localStorage.getItem("payOk") == 1){
         this.noWXPayShow = true;
       }else{
         this.noWXPayShow = false;
@@ -122,9 +128,8 @@
     methods: {
       //关闭支付弹层
       closePopup(){
-        sessionStorage.removeItem("mOrderType");
-        sessionStorage.removeItem("mOrderAmount");
-        sessionStorage.removeItem("mOrderFrequency");
+        localStorage.removeItem("mOrder");
+        localStorage.removeItem("payOk");
         this.$emit('update:payPopupShow', false);
       },
       //判断是否还有剩余名额
@@ -290,9 +295,11 @@
       noOrder(opt){
         const that = this;
         localStorage.setItem("docId",that.payPopupParams.docId);
-        sessionStorage.setItem("mOrderType",opt.orderSourceType);
-        sessionStorage.setItem("mOrderAmount",opt.orderAmount);
-        sessionStorage.setItem("mOrderFrequency",opt.orderFrequency);
+        localStorage.setItem("mOrder",JSON.stringify({
+          "mOrderType":opt.orderSourceType,
+          "mOrderAmount":opt.orderAmount,
+          "mOrderFrequency":opt.orderFrequency
+        }));
         wxCommon.wxCreateOrder({
           isTest:0,
           data: {
@@ -486,13 +493,17 @@
           outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
           console.log("查看回调",data);
+          let payDate = JSON.parse(localStorage.getItem("payDate")),
+              mOrder = JSON.parse(localStorage.getItem("mOrder"));
+          alert(localStorage.getItem("payDate"));
+          alert(localStorage.getItem("mOrder"));
           if(data.resultCode == "SUCCESS"){
             api.ajax({
               url:  "/mcall/customer/case/consultation/v1/getMapById/",
               method: "POST",
               data: {
-                caseId: that.payPopupParams.caseId,
-                customerId: that.payPopupParams.docId,
+                caseId: payDate.caseId,
+                customerId: payDate.docId,
                 consultationType: 1,
                 siteId: 17
               },
@@ -502,10 +513,10 @@
                     url:  "/mcall/customer/case/consultation/v1/create/",
                     method: "POST",
                     data: {
-                      caseId: that.payPopupParams.caseId,
-                      customerId: that.payPopupParams.docId ,
-                      patientCustomerId: that.payPopupParams.patientCustomerId,
-                      patientId: that.payPopupParams.patientId,
+                      caseId: payDate.caseId,
+                      customerId: payDate.docId ,
+                      patientCustomerId: payDate.patientCustomerId,
+                      patientId: payDate.patientId,
                       consultationType: 1,
                       consultationState: -1,
                       consultationLevel: 1,
@@ -514,11 +525,12 @@
                     },
                     done (d) {
                       if (d.responseObject.responseStatus) {
+                        alert(d.responseObject.responsePk);
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
-                          orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
-                          orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
-                          orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
+                          orderType: mOrder.mOrderType,//0免费，其他不是
+                          orderAmount: mOrder.mOrderAmount, //价钱
+                          orderFrequency:mOrder.mOrderFrequency//聊天次数
                         });
                         that.closePopup();
                       }
@@ -526,9 +538,9 @@
                   });
                 }else{
                   that.$emit("paySuccess", {
-                    orderType: sessionStorage.getItem("mOrderType"),//0免费，其他不是
-                    orderAmount: sessionStorage.getItem("mOrderAmount"), //价钱
-                    orderFrequency:sessionStorage.getItem("mOrderFrequency")//聊天次数
+                    orderType: mOrder.mOrderType,//0免费，其他不是
+                    orderAmount: mOrder.mOrderAmount, //价钱
+                    orderFrequency:mOrder.mOrderFrequency//聊天次数
                   });
                   that.closePopup();
                 }
