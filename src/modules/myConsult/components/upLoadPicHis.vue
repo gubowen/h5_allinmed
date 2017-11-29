@@ -40,6 +40,16 @@
     <transition name="fade">
       <Toast :content="errorMsg" v-if="errorShow"></Toast>
     </transition>
+    <transition name="fade">
+        <confirm
+          :confirmParams="{
+          'ensure':'取消',
+          'cancel':'确定',
+//          'content':'',
+          'title':'确定删除图片吗？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
+          @ensureClickEvent="cancelDeletePic"></confirm>
+      </transition>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -78,6 +88,8 @@ export default {
       errorMsg: "",
       loading: false,
       finish: false,
+      deletePic:{},
+      deletePicTip: false,
       userData: {
         account: "",
         token: ""
@@ -114,16 +126,44 @@ export default {
     //删除图片 走接口
     imgDelete(img, index, id) {
       const that = this;
+      this.deletePicTip = true;
+      this.deletePic.type = id;
+      this.deletePic.index = index;
+      // api.ajax({
+      //   url: XHRList.imgDelete,
+      //   method: "POST",
+      //   data: {
+      //     id: img.imgId,   //图片的ID
+      //     isValid: 0       //无效
+      //   },
+      //   beforeSend() {},
+      //   done() {
+      //     that.imageList[id].splice(index, 1);   //删除data数组里对应的图片数据
+      //   }
+      // });
+    },
+    //取消删除图片
+    cancelDeletePic() {
+      this.deletePic.type = "";
+      this.deletePic.index = "";
+      this.deletePicTip = false;
+    },
+    //确定删除图片
+    ensureDeletePic() {
+      let that =this;
+      let _deletePic = this.deletePic;
       api.ajax({
         url: XHRList.imgDelete,
         method: "POST",
         data: {
-          id: img.imgId,   //图片的ID
-          isValid: 0       //无效
+          id: that.deletePic.type,
+          isValid: 0
         },
         beforeSend() {},
         done() {
-          that.imageList[id].splice(index, 1);   //删除data数组里对应的图片数据
+          that.imageList[_deletePic.type].splice(_deletePic.index, 1);
+          // that.uploading = false;
+          that.deletePicTip = false;
         }
       });
     },

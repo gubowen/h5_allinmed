@@ -127,7 +127,7 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-      
+
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -1445,6 +1445,8 @@ export default {
       localStorage.setItem("APPIMLinks", location.href);
       localStorage.setItem("PCIMLinks", location.href);
     }
+    //以下M站支付使用
+    localStorage.removeItem("mPayDoctorId");
     if (api.getPara().showSuccess == "yes") {
       this.payPopupShow = true;
     } else {
