@@ -58,6 +58,7 @@
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
+
   export default{
 
     data() {
@@ -155,7 +156,6 @@
     },
     mounted() {  //渲染启动...接收上一页携带路由参数体
       this.patientMessage = this.$route.query;
-      console.log(this.patientMessage);
       document.title = "选择部位";
       this.currentType = this.patientType ();
       localStorage.removeItem("hasCome");

@@ -10,6 +10,6 @@ import "babel-polyfill";
 
 export default class IMBaseMethods{
     constructor(nimObj){
-        this.nim=nimObj;
+        this.nimObj=nimObj;
     }
 };

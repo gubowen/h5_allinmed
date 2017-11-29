@@ -19,17 +19,19 @@ export default class deleteMessage extends IMBaseMethods {
 
   @readonly
   deleteMessage() {
+    const that=this;
     return new Promise((resolve, reject) => {
-      console.log('正在撤回消息', this.msg)
-      this.nimObj.deleteMsg({
+      console.log(that.nimObj)
+      console.log('正在撤回消息', that.msg)
+      that.nimObj.deleteMsg({
         msg: this.msg,
         done(error) {
           if (!error) {
             console.log("撤回消息成功.....");
-            resolve(this.msg)
+            resolve(that.msg)
           } else {
             console.log("撤回失败.....");
-            reject(error, this.msg)
+            reject(error, that.msg)
           }
         }
       })
