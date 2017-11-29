@@ -30,7 +30,7 @@
               <section class="tc-upLoadBox upLoadCommon-box-s">
                 <form class="qu-upFormBox qu-upFormBox-s" action="">
                   <figure class="qu-upLoadTitle qu-upLoadTitle-s">
-                    <p class="tc-upLoadTitleName">请上传X光片/超声/CT等检查资料，便于医生为您准确诊断</p>
+                    <p class="tc-upLoadTitleName">请上传X光片/超声/CT等检查资料，便于医生为您准确诊断（最多上传9张）</p>
                     <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p>
                   </figure>
                   <ul class="qu-upLoadItemBox qu-upLoadItemBox-s docInt">
@@ -48,7 +48,7 @@
                     <li class="ev-upLoadAdd" v-show="imageList1.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="uploading1===false&&imageList1.length<9"
-                             @change="onFileChange($event,1)" multiple  capture="camera">
+                             @change="onFileChange($event,1)" multiple  capture="camera" >
                     </li>
                   </ul>
                 </form>
