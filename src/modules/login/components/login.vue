@@ -207,6 +207,9 @@
             if (this.errors.has('phone')) {
               this.toastComm(this.errors.first('phone'));
               return;
+            }else if(!this.phoneMessage.length>0){
+               this.toastComm("请输入手机号码");
+               return;
             }
           }else{
             return;

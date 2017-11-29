@@ -48,7 +48,7 @@
                     <li class="ev-upLoadAdd" v-show="imageList1.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="uploading1===false&&imageList1.length<9"
-                             @change="onFileChange($event,1)" multiple>
+                             @change="onFileChange($event,1)" multiple  capture="camera">
                     </li>
                   </ul>
                 </form>
@@ -71,7 +71,7 @@
                     <li class="ev-upLoadAdd" v-show="imageList2.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple>
+                             @change="onFileChange($event,2)" multiple capture="camera">
                     </li>
                   </ul>
                 </form>
