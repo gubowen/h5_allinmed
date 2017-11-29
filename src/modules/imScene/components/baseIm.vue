@@ -9,10 +9,8 @@
           </p>
         </article>
       </transition>
-    <section class="main-message" ref="wrapper">
-
-      <transition-group name="fadeDown" tag="section"
-                        :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
+    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
+      <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
           <p class='time-stamp'

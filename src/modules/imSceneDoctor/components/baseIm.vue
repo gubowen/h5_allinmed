@@ -15,7 +15,7 @@
             </article>
           </article>
         </transition>
-      <section class="main-message" ref="wrapper" :class="{'bottom-tips-padding':bottomTipsShow}">
+      <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}">
 
         <transition-group name="fadeDown" tag="section">
           <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index"
