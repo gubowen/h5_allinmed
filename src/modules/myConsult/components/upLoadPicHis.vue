@@ -127,6 +127,7 @@ export default {
     imgDelete(img, index, id) {
       const that = this;
       this.deletePicTip = true;
+      this.deletePic.imgId = img.imgId;
       this.deletePic.type = id;
       this.deletePic.index = index;
       // api.ajax({
@@ -156,7 +157,7 @@ export default {
         url: XHRList.imgDelete,
         method: "POST",
         data: {
-          id: that.deletePic.type,
+          id: that.deletePic.imgId,
           isValid: 0
         },
         beforeSend() {},
@@ -423,7 +424,8 @@ export default {
   },
   components: {
     Toast,
-    Loading
+    Loading,
+    confirm
   }
 };
 </script>
