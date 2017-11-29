@@ -954,10 +954,18 @@ export default {
       });
     },
     //滑动到某个元素
-    scrollElement(element) {
+    scrollElement(distance) {
       let that = this;
-      that.refreshScroll();
-      this.scroll.scrollToElement(element, 1000);
+      // that.refreshScroll();
+      // this.scroll.scrollToElement(element, 1000);
+      console.log('position'+distance);
+      $(".main-message").animate(
+        {
+          scrollTop: distance,
+        },
+        300
+      );
+        
     },
     //输入框字数限制
     inputLimit() {

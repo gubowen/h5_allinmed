@@ -1,8 +1,7 @@
  <template>
   <section>
     <!--推荐医生-->
-    <div data-alcode-mod='716'>
-      <section class="main-message-box" v-if="doctorObj.allData.length">
+    <section class="main-message-box" data-alcode-mod='716' v-if="doctorObj.allData.length">
       <article class="doctor-box">
         <header class="doctor-header">
           <h3 class="doctor-title">匹配医生</h3>
@@ -47,7 +46,6 @@
         </section>
       </article>
     </section>
-    </div>
 
     <!--患教知识-->
     <section class="main-message-box" v-if="knowledgeObj.allData.length">
@@ -94,8 +92,7 @@
     </section>
 
     <!--检查检验-->
-    <div data-alcode-mod='715'>
-      <section class="main-message-box" v-if="checkSuggestObj.allData.length">
+    <section class="main-message-box" data-alcode-mod='715' v-if="checkSuggestObj.allData.length">
       <article class="check-suggest-box">
         <header class="check-suggest-title">为确保分诊准确和专家问诊的效率，建议您进行以下检查并上传检查资料，分诊计时已停止，有关检查疑问您可继续向分诊医生询问，资料上传后分诊医生将继续为您服务。</header>
         <section class="check-suggest-bg"></section>
@@ -120,7 +117,6 @@
         </section>
       </article>
     </section>
-    </div>
 
   </section>
 </template>
@@ -304,11 +300,16 @@
               that.checkSuggestData('doctorObj');
             }
             that.doctorResponse = true;
-            that.checkResponse();
+            that.$nextTick(() => {
+              that.checkResponse();
+            })
+            
           },
           fail(){
             that.doctorResponse = true;
-            that.checkResponse();
+            that.$nextTick(() => {
+              that.checkResponse();
+            })
           },
         })
       },
@@ -318,8 +319,8 @@
         if (that.suggestResponse && that.doctorResponse) {
           store.commit("addRenderSuggestionNum");
         }
-        console.log(that.$store.state.previewSuggestionNum);
-        console.log(that.$store.state.renderSuggestionNum);
+        // console.log(that.$store.state.previewSuggestionNum);
+        // console.log(that.$store.state.renderSuggestionNum);
         //渲染完成后进行定位
         if (that.$store.state.previewSuggestionNum <= that.$store.state.renderSuggestionNum) {
           that.$nextTick(function () {
@@ -327,11 +328,11 @@
               console.log('医生数据完成');
               that.scrollToBottom();
             } else {
-              console.log(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1])
+              let $ele = $(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
               // that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
               // document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
-              console.log(that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].parentElement.parentElement.parentElement.parentElement))
-              that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].parentElement.parentElement.parentElement.parentElement)
+              // console.log('top + '+$(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]).closest('.main-message-wrapper')[0].offsetTop);
+              that.scrollElement($ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop)
             }
           })
         }
@@ -391,11 +392,11 @@
         that[param].moreData = true;
         that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
-        console.log(e.srcElement.parentElement.parentElement.parentElement.parentElement);
+        // console.log(e.srcElement.parentElement.parentElement.parentElement.parentElement);
         that.$nextTick(function () {
           // that.refreshScroll();
           // that.scrollElement(e.srcElement.parentElement.parentElement.parentElement.parentElement)
-          that.scrollElement(e.srcElement.offsetParent);
+          that.scrollElement($(e.srcElement).closest('.main-message-wrapper')[0].offsetTop + $(e.srcElement).closest('.main-message-box')[0].offsetTop);
         })
       },
       goToUpload(){
