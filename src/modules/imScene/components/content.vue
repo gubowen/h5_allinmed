@@ -1,5 +1,6 @@
 <template>
-  <section class="main-message-box">
+  <section class="main-message-box" v-touch:long="longTouchHandler">
+
     <article
       class="main-message-box-item"
       :data-clientid="contentMessage.idClient"
@@ -12,8 +13,12 @@
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content">
+        <transition name="fade">
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</button>
+        </transition>
         <p>{{contentMessage.text}}</p>
       </figcaption>
+      
       <figure class="main-message-img" v-if="contentMessage.from===userData.account">
         <img :src="logoUrl" alt="">
       </figure>
@@ -21,7 +26,7 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -29,27 +34,63 @@
    *
    * Created by qiangkailiang on 2017/8/17.
    */
-  export default{
-    mounted(){
+export default {
+  data() {
+    return {
+      showDeleteMsg: false
+    };
+  },
+  mounted() {},
+  computed: {
+    logoUrl() {
+      return this.$store.state.logoUrl;
+    }
+  },
+  methods: {
+    longTouchHandler() {
+      this.showDeleteMsg = true;
+      this.$emit("longTouchEmitHandler");
     },
-    computed: {
-      logoUrl(){
-        return this.$store.state.logoUrl
-      }
+    deleteMsgEvent() {
+      this.showDeleteMsg = false;
+      this.$emit("deleteMsgEvent");
+    }
+  },
+  props: {
+    contentMessage: {
+      type: Object
     },
-    props: {
-      contentMessage: {
-        type: Object
-      },
-      targetData: {
-        type: Object
-      },
-      userData: {
-        type: Object
-      }
+    targetData: {
+      type: Object
+    },
+    userData: {
+      type: Object
+    },
+    currentIndex:{
+      type:Number
+    },
+    deleteMsgIndex:{
+      type:Number
     }
   }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
+@import "../../../../scss/library/_common-modules";
+.delete-msg-btn {
+  @include font-dpr(16px);
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  transform:translateY(-50%);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

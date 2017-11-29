@@ -15,7 +15,7 @@
             </article>
           </article>
         </transition>
-      <section class="main-message" ref="wrapper" :class="{'bottom-tips-padding':bottomTipsShow}">
+      <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}">
 
         <transition-group name="fadeDown" tag="section">
           <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index"
@@ -293,6 +293,7 @@ export default {
       this.onFocus = false;
       this.autoSizeTextarea();
     },
+
     connectToNim() {
       const that = this;
       nimEnv().then(nimEnv => {
@@ -1169,13 +1170,14 @@ export default {
     },
     scrollToBottom() {
       let that = this;
-        that.$nextTick(() => {
-          
-          $(".main-message").animate({
+      that.$nextTick(() => {
+        $(".main-message").animate(
+          {
             scrollTop: $(".main-message>section").height()
-          },300);
-
-        });
+          },
+          300
+        );
+      });
     },
     inputLimit() {
       let content = this.sendTextContent;
@@ -1261,19 +1263,21 @@ export default {
             },
             done(data) {
               if (data.responseObject.responseData) {
-                
                 // 存储sessionStorage，给分诊医生im使用；
-                sessionStorage.setItem('doctor',that.$store.state.targetMsg.nick)
+                sessionStorage.setItem(
+                  "doctor",
+                  that.$store.state.targetMsg.nick
+                );
 
                 window.location.href =
-                      "/dist/imScene.html?&caseId=" +
-                      api.getPara().caseId +
-                      "&patientId=" +
-                      api.getPara().patientId +
-                      "&patientCustomerId=" +
-                      api.getPara().patientCustomerId +
-                      "&shuntCustomerId=" +
-                      that.shuntCustomerId 
+                  "/dist/imScene.html?&caseId=" +
+                  api.getPara().caseId +
+                  "&patientId=" +
+                  api.getPara().patientId +
+                  "&patientCustomerId=" +
+                  api.getPara().patientCustomerId +
+                  "&shuntCustomerId=" +
+                  that.shuntCustomerId;
                 // that.nim.sendText({
                 //   scene: "p2p",
                 //   to: "1_doctor00001",
@@ -1286,7 +1290,7 @@ export default {
                 //   text: `${that.$store.state.targetMsg
                 //     .nick}拒绝了我的咨询，请重新为我匹配对症医生`,
                 //   done(error, obj) {
-                    
+
                 //   }
                 // });
               }

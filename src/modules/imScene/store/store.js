@@ -25,8 +25,13 @@ export default new Vuex.Store({
     },
     previewSuggestionNum:0,//初诊建议次数
     renderSuggestionNum:0,//渲染出诊建议次数
+    patientName:"",
+    deleteBtnShow:false
   },
   mutations: {
+    setPatientName(state,name){
+        state.patientName=name;
+    },
     upLoadPercentFn(state,percent){
       state.upLoadPercent = percent;
     },
@@ -56,6 +61,9 @@ export default new Vuex.Store({
     //渲染初诊建议次数增加
     addRenderSuggestionNum(state){
       state.renderSuggestionNum++;
+    },
+    setDeleteBtnShow(state,flag){
+        state.deleteBtnShow=flag;
     },
     setLastTime(state,time){
       state.lastTime=time;

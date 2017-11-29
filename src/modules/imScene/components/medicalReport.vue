@@ -1,23 +1,7 @@
 <template>
   <div>
     <section class="main-message-box" >
-      <!--<article class="main-message-box-item my-message" data-clientid="" @click="goToDetail">-->
-        <!--<figcaption class="medical-record message-result medical-record-list">-->
-          <!--<article class="message-result-item">-->
-            <!--<header class="message-result-item-title">问诊单</header>-->
-            <!--<section class="message-result-item-message">-->
-              <!--<figure class="message-result-item-img">-->
-                <!--<img src="../../../../image/img00/patientConsult/dialogue_case@2x.png" alt="">-->
-              <!--</figure>-->
-              <!--<figcaption><h2>{{medicalReportMessage.data.patientName}}问诊单</h2>-->
-                <!--<p><span class="sex">性别:{{medicalReportMessage.data.sexName}}</span><span class="age">年龄:{{medicalReportMessage.data.age}}</span></p></figcaption>-->
-            <!--</section>-->
-          <!--</article>-->
-        <!--</figcaption>-->
-        <!--<figure class="main-message-img">-->
-          <!--<img :src="logoUrl" alt="">-->
-        <!--</figure>-->
-      <!--</article>-->
+
       <!--新的问诊单-->
       <article class="medical-report-box" data-clientid="" @click="goToDetail">
         <header class="medical-report-title">问诊单</header>
@@ -69,6 +53,7 @@
       this.getCaseMain();
       this.getTimeSlot();
       store.commit("setLogoUrl",this.medicalReportMessage.data)
+      store.commit("setPatientName",this.medicalReportMessage.data.patientName)
     },
     methods:{
       getCaseMain(){

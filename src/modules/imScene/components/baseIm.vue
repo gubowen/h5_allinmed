@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner ev-fileUpHide" style="overflow:auto">
+  <section class="main-inner ev-fileUpHide" style="overflow:auto" >
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
           <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
@@ -9,10 +9,8 @@
           </p>
         </article>
       </transition>
-    <section class="main-message" ref="wrapper">
-
-      <transition-group name="fadeDown" tag="section"
-                        :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}" style="z-index: 0;">
+    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
+      <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
           <p class='time-stamp'
@@ -57,7 +55,12 @@
           <ContentText
             v-if="msg.type==='text' && msg.text"
             :contentMessage="msg" :userData="userData"
-            :targetData="targetData">
+            :targetData="targetData"
+            @deleteMsgEvent="deleteMsgEvent(msg)"
+            @longTouchEmitHandler="deleteMsgIndex=index"
+            :currentIndex="index"
+            :deleteMsgIndex="deleteMsgIndex"
+             >
           </ContentText>
           <!--图像消息-->
           <ImageContent
@@ -170,6 +173,9 @@
         }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false" @ensureClickEvent="viewPayResult()">
     </confirm>
     <loading :show="finish"></loading>
+     <transition name="fade">
+       <Toast :content="toastTips" v-if="toastShow"></Toast>
+     </transition>
   </section>
 
 </template>
@@ -191,6 +197,7 @@ import payPopup from "components/payLayer";
 import loading from "components/loading";
 import confirm from "components/confirm";
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
+import Toast from "components/toast";
 
 import MedicalReport from "./medicalReport";
 import ContentText from "./content";
@@ -207,6 +214,8 @@ import nimEnv from "common/js/nimEnv/nimEnv";
 
 import BScroll from "better-scroll";
 
+import DeleteMsg from "common/js/IM_BaseMethod/deleteMsg";
+import DeleteMsgTips from "common/js/IM_BaseMethod/deleteMsgAfterTips.js";
 import "babel-polyfill";
 let nim;
 const XHRList = {
@@ -262,7 +271,10 @@ export default {
       sendTextContent: "", //文本消息
       cId: "0", //聊天消息拓展字段的customerId
       footerPosition: "main-input-box",
-      bfscrolltop: document.body.scrollTop
+      bfscrolltop: document.body.scrollTop,
+      toastTips: "",
+      toastShow: false,
+      deleteMsgIndex:-1
     };
   },
 
@@ -376,6 +388,7 @@ export default {
         that.cId = JSON.parse(msg.custom).cId;
       }
     },
+
     //收到检查检验隐藏顶部框；
     pauseTime(msg) {
       let that = this;
@@ -674,6 +687,44 @@ export default {
           }
         }
       });
+    },
+    deleteMsgEvent(msg) {
+      const deleteMsg = new DeleteMsg(this.nim, msg);
+      const _DeleteTimeLimit = "2分钟";
+      const that=this;
+
+      deleteMsg
+        .deleteMessage()
+        .then(msg => {
+          console.log(msg);
+          const deleteMsgTips = new DeleteMsgTips(this.nim, this.targetData.account, {
+            cType: "0",
+            cId: this.cId,
+            mType: "36",
+            conId: this.orderSourceId,
+            patientName: this.$store.state.patientName,
+            deleteMsg: msg
+          });
+          deleteMsgTips
+            .sendDeleteTips()
+            .then((tipsError, tipsMsg) => {
+              console.log(`撤回消息提示--发送成功`);
+              that.sendMessageSuccess(tipsError, tipsMsg);
+            })
+            .catch((tipsError, tipsMsg) => {
+              console.log(`撤回消息提示--发送失败...${tipsError}`);
+            });
+        })
+        .catch((error, msg) => {
+          console.log(error);
+          if (parseInt(error.code) === 508) {
+            this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
+            this.toastShow = true;
+            setTimeout(() => {
+              this.toastShow = false;
+            }, 2000);
+          }
+        });
     },
     //获取剩余时间
     getLastTime() {
@@ -1037,23 +1088,22 @@ export default {
         },
         wxPayError(_data) {
           that.isClick = false; //是否点击立即咨询重置
-          window.location.reload();
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-//      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+      //      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
     },
     //判断是否显示支付结果弹层
-    isShowPaySuccess(){
-      localStorage.removeItem('payCaseId');
-      localStorage.removeItem('payPatientId');
-      if(api.getPara().showSuccess == "yes"){
-        if(sessionStorage.getItem("mOrderAmount")){
+    isShowPaySuccess() {
+      localStorage.removeItem("payCaseId");
+      localStorage.removeItem("payPatientId");
+      if (api.getPara().showSuccess == "yes") {
+        if (sessionStorage.getItem("mOrderAmount")) {
           this.payPopupShow = true;
-        }else{
+        } else {
           this.noWXPayShow = true;
         }
-      }else{
+      } else {
         this.payPopupShow = false;
         this.noWXPayShow = false;
       }
@@ -1316,7 +1366,7 @@ export default {
     setTimeout(() => {
       // this.initScroll();
     }, 20);
-    that.isShowPaySuccess();//支付弹层
+    that.isShowPaySuccess(); //支付弹层
   },
   //组件更新之前的生命钩子
   beforeUpdate() {},
@@ -1424,7 +1474,8 @@ export default {
     MiddleTips,
     payPopup,
     loading,
-    confirm
+    confirm,
+    Toast
   }
 };
 </script>
@@ -1467,7 +1518,15 @@ export default {
     display: inline-block;
   }
 }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 .fadeDown-enter-active,
 .fadeDown-leave-active {
   transition: all ease-in-out 0.5s;
