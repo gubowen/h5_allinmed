@@ -122,9 +122,9 @@
     methods: {
       //关闭支付弹层
       closePopup(){
-        localStorage.removeItem("mOrderType");
-        localStorage.removeItem("mOrderAmount");
-        localStorage.removeItem("mOrderFrequency");
+//        localStorage.removeItem("mOrderType");
+//        localStorage.removeItem("mOrderAmount");
+//        localStorage.removeItem("mOrderFrequency");
         localStorage.removeItem("payOk");
         this.$emit('update:payPopupShow', false);
       },
@@ -487,6 +487,7 @@
           outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
           console.log("查看回调",data);
+          alert("这是和医生支付");
           if(data.resultCode == "SUCCESS"){
             api.ajax({
               url:  "/mcall/customer/case/consultation/v1/getMapById/",

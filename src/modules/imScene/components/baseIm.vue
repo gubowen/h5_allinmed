@@ -1132,6 +1132,7 @@ export default {
       })
         .then(function(data) {
           console.log("查看回调", data);
+          alert("这是和分诊医生支付");
           if (data.resultCode == "SUCCESS") {
             that.noWXPayShow = false;
             localStorage.removeItem("payOk");
@@ -1229,6 +1230,7 @@ export default {
     toUpLoadTimes(opt) {
       let that = this;
       //        debugger
+      alert(opt.orderFrequency);
       api.ajax({
         url: XHRList.updateCount,
         method: "POST",
@@ -1241,8 +1243,8 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            that.payPopupShow = false;
             localStorage.setItem("sendTips", JSON.stringify(opt));
+            that.payPopupShow = false;
             window.location.href =
               "/dist/imSceneDoctor.html?from=im&caseId=" +
               api.getPara().caseId +
