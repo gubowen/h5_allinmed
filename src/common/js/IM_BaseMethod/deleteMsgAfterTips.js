@@ -27,7 +27,7 @@ export default class DeleteMsgAfterTips extends IMBaseMethods {
         that.nimObj.sendCustomMsg({
         scene: "p2p",
         to: that.targetAccount,
-        custom: that.customParam || JSON.stringify({}),
+        custom: JSON.stringify(that.customParam) || JSON.stringify({}),
         content: JSON.stringify({
           type: "deleteMsgTips",
           data: {

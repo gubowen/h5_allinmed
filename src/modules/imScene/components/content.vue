@@ -78,11 +78,13 @@ export default {
 <style lang="scss" rel="stylesheet/scss">
 @import "../../../../scss/library/_common-modules";
 .delete-msg-btn {
-  @include font-dpr(16px);
+  @include font-dpr(14px);
   position: absolute;
   top: 50%;
-  left: -20%;
+  left: 0;
+  margin-left: -1rem; 
   transform:translateY(-50%);
+  @include circle(rem(75px),#CCEDF2);
 }
 .fade-enter-active,
 .fade-leave-active {
