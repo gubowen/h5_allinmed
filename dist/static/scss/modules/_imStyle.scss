@@ -20,7 +20,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding-top: 1rem;
+  &.padding-top{
+    padding-top: 1rem;
+  }
+  &.padding-bottom{
+    padding-bottom: 1.3rem;
+  }
   overflow: scroll;
   // height: 92.5%;
   -webkit-overflow-scrolling: touch;
@@ -31,7 +36,7 @@
     -webkit-overflow-scrolling: touch;
     transform-style: preserve-3d;
     transform: translate3d(0, 0, 0); 
-    padding-bottom: rem(105px);
+    padding-bottom: rem(150px);
     // margin-top: rem(100px);
   }
 }
