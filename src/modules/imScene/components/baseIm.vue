@@ -739,19 +739,17 @@ export default {
         .deleteMessage()
         .then(msg => {
           console.log(99999);
-          alert(99999)
-          // deleteMsgTips
-          //   .sendDeleteTips()
-          //   .then((tipsMsg, tipsError) => {
-          //     console.log(tipsMsg, tipsError);
-          //     console.log(`撤回消息提示--发送成功`);
-          //     that.sendMessageSuccess(tipsError, tipsMsg);
-          //   })
+          deleteMsgTips
+            .sendDeleteTips()
+            .then((tipsMsg, tipsError) => {
+              console.log(tipsMsg, tipsError);
+              console.log(`撤回消息提示--发送成功`);
+              that.sendMessageSuccess(tipsError, tipsMsg);
+            })
         })
         .catch((error, msg) => {
-          console.log(8888);
           console.log(error);
-          
+          console.log(8888)
           if (parseInt(error.code) === 508) {
             this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
             this.toastShow = true;
