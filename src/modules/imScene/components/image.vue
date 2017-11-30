@@ -1,11 +1,11 @@
 <template>
-  <section class="main-message-box" v-touch:long="longTouchHandler">
+  <section class="main-message-box" v-touch:long.stop="longTouchHandler">
     <article class="main-message-box-item my-message" data-clientid="9c5718e331459678f2a759f16c90dd7c">
       <i class="fail-button" style="display:none">
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content image-message">
-                <transition name="fade">
+        <transition name="fade">
           <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</button>
         </transition>
         <section class="middle-tip-box" v-if="progress.uploading">
@@ -15,7 +15,7 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <img class="im-image" @click="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
+        <img class="im-image"  v-touch:tap="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img">
         <img :src="logoUrl" alt="">
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       imageNum: "", //图片列表中第几个
-            showDeleteMsg: false
+      showDeleteMsg: false
     };
   },
   computed: {
@@ -79,6 +79,7 @@ export default {
   methods: {
     showBigImg(item, index) {
       let that = this;
+      this.showDeleteMsg = false;
       let _params = {
         imgBlob: (function() {
           let result = [];
@@ -119,8 +120,8 @@ export default {
     currentIndex: {
       type: Number
     },
-        deleteMsgIndex:{
-      type:Number
+    deleteMsgIndex: {
+      type: Number
     }
   }
 };
