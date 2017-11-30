@@ -734,31 +734,32 @@ export default {
       );
       const _DeleteTimeLimit = "2分钟";
       const that = this;
-    alert(9999)
-      // deleteMsg
-      //   .deleteMessage()
-      //   .then(msg => {
-      //     console.log(99999);
-      //     deleteMsgTips
-      //       .sendDeleteTips()
-      //       .then((tipsMsg, tipsError) => {
-      //         console.log(tipsMsg, tipsError);
-      //         console.log(`撤回消息提示--发送成功`);
-      //         that.sendMessageSuccess(tipsError, tipsMsg);
-      //       })
-      //   })
-      //   .catch((error, msg) => {
-      //     console.log(8888);
-      //     console.log(error);
+    
+      deleteMsg
+        .deleteMessage()
+        .then(msg => {
+          console.log(99999);
+          alert(99999)
+          // deleteMsgTips
+          //   .sendDeleteTips()
+          //   .then((tipsMsg, tipsError) => {
+          //     console.log(tipsMsg, tipsError);
+          //     console.log(`撤回消息提示--发送成功`);
+          //     that.sendMessageSuccess(tipsError, tipsMsg);
+          //   })
+        })
+        .catch((error, msg) => {
+          console.log(8888);
+          console.log(error);
           
-      //     if (parseInt(error.code) === 508) {
-      //       this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
-      //       this.toastShow = true;
-      //       setTimeout(() => {
-      //         this.toastShow = false;
-      //       }, 2000);
-      //     }
-      //   });
+          if (parseInt(error.code) === 508) {
+            this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
+            this.toastShow = true;
+            setTimeout(() => {
+              this.toastShow = false;
+            }, 2000);
+          }
+        });
     },
     //获取剩余时间
     getLastTime() {
