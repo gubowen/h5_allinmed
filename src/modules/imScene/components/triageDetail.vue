@@ -2,7 +2,8 @@
   <section class="he-videoUpHide ev-videoImgUpHide">
     <section class="he-videoUpLoadBox">
       <section class="he-videosMain">
-        <p class="he-loadTitle">{{baseMessage.content}}</p>
+        <section class="al-uploadNumLimit" v-if="baseMessage.type==2"><span>提示：最多可以上传9张图片</span></section>
+        <p class="he-loadTitle" :class="{'upLoadPicHasTip':baseMessage.type==2}">{{baseMessage.content}}</p>
         <ul class="he-loadFiles he-videoImageBox docInt" v-if="baseMessage.type==2">
           <li class="tc-imageItemList ev-imgList success" v-for="(item,index) in imageList" v-if="imageList.length>0">
             <img :src="item.blob" alt="">
@@ -157,10 +158,10 @@ export default {
       filesObj: {}, //多图file对象存储，用于获取每张图的信息
       base64Arr: [], //base64压缩后的图片
       uploadIndex: "", //多图上传递增索引
-      loading:false,
+      loading: false,
       uploading: false,
-      deletePic:{},
-      deletePicTip:false,    //图片删除
+      deletePic: {},
+      deletePicTip: false, //图片删除
       videoUploading: false, //视频正在上传七牛
       videoObj: {},
       videoSubmitParam: {},
@@ -247,7 +248,7 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
-             //放开上传权限（最后一张图是大于上传限制时触发）
+            //放开上传权限（最后一张图是大于上传限制时触发）
             if (i == files.length - 1) {
               this.loading = false;
             }
@@ -261,8 +262,7 @@ export default {
             imageCompress(
               {
                 imgSrc: oFREvent.target.result,
-                quality: 0.8,
- 
+                quality: 0.8
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
@@ -294,7 +294,7 @@ export default {
     },
     //确定删除图片
     ensureDeletePic() {
-      let that =this;
+      let that = this;
       let _deletePic = this.deletePic;
       api.ajax({
         url: XHRList.imgDelete,
@@ -348,15 +348,13 @@ export default {
         timeout: 300000,
         done(res) {
           if (res.responseObject.responseStatus) {
-            let num = index
-              ? index
-              : that["imageList"].length - 1; //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
+            let num = index ? index : that["imageList"].length - 1; //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
             that.$set(that.imageList, num, {
               blob: res.responseObject.responseData.logoUrl,
               imgId: res.responseObject.responsePk,
               uploading: false,
               fail: false,
-              finish: true,
+              finish: true
             });
             //上传下一张图片
             that.uploadIndex = parseInt(that.uploadIndex) + 1;
@@ -373,7 +371,7 @@ export default {
                 that.base64Arr[that.uploadIndex]
               );
             } else {
-              that.loading = false;      //放开上传权限
+              that.loading = false; //放开上传权限
               if (that.filesObj[that.uploadIndex]) {
                 that.errorShow = true;
                 that.errorMsg = "图片最多上传9张！";
@@ -385,9 +383,7 @@ export default {
             }
           } else {
             //接口异常上传失败处理
-            let num = index
-              ? index
-              : that["imageList"].length - 1;
+            let num = index ? index : that["imageList"].length - 1;
             that["imageList"][num].uploading = false;
             that["imageList"][num].fail = true;
             that["imageList"][num].finish = true;
@@ -409,18 +405,18 @@ export default {
       const that = this;
 
       let uploader = Qiniu.uploader({
-        runtimes: "html5,flash,html4",             // 上传模式，依次退化
-        browse_button: "uploadBtn",                // 上传选择的点选按钮，必需
+        runtimes: "html5,flash,html4", // 上传模式，依次退化
+        browse_button: "uploadBtn", // 上传选择的点选按钮，必需
         multi_selection: false,
-        uptoken_url: XHRList.getToken,             // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-        get_new_uptoken: true,                     // 设置上传文件的时候是否每次都重新获取新的uptoken
-        domain: "allinmed",                        // bucket域名，下载资源时用到，必需
-        container: this.$refs.upload,              // 上传区域DOM ID，默认是browser_button的父元素
-        max_file_size: "60mb",                     // 最大文件体积限制
+        uptoken_url: XHRList.getToken, // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+        get_new_uptoken: true, // 设置上传文件的时候是否每次都重新获取新的uptoken
+        domain: "allinmed", // bucket域名，下载资源时用到，必需
+        container: this.$refs.upload, // 上传区域DOM ID，默认是browser_button的父元素
+        max_file_size: "60mb", // 最大文件体积限制
         flash_swf_url: "path/of/plupload/Moxie.swf", //引入flash，相对路径
-        dragdrop: true,                             // 开启可拖曳上传
-        drop_element: "container",                  // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-        chunk_size: "4mb",                          // 分块上传时，每块的体积
+        dragdrop: true, // 开启可拖曳上传
+        drop_element: "container", // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+        chunk_size: "4mb", // 分块上传时，每块的体积
         filters: {
           mime_types: [
             //只允许上传video  为兼容移动端上传视频文件，不传接收类型参数，
@@ -441,7 +437,11 @@ export default {
           },
           BeforeUpload: function(up, file) {
             // 每个文件上传前，处理相关的事情
-            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(file.type)) {
+            if (
+              !/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(
+                file.type
+              )
+            ) {
               that.errorShow = true;
               that.errorMsg = "当前仅支持avi、mp4、3gp、wmv、mov、flv格式的视频";
               setTimeout(() => {
@@ -471,7 +471,11 @@ export default {
           },
           Error: function(up, err, errTip) {
             //上传出错时，处理相关的事情
-            if (!/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(err.file.type)) {
+            if (
+              !/(mp4)|(mov)|(avi)|(3gp)|(wmv)|(flv)|(quicktime)$/i.test(
+                err.file.type
+              )
+            ) {
               that.errorShow = true;
               that.errorMsg =
                 err.code == "-601"
@@ -482,7 +486,7 @@ export default {
                 that.errorShow = false;
               }, 3000);
               return false;
-            }else if(err.code == '-600'){
+            } else if (err.code == "-600") {
               that.errorShow = true;
               that.errorMsg = "视频不能超过60M，请重新上传";
               setTimeout(() => {
@@ -490,7 +494,7 @@ export default {
                 that.errorShow = false;
               }, 3000);
               return false;
-            }else if(err.code =='-200'){
+            } else if (err.code == "-200") {
               that.videoUploading = false;
               that.errorShow = true;
               that.errorMsg = "网络异常，请检查网络连接后重新上传";
@@ -727,12 +731,45 @@ export default {
       padding-bottom: rem(117px);
       background-color: #fff;
       z-index: 5;
+      .al-uploadNumLimit {
+        @include font-dpr(16px);
+        padding: rem(30px) rem(60px) 0 rem(48px);
+
+        span {
+          display: inline-block;
+          position: relative;
+          // padding-left: rem(30px);
+          padding: rem(10px) rem(30px) rem(10px) rem(65px);
+          background-color: #fa787a2b;
+          border-radius: 50px;
+          width: 100%;
+          box-sizing: border-box;
+          color: #444444;
+          &::before {
+            position: absolute;
+            content: "";
+            display: inline-block;
+            width: rem(28px);
+            height: rem(28px);
+            background: url("../../../common/image/img00/doctorHome/upLoadTip.png")
+              no-repeat center;
+            background-size: rem(28px) rem(28px);
+            top: 50%;
+            margin-top: rem(-14px);
+
+            left: rem(20px);
+          }
+        }
+      }
       //问题样式
       .he-loadTitle {
         padding: rem(48px) rem(40px) rem(10px);
         @include font-dpr(17px);
         line-height: 1.5;
         color: #222222;
+        &.upLoadPicHasTip{
+          padding: rem(30px) rem(40px) rem(10px);
+        }
       }
       .he-loadFiles {
         @include clearfix();
