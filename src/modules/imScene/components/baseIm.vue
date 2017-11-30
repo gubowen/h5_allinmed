@@ -1374,13 +1374,13 @@ export default {
     //      }
     payPopupDate() {
       return {
-        docName: this.$store.state.targetDoctor.nick,
-        docId: this.$store.state.targetDoctor.customerId,
+        docName: this.$store.state.targetDoctor.nick || JSON.parse(localStorage.getItem("mPayDoctorDetails")).nick,
+        docId: this.$store.state.targetDoctor.customerId || JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId,
         caseId: api.getPara().caseId,
         patientId: api.getPara().patientId,
         patientCustomerId: api.getPara().patientCustomerId,
         from: "checkSuggest",
-        payType: this.$store.state.targetDoctor.payType
+        payType: this.$store.state.targetDoctor.payType || JSON.parse(localStorage.getItem("mPayDoctorDetails")).payType
       };
     },
     // 输入框的长度
