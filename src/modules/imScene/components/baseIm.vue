@@ -1531,7 +1531,7 @@ export default {
 //问诊开始结束提示样式
 .first-message {
   @include font-dpr(13px);
-  color: #aaaaaa;
+  color: #aaa;
   background-color: #edeeee;
   text-align: center;
   margin: 0 rem(30px);
