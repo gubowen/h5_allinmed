@@ -1,5 +1,6 @@
 <template>
   <section class="upload-wrapper">
+    <section class="al-uploadNumLimit"><span>提示：每一项最多可以上传9张图片</span></section>
     <section class="tc-upLoadFile ev-delete">
       <section class="tc-upLoadBox" v-for="(item,index) in uploadList">
         <figure class="tc-upLoadTitle ev-upLoadList">
@@ -117,7 +118,7 @@ export default {
       errorMsg: "",
       loading: false, //是否正在上传
       deletePic: {},
-      deletePicTip:false, //删除图片弹层
+      deletePicTip: false //删除图片弹层
     };
   },
   computed: {
@@ -466,6 +467,35 @@ export default {
   left: 0;
   bottom: 0;
   background-color: #ffffff;
+  .al-uploadNumLimit {
+    @include font-dpr(16px);
+    padding: rem(30px) rem(60px) rem(30px) rem(48px);
+    
+    span {
+      display: inline-block;
+      position: relative;
+      // padding-left: rem(30px);
+      padding: rem(10px) rem(30px) rem(10px) rem(65px);
+      background-color: #fa787a2b;
+      border-radius: 50px;
+      width: 100%;
+      box-sizing: border-box;
+      color: #444444;
+      &::before {
+        position: absolute;
+        content: "";
+        display: inline-block;
+        width: rem(28px);
+        height: rem(28px);
+        background: url("../../../common/image/img00/doctorHome/upLoadTip.png") no-repeat center;
+        background-size: rem(28px) rem(28px);
+        top: 50%;
+        margin-top: rem(-14px);
+
+        left: rem(20px);
+      }
+    }
+  }
 }
 
 $colorTwo: #222222;
