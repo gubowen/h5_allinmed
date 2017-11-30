@@ -734,24 +734,23 @@ export default {
       );
       const _DeleteTimeLimit = "2分钟";
       const that = this;
-      console.log(99999);
+    
       deleteMsg
         .deleteMessage()
         .then(msg => {
+          console.log(99999);
           deleteMsgTips
             .sendDeleteTips()
             .then((tipsMsg, tipsError) => {
-              console.log(tipsMsg);
-
+              console.log(tipsMsg, tipsError);
               console.log(`撤回消息提示--发送成功`);
               that.sendMessageSuccess(tipsError, tipsMsg);
             })
-            .catch((tipsError, tipsMsg) => {
-              console.log(`撤回消息提示--发送失败...${tipsError}`);
-            });
         })
         .catch((error, msg) => {
+          console.log(8888);
           console.log(error);
+          
           if (parseInt(error.code) === 508) {
             this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
             this.toastShow = true;
@@ -1044,10 +1043,10 @@ export default {
       let that = this;
       // that.refreshScroll();
       // this.scroll.scrollToElement(element, 1000);
-      console.log('position'+distance);
+      console.log("position" + distance);
       $(".main-message").animate(
         {
-          scrollTop: distance,
+          scrollTop: distance
         },
         300
       );
@@ -1274,7 +1273,9 @@ export default {
               "/dist/imSceneDoctor.html?from=im&caseId=" +
               api.getPara().caseId +
               "&doctorCustomerId=" +
-              (that.$store.state.targetDoctor.customerId || JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId) +
+              (that.$store.state.targetDoctor.customerId ||
+                JSON.parse(localStorage.getItem("mPayDoctorDetails"))
+                  .customerId) +
               "&patientCustomerId=" +
               api.getPara().patientCustomerId +
               "&patientId=" +
@@ -1381,13 +1382,19 @@ export default {
     //      }
     payPopupDate() {
       return {
-        docName: this.$store.state.targetDoctor.nick || JSON.parse(localStorage.getItem("mPayDoctorDetails")).nick,
-        docId: this.$store.state.targetDoctor.customerId || JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId,
+        docName:
+          this.$store.state.targetDoctor.nick ||
+          JSON.parse(localStorage.getItem("mPayDoctorDetails")).nick,
+        docId:
+          this.$store.state.targetDoctor.customerId ||
+          JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId,
         caseId: api.getPara().caseId,
         patientId: api.getPara().patientId,
         patientCustomerId: api.getPara().patientCustomerId,
         from: "checkSuggest",
-        payType: this.$store.state.targetDoctor.payType || JSON.parse(localStorage.getItem("mPayDoctorDetails")).payType
+        payType:
+          this.$store.state.targetDoctor.payType ||
+          JSON.parse(localStorage.getItem("mPayDoctorDetails")).payType
       };
     },
     // 输入框的长度
