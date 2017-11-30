@@ -707,7 +707,6 @@ export default {
         JSON.parse(msg.content).type === "deleteMsgTips"
       ) {
         flag = true;
-        console.log(JSON.parse(msg.content).data);
         let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
         this.msgList.forEach((element, index) => {
           if (element.idClient === idClient) {
@@ -735,7 +734,7 @@ export default {
       );
       const _DeleteTimeLimit = "2分钟";
       const that = this;
-
+      console.log(99999);
       deleteMsg
         .deleteMessage()
         .then(msg => {
@@ -743,7 +742,7 @@ export default {
             .sendDeleteTips()
             .then((tipsMsg, tipsError) => {
               console.log(tipsMsg);
-              this.msgList.removeByValue(msg);
+
               console.log(`撤回消息提示--发送成功`);
               that.sendMessageSuccess(tipsError, tipsMsg);
             })

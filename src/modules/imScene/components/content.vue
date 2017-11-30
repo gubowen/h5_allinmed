@@ -14,7 +14,7 @@
       </i>
       <figcaption class="main-message-content">
         <transition name="fade">
-          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</button>
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</span>
         </transition>
         <p>{{contentMessage.text}}</p>
       </figcaption>
@@ -83,6 +83,9 @@ export default {
   top: 50%;
   left: 0;
   margin-left: -1rem; 
+  line-height: rem(75px);
+  text-align: center;
+  display: block;
   transform:translateY(-50%);
   @include circle(rem(75px),#CCEDF2);
 }
