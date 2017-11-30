@@ -253,7 +253,13 @@ export default {
         }
       }
     }
-    autosize(this.$el.querySelector("textarea"));
+    this.$nextTick(() => {
+      setTimeout(() => {
+        autosize(this.$el.querySelector("textarea"));
+        autosize.update(this.$el.querySelector("textarea"));
+      }, 1000);
+    });
+
     if (localStorage.getItem("PCIMLinks") !== null) {
       this.backPopupShow = true;
     } else {
@@ -540,6 +546,10 @@ export default {
           }, 100);
         }
       }
+
+      setTimeout(() => {
+        autosize(this.$el.querySelector("textarea"));
+      }, 100);
     },
     showQueryDetail(id) {
       let that = this;
