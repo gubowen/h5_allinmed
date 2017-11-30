@@ -1441,12 +1441,6 @@ export default {
     this.setFooterPosition();
     // this.initScroll();
     this.getUserBaseData();
-    if (api.getPara().from === "im") {
-      return;
-    } else {
-      localStorage.setItem("APPIMLinks", location.href);
-      localStorage.setItem("PCIMLinks", location.href);
-    }
     //以下M站支付使用
     localStorage.removeItem("mPayDoctorId");
     if (localStorage.getItem("payOk") == 1) {
@@ -1457,6 +1451,14 @@ export default {
 
     //      this.resetLogoUrl();
     api.forbidShare();
+
+
+    if (api.getPara().from === "im") {
+      return;
+    } else {
+      localStorage.setItem("APPIMLinks", location.href);
+      localStorage.setItem("PCIMLinks", location.href);
+    }
   },
   activated() {
     this.scrollToBottom();
