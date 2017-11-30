@@ -383,7 +383,11 @@
         siteSwitch.weChatJudge(()=>{
           console.log("这是微信")
         },()=>{
-          localStorage.setItem("mPayDoctorId",that.doctorObj.allData[index].customerId);
+          localStorage.setItem("mPayDoctorDetails",JSON.stringify({
+            customerId:that.doctorObj.allData[index].customerId,
+            nick:that.doctorObj.allData[index].fullName,
+            payType:type
+          }));
         });
         store.commit("setTargetMsg", {customerId:that.doctorObj.allData[index].customerId});
         store.commit("setTargetMsg", {nick:that.doctorObj.allData[index].fullName});
