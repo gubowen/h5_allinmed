@@ -991,6 +991,7 @@ export default {
         if (
           JSON.parse(msg.content).type.includes("new-") ||
           JSON.parse(msg.content).type === "payFinishTips" ||
+          JSON.parse(msg.content).type === "triagePatientTips" ||
           JSON.parse(msg.content).type === "reTriageTip"
         ) {
           return false;
