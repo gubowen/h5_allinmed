@@ -1,17 +1,13 @@
 <template>
   <div>
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
-    <!-- <p class="H-pay" @click="askH5Pay()">H5支付</p>
+    <p class="H-pay" @click="askH5Pay()">H5支付</p>
     <p class="H-viewPay" v-if="payShow" @click="payHide">支付成功</p>
-    <p class="uploadPic" @click="upload()">上传图片</p> -->
+    <p class="uploadPic" @click="upload()">上传图片</p>
   </div>
 </template>
 <script type="text/ecmascript-6">
 import fb from "common/js/third-party/flexible";
-import WxPayCommon from "../../common/js/wxPay/wxComm";
+// import WxPayCommon from "../../common/js/wxPay/wxComm";
 // import uploadList from "../../components/uploadList";
 export default {
   data() {
@@ -20,10 +16,10 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem("askPay") == 1) {
-      this.payShow = true;
-      this.viewResultH5Pay();
-    }
+    // if (localStorage.getItem("askPay") == 1) {
+    //   this.payShow = true;
+    //   this.viewResultH5Pay();
+    // }
   },
   methods: {
     upload() {
@@ -89,7 +85,7 @@ export default {
 };
 </script>
 <style lang="scss" rel="stylesheet/scss">
-@import "../../../scss/library/_common-modules";
+@import "../../../../scss/library/_common-modules";
 .H-pay {
   @include font-dpr(40px);
   background: #5dbdce;
