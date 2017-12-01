@@ -199,6 +199,7 @@ export default {
   activated() {
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
+    api.forbidShare();
   },
   methods: {
     getUploadList() {
@@ -470,7 +471,7 @@ export default {
   .al-uploadNumLimit {
     @include font-dpr(16px);
     padding: rem(30px) rem(60px) rem(30px) rem(48px);
-    
+
     span {
       display: inline-block;
       position: relative;
