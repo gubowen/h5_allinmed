@@ -236,6 +236,7 @@ export default {
       msgList: [],
       targetMsg: [],
       from: api.getPara().from,
+      imageLastIndex:0, //上传图片最后一张记录在数组中的位置
       userData: {
         account: "",
         token: ""
@@ -1062,6 +1063,7 @@ export default {
     },
     sendImageFile(file) {
       const that = this;
+      that.imageLastIndex = that.msgList.length - 1;
       this.nim.previewFile({
         type: "image",
         fileInput: this.$refs.imageSender,
@@ -1070,7 +1072,7 @@ export default {
           that.imageProgress = {
             uploading: true,
             progress: obj.percentageText,
-            index: that.msgList.length - 1
+            index: that.imageLastIndex,
           };
           console.log("文件总大小: " + obj.total + "bytes");
           console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1102,7 +1104,7 @@ export default {
               }),
               type: "image",
               done(error, msg) {
-                that.msgList[that.msgList.length - 1] = msg;
+                that.msgList[that.imageLastIndex] = msg;
                 that.imageProgress = {
                   uploading: false,
                   progress: "0%",
