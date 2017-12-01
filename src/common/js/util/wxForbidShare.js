@@ -14,7 +14,6 @@ import net from "./net";
 class forbidShare {
   constructor() {}
   wxforbidShare(){
-    alert("aaa");
     let script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "/static/js/third-party/jweixin-1.0.0.js";
