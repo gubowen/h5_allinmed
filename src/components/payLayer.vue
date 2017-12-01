@@ -469,7 +469,7 @@
                         that.$emit("paySuccess", {
                           orderType: 0,
                           orderAmount: 0,
-                          orderFrequency:30
+                          orderFrequency:3
                         });
                       }
                     });
@@ -480,7 +480,7 @@
               that.$emit("paySuccess", {
                 orderType: 0,
                 orderAmount: 0,
-                orderFrequency:30
+                orderFrequency:3
               });
             }
           }

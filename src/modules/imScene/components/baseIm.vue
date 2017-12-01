@@ -1464,6 +1464,7 @@ export default {
   activated() {
     let that = this;
     document.body.scrollTop = 1;
+    api.forbidShare();
     that.refreshScroll();
     if (that.$route.query.queryType === "triage") {
       that.nim.sendCustomMsg({

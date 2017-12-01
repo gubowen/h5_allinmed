@@ -21,11 +21,11 @@ class Api {
   }
   //禁止分享
   forbidShare(){
-    // if (!net.getPara().isShare){
-    //   forbidShare.wxforbidShare();
-    // }else{
-    //   return;
-    // }
+    if (!net.getPara().isShare){
+      forbidShare.wxforbidShare();
+    }else{
+      return;
+    }
   }
 
   banZoom () {
