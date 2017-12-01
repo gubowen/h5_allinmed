@@ -817,7 +817,7 @@ export default {
         method: "POST",
         data: {
           consultationId: consultationId,
-          frequency: 30,
+          frequency: 3,
           frequencyType: 2,
           consultationState: -1,
           consultationLevel: 0
@@ -829,7 +829,7 @@ export default {
               JSON.stringify({
                 orderType: 0,
                 orderAmount: 0,
-                orderFrequency: 30
+                orderFrequency: 3
               })
             );
             that.finish = false;
