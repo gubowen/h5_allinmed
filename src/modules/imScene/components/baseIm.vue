@@ -742,14 +742,14 @@ export default {
             that.nim.sendCustomMsg({
               scene: "p2p",
               to: that.targetData.account,
-              custom: {
+              custom: JSON.stringify({
                 cType: "0",
                 cId: that.cId,
                 mType: "36",
                 conId: that.orderSourceId,
                 patientName: that.$store.state.patientName,
                 deleteMsg: msg
-              },
+              }),
               content: JSON.stringify({
                 type: "deleteMsgTips",
                 data: {
