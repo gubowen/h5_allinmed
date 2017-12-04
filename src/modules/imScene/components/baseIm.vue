@@ -742,11 +742,7 @@ export default {
         done(error) {
           console.log(error);
           if (!error) {
-            console.log("撤回消息成功.....");
-            console.log(that.nim.sendCustomMsg);
             setTimeout(() => {
-              console.log("定时器结束再发送");
-              console.log(that.nim.sendCustomMsg);
               that.nim.sendCustomMsg({
                 scene: "p2p",
                 to: that.targetData.account,
