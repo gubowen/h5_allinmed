@@ -81,6 +81,9 @@ class ImScene {
     }, {
       path: "/BaseIm",
       name: "BaseIm",
+      meta: {
+        keepAlive: true,
+      },
       component: BaseIm
     }, {
       path: "/ShowBigImg",
@@ -92,6 +95,9 @@ class ImScene {
     }, {
       path: "/MedicalReportDetail",
       name: "MedicalReportDetail",
+      meta: {
+        keepAlive: true,
+      },
       component: MedicalReportDetail
     }]
   }

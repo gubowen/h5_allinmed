@@ -6,8 +6,8 @@
         <p class="he-loadTitle" :class="{'upLoadPicHasTip':baseMessage.type==2}">{{baseMessage.content}}</p>
         <ul class="he-loadFiles he-videoImageBox docInt" v-if="baseMessage.type==2">
           <li class="tc-imageItemList ev-imgList success" v-for="(item,index) in imageList" v-if="imageList.length>0">
-            <img :src="item.blob" alt="">
-            <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)" v-show="item.finish"></span>
+            <img :src="item.blob" @click="showBigImg(item,index)" alt="">
+            <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)" v-show="item.finish&&!item.fail"></span>
             <div v-if="item.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
@@ -175,6 +175,10 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     let that = this;
+    if (to.name=='showBigImg') {
+      
+      next(true);
+    };
     //      debugger;
     if (that.baseMessage.type == 1) {
       if (that.videoObj.size || that.videoUploading) {
@@ -231,6 +235,17 @@ export default {
   },
   props: {},
   methods: {
+    //查看大图
+    showBigImg(item, index) {
+      let _params = {
+        imgBlob: this.imageList,
+        indexNum: index
+      };
+      this.$router.push({
+        name: "showBigImg",
+        params: _params
+      });
+    },
     onFileChange(e, item, index) {
       let files = e.target.files || e.dataTransfer.files;
       let that = this;

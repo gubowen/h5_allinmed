@@ -19,7 +19,7 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <img class="im-image" @click="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
+        <img class="im-image" @click.stop="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img" v-if="imageMessage.from===userData.account">
         <img :src="logoUrl" alt="">
