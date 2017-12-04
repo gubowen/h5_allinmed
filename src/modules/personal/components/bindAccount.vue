@@ -90,5 +90,10 @@
 
     }
   }
+  .allinmed-personal-account{
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
 </style>

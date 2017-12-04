@@ -1,23 +1,14 @@
 <template>
   <section class="allinmed-mainInner">
-    <userLogo v-show="loginOnOff"></userLogo>
-    <noLogin v-show="!loginOnOff"></noLogin>
-    <focusWeixin></focusWeixin>
-    <accountSafe></accountSafe>
-    <linkUs></linkUs>
-    <button class="allinmed-personal-logout" v-if="loginOnOff">退出登录</button>
+    <router-view></router-view>
     <bindAccount></bindAccount>
   </section>
 </template>
 <script>
   import fb from 'common/js/third-party/flexible'
-  import userLogo from './components/userLogo.vue'
-  import focusWeixin from './components/focusWeixin.vue'
-  import accountSafe from './components/accountSafe.vue'
-  import noLogin from './components/noLogin.vue'
-  import linkUs from './components/linkUs.vue'
+
   import bindAccount from './components/bindAccount.vue'
-  import {mapGetters} from "vuex";
+
   export default {
     data () {
       return {
@@ -42,6 +33,7 @@
     height: auto;
     background: #eee;
     padding: rem(20px);
+    position:relative;
 
   img {
     width: 100%;
