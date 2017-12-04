@@ -1,9 +1,9 @@
 <template>
-  <section class="allinmed-personal-accountSafe">
+  <router-link class="allinmed-personal-accountSafe"  tag="section" to="/bindAccount">
     <span class="icon safe"></span>
     <span class="title">账号安全</span>
     <span class="jump"></span>
-  </section>
+  </router-link>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules.scss";

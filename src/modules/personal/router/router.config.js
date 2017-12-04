@@ -3,6 +3,7 @@
 */
 import bindAccount from "../components/bindAccount.vue"
 import personalIndex from "../components/personalIndex.vue"
+import changePsw from "../components/changePsw.vue"
 
 
 export default {
@@ -12,16 +13,16 @@ export default {
       component:personalIndex
     },
     {
-      path:"/catalog",
-      component:Catalog
+      path:"/bindAccount",
+      component:bindAccount
     },
     {
-      path:"/related",
-      component:Related
+      path:"/changePsw",
+      component:changePsw
     },
     {
       path:"*",
-      redirect:"/catalog"
+      redirect:"/personalIndex"
     }
   ]
 };

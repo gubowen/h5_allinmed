@@ -1,12 +1,10 @@
 <template>
   <section class="allinmed-mainInner">
     <router-view></router-view>
-    <bindAccount></bindAccount>
   </section>
 </template>
 <script>
   import fb from 'common/js/third-party/flexible'
-
   import bindAccount from './components/bindAccount.vue'
 
   export default {
@@ -15,14 +13,11 @@
         msg: 'hello'
       }
     },
-    computed:{
-      ...mapGetters(["loginOnOff"]),
-    },
     mounted(){
 
     },
     components: {
-      userLogo, focusWeixin, accountSafe, linkUs,noLogin,bindAccount
+      bindAccount
     }
   }
 </script>

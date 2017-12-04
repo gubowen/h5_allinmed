@@ -23,10 +23,10 @@
         </span>
       </section>
     </section>
-    <section class="allinmed-personal-changePsw">
+    <router-link class="allinmed-personal-changePsw" tag="section" to="/changePsw">
       <span class="title">修改密码</span>
       <span class="jump"></span>
-    </section>
+    </router-link>
   </section>
 
 </template>
@@ -93,7 +93,7 @@
   .allinmed-personal-account{
     position: absolute;
     top: 0;
-    left: 0;
+    left: rem(20px);
   }
 
 </style>

@@ -92,7 +92,7 @@
     "vue-validator": "^3.0.0-alpha.2",
     "vue-waterfall": "^1.0.6",
     "vueg": "^1.2.6",
-    "vuex": "^2.3.1",
+    "vuex": "^2.5.0",
     "webpack": "^3.5.5",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
