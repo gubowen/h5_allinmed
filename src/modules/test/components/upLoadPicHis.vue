@@ -24,7 +24,7 @@
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
-          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
+          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length>0&&!loading"/>
