@@ -124,6 +124,17 @@ export default {
         });
       }
     },
+    //查看大图
+    showBigImg(item, index, type){
+      let _params = {
+        imgBlob: this["imageList" + type],
+        indexNum: index
+      };
+      this.$router.push({
+        name: "showBigImg",
+        params: _params
+      })
+    },
     //删除图片 走接口
     imgDelete(img, index, id) {
       const that = this;

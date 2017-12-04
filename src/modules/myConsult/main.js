@@ -13,6 +13,7 @@ import consultHis from "./components/consultHis"
 import uploadPic from "./components/upLoadPicHis"
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
+import showBigImg from '../../components/showBigImg';
 import fastclick from 'fastclick';
 // import api from "common/js/util/util";
 
@@ -58,6 +59,14 @@ class Myconsult {
         meta: {
           keepAlive: true
         }
+      },
+      {
+        path: "/showBigImg",
+        name: "showBigImg",
+        component: showBigImg,
+        meta: {
+          keepAlive: false
+        },
       }
     ];
   }
