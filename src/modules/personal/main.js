@@ -4,7 +4,7 @@
  * @Notify：
  * @Depend：
  *
- * Created by wangjingrong on 17/8/10.
+ * Created by zhangheng on 17/8/10.
  */
 import Vue from 'vue';
 import App from './App';
