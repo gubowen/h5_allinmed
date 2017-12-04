@@ -132,6 +132,7 @@ export default {
         imgBlob:  that.imageList[type],
         indexNum: index
       };
+      console.log(_params);
       this.$router.push({
         name: "showBigImg",
         params: _params
