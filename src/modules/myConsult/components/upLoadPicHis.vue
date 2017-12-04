@@ -111,9 +111,10 @@ export default {
   },
   mounted() {
     api.forbidShare();
+    this.getUploadList();
   },
   activated() {
-    this.getUploadList();
+    // this.getUploadList();
   },
   methods: {
     getUploadList() {
