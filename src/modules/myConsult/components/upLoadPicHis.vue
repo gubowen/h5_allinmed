@@ -125,9 +125,9 @@ export default {
       }
     },
     //查看大图
-    showBigImg(item, index, type){
+    showBigImg(item, index){
       let _params = {
-        imgBlob: this["imageList" + type],
+        imgBlob: this.imageList,
         indexNum: index
       };
       this.$router.push({
