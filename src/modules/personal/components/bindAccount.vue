@@ -33,7 +33,7 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
   .allinmed-personal-bindAccount{
-    width: rem(614px);
+    width: rem(610px);
     height: rem(480px);
     padding: 0 rem(48px);
     background:#fff;
