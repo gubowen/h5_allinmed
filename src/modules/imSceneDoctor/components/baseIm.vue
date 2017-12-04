@@ -301,7 +301,7 @@ export default {
       const that = this;
       nimEnv().then(nimEnv => {
         this.nim = NIM.getInstance({
-                    debug: true,
+                    // debug: true,
           appKey: nimEnv,
           account: this.userData.account,
           token: this.userData.token,

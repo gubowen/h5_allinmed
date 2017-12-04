@@ -255,8 +255,11 @@ export default {
     }
     this.$nextTick(() => {
       setTimeout(() => {
-        autosize(this.$el.querySelector("textarea"));
-        autosize.update(this.$el.querySelector("textarea"));
+        this.$el.querySelectorAll("textarea").forEach((element,index)=>{
+        autosize(element);
+        autosize.update(element);
+        })
+
       }, 1000);
     });
 
