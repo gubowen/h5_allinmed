@@ -299,7 +299,6 @@ export default {
       }
     },
     focusFn() {
-
       if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "relative",
@@ -309,6 +308,9 @@ export default {
         //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         // }, 100);
       } else {
+        $(".main-message").css({
+          bottom: "10%"
+        });
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
@@ -318,7 +320,6 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      
       if (navigator.userAgent.toLowerCase().includes("11")) {
         //
         //   $("body").css({
@@ -330,6 +331,9 @@ export default {
         //   document.body.scrollTop = this.bfscrolltop;
         // }, 20);
       } else {
+        $(".main-message").css({
+          bottom: "0%"
+        });
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
           document.body.scrollTop = this.bfscrolltop;
@@ -752,7 +756,7 @@ export default {
                   mType: "36",
                   conId: that.orderSourceId,
                   patientName: that.$store.state.patientName,
-                  idClient:msg.idClient
+                  idClient: msg.idClient
                 }),
                 content: JSON.stringify({
                   type: "deleteMsgTips",
@@ -762,7 +766,7 @@ export default {
                   }
                 }),
                 done(tipsError, tipsMsg) {
-                  console.log('发送撤回消息完成');
+                  console.log("发送撤回消息完成");
                   console.log(tipsError);
                   console.log(tipsMsg);
                   if (!tipsError) {
@@ -772,8 +776,7 @@ export default {
                   }
                 }
               });
-            },20)
-            
+            }, 20);
           } else {
             if (parseInt(error.code) === 508) {
               that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
