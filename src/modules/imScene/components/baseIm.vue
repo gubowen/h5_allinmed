@@ -776,7 +776,7 @@ export default {
                   }
                 }
               });
-            },1000)
+            },20)
             
           } else {
             if (parseInt(error.code) === 508) {
