@@ -268,9 +268,9 @@
     },
     mounted() {
 //      console.log(PickerDate);
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
+      // if(!api.checkOpenId()){
+      //   api.wxGetOpenId(1);
+      // }
       api.forbidShare();
       let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId;
       if (customerIdFlag && customerIdFlag != 0){
