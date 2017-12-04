@@ -318,7 +318,7 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      
+
       if (navigator.userAgent.toLowerCase().includes("11")) {
         //
         //   $("body").css({
@@ -753,7 +753,7 @@ export default {
                 mType: "36",
                 conId: that.orderSourceId,
                 patientName: that.$store.state.patientName,
-                deleteMsg: msg
+                idClient:msg.idClient
               }),
               content: JSON.stringify({
                 type: "deleteMsgTips",
