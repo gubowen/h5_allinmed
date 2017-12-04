@@ -13,7 +13,7 @@ import vueg from 'vueg';
 import Vuex from 'vuex';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
-// import fastclick from 'fastclick';
+import fastclick from 'fastclick';
 
 import BaseIm from "./components/baseIm";
 import ShowBigImg from "components/showBigImg";
@@ -26,7 +26,7 @@ import store from "./store/store";
 import touch from "common/js/customDirective/vTouch";
 import "babel-polyfill";
 
-// fastclick.attach(document.body);
+fastclick.attach(document.body);
 
 class ImScene {
   constructor() {

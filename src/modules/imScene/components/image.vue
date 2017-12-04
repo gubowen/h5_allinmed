@@ -15,7 +15,7 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <img class="im-image"  v-touch:tap="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
+        <img class="im-image"  v-touch:tap.stop.prevent="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img">
         <img :src="logoUrl" alt="">
@@ -128,5 +128,26 @@ export default {
 };
 </script>
 <style lang="scss" rel="stylesheet/scss">
+@import "../../../../scss/library/_common-modules";
+.delete-msg-btn {
+  @include font-dpr(14px);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-left: -1rem; 
+  line-height: rem(75px);
+  text-align: center;
+  display: block;
+  transform:translateY(-50%);
+  @include circle(rem(75px),#CCEDF2);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
