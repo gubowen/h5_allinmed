@@ -763,6 +763,9 @@ export default {
                 }
               }),
               done(tipsError, tipsMsg) {
+                console.log('发送撤回消息完成');
+                console.log(tipsError);
+                console.log(tipsMsg);
                 if (!tipsError) {
                   console.log(tipsError, tipsMsg);
                   console.log(`撤回消息提示--发送成功`);
