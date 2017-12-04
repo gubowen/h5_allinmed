@@ -25,26 +25,27 @@ let Helper = {
     let absv = Math.abs(v);
     let move = Math.sqrt(Math.pow(h, 2) + Math.pow(v, 2));
     switch (true) {
-      case (during < 3):
+      case (during < 100):
+      type = 'tap';
         break;
-      case (during > 300):
+      case (during > 500):
         type = 'long';
         break;
-      case (move < 10):
-        type = 'tap';
-        break;
-      case (h > 0 && absv < 20):
-        type = 'right';
-        break;
-      case (h < 0 && absv < 20):
-        type = 'left';
-        break;
-      case (v > 0 && absh < 20):
-        type = 'down';
-        break;
-      case (v < 0 && absh < 20):
-        type = 'up';
-        break;
+      // case (move < 10):
+      //   type = 'tap';
+      //   break;
+      // case (h > 0 && absv < 20):
+      //   type = 'right';
+      //   break;
+      // case (h < 0 && absv < 20):
+      //   type = 'left';
+      //   break;
+      // case (v > 0 && absh < 20):
+      //   type = 'down';
+      //   break;
+      // case (v < 0 && absh < 20):
+      //   type = 'up';
+      //   break;
       default:
     }
     return type;
