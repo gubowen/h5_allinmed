@@ -333,9 +333,6 @@ export default {
               that.$route.params.caseId,
               that.$route.params.consultationId
             );
-            that.$router.push({
-              path: "/consultHis"
-            });
           } else {
             console.log("更新状态失败");
           }
@@ -363,22 +360,24 @@ export default {
     },
     connectToNim(cid) {
       const that = this;
-      this.nim = NIM.getInstance({
-        // debug: true,
-        appKey: nimEnv(),
-        account: that.userData.account,
-        token: that.userData.token,
-        onconnect(data) {
-          console.log("连接成功");
-          that.nimSendSuccess(cid);
-        },
-        onwillreconnect(obj) {
-          console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
-        },
-        ondisconnect() {
-          console.log("链接已中断...");
-        }
-      });
+      nimEnv().then(nimEnv=>{
+        this.nim = NIM.getInstance({
+          // debug: true,
+          appKey: nimEnv,
+          account: that.userData.account,
+          token: that.userData.token,
+          onconnect(data) {
+            console.log("连接成功");
+            that.nimSendSuccess(cid);
+          },
+          onwillreconnect(obj) {
+            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+          },
+          ondisconnect() {
+            console.log("链接已中断...");
+          }
+        });
+      })
     },
     nimSendSuccess(cd) {
       let that = this;
@@ -418,6 +417,9 @@ export default {
         done(data) {
           if (data.responseObject.responseData) {
             console.log("更新时间成功");
+            that.$router.push({
+              path: "/consultHis"
+            });
           }
         }
       });
