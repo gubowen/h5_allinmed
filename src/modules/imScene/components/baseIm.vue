@@ -308,9 +308,7 @@ export default {
         //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         // }, 100);
       } else {
-        $(".main-message").css({
-          bottom: "10%"
-        });
+
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
@@ -331,9 +329,7 @@ export default {
         //   document.body.scrollTop = this.bfscrolltop;
         // }, 20);
       } else {
-        $(".main-message").css({
-          bottom: "0%"
-        });
+
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
           document.body.scrollTop = this.bfscrolltop;
