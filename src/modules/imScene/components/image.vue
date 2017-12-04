@@ -101,6 +101,7 @@ export default {
     },
     deleteMsgEvent() {
       this.showDeleteMsg = false;
+      console.log('image组件里的我要删除');
       this.$emit("deleteMsgEvent");
     }
   },
