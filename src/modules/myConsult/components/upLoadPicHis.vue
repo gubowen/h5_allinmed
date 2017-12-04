@@ -12,11 +12,11 @@
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
             <img alt="" @click="showBigImg(img,imgIndex,1)" :src="img.blob">
-            <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(img,imgIndex,item.adviceId)" v-show="img.uploading==false"></span>
+            <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(img,imgIndex,item.adviceId)" v-show="img.uploading==false&&!img.fail"></span>
             <div v-show="img.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
-              <span class="tc-upLoadDel" style="cursor: pointer"></span>
+              <!-- <span class="tc-upLoadDel" style="cursor: pointer"></span> -->
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
             <figure class="upload-fail" v-if="img.fail">
@@ -123,6 +123,17 @@ export default {
           this.$set(this.imageList, element.adviceId, []);
         });
       }
+    },
+    //查看大图
+    showBigImg(item, index, type){
+      let _params = {
+        imgBlob: this["imageList" + type],
+        indexNum: index
+      };
+      this.$router.push({
+        name: "showBigImg",
+        params: _params
+      })
     },
     //删除图片 走接口
     imgDelete(img, index, id) {
@@ -333,9 +344,6 @@ export default {
               that.$route.params.caseId,
               that.$route.params.consultationId
             );
-            that.$router.push({
-              path: "/consultHis"
-            });
           } else {
             console.log("更新状态失败");
           }
@@ -363,22 +371,24 @@ export default {
     },
     connectToNim(cid) {
       const that = this;
-      this.nim = NIM.getInstance({
-        // debug: true,
-        appKey: nimEnv(),
-        account: that.userData.account,
-        token: that.userData.token,
-        onconnect(data) {
-          console.log("连接成功");
-          that.nimSendSuccess(cid);
-        },
-        onwillreconnect(obj) {
-          console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
-        },
-        ondisconnect() {
-          console.log("链接已中断...");
-        }
-      });
+      nimEnv().then(nimEnv=>{
+        this.nim = NIM.getInstance({
+          // debug: true,
+          appKey: nimEnv,
+          account: that.userData.account,
+          token: that.userData.token,
+          onconnect(data) {
+            console.log("连接成功");
+            that.nimSendSuccess(cid);
+          },
+          onwillreconnect(obj) {
+            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+          },
+          ondisconnect() {
+            console.log("链接已中断...");
+          }
+        });
+      })
     },
     nimSendSuccess(cd) {
       let that = this;
@@ -418,6 +428,9 @@ export default {
         done(data) {
           if (data.responseObject.responseData) {
             console.log("更新时间成功");
+            that.$router.push({
+              path: "/consultHis"
+            });
           }
         }
       });

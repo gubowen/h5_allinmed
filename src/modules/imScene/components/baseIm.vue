@@ -299,7 +299,8 @@ export default {
       }
     },
     focusFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+
+      if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "relative",
         //   bottom: "55%"
@@ -317,15 +318,17 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        // setTimeout(() => {
+      
+      if (navigator.userAgent.toLowerCase().includes("11")) {
+        //
         //   $("body").css({
         //     position: "static",
         //     bottom: "0%"
         //   });
-        // clearInterval(this.interval); //清除计时器
-        // document.body.scrollTop = this.bfscrolltop;
-        // },20);
+        // setTimeout(() => {
+        //   clearInterval(this.interval); //清除计时器
+        //   document.body.scrollTop = this.bfscrolltop;
+        // }, 20);
       } else {
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
@@ -737,34 +740,40 @@ export default {
       this.nim.deleteMsg({
         msg: msg,
         done(error) {
+          console.log(error);
           if (!error) {
-            console.log("撤回消息成功.....");
-            that.nim.sendCustomMsg({
-              scene: "p2p",
-              to: that.targetData.account,
-              custom: JSON.stringify({
-                cType: "0",
-                cId: that.cId,
-                mType: "36",
-                conId: that.orderSourceId,
-                patientName: that.$store.state.patientName,
-                deleteMsg: msg
-              }),
-              content: JSON.stringify({
-                type: "deleteMsgTips",
-                data: {
-                  from: that.$store.state.patientName || "患者",
-                  deleteMsg: msg || {}
+            setTimeout(() => {
+              that.nim.sendCustomMsg({
+                scene: "p2p",
+                to: that.targetData.account,
+                custom: JSON.stringify({
+                  cType: "0",
+                  cId: that.cId,
+                  mType: "36",
+                  conId: that.orderSourceId,
+                  patientName: that.$store.state.patientName,
+                  idClient:msg.idClient
+                }),
+                content: JSON.stringify({
+                  type: "deleteMsgTips",
+                  data: {
+                    from: that.$store.state.patientName || "患者",
+                    deleteMsg: msg || {}
+                  }
+                }),
+                done(tipsError, tipsMsg) {
+                  console.log('发送撤回消息完成');
+                  console.log(tipsError);
+                  console.log(tipsMsg);
+                  if (!tipsError) {
+                    console.log(tipsError, tipsMsg);
+                    console.log(`撤回消息提示--发送成功`);
+                    that.sendMessageSuccess(tipsError, tipsMsg);
+                  }
                 }
-              }),
-              done(tipsError, tipsMsg) {
-                if (!tipsError) {
-                  console.log(tipsError, tipsMsg);
-                  console.log(`撤回消息提示--发送成功`);
-                  that.sendMessageSuccess(tipsError, tipsMsg);
-                }
-              }
-            });
+              });
+            },20)
+            
           } else {
             if (parseInt(error.code) === 508) {
               that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
