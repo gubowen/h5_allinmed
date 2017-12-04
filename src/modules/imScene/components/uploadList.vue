@@ -16,11 +16,11 @@
             <img alt="" @click="showBigImg(img,imgIndex,item.adviceId)" :src="img.blob">
             <span class="tc-upLoadDel" style="cursor: pointer"
                   @click="imgDelete(img,imgIndex,item.adviceId)"
-                  v-show="img.uploading==false"></span>
+                  v-show="img.uploading==false&&!img.fail"></span>
             <div v-show="img.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
-              <span class="tc-upLoadDel" style="cursor: pointer"></span>
+              <!-- <span class="tc-upLoadDel" style="cursor: pointer"></span> -->
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
             <figure class="upload-fail" v-if="img.fail">
