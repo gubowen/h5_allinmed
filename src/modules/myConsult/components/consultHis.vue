@@ -4,13 +4,13 @@
     <template v-if="items.length <= 0 && noFriend">
       <section class="noFriendText">
         <p>您还没有任何记录</p>
-        <p>添加关心的人，在线问诊，唯医骨科为您开启全新的就医体验</p>
+        <p>添加关心的人，在线咨询预约，唯医骨科为您开启全新的就医体验</p>
       </section>
       <section class="noFriendHref">
-        <a @click="hrefToConsult()">去问诊&gt;&gt;</a>
+        <a @click="hrefToConsult()">去问诊&gt;</a>
       </section>
     </template>
-    <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem">
+    <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem" style="background:#eeeeee;border-top: 1px solid transparent;" v-else>
       <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items"
                v-if="item.patientId&&item.patientId.length>0">
         <article class="orderHisItemTop">
@@ -366,26 +366,27 @@
     float: right;
   }
 
-  //亲友管理
+  //没有历史
   .noFriendText {
-    padding: rem(340px) rem(94px) 0;
+    padding: rem(450px) rem(86px) 0;
     &:before {
       content: '';
       display: block;
-      width: rem(390px);
-      height: rem(250px);
-      background: url("../../../common/image/img00/myServices/no_friend.png") no-repeat center center;
+      width: rem(320px);
+      height: rem(320px);
+      background: url("../../../common/image/img00/myServices/inquiry_bg.png") no-repeat center center;
       background-size: 100% 100%;
       position: absolute;
-      top: rem(48px);
+      top: rem(90px);
       left: 50%;
-      margin-left: rem(-390px / 2);
+      margin-left: rem(-160px);
     }
     p {
       &:nth-child(1) {
-        @include font-dpr(19px);
+        @include font-dpr(18px);
         color: #222;
         text-align: center;
+        font-weight: 600;
       }
       &:nth-child(2) {
         margin-top: rem(30px);
@@ -400,7 +401,7 @@
     a {
       text-align: center;
       margin-top: rem(60px);
-      color: #00beaf;
+      color: #07B6AC;
       display: block;
       @include font-dpr(18px);
     }
@@ -409,8 +410,7 @@
   //咨询历史
   .orderList {
     box-sizing: border-box;
-    border-top: 1px solid transparent;
-    background: url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
+    background: #ffffff url("../../../common/image/background_wave.png") no-repeat bottom center;
     background-size: 100% rem(272px);
     min-height: 100%;
     .orderHistoryItem {
