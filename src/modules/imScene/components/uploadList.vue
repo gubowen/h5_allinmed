@@ -513,7 +513,7 @@ $colorTwo: #222222;
   .tc-upLoadTitle {
     padding: rem(30px) rem(48px) rem(30px) rem(48px);
     position: relative;
-
+    border-bottom: rem(1px) solid #ffffff;
     .tc-upLoadTitleName {
       display: inline-block;
       @include font-dpr(16px);
