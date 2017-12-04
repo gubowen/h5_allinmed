@@ -103,12 +103,12 @@ class WxCommon {
             window.location.href = localStorage.getItem("currentUrl") + "?openId=" + net.getPara().openId;
           }
           localStorage.setItem("openId", net.getPara().openId);
-          sessionStorage.removeItem("isReLoading");
+          localStorage.removeItem("isReLoading");
         }
 
       } else {
         localStorage.setItem("currentUrl", _currentPageUrl);
-        sessionStorage.setItem("isReLoading","1");
+        localStorage.setItem("isReLoading","1");
         window.location.href = _url;
       }
     }
