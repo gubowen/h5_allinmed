@@ -259,7 +259,7 @@ export default {
       }
     },
     focusFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+      if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "relative",
         //   bottom: "55%"
@@ -277,7 +277,7 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+      if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "static",
         //   bottom: "0%"

@@ -299,7 +299,8 @@ export default {
       }
     },
     focusFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
+
+      if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "relative",
         //   bottom: "55%"
@@ -317,15 +318,17 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      if (navigator.userAgent.toLowerCase().includes("11_1")) {
-        // setTimeout(() => {
+      
+      if (navigator.userAgent.toLowerCase().includes("11")) {
+        //
         //   $("body").css({
         //     position: "static",
         //     bottom: "0%"
         //   });
-        // clearInterval(this.interval); //清除计时器
-        // document.body.scrollTop = this.bfscrolltop;
-        // },20);
+        // setTimeout(() => {
+        //   clearInterval(this.interval); //清除计时器
+        //   document.body.scrollTop = this.bfscrolltop;
+        // }, 20);
       } else {
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
