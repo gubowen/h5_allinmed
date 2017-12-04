@@ -12,11 +12,11 @@
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
             <img alt="" @click="showBigImg(img,imgIndex,1)" :src="img.blob">
-            <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(img,imgIndex,item.adviceId)" v-show="img.uploading==false"></span>
+            <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(img,imgIndex,item.adviceId)" v-show="img.uploading==false&&!img.fail"></span>
             <div v-show="img.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
-              <span class="tc-upLoadDel" style="cursor: pointer"></span>
+              <!-- <span class="tc-upLoadDel" style="cursor: pointer"></span> -->
               <span class="tc-upLoadAfreshText">等待上传</span>
             </div>
             <figure class="upload-fail" v-if="img.fail">

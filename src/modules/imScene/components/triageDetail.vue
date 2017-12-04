@@ -7,7 +7,7 @@
         <ul class="he-loadFiles he-videoImageBox docInt" v-if="baseMessage.type==2">
           <li class="tc-imageItemList ev-imgList success" v-for="(item,index) in imageList" v-if="imageList.length>0">
             <img :src="item.blob" alt="">
-            <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)" v-show="item.finish"></span>
+            <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)" v-show="item.finish&&!item.fail"></span>
             <div v-if="item.uploading">
               <span class="tc-upLoadCover"></span>
               <span class="tc-upLoading"></span>
