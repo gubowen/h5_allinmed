@@ -51,7 +51,7 @@ class WxCommon {
      *
      *
      */
-    sessionStorage.setItem("isReLoading","1");
+    
     let appId = "";
     let XHRUrl = "";
     let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
@@ -108,6 +108,7 @@ class WxCommon {
 
       } else {
         localStorage.setItem("currentUrl", _currentPageUrl);
+        sessionStorage.setItem("isReLoading","1");
         window.location.href = _url;
       }
     }
