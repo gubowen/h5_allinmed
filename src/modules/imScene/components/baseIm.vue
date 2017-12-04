@@ -740,8 +740,10 @@ export default {
       this.nim.deleteMsg({
         msg: msg,
         done(error) {
+          console.log(error);
           if (!error) {
             console.log("撤回消息成功.....");
+
             that.nim.sendCustomMsg({
               scene: "p2p",
               to: that.targetData.account,
