@@ -9,6 +9,7 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
+                 :capture="cameraType"
                  @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
@@ -26,6 +27,7 @@
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple
+                     :capture="cameraType"
                      @change="onFileChange($event, item, imgIndex)"
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
@@ -37,6 +39,7 @@
                        accept="image/*"
                        type="file"
                        multiple
+                       :capture="cameraType"
                        v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
               </span>
@@ -85,6 +88,13 @@
    *
    * Created by qiangkailiang on 2017/8/21.
    */
+let _cameraType = "";
+
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}  
 import axios from "axios";
 import api from "common/js/util/util";
 import store from "../store/store";
@@ -104,6 +114,7 @@ let refreshFlag = true; //路由进来的时候判断是否是查看大图返回
 export default {
   data() {
     return {
+      cameraType:_cameraType,
       leaveConfirm: false,
       leaveConfirmParams: {}, //离开confirm的参数
       pageLeaveEnsure: false, //是否离开页面
@@ -195,13 +206,20 @@ export default {
   },
   mounted() {
     api.forbidShare();
+    this.initData();
   },
   activated() {
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
     api.forbidShare();
+    this.initData();
   },
   methods: {
+    initData(){
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+         $(".ev-upLoadInput").removeAttr("capture")
+      }
+    },
     getUploadList() {
       if (!localStorage.getItem("upload")) {
         localStorage.setItem("upload", JSON.stringify(this.$route.params));
