@@ -60,7 +60,7 @@
 
   }
 </style>
-<script>
+<script  type="text/ecmascript-6">
   import toast from "components/toast";
   import {mapGetters} from "vuex";
   export default {

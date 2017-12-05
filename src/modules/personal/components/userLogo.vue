@@ -37,7 +37,7 @@
     }
   }
 </style>
-<script>
+<script  type="text/ecmascript-6">
   import {mapGetters} from "vuex"
   export default  {
     computed:{

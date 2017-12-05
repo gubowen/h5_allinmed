@@ -17,7 +17,7 @@
     </transition>
   </section>
 </template>
-<script>
+<script  type="text/ecmascript-6">
   import userLogo from './../components/userLogo.vue';
   import focusWeixin from './../components/focusWeixin.vue';
   import accountSafe from './../components/accountSafe.vue';

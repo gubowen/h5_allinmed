@@ -46,7 +46,7 @@
     border-radius:rem(16px);
   }
 </style>
-<script>
+<script  type="text/ecmascript-6">
   import toast from "components/toast";
   export default {
     data(){
