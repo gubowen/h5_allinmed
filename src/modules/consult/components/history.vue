@@ -41,14 +41,19 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input class="ev-upLoadInput" accept="image/*" type="file"
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple ref="uploader">
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)" multiple  :capture="cameraType" ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList1.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="uploading1===false&&imageList1.length<9"
-                             @change="onFileChange($event,1)" multiple   :capture="cameraType" ref="uploader">
+                             v-if="!isIos&&uploading1===false&&imageList1.length<9"
+                             @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="isIos&&uploading1===false&&imageList1.length<9"
+                             @change="onFileChange($event,1)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
@@ -64,14 +69,19 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input class="ev-upLoadInput" accept="image/*" type="file"
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,2,index)" multiple ref="uploader">
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,2,index)" multiple  :capture="cameraType" ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList2.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple   :capture="cameraType" ref="uploader">
+                             v-if="!isIos&&uploading2===false&&imageList2.length<9"
+                             @change="onFileChange($event,2)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="isIos&&uploading2===false&&imageList2.length<9"
+                             @change="onFileChange($event,2)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
@@ -219,6 +229,7 @@ export default {
         customerId: api.getPara().customerId,
         doctorId: api.getPara().doctorId
       },
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       orderSourceId: "", //进入分诊im需要orderSourceId
       finish: false,
       deletePic: {},
@@ -269,40 +280,6 @@ export default {
         patientId: ""
       }
     };
-  },
-  watch:{
-    "uploading1"(){
-      setTimeout(()=>{
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture")
-        }
-      },1000)
-
-    },
-    "uploading2"(){
-      setTimeout(()=>{
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture")
-        }
-      },1000)
-
-    },
-    "imageList1"(){
-      setTimeout(()=>{
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture")
-        }
-      },1000)
-
-    },
-    "imageList2"(){
-      setTimeout(()=>{
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture")
-        }
-      },1000)
-
-    }
   },
   activated() {
     this.finish = false;
@@ -368,7 +345,7 @@ export default {
       }
       // alert(navigator.userAgent.toLowerCase())
       if (navigator.userAgent.toLowerCase().includes("iphone")) {
-        $(".ev-upLoadInput").removeAttr("capture")
+        $(".ev-upLoadInput").removeAttr("capture");
       }
     },
     selectHospital() {

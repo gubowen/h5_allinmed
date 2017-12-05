@@ -16,15 +16,19 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                     @change="onFileChange($event,item,index)" v-show="item.finish" :capture="cameraType">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="isIos"
+                     @change="onFileChange($event,item,index)" v-show="item.finish">
+                 <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="!isIos"
+                     @change="onFileChange($event,item,index)" v-show="item.finish" capture="camera">
             </figure>
           </li>
           <li class="tc-imageUpLoadAdd" v-show="imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
-              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="!loading&&imageList.length<9"
-                     @change="onFileChange($event)" :capture="cameraType">
+              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="isIos&&!loading&&imageList.length<9"
+                     @change="onFileChange($event)">
+              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="!isIos&&!loading&&imageList.length<9"
+                     @change="onFileChange($event)" capture="camera">
             </a>
           </li>
         </ul>
@@ -168,6 +172,7 @@
         reloadVideoConfirm: false, //视频重新上传的confirm框是否显示
         baseMessage: {},
         imageList: [],
+        isIos:navigator.userAgent.toLowerCase().includes("iphone"),
         filesObj: {}, //多图file对象存储，用于获取每张图的信息
         base64Arr: [], //base64压缩后的图片
         uploadIndex: "", //多图上传递增索引
