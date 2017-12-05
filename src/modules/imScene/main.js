@@ -109,7 +109,7 @@ class ImScene {
       path: "/TriageDetail",
       name: "TriageDetail",
       meta: {
-        keepAlive: true,
+        keepAlive: false,
       },
       component: TriageDetail
     }, {
