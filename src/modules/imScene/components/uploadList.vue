@@ -9,7 +9,7 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-          :capture="cameraType"
+                 :capture="cameraType"
                  @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
@@ -39,8 +39,8 @@
                        accept="image/*"
                        type="file"
                        multiple
-                       v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        :capture="cameraType"
+                       v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
               </span>
             </a>
@@ -113,6 +113,7 @@ let refreshFlag = true; //路由进来的时候判断是否是查看大图返回
 export default {
   data() {
     return {
+      cameraType:_cameraType,
       leaveConfirm: false,
       leaveConfirmParams: {}, //离开confirm的参数
       pageLeaveEnsure: false, //是否离开页面
@@ -127,8 +128,7 @@ export default {
       errorMsg: "",
       loading: false, //是否正在上传
       deletePic: {},
-      deletePicTip: false, //删除图片弹层
-      cameraType: _cameraType
+      deletePicTip: false //删除图片弹层
     };
   },
   computed: {
@@ -209,7 +209,6 @@ export default {
   activated() {
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
-    console.log("fuck");
     api.forbidShare();
     setTimeout(() => {
       if (navigator.userAgent.toLowerCase().includes("iphone")) {
