@@ -11,7 +11,7 @@
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
-            <img alt="" @click="showBigImg(img,imgIndex,1)" :src="img.blob">
+            <img alt="" @click="showBigImg(img,imgIndex,item.adviceId)" :src="img.blob">
             <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(img,imgIndex,item.adviceId)" v-show="img.uploading==false&&!img.fail"></span>
             <div v-show="img.uploading">
               <span class="tc-upLoadCover"></span>
@@ -111,9 +111,10 @@ export default {
   },
   mounted() {
     api.forbidShare();
+    this.getUploadList();
   },
   activated() {
-    this.getUploadList();
+    // this.getUploadList();
   },
   methods: {
     getUploadList() {
@@ -126,10 +127,13 @@ export default {
     },
     //查看大图
     showBigImg(item, index, type){
+      let that = this;
+
       let _params = {
-        imgBlob: this["imageList" + type],
+        imgBlob:  that.imageList[type],
         indexNum: index
       };
+      console.log(_params);
       this.$router.push({
         name: "showBigImg",
         params: _params

@@ -1,9 +1,11 @@
 <template>
   <div>
-    <p class="H-pay" @click="askH5Pay()">H5支付</p>
+    <!-- <p class="H-pay" @click="askH5Pay()">H5支付</p>
     <p class="H-viewPay" v-if="payShow" @click="payHide">支付成功</p>
-    <p class="uploadPic" @click="upload()">上传图片</p>
+    <p class="uploadPic" @click="upload()">上传图片</p> -->
+    <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxaa5288ad7f627608&redirect_uri=http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/?ref=https://m9.allinmed.cn/dist/consult.html&response_type=code&scope=snsapi_base&state=b6#wechat_redirect">喵！</a>
   </div>
+  
 </template>
 <script type="text/ecmascript-6">
 import fb from "common/js/third-party/flexible";

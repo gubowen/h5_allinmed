@@ -299,7 +299,6 @@ export default {
       }
     },
     focusFn() {
-
       if (navigator.userAgent.toLowerCase().includes("11")) {
         // $("body").css({
         //   position: "relative",
@@ -309,6 +308,7 @@ export default {
         //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         // }, 100);
       } else {
+
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
@@ -318,7 +318,6 @@ export default {
       this.autoSizeTextarea();
     },
     blurFn() {
-      
       if (navigator.userAgent.toLowerCase().includes("11")) {
         //
         //   $("body").css({
@@ -330,6 +329,7 @@ export default {
         //   document.body.scrollTop = this.bfscrolltop;
         // }, 20);
       } else {
+
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
           document.body.scrollTop = this.bfscrolltop;
@@ -752,7 +752,7 @@ export default {
                   mType: "36",
                   conId: that.orderSourceId,
                   patientName: that.$store.state.patientName,
-                  idClient:msg.idClient
+                  idClient: msg.idClient
                 }),
                 content: JSON.stringify({
                   type: "deleteMsgTips",
@@ -762,7 +762,7 @@ export default {
                   }
                 }),
                 done(tipsError, tipsMsg) {
-                  console.log('发送撤回消息完成');
+                  console.log("发送撤回消息完成");
                   console.log(tipsError);
                   console.log(tipsMsg);
                   if (!tipsError) {
@@ -772,8 +772,7 @@ export default {
                   }
                 }
               });
-            },20)
-            
+            }, 20);
           } else {
             if (parseInt(error.code) === 508) {
               that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
@@ -1471,11 +1470,24 @@ export default {
   beforeUpdate() {},
   //组件更新之后的生命钩子
   updated() {},
+  beforeRouteLeave (to, from, next) {
+    // 记录查看大图时离开的位置
+    if (to.name === 'showBigImg') {
+      console.log($(".main-message").scrollTop());
+      sessionStorage.setItem('imagePosition',$(".main-message").scrollTop());
+    }
+    next(true);
+  },
   activated() {
     let that = this;
-    document.body.scrollTop = 1;
+    // document.body.scrollTop = 1;
     api.forbidShare();
-    that.refreshScroll();
+    // that.refreshScroll();
+    // 判断是否有查看大图的位置，定位到响应位置
+    if (sessionStorage.getItem('imagePosition')) {
+      $(".main-message").scrollTop(sessionStorage.getItem('imagePosition'));
+      sessionStorage.removeItem('imagePosition');
+    }
     if (that.$route.query.queryType === "triage") {
       that.nim.sendCustomMsg({
         scene: "p2p",

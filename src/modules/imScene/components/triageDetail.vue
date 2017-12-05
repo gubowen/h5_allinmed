@@ -175,56 +175,55 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     let that = this;
-    if (to.name=='showBigImg') {
-      
+    if (to.name == "showBigImg") {
       next(true);
-    };
-    //      debugger;
-    if (that.baseMessage.type == 1) {
-      if (that.videoObj.size || that.videoUploading) {
-        if (that.videoUploading) {
-          that.videoLeaveConfirmParams = {
-            ensure: "离开",
-            cancel: "取消",
-            title: "努力上传中",
-            content: "现在离开，下次还要重新上传哦"
-          };
-        } else {
-          that.videoLeaveConfirmParams = {
-            ensure: "现在提交",
-            cancel: "暂不提交",
-            title: "要提交上传的视频么",
-            content: ""
-          };
-        }
-        that.videoLeaveConfirm = true;
-        //        that.pageLeaveEnsure =false;
-        next(that.pageLeaveEnsure);
-      } else {
-        next(true);
-      }
-      this.reloadVideoConfirm = false;
     } else {
-      if (that.imageList.length) {
-        if (that.uploading) {
-          that.imgLeaveConfirmParams = {
-            ensure: "取消",
-            cancel: "离开",
-            title: "努力上传中",
-            content: "现在离开，下次还要重新上传哦"
-          };
+      if (that.baseMessage.type == 1) {
+        if (that.videoObj.size || that.videoUploading) {
+          if (that.videoUploading) {
+            that.videoLeaveConfirmParams = {
+              ensure: "离开",
+              cancel: "取消",
+              title: "努力上传中",
+              content: "现在离开，下次还要重新上传哦"
+            };
+          } else {
+            that.videoLeaveConfirmParams = {
+              ensure: "现在提交",
+              cancel: "暂不提交",
+              title: "要提交上传的视频么",
+              content: ""
+            };
+          }
+          that.videoLeaveConfirm = true;
+          //        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure);
         } else {
-          that.imgLeaveConfirmParams = {
-            ensure: "现在提交",
-            cancel: "暂不提交",
-            title: "要提交上传的图片么？"
-          };
+          next(true);
         }
-        that.imgLeaveConfirm = true;
-        //        that.pageLeaveEnsure =false;
-        next(that.pageLeaveEnsure);
+        this.reloadVideoConfirm = false;
       } else {
-        next(true);
+        if (that.imageList.length) {
+          if (that.uploading) {
+            that.imgLeaveConfirmParams = {
+              ensure: "取消",
+              cancel: "离开",
+              title: "努力上传中",
+              content: "现在离开，下次还要重新上传哦"
+            };
+          } else {
+            that.imgLeaveConfirmParams = {
+              ensure: "现在提交",
+              cancel: "暂不提交",
+              title: "要提交上传的图片么？"
+            };
+          }
+          that.imgLeaveConfirm = true;
+          //        that.pageLeaveEnsure =false;
+          next(that.pageLeaveEnsure);
+        } else {
+          next(true);
+        }
       }
     }
   },
@@ -704,16 +703,16 @@ export default {
   },
   activated() {
     let that = this;
-    that.imageList = [];
+    // that.imageList = [];
     that.videoObj = {};
     that.videoSubmitParam = {};
-    if (!sessionStorage.getItem("triageRoute")) {
-      sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
-    }
+    // if (!sessionStorage.getItem("triageRoute")) {
+    //   sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
+    // }
 
     that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
     that.videoUpload();
-    that.reloadUpload();
+    // that.reloadUpload();
   },
   components: {
     Toast,
@@ -782,7 +781,7 @@ export default {
         @include font-dpr(17px);
         line-height: 1.5;
         color: #222222;
-        &.upLoadPicHasTip{
+        &.upLoadPicHasTip {
           padding: rem(30px) rem(40px) rem(10px);
         }
       }

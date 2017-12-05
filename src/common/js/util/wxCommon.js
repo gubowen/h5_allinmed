@@ -51,6 +51,7 @@ class WxCommon {
      *
      *
      */
+    
     let appId = "";
     let XHRUrl = "";
     let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
@@ -84,7 +85,8 @@ class WxCommon {
     if (net.getPara().code) {
       if (window.location.href.indexOf("openId") === -1) {
         window.location.href = XHRUrl +
-          "?ref=" + localStorage.getItem("currentUrl") +
+          "?ref=" + (window.location.origin + window.location.pathname)+
+          //localStorage.getItem("currentUrl") +
           "&response_type=code" +
           "&scope=snsapi_base" +
           "&state=pay" +
@@ -98,14 +100,17 @@ class WxCommon {
           sessionStorage.setItem("count", 1);
           if (localStorage.getItem("currentUrl") && localStorage.getItem("currentUrl").indexOf("?") != -1) {
             window.location.href = localStorage.getItem("currentUrl") + "&openId=" + net.getPara().openId;
+            localStorage.removeItem("isReLoading");
           } else {
             window.location.href = localStorage.getItem("currentUrl") + "?openId=" + net.getPara().openId;
+            localStorage.removeItem("isReLoading");
           }
           localStorage.setItem("openId", net.getPara().openId);
         }
 
       } else {
         localStorage.setItem("currentUrl", _currentPageUrl);
+        localStorage.setItem("isReLoading","1");
         window.location.href = _url;
       }
     }
