@@ -50,7 +50,7 @@ class Myconsult {
         name: "consultHis",
         component: consultHis,
         meta: {
-          keepAlive: true
+          keepAlive: false
         }
       }, {
         path: '/uploadPic',
