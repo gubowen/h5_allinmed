@@ -703,7 +703,7 @@ export default {
   },
   activated() {
     let that = this;
-    that.imageList = [];
+    // that.imageList = [];
     that.videoObj = {};
     that.videoSubmitParam = {};
     // if (!sessionStorage.getItem("triageRoute")) {
