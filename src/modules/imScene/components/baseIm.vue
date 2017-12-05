@@ -1471,6 +1471,7 @@ export default {
   //组件更新之后的生命钩子
   updated() {},
   beforeRouteLeave (to, from, next) {
+    // 记录查看大图时离开的位置
     if (to.name === 'showBigImg') {
       console.log($(".main-message").scrollTop());
       sessionStorage.setItem('imagePosition',$(".main-message").scrollTop());
@@ -1482,6 +1483,7 @@ export default {
     // document.body.scrollTop = 1;
     api.forbidShare();
     // that.refreshScroll();
+    // 判断是否有查看大图的位置，定位到响应位置
     if (sessionStorage.getItem('imagePosition')) {
       $(".main-message").scrollTop(sessionStorage.getItem('imagePosition'));
       sessionStorage.removeItem('imagePosition');
