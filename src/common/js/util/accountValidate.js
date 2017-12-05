@@ -39,11 +39,17 @@ export default function accountValidate() {
         let _mobile = data.responseObject.responseData.dataList[0].mobile;
         if (_mobile && _mobile.length > 0) {
           //已绑定手机号
+          sessionStorage.removeItem("isReLoading");
           return true;
         } else {
           //未绑定手机号
-          sessionStorage.setItem("loginBack", window.location.href);
-          window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+          if(sessionStorage.getItem("isReLoading")&&sessionStorage.getItem("isReLoading")=="1"){
+            return;
+          }else{
+            // accountValidate();
+            sessionStorage.setItem("loginBack", window.location.href);
+            window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+          }
         }
       }
     }
