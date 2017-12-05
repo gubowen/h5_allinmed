@@ -205,14 +205,14 @@ export default {
     }
   },
   mounted() {
-    api.forbidShare();
     this.initData();
+    api.forbidShare();
   },
   activated() {
+    this.initData();
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
     api.forbidShare();
-    this.initData();
   },
   methods: {
     initData(){
