@@ -50,6 +50,7 @@ export default{
   box-sizing: border-box;
   position: relative;
   background-size: contain;
+  margin-bottom:rem(20px) ;
   .btn-close{
       width:rem(28px);
       height:rem(28px);

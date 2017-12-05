@@ -182,6 +182,7 @@ export default {
 @import "../../../../scss/library/_common-modules";
 .slider {
   min-height: 1px;
+  overflow: hidden;
   .slider-group {
     position: relative;
     overflow: hidden;
