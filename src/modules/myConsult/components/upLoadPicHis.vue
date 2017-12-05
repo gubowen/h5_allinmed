@@ -7,7 +7,7 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple :capture="cameraType" @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -21,13 +21,13 @@
             </div>
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple :capture="cameraType" @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length>0&&!loading"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple :capture="cameraType" @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length>0&&!loading"/>
               </span>
             </a>
           </li>
@@ -62,6 +62,13 @@
    *
    * Created by qiangkailiang on 2017/8/21.
    */
+let _cameraType = "";
+
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}  
 import axios from "axios";
 import api from "common/js/util/util";
 import confirm from "components/confirm";
@@ -80,6 +87,7 @@ const XHRList = {
 export default {
   data() {
     return {
+      cameraType:_cameraType,
       uploadList: [],
       imageList: {},
       filesObj: {}, //多图file对象存储，用于获取每张图的信息
@@ -112,11 +120,18 @@ export default {
   mounted() {
     api.forbidShare();
     this.getUploadList();
+    this.initData();
   },
   activated() {
     // this.getUploadList();
+    this.initData();
   },
   methods: {
+    initData(){
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+      }
+    },
     getUploadList() {
       if (localStorage.getItem("picList")) {
         this.uploadList = JSON.parse(localStorage.getItem("picList"));
