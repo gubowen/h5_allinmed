@@ -4,31 +4,34 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>当前密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码" id="password">
-          <i class="icon-searchCancel"></i>
+          <input type="password" placeholder="请输入当前密码"   v-model="nowPassWord" @focus='inputBegin(0)' @blur='inputEnd'>
+          <i class="icon-searchCancel" v-show='(cancelIndex===0)&&(nowPassWord.length>0)' @click='removeInput(0)'></i>
 
         </figure>
       </article>
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码" id="newPassword">
-          <i class="eye ev_toggleEye eyeClose" style="right:0;margin-right:0;"></i>
+          <input :type="pswType" placeholder="请输入当前密码"    v-model="newPassWord">
+          <i class="eye ev_toggleEye " :class='{"eyeClose":!eyeState,"eyeOpen":eyeState,}' style="right:0;margin-right:0;" @click='changeEyeState'></i>
 
         </figure>
       </article>
       <article class="allinmed-personal-tableModuleItem">
         <h3>确认新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码" id="password">
-          <i class="icon-searchCancel"></i>
+          <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
+          <i class="icon-searchCancel" v-show='(cancelIndex===1)&&(reNewPassWord.length>0)'  @click='removeInput(1)'></i>
 
         </figure>
       </article>
       <article class="allinmed-personal-tableModuleItem">
-        <button class="btn-primary-lg allinmed-personal-msgWriting" id="save" on="false">确认</button>
+        <button class="btn-primary-lg" :class='{"allinmed-personal-msgWriting":!activeOnOff}' id="save" on="false" @click='activeSave'>确认</button>
       </article>
     </section>
+    <transition name="fade">
+      <toast :content="errorMsg" v-if="errorShow"></toast>
+    </transition>
   </section>
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -41,60 +44,99 @@
     width: rem(710px);
     background: #fff;
     border-radius:rem(16px);
-    .allinmed-personal-tableModule{
-        position: relative;
-        min-height:rem(454px);
-        height:auto;
-        .allinmed-personal-tableModuleItem{
-          margin: 0 rem(28px);
-          padding: rem(30px) 0;
-          position:relative;
-          box-sizing: border-box;
-          border-bottom: 2px solid #EAEAEA;
-
-          height:rem(101px);
-          h3{
-            float: left;
-            font-size: rem(30px);
-            color: #555;
-            font-weight: 400;
-            display: inline-block;
-            line-height:rem(38px);
-          }
-        .allinmed-tableModuleItemInput{
-          color: #aaa;
-          position: absolute;
-          left: rem(156px);
-          font-size: rem(30px);
-          display: inline-block;
-
-            & > input {
-                border: none;
-                background: none;
-                font-family: "Microsoft Yahei";
-                padding: 0;
-                margin: 0;
-              }
-        }
-
-          &:nth-last-child(1){
-             border-bottom: none;
-           }
-        }
-        .btn-primary-lg {
-          display: block;
-          width: 100%;
-          text-align: center;
-          height: rem(90px);
-          line-height: rem(90px);
-          background-color: #2899e6;
-          border-radius: rem(20px);
-          color: #fff;
-          font-size: rem(40px);
-        }
-        .allinmed-personal-msgWriting{
-          opacity: .5;
-        }
-    }
   }
 </style>
+<script>
+  import toast from "components/toast";
+  export default {
+    data(){
+      return {
+        nowPassWord:"",
+        newPassWord:"",
+        reNewPassWord:"",
+        eyeState:false,
+        cancelIndex:-1,
+        errorShow:false,
+        errorMsg:""
+      }
+    },
+    computed:{
+      pswType(){
+        return (this.eyeState)?"text":"password";
+      },
+      activeOnOff(){
+        return (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
+      }
+    },
+    methods:{
+      toast(msg){
+        let t = this;
+        this.errorMsg = msg;
+        t.errorShow = true;
+        setTimeout(function(){
+          t.errorShow = false;
+        },2000);
+        return false;
+      },
+      changeEyeState(){
+        let t = this;
+        t.eyeState = !t.eyeState;
+      },
+      inputBegin(index){
+        this.cancelIndex = index;
+      },
+      activeSave(){
+        let t = this;
+        let allRight = true;
+        if(!t.activeOnOff){
+          if(t.nowPassWord.length===0){
+            //t.toast("请输入当前密码");
+            allRight = false;
+            return false;
+          }
+          if(t.newPassWord.length===0){
+            //t.toast("请输入新密码");
+            allRight = false;
+            return false;
+          }
+          if(t.reNewPassWord.length===0){
+            //t.toast("请确认新密码");
+            allRight = false;
+            return false;
+          }
+        }else{
+          (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
+          if(t.newPassWord.length<6){
+            t.toast("新密码长度应大于6位");
+            allRight = false;
+            return false;
+          }
+          if(t.reNewPassWord.length<6){
+            t.toast("新密码长度应大于6位");
+            allRight = false;
+            return false;
+          }
+          if(t.newPassWord===t.reNewPassWord){
+            t.toast("两次输入密码不一致");
+            allRight = false;
+            return false;
+          }
+          if(t.nowPassWord===t.newPassWord){
+              console.log("新旧密码一致");
+          }
+        }
+        console.log(allRight);
+        if(allRight){
+          console.log("参数均正确可以进行逻辑");
+        }
+      },
+      inputEnd(){
+        this.cancelIndex =-1;
+      },
+      removeInput(index){
+        let arr = ['nowPassWord','reNewPassWord'];
+        this[(arr[index])] = '';
+      }
+    }
+  }
+</script>

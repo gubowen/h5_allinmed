@@ -4,7 +4,9 @@
 import bindAccount from "../components/bindAccount.vue"
 import personalIndex from "../components/personalIndex.vue"
 import changePsw from "../components/changePsw.vue"
-
+import changePhone from "../components/bindPhone.vue"
+import followWechat from "components/followWechat";
+import contactUs from "components/followWechat";
 
 export default {
   routes: [
@@ -19,6 +21,18 @@ export default {
     {
       path:"/changePsw",
       component:changePsw
+    },
+    {
+      path:"/followWechat",
+      component:followWechat
+    },
+    {
+      path:"/contactUs",
+      component:contactUs
+    },
+    {
+      path:"/changePhone",
+      component:changePhone
     },
     {
       path:"*",

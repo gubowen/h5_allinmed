@@ -4,22 +4,16 @@
       <section class="account-item border-bottom">
         <span class="title">微信</span>
         <span class="operate">
-          <a class="bind ev-bind-weixin">去绑定</a>
+          <em v-if="weixinName.length>0">{{weixinName}}</em>
+          <a class="bind ev-bind-weixin" :href='jumpUrl.focusWexin'  v-if="weixinName.length===0">去绑定</a>
           <i class="jump"></i>
-        </span>
-      </section>
-      <section class="account-item border-bottom">
-        <span class="title">手机</span>
-        <span class="operate">
-          <i class="phone-number">136****0303</i>
-          <a class="bind phone ev-bind-phone">更换</a>
         </span>
       </section>
       <section class="account-item">
-        <span class="title">邮箱</span>
+        <span class="title">手机</span>
         <span class="operate">
-          <a class="bind ev-bind-phone">去绑定</a>
-          <i class="jump"></i>
+          <i class="phone-number">{{customerPhoneNum|hidePhone}}</i>
+          <router-link tag="i" to='/changePhone' class="bind phone ev-bind-phone">更换</router-link>
         </span>
       </section>
     </section>
@@ -34,7 +28,7 @@
   @import "../../../../scss/library/_common-modules.scss";
   .allinmed-personal-bindAccount{
     width: rem(610px);
-    height: rem(480px);
+    height: rem(318px);
     padding: 0 rem(48px);
     background:#fff;
     border-radius: rem(16px);
@@ -53,15 +47,34 @@
       }
       .operate{
         float: right;
+        /*&> i,&> a{
+           display: inline-block;
+           vertical-align: middle;
+         }*/
+      em{
+        font-style: normal;
+        font-size: rem(28px);
+        color: #AAAAAA;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        width: rem(164px);
+        vertical-align: middle;
+      }
       .phone-number{
       @include font-dpr(14px);
         color: #AAAAAA;
         line-height: rem(36px);
         margin-right: rem(12px);
+        display:inline-block;
+        vertical-align: middle;
       }
         .bind{
           color: #00BEAF;
-          line-height: rem(30px);
+          font-size: rem(28px);
+          display:inline-block;
+          vertical-align: middle;
         &.phone{
            width: rem(92px);
            height: rem(44px);
@@ -97,3 +110,20 @@
   }
 
 </style>
+<script>
+  import {mapGetters} from "vuex"
+  export default  {
+    computed:{
+      ...mapGetters(['jumpUrl','weixinName','customerPhoneNum'])
+    },
+    mounted(){
+      console.log(this.jumpUrl)
+    },
+    filters:{
+      hidePhone(val){
+        val = val+"";
+        return val.substring(0,3)+"****"+val.substring(7,100)
+      }
+    }
+  }
+</script>

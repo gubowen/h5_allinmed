@@ -1,7 +1,9 @@
 <template>
   <router-link class="allinmed-personal-accountSafe"  tag="section" to="/bindAccount">
-    <span class="icon safe"></span>
-    <span class="title">账号安全</span>
+    <p class='allinmed-personal-des'>
+      <span class="icon safe"></span>
+      <span class="title">账号安全</span>
+    </p>
     <span class="jump"></span>
   </router-link>
 </template>

@@ -1,21 +1,26 @@
 <template>
   <section class="allinmed-personal-linkUs">
-    <section class="allinmed-personal-link">
+    <router-link tag='section' class="allinmed-personal-link" to='/contactUs'>
+      <p class='allinmed-personal-des'>
       <span class="icon link"></span>
       <span class="title">联系我们</span>
+      </p>
       <span class="jump"></span>
-    </section>
-    <section class="allinmed-personal-about">
+    </router-link>
+    <a class="allinmed-personal-about"  :href='jumpUrl.aboutAllinmed'>
+      <p class='allinmed-personal-des'>
       <span class="icon about"></span>
       <span class="title">关于唯医互联网骨科医院</span>
+      </p>
       <span class="jump"></span>
-    </section>
+    </a>
   </section>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules.scss";
   .allinmed-personal-linkUs{
     margin:rem(20px) auto;
+
     background: #fff;
     width: rem(606px);
     border-radius: rem(16px);
@@ -23,9 +28,25 @@
     .allinmed-personal-link,.allinmed-personal-about{
       padding: rem(58px) 0 rem(62px) 0;
       height: rem(40px);
+      display: block;
     }
+  .allinmed-personal-link{
+    padding-top: 0;
+  }
     .allinmed-personal-about{
+      padding-bottom: 0;
       border-top: 2px solid #EAEAEA;
     }
   }
 </style>
+<script>
+  import {mapGetters} from "vuex"
+  export default  {
+    computed:{
+      ...mapGetters(['jumpUrl'])
+    },
+    mounted(){
+      console.log(this.jumpUrl)
+    }
+  }
+</script>

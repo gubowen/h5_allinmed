@@ -2,10 +2,19 @@
   <section class="allinmed-mainIndex">
     <userLogo v-show="loginOnOff"></userLogo>
     <noLogin v-show="!loginOnOff"></noLogin>
-    <focusWeixin></focusWeixin>
+    <focusWeixin v-if='!weixinState'></focusWeixin>
     <accountSafe></accountSafe>
     <linkUs></linkUs>
-    <button class="allinmed-personal-logout" v-if="loginOnOff">退出登录</button>
+    <button class="allinmed-personal-logout" v-if="loginOnOff" @click='returnBack'>退出登录</button>
+    <transition name="fade">
+      <confirm
+        :confirmParams="{
+          'ensure':'确定',
+          'cancel':'取消',
+          'title':'确定退出登录吗？'
+          }" v-if="backShow" :showFlag.sync="backShow" @cancelClickEvent="loginBackCancelEvent"
+        @ensureClickEvent="loginEnsureEventWait"></confirm>
+    </transition>
   </section>
 </template>
 <script>
@@ -14,21 +23,42 @@
   import accountSafe from './../components/accountSafe.vue';
   import noLogin from './../components/noLogin.vue';
   import linkUs from './../components/linkUs.vue';
-  import {mapGetters} from "vuex";
+  import confirm from 'components/confirm';
+  import {mapGetters,mapActions} from "vuex";
   export default {
     data () {
       return {
-        msg: 'hello'
+        msg: 'hello',
+        backShow:false
       }
     },
     computed:{
-      ...mapGetters(["loginOnOff"]),
+      ...mapGetters(["loginOnOff",'weixinState']),
     },
     mounted(){
 
     },
+    methods:{
+      ...mapActions(['outLogin']),
+      hideDialog(){
+        this.backShow = false;
+      },
+      loginBackCancelEvent(){
+        let t = this;
+        t.hideDialog();
+      },
+      loginEnsureEventWait(){
+        let t = this;
+        t.hideDialog();
+        t.outLogin();
+      },
+      returnBack(){
+        let t = this;
+        t.backShow = true;
+      }
+    },
     components: {
-      userLogo, focusWeixin, accountSafe, linkUs,noLogin
+      userLogo, focusWeixin, accountSafe, linkUs,noLogin,confirm
     }
   }
 </script>

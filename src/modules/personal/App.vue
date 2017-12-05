@@ -5,19 +5,13 @@
 </template>
 <script>
   import fb from 'common/js/third-party/flexible'
-  import bindAccount from './components/bindAccount.vue'
+
 
   export default {
     data () {
       return {
         msg: 'hello'
       }
-    },
-    mounted(){
-
-    },
-    components: {
-      bindAccount
     }
   }
 </script>
@@ -29,7 +23,13 @@
     background: #eee;
     padding: rem(20px);
     position:relative;
-
+    .allinmed-personal-des{
+      float: left;
+    &> span{
+       display: inline-block;
+       vertical-align: middle;
+     }
+    }
   img {
     width: 100%;
     height: 100%;
@@ -52,18 +52,21 @@
   .icon {
     width: rem(36px);
     height: rem(36px);
-    float: left;
+    display:inline-block;
 
   &.safe {
     background: #fff url("../../../src/common/image/img00/personal/icon_01.png") no-repeat center 50%;
+    background-size: contain;
   }
 
   &.link {
     background: #fff url("../../../src/common/image/img00/personal/icon_03.png") no-repeat center 50%;
+     background-size: contain;
   }
 
   &.about {
     background: #fff url("../../../src/common/image/img00/personal/icon_02.png") no-repeat center 50%;
+    background-size: contain;
   }
 
   }
@@ -74,19 +77,145 @@
     letter-spacing: 0;
     line-height: rem(40px);
     margin-left: rem(16px);
-    float: left;
+    display:inline-block;
     height: 100%;
   }
 
   .jump {
     width: rem(20px);
-    height: rem(36px);
+    height: rem(40px);
     background: url("../../../src/common/image/img00/personal/arrow.png") no-repeat center 50%;
-    background-size: cover;
+    background-size: contain;
     float: right;
+    vertical-align: middle;
+  }
+    .allinmed-personal-tableModule{
+      position: relative;
+      min-height:rem(454px);
+      height:auto;
+    .allinmed-personal-tableModuleItem,.allinmed-changeMobileContent{
+      margin: 0 rem(28px);
+      padding: rem(30px) 0;
+      position:relative;
+      box-sizing: border-box;
+      border-bottom: 2px solid #EAEAEA;
+      height:rem(101px);
+      .icon-searchCancel:before {
+        content: "";
+        width: rem(26px);
+        height: rem(26px);
+        display: inline-block;
+        vertical-align: middle;
+        background: url("../../../src/common/image/img00/personal/icon_searchCancel.png") center center no-repeat;
+        background-size: contain;
+        right: 0;
+        margin-top: rem(14px);
+        margin-right: rem(10px);
+        position: absolute;
+      }
+    h3{
+      float: left;
+      font-size: rem(30px);
+      color: #555;
+      font-weight: 400;
+      display: inline-block;
+      line-height:rem(50px);
+    }
+    .allinmed-tableModuleItemInput{
+      color: #aaa;
+      position: absolute;
+      left: rem(156px);
+      font-size: rem(30px);
+      display: inline-block;
+      width: 75%;
+      .close{
+        background: url('../../../src/common/image/img00/personal/close.png') no-repeat;
+        display: inline-block;
+        width: rem(29px);
+        height: rem(29px);
+        -webkit-background-size: contain;
+        background-size: contain;
+        vertical-align: middle;
+        margin:0 rem(20px) 0 rem(15px);
+        position: absolute;
+        top: 50%;
+        margin-top: rem(-15px);
+      }
+      .eye{
+        display: inline-block;
+        width: rem(38px);
+        vertical-align: middle;
+        margin:0 rem(20px) 0 rem(15px);
+        position: absolute;
+        top: 50%;
+        margin-top: rem(-10px);
+      }
+      .eyeOpen{
+        background: url('../../../src/common/image/img00/personal/eye.png') no-repeat;
+        -webkit-background-size: contain;
+        background-size: contain;
+        height: rem(20px);
+      }
+      .eyeClose{
+        background: url('../../../src/common/image/img00/personal/Eye_Close.png') no-repeat;
+        -webkit-background-size: contain;
+        background-size: contain;
+        height: rem(27px);
+        margin-top: rem(-14px);
+      }
+
+    & > input {
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        font-size: rem(32px);
+        display: inline-block;
+        vertical-align: middle;
+        min-width: rem(100px);
+      }
+    }
+
+    &:nth-last-child(1){
+       border-bottom: none;
+     }
+    }
+    .allinmed-changeMobileContent{
+      min-height:rem(136px);
+      height: auto;
+      color: gray;
+      font-size: rem(30px);
+      line-height: rem(45px);
+      border: none;
+    }
+    .btn-primary-lg {
+      display: block;
+      width: 100%;
+      text-align: center;
+      height: rem(90px);
+      line-height: rem(90px);
+      background-color: #00BEAF;
+      border-radius: rem(10px);
+      color: #fff;
+      font-size: rem(40px);
+    }
+    .allinmed-personal-msgWriting{
+      opacity: .5;
+    }
+    }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
   }
 
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
   }
+  .middle-tip-modal{
+    position: absolute;
+  }
+
 </style>
 
 
