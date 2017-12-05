@@ -27,8 +27,8 @@
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                     :capture="cameraType"
                      @change="onFileChange($event, item, imgIndex)"
+                     :capture="cameraType"
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
@@ -88,13 +88,6 @@
    *
    * Created by qiangkailiang on 2017/8/21.
    */
-let _cameraType = "";
-
-if (navigator.userAgent.toLowerCase().includes("iphone")) {
-  _cameraType = "";
-} else {
-  _cameraType = "camera";
-}  
 import axios from "axios";
 import api from "common/js/util/util";
 import store from "../store/store";
@@ -102,7 +95,13 @@ import confirm from "components/confirm";
 import Loading from "components/loading";
 import Toast from "components/toast";
 import imageCompress from "common/js/imgCompress/toCompress";
+let _cameraType = "";
 
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}
 const XHRList = {
   imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",
   imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",
@@ -205,21 +204,19 @@ export default {
     }
   },
   mounted() {
-    this.initData();
     api.forbidShare();
   },
   activated() {
-    this.initData();
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
     api.forbidShare();
+    setTimeout(() => {
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+        $(".ev-upLoadInput").removeAttr("capture");
+      }
+    }, 500);
   },
   methods: {
-    initData(){
-      if (navigator.userAgent.toLowerCase().includes("iphone")) {
-         $(".ev-upLoadInput").removeAttr("capture")
-      }
-    },
     getUploadList() {
       if (!localStorage.getItem("upload")) {
         localStorage.setItem("upload", JSON.stringify(this.$route.params));
@@ -506,7 +503,8 @@ export default {
         display: inline-block;
         width: rem(28px);
         height: rem(28px);
-        background: url("../../../common/image/img00/doctorHome/upLoadTip.png") no-repeat center;
+        background: url("../../../common/image/img00/doctorHome/upLoadTip.png")
+          no-repeat center;
         background-size: rem(28px) rem(28px);
         top: 50%;
         margin-top: rem(-14px);

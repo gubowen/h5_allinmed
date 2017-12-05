@@ -15,14 +15,14 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,index)" v-show="item.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,index)" v-show="item.finish" :capture="cameraType">
             </figure>
           </li>
           <li class="tc-imageUpLoadAdd" v-show="imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
               <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="!loading&&imageList.length<9"
-                     @change="onFileChange($event)">
+                     @change="onFileChange($event)" :capture="cameraType">
             </a>
           </li>
         </ul>
@@ -129,6 +129,13 @@
    *
    * Created by lichenyang on 2017/8/23.
    */
+  let _cameraType = "";
+
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}
 import api from "common/js/util/util";
 import axios from "axios";
 import Qiniu from "common/js/third-party/qiniu/qiniu";
@@ -168,6 +175,7 @@ export default {
       upLoadPercent: "",
       tip: "上传完成",
       tipShow: false,
+            cameraType: _cameraType,
       uploadVideo: false, //点击提交之后，提交按钮是否可以点击
       errorShow: false, //toast提示框
       errorMsg: "" //toast话术
@@ -707,6 +715,11 @@ export default {
     that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
     that.videoUpload();
     api.forbidShare();
+        setTimeout(() => {
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+        $(".tc-upLoadInput").removeAttr("capture");
+      }
+    }, 500);
   },
   activated() {
     let that = this;
@@ -720,6 +733,11 @@ export default {
     that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
     that.videoUpload();
     // that.reloadUpload();
+        setTimeout(() => {
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+        $(".ev-upLoadInput").removeAttr("capture");
+      }
+    }, 500);
   },
   components: {
     Toast,
