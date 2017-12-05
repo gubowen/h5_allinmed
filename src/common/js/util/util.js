@@ -198,11 +198,12 @@ class Api {
 
 //手机号验证
   mobileCheck() {
-    if(sessionStorage.getItem("isReLoading")&&sessionStorage.getItem("isReLoading")=="1"){
-      return;
-    }else{
-      accountValidate();
-    }
+    accountValidate();
+    // if(sessionStorage.getItem("isReLoading")&&sessionStorage.getItem("isReLoading")=="1"){
+    //   return;
+    // }else{
+    //   accountValidate();
+    // }
   }
 
 //时间处理  2017年05月08日 星期一 14:20 / 2017.05.08 星期一 14:20
