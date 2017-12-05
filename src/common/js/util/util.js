@@ -198,7 +198,7 @@ class Api {
 
 //手机号验证
   mobileCheck() {
-    if(localStorage.getItem("isReLoading")&&localStorage.getItem("isReLoading")=="1"){
+    if(sessionStorage.getItem("isReLoading")&&sessionStorage.getItem("isReLoading")=="1"){
       return;
     }else{
       accountValidate();
