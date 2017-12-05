@@ -25,6 +25,7 @@ class WxCommon {
         _checkKey = false;
         if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
           sessionStorage.removeItem("count");
+          sessionStorage.removeItem("isReLoading");
         }
       }
       return _checkKey;
@@ -109,7 +110,7 @@ class WxCommon {
 
       } else {
         localStorage.setItem("currentUrl", _currentPageUrl);
-        localStorage.setItem("isReLoading","1");
+        sessionStorage.setItem("isReLoading","1");
         window.location.href = _url;
       }
     }
