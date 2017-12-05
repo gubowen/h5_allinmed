@@ -66,6 +66,7 @@ export default {
 .banner {
   padding: rem(32px) 0 rem(140px) 0;
   position: relative;
+  overflow: hidden;
   .banner-slider {
     & > img {
       width: 100%;
