@@ -55,7 +55,7 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  @import "../../../scss/library/_common-modules";
+  @import "../../scss/library/_common-modules";
   .contactMain{
     height: 100%;
     position: relative;
