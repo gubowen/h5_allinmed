@@ -706,9 +706,9 @@ export default {
     // that.imageList = [];
     that.videoObj = {};
     that.videoSubmitParam = {};
-    // if (!sessionStorage.getItem("triageRoute")) {
-    //   sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
-    // }
+    if (!sessionStorage.getItem("triageRoute")) {
+      sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
+    }
 
     that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
     that.videoUpload();
