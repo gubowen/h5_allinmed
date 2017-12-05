@@ -1,29 +1,37 @@
 <template>
-  <section>
+  <section class="mHome">
     <attention></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
       <slider :loop="true" :autoPlay="true" :interval="4000">
         <slot>
-          <div class=""><img src="../../../common/image/img00/index/banner_default.png" height="284" width="640"/></div>
-          <div class=""><img src="../../../common/image/img00/index/banner_default.png" height="284" width="640"/></div>
         </slot>
       </slider>
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
     <figure class="diagnose">
-        <section class="btn-diagnose">点击问诊</section>
+        <section class="btn-diagnose" @click="diagnoseEvent">点击问诊</section>
     </figure>
     <figure class="history">
-      <header><h3>问诊历史</h3><p class="btn-more">更多></p></header>
-      <section class="content">
+      <header><h3>问诊历史</h3><p class="btn-more" @click="moreEvent">更多></p></header>
+      <!--未登录-->
+      <section class="content" v-if="!loginFlag">
             <section class="login">
               <p>您还没有登录</p>
-              <div class="btn-login">点击登录</div>
+              <div class="btn-login" @click="loginEvent">点击登录</div>
             </section>
       </section>
-      <section class="history-info">
+      <!--已登录-->
+      <!--无问诊历史-->
+      <section class="content" v-if="loginFlag&&diagnoseList.length==0">
+        <section class="login">
+          <p>您还没有问诊记录</p>
+          <div class="btn-login">点击看病</div>
+        </section>
+      </section>
+      <!--有问诊历史-->
+      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0">
             <div class="doctor">
               <div class="doctor-img"></div>
               <div class="doctor-info">
@@ -46,10 +54,21 @@
   import attention from './attention'
   import slider from './slider'
   import tabbar from 'components/tabbar'
+  import api from 'common/js/util/util';
+  let XHRList = {
+      //登录页
+      loginUrl:'',
+      //问诊
+      diagnose:'',
+      //问诊历史
+      historyUrl:'/dist/consult.html?customerId=' + api.getPara().customerId,
+  };
   export default{
     data(){
         return {
-
+          loginFlag:true,
+          wxLoginFlag:false,
+          diagnoseList:[]
         }
     },
     components: {
@@ -57,12 +76,55 @@
       slider,
       tabbar
     },
-    methods: {},
-    mounted(){}
+    methods: {
+      init(){
+
+        this.diagnoseList = [1,2];
+      },
+      //问诊
+      diagnoseEvent(){
+          if(this.loginJudge()){
+              window.location.href=XHRList.diagnose;
+          }else{
+              //跳到登录注册页.
+            window.location.href=XHRList.loginUrl;
+          }
+      },
+      //更多
+      moreEvent(){
+        if(this.loginJudge()){
+          window.location.href=XHRList.historyUrl;
+        }else{
+          //跳到登录注册页.
+          window.location.href=XHRList.loginUrl;
+        }
+      },
+      //登录
+      loginEvent(){
+
+      },
+      //登录判断
+      loginJudge(){
+        if(this.loginFlag){
+          //已登录
+          console.log("已登录");
+        }else{
+          //未登录
+          console.log("未登录");
+          return false ;
+        }
+      }
+    },
+    mounted(){
+        this.init();
+    }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
+  .mHome{
+    padding:0 0 rem(100px) 0;
+  }
   .banner{
     padding:rem(32px) 0 rem(140px) 0;
     position: relative;
@@ -79,6 +141,7 @@
     height:rem(280px);
     margin-bottom:rem(84px);
     background:url("../../../common/image/img00/index/button_bg.png") no-repeat;
+    background-size: contain;
     padding-top: 86px;
     .btn-diagnose{
       width:rem(474px);
@@ -121,6 +184,7 @@
       height:rem(304px);
       box-sizing: border-box;
       position: relative;
+      background-size: contain;
       .login{
         position: absolute;
         top:rem(86px);
@@ -163,7 +227,7 @@
           height:rem(80px);
           border-radius: 50%;
           background: #000 url("../../../common/image/img00/index/personal_default.png") 100% 100% no-repeat;
-          background-size: 100% 100%;
+          background-size: contain;
           margin-right:rem(20px);
         }
         .doctor-info{

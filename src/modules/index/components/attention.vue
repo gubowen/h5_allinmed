@@ -49,11 +49,13 @@ export default{
   padding:rem(20px) rem(40px);
   box-sizing: border-box;
   position: relative;
+  background-size: contain;
   .btn-close{
       width:rem(28px);
       height:rem(28px);
       background:url("../../../common/image/img00/index/close.png") 100% 100% no-repeat ;
       margin:rem(28px) 0 0 0;
+      background-size: contain;
   }
   .btn-attention{
     @include font-dpr(16px);

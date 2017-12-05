@@ -14,6 +14,8 @@ import fastclick from 'fastclick';
 import "static/css/base.css";
 
 
+
+
 import store from "./store/store";
 import "babel-polyfill";
 fastclick.attach(document.body);
