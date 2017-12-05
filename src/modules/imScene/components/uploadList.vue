@@ -131,6 +131,15 @@ export default {
       deletePicTip: false //删除图片弹层
     };
   },
+  watch:{
+    "loading"(){
+      setTimeout(()=>{
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+        }
+      },1000)
+    }
+  },
   computed: {
     //计算提交按钮是否可以点击
     submitFlag() {

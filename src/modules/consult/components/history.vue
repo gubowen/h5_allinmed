@@ -270,6 +270,40 @@ export default {
       }
     };
   },
+  watch:{
+    "uploading1"(){
+      setTimeout(()=>{
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+        }
+      },1000)
+
+    },
+    "uploading2"(){
+      setTimeout(()=>{
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+        }
+      },1000)
+
+    },
+    "imageList1"(){
+      setTimeout(()=>{
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+        }
+      },1000)
+
+    },
+    "imageList2"(){
+      setTimeout(()=>{
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
+          $(".ev-upLoadInput").removeAttr("capture")
+        }
+      },1000)
+
+    }
+  },
   activated() {
     this.finish = false;
     this.initData();
