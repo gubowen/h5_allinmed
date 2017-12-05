@@ -196,6 +196,9 @@ export default {
             };
           }
           that.videoLeaveConfirm = true;
+          if (that.pageLeaveEnsure) {
+            that.videoLeaveConfirm = false;
+          }
           //        that.pageLeaveEnsure =false;
           next(that.pageLeaveEnsure);
         } else {
@@ -221,6 +224,10 @@ export default {
           that.imgLeaveConfirm = true;
           //        that.pageLeaveEnsure =false;
           next(that.pageLeaveEnsure);
+          if (that.pageLeaveEnsure) {
+            that.imageList = [];
+            that.imgLeaveConfirm = false;
+          }
         } else {
           next(true);
         }
