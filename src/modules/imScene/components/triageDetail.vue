@@ -6,7 +6,7 @@
         <p class="he-loadTitle" :class="{'upLoadPicHasTip':baseMessage.type==2}">{{baseMessage.content}}</p>
         <ul class="he-loadFiles he-videoImageBox docInt" v-if="baseMessage.type==2">
           <li class="tc-imageItemList ev-imgList success" v-for="(item,index) in imageList" v-if="imageList.length>0">
-            <img :src="item.blob" @click="showBigImg(item,index)" alt="">
+            <img :src="item.blob"  alt="">
             <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)" v-show="item.finish&&!item.fail"></span>
             <div v-if="item.uploading">
               <span class="tc-upLoadCover"></span>
@@ -196,9 +196,9 @@ export default {
             };
           }
           that.videoLeaveConfirm = true;
-          if (that.pageLeaveEnsure) {
-            that.videoLeaveConfirm = false;
-          }
+          // if (that.pageLeaveEnsure) {
+          //   that.videoLeaveConfirm = false;
+          // }
           //        that.pageLeaveEnsure =false;
           next(that.pageLeaveEnsure);
         } else {
@@ -224,10 +224,10 @@ export default {
           that.imgLeaveConfirm = true;
           //        that.pageLeaveEnsure =false;
           next(that.pageLeaveEnsure);
-          if (that.pageLeaveEnsure) {
-            that.imageList = [];
-            that.imgLeaveConfirm = false;
-          }
+          // if (that.pageLeaveEnsure) {
+          //   that.imageList = [];
+          //   that.imgLeaveConfirm = false;
+          // }
         } else {
           next(true);
         }
