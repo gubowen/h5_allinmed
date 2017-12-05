@@ -9,8 +9,10 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                 :capture="cameraType"
-                 @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0&&!loading">
+                 @change="onFileChange($event, item)" v-if="isIos&&imageList[item.adviceId].length===0&&!loading">
+           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
+                 capture="camera"
+                 @change="onFileChange($event, item)" v-if="!isIos&&imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -28,7 +30,13 @@
               <p>重新上传</p>
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple
                      @change="onFileChange($event, item, imgIndex)"
-                     :capture="cameraType"
+                  
+                     v-if="isIos"
+                     v-show="imageList[item.adviceId].length>0 && img.finish">
+             <input class="ev-upLoadInput" accept="image/*" type="file" multiple
+                     @change="onFileChange($event, item, imgIndex)"
+                     capture="camera"
+                     v-if="!isIos"
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
@@ -39,8 +47,14 @@
                        accept="image/*"
                        type="file"
                        multiple
-                       :capture="cameraType"
-                       v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
+                       v-if="isIos&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
+                       @change="onFileChange($event, item)"/>
+                       <input class="ev-upLoadInput"
+                       accept="image/*"
+                       type="file"
+                       multiple
+                       capture="camera"
+                       v-if="!isIos&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
               </span>
             </a>
@@ -114,6 +128,7 @@ export default {
   data() {
     return {
       cameraType:_cameraType,
+      isIos:navigator.userAgent.toLowerCase().includes("iphone"),
       leaveConfirm: false,
       leaveConfirmParams: {}, //离开confirm的参数
       pageLeaveEnsure: false, //是否离开页面
@@ -131,15 +146,7 @@ export default {
       deletePicTip: false //删除图片弹层
     };
   },
-  watch:{
-    "loading"(){
-      setTimeout(()=>{
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture")
-        }
-      },1000)
-    }
-  },
+
   computed: {
     //计算提交按钮是否可以点击
     submitFlag() {
