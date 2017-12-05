@@ -1,9 +1,6 @@
 const mutaions = {
-    pushInfo(state,data){
-        /*state.courseInfo = data;
-
-       // console.log("mutaions",data);
-       // return state.courseInfo*/
+  changeLoginOnOff(state,data){
+      state.loginOnOff = false;
     }
 };
 export default mutaions;

@@ -1,14 +1,7 @@
 
 const  actions = {
-    getCourseInfo:({commit,state})=>{
-
-    },
-    getCatalog:({commit,state})=>{
-
-    },
-    getRelated:({commit,state})=>{
-
-
-    }
+  outLogin:({commit,state})=>{
+    commit("changeLoginOnOff");
+  }
 };
 export  default  actions;

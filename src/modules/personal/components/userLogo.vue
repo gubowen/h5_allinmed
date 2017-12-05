@@ -1,9 +1,9 @@
 <template>
-  <section class="allinmed-personal-logo">
+  <section class="allinmed-personal-logo" v-cloak>
     <figure class="allinmed-personal-userLogo">
-      <img src="http://d.hiphotos.baidu.com/image/pic/item/00e93901213fb80e18b8444b3dd12f2eb83894c4.jpg" alt="">
+      <img :src="logUrl" alt="">
     </figure>
-    <article class="allinmed-personal-userName">zym12345</article>
+    <article class="allinmed-personal-userName">{{customerName}}</article>
   </section>
 
 </template>
@@ -37,3 +37,14 @@
     }
   }
 </style>
+<script  type="text/ecmascript-6">
+  import {mapGetters} from "vuex"
+  export default  {
+    computed:{
+      ...mapGetters(['customerName','logUrl'])
+    },
+    mounted(){
+      console.log(this.customerName)
+    }
+  }
+</script>
