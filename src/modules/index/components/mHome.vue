@@ -1,12 +1,16 @@
 <template>
-  <section class="mHome">
+  <section>
     <attention></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
       <slider :loop="true" :autoPlay="true" :interval="4000">
-        <slot>
-        </slot>
+          <div class="banner-slider">
+            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
+            </div>
+          <div class="banner-slider">
+            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
+          </div>
       </slider>
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
@@ -46,7 +50,7 @@
             </div>
       </section>
     </figure>
-    <tabbar :selected=1></tabbar>
+    <tabbar :selected="1"></tabbar>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -128,6 +132,12 @@
   .banner{
     padding:rem(32px) 0 rem(140px) 0;
     position: relative;
+    .banner-slider {
+      & > img {
+        width: 100%;
+        vertical-align: top;
+      }
+    }
   }
   .advertising{
     @include font-dpr(24px);
