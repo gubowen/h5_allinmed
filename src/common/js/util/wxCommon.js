@@ -99,10 +99,10 @@ class WxCommon {
           sessionStorage.setItem("count", 1);
           if (localStorage.getItem("currentUrl") && localStorage.getItem("currentUrl").indexOf("?") != -1) {
             window.location.href = localStorage.getItem("currentUrl") + "&openId=" + net.getPara().openId;
-            localStorage.removeItem("isReLoading");
+            // localStorage.removeItem("isReLoading");
           } else {
             window.location.href = localStorage.getItem("currentUrl") + "?openId=" + net.getPara().openId;
-            localStorage.removeItem("isReLoading");
+            // localStorage.removeItem("isReLoading");
           }
           localStorage.setItem("openId", net.getPara().openId);
         }
