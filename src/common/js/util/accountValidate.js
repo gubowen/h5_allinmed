@@ -51,6 +51,15 @@ export default function accountValidate() {
             window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
           }
         }
+      }else{
+        //未绑定手机号
+        if(sessionStorage.getItem("isReLoading")&&sessionStorage.getItem("isReLoading")=="1"){
+          return;
+        }else{
+          // accountValidate();
+          sessionStorage.setItem("loginBack", window.location.href);
+          window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+        }
       }
     }
   });
