@@ -1470,11 +1470,22 @@ export default {
   beforeUpdate() {},
   //组件更新之后的生命钩子
   updated() {},
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'showBigImg') {
+      console.log($(".main-message").scrollTop());
+      sessionStorage.setItem('imagePosition',$(".main-message").scrollTop());
+    }
+    next(true);
+  },
   activated() {
     let that = this;
-    document.body.scrollTop = 1;
+    // document.body.scrollTop = 1;
     api.forbidShare();
-    that.refreshScroll();
+    // that.refreshScroll();
+    if (sessionStorage.getItem('imagePosition')) {
+      $(".main-message").scrollTop(sessionStorage.getItem('imagePosition'));
+      sessionStorage.removeItem('imagePosition');
+    }
     if (that.$route.query.queryType === "triage") {
       that.nim.sendCustomMsg({
         scene: "p2p",

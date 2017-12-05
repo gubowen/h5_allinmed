@@ -1462,8 +1462,19 @@ export default {
       localStorage.setItem("PCIMLinks", location.href);
     }
   },
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'showBigImg') {
+      console.log($(".main-message").scrollTop());
+      sessionStorage.setItem('imagePosition',$(".main-message").scrollTop());
+    }
+    next(true);
+  },
   activated() {
-    this.scrollToBottom();
+    // this.scrollToBottom();
+    if (sessionStorage.getItem('imagePosition')) {
+      $(".main-message").scrollTop(sessionStorage.getItem('imagePosition'));
+      sessionStorage.removeItem('imagePosition');
+    }
   },
   watch: {
     msgList: {
