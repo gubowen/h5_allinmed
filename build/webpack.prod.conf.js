@@ -124,7 +124,9 @@ let pages = ((globalPath)=>{
 for (let entryName in pages) {
   let conf = {
     // 生成出来的html文件名
-    filename: entryName + '.html',
+    //Fixed by qiangkailiang on 20171204
+    //若输出为首页，则输出至根目录下index.html
+    filename: (entryName==="index"?"../"+entryName + '.html':entryName + '.html'),
     // 每个html的模版，这里多个页面使用同一个模版
     template: pages[entryName]['path'],
     // 自动将引用插入html
