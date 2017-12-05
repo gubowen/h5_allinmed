@@ -9,6 +9,7 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
+          :capture="cameraType"
                  @change="onFileChange($event, item)" v-if="imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
@@ -27,6 +28,7 @@
               <p>重新上传</p>
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple
                      @change="onFileChange($event, item, imgIndex)"
+                     :capture="cameraType"
                      v-show="imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
@@ -38,6 +40,7 @@
                        type="file"
                        multiple
                        v-if="imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
+                       :capture="cameraType"
                        @change="onFileChange($event, item)"/>
               </span>
             </a>
@@ -92,7 +95,13 @@ import confirm from "components/confirm";
 import Loading from "components/loading";
 import Toast from "components/toast";
 import imageCompress from "common/js/imgCompress/toCompress";
+let _cameraType = "";
 
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}
 const XHRList = {
   imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",
   imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",
@@ -118,7 +127,8 @@ export default {
       errorMsg: "",
       loading: false, //是否正在上传
       deletePic: {},
-      deletePicTip: false //删除图片弹层
+      deletePicTip: false, //删除图片弹层
+      cameraType: _cameraType
     };
   },
   computed: {
@@ -199,7 +209,13 @@ export default {
   activated() {
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
+    console.log("fuck");
     api.forbidShare();
+    setTimeout(() => {
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+        $(".ev-upLoadInput").removeAttr("capture");
+      }
+    }, 500);
   },
   methods: {
     getUploadList() {
@@ -488,7 +504,8 @@ export default {
         display: inline-block;
         width: rem(28px);
         height: rem(28px);
-        background: url("../../../common/image/img00/doctorHome/upLoadTip.png") no-repeat center;
+        background: url("../../../common/image/img00/doctorHome/upLoadTip.png")
+          no-repeat center;
         background-size: rem(28px) rem(28px);
         top: 50%;
         margin-top: rem(-14px);

@@ -332,9 +332,9 @@ export default {
       if (this.$route.params.from === "hospital") {
         this.hospitalMessage = this.$route.params.baseMessage;
       }
-
+      // alert(navigator.userAgent.toLowerCase())
       if (navigator.userAgent.toLowerCase().includes("iphone")) {
-$(".ev-upLoadInput").removeAttr("capture")
+        $(".ev-upLoadInput").removeAttr("capture")
       }
     },
     selectHospital() {
