@@ -10,7 +10,7 @@
         <a @click="hrefToConsult()">去问诊&gt;</a>
       </section>
     </template>
-    <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem" style="background:#eeeeee;border-top: 1px solid transparent;" v-else>
+    <div class="orderHistoryBox" data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem" v-else>
       <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items"
                v-if="item.patientId&&item.patientId.length>0">
         <article class="orderHisItemTop">
@@ -76,10 +76,10 @@
       }
     },
     mounted(){
-      api.mobileCheck();
-      if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);    //获取openId
-      }
+//      api.mobileCheck();
+//      if (!api.checkOpenId()) {
+//        api.wxGetOpenId(1);    //获取openId
+//      }
       api.forbidShare();
       this.getOrderHistoryLists();
     },
@@ -410,9 +410,12 @@
   //咨询历史
   .orderList {
     box-sizing: border-box;
-    background: #ffffff url("../../../common/image/background_wave.png") no-repeat bottom center;
-    background-size: 100% rem(272px);
     min-height: 100%;
+    .orderHistoryBox{
+      background:#eeeeee;
+      border-top: 1px solid transparent;
+      padding-bottom:rem(110px);
+    }
     .orderHistoryItem {
       margin: rem(20px) rem(20px) 0;
       background: #ffffff;

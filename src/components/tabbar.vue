@@ -9,7 +9,7 @@
     <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(2)">
       <dl class="tabbar-item" :class="{'selected':selected == 2}">
           <dt class="tabbar-icon history"></dt>
-          <dd class="tabbar-des">问诊历史</dd>
+          <dd class="tabbar-des">{{selected == 2?'去问诊':'问诊历史'}}</dd>
       </dl>
     </a>
     <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(3)">
@@ -45,11 +45,15 @@
       initData () {
         let userId = api.getPara().customerId || api.getPara().patientCustomerId;
         this.homeUrl = `./consult.html?customerId=${userId}`;
-        this.historyUrl = `./myConsult.html?customerId=${userId}`;
+        if(this.selected == 2){
+          this.historyUrl = `./consult.html?customerId=${userId}`;
+        }else{
+          this.historyUrl = `./myConsult.html?customerId=${userId}`;
+        }
         this.myUrl = `./consult.html?customerId=${userId}`;
       },
       toUrl (num) {
-        if (this.selected == num) return false; 
+//        if (this.selected == num) return false;
         switch(num) {
           case 1:
             location.href = this.homeUrl;
@@ -97,15 +101,15 @@
           &.home{
             background: url("../common/image/img00/commonImage/home_default.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
+          }
           &.history{
             background: url("../common/image/img00/commonImage/inquiry_default.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
+          }
           &.my{
             background: url("../common/image/img00/commonImage/personal_default.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
+          }
         }
         &.selected {
           color: #09C395;
@@ -113,17 +117,17 @@
             &.home{
             background: url("../common/image/img00/commonImage/home_press.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
+          }
           &.history{
             background: url("../common/image/img00/commonImage/inquiry_press.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
+          }
           &.my{
             background: url("../common/image/img00/commonImage/personal_press.png") no-repeat center bottom;
             background-size:rem(44px) rem(44px);
-          } 
           }
-        }  
+          }
+        }
       }
     }
   }
