@@ -215,6 +215,9 @@
   .middle-tip-modal{
     position: absolute;
   }
+  [v-cloak]{
+    display: none;
+  }
 
 </style>
 

@@ -1,5 +1,5 @@
 <template>
-  <section class="allinmed-personal-logo">
+  <section class="allinmed-personal-logo" v-cloak>
     <figure class="allinmed-personal-userLogo">
       <img :src="logUrl" alt="">
     </figure>

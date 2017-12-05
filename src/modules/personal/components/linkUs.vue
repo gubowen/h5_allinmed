@@ -7,13 +7,13 @@
       </p>
       <span class="jump"></span>
     </router-link>
-    <a class="allinmed-personal-about"  :href='jumpUrl.aboutAllinmed'>
+    <router-link tag='section' class="allinmed-personal-about"  to='/aboutAllinmed'>
       <p class='allinmed-personal-des'>
       <span class="icon about"></span>
       <span class="title">关于唯医互联网骨科医院</span>
       </p>
       <span class="jump"></span>
-    </a>
+    </router-link>
   </section>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">
@@ -39,14 +39,3 @@
     }
   }
 </style>
-<script>
-  import {mapGetters} from "vuex"
-  export default  {
-    computed:{
-      ...mapGetters(['jumpUrl'])
-    },
-    mounted(){
-      console.log(this.jumpUrl)
-    }
-  }
-</script>

@@ -5,7 +5,7 @@
         <span class="title">微信</span>
         <span class="operate">
           <em v-if="weixinName.length>0">{{weixinName}}</em>
-          <a class="bind ev-bind-weixin" :href='jumpUrl.focusWexin'  v-if="weixinName.length===0">去绑定</a>
+          <router-link tag='a' class="bind ev-bind-weixin" to='/followWechat'  v-if="weixinName.length===0">去绑定</router-link>
           <i class="jump"></i>
         </span>
       </section>
@@ -114,7 +114,7 @@
   import {mapGetters} from "vuex"
   export default  {
     computed:{
-      ...mapGetters(['jumpUrl','weixinName','customerPhoneNum'])
+      ...mapGetters(['weixinName','customerPhoneNum'])
     },
     mounted(){
       console.log(this.jumpUrl)

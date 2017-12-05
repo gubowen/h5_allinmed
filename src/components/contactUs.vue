@@ -54,17 +54,17 @@
   }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
   .contactMain{
     height: 100%;
     position: relative;
-    background:url("../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
+    background:url("../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
     background-size:100% rem(272px);
     .con_topBanner{
       width: 100%;
       height: rem(320px);
-      background: url("../../common/image/img00/contactUs/background.png") no-repeat center;
+      background: url("../common/image/img00/contactUs/background.png") no-repeat center;
       background-size: 100% 100%;
     }
     .con_center{
@@ -142,7 +142,7 @@
             width: rem(76px);
             height: rem(76px);
             vertical-align: bottom;
-            background: url("../../common/image/img00/contactUs/call.png") no-repeat center;
+            background: url("../common/image/img00/contactUs/call.png") no-repeat center;
             background-size: 100% 100%;
           }
         }
