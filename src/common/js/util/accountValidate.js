@@ -27,7 +27,7 @@ export default function accountValidate() {
   }
 
   ajax({
-    url: "/mcall/patient/customer/unite/v1/getById/",
+    url: "/mcall/patient/customer/unite/v1/getMapById/",
     method: 'POST',
     data: _phoneCheckParams,
     beforeSend: function () {
@@ -36,7 +36,7 @@ export default function accountValidate() {
     done(data) {
       localStorage.setItem("customerBaseInfo_one", JSON.stringify(data));
       if (data && data.responseObject && data.responseObject.responseData && data.responseObject.responseData.dataList) {
-        let _mobile = data.responseObject.responseData.dataList.patientCustomerUnite.mobile;
+        let _mobile = data.responseObject.responseData.dataList[0].mobile;
         if (_mobile && _mobile.length > 0) {
           //已绑定手机号
           return true;
