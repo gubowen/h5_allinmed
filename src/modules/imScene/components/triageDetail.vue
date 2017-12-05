@@ -712,7 +712,7 @@ export default {
 
     that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
     that.videoUpload();
-    that.reloadUpload();
+    // that.reloadUpload();
   },
   components: {
     Toast,
