@@ -1,10 +1,10 @@
 <template>
-  <section>
+  <section class="mHome">
     <attention></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
-      <slider :loop="true" :autoPlay="true" :interval="4000">
+      <slider :loop="true" :autoPlay="true" :interval="5000">
           <div class="banner-slider">
             <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
             </div>
@@ -31,22 +31,21 @@
       <section class="content" v-if="loginFlag&&diagnoseList.length==0">
         <section class="login">
           <p>您还没有问诊记录</p>
-          <div class="btn-login">点击看病</div>
+          <div class="btn-login" @click="diagnoseEvent">点击看病</div>
         </section>
       </section>
       <!--有问诊历史-->
-      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0">
+      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList">
             <div class="doctor">
-              <div class="doctor-img"></div>
+              <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
               <div class="doctor-info">
-                <p class="doctor-type">测试医生|住院医生</p>
-                <p class="doctor-time">图文问诊 12-06 11:24</p>
+                <p class="doctor-type"><span class="name">{{item.consultationType == 0 ? '唯医门诊医生' : getFullName(item)}}</span><span class="career">{{item.medicalTitle}}</span></p>
+                <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime|formatTime}}</span></p>
               </div>
-              <div class="doctor-status">已结束</div>
             </div>
             <div class="patient">
-              <div class="patient-info"><p class="title">患者</p><p>张国良</p></div>
-              <div class="patient-info"><p class="title">主诉</p><p>左大腿扭伤、拉伤，3个月，疼…</p></div>
+              <div class="patient-info"><p class="title">患者</p><p class="detail">{{item.patientName && item.patientName.length > 5 ? item.patientName.substring(0, 5) + "..." : item.patientName}}</p></div>
+              <div class="patient-info"><p class="title">主诉</p><p class="detail">{{item.mainContent.caseMain}}</p></div>
             </div>
       </section>
     </figure>
@@ -59,6 +58,9 @@
   import slider from './slider'
   import tabbar from 'components/tabbar'
   import api from 'common/js/util/util';
+  import Vue from 'vue';
+
+
   let XHRList = {
       //登录页
       loginUrl:'',
@@ -66,11 +68,13 @@
       diagnose:'',
       //问诊历史
       historyUrl:'/dist/consult.html?customerId=' + api.getPara().customerId,
+      getOrderHistoryLists: '/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
   };
+
   export default{
     data(){
         return {
-          loginFlag:true,
+          loginFlag:false,
           wxLoginFlag:false,
           diagnoseList:[]
         }
@@ -82,8 +86,85 @@
     },
     methods: {
       init(){
-
-        this.diagnoseList = [1,2];
+        this.loginFlag = true;
+        this.getOrderHistoryLists();
+//        let obj = {
+//            img:'../../../common/image/img00/index/personal_default.png',
+//            name:'测试医生',
+//            career:'住院医生',
+//            diagnoseType:'图文问诊',
+//            createTime:'2006-07-02 08:09:04',
+//            patientName:'张国良',
+//            main:'左大腿扭伤、拉伤，3个月，疼啊啊啊啊啊啊啊啊啊啊啊啊'
+//        };
+//        this.diagnoseList.push(obj);
+      },
+      getOrderHistoryLists(){
+        const that = this;
+        api.ajax({
+          url: XHRList.getOrderHistoryLists,
+          method: "post",
+          data: {
+            patientCustomerId: api.getPara().customerId,
+            isValid: 1,
+            firstResult: 0,
+            maxResult: 1,
+            logoUseFlag: 3
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          timeout: 30000,
+          done(response){
+            if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
+              Vue.set(that.diagnoseList,0,response.responseObject.responseData.dataList[0])
+            }
+          }
+        })
+      },
+      getImgUrl(opt){
+        let logoImg = '';
+        //分诊医生
+        if (opt.consultationType == 0) {
+          //判断头像
+          if (opt.logoUrl) {
+            logoImg = opt.logoUrl;
+          } else {
+            logoImg = "/image/img00/myServices/doctor_portrait.png";
+          }
+        } else {
+          //判断头像
+          if (opt.logoUrl) {
+            logoImg = opt.logoUrl;
+          } else {
+            logoImg = "/image/img00/doctorMain/doc_logo.png";
+          }
+        }
+        return logoImg;
+      },
+      getFullName(opt){
+        if (opt.fullName.length > 6) {
+          return opt.fullName.substring(0, 6) + "..."
+        } else {
+          return opt.fullName;
+        }
+      },
+      getInquiryType(opt){
+        //判断问诊类型
+        let consultationLevel = '';
+        if (opt.consultationType == 1) {
+          switch (Number(opt.consultationLevel)) {
+            case 0:
+            case 1:
+              consultationLevel = "图文问诊";
+              break;
+            case 3:
+              consultationLevel = "特需问诊";
+              break;
+          }
+          ;
+        }
+        return consultationLevel;
       },
       //问诊
       diagnoseEvent(){
@@ -130,7 +211,7 @@
     padding:0 0 rem(100px) 0;
   }
   .banner{
-    padding:rem(32px) 0 rem(140px) 0;
+    padding:0 0 rem(140px) 0;
     position: relative;
     .banner-slider {
       & > img {
@@ -227,7 +308,7 @@
       box-shadow: 0 0 4px 0 rgba(0,0,0,0.06);
       border-radius: 8px;
       margin:0 rem(25px) rem(50px);
-      padding:rem(40px) rem(26px);
+      padding:rem(34px) rem(26px);
       .doctor{
         padding-bottom:rem(36px);
         border-bottom:rem(2px) solid #F1F1F1;
@@ -236,40 +317,61 @@
           width: rem(80px);
           height:rem(80px);
           border-radius: 50%;
-          background: #000 url("../../../common/image/img00/index/personal_default.png") 100% 100% no-repeat;
-          background-size: contain;
           margin-right:rem(20px);
+          overflow: hidden;
+          &>img{
+            display: block;
+            width:100%;
+            height:100%;
+            background-size: contain;
+          }
         }
         .doctor-info{
           display: inline-block;
+          margin-top:rem(6px);
           .doctor-type{
-            @include font-dpr(15px);
+            @include font-dpr(12px);
             font-size: 15px;
             color: #333333;
             letter-spacing: 0;
-            line-height: rem(32px);
+            line-height: rem(30px);
             margin-bottom:rem(8px);
+            .name{
+              @include font-dpr(15px);
+              margin-right:rem(14px);
+              vertical-align: bottom;
+            }
+            .career{
+              @include font-dpr(15px);
+              margin-left:rem(14px);
+              vertical-align: bottom;
+            }
           }
           .doctor-time{
             @include font-dpr(14px);
             color: #808080;
             letter-spacing: 0;
             line-height: rem(30px);
+            .diagnoseType{
+              margin-right:rem(16px);
+            }
+            .createTime{
+
+            }
           }
         }
         .doctor-status{
+          @include font-dpr(14px);
           height:rem(56px);
           width:rem(114px);
           float: right;
           opacity: 0.49;
           background: #E5E5E5;
           border-radius: rem(8px);
-          @include font-dpr(14px);
           color: #808080;
           letter-spacing: 0;
-          line-height: rem(28px);
-          padding:rem(14px) rem(8px);
-          margin-top:rem(4px);
+          line-height: rem(56px);
+          margin-top:rem(14px);
           text-align: center;
           box-sizing: border-box;
         }
@@ -285,22 +387,28 @@
             @include font-dpr(17px);
             color: #333333;
             letter-spacing: 0;
-            line-height: rem(36px);
             display: inline-block;
             font-weight: 600;
           }
           .title{
             font-weight:normal;
-            @include font-dpr(17px);
             display: inline-block;
             color: #555555;
             letter-spacing: 0;
-            line-height: rem(32px);
-            margin-right: rem(30px);
+            width:rem(100px)
+          }
+          .detail{
+            vertical-align: bottom;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            padding-left:rem(100px);
+            margin-left:rem(-100px);
+            box-sizing: border-box;
           }
         }
       }
     }
   }
-
 </style>

@@ -76,10 +76,10 @@
       }
     },
     mounted(){
-//      api.mobileCheck();
-//      if (!api.checkOpenId()) {
-//        api.wxGetOpenId(1);    //获取openId
-//      }
+      api.mobileCheck();
+      if (!api.checkOpenId()) {
+        api.wxGetOpenId(1);    //获取openId
+      }
       api.forbidShare();
       this.getOrderHistoryLists();
     },
@@ -93,7 +93,7 @@
             patientCustomerId: api.getPara().customerId,
             isValid: 1,
             firstResult: 0,
-            maxResult: 20,
+            maxResult: 9999,
             logoUseFlag: 3
           },
           headers: {
