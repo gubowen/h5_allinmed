@@ -32,15 +32,15 @@
                      @change="onFileChange($event, item, imgIndex)"
                   
                      v-if="isIos"
-                     v-show="imageList[item.adviceId].length>0 && img.finish">
+                     v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
              <input class="ev-upLoadInput" accept="image/*" type="file" multiple
                      @change="onFileChange($event, item, imgIndex)"
                      capture="camera"
                      v-if="!isIos"
-                     v-show="imageList[item.adviceId].length>0 && img.finish">
+                     v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
-          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
+          <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput"
@@ -234,6 +234,7 @@ export default {
         localStorage.setItem("upload", JSON.stringify(this.$route.params));
       }
       this.uploadList = JSON.parse(localStorage.getItem("upload"));
+
       this.uploadList.forEach((element, index) => {
         this.$set(this.imageList, element.adviceId, []);
       });

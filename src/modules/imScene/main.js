@@ -102,14 +102,14 @@ class ImScene {
       path: "/UploadList",
       name: "UploadList",
       meta: {
-        keepAlive: false
+        keepAlive: true
       },
       component: UploadList
     }, {
       path: "/TriageDetail",
       name: "TriageDetail",
       meta: {
-        keepAlive: true,
+        keepAlive: false,
       },
       component: TriageDetail
     }, {
