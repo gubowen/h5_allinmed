@@ -6,7 +6,7 @@
         <p class="he-loadTitle" :class="{'upLoadPicHasTip':baseMessage.type==2}">{{baseMessage.content}}</p>
         <ul class="he-loadFiles he-videoImageBox docInt" v-if="baseMessage.type==2">
           <li class="tc-imageItemList ev-imgList success" v-for="(item,index) in imageList" v-if="imageList.length>0">
-            <img :src="item.blob" alt="">
+            <img :src="item.blob" @click="showBigImg(item,index)" alt="">
             <span class="tc-upLoadDel" @click="imgDelete(item, index, item.imgId)"
                   v-show="item.finish&&!item.fail"></span>
             <div v-if="item.uploading">
@@ -188,6 +188,7 @@
         tipShow: false,
         cameraType: _cameraType,
         uploadVideo: false, //点击提交之后，提交按钮是否可以点击
+        uploader:{},//七牛初始化的对象
         errorShow: false, //toast提示框
         errorMsg: "" //toast话术
       };
@@ -200,6 +201,7 @@
         if (that.baseMessage.type == 1) {
           if (that.videoObj.size || that.videoUploading) {
             if (that.videoUploading) {
+              that.uploader.stop();//七牛上传暂停；
               that.videoLeaveConfirmParams = {
                 ensure: "离开",
                 cancel: "取消",
@@ -215,9 +217,10 @@
               };
             }
             that.videoLeaveConfirm = true;
-            // if (that.pageLeaveEnsure) {
-            //   that.videoLeaveConfirm = false;
-            // }
+            if (that.pageLeaveEnsure) {
+              that.videoLeaveConfirm = false;
+              that.videoUploading = false;
+            }
             next(that.pageLeaveEnsure);
           } else {
             next(true);
@@ -240,10 +243,10 @@
               };
             }
             that.imgLeaveConfirm = true;
-            // if (that.pageLeaveEnsure) {
-            //   that.imageList = [];
-            //   that.imgLeaveConfirm = false;
-            // }
+            if (that.pageLeaveEnsure) {
+              that.imageList = [];
+              that.imgLeaveConfirm = false;
+            }
             next(that.pageLeaveEnsure);
           } else {
             next(true);
@@ -443,7 +446,7 @@
       videoUpload() {
         const that = this;
 
-        let uploader = Qiniu.uploader({
+        that.uploader = Qiniu.uploader({
           runtimes: "html5,flash,html4", // 上传模式，依次退化
           browse_button: "uploadBtn", // 上传选择的点选按钮，必需
           multi_selection: false,
@@ -488,7 +491,7 @@
                   that.errorShow = false;
                 }, 3000);
                 // that.videoUpload();
-                uploader.removeFile(uploader.getFile(file.id));
+                that.uploader.removeFile(that.uploader.getFile(file.id));
                 return false;
               } else {
                 console.log("123");
@@ -541,7 +544,7 @@
                   that.errorMsg = "";
                   that.errorShow = false;
                 }, 3000);
-                uploader.removeFile(uploader.getFile(err.file.id));
+                that.uploader.removeFile(that.uploader.getFile(err.file.id));
                 return false;
               }
             },
@@ -653,6 +656,7 @@
           this.pageLeaveEnsure = true;
           this.$router.go(-1);
         } else {
+          this.uploader.start();//七牛上传开始；
           this.pageLeaveEnsure = false;
         }
       },
@@ -731,7 +735,7 @@
       }
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
-      that.videoUpload();
+      // that.videoUpload();
       api.forbidShare();
       setTimeout(() => {
         if (navigator.userAgent.toLowerCase().includes("iphone")) {
@@ -744,13 +748,15 @@
       // that.imageList = [];
       that.videoObj = {};
       that.videoSubmitParam = {};
+      that.videoLeaveConfirm = false;
       that.pageLeaveEnsure = false;
+      that.videoUploading = false;
       if (!sessionStorage.getItem("triageRoute")) {
         sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
       }
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
-      that.videoUpload();
+      that.videoUpload(); // 初始化七牛
       // that.reloadUpload();
     },
     components: {
