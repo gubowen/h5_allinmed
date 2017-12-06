@@ -56,12 +56,14 @@
 //        if (this.selected == num) return false;
         switch(num) {
           case 1:
+            if (this.selected == 1) return false;
             location.href = this.homeUrl;
             break;
           case 2:
             location.href = this.historyUrl;
             break;
           case 3:
+            if (this.selected == 3) return false;          
             location.href = this.myUrl;
             break;
           default:
