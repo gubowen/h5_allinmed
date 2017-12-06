@@ -319,7 +319,8 @@ export default {
             imageCompress(
               {
                 imgSrc: oFREvent.target.result,
-                quality: 0.8
+                quality: 0.8,
+                file:files[i]
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
