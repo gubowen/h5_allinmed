@@ -8,6 +8,7 @@ import changePhone from "../components/bindPhone.vue"
 import followWechat from "components/followWechat";
 import contactUs from "components/contactUs";
 import aboutAllinmed from "components/aboutAllinmed";
+import verificationCode from "../components/verificationCode";
 
 export default {
   routes: [
@@ -26,6 +27,10 @@ export default {
     {
       path:"/followWechat",
       component:followWechat
+    },
+    {
+      path:"/verificationCode",
+      component:verificationCode
     },
     {
       path:"/aboutAllinmed",

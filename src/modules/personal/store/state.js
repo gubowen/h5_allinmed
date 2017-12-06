@@ -16,7 +16,7 @@ const getCustomerInfo = () =>{
   api.ajax({
     url: xhrUrl.customerInfo,
     method: "POST",
-    data: {customerId:"1492410302004"},
+    data: {customerId:"1509944590525"},
     beforeSend: function () {
 
     },
@@ -26,6 +26,9 @@ const getCustomerInfo = () =>{
       if(data&&data.responseObject&&data.responseObject.responseStatus){
         state.logUrl = data.responseObject.responseData.headUrl;
         state.customerName = data.responseObject.responseData.nickName;
+        state.weixinName = data.responseObject.responseData.nickName;
+        state.weixinState = (parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1);
+        state.customerPhoneNum = parseInt(data.responseObject.responseData.mobile,10);
 
       }
     },

@@ -2,19 +2,13 @@
   <section class="allinmed-personal-changePhone">
     <section class="allinmed-personal-tableModule">
       <article class="allinmed-changeMobileContent">
-        <figcaption>绑定手机号能够保证你的账号安全，随时找回发布的图片，当前手机号：</figcaption>
-        <figcaption class="al-nowMailBox">{{customerPhoneNum}}</figcaption>
+        <figcaption>绑定手机能够保证你的账号安全，随时找回发布的图片</figcaption>
       </article>
       <article class="allinmed-personal-tableModuleItem">
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入登录密码" id="password" v-model='pswNum' @focus='inputBegin(0)' @blur='inputEnd'>
-          <i class="icon-searchCancel"  v-show='(cancelIndex===0)&&(pswNum.length>0)'   @click='removeInput(0)'></i>
-        </figure>
-      </article>
-      <article class="allinmed-personal-tableModuleItem">
-        <figure class="allinmed-tableModuleItemInput">
-          <input type="text" placeholder="请输入更换手机号" id="newPassword" v-model="phoneNum" @focus='inputBegin(1)'  @blur='inputEnd' v-validate="'required|mobile'"  name="phone">
-          <i class="icon-searchCancel"  v-show='(cancelIndex===1)&&(phoneNum.length>0)'   @click='removeInput(1)'></i>
+          <i class="icon-mobile" :class="{'icon-mobile-on':cancelIndex===0}"></i>
+          <input type="text" placeholder="请输入手机号" id="password" v-model='phoneNum' @focus='inputBegin(0)' @blur='inputEnd'  v-validate="'required|mobile'"  name="phone">
+          <i class="icon-searchCancel"  v-show='(cancelIndex===0)&&(phoneNum.length>0)'   @click='removeInput(0)'></i>
         </figure>
       </article>
       <article class="allinmed-personal-tableModuleItem">
@@ -48,6 +42,7 @@
     width: 100%;
     input{
       height: rem(70px);
+      margin-left: rem(50px);
     }
   .icon-searchCancel:before {
 
@@ -66,7 +61,6 @@
   export default {
     data(){
       return {
-        pswNum:"",
         phoneNum:"",
         cancelIndex:-1,
         errorShow:false,
@@ -89,7 +83,7 @@
     computed:{
       ...mapGetters(["customerPhoneNum"]),
       activeOnOff(){
-        return (this.pswNum.length>0)&&(this.phoneNum.length>0);
+        return (this.phoneNum.length>0);
       }
     },
     methods:{
@@ -116,11 +110,7 @@
         let t = this;
         let allRight = true;
         if(!t.activeOnOff){
-          if(t.pswNum.length===0){
-            t.toast("请输入登录密码");
-            allRight = false;
-            return false;
-          }
+
           if(t.phoneNum.length===0){
             t.toast("请输入新手机号");
             allRight = false;
@@ -131,19 +121,16 @@
             allRight = false;
             t.toast("请输入正确的手机号");
           }else{
-            if(parseInt(t.phoneNum,10)===t.customerPhoneNum){
+            if(this.errors.has('phone')){
               allRight = false;
-              t.toast("手机号未发生改变");
-            }else{
-              if(this.errors.has('phone')){
-                allRight = false;
-                t.toast("请输入正确的手机号");
-              }
+              t.toast("请输入正确的手机号");
             }
           }
         }
         if(allRight){
-          console.log("以上逻辑都正确可以进行交互");
+          t.$router.push({
+            path: "/verificationCode"
+          });
         }
       }
     },

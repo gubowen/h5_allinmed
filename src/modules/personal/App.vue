@@ -113,6 +113,25 @@
         margin-right: rem(10px);
         position: absolute;
       }
+      .icon-mobile{
+        display: inline-block;
+        &:before{
+           content: "";
+           display: inline-block;
+           width: rem(17px);
+           height: rem(30px);
+           background: url('../../../src/common/image/img00/personal/icon_mobile.png') center center no-repeat;
+           background-size: cover;
+           vertical-align: middle;
+         }
+      }
+      .icon-mobile-on{
+            &:before{
+               background: url('../../../src/common/image/img00/personal/icon_mobileOn.png') center center no-repeat;
+               background-size: cover;
+               vertical-align: middle;
+             }
+      }
     h3{
       float: left;
       font-size: rem(30px);
