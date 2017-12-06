@@ -559,6 +559,13 @@
             }
           }
         });
+        setTimeout(()=>{
+          if (!navigator.userAgent.toLowerCase().includes("iphone")){
+            $(".moxie-shim-html5 input").attr("capture","camera")
+            $(".moxie-shim-html5 input").attr("multiple")
+          }
+        },1000)
+
       },
       //图片提交
       submitImage() {

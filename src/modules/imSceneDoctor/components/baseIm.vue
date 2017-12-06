@@ -121,8 +121,8 @@
           </section>
           <section class="main-input-box-plus">
             <i class="icon-im-plus"></i>
-            <input v-if="isIos&&inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
-            <input v-if="!isIos&&inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera">
+            <input v-if="isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+            <input v-if="!isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera">
           </section>
           <figure class="main-input-box-textarea-inner">
             <textarea class="main-input-box-textarea"
@@ -1059,9 +1059,10 @@ export default {
       console.log(file);
       if (file.type.includes("image")) {
         this.sendImageFile(file);
-      } else if (file.type.includes("video")) {
-        this.sendVideoFile(file);
-      }
+      } 
+      // else if (file.type.includes("video")) {
+      //   this.sendVideoFile(file);
+      // }
     },
     sendImageFile(file) {
       const that = this;
