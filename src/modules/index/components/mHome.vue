@@ -37,16 +37,15 @@
       <!--有问诊历史-->
       <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList">
             <div class="doctor">
-              <div class="doctor-img"><img :src="item.img"/></div>
+              <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
               <div class="doctor-info">
-                <p class="doctor-type"><span class="name">{{item.name}}</span>| <span class="career">{{item.career}}</span></p>
-                <p class="doctor-time"><span>{{item.diagnoseType}}</span> <span>{{item.createTime|formatTime}}</span></p>
+                <p class="doctor-type"><span class="name">{{item.consultationType == 0 ? '唯医门诊医生' : getFullName(item)}}</span><span class="career">{{item.medicalTitle}}</span></p>
+                <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime|formatTime}}</span></p>
               </div>
-              <div class="doctor-status">已结束</div>
             </div>
             <div class="patient">
-              <div class="patient-info"><p class="title">患者</p><p class="detail">{{item.patientName}}</p></div>
-              <div class="patient-info"><p class="title">主诉</p><p class="detail">{{item.main}}</p></div>
+              <div class="patient-info"><p class="title">患者</p><p class="detail">{{item.patientName && item.patientName.length > 5 ? item.patientName.substring(0, 5) + "..." : item.patientName}}</p></div>
+              <div class="patient-info"><p class="title">主诉</p><p class="detail">{{item.mainContent.caseMain}}</p></div>
             </div>
       </section>
     </figure>
@@ -59,6 +58,7 @@
   import slider from './slider'
   import tabbar from 'components/tabbar'
   import api from 'common/js/util/util';
+  import Vue from 'vue';
 
 
   let XHRList = {
@@ -68,6 +68,7 @@
       diagnose:'',
       //问诊历史
       historyUrl:'/dist/consult.html?customerId=' + api.getPara().customerId,
+      getOrderHistoryLists: '/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
   };
 
   export default{
@@ -86,16 +87,84 @@
     methods: {
       init(){
         this.loginFlag = true;
-        let obj = {
-            img:'../../../common/image/img00/index/personal_default.png',
-            name:'测试医生',
-            career:'住院医生',
-            diagnoseType:'图文问诊',
-            createTime:'2006-07-02 08:09:04',
-            patientName:'张国良',
-            main:'左大腿扭伤、拉伤，3个月，疼啊啊啊啊啊啊啊啊啊啊啊啊'
-        };
-        this.diagnoseList.push(obj);
+        this.getOrderHistoryLists();
+//        let obj = {
+//            img:'../../../common/image/img00/index/personal_default.png',
+//            name:'测试医生',
+//            career:'住院医生',
+//            diagnoseType:'图文问诊',
+//            createTime:'2006-07-02 08:09:04',
+//            patientName:'张国良',
+//            main:'左大腿扭伤、拉伤，3个月，疼啊啊啊啊啊啊啊啊啊啊啊啊'
+//        };
+//        this.diagnoseList.push(obj);
+      },
+      getOrderHistoryLists(){
+        const that = this;
+        api.ajax({
+          url: XHRList.getOrderHistoryLists,
+          method: "post",
+          data: {
+            patientCustomerId: api.getPara().customerId,
+            isValid: 1,
+            firstResult: 0,
+            maxResult: 1,
+            logoUseFlag: 3
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          timeout: 30000,
+          done(response){
+            if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
+              Vue.set(that.diagnoseList,0,response.responseObject.responseData.dataList[0])
+            }
+          }
+        })
+      },
+      getImgUrl(opt){
+        let logoImg = '';
+        //分诊医生
+        if (opt.consultationType == 0) {
+          //判断头像
+          if (opt.logoUrl) {
+            logoImg = opt.logoUrl;
+          } else {
+            logoImg = "/image/img00/myServices/doctor_portrait.png";
+          }
+        } else {
+          //判断头像
+          if (opt.logoUrl) {
+            logoImg = opt.logoUrl;
+          } else {
+            logoImg = "/image/img00/doctorMain/doc_logo.png";
+          }
+        }
+        return logoImg;
+      },
+      getFullName(opt){
+        if (opt.fullName.length > 6) {
+          return opt.fullName.substring(0, 6) + "..."
+        } else {
+          return opt.fullName;
+        }
+      },
+      getInquiryType(opt){
+        //判断问诊类型
+        let consultationLevel = '';
+        if (opt.consultationType == 1) {
+          switch (Number(opt.consultationLevel)) {
+            case 0:
+            case 1:
+              consultationLevel = "图文问诊";
+              break;
+            case 3:
+              consultationLevel = "特需问诊";
+              break;
+          }
+          ;
+        }
+        return consultationLevel;
       },
       //问诊
       diagnoseEvent(){
@@ -250,7 +319,6 @@
           border-radius: 50%;
           margin-right:rem(20px);
           overflow: hidden;
-          background: #000;
           &>img{
             display: block;
             width:100%;
