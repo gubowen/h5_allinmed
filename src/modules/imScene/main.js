@@ -102,7 +102,7 @@ class ImScene {
       path: "/UploadList",
       name: "UploadList",
       meta: {
-        keepAlive: true
+        keepAlive: false
       },
       component: UploadList
     }, {
