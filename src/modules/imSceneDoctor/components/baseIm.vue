@@ -121,7 +121,8 @@
           </section>
           <section class="main-input-box-plus">
             <i class="icon-im-plus"></i>
-            <input v-if="inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+            <input v-if="isIos&&inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+            <input v-if="!isIos&&inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera">
           </section>
           <figure class="main-input-box-textarea-inner">
             <textarea class="main-input-box-textarea"
@@ -209,6 +210,7 @@ const IS_Android = net.browser().android;
 export default {
   data() {
     return {
+        isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
       imageProgress: {
         uploading: false,

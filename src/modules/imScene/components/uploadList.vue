@@ -226,11 +226,7 @@ export default {
     this.leaveConfirm = false;
     refreshFlag && this.getUploadList();
     api.forbidShare();
-    setTimeout(() => {
-      if (navigator.userAgent.toLowerCase().includes("iphone")) {
-        $(".ev-upLoadInput").removeAttr("capture");
-      }
-    }, 500);
+
   },
   methods: {
     getUploadList() {
