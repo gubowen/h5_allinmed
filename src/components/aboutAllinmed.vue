@@ -15,11 +15,11 @@
 <script type="text/ecmascript-6">
   /**
    * @Desc：
-   * @Usage:  引入此公共组件，需要传一个参数 selected （必传，代表哪个高亮且不可点击）
+   * @Usage:  
    * @Notify：
    * @Depend：
    *
-   * Created by lichenyang on 2017/12/25.
+   * Created by lichenyang on 2017/12/06.
    */
   import api from 'common/js/util/util';
   import attention from 'components/attention'
