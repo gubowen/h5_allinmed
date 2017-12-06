@@ -42,6 +42,28 @@ class Home{
       router: this.router,
       render: h => h(App)
     });
+
+    Vue.filter("formatTime", function(time) {
+      var format = function(num) {
+        return num > 9 ? num : "0" + num;
+      };
+
+      var normalTime = function(time) {
+        var d = new Date(time);
+        var obj = {
+          y: d.getFullYear(),
+          m: format(d.getMonth() + 1),
+          dd: format(d.getDate()),
+          h: format(d.getHours()),
+          mm: format(d.getMinutes())
+        };
+        return obj;
+      };
+      let result = "";
+       result = normalTime(time).m + "-" + normalTime(time).dd +' '+ normalTime(time).h +':'+normalTime(time).mm ;
+
+      return result;
+    })
   }
   //路由注册
   routerStart() {

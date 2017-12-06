@@ -40,7 +40,7 @@
               <div class="doctor-img"><img :src="item.img"/></div>
               <div class="doctor-info">
                 <p class="doctor-type"><span class="name">{{item.name}}</span>| <span class="career">{{item.career}}</span></p>
-                <p class="doctor-time"><span>{{item.diagnoseType}}</span> <span>{{item.createTime}}</span></p>
+                <p class="doctor-time"><span>{{item.diagnoseType}}</span> <span>{{item.createTime|formatTime}}</span></p>
               </div>
               <div class="doctor-status">已结束</div>
             </div>
@@ -59,6 +59,8 @@
   import slider from './slider'
   import tabbar from 'components/tabbar'
   import api from 'common/js/util/util';
+
+
   let XHRList = {
       //登录页
       loginUrl:'',
@@ -67,6 +69,7 @@
       //问诊历史
       historyUrl:'/dist/consult.html?customerId=' + api.getPara().customerId,
   };
+
   export default{
     data(){
         return {
@@ -88,7 +91,7 @@
             name:'测试医生',
             career:'住院医生',
             diagnoseType:'图文问诊',
-            createTime:'12-06 11:24',
+            createTime:'2006-07-02 08:09:04',
             patientName:'张国良',
             main:'左大腿扭伤、拉伤，3个月，疼啊啊啊啊啊啊啊啊啊啊啊啊'
         };
