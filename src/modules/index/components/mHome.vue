@@ -54,7 +54,7 @@
 </template>
 <script type="text/ecmascript-6">
   import"common/js/third-party/flexible";
-  import attention from './attention'
+  import attention from 'components/attention'
   import slider from './slider'
   import tabbar from 'components/tabbar'
   import api from 'common/js/util/util';
