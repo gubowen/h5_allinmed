@@ -1526,7 +1526,7 @@ export default {
         }
       });
     }
-    that.$router.push({
+    that.$router.replace({
       query: {}
     });
   },

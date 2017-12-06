@@ -621,7 +621,7 @@
               that.$router.push({
                 path: "/BaseIm",
                 params: {
-                  success: 1
+                  success: 1,
                 },
                 query: {
                   success: 1,
@@ -737,6 +737,7 @@
       // that.imageList = [];
       that.videoObj = {};
       that.videoSubmitParam = {};
+      that.pageLeaveEnsure = false;
       if (!sessionStorage.getItem("triageRoute")) {
         sessionStorage.setItem("triageRoute", JSON.stringify(this.$route.params));
       }
