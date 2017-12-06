@@ -67,6 +67,7 @@
             margin-right:rem(16px);
             vertical-align: middle;
             background:url("../common/image/img00/followWX/title_label01.png") no-repeat;
+            background-size: 100% 100%;
           }
           &:after{
             display: inline-block;
@@ -76,6 +77,7 @@
             margin-left:rem(16px);
             vertical-align: middle;
             background:url("../common/image/img00/followWX/title_label02.png") no-repeat;
+            background-size: 100% 100%;
           }
       }
       .followWX_wayone{
@@ -93,6 +95,7 @@
             padding-right:rem(12px);
             vertical-align: middle;
             background:url("../common/image/img00/followWX/label_first.png") no-repeat;
+            background-size: 100% 100%;
           }
         }
         ul{
@@ -153,6 +156,7 @@
             padding-right:rem(12px);
             vertical-align: middle;
             background:url("../common/image/img00/followWX/label_second.png") no-repeat;
+            background-size: 100% 100%;
           }
         }
         .searchFollow{
