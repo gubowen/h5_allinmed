@@ -23,7 +23,7 @@ const getCustomerInfo = () =>{
     timeout: 20000,
     done(data) {
       console.log(data);
-      if(data.responseObject.responseStatus){
+      if(data&&data.responseObject&&data.responseObject.responseStatus){
         state.logUrl = data.responseObject.responseData.headUrl;
         state.customerName = data.responseObject.responseData.nickName;
 

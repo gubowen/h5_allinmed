@@ -127,6 +127,15 @@
         }
         console.log(allRight);
         if(allRight){
+          let param = {
+            typeId: '1',//string	是	1-修改/重置密码2-账号验证3-手机快捷登录4-老患者报到5-短信通知
+            accountType: '0',//	string	是	账号类型,0手机 1邮箱
+            visitSiteId: '21',//string	是	站点id 21-M站		21
+            userType: '0',//string	是	用户类型 0-医生用户 1-患者用户
+            operateType: '',//	string	是	1-绑定手机 2－修改手机号 3-手机号找回p密码 5-手机号注册 8-手机号快捷登录 9-老患者报到 16-患者注册
+            account: '',//	string	是	账号
+            codeLength: ''//	string	是	验证码长度
+          }
           console.log("参数均正确可以进行逻辑");
         }
       },
@@ -137,6 +146,9 @@
         let arr = ['nowPassWord','reNewPassWord'];
         this[(arr[index])] = '';
       }
-    }
+    },
+    components:{
+      toast
+  }
   }
 </script>

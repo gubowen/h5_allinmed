@@ -1,11 +1,11 @@
 <template>
   <section class="allinmed-personal-account">
     <section class="allinmed-personal-bindAccount">
-      <section class="account-item border-bottom">
+      <section class="account-item border-bottom" @click.stop="bindWeixin">
         <span class="title">微信</span>
         <span class="operate">
           <em v-if="weixinName.length>0">{{weixinName}}</em>
-          <router-link tag='a' class="bind ev-bind-weixin" to='/followWechat'  v-if="weixinName.length===0">去绑定</router-link>
+          <a class="bind ev-bind-weixin" v-if="weixinName.length===0">去绑定</a>
           <i class="jump"></i>
         </span>
       </section>
@@ -116,8 +116,21 @@
     computed:{
       ...mapGetters(['weixinName','customerPhoneNum'])
     },
+    methods:{
+      bindWeixin(){
+        let t = this;
+        if(t.weixinName.length){
+          return false;
+        }else{
+          t.$router.push({
+            path: "/followWechat"
+          });
+        }
+        console.log(this.weixinName);/*data.responseObject*/
+      }
+    },
     mounted(){
-      console.log(this.jumpUrl)
+
     },
     filters:{
       hidePhone(val){
