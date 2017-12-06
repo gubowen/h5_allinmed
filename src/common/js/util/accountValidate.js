@@ -49,7 +49,7 @@ export default function accountValidate() {
           }else{
             // accountValidate();
             sessionStorage.setItem("loginBack", window.location.href);
-            // window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+            window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
           }
         }
       }else{
@@ -59,7 +59,7 @@ export default function accountValidate() {
         }else{
           // accountValidate();
           sessionStorage.setItem("loginBack", window.location.href);
-          // window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
+          window.location.href = '/dist/login.html?customerId=' + _phoneCheckParams.customerId;
         }
       }
     }

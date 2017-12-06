@@ -254,14 +254,6 @@
     watch: {
       "$store.state.upLoadPercent": function () {
         this.upLoadPercent = this.$store.state.upLoadPercent;
-      },
-      "loading"() {
-        setTimeout(() => {
-          if (navigator.userAgent.toLowerCase().includes("iphone")) {
-            $(".tc-upLoadInput").removeAttr("capture");
-            $(".ev-upLoadInput").removeAttr("capture");
-          }
-        }, 500);
       }
     },
     props: {},
@@ -752,11 +744,6 @@
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
       that.videoUpload();
       // that.reloadUpload();
-      setTimeout(() => {
-        if (navigator.userAgent.toLowerCase().includes("iphone")) {
-          $(".ev-upLoadInput").removeAttr("capture");
-        }
-      }, 500);
     },
     components: {
       Toast,
