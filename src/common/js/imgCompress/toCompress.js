@@ -7,7 +7,7 @@
  * Created by Qiangkailiang on 17/11/20.
  */
 
-
+import changeDirection from "./changeFileDirection";
 export default function ImageCompress(param, compressFn) {
   const image = new Image();
   image.src = param.imgSrc;
@@ -18,14 +18,11 @@ export default function ImageCompress(param, compressFn) {
     let finalBase64 = "";
 
     let compressParam=getRatioSize(image,param);
-    canvas.width = compressParam.width;
-    canvas.height = compressParam.height;
 
-
-    ctx.drawImage(image, 0, 0, compressParam.width, compressParam.height);
-    finalBase64 = canvas.toDataURL("image/jpeg",0.9);
-  
-    compressFn && compressFn(finalBase64);
+    changeDirection(canvas,ctx,param,compressParam,image,()=>{
+      finalBase64 = canvas.toDataURL("image/jpeg",0.9);
+      compressFn && compressFn(finalBase64);
+    }) 
   }
 }
 
