@@ -562,11 +562,12 @@
           }
         });
         setTimeout(()=>{
-          if (!navigator.userAgent.toLowerCase().includes("iphone")){
+          if (!that.isIos){
             $(".moxie-shim-html5 input").attr("capture","camera")
-            $(".moxie-shim-html5 input").attr("multiple")
+            $(".moxie-shim-html5 input").attr("accept","video/*") 
+            $(".moxie-shim-html5 input").attr("multiple","")
           }
-        },1000)
+        },300)
 
       },
       //图片提交
@@ -736,7 +737,7 @@
       }
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
-      // that.videoUpload();
+      that.videoUpload();// 初始化七牛
       api.forbidShare();
       setTimeout(() => {
         if (navigator.userAgent.toLowerCase().includes("iphone")) {
@@ -757,7 +758,7 @@
       }
 
       that.baseMessage = JSON.parse(sessionStorage.getItem("triageRoute"));
-      that.videoUpload(); // 初始化七牛
+      // that.videoUpload(); // 初始化七牛
       // that.reloadUpload();
     },
     components: {
