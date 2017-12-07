@@ -304,11 +304,20 @@ export default {
     focusFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
         this.scrollToBottom();
+//         setTimeout(()=>{
+//  $("body,html").scrollTop(10000);
+//         },1000);
+       
       } else {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
       }
+      setTimeout(()=>{
+      $(".main-message-time").css({
+        top:document.body.scrollTop
+      })
+      },500)
 
       this.onFocus = true;
       this.autoSizeTextarea();
@@ -322,7 +331,9 @@ export default {
           document.body.scrollTop = this.bfscrolltop;
         }, 20);
       }
-
+      $(".main-message-time").css({
+        top:0
+      })
       this.onFocus = false;
       this.autoSizeTextarea();
     },
@@ -1070,6 +1081,7 @@ export default {
           },
           300
         );
+        
       });
     },
     //滑动到某个元素
@@ -1439,6 +1451,9 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
+    window.addEventListener("scroll",()=>{
+      // console.log(123123)
+    })
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
