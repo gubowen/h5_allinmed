@@ -42,7 +42,7 @@
     width: 100%;
     input{
       height: rem(70px);
-      margin-left: rem(50px);
+      margin-left: rem(10px);
     }
   .icon-searchCancel:before {
 
@@ -83,7 +83,7 @@
     computed:{
       ...mapGetters(["customerPhoneNum"]),
       activeOnOff(){
-        return (this.phoneNum.length>0);
+        return (this.phoneNum.length===11);
       }
     },
     methods:{
@@ -110,20 +110,20 @@
         let t = this;
         let allRight = true;
         if(!t.activeOnOff){
-
           if(t.phoneNum.length===0){
-            t.toast("请输入新手机号");
+            t.toast("您还没有填写手机号");
             allRight = false;
             return false;
           }
+
         }else{
           if(isNaN(parseInt(t.phoneNum,10))){
             allRight = false;
-            t.toast("请输入正确的手机号");
+            t.toast("不像是正确的手机号。");
           }else{
             if(this.errors.has('phone')){
               allRight = false;
-              t.toast("请输入正确的手机号");
+              t.toast("不像是正确的手机号。");
             }
           }
         }

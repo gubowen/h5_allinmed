@@ -15,7 +15,7 @@
 <script type="text/ecmascript-6">
   /**
    * @Desc：
-   * @Usage:  
+   * @Usage:
    * @Notify：
    * @Depend：
    *
@@ -44,7 +44,7 @@
     },
   }
 </script>
-<style lang="scss" rel="stylesheet/scss" scope>
+<style lang="scss" rel="stylesheet/scss">
   @import "../../scss/library/_common-modules";
   .allinmed-mainInner{
     height: 100%;
@@ -83,7 +83,7 @@
         @include font-dpr(18px);
         color: #FFFFFF;
         margin:rem(80px) auto 0;
-        
+
       }
     }
   }

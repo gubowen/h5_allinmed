@@ -12,7 +12,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input :type="pswType" placeholder="请输入当前密码"    v-model="newPassWord">
+          <input :type="pswType" placeholder="请输入当前密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
           <i class="eye ev_toggleEye " :class='{"eyeClose":!eyeState,"eyeOpen":eyeState,}' style="right:0;margin-right:0;" @click='changeEyeState'></i>
 
         </figure>
@@ -20,8 +20,8 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>确认新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
-          <i class="icon-searchCancel" v-show='(cancelIndex===1)&&(reNewPassWord.length>0)'  @click='removeInput(1)'></i>
+          <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
+          <i class="icon-searchCancel" v-show='(cancelIndex===2)&&(reNewPassWord.length>0)'  @click='removeInput(1)'></i>
 
         </figure>
       </article>
@@ -48,6 +48,7 @@
 </style>
 <script  type="text/ecmascript-6">
   import toast from "components/toast";
+  import {mapGetters} from "vuex";
   export default {
     data(){
       return {
@@ -61,6 +62,7 @@
       }
     },
     computed:{
+      ...mapGetters(["customerId",'customerPhoneNum']),
       pswType(){
         return (this.eyeState)?"text":"password";
       },
@@ -111,8 +113,18 @@
             allRight = false;
             return false;
           }
-          if(t.reNewPassWord.length<6){
+          if(t.newPassWord.length<6){
             t.toast("新密码长度应大于6位");
+            allRight = false;
+            return false;
+          }
+          if(t.newPassWord.length>20){
+            t.toast("新密码长度应小于20位");
+            allRight = false;
+            return false;
+          }
+          if(t.reNewPassWord.length>20){
+            t.toast("新密码长度应小于20位");
             allRight = false;
             return false;
           }
@@ -128,15 +140,40 @@
         console.log(allRight);
         if(allRight){
           let param = {
-            typeId: '1',//string	是	1-修改/重置密码2-账号验证3-手机快捷登录4-老患者报到5-短信通知
-            accountType: '0',//	string	是	账号类型,0手机 1邮箱
-            visitSiteId: '21',//string	是	站点id 21-M站		21
-            userType: '0',//string	是	用户类型 0-医生用户 1-患者用户
-            operateType: '',//	string	是	1-绑定手机 2－修改手机号 3-手机号找回p密码 5-手机号注册 8-手机号快捷登录 9-老患者报到 16-患者注册
-            account: '',//	string	是	账号
-            codeLength: ''//	string	是	验证码长度
+            oldPassword:t.nowPassWord,//	string	是
+            newPassword:t.newPassWord,//	string	是
+            customerId:t.customerId,//	string	是
+            mobile:t.customerPhoneNum,//	string	是
+            userType:1,//	string	是
+            optType:1//	string	是
           }
-          console.log("参数均正确可以进行逻辑");
+          const resetPsw = () =>{
+            let _this = this;
+            api.ajax({
+              url: xhrUrl.customerInfo,
+              method: "POST",
+              data: param,
+              beforeSend: function () {
+
+              },
+              timeout: 20000,
+              done(data) {
+                console.log(data);
+                if(data&&data.responseObject&&data.responseObject.responseStatus){
+                      if(data.responseObject.responseCode==='0A0005'){
+                        t.toast("当前密码不正确！");
+                      }else if( data.responseObject.responseCode==='0B0003'){
+                        t.toast("用户不存在！");
+                      }else{
+
+                      }
+                }
+              },
+              fail(err){
+
+              }
+            })
+          }
         }
       },
       inputEnd(){
@@ -149,6 +186,24 @@
     },
     components:{
       toast
-  }
+  },
+    watch:{
+      cancelIndex(newStr){
+        let t = this;
+        if((newStr===1)&&(t.nowPassWord.length===0)){
+          t.toast("请输入当前密码");
+        }
+        if(newStr===2){
+          console.log(t.nowPassWord)
+          if(t.nowPassWord.length===0){
+            console.log("进入");
+            t.toast("请输入当前密码");
+          }
+          if(t.newPassWord.length===0){
+            t.toast("请输入新密码");
+          }
+        }
+      }
+    }
   }
 </script>

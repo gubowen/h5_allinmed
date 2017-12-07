@@ -11,6 +11,7 @@
     height: rem(80px);
     margin:rem(20px) auto;
     background: #fff;
+    margin-top: 0;
     border-radius: rem(16px);
     .login{
       width: rem(282px);

@@ -22,6 +22,7 @@
     height: auto;
     background: #eee;
     padding: rem(20px);
+    padding-top: 0;
     position:relative;
     .allinmed-personal-des{
       float: left;

@@ -93,7 +93,6 @@
         if(newStr.length>4){
           this.codeId = oldStr;
           document.getElementById("validCode").blur();
-          $('#updateMobile').trigger("click");
         }
         if(newStr.length==4){
           this.codeId = newStr;
@@ -102,6 +101,9 @@
       }
     },
     methods:{
+      checkCode(){
+
+      },
       sendCode(){
         let t= this;
         this.timeBegin();
@@ -131,6 +133,7 @@
           let nowTimer = setInterval(function(){
             t.timeNum--;
             if(t.timeNum===0){
+              //一天只能发三次
               t.timeOnOff = false;
               clearInterval(nowTimer);
             }
@@ -138,6 +141,8 @@
         }
         if(this.setTime>0){
           timer();
+        }else{
+          t.toast("一天只能发三次");
         }
       }
     },
