@@ -314,9 +314,9 @@ export default {
         }, 100);
       }
       setTimeout(()=>{
-      $(".main-message-time").css({
-        top:document.body.scrollTop
-      })
+        $(".main-message-time").css({ 
+          top:document.body.scrollTop
+        })
       },500)
 
       this.onFocus = true;
