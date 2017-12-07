@@ -1,5 +1,6 @@
 <template>
   <section class="main-box">
+    <div class="placeholder-ele"></div>
     <attention></attention>
     <section class="main-content">
       <h2 class="main-title">关于唯医互联网医院</h2>
@@ -56,12 +57,16 @@
     width: 100%;
     background: url("../common/image/background_wave.png") no-repeat center bottom;
     background-size: 100% rem(272px);
+    .placeholder-ele{
+      width: 100%;
+      height: 1px;
+    }
     .main-content{
       background: #FFFFFF;
       border-radius: rem(8px);
       padding-top: rem(50px);
       padding-bottom: rem(76px);
-      margin: 0 rem(20px);
+      margin: rem(24px) rem(20px) 0;
       .main-title{
         text-align: center;
         @include font-dpr(22px);
