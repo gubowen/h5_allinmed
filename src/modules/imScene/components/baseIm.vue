@@ -68,6 +68,8 @@
             :imageMessage="msg"
             :nim="nim"
             ref="bigImg"
+             :userData="userData"
+            :targetData="targetData"
             :imageList="imageList"
             :imageProgress="imageProgress"
               @deleteMsgEvent="deleteMsgEvent(msg)"
@@ -250,7 +252,7 @@ const IS_Android = net.browser().android;
 export default {
   data() {
     return {
-        isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
       imageProgress: {
         uploading: false,
@@ -304,23 +306,20 @@ export default {
     focusFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
         this.scrollToBottom();
-//         setTimeout(()=>{
-//  $("body,html").scrollTop(10000);
-//         },1000);
-       
       } else {
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
       }
-      setTimeout(()=>{
-        $(".main-message-time").css({ 
-          top:document.body.scrollTop
-        })
-      },500)
+      setTimeout(() => {
+        $(".main-message-time").css({
+          top: document.body.scrollTop
+        });
+      }, 500);
 
       this.onFocus = true;
       this.autoSizeTextarea();
+
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
@@ -332,8 +331,8 @@ export default {
         }, 20);
       }
       $(".main-message-time").css({
-        top:0
-      })
+        top: 0
+      });
       this.onFocus = false;
       this.autoSizeTextarea();
     },
@@ -918,8 +917,12 @@ export default {
       }
       if (!error) {
         this.msgList.push(msg);
-        this.scrollToBottom();
-        this.refreshScroll();
+        setTimeout(() => {
+          this.scrollToBottom();
+          // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 1000);
+
+        // this.refreshScroll();
       } else {
         //消息发送失败的处理
         that.sendErrorTips(msg);
@@ -1081,7 +1084,6 @@ export default {
           },
           300
         );
-        
       });
     },
     //滑动到某个元素
@@ -1451,9 +1453,7 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-    window.addEventListener("scroll",()=>{
-      // console.log(123123)
-    })
+   
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
