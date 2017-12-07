@@ -32,8 +32,8 @@
             <p class="codeInput">
               <input type="password" placeholder="设置密码（至少6位）">
               <span class="iconBox">
-                <img src="../../../common/image/img00/login/close_button.png" alt="清除密码" class="clearPassword">
-                <img src="../../../common/image/img00/login/eyes_open.png" alt="显示密码" class="showPassword">
+                <i class="icon-clearPassword"></i>
+                <i class="icon-eyesStatus"></i>
               </span>
             </p>
             <button class="stipulation">注册代表您已同意<i>《唯医互联网骨科医院服务协议》</i></button>
@@ -150,19 +150,6 @@
           width:50%;
           color: #777777;
         }
-        .iconBox{
-          .clearPassword{
-            width:rem(40px);
-            height:rem(40px);
-            margin-right:rem(10px);
-            vertical-align: middle;
-          }
-          .showPassword{
-            width:rem(44px);
-            height:rem(32px);
-            vertical-align: middle;
-          }
-        }
       }
     }
     .stipulation{
@@ -235,9 +222,23 @@
     }
   }
   .icon-eyesStatus{
+    display:inline-block;
     width:rem(44px);
     height:rem(35px);
     background:url("../../../common/image/img00/login/eyes_open.png") no-repeat;
     background-size: 100% 100%;
+    margin-top:rem(5px);
+    &.hide{
+      background:url("../../../common/image/img00/login/eyes_close.png") no-repeat;
+    }
+  }
+  .icon-clearPassword{
+    display:inline-block;
+    width:rem(40px);
+    height:rem(40px);
+    margin-left:rem(10px);
+    background:url("../../../common/image/img00/login/close_button.png") no-repeat;
+    background-size: 100% 100%;
+    margin-top:rem(5px);
   }
 </style>
