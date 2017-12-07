@@ -7,7 +7,8 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length===0&&!loading">
+        <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="isIos&&imageList[item.adviceId].length===0&&!loading">
+         <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -21,13 +22,15 @@
             </div>
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="isIos">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="!isIos">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="imageList[item.adviceId].length>0&&!loading"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="isIos&&imageList[item.adviceId].length>0&&!loading"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&imageList[item.adviceId].length>0&&!loading"/>
               </span>
             </a>
           </li>
@@ -62,6 +65,8 @@
    *
    * Created by qiangkailiang on 2017/8/21.
    */
+let _cameraType = "";
+
 import axios from "axios";
 import api from "common/js/util/util";
 import confirm from "components/confirm";
@@ -80,6 +85,7 @@ const XHRList = {
 export default {
   data() {
     return {
+      cameraType: _cameraType,
       uploadList: [],
       imageList: {},
       filesObj: {}, //多图file对象存储，用于获取每张图的信息
@@ -89,12 +95,13 @@ export default {
       errorMsg: "",
       loading: false,
       finish: false,
-      deletePic:{},
+      deletePic: {},
       deletePicTip: false,
       userData: {
         account: "",
         token: ""
-      }
+      },
+      isIos: navigator.userAgent.toLowerCase().includes("iphone")
     };
   },
   computed: {
@@ -112,11 +119,16 @@ export default {
   mounted() {
     api.forbidShare();
     this.getUploadList();
+    this.initData();
   },
   activated() {
     // this.getUploadList();
+    this.initData();
   },
   methods: {
+    initData() {
+
+    },
     getUploadList() {
       if (localStorage.getItem("picList")) {
         this.uploadList = JSON.parse(localStorage.getItem("picList"));
@@ -126,18 +138,18 @@ export default {
       }
     },
     //查看大图
-    showBigImg(item, index, type){
+    showBigImg(item, index, type) {
       let that = this;
 
       let _params = {
-        imgBlob:  that.imageList[type],
+        imgBlob: that.imageList[type],
         indexNum: index
       };
       console.log(_params);
       this.$router.push({
         name: "showBigImg",
         params: _params
-      })
+      });
     },
     //删除图片 走接口
     imgDelete(img, index, id) {
@@ -167,7 +179,7 @@ export default {
     },
     //确定删除图片
     ensureDeletePic() {
-      let that =this;
+      let that = this;
       let _deletePic = this.deletePic;
       api.ajax({
         url: XHRList.imgDelete,
@@ -188,7 +200,7 @@ export default {
     upLoadPic(files, item, index, base64) {
       const that = this;
       //本地图片预览处理
-       if (typeof index !== "undefined") {
+      if (typeof index !== "undefined") {
         that["imageList"][item.adviceId][index] = {
           blob: base64,
           imgId: "",
@@ -223,7 +235,7 @@ export default {
           if (res.responseObject.responseStatus) {
             let num = index
               ? index
-              : that["imageList"][item.adviceId].length - 1;  //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
+              : that["imageList"][item.adviceId].length - 1; //图片索引，如果有值则是重传图片，替换已存数组中的键值；如果没有则是新上传的图片，取新上传图片所在数组的长度减一；
             that.$set(that.imageList[item.adviceId], num, {
               blob: res.responseObject.responseData.logoUrl,
               imgId: res.responseObject.responsePk,
@@ -244,7 +256,7 @@ export default {
                 index,
                 that.base64Arr[that.uploadIndex]
               );
-            }else{
+            } else {
               that.loading = false;
               if (that.filesObj[that.uploadIndex]) {
                 that.errorShow = true;
@@ -257,7 +269,9 @@ export default {
             }
           } else {
             //接口异常上传失败处理
-            let num = index ? index : that["imageList"][item.adviceId].length - 1;
+            let num = index
+              ? index
+              : that["imageList"][item.adviceId].length - 1;
             that["imageList"][item.adviceId][num].uploading = false;
             that["imageList"][item.adviceId][num].fail = true;
             that["imageList"][item.adviceId][num].finish = true;
@@ -270,7 +284,7 @@ export default {
           that["imageList"][item.adviceId][num].uploading = false;
           that["imageList"][item.adviceId][num].fail = true;
           that["imageList"][item.adviceId][num].finish = true;
-          that.loading = false;  //放开上传权限
+          that.loading = false; //放开上传权限
         }
       });
     },
@@ -284,7 +298,7 @@ export default {
       if (!files.length) {
         return;
       }
-      this.loading = true;   //关闭上传权限
+      this.loading = true; //关闭上传权限
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
@@ -292,8 +306,8 @@ export default {
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
-             if (i == files.length - 1) {
-              this.loading = false;   //开启上传权限
+            if (i == files.length - 1) {
+              this.loading = false; //开启上传权限
             }
           }, 3000);
         } else {
@@ -306,6 +320,7 @@ export default {
               {
                 imgSrc: oFREvent.target.result,
                 quality: 0.8,
+                file:files[i]
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
@@ -326,7 +341,7 @@ export default {
     backToImPage() {
       const that = this;
       if (that.loading) {
-          //图片上传中
+        //图片上传中
         this.errorShow = true;
         this.errorMsg = "图片上传中...";
         setTimeout(() => {
@@ -375,7 +390,7 @@ export default {
     },
     connectToNim(cid) {
       const that = this;
-      nimEnv().then(nimEnv=>{
+      nimEnv().then(nimEnv => {
         this.nim = NIM.getInstance({
           // debug: true,
           appKey: nimEnv,
@@ -386,13 +401,15 @@ export default {
             that.nimSendSuccess(cid);
           },
           onwillreconnect(obj) {
-            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
+            console.log(
+              "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
+            );
           },
           ondisconnect() {
             console.log("链接已中断...");
           }
         });
-      })
+      });
     },
     nimSendSuccess(cd) {
       let that = this;
@@ -483,7 +500,8 @@ export default {
         display: inline-block;
         width: rem(28px);
         height: rem(28px);
-        background: url("../../../common/image/img00/doctorHome/upLoadTip.png") no-repeat center;
+        background: url("../../../common/image/img00/doctorHome/upLoadTip.png")
+          no-repeat center;
         background-size: rem(28px) rem(28px);
         top: 50%;
         margin-top: rem(-14px);
@@ -571,30 +589,30 @@ $colorTwo: #222222;
         z-index: 0;
       }
       //上传失败
-          .upload-fail {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            opacity: 0.83;
-            background: #545454;
-            & > input {
-              opacity: 0;
-              width: 100%;
-              height: 100%;
-            }
-            & > p {
-              @include font-dpr(12px);
-              color: #ffffff !important;
-              text-align: center;
-              position: absolute;
-              top: 50%;
-              width: 100%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-            }
-          }
+      .upload-fail {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0.83;
+        background: #545454;
+        & > input {
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+        }
+        & > p {
+          @include font-dpr(12px);
+          color: #ffffff !important;
+          text-align: center;
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
       .tc-upLoadDel {
         position: absolute;
         //display: inline-block;

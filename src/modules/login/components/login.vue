@@ -119,7 +119,9 @@
 //              isValid: 1,       //	string	是	修改验证码信息
             account: '',      //	string	是	手机号
             customerId:"",
-            mobile:""
+            mobile:"",
+            isCheckMobile:1,
+            checkMobileTime:1
           },
           wxBindCheckParams:{
             isValid: 1,       //	string	是		1

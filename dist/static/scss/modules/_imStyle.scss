@@ -1,5 +1,5 @@
 /**
-* @Desc：
+* @Desc：IM核心UI
 * @Usage:
 * @Notify：
 * @Depend：
@@ -91,6 +91,7 @@
     }
     &.others-message {
       float: left;
+      
       &>.main-message-content {
         display: inline-block;
         vertical-align: top;
@@ -98,6 +99,17 @@
         border: 0 solid #E4E9EB;
         box-shadow: 0 1px 0 0 rgba(204, 204, 204, 0.20);
         border-top-left-radius: 0;
+        &.image-message {
+          padding: 0;
+          background-color: transparent;
+          position: relative;
+          .middle-tip-box {
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+          }
+        }
         &>p {
           word-break: break-all;
         }

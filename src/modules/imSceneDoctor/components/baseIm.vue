@@ -121,7 +121,8 @@
           </section>
           <section class="main-input-box-plus">
             <i class="icon-im-plus"></i>
-            <input v-if="inputFlag" type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender">
+            <input v-if="isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" accept="image/*">
+            <input v-if="!isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera" accept="image/*">
           </section>
           <figure class="main-input-box-textarea-inner">
             <textarea class="main-input-box-textarea"
@@ -209,6 +210,7 @@ const IS_Android = net.browser().android;
 export default {
   data() {
     return {
+        isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
       imageProgress: {
         uploading: false,
@@ -272,7 +274,11 @@ export default {
           document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
       }
-
+      setTimeout(()=>{
+        $(".main-message-time").css({ 
+          top:document.body.scrollTop
+        })
+      },500)
       this.onFocus = true;
       this.autoSizeTextarea();
     },
@@ -292,7 +298,11 @@ export default {
           document.body.scrollTop = this.bfscrolltop;
         }, 20);
       }
-
+      setTimeout(()=>{
+        $(".main-message-time").css({ 
+          top:0
+        })
+      },500)
       this.onFocus = false;
       this.autoSizeTextarea();
     },
@@ -1057,9 +1067,10 @@ export default {
       console.log(file);
       if (file.type.includes("image")) {
         this.sendImageFile(file);
-      } else if (file.type.includes("video")) {
-        this.sendVideoFile(file);
-      }
+      } 
+      // else if (file.type.includes("video")) {
+      //   this.sendVideoFile(file);
+      // }
     },
     sendImageFile(file) {
       const that = this;

@@ -68,6 +68,8 @@
             :imageMessage="msg"
             :nim="nim"
             ref="bigImg"
+             :userData="userData"
+            :targetData="targetData"
             :imageList="imageList"
             :imageProgress="imageProgress"
               @deleteMsgEvent="deleteMsgEvent(msg)"
@@ -158,7 +160,9 @@
       <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" v-if="inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+          <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                 accept="image/*">
+          <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
                  accept="image/*">
         </section>
         <figure class="main-input-box-textarea-inner">
@@ -248,6 +252,7 @@ const IS_Android = net.browser().android;
 export default {
   data() {
     return {
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
       imageProgress: {
         uploading: false,
@@ -300,42 +305,34 @@ export default {
     },
     focusFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
-        // $("body").css({
-        //   position: "relative",
-        //   bottom: "55%"
-        // });
-        // this.interval = setInterval(function() {
-        //   document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-        // }, 100);
+        this.scrollToBottom();
       } else {
-
         this.interval = setInterval(function() {
           document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
         }, 100);
       }
+      setTimeout(() => {
+        $(".main-message-time").css({
+          top: document.body.scrollTop
+        });
+      }, 500);
 
       this.onFocus = true;
       this.autoSizeTextarea();
+
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
-        //
-        //   $("body").css({
-        //     position: "static",
-        //     bottom: "0%"
-        //   });
-        // setTimeout(() => {
-        //   clearInterval(this.interval); //清除计时器
-        //   document.body.scrollTop = this.bfscrolltop;
-        // }, 20);
+        this.scrollToBottom();
       } else {
-
         setTimeout(() => {
           clearInterval(this.interval); //清除计时器
           document.body.scrollTop = this.bfscrolltop;
         }, 20);
       }
-
+      $(".main-message-time").css({
+        top: 0
+      });
       this.onFocus = false;
       this.autoSizeTextarea();
     },
@@ -920,8 +917,12 @@ export default {
       }
       if (!error) {
         this.msgList.push(msg);
-        this.scrollToBottom();
-        this.refreshScroll();
+        setTimeout(() => {
+          this.scrollToBottom();
+          // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+        }, 1000);
+
+        // this.refreshScroll();
       } else {
         //消息发送失败的处理
         that.sendErrorTips(msg);
@@ -1079,7 +1080,7 @@ export default {
       that.$nextTick(() => {
         $(".main-message").animate(
           {
-            scrollTop: $(".main-message>section").height()
+            scrollTop: $(".main-message>section").height() + 1000
           },
           300
         );
@@ -1452,6 +1453,7 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
+   
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
@@ -1470,11 +1472,11 @@ export default {
   beforeUpdate() {},
   //组件更新之后的生命钩子
   updated() {},
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     // 记录查看大图时离开的位置
-    if (to.name === 'showBigImg') {
+    if (to.name === "showBigImg") {
       console.log($(".main-message").scrollTop());
-      sessionStorage.setItem('imagePosition',$(".main-message").scrollTop());
+      sessionStorage.setItem("imagePosition", $(".main-message").scrollTop());
     }
     next(true);
   },
@@ -1484,9 +1486,9 @@ export default {
     api.forbidShare();
     // that.refreshScroll();
     // 判断是否有查看大图的位置，定位到响应位置
-    if (sessionStorage.getItem('imagePosition')) {
-      $(".main-message").scrollTop(sessionStorage.getItem('imagePosition'));
-      sessionStorage.removeItem('imagePosition');
+    if (sessionStorage.getItem("imagePosition")) {
+      $(".main-message").scrollTop(sessionStorage.getItem("imagePosition"));
+      sessionStorage.removeItem("imagePosition");
     }
     if (that.$route.query.queryType === "triage") {
       that.nim.sendCustomMsg({
@@ -1539,7 +1541,7 @@ export default {
         }
       });
     }
-    that.$router.push({
+    that.$router.replace({
       query: {}
     });
   },
