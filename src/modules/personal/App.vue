@@ -1,5 +1,6 @@
 <template>
   <section class="allinmed-mainInner">
+    <div class="padding-plus"></div>
     <router-view></router-view>
   </section>
 </template>
@@ -24,6 +25,9 @@
     padding: rem(20px);
     padding-top: 0;
     position:relative;
+    .padding-plus{
+      padding-top: rem(20px);
+    }
     .allinmed-personal-des{
       float: left;
     &> span{

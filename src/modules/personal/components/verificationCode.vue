@@ -15,7 +15,7 @@
       重新发送
     </article>
     <article class="al-changeMobileContent sended">
-      今天剩余<span class="num">{{setTime}}</span>次
+      今天剩余<span class="num" v-html="(codeNum<=0)?(0):(codeNum)"></span>次
     </article>
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
@@ -75,12 +75,17 @@
   }
 </style>
 <script>
+  import api from 'common/js/util/util';
   import toast from "components/toast";
+  import {mapGetters,mapActions} from "vuex";
+  let xhrUrl = {
+    sendCode:'/mcall/patient/customer/unite/v1/updateMobile/'
+  }
   export default {
     data(){
       return {
         codeId:"",
-        setTime:3,
+        // setTime:3,
         setTimeNum:10,
         timeNum:0,
         timeOnOff:false,
@@ -98,15 +103,64 @@
           this.codeId = newStr;
           document.getElementById("validCode").blur();
         }
+      },
+      codeNum(newStr){
+        if(newStr>=0){
+          this.timeBegin();
+        }else{
+          this.toast("一天只能发十次");
+        }
       }
     },
+    computed:{
+      ...mapGetters(["codeNum",'customerId','codeNumId'])
+    },
     methods:{
-      checkCode(){
+      ...mapActions(['getValidCode']),
+      postCodeNum(){
+        let t = this;
+        let param = {
+          customerId:t.customerId,//	string	是	用户id
+          mobile:t.phoneNum,//	string	是	手机号
+          typeId:2,//	string	是	1-手机号找回密码 2-账号验证(绑定手机、手机号注册) 3-手机验证码快捷登录
+          optType:1,//	string	是	操作类型		默认：1
+          codeId:t.codeNumId,//	string	是	验证码主键
+          validCode:t.codeId,//	string	是	验证码CODE
+        }
+        let codeNum = ()=>{
+          api.ajax({
+            url: xhrUrl.sendCode,
+            method: "POST",
+            data: param,
+            beforeSend: function () {
 
+            },
+            timeout: 20000,
+            done(data) {
+              if(data&&data.responseObject&&data.responseObject.responseStatus){
+                t.$store.state.customerPhoneNum = t.$store.state.phoneNum;
+                t.$router.push({
+                  path: "/bindAccount"
+                });
+              }else{
+                t.toast(data.responseObject.responseMessage);
+              }
+            },
+            fail(err){
+
+            }
+          })
+        }
+        codeNum();
       },
       sendCode(){
         let t= this;
-        this.timeBegin();
+        if(t.codeNum<=0){
+          this.toast("一天只能发十次");
+          return false;
+        }else{
+          t.getValidCode();
+        }
       },
       checkNum(){
         let t = this;
@@ -123,31 +177,38 @@
         },2000);
         return false;
       },
-      timeBegin(){
+      timeBegin(onOff){
         let t = this;
         let timer = ()=>{
           t.timeNum =t.setTimeNum;
-          this.setTime--;
+          // this.setTime--;
           t.timeOnOff = true;
           clearInterval(nowTimer);
           let nowTimer = setInterval(function(){
             t.timeNum--;
             if(t.timeNum===0){
-              //一天只能发三次
+              //一天只能发十次
               t.timeOnOff = false;
               clearInterval(nowTimer);
             }
           },1000);
         }
-        if(this.setTime>0){
+        if(this.codeNum>=0){
           timer();
         }else{
-          t.toast("一天只能发三次");
+            t.toast("一天只能发十次");
         }
       }
     },
     mounted(){
-      this.timeBegin();
+      let t = this;
+      if(t.codeNum===10){
+        t.$router.push({
+          path: "/personalIndex"
+        });
+      }else{
+        t.timeBegin();
+      }
     },
     components:{
       toast

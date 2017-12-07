@@ -1,6 +1,5 @@
 <template>
   <section class="allinmed-mainIndex">
-    <div class="padding-plus"></div>
     <userLogo v-show="loginOnOff"></userLogo>
     <noLogin v-show="!loginOnOff"></noLogin>
     <focusWeixin v-show='!weixinState'></focusWeixin>
@@ -63,9 +62,3 @@
     }
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
-  @import "../../../../scss/library/_common-modules.scss";
-  .padding-plus{
-    padding-top: rem(20px);
-  }
-</style>
