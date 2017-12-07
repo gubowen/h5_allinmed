@@ -10,7 +10,10 @@ import Vue from 'vue';
 import App from './App';
 import VueRouter from 'vue-router';
 import login from './components/login';
+import register from './components/register';
+import loginRule from './components/loginRule';
 import forgetPassword from './components/forgetPassword';
+import wechat from 'components/followWechat';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import fastclick from 'fastclick';
@@ -46,10 +49,22 @@ class MLogin {
         path: '/login',
         name: "login",
         component: login
-      }, {
+      },{
+        path: '/loginRule',
+        name: "loginRule",
+        component: loginRule
+      },{
         path: '/forgetPassword',
         name: "forgetPassword",
         component: forgetPassword
+      },{
+        path: '/wechat',
+        name: "wechat",
+        component: wechat
+      },{
+        path: '/register',
+        name: "register",
+        component: register
       }
     ];
   }

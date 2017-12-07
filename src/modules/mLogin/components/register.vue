@@ -2,31 +2,27 @@
   <div>
     <section class="loginRegisterBox">
       <ul class="loginRegisterTitle">
-        <li class="fl on">手机验证登录</li>
-        <li class="fr" @click="goReginster">注册</li>
+        <li class="fl" @click="goLogin()">手机验证登录</li>
+        <li class="fr on">注册</li>
       </ul>
 
       <ul class="loginRegisterContent">
-        <li class="loginContent">
+        <li class="registerContent">
           <form class="formBox">
             <p class="phoneInput"><input type="number" placeholder="请输入手机号"></p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入验证码">
-              <span class="getCode">获取验证码</span>
-              <span class="codeCountdown" style="display:none;"><i>54</i>秒后重新获取</span>
+              <input type="password" placeholder="设置密码（至少6位）">
+              <span class="iconBox">
+                <i class="icon-clearPassword"></i>
+                <i class="icon-eyesStatus"></i>
+              </span>
             </p>
-            <p class="codeInput">
-              <input type="number" placeholder="请输入密码">
-              <i class="icon-eyesStatus fr"></i>
-            </p>
-            <button class="loginButton">登录</button>
-            <article class="changeAndForget">
-              <span class="changeLoginWay fl">账号密码登录</span>
-              <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
-            </article>
+            <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
+            <button class="loginButton">注册</button>
           </form>
         </li>
       </ul>
+
       <wechatLead></wechatLead>
     </section>
     <!-- <vConfirm :confirmParams="{
@@ -53,16 +49,16 @@
       }
     },
     methods: {
-      goReginster () {
+      goLogin () {
         this.$router.push({
-          name: "register"
+          name: "login"
         });
       },
-      goForgetPass () {
+      goLoginRule () {
         this.$router.push({
-          name: "forgetPassword"
+          name: "loginRule"
         });
-      }
+      }  
     },
     mounted(){},
     components:{
@@ -182,6 +178,40 @@
       .forgetPass{
         color: #2FC5BD;
       }
+    }
+  }
+  .WXlogin{
+    position:absolute;
+    bottom:rem(60px);
+    figcaption{
+      display: inline-block;
+      vertical-align:middle;
+      color:#AAAAAA;
+      @include font-dpr(12px);
+      &:before{
+        display: inline-block;
+        content: '';
+        vertical-align:middle;
+        width:rem(86px);
+        height:1px;
+        background:#D8D8D8;
+        margin-right:rem(30px);
+      }
+      &:after{
+        display: inline-block;
+        content: '';
+        vertical-align:middle;
+        width:rem(86px);
+        height:1px;
+        background:#D8D8D8;
+        margin-left:rem(30px);
+      }
+    }
+    .WXimage{
+      display:block;
+      margin:rem(40px) auto 0;
+      width:rem(100px);
+      height:rem(100px);
     }
   }
   .icon-eyesStatus{
