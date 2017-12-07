@@ -47,11 +47,12 @@
         <img src="../../../common/image/img00/login/wechat_shape.png" alt="关注微信" class="WXimage">
       </figure>
     </section>
-    <!--<vConfirm :confirmParams="{-->
-      <!--title:'该手机号尚未注册',-->
-      <!--ensure:'立即注册',-->
-      <!--cancel:'重新输入'-->
-    <!--}"></vConfirm>-->
+    <!-- <vConfirm :confirmParams="{
+      title:'该手机号尚未注册',
+      ensure:'立即注册',
+      cancel:'重新输入'
+    }">
+    </vConfirm> -->
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -96,8 +97,8 @@
           content: '';
           width:rem(80px);
           height:rem(10px);
-          background: #2FC5BD;
-          border-radius: rem(100px);
+          background-color: #2FC5BD;
+          border-radius: 9999px;
           margin:rem(20px) auto 0;
         }
       }
