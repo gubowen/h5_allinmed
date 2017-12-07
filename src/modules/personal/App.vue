@@ -37,7 +37,7 @@
 
   }
   .allinmed-personal-logout {
-    width: rem(710px);
+    width: rem(698px);
     height: rem(100px);
     margin: rem(20px) auto;
     background: #fff;
@@ -48,6 +48,7 @@
     line-height: rem(100px);
     @include font-dpr(18px);
     text-align: center;
+    display: block;
   }
 
   .icon {

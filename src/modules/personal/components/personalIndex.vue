@@ -3,7 +3,7 @@
     <div class="padding-plus"></div>
     <userLogo v-show="loginOnOff"></userLogo>
     <noLogin v-show="!loginOnOff"></noLogin>
-    <focusWeixin v-if='!weixinState'></focusWeixin>
+    <focusWeixin v-show='!weixinState'></focusWeixin>
     <accountSafe  v-show="loginOnOff"></accountSafe>
     <linkUs></linkUs>
     <button class="allinmed-personal-logout" v-if="loginOnOff" @click='returnBack'>退出登录</button>

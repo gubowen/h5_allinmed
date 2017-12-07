@@ -19,6 +19,9 @@ const getters = {
   },
   logUrl(state){
     return state.logUrl;
+  },
+  customerId(state){
+    return state.customerId;
   }
 };
 export default getters;

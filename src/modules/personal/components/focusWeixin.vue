@@ -7,7 +7,7 @@
   @import "../../../../scss/library/_common-modules.scss";
   .allinmed-personal-weixin{
     display: block;
-    width: rem(710px);
+    width: rem(698px);
     height: rem(160px);
     margin:rem(20px) auto;
     background:#fff url("../../../../src/common/image/img00/personal/banner.png") no-repeat center 50%;

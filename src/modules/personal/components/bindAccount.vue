@@ -59,7 +59,7 @@
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
-        width: rem(164px);
+        max-width: rem(164px);
         vertical-align: middle;
       }
       .phone-number{

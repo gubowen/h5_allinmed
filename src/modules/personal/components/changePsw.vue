@@ -21,7 +21,7 @@
         <h3>确认新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
           <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
-          <i class="icon-searchCancel" v-show='(cancelIndex===2)&&(reNewPassWord.length>0)'  @click='removeInput(1)'></i>
+          <i class="icon-searchCancel" v-show='(cancelIndex===2)&&(reNewPassWord.length>0)'  @click='removeInput(2)'></i>
 
         </figure>
       </article>
@@ -49,6 +49,10 @@
 <script  type="text/ecmascript-6">
   import toast from "components/toast";
   import {mapGetters} from "vuex";
+  import api from 'common/js/util/util';
+  let xhrUrl = {
+    resetPsw:"/mcall/patient/customer/unite/v1/updatePwd/"
+  }
   export default {
     data(){
       return {
@@ -68,6 +72,10 @@
       },
       activeOnOff(){
         return (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
+      },
+      allRight(){
+        let t = this;
+        return (t.activeOnOff)&&(t.newPassWord.length>20)&&(t.reNewPassWord.length>20)(t.newPassWord.length<6)&&(t.reNewPassWord.length<6)&&(t.newPassWord===t.reNewPassWord);
       }
     },
     methods:{
@@ -89,56 +97,56 @@
       },
       activeSave(){
         let t = this;
-        let allRight = true;
+        // let allRight = true;
         if(!t.activeOnOff){
           if(t.nowPassWord.length===0){
             //t.toast("请输入当前密码");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.newPassWord.length===0){
             //t.toast("请输入新密码");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.reNewPassWord.length===0){
             //t.toast("请确认新密码");
-            allRight = false;
+            // allRight = false;
             return false;
           }
         }else{
-          (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
+          // (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
           if(t.newPassWord.length<6){
             t.toast("新密码长度应大于6位");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.newPassWord.length<6){
             t.toast("新密码长度应大于6位");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.newPassWord.length>20){
             t.toast("新密码长度应小于20位");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.reNewPassWord.length>20){
             t.toast("新密码长度应小于20位");
-            allRight = false;
+            // allRight = false;
             return false;
           }
-          if(t.newPassWord===t.reNewPassWord){
+          if(t.newPassWord!==t.reNewPassWord){
             t.toast("两次输入密码不一致");
-            allRight = false;
+            // allRight = false;
             return false;
           }
           if(t.nowPassWord===t.newPassWord){
               console.log("新旧密码一致");
           }
         }
-        console.log(allRight);
-        if(allRight){
+        // console.log(allRight);
+        if(t.allRight){
           let param = {
             oldPassword:t.nowPassWord,//	string	是
             newPassword:t.newPassWord,//	string	是
@@ -150,7 +158,7 @@
           const resetPsw = () =>{
             let _this = this;
             api.ajax({
-              url: xhrUrl.customerInfo,
+              url: xhrUrl.resetPsw,
               method: "POST",
               data: param,
               beforeSend: function () {
@@ -160,13 +168,14 @@
               done(data) {
                 console.log(data);
                 if(data&&data.responseObject&&data.responseObject.responseStatus){
-                      if(data.responseObject.responseCode==='0A0005'){
-                        t.toast("当前密码不正确！");
-                      }else if( data.responseObject.responseCode==='0B0003'){
-                        t.toast("用户不存在！");
-                      }else{
-
-                      }
+                  console.log(data.responseObject.responseCode,typeof data.responseObject.responseCode)
+                  t.toast("修改密码成功，请重新登录");
+                }else{
+                  if(data.responseObject.responseCode==='0A0005'){
+                    t.toast("当前密码不正确！");
+                  }else if( data.responseObject.responseCode==='0B0003'){
+                    t.toast("用户不存在！");
+                  }
                 }
               },
               fail(err){
@@ -174,13 +183,14 @@
               }
             })
           }
+          resetPsw();
         }
       },
       inputEnd(){
         this.cancelIndex =-1;
       },
       removeInput(index){
-        let arr = ['nowPassWord','reNewPassWord'];
+        let arr = ['nowPassWord',"",'reNewPassWord'];
         this[(arr[index])] = '';
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <section class="allinmed-personal-logo" v-cloak>
+  <section class="allinmed-personal-logo" v-if="(customerName.length>0)&&(logUrl.length>0)">
     <figure class="allinmed-personal-userLogo">
       <img :src="logUrl" alt="">
     </figure>
@@ -11,7 +11,7 @@
   @import "../../../../scss/library/_common-modules.scss";
   /*@import "../../../../scss/library/_common-modules.scss";*/
   .allinmed-personal-logo{
-    width: rem(614px);
+    width: rem(602px);
     padding: rem(48px);
     height: rem(146px);
     background: #FFFFFF;
