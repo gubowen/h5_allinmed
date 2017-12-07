@@ -1,6 +1,14 @@
 <template>
   <section class="main-message-box" v-touch:long.stop="longTouchHandler">
-    <article class="main-message-box-item my-message" data-clientid="9c5718e331459678f2a759f16c90dd7c">
+
+    <article
+      class="main-message-box-item"
+      :data-clientid="imageMessage.idClient"
+      :class="{'my-message':imageMessage.from===userData.account,
+             'others-message':imageMessage.from===targetData.account}">  
+     <figure class="main-message-img" v-if="imageMessage.from===targetData.account">
+        <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
+      </figure>
       <i class="fail-button" style="display:none">
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
@@ -17,7 +25,7 @@
         </section>
         <img class="im-image"  v-touch:tap.stop.prevent="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
       </figcaption>
-      <figure class="main-message-img">
+      <figure class="main-message-img" v-if="imageMessage.from===userData.account">
         <img :src="logoUrl" alt="">
       </figure>
     </article>
@@ -101,7 +109,7 @@ export default {
     },
     deleteMsgEvent() {
       this.showDeleteMsg = false;
-      console.log('image组件里的我要删除');
+      console.log("image组件里的我要删除");
       this.$emit("deleteMsgEvent");
     }
   },
@@ -123,7 +131,13 @@ export default {
     },
     deleteMsgIndex: {
       type: Number
-    }
+    },
+        targetData: {
+      type: Object
+    },
+    userData: {
+      type: Object
+    },
   }
 };
 </script>
@@ -134,11 +148,11 @@ export default {
   position: absolute;
   top: 50%;
   left: 0;
-  margin-left: -1rem; 
+  margin-left: -1rem;
   line-height: rem(75px);
   text-align: center;
   display: block;
-  transform:translateY(-50%);
+  transform: translateY(-50%);
   @include circle(rem(75px),#CCEDF2);
 }
 .fade-enter-active,
