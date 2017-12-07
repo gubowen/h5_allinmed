@@ -95,6 +95,12 @@ class Api {
     return wxCommon.isWXBrowse();
   }
 
+  getSiteId () {
+    let siteId = 0;
+    wxCommon.isWXBrowse() == 'other' ? siteId = 21 : siteId = 17;
+    return siteId;
+  }
+
   getByteLen(val) {
     let len = 0;
     for (let i = 0; i < val.length; i++) {
