@@ -4,12 +4,16 @@ const  xhrUrl = {
   loginState:"/mcall/patient/customer/unite/v1/checkSession/"
 }
 const state = {
-  loginOnOff:true,//获取登录状态
+  loginOnOff:false,//获取登录状态
   customerPhoneNum:'',
+  phoneNum:"",
+  phoneError:"",
   weixinName:"",
-  weixinState:false,
+  weixinState:true,
   customerName:"",
   logUrl:"",
+  codeNum:10,
+  codeNumId:"",
   customerId:1509944590525
 };
 const getCustomerInfo = () =>{
@@ -56,7 +60,8 @@ const checkLoginState = () =>{
         state.loginOnOff = true;
         getCustomerInfo();
       }else{
-        //state.loginOnOff = false;
+        state.loginOnOff = false;
+        state.weixinState = false;
       }
     },
     fail(err){

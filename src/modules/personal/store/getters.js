@@ -22,6 +22,12 @@ const getters = {
   },
   customerId(state){
     return state.customerId;
+  },
+  codeNum(state){
+    return state.codeNum;
+  },
+  phoneError(state){
+    return state.phoneError;
   }
 };
 export default getters;
