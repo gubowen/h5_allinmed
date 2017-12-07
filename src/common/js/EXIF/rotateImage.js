@@ -6,14 +6,7 @@
  *
  * Created by Qiangkailiang on 17/11/7.
  */
-/**
- * @Desc：
- * @Usage:
- * @Notify：
- * @Depend：
- *
- * Created by Qiangkailiang on 17/11/6.
- */
+
 
 export default function imageEXIF(dir,imgUrl){
   let image = new Image();

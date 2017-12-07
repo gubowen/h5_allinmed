@@ -15,7 +15,9 @@ import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import showBigImg from '../../components/showBigImg';
 import fastclick from 'fastclick';
-// import api from "common/js/util/util";
+import CheckLogin from 'common/js/auth/checkLogin';
+import api from "common/js/util/util";
+import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
 
 
 fastclick.attach(document.body);
@@ -23,8 +25,18 @@ fastclick.attach(document.body);
 
 class Myconsult {
   constructor() {
-    // api.wxGetOpenId(1);
-    this.init();
+    siteSwitch.weChatJudge(()=>{
+      this.init();
+    },()=>{
+      let checkLogin = new CheckLogin();
+      checkLogin.getStatus().then((data)=>{
+        if(data.responseStatus){
+          this.init();
+        }else{
+          window.location.href = `/mLogin.html?customerId=${api.getPara().customerId}`;
+        }
+      })
+    })
   }
 
   init() {

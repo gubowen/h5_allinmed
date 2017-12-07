@@ -28,7 +28,6 @@
           <img src="../common/image/img00/followWX/picture.png">
         </figure>
       </section>
-      <button class="openWX">打开微信</button>
     </section>
   </section>
 </template>
