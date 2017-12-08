@@ -1,6 +1,6 @@
 <template>
   <section class="mHome">
-    <attention></attention>
+    <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
@@ -59,15 +59,17 @@ import slider from "./slider";
 import tabbar from "components/tabbar";
 import api from "common/js/util/util";
 import Vue from "vue";
+
+
 import CheckLogin from "common/js/auth/checkLogin";
 import GetPersonal from "common/js/auth/getPersonal";
 const getPersonal = new GetPersonal();
 const checkLogin = new CheckLogin();
 let XHRList = {
   //登录页
-  loginUrl: "",
+  loginUrl: "/dist/mLogin.html",
   //问诊
-  diagnose: "",
+  diagnose: `/dist/consult.html?${localStorage.getItem("userId")}`,
   //问诊历史
   historyUrl: "/dist/consult.html?customerId=" + api.getPara().customerId,
   getOrderHistoryLists: "/mcall/customer/case/consultation/v1/getMapList/", //咨询历史接口
@@ -89,19 +91,8 @@ export default {
   },
   methods: {
     init() {
-      this.loginFlag = true;
       this.loginJudge();
-      this.getOrderHistoryLists();
-      //        let obj = {
-      //            img:'../../../common/image/img00/index/personal_default.png',
-      //            name:'测试医生',
-      //            career:'住院医生',
-      //            diagnoseType:'图文问诊',
-      //            createTime:'2006-07-02 08:09:04',
-      //            patientName:'张国良',
-      //            main:'左大腿扭伤、拉伤，3个月，疼啊啊啊啊啊啊啊啊啊啊啊啊'
-      //        };
-      //        this.diagnoseList.push(obj);
+      
     },
     getOrderHistoryLists() {
       const that = this;
@@ -177,9 +168,14 @@ export default {
       }
       return consultationLevel;
     },
+    attentionHandle(){
+      this.$router.push({
+        name:"followWeChat"
+      })
+    },
     //问诊
     diagnoseEvent() {
-      if (this.loginJudge()) {
+      if (this.loginFlag) {
         window.location.href = XHRList.diagnose;
       } else {
         //跳到登录注册页.
@@ -188,7 +184,7 @@ export default {
     },
     //更多
     moreEvent() {
-      if (this.loginJudge()) {
+      if (this.loginFlag) {
         window.location.href = XHRList.historyUrl;
       } else {
         //跳到登录注册页.
@@ -196,24 +192,25 @@ export default {
       }
     },
     //登录
-    loginEvent() {},
+    loginEvent() {
+      window.location.href=XHRList.loginUrl
+    },
     //登录判断
     loginJudge() {
       checkLogin.getStatus().then(res => {
         if (res.data.responseObject.responseStatus) {
           this.loginFlag = true;
           this.getPersonalMessage();
+          this.getOrderHistoryLists();
         } else {
           this.loginFlag = false;
         }
       });
     },
     getPersonalMessage() {
-      getPersonal
-        .getMessage(localStorage.getItem("userId"))
-        .then(res => {
-          console.log(res);
-        });
+      getPersonal.getMessage(localStorage.getItem("userId")).then(res => {
+        console.log(res);
+      });
     }
   },
   mounted() {
