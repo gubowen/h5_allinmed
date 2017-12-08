@@ -2,7 +2,7 @@
   <section class="allinmed-mainInner">
     <div class="padding-plus" v-show="paddingOnOff"></div>
     <router-view></router-view>
-    <tab></tab>
+    <tab :selected=3></tab>
   </section>
 </template>
 <script>
@@ -37,8 +37,7 @@
     min-height: 100%;
     height: auto;
     background: #eee;
-    padding: rem(20px);
-    padding-top: 0;
+    padding: 0 rem(20px);
     position:relative;
     .padding-plus{
       padding-top: rem(20px);
