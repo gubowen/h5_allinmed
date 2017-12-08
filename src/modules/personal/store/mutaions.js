@@ -33,6 +33,9 @@ const mutaions = {
   changePhoneNum(state,num){
     state.phoneNum = num;
   },
+  changeCodeState(state,status){
+    state.codeState = status;
+  },
   getValidCode(state){
     let param = {
       typeId: 2,//	string	是	1-修改/重置密码2-账号验证(绑定手机、手机号注册)3-手机快捷登录4-老患者报到5-短信通知

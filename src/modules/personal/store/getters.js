@@ -28,6 +28,9 @@ const getters = {
   },
   phoneError(state){
     return state.phoneError;
+  },
+  codeState(state){
+    return state.codeState;
   }
 };
 export default getters;

@@ -5,16 +5,17 @@ const  xhrUrl = {
 }
 const state = {
   loginOnOff:false,//获取登录状态
-  customerPhoneNum:'',
-  phoneNum:"",
-  phoneError:"",
-  weixinName:"",
-  weixinState:true,
-  customerName:"",
-  logUrl:"",
-  codeNum:10,
-  codeNumId:"",
-  customerId:1509944590525
+  customerPhoneNum:'',//用户原本的手机号
+  phoneNum:"",//用户当前修改的手机号
+  phoneError:"",//手机号错误提示
+  weixinName:"",//用户微信昵称
+  weixinState:true,//微信绑定状态
+  customerName:"",//用户名
+  logUrl:"",//头像
+  codeNum:10,//一天可以发送多少次验证码，
+  codeNumId:"",//更改手机号的时候，既传验证码，也需要验证码id
+  customerId:1509944590525,//用户id
+  codeState:false//获取验证码是路由跳转，在浏览器可以通过历史按钮触发，填坑
 };
 const getCustomerInfo = () =>{
   let _this = this;
@@ -70,7 +71,7 @@ const checkLoginState = () =>{
   })
 }
 //getCustomerInfo();
-checkLoginState();//检查用户的登录状态
+checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
 
 
 

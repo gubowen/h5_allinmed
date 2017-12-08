@@ -26,11 +26,14 @@
   @import "../../../../scss/library/_common-modules.scss";
   .al-changeMobileBox {
     background-color: #fff;
-    margin-top: rem(20px);
+    width: rem(638px);
+    min-height: rem(100px);
+    margin: rem(20px) auto;
+    background: #fff;
     padding: rem(60px) rem(30px);
     padding-bottom: rem(100px);
     border-radius: rem(16px);
-    height: 100%;
+    height: auto;
   .al-changeMobileContent {
   @include font-dpr(15px);
     color: #808080;
@@ -97,11 +100,11 @@
       codeId(newStr,oldStr){
         if(newStr.length>4){
           this.codeId = oldStr;
-          document.getElementById("validCode").blur();
+          this.postCodeNum();
         }
         if(newStr.length==4){
           this.codeId = newStr;
-          document.getElementById("validCode").blur();
+          this.postCodeNum();
         }
       },
       codeNum(newStr){
@@ -113,10 +116,10 @@
       }
     },
     computed:{
-      ...mapGetters(["codeNum",'customerId','codeNumId'])
+      ...mapGetters(["codeNum",'customerId','codeNumId','codeState'])
     },
     methods:{
-      ...mapActions(['getValidCode']),
+      ...mapActions(['getValidCode','changeCodeState']),
       postCodeNum(){
         let t = this;
         let param = {
@@ -127,6 +130,7 @@
           codeId:t.codeNumId,//	string	是	验证码主键
           validCode:t.codeId,//	string	是	验证码CODE
         }
+        document.getElementById("validCode").blur();
         let codeNum = ()=>{
           api.ajax({
             url: xhrUrl.sendCode,
@@ -181,13 +185,11 @@
         let t = this;
         let timer = ()=>{
           t.timeNum =t.setTimeNum;
-          // this.setTime--;
           t.timeOnOff = true;
           clearInterval(nowTimer);
           let nowTimer = setInterval(function(){
             t.timeNum--;
             if(t.timeNum===0){
-              //一天只能发十次
               t.timeOnOff = false;
               clearInterval(nowTimer);
             }
@@ -207,7 +209,12 @@
           path: "/personalIndex"
         });
       }else{
-        t.timeBegin();
+        if(t.codeState){
+          t.changeCodeState(false);
+          t.timeBegin();
+        }else{
+          t.sendCode();
+        }
       }
     },
     components:{
