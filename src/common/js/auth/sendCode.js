@@ -1,5 +1,5 @@
 /**
- * @Desc：验证码登录
+ * @Desc：发送验证码
  * @Usage:
  * @Notify：
  * @Depend：

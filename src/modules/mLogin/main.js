@@ -9,6 +9,7 @@
 import Vue from 'vue';
 import vueg from 'vueg'
 import App from './App';
+import VeeValidator, {Validator}  from 'vee-validate';
 import VueRouter from 'vue-router';
 import login from './components/login';
 import register from './components/register';
@@ -19,6 +20,7 @@ import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import fastclick from 'fastclick';
 
+import valiadteMethods from '../../common/js/util/validate_methods';
 
 fastclick.attach(document.body);
 
@@ -30,6 +32,7 @@ class MLogin {
 
   init() {
     Vue.use(VueRouter);
+    Vue.use(VeeValidator);//vue使用验证插件
     this.routerStart();
     this.registerRouter();
     //vue路由
@@ -98,6 +101,65 @@ class MLogin {
     ];
   }
 }
+
+
+Validator.extend('mobile', {
+  messages: {
+    en: (field, args) => {
+      return "请填写真实手机号码"
+    },
+    cn: (field, args) => {
+      return "请填写真实手机号码"
+    }
+  },
+  validate: value => {
+    return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/).test(value)
+  }
+});
+
+Validator.extend('special', {
+  messages: {
+    en: field => '请填写真实姓名，不能输入数字及特殊符号',
+  },
+  validate: value => {
+    return !(/[`~!！？@#$%^&*()_+<>?:"{},，。.\/;'[\] ]/).test(value)
+  }
+});
+
+Validator.extend('max_length', {
+  messages: {
+    en: field => '请填写真实姓名',
+  },
+  validate: (value,args) => {
+    let len = 0;
+    for (let i = 0; i < value.length; i++) {
+      if (value[i].match(/[^\x00-\xff]/ig) !== null){
+        len += 2;
+      }
+      else{
+        len += 1;
+      }
+    }
+    return len <= parseInt(args[0]);
+  }
+});
+
+Validator.extend('isEmoji', {
+  messages: {
+    en: field => '请填写真实姓名，不能输入数字及特殊符号',
+  },
+  validate: value => {
+    return !(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g).test(value)
+  }
+});
+Validator.extend('noNumber', {
+  messages: {
+    en: field => '请填写真实姓名，不能输入数字及特殊符号',
+  },
+  validate: value => {
+    return !(/^(?=.*\d.*\b)/).test(value)
+  }
+});
 
 
 new MLogin();
