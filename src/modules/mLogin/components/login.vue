@@ -2,12 +2,12 @@
   <div>
     <section class="loginRegisterBox">
       <ul class="loginRegisterTitle">
-        <li class="fl on">手机验证登录</li>
+        <li class="fl on">{{loginStyle == "phone"?'手机验证登录':'账号密码登录'}}</li>
         <li class="fr" @click="goReginster">注册</li>
       </ul>
 
       <ul class="loginRegisterContent">
-        <li class="loginContent">
+        <li class="phoneLogin" v-if="loginStyle == 'phone'">
           <form class="formBox">
             <p class="phoneInput"><input type="number" placeholder="请输入手机号"></p>
             <p class="codeInput">
@@ -15,13 +15,22 @@
               <span class="getCode">获取验证码</span>
               <span class="codeCountdown" style="display:none;"><i>54</i>秒后重新获取</span>
             </p>
+            <button class="loginButton">登录</button>
+            <article class="changeAndForget">
+              <span class="changeLoginWay fl" @click="loginStyle = 'account'">账号密码登录</span>
+            </article>
+          </form>
+        </li>
+        <li class="accountLogin" v-if="loginStyle == 'account'">
+          <form class="formBox">
+            <p class="phoneInput"><input type="number" placeholder="请输入手机号"></p>
             <p class="codeInput">
               <input type="number" placeholder="请输入密码">
               <i class="icon-eyesStatus fr"></i>
             </p>
             <button class="loginButton">登录</button>
             <article class="changeAndForget">
-              <span class="changeLoginWay fl">账号密码登录</span>
+              <span class="changeLoginWay fl" @click="loginStyle = 'phone'">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
             </article>
           </form>
@@ -29,12 +38,17 @@
       </ul>
       <wechatLead></wechatLead>
     </section>
-    <!-- <vConfirm :confirmParams="{
+    <vConfirm v-if="confirmFlag" :confirmParams="{
       title:'该手机号尚未注册',
       ensure:'立即注册',
-      cancel:'重新输入'
-    }">
-    </vConfirm> -->
+      cancel:'重新输入',}"
+      @ensureClickEvent = 'ensureClickEvent'
+      @cancelClickEvent = 'cancelClickEvent'
+    >
+    </vConfirm>
+    <transition name="fade">
+      <toast :content="errorMsg" v-if="errorShow"></toast>
+    </transition>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -43,13 +57,17 @@
   import api from 'common/js/util/util';
   import vConfirm from 'components/verticalConfirm';
   import wechatLead from './wechatLead';
+  import toast from 'components/toast';
   import "babel-polyfill";
 
   const XHRList = {}
   export default{
     data() {
       return {
-        tabIndex:1
+        confirmFlag:false,//confirm 框的显示隐藏
+        loginStyle:'phone',//登录方式
+        errorShow:false,//toast 框是否显示
+        errorMsg:'',// toast 框提示语
       }
     },
     methods: {
@@ -62,12 +80,28 @@
         this.$router.push({
           name: "forgetPassword"
         });
+      },
+      //confirm 框立即注册事件
+      ensureClickEvent () {
+        this.confirmFlag = false;
+        this.$router.push({
+          name: "register"
+        });
+      },
+      //confirm 框重新输入事件
+      cancelClickEvent () {
+        this.confirmFlag = false;
+      },
+      // 切换登陆方式
+      toggleLogin () {
+        this.loginStyle = this.loginStyle == 'phone'? 'account' :'phone';
       }
     },
     mounted(){},
     components:{
       vConfirm,
-      wechatLead
+      wechatLead,
+      toast
     }
   }
 </script>
@@ -204,4 +238,18 @@
     background-size: 100% 100%;
     margin-top:rem(5px);
   }
+
+
+  /*vue组件自定义动画开始*/
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+  }
+
+  /*vue组件自定义动画结束*/
+
 </style>

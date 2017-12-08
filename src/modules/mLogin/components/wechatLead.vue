@@ -26,7 +26,7 @@
     }
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../../../scss/library/_common-modules";
 .WXlogin{
     position:absolute;

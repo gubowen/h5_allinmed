@@ -180,40 +180,6 @@
       }
     }
   }
-  .WXlogin{
-    position:absolute;
-    bottom:rem(60px);
-    figcaption{
-      display: inline-block;
-      vertical-align:middle;
-      color:#AAAAAA;
-      @include font-dpr(12px);
-      &:before{
-        display: inline-block;
-        content: '';
-        vertical-align:middle;
-        width:rem(86px);
-        height:1px;
-        background:#D8D8D8;
-        margin-right:rem(30px);
-      }
-      &:after{
-        display: inline-block;
-        content: '';
-        vertical-align:middle;
-        width:rem(86px);
-        height:1px;
-        background:#D8D8D8;
-        margin-left:rem(30px);
-      }
-    }
-    .WXimage{
-      display:block;
-      margin:rem(40px) auto 0;
-      width:rem(100px);
-      height:rem(100px);
-    }
-  }
   .icon-eyesStatus{
     display:inline-block;
     width:rem(44px);
