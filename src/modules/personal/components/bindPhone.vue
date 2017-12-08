@@ -84,11 +84,12 @@
           t.$router.push({
             path: "/verificationCode"
           });
+          t.changeCodeState(true);
+          // t.codeState = true;
         }
       }
     },
     mounted(){
-      console.log("进入");
       this.phoneNum = this.$store.state.phoneNum;
       this.$validator.updateDictionary({
         en: {
@@ -103,7 +104,7 @@
       });
     },
     computed:{
-      ...mapGetters(["customerPhoneNum",'customerId','codeNum','phoneError']),
+      ...mapGetters(["customerPhoneNum",'customerId','codeNum','phoneError','codeState']),
       activeOnOff(){
         return (this.phoneNum.length===11);
       },
@@ -113,7 +114,7 @@
       }
     },
     methods:{
-      ...mapActions(["changePhoneNum",'getValidCode']),
+      ...mapActions(["changePhoneNum",'getValidCode','changeCodeState']),
       inputBegin(index){
         this.cancelIndex = index;
       },

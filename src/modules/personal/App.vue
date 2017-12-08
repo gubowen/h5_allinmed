@@ -1,17 +1,32 @@
 <template>
   <section class="allinmed-mainInner">
-    <div class="padding-plus"></div>
+    <div class="padding-plus" v-show="paddingOnOff"></div>
     <router-view></router-view>
+    <tab></tab>
   </section>
 </template>
 <script>
   import fb from 'common/js/third-party/flexible'
-
+  import tab from 'components/tabbar'
 
   export default {
     data () {
       return {
-        msg: 'hello'
+        msg: 'hello',
+        paddingOnOff:true
+
+      }
+    },
+    components:{
+      tab
+    },
+    watch:{
+      '$route'(router){
+        if(router.path==='/aboutAllinmed'){
+          this.paddingOnOff = false;
+        }else{
+          this.paddingOnOff = true;
+        }
       }
     }
   }
