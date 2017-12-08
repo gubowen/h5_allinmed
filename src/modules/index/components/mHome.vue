@@ -40,7 +40,7 @@
               <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
               <div class="doctor-info">
                 <p class="doctor-type"><span class="name">{{item.consultationType == 0 ? '唯医门诊医生' : getFullName(item)}}</span><span class="career">{{item.medicalTitle}}</span></p>
-                <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime|formatTime}}</span></p>
+                <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime.substring(0,item.createTime.length-2)}}</span></p>
               </div>
             </div>
             <div class="patient">
@@ -92,7 +92,7 @@ export default {
   methods: {
     init() {
       this.loginJudge();
-      
+
     },
     getOrderHistoryLists() {
       const that = this;
@@ -111,16 +111,8 @@ export default {
         },
         timeout: 30000,
         done(response) {
-          if (
-            response &&
-            response.responseObject.responseData.dataList &&
-            response.responseObject.responseData.dataList.length > 0
-          ) {
-            Vue.set(
-              that.diagnoseList,
-              0,
-              response.responseObject.responseData.dataList[0]
-            );
+          if (response &&response.responseObject.responseData.dataList &&response.responseObject.responseData.dataList.length > 0) {
+            that.diagnoseList = response.responseObject.responseData.dataList;
           }
         }
       });
@@ -198,7 +190,7 @@ export default {
     //登录判断
     loginJudge() {
       checkLogin.getStatus().then(res => {
-        if (res.data.responseObject.responseStatus) {
+        if (!res.data.responseObject.responseStatus) {
           this.loginFlag = true;
           this.getPersonalMessage();
           this.getOrderHistoryLists();
