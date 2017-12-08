@@ -1,6 +1,5 @@
 <template>
-  <section class="allinmed-mainInner">
-    <div class="padding-plus" v-show="paddingOnOff"></div>
+  <section class="allinmed-mainInner" :class="{'have-padding':paddingOnOff}">
     <router-view></router-view>
     <tab :selected=3></tab>
   </section>
@@ -12,32 +11,30 @@
   export default {
     data () {
       return {
-        msg: 'hello',
-        paddingOnOff:true
-
+        msg: 'hello'
       }
+    },
+    computed:{
+      paddingOnOff(){
+        return ((this.$route.path==='/aboutAllinmed')||(this.$route.path==='/contactUs'))?false:true;
+      }
+    },
+    methods:{
+
     },
     components:{
       tab
-    },
-    watch:{
-      '$route'(router){
-        if(router.path==='/aboutAllinmed'){
-          this.paddingOnOff = false;
-        }else{
-          this.paddingOnOff = true;
-        }
-      }
     }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../scss/library/_common-modules.scss";
+
   .allinmed-mainInner {
     min-height: 100%;
     height: auto;
     background: #eee;
-    padding: 0 rem(20px);
+    padding: 0;
     position:relative;
     .padding-plus{
       padding-top: rem(20px);
@@ -242,6 +239,9 @@
       opacity: .5;
     }
     }
+  }
+  .have-padding{
+    padding:rem(20px) 0;
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s

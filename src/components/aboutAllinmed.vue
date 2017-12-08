@@ -47,11 +47,6 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../scss/library/_common-modules";
-  .allinmed-mainInner{
-    height: 100%;
-    padding:0;
-  }
-
   .main-box{
     height: 100%;
     width: 100%;
