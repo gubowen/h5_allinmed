@@ -22,9 +22,9 @@ import fastclick from 'fastclick';
 
 import valiadteMethods from '../../common/js/util/validate_methods';
 
-fastclick.attach(document.body);
+// fastclick.attach(document.body);
 
-
+console.log(module)
 class MLogin {
   constructor() {
     this.init();
@@ -163,3 +163,6 @@ Validator.extend('noNumber', {
 
 
 new MLogin();
+if (module.hot) {  
+  module.hot.accept();
+}

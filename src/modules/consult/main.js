@@ -28,7 +28,6 @@ import fastclick from 'fastclick';
 import valiadteMethods from '../../common/js/util/validate_methods';
 // fastclick.attach(document.body);
 
-
 class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）

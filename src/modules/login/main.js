@@ -222,3 +222,7 @@ Validator.extend('noNumber', {
     return !(/^(?=.*\d.*\b)/).test(value)
   }
 });
+
+if (module.hot) {  
+  module.hot.accept();
+}

@@ -19,23 +19,25 @@ export default class PassLogin {
 
   }
 
-  login(param) {
+  loginInit(param) {
     return new Promise((resolve, reject) => {
       ajax({
         url: XHRList.login,
         method: "POST",
         data: {
-            siteId:api.getSiteId(),
-            account:param.account,
-            password:param.password
+          siteId: api.getSiteId(),
+          account: param.account,
+          password: param.password
         },
         timeout: 10000,
         done(res) {
           resolve(res);
         },
         fail(err) {
-          reject(err);
-          throw new Error(err);
+          if (err) {
+            reject(err);
+            throw new Error(err);
+          }
         }
       })
     })

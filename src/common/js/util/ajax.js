@@ -21,7 +21,7 @@ export default function ajax(param) {
     url: param.url,
     method: param.method,
     data: param.data,
-    transformRequest: [function(data) {
+    transformRequest: [function (data) {
       return "paramJson=" + JSON.stringify(data);
     }],
     headers: {
@@ -33,7 +33,7 @@ export default function ajax(param) {
     if (document.querySelector(".ev-loading")) {
       document.querySelector(".ev-loading").style.display = "none";
     }
-  }, (err) => {
+  }).catch((err) => {
     param.fail && param.fail(err);
   });
 }

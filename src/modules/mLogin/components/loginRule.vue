@@ -191,6 +191,7 @@
             height: rem(56px);
             margin-top: rem(-28px);
             background: url("../../../common/image/img00/login/logo@2x.png") no-repeat center;
+            background-size: cover;
           }
         }
       }

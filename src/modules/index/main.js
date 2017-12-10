@@ -77,3 +77,6 @@ class Home{
 }
 
 let home = new Home();
+if (module.hot) {  
+  module.hot.accept();
+}

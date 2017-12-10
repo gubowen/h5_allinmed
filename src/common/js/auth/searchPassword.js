@@ -1,35 +1,36 @@
 /**
- * @Desc：验证码登录
+ * @Desc：找回密码
  * @Usage:
  * @Notify：
  * @Depend：
  *
- * Created by Qiangkailiang on 17/12/08.
+ * Created by lichenyang on 17/12/08.
  */
+
 
 import api from "common/js/util/util";
 const XHRList = {
-  validLogin: "/mcall/patient/customer/unite/v1/validCodelogin/"
+    searchPasswordUrl: "/mcall/patient/customer/send/code/v1/searchPassword/"
 };
-export default class ValidCodeLogin {
+export default class searchPassword {
   constructor() {
 
   }
 
-  validInit(param) {
+  searchInit(param) {
     return new Promise((resolve, reject) => {
       api.ajax({
-        url: XHRList.validLogin,
+        url: XHRList.searchPasswordUrl,
         method: "POST",
         data: {
           userType: 1,
-          account: param.account,
-          isValid: 1,
+          account: param.account, //账号
           codeId: param.codeId,
           validCode: param.validCode,
+          isValid: 1,
           password: param.password,
           optType: 1,
-          typeId: param.typeId
+          typeId: 1
         },
         timeout: 10000,
         done(res) {
@@ -40,6 +41,7 @@ export default class ValidCodeLogin {
             reject(err);
             throw new Error(err);
           }
+
         }
       })
     })
