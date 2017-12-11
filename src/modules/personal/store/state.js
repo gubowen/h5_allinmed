@@ -31,7 +31,8 @@ const getCustomerInfo = () =>{
     timeout: 20000,
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
-        state.logUrl = (data.responseObject.responseData.headUrl.length)?(data.responseObject.responseData.headUrl):'http://p1.gexing.com/touxiang/20120831/2327/5040d7dbbdc74_200x200_3.jpg';
+        let imgUrl = require("../../../common/image/img00/avatar.png");
+        state.logUrl = (data.responseObject.responseData.headUrl.length)?(data.responseObject.responseData.headUrl):imgUrl;
         state.customerName = (data.responseObject.responseData.nickName.length)?(data.responseObject.responseData.nickName):(localStorage.getItem("mobile"));
         state.weixinName = data.responseObject.responseData.uniteNickname;
         state.customerId = data.responseObject.responsePk;
