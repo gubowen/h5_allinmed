@@ -104,7 +104,7 @@ export default {
           patientCustomerId: localStorage.getItem("userId"),
           isValid: 1,
           firstResult: 0,
-          maxResult: 20,
+          maxResult: 1,
           logoUseFlag: 3
         },
         timeout: 30000,

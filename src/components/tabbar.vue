@@ -50,7 +50,7 @@
         }else{
           this.historyUrl = `./myConsult.html?customerId=${userId}`;
         }
-        this.myUrl = `./personal.html?customerId=${userId}`;
+        this.myUrl = `./personal.html`;
       },
       toUrl (num) {
 //        if (this.selected == num) return false;

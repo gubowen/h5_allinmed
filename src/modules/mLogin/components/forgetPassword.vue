@@ -179,7 +179,7 @@ export default {
           if (data.responseObject.responseStatus) {
             this.toastComm("密码修改成功");
             setTimeout(() => {
-              window.location.href="/";
+              window.location.href="/dist/mLogin.html";
             }, 3000);
             this.$store.commit("setLoadingState",false);
           } else {
