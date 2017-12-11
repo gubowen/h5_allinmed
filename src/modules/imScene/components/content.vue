@@ -14,7 +14,7 @@
       </i>
       <figcaption class="main-message-content">
         <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</span>
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition>
         <p>{{contentMessage.text}}</p>
       </figcaption>

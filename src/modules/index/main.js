@@ -8,11 +8,10 @@
  */
 import Vue from 'vue';
 import App from './App';
-import mHome from './components/mHome';
 import VueRouter from 'vue-router';
 import fastclick from 'fastclick';
 import "static/css/base.css";
-
+import route from "./route/route.config";
 
 
 
@@ -30,7 +29,7 @@ class Home{
 
   init(){
     Vue.use(VueRouter);
-    this.routerStart();
+ 
     this.registerRouter();
 
     this.goToRouter();
@@ -42,45 +41,8 @@ class Home{
       router: this.router,
       render: h => h(App)
     });
-
-    Vue.filter("formatTime", function(time) {
-      var format = function(num) {
-        return num > 9 ? num : "0" + num;
-      };
-
-      var normalTime = function(time) {
-        var d = new Date(time);
-        var obj = {
-          y: d.getFullYear(),
-          m: format(d.getMonth() + 1),
-          dd: format(d.getDate()),
-          h: format(d.getHours()),
-          mm: format(d.getMinutes())
-        };
-        return obj;
-      };
-      let result = "";
-       result = normalTime(time).m + "-" + normalTime(time).dd +' '+ normalTime(time).h +':'+normalTime(time).mm ;
-
-      return result;
-    })
   }
-  //路由注册
-  routerStart() {
-    this.routes = [
-      {
-        path:"/",
-        redirect:"/home"
-      },{
-        path: "/home",
-        name: "home",
-        component: mHome,
-        meta: {
-          keepAlive: true
-        },
-      }
-    ]
-  }
+  
   //路由实例化生成
   registerRouter(){
     const options={
@@ -99,7 +61,7 @@ class Home{
       disable: false,               //禁用转场动画，默认为false，嵌套路由默认为true
     };
     this.router = new VueRouter({
-      routes: this.routes,
+      routes: route,
       scrollBehavior (to, from, savedPosition) {
         return {x: 0, y: 0}
       }
@@ -115,3 +77,6 @@ class Home{
 }
 
 let home = new Home();
+if (module.hot) {  
+  module.hot.accept();
+}

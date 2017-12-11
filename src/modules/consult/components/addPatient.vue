@@ -265,9 +265,11 @@
       this.finish=false;
       this.initData();
       this.currentIndex = -1;
+      document.title="为谁问诊";
     },
     mounted() {
 //      console.log(PickerDate);
+      document.title="为谁问诊";
       if(!api.checkOpenId()){
         api.wxGetOpenId(1);
       }

@@ -41,14 +41,19 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple>
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple ref="uploader">
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple  :capture="cameraType" ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList1.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="uploading1===false&&imageList1.length<9"
-                             @change="onFileChange($event,1)" multiple >
+                             v-if="!isIos&&uploading1===false&&imageList1.length<9"
+                             @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="isIos&&uploading1===false&&imageList1.length<9"
+                             @change="onFileChange($event,1)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
@@ -64,14 +69,19 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple>
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,2,index)" multiple ref="uploader">
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,2,index)" multiple  :capture="cameraType" ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList2.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple >
+                             v-if="!isIos&&uploading2===false&&imageList2.length<9"
+                             @change="onFileChange($event,2)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="isIos&&uploading2===false&&imageList2.length<9"
+                             @change="onFileChange($event,2)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
@@ -169,6 +179,14 @@
    */
 
 // import selectArea from 'components/selectArea';
+let _cameraType = "";
+
+if (navigator.userAgent.toLowerCase().includes("iphone")) {
+  _cameraType = "";
+} else {
+  _cameraType = "camera";
+}
+
 import api from "common/js/util/util";
 import loading from "components/loading";
 import toast from "components/toast";
@@ -206,15 +224,17 @@ export default {
         has: false,
         none: false
       },
+      cameraType: _cameraType,
       patientParams: {
         customerId: api.getPara().customerId,
         doctorId: api.getPara().doctorId
       },
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       orderSourceId: "", //进入分诊im需要orderSourceId
       finish: false,
       deletePic: {},
       deletePicTip: false,
-      noWXPayShow:false,
+      noWXPayShow: false,
       upLoadTip: false,
       levelShow: false,
       backPopupShow: false,
@@ -264,7 +284,7 @@ export default {
   activated() {
     this.finish = false;
     this.initData();
-    this.isShowPaySuccess();//支付弹层
+    this.isShowPaySuccess(); //支付弹层
     document.title = "描述病情";
     if (localStorage.getItem("PCIMLinks") !== null) {
       this.backPopupShow = true;
@@ -279,7 +299,7 @@ export default {
   mounted() {
     document.title = "描述病情";
     this.initData();
-    this.isShowPaySuccess();//支付弹层
+    this.isShowPaySuccess(); //支付弹层
     // document.body.scrollTop = 0;
     autosize(this.$el.querySelector(".medicineBox"));
     localStorage.setItem("hasCome", 0);
@@ -287,7 +307,7 @@ export default {
       this.backPopupShow = true;
     } else {
       this.backPopupShow = false;
-    };
+    }
     api.forbidShare();
   },
   beforeRouteEnter(to, from, next) {
@@ -322,6 +342,10 @@ export default {
 
       if (this.$route.params.from === "hospital") {
         this.hospitalMessage = this.$route.params.baseMessage;
+      }
+      // alert(navigator.userAgent.toLowerCase())
+      if (navigator.userAgent.toLowerCase().includes("iphone")) {
+        $(".ev-upLoadInput").removeAttr("capture");
       }
     },
     selectHospital() {
@@ -359,13 +383,13 @@ export default {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
           this.errorMsg = "图片不能超过10M";
-          this["uploading"+[type]] = true;    //重置input file 对象
+          this["uploading" + [type]] = true; //重置input file 对象
           setTimeout(() => {
             this.errorMsg = "";
             this.errorShow = false;
             if (i == files.length - 1) {
               // this.loading = false;   //开启上传权限
-              this["uploading"+[type]] = false;
+              this["uploading" + [type]] = false;
             }
           }, 3000);
         } else {
@@ -378,7 +402,7 @@ export default {
               {
                 imgSrc: oFREvent.target.result,
                 quality: 0.8,
-
+                file:files[i]
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
@@ -439,9 +463,12 @@ export default {
         url: XHRList.upload,
         method: "POST",
         data: {
-          fileContent: base64.split(",")[1].replace(/\+/g,"%2B").replace(/\n/g,""),
+          fileContent: base64
+            .split(",")[1]
+            .replace(/\+/g, "%2B")
+            .replace(/\n/g, ""),
           fileName: files.name,
-          extName:files.name.split(".")[1],
+          extName: files.name.split(".")[1],
           caseId: "",
           imageType: _imageType,
           caseCategoryId: ""
@@ -475,7 +502,7 @@ export default {
                 index,
                 that.base64Arr[that.uploadIndex]
               );
-            }else {
+            } else {
               if (that.filesObj[that.uploadIndex]) {
                 that.errorShow = true;
                 that.errorMsg = "图片最多上传9张！";
@@ -561,7 +588,7 @@ export default {
     submitParamsInstall() {
       if (!this.validateParamsFull()) {
         return false;
-      } else if(this.uploading1||this.uploading1){
+      } else if (this.uploading1 || this.uploading1) {
         //图片上传中
         this.errorShow = true;
         this.errorMsg = "图片上传中...";
@@ -569,7 +596,7 @@ export default {
           this.errorMsg = "";
           this.errorShow = false;
         }, 1000);
-      }else{
+      } else {
         //提示用户提交后不可修改提交内容
         if (localStorage.getItem("PCIMLinks") !== null) {
           this.backPopupShow = true;
@@ -634,7 +661,7 @@ export default {
         done(data) {
           if (data.responseObject.responsePk !== 0) {
             that.responseCaseId = data.responseObject.responsePk;
-            localStorage.setItem("payCaseId",that.responseCaseId);
+            localStorage.setItem("payCaseId", that.responseCaseId);
             //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
             api.getPara().doctorId
               ? that.getProfessionalDoctor()
@@ -646,36 +673,36 @@ export default {
       });
     },
     //获取orderSourceId
-//    createOrderSourceId() {
-//      const that = this;
-//      if (that.isClick) {
-//        return false;
-//      }
-//      that.isClick = true;
-//      api.ajax({
-//        url: XHRList.triageAssign,
-//        method: "POST",
-//        data: {
-//          caseId: that.responseCaseId,
-//          customerId: 0,
-//          patientCustomerId: api.getPara().customerId,
-//          patientId: that.allParams.patientId,
-//          consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
-//          consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-//          siteId: 17,
-//          caseType: 0
-//        },
-//        done(data) {
-//          if (data.responseObject.responseStatus) {
-//            console.log("获取orderSourceId成功");
-//            that.orderSourceId = data.responseObject.responsePk;
-//            that.getConsultPrice();
-//          } else {
-//            console.log("获取orderSourceId失败");
-//          }
-//        }
-//      });
-//    },
+    //    createOrderSourceId() {
+    //      const that = this;
+    //      if (that.isClick) {
+    //        return false;
+    //      }
+    //      that.isClick = true;
+    //      api.ajax({
+    //        url: XHRList.triageAssign,
+    //        method: "POST",
+    //        data: {
+    //          caseId: that.responseCaseId,
+    //          customerId: 0,
+    //          patientCustomerId: api.getPara().customerId,
+    //          patientId: that.allParams.patientId,
+    //          consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
+    //          consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+    //          siteId: 17,
+    //          caseType: 0
+    //        },
+    //        done(data) {
+    //          if (data.responseObject.responseStatus) {
+    //            console.log("获取orderSourceId成功");
+    //            that.orderSourceId = data.responseObject.responsePk;
+    //            that.getConsultPrice();
+    //          } else {
+    //            console.log("获取orderSourceId失败");
+    //          }
+    //        }
+    //      });
+    //    },
     //获取咨询价格
     getConsultPrice(caseId) {
       const that = this;
@@ -743,46 +770,49 @@ export default {
           //支付失败回调  (问诊/门诊类型 必选)
         }
       });
-//      siteSwitch.weChatJudge(
-//        ()=>{
-//          if(price>0){
-//            that.noWXPayShow = false;
-//          }
-//        },
-//        ()=>that.noWXPayShow = true
-//      );
+      //      siteSwitch.weChatJudge(
+      //        ()=>{
+      //          if(price>0){
+      //            that.noWXPayShow = false;
+      //          }
+      //        },
+      //        ()=>that.noWXPayShow = true
+      //      );
     },
     //判断是否显示支付结果弹层
-    isShowPaySuccess(){
-      if(localStorage.getItem("payOk") == 1){
+    isShowPaySuccess() {
+      if (localStorage.getItem("payOk") == 1) {
         this.noWXPayShow = true;
-      }else{
+      } else {
         this.noWXPayShow = false;
       }
     },
     //查看m站支付结果
-    viewPayResult(){
+    viewPayResult() {
       let that = this;
       WxPayCommon.PayResult({
-        outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
-      }).then(function (data) {
-        console.log("查看回调",data);
-        if(data.resultCode == "SUCCESS"){
-          localStorage.removeItem("payOk");
-          that.noWXPayShow = false;
-          that.getTriageDoctorId();
-        }else{
-          that.isClick = false; //是否点击立即咨询重置
-          console.log("未支付成功");
-        }
-      }).catch(function (err) {
-        console.log(err);
+        outTradeNo: localStorage.getItem("orderNumber") //微信订单号
       })
+        .then(function(data) {
+          console.log("查看回调", data);
+          if (data.resultCode == "SUCCESS") {
+            localStorage.removeItem("payOk");
+            that.noWXPayShow = false;
+            that.getTriageDoctorId();
+          } else {
+            that.isClick = false; //是否点击立即咨询重置
+            console.log("未支付成功");
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     },
     //支付失败跳转
-    payFail(){
+    payFail() {
       localStorage.removeItem("payOk");
-      window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId}`;
+      window.location.href = `/dist/consult.html?customerId=${api.getPara()
+        .customerId}`;
     },
     //创建专业医生会话
     getProfessionalDoctor() {
@@ -866,23 +896,26 @@ export default {
       that.isClick = false;
       that.backPopupShow = true;
       that.clearPageData();
-      siteSwitch.weChatJudge(()=>{
-        window.location.href =
-          "/dist/imScene.html?caseId=" +
-          that.responseCaseId +
-          "&patientId=" +
-          that.allParams.patientId +
-          "&patientCustomerId=" +
-          that.allParams.customerId;
-      },()=>{
-        window.location.href =
-          "/dist/imScene.html?caseId=" +
-          localStorage.getItem('payCaseId') +
-          "&patientId=" +
-          localStorage.getItem('payPatientId') +
-          "&patientCustomerId=" +
-          that.allParams.customerId;
-      });
+      siteSwitch.weChatJudge(
+        () => {
+          window.location.href =
+            "/dist/imScene.html?caseId=" +
+            that.responseCaseId +
+            "&patientId=" +
+            that.allParams.patientId +
+            "&patientCustomerId=" +
+            that.allParams.customerId;
+        },
+        () => {
+          window.location.href =
+            "/dist/imScene.html?caseId=" +
+            localStorage.getItem("payCaseId") +
+            "&patientId=" +
+            localStorage.getItem("payPatientId") +
+            "&patientCustomerId=" +
+            that.allParams.customerId;
+        }
+      );
     },
     // 填写情况验证
     validateParamsFull() {
