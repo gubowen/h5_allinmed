@@ -66,7 +66,7 @@
       }
     },
     computed:{
-      ...mapGetters(["customerId",'customerPhoneNum']),
+      ...mapGetters(["customerId",'customerPhoneNum','loginUrl']),
       pswType(){
         return (this.eyeState)?"text":"password";
       },
@@ -172,6 +172,10 @@
                 if(data&&data.responseObject&&data.responseObject.responseStatus){
                   console.log(data.responseObject.responseCode,typeof data.responseObject.responseCode)
                   t.toast("修改密码成功，请重新登录");
+                  clearTimeout(callBackTimer);
+                  let callBackTimer = setTimeout(function () {
+                    window.location.href = t.loginUrl;
+                  },2000)
                 }else{
                   if(data.responseObject.responseCode==='0A0005'){
                     t.toast("当前密码不正确！");

@@ -4,6 +4,7 @@ const  xhrUrl = {
   loginState:"/mcall/patient/customer/unite/v1/checkSession/"
 }
 const state = {
+  loginUrl:"/mLogin.html",
   loginOnOff:false,//获取登录状态
   customerPhoneNum:'',//用户原本的手机号
   phoneNum:"",//用户当前修改的手机号
@@ -15,6 +16,7 @@ const state = {
   codeNum:10,//一天可以发送多少次验证码，
   codeNumId:"",//更改手机号的时候，既传验证码，也需要验证码id
   customerId:localStorage.getItem("userId"),//用户id
+  loadingOnOff:false,
   codeState:false//获取验证码是路由跳转，在浏览器可以通过历史按钮触发，填坑
 };
 const getCustomerInfo = () =>{
