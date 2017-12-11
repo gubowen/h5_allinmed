@@ -31,6 +31,9 @@ const getters = {
   },
   codeState(state){
     return state.codeState;
+  },
+  loginUrl(state){
+    return state.loginUrl;
   }
 };
 export default getters;

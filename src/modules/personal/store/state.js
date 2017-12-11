@@ -4,7 +4,8 @@ const  xhrUrl = {
   loginState:"/mcall/patient/customer/unite/v1/checkSession/"
 }
 const state = {
-  loginOnOff:true,//获取登录状态
+  loginUrl:"",
+  loginOnOff:false,//获取登录状态
   customerPhoneNum:'',//用户原本的手机号
   phoneNum:"",//用户当前修改的手机号
   phoneError:"",//手机号错误提示
@@ -70,8 +71,8 @@ const checkLoginState = () =>{
     }
   })
 }
-getCustomerInfo();
-//checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
+//getCustomerInfo();
+checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
 
 
 
