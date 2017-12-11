@@ -21,7 +21,8 @@ import followWechat from 'components/followWechat';
 // import vueg from 'vueg'
 // import 'vueg/css/transition-min.css';
 import "static/css/base.css";
-import api from '../../common/js/util/util';
+import CheckLogin from 'common/js/auth/checkLogin';
+import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
 
 import searchList from 'components/searchList';
@@ -34,7 +35,14 @@ class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）
     api.banZoom();
-    this.init();
+    let checkLogin = new CheckLogin();
+    checkLogin.getStatus().then((res)=>{
+      if(res.data.responseObject.responseStatus){
+        this.init();
+      }else{
+        window.location.href = `/mLogin.html?customerId=${api.getPara().customerId}`;
+      }
+    })
   }
 
   init() {

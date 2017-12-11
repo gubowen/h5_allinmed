@@ -17,7 +17,6 @@ import showBigImg from '../../components/showBigImg';
 import fastclick from 'fastclick';
 import CheckLogin from 'common/js/auth/checkLogin';
 import api from "common/js/util/util";
-import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
 
 
 fastclick.attach(document.body);
@@ -25,17 +24,14 @@ fastclick.attach(document.body);
 
 class Myconsult {
   constructor() {
-    siteSwitch.weChatJudge(()=>{
-      this.init();
-    },()=>{
-      let checkLogin = new CheckLogin();
-      checkLogin.getStatus().then((data)=>{
-        if(data.responseStatus){
-          this.init();
-        }else{
-          window.location.href = `/mLogin.html?customerId=${api.getPara().customerId}`;
-        }
-      })
+    // this.init();
+    let checkLogin = new CheckLogin();
+    checkLogin.getStatus().then((res)=>{
+      if(res.data.responseObject.responseStatus){
+        this.init();
+      }else{
+        window.location.href = `/mLogin.html?customerId=${api.getPara().customerId}`;
+      }
     })
   }
 

@@ -254,7 +254,7 @@
     },
     activated(){
       //手机号校验
-      api.mobileCheck();
+//      api.mobileCheck();
       // document.title = "填写患者信息";
       this.finish = false;
       this.initData();

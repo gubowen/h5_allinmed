@@ -41,6 +41,9 @@
           </button>
         </div>
       </section>
+      <infinite-loading @infinite="onInfinite">
+        <!--<span slot="{{no-more}}">{{没有更多了}}</span>-->
+      </infinite-loading>
     </div>
     <loading v-show="finish"></loading>
   </section>
@@ -54,6 +57,7 @@
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
 
   const XHRList = {
@@ -65,26 +69,20 @@
       return {
         finish: false,
         noFriend: false,
-        counter: 1,
-        num: 10,
-        pageStart: 0,
-        pageEnd: 0,
-        items: [],
-        scrollData: {
-          noFlag: false
-        }
+        pageNum: 20,
+        pageStart:0,
+        items: []
       }
     },
     mounted(){
-      api.mobileCheck();
+//      api.mobileCheck();
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);    //获取openId
       }
       api.forbidShare();
-      this.getOrderHistoryLists();
     },
     methods: {
-      getOrderHistoryLists(){
+      onInfinite($state){
         const that = this;
         api.ajax({
           url: XHRList.getOrderHistoryLists,
@@ -92,8 +90,8 @@
           data: {
             patientCustomerId: api.getPara().customerId,
             isValid: 1,
-            firstResult: 0,
-            maxResult: 9999,
+            firstResult: that.pageStart,
+            maxResult: that.pageNum,
             logoUseFlag: 3
           },
           headers: {
@@ -104,17 +102,19 @@
             that.finish = true;
           },
           done(response){
-            console.log(response.responseObject.responseData.dataList)
             if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
-              that.items = response.responseObject.responseData.dataList;
-            } else {
-              that.noFriend = true;
+              that.pageStart += that.pageNum;
+              let temp = response.responseObject.responseData.dataList;
+              that.items = that.items.concat(temp);
+              $state.loaded();
+            }else{
+              if(that.pageStart>0){
+                $state.complete()
+              }else{
+                that.noFriend = true;
+              }
             }
-          },
-          fail(error){
-            document.querySelector(".ev-loading").style.display = "none";
-            console.log("数据错误");
-            console.log(error);
+            that.finish = false;
           }
         })
       },
@@ -317,41 +317,13 @@
             console.log(error);
           }
         })
-      },
-      onRefresh(done) {
-        this.getOrderHistoryLists();
-        done();
-      },
-      onInfinite(done) {
-        console.log(2)
-        this.counter++;
-        let end = this.pageEnd = this.num * this.counter;
-        let i = this.pageStart = this.pageEnd - this.num;
-        let more = this.$el.querySelector('.load-more')
-        for (i; i < end; i++) {
-          if (i >= 30) {
-            more.style.display = 'none'; //隐藏加载条
-            //走完数据调用方法
-            this.scrollData.noFlag = true;
-
-            break;
-          } else {
-            this.listdata.push({
-              date: "2017-06-1" + i,
-              portfolio: "1.5195" + i,
-              drop: i + "+.00 %",
-              state: 2
-            })
-            more.style.display = 'none'; //隐藏加载条
-          }
-        }
-        done();
-      },
+      }
     },
     components: {
       loading,
       toast,
-      loadMore
+      loadMore,
+      InfiniteLoading
     }
   }
 </script>
