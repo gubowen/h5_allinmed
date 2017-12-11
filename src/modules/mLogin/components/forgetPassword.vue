@@ -175,7 +175,7 @@ export default {
           if (data.responseObject.responseStatus) {
             this.toastComm("密码修改成功");
             setTimeout(() => {
-              window.location.href="m.allinmed.cn";
+              window.location.href="m.allinmed.cn/mLogin.html";
             }, 3000);
           } else {
             this.toastComm(data.responseObject.responseMessage);
@@ -214,7 +214,7 @@ export default {
     @include font-dpr(17px);
     @include clearfix();
     .getCode {
-      width: 40%;
+      width: 45%;
       float: right;
       text-align: right;
       color: #2fc5bd;
@@ -228,7 +228,7 @@ export default {
       border: none;
       color: #101010;
       font-weight: 600;
-      width: 55%;
+      width: 57%;
       float: left;
       @include placeholder() {
         color: #a0a0a0;

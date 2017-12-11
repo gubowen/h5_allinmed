@@ -258,6 +258,13 @@ export default {
           typeId:3
         }).then((data)=>{
           if (data.responseObject.responseStatus){
+            const _obj=data.responseObject.responseData;
+
+            localStorage.setItem("userId",_obj.customerId);
+            localStorage.setItem("userName",_obj.nickName);
+            localStorage.setItem("mobile",_obj.mobile);
+            localStorage.setItem("logoUrl",_obj.headUrl);
+
             this.toastComm("登录成功，即将返回来源页面",()=>{
               window.location.href="m.allinmed.cn";
             });
