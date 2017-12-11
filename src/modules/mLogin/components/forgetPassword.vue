@@ -24,8 +24,8 @@
             v-model="codeMessage" 
             v-validate="'required|digits:4'" 
             name="codeInput" />
-          <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
-          <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
+          <span class="getCode" v-if="codeTime<=0" @click="sendCode" style="width:38%">重新发送</span>
+          <span class="codeCountdown" v-if="codeTime>0" style="width:45%"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
         <p class="codeInput" v-if="finishMobile">
           <input :type='passwordHide?"password":"text"' 
@@ -125,6 +125,7 @@ export default {
     },
     sendCode() {
       this.$validator.validateAll();
+      this.$store.commit("setLoadingState",true);
       if (this.errors.has("phone")) {
         this.toastComm(this.errors.first(name));
       } else {
@@ -141,8 +142,10 @@ export default {
               this.toastComm("验证码已发送");
               this.imgUrl = this.toastImg.success;
               this.countDown(60);
+               this.$store.commit("setLoadingState",false);
             } else {
               this.toastComm(data.responseObject.responseMessage);
+               this.$store.commit("setLoadingState",false);
             }
           });
       }
@@ -164,6 +167,7 @@ export default {
       }, 1000);
     },
     resetPassword() {
+       this.$store.commit("setLoadingState",true);
       searchPassword
         .searchInit({
           account: this.phoneMessage,
@@ -177,8 +181,10 @@ export default {
             setTimeout(() => {
               window.location.href="m.allinmed.cn/mLogin.html";
             }, 3000);
+            this.$store.commit("setLoadingState",false);
           } else {
             this.toastComm(data.responseObject.responseMessage);
+            this.$store.commit("setLoadingState",false);
           }
         });
     }

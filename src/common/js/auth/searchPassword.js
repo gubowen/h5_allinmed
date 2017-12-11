@@ -10,7 +10,7 @@
 
 import api from "common/js/util/util";
 const XHRList = {
-    searchPasswordUrl: "/mcall/patient/customer/send/code/v1/searchPassword/"
+    searchPasswordUrl: "/mcall/patient/customer/unite/v1/searchPassword/"
 };
 export default class searchPassword {
   constructor() {
@@ -27,6 +27,7 @@ export default class searchPassword {
           account: param.account, //账号
           codeId: param.codeId,
           validCode: param.validCode,
+          siteId:api.getSiteId(),
           isValid: 1,
           password: param.password,
           optType: 1,

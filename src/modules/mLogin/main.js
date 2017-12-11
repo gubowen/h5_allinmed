@@ -19,7 +19,7 @@ import wechat from 'components/followWechat';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import fastclick from 'fastclick';
-
+import store from "./store/store";
 import valiadteMethods from '../../common/js/util/validate_methods';
 
 // fastclick.attach(document.body);
@@ -41,6 +41,7 @@ class MLogin {
     });
     //Vue实例启动
     const app = new Vue({
+      store,
       router: this.router,
       render: h => h(App)
     }).$mount("#mLogin");
