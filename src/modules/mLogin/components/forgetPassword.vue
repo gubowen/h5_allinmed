@@ -179,7 +179,7 @@ export default {
           if (data.responseObject.responseStatus) {
             this.toastComm("密码修改成功");
             setTimeout(() => {
-              window.location.href="m.allinmed.cn/mLogin.html";
+              window.location.href="/";
             }, 3000);
             this.$store.commit("setLoadingState",false);
           } else {

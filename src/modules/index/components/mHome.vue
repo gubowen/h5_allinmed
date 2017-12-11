@@ -17,7 +17,7 @@
     <figure class="diagnose">
         <section class="btn-diagnose" @click="diagnoseEvent">点击问诊</section>
     </figure>
-    <figure class="history">
+    <figure class="history" v-show="dataGetFinish">
       <header><h3>问诊历史</h3><p class="btn-more" @click="moreEvent">更多></p></header>
       <!--未登录-->
       <section class="content" v-if="!loginFlag">
@@ -81,7 +81,8 @@ export default {
     return {
       loginFlag: false,
       wxLoginFlag: false,
-      diagnoseList: []
+      diagnoseList: [],
+      dataGetFinish:false
     };
   },
   components: {
@@ -103,17 +104,17 @@ export default {
           patientCustomerId: localStorage.getItem("userId"),
           isValid: 1,
           firstResult: 0,
-          maxResult: 1,
+          maxResult: 20,
           logoUseFlag: 3
-        },
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
         },
         timeout: 30000,
         done(response) {
           if (response &&response.responseObject.responseData.dataList &&response.responseObject.responseData.dataList.length > 0) {
             that.diagnoseList = response.responseObject.responseData.dataList;
+            that.dataGetFinish=true;
+            
           }
+          that.$store.commit("setLoadingState", false);
         }
       });
     },
@@ -189,20 +190,19 @@ export default {
     },
     //登录判断
     loginJudge() {
+      this.$store.commit("setLoadingState", true);
       checkLogin.getStatus().then((res) => {
         console.log(res)
         if (res.data.responseObject.responseStatus) {
           this.loginFlag = true;
-          this.getPersonalMessage();
           this.getOrderHistoryLists();
+          
         } else {
           this.loginFlag = false;
+          this.dataGetFinish=true;
+          this.$store.commit("setLoadingState", false);
         }
-      });
-    },
-    getPersonalMessage() {
-      getPersonal.getMessage(localStorage.getItem("userId")).then(res => {
-        console.log(res);
+        
       });
     }
   },
