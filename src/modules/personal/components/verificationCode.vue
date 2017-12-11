@@ -92,7 +92,7 @@
       return {
         codeId:"",
         // setTime:3,
-        setTimeNum:10,
+        setTimeNum:60,
         timeNum:0,
         timeOnOff:false,
         errorShow:false
