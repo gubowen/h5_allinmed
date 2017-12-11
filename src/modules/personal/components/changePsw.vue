@@ -75,7 +75,7 @@
       },
       allRight(){
         let t = this;
-        return (t.activeOnOff)&&(t.newPassWord.length<20)&&(t.reNewPassWord.length<20)&&(t.newPassWord.length>=6)&&(t.reNewPassWord.length>=6)&&(t.newPassWord===t.reNewPassWord);
+        return (t.activeOnOff)&&(t.newPassWord.length<=20)&&(t.reNewPassWord.length<=20)&&(t.newPassWord.length>=6)&&(t.reNewPassWord.length>=6)&&(t.newPassWord===t.reNewPassWord);
       }
     },
     methods:{
@@ -98,7 +98,6 @@
       },
       activeSave(){
         let t = this;
-        // let allRight = true;
         if(!t.activeOnOff){
           if(t.nowPassWord.length===0){
             //t.toast("请输入当前密码");
@@ -143,7 +142,7 @@
             return false;
           }
           if(t.nowPassWord===t.newPassWord){
-              console.log("新旧密码一致");
+              //console.log("新旧密码一致");
           }
         }
         // console.log(allRight);
@@ -204,9 +203,6 @@
       toast
   },
     watch:{
-      newPassWord(){
-        console.log(this.allRight)
-      },
       cancelIndex(newStr){
         let t = this;
         if((newStr===1)&&(t.nowPassWord.length===0)){

@@ -126,7 +126,7 @@
             path: "/followWechat"
           });
         }
-        console.log(this.weixinName);/*data.responseObject*/
+        //console.log(this.weixinName);/*data.responseObject*/
       }
     },
     mounted(){

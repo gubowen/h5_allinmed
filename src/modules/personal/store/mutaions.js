@@ -14,7 +14,6 @@ const logOut = (status) =>{
     },
     timeout: 20000,
     done(data) {
-      console.log(data);
       if(data&&data.responseObject&&data.responseObject.responseStatus){
         status.loginOnOff = false;
 

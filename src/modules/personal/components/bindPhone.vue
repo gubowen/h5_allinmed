@@ -150,7 +150,6 @@
           }
         }
         if(t.allRight){
-          console.log(t.codeNum)
           if(t.codeNum===0){
             t.toast("一天只能发十次");
             return false;

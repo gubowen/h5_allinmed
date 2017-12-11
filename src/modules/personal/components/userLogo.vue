@@ -43,9 +43,6 @@
     computed:{
       ...mapGetters(['customerName','logUrl'])
     },
-    mounted(){
-      console.log(this.customerName)
-    },
     filters:{
       hidePhone(val){
         if(isNaN(val)){

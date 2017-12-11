@@ -35,9 +35,6 @@
     computed:{
       ...mapGetters(["loginOnOff",'weixinState']),
     },
-    mounted(){
-
-    },
     methods:{
       ...mapActions(['outLogin']),
       hideDialog(){
