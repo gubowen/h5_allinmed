@@ -43,15 +43,15 @@
         <li class="accountLogin" v-if="loginStyle == 'account'">
           <form class="formBox">
             <p class="phoneInput">
-              <input type="number" placeholder="请输入手机号" name="phone" v-validate="'required|mobile'" @blur="validateBlur('phone')" @input="onKeyPress()"  v-model="phoneMessage">
+              <input type="number" placeholder="请输入手机号" name="phone" v-validate="'required|mobile'" @blur="validateBlur('phone')" @input="onKeyPress()" v-model="phoneMessage">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" >
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required'" @blur="accountvalidateBlur('password')" v-model="password">
               <i class="icon-eyesStatus fr" 
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
             </p>
-            <button class="loginButton" :class="{'on':allPass}">登录</button>
+            <button class="loginButton" :class="{'on':allPass}" @click.prevent="accountLoginFn()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="loginStyle = 'phone'">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
@@ -165,6 +165,20 @@ export default {
         if (this.errors.has(name)) {
           this.toastComm(this.errors.first(name));
         }
+      }
+    },
+    //账号登陆验证
+    accountvalidateBlur(name){
+      this.$validator.validateAll();
+      // if(this.errors.has(name)){
+      //   this.toastComm(this.errors.first(name));
+      // }
+      if(/^(\w){6,20}$/.test(this.password)){
+
+      }else if(this.password==""){
+        this.toastComm("请输入密码");
+      }else{
+        this.toastComm("密码错误，请重新输入");
       }
     },
     //toast提示
@@ -289,7 +303,7 @@ export default {
       }
     },
     // 帐密登录
-    passwordLogin() {
+    accountLoginFn() {
       passwordLogin
         .loginInit({
           account: this.phoneMessage,
@@ -297,8 +311,17 @@ export default {
         })
         .then(data => {
           if (data.responseObject.responseStatus) {
+            const _obj = data.responseObject.responseData;
+
+              localStorage.setItem("userId", _obj.customerId);
+              localStorage.setItem("userName", _obj.nickName);
+              localStorage.setItem("mobile", _obj.mobile);
+              localStorage.setItem("logoUrl", _obj.headUrl);
+               this.toastComm("登录成功，即将返回来源页面", () => {
+                window.location.href = "m.allinmed.cn";
+              });
           } else {
-            this, toastComm(data.responseObject.responseMessage);
+            this.toastComm(data.responseObject.responseMessage);
           }
         });
     }
@@ -316,6 +339,34 @@ export default {
           codeInput: {
             required: "请输入短信验证码",
             digits: "验证码错误"
+          },
+          //账号登录密码
+          passw:{
+            required:"请输入密码",
+            digits:"密码错误"
+          }
+        }
+      }
+    });
+  },
+  activated(){
+    this.$validator.updateDictionary({
+      en: {
+        custom: {
+          //手机号的验证
+          phone: {
+            required: "请输入手机号码",
+            mobile: "请输入正确的手机号码"
+          },
+          //患者关系的验证规则
+          codeInput: {
+            required: "请输入短信验证码",
+            digits: "验证码错误"
+          },
+          //账号登录密码
+          password:{
+            required:"请输入密码",
+            digits:"密码错误"
           }
         }
       }

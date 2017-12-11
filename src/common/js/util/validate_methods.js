@@ -13,6 +13,22 @@ class ValidateVerifiPolicy {
   }
 
   verifiPolicy(){
+    Validator.extend('password', {
+      messages: {
+        en: (field, args) => {
+          return field + "长度应在6-20位之间"
+        },
+        cn: (field, args) => {
+          return field + "长度应在6-20位之间"
+        },
+        zh_CN: (field, args) => {
+          return field + "长度应在6-20位之间"
+        }
+      },
+      validate: value => {
+        return /^(\w){6,20}$/.test(value)
+      }
+    });
     Validator.extend('mobile', {
       messages: {
         en: (field, args) => {
