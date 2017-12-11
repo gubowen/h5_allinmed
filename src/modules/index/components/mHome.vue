@@ -69,9 +69,9 @@ let XHRList = {
   //登录页
   loginUrl: "/dist/mLogin.html",
   //问诊
-  diagnose: `/dist/consult.html?${localStorage.getItem("userId")}`,
+  diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
   //问诊历史
-  historyUrl: "/dist/consult.html?customerId=" + api.getPara().customerId,
+  historyUrl: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
   getOrderHistoryLists: "/mcall/customer/case/consultation/v1/getMapList/", //咨询历史接口
   personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/"
 };
