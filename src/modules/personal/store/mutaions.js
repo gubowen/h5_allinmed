@@ -16,7 +16,7 @@ const logOut = (status) =>{
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
         status.loginOnOff = false;
-
+        localStorage.removeItem("hasCloseAttention");
       }
     },
     fail(err){
@@ -67,6 +67,7 @@ const mutaions = {
             state.codeNumId = data.responseObject.responsePk;
           }else{
             if(data.responseObject.responseCode==='0B0006'){
+              state.phoneError = '';
               state.phoneError = '0B0006';
             }
             if(data.responseObject.responseCode==='SMS0003'){
