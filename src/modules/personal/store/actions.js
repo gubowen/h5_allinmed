@@ -11,6 +11,12 @@ const  actions = {
     },
   changeCodeState:({commit,state},status)=>{
     commit("changeCodeState",status);
+  },
+  showLoading:({commit,state})=>{
+    commit("showLoading");
+  },
+  hideLoading:({commit,state})=>{
+    commit("hideLoading");
   }
 };
 export  default  actions;

@@ -32,7 +32,7 @@
     padding: 0 rem(48px);
     background:#fff;
     border-radius: rem(16px);
-    margin:rem(20px) auto;
+    margin:0 auto rem(20px) auto;
     .border-bottom{
       border-bottom: 2px solid #EAEAEA;
     }
@@ -121,8 +121,8 @@
         let t = this;
         if(t.weixinName.length){
           return false;
-        }else{
-          t.$router.push({
+        }else{//当用户已经绑定过微信后，不用再跳转微信关注页
+          t.$router.push({//当用户没有绑定过微信后，不用再跳转微信关注页
             path: "/followWechat"
           });
         }

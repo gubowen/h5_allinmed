@@ -1,25 +1,27 @@
 <template>
-  <section class="al-changeMobileBox">
-    <article class="al-changeMobileContent">
-      验证码已发送，请输入收到的验证码
-    </article>
-    <form id="updateMobile" novalidate="novalidate">
-      <figure class="al-validateInput">
-        <input type="text" name="validCode" id="validCode" v-model="codeId" @blur="checkNum">
-      </figure>
-    </form>
-    <article class="al-changeMobileContent sended ev-sended" style="display: block;"  v-if="timeOnOff">
-      已发送<span class="second">{{timeNum}}s</span>后重新发送
-    </article>
-    <article class="al-changeMobileContent sended ev-reSend" style="color: rgb(53, 152, 219);"  v-if="!timeOnOff" @click="sendCode">
-      重新发送
-    </article>
-    <article class="al-changeMobileContent sended">
-      今天剩余<span class="num" v-html="(codeNum<=0)?(0):(codeNum)"></span>次
-    </article>
-    <transition name="fade">
-      <toast :content="errorMsg" v-if="errorShow"></toast>
-    </transition>
+  <section class="al-changeMobileCode">
+    <section class="al-changeMobileBox">
+      <article class="al-changeMobileContent">
+        验证码已发送，请输入收到的验证码
+      </article>
+      <form id="updateMobile" novalidate="novalidate">
+        <figure class="al-validateInput">
+          <input type="text" name="validCode" id="validCode" v-model="codeId" @blur="checkNum">
+        </figure>
+      </form>
+      <article class="al-changeMobileContent sended ev-sended" style="display: block;"  v-if="timeOnOff">
+        已发送<span class="second">{{timeNum}}s</span>后重新发送
+      </article>
+      <article class="al-changeMobileContent sended ev-reSend" style="color: rgb(53, 152, 219);"  v-if="!timeOnOff" @click="sendCode">
+        重新发送
+      </article>
+      <article class="al-changeMobileContent sended">
+        今天剩余<span class="num" v-html="(codeNum<=0)?(0):(codeNum)"></span>次
+      </article>
+      <transition name="fade">
+        <toast :content="errorMsg" v-if="errorShow"></toast>
+      </transition>
+    </section>
   </section>
 </template>
 <style lang="scss" rel="stylesheet/scss">
@@ -29,6 +31,7 @@
     width: rem(638px);
     min-height: rem(100px);
     margin: rem(20px) auto;
+    margin-top: 0;
     background: #fff;
     padding: rem(60px) rem(30px);
     padding-bottom: rem(100px);

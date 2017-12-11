@@ -26,11 +26,17 @@ const getters = {
   codeNum(state){
     return state.codeNum;
   },
+  loadingOnOff(state){
+    return state.loadingOnOff;
+  },
   phoneError(state){
     return state.phoneError;
   },
   codeState(state){
     return state.codeState;
+  },
+  loginUrl(state){
+    return state.loginUrl;
   }
 };
 export default getters;

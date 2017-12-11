@@ -106,7 +106,7 @@
     computed:{
       ...mapGetters(["customerPhoneNum",'customerId','codeNum','phoneError','codeState']),
       activeOnOff(){
-        return (this.phoneNum.length===11);
+        return (this.phoneNum.length===11)&&(!this.errors.has('phone'));
       },
       allRight(){
         let t = this;
@@ -136,19 +136,17 @@
       },
       saveInfo(){
         let t = this;
-        if(!t.activeOnOff){
-          if(t.phoneNum.length===0){
-            t.toast("您还没有填写手机号");
-            return false;
-          }
-
+        if(t.phoneNum.length===0){
+          t.toast("您还没有填写手机号");
+          return false;
+        }
+        if(isNaN(parseInt(t.phoneNum,10))){
+          t.toast("不像是正确的手机号。");
+          return false;
         }else{
-          if(isNaN(parseInt(t.phoneNum,10))){
+          if(this.errors.has('phone')){
             t.toast("不像是正确的手机号。");
-          }else{
-            if(this.errors.has('phone')){
-              t.toast("不像是正确的手机号。");
-            }
+            return false;
           }
         }
         if(t.allRight){

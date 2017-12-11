@@ -48,7 +48,7 @@
 </style>
 <script  type="text/ecmascript-6">
   import toast from "components/toast";
-  import {mapGetters} from "vuex";
+  import {mapGetters,mapActions} from "vuex";
   import api from 'common/js/util/util';
   let xhrUrl = {
     resetPsw:"/mcall/patient/customer/unite/v1/updatePwd/"
@@ -66,7 +66,7 @@
       }
     },
     computed:{
-      ...mapGetters(["customerId",'customerPhoneNum']),
+      ...mapGetters(["customerId",'customerPhoneNum','loginUrl']),
       pswType(){
         return (this.eyeState)?"text":"password";
       },
@@ -79,6 +79,7 @@
       }
     },
     methods:{
+      ...mapActions(['showLoading','hideLoading']),
       toast(msg){
         let t = this;
         this.errorMsg = msg;
@@ -162,14 +163,19 @@
               method: "POST",
               data: param,
               beforeSend: function () {
-
+                t.showLoading();
               },
               timeout: 20000,
               done(data) {
                 console.log(data);
+                t.hideLoading();
                 if(data&&data.responseObject&&data.responseObject.responseStatus){
                   console.log(data.responseObject.responseCode,typeof data.responseObject.responseCode)
                   t.toast("修改密码成功，请重新登录");
+                  clearTimeout(callBackTimer);
+                  let callBackTimer = setTimeout(function () {
+                    window.location.href = t.loginUrl;
+                  },2000)
                 }else{
                   if(data.responseObject.responseCode==='0A0005'){
                     t.toast("当前密码不正确！");

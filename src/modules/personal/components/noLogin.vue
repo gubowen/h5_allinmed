@@ -1,6 +1,6 @@
 <template>
   <section class="allinmed-personal-login">
-    <button class="login">登录/注册</button>
+    <a class="login" :href="loginUrl">登录/注册</a>
   </section>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">
@@ -29,3 +29,11 @@
 
   }
 </style>
+<script>
+  import {mapGetters} from "vuex";
+  export default {
+    computed: {
+      ...mapGetters(['loginUrl'])
+    }
+  }
+</script>
