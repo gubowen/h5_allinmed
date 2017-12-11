@@ -119,7 +119,7 @@
       }
     },
     computed:{
-      ...mapGetters(["codeNum",'customerId','codeNumId','codeState'])
+      ...mapGetters(["codeNum",'customerId','codeNumId','codeState','phoneNum'])
     },
     methods:{
       ...mapActions(['getValidCode','changeCodeState']),

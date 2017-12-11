@@ -40,6 +40,9 @@ const getters = {
   },
   loginUrl(state){
     return state.loginUrl;
+  },
+  phoneNum(state){
+    return state.phoneNum;
   }
 };
 export default getters;
