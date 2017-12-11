@@ -33,7 +33,7 @@ class Consult {
       if(res.data.responseObject.responseStatus){
         this.init();
       }else{
-        window.location.href = `/mLogin.html?customerId=${api.getPara().patientCustomerId}`;
+        window.location.href = '/mLogin.html';
       }
     })
   }
