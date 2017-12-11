@@ -72,9 +72,12 @@
       phoneNum(newNum){
           this.changePhoneNum(newNum);
       },
-      phoneError(){
+      phoneError(newStr){
         let t = this;
-        t.toast("手机号已被使用过！");
+        if(newStr==='0B0006'){
+          t.toast("手机号已被使用过！");
+        }
+
       },
       codeNum(newStr){
         let t = this;
