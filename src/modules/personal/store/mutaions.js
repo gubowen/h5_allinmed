@@ -26,6 +26,12 @@ const logOut = (status) =>{
   })
 }
 const mutaions = {
+  showLoading(state){
+    state.loadingOnOff = true;
+  },
+  hideLoading(state){
+    state.loadingOnOff = false;
+  },
   changeLoginOnOff(state,data){
       //state.loginOnOff = false;
       logOut(state);
@@ -52,10 +58,11 @@ const mutaions = {
         method: "POST",
         data: param,
         beforeSend: function () {
-
+            state.loadingOnOff = true;
         },
         timeout: 20000,
         done(data) {
+          state.loadingOnOff = true;
           if(data&&data.responseObject&&data.responseObject.responseStatus){
             state.codeNum = parseInt(data.responseObject.responseData.codeNum,10);
             state.codeNumId = data.responseObject.responsePk;

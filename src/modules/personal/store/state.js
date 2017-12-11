@@ -5,7 +5,7 @@ const  xhrUrl = {
 }
 const state = {
   loginUrl:"",
-  loginOnOff:false,//获取登录状态
+  loginOnOff:true,//获取登录状态
   customerPhoneNum:'',//用户原本的手机号
   phoneNum:"",//用户当前修改的手机号
   phoneError:"",//手机号错误提示
@@ -16,6 +16,7 @@ const state = {
   codeNum:10,//一天可以发送多少次验证码，
   codeNumId:"",//更改手机号的时候，既传验证码，也需要验证码id
   customerId:1509944590525,//用户id
+  loadingOnOff:false,
   codeState:false//获取验证码是路由跳转，在浏览器可以通过历史按钮触发，填坑
 };
 const getCustomerInfo = () =>{
@@ -62,8 +63,8 @@ const checkLoginState = () =>{
         state.loginOnOff = true;
         getCustomerInfo();
       }else{
-        state.loginOnOff = false;
-        state.weixinState = false;
+        //state.loginOnOff = false;
+        //state.weixinState = false;
       }
     },
     fail(err){
@@ -71,7 +72,7 @@ const checkLoginState = () =>{
     }
   })
 }
-//getCustomerInfo();
+getCustomerInfo();
 checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
 
 

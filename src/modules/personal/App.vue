@@ -1,12 +1,15 @@
 <template>
   <section class="allinmed-mainInner">
+    <Loading :show="loadingOnOff"></Loading>
     <router-view  :class="{'have-padding':paddingOnOff}"></router-view>
     <tab :selected=3></tab>
   </section>
 </template>
 <script>
   import fb from 'common/js/third-party/flexible'
-  import tab from 'components/tabbar'
+  import tab from 'components/tabbar';
+  import Loading from "components/loading";
+  import {mapGetters} from "vuex"
 
   export default {
     data () {
@@ -15,6 +18,7 @@
       }
     },
     computed:{
+      ...mapGetters(["loadingOnOff"]),
       paddingOnOff(){
         return ((this.$route.path==='/aboutAllinmed')||(this.$route.path==='/contactUs'))?false:true;
       }
@@ -22,8 +26,11 @@
     methods:{
 
     },
+    mounted(){
+      console.log(this.loadingOnOff)
+    },
     components:{
-      tab
+      tab,Loading
     }
   }
 </script>
