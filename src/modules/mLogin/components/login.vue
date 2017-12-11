@@ -7,6 +7,7 @@
       </ul>
 
       <ul class="loginRegisterContent">
+        <!-- 手机验证登录 -->
         <li class="phoneLogin" v-if="loginStyle == 'phone'">
           <form class="formBox">
             <p class="phoneInput">
@@ -38,11 +39,14 @@
             </article>
           </form>
         </li>
+        <!-- 账号密码登录 -->
         <li class="accountLogin" v-if="loginStyle == 'account'">
           <form class="formBox">
-            <p class="phoneInput"><input type="number" placeholder="请输入手机号"></p>
+            <p class="phoneInput">
+              <input type="number" placeholder="请输入手机号" name="phone" v-validate="'required|mobile'" @blur="validateBlur('phone')" @input="onKeyPress()"  v-model="phoneMessage">
+            </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" >
               <i class="icon-eyesStatus fr" 
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>

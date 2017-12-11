@@ -12,6 +12,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "eruda": "^1.2.6",
+    "exif-js": "^2.3.0",
     "vue": "^2.5.7",
     "vue-awesome-swiper": "^2.5.4",
     "vue-lazyload": "^1.1.4",
