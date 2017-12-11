@@ -100,7 +100,7 @@ export default {
         url: XHRList.getOrderHistoryLists,
         method: "post",
         data: {
-          patientCustomerId: api.getPara().customerId,
+          patientCustomerId: localStorage.getItem("userId"),
           isValid: 1,
           firstResult: 0,
           maxResult: 1,
@@ -189,8 +189,9 @@ export default {
     },
     //登录判断
     loginJudge() {
-      checkLogin.getStatus().then(res => {
-        if (!res.data.responseObject.responseStatus) {
+      checkLogin.getStatus().then((res) => {
+        console.log(res)
+        if (res.data.responseObject.responseStatus) {
           this.loginFlag = true;
           this.getPersonalMessage();
           this.getOrderHistoryLists();
