@@ -14,7 +14,7 @@ const state = {
   logUrl:"",//头像
   codeNum:10,//一天可以发送多少次验证码，
   codeNumId:"",//更改手机号的时候，既传验证码，也需要验证码id
-  customerId:1509944590525,//用户id
+  customerId:localStorage.getItem("userId"),//用户id
   codeState:false//获取验证码是路由跳转，在浏览器可以通过历史按钮触发，填坑
 };
 const getCustomerInfo = () =>{

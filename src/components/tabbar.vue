@@ -44,7 +44,7 @@
     methods : {
       initData () {
         let userId = api.getPara().customerId || api.getPara().patientCustomerId||localStorage.getItem("userId");
-        this.homeUrl = `./consult.html?customerId=${userId}`;
+        this.homeUrl = `/`;
         if(this.selected == 2){
           this.historyUrl = `./consult.html?customerId=${userId}`;
         }else{
