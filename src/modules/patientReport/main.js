@@ -13,6 +13,7 @@ import VueRouter from 'vue-router';
 import vueg from 'vueg'
 import 'vueg/css/transition-min.css';
 import "static/css/base.css";
+import CheckLogin from 'common/js/auth/checkLogin';
 import api from '../../common/js/util/util';
 
 import valiadteMethods from '../../common/js/util/validate_methods';
@@ -27,7 +28,14 @@ fastclick.attach(document.body);
 
 class Consult {
   constructor() {
-    this.init();
+    let checkLogin = new CheckLogin();
+    checkLogin.getStatus().then((res)=>{
+      if(res.data.responseObject.responseStatus){
+        this.init();
+      }else{
+        window.location.href = '/mLogin.html';
+      }
+    })
   }
 
   init() {

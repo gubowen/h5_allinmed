@@ -3,8 +3,8 @@
     <h2>提交成功</h2>
     <ul class="conGuideText">
       <li>关注“唯医互联网骨科医院”微信公众号</li>
-      <li class="waitReply"><span>请耐心等待医生的回复</span></li>
       <li>查看医生回复<router-link to="/followWechat" class="btnAttention">关注方法 >></router-link></li>
+      <!--<li class="waitReply"><span>请耐心等待医生的回复</span></li>-->
     </ul>
     <router-link to="/addPatient" class="btnHome">继续问诊</router-link>
   </section>

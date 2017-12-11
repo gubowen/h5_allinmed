@@ -284,7 +284,7 @@
           _this.checkPatientState(data);
         }});
         this.getGoodsInfo();
-        api.mobileCheck();    //注册检测（医生名片）
+//        api.mobileCheck();    //注册检测（医生名片）
         if(api.getPara().customerId&&api.getPara().customerId.length>0){
           _this.isDoctorID = true;
         }

@@ -14,7 +14,7 @@
       </i>
       <figcaption class="main-message-content image-message">
         <transition name="fade">
-          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg">撤回</button>
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg"&&imageMessage.from===userData.account>撤回</button>
         </transition>
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">

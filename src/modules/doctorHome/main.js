@@ -17,7 +17,8 @@ import vueg from 'vueg'
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import  "../../common/js/third-party/jweixin-1.0.0.js"
-import api from '../../common/js/util/util';
+import CheckLogin from 'common/js/auth/checkLogin';
+import api from 'common/js/util/util';
 import fastclick from 'fastclick';
 import WxPayCommon from '../../common/js/wxPay/wxComm';
 // import vconsole from 'vconsole';
@@ -27,7 +28,14 @@ fastclick.attach(document.body);
 
 class Consult {
   constructor() {
-    this.init();
+    let checkLogin = new CheckLogin();
+    checkLogin.getStatus().then((res)=>{
+      if(res.data.responseObject.responseStatus){
+        this.init();
+      }else{
+        window.location.href = '/mLogin.html';
+      }
+    })
   }
 
   init() {

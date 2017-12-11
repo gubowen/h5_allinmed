@@ -43,14 +43,14 @@
     },
     methods : {
       initData () {
-        let userId = api.getPara().customerId || api.getPara().patientCustomerId||localStorage.getItem("userId");
+        // let userId = api.getPara().customerId || api.getPara().patientCustomerId||localStorage.getItem("userId");
         this.homeUrl = `/`;
         if(this.selected == 2){
-          this.historyUrl = `./consult.html?customerId=${userId}`;
+          this.historyUrl = `./consult.html`;
         }else{
-          this.historyUrl = `./myConsult.html?customerId=${userId}`;
+          this.historyUrl = `./myConsult.html`;
         }
-        this.myUrl = `./personal.html?customerId=${userId}`;
+        this.myUrl = `./personal.html`;
       },
       toUrl (num) {
 //        if (this.selected == num) return false;
