@@ -75,7 +75,7 @@
       },
       allRight(){
         let t = this;
-        return (t.activeOnOff)&&(t.newPassWord.length>20)&&(t.reNewPassWord.length>20)(t.newPassWord.length<6)&&(t.reNewPassWord.length<6)&&(t.newPassWord===t.reNewPassWord);
+        return (t.activeOnOff)&&(t.newPassWord.length<20)&&(t.reNewPassWord.length<20)&&(t.newPassWord.length>=6)&&(t.reNewPassWord.length>=6)&&(t.newPassWord===t.reNewPassWord);
       }
     },
     methods:{
@@ -204,6 +204,9 @@
       toast
   },
     watch:{
+      newPassWord(){
+        console.log(this.allRight)
+      },
       cancelIndex(newStr){
         let t = this;
         if((newStr===1)&&(t.nowPassWord.length===0)){

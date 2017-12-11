@@ -3,7 +3,7 @@
     <figure class="allinmed-personal-userLogo">
       <img :src="logUrl" alt="">
     </figure>
-    <article class="allinmed-personal-userName">{{customerName}}</article>
+    <article class="allinmed-personal-userName">{{customerName|hidePhone}}</article>
   </section>
 
 </template>
@@ -45,6 +45,16 @@
     },
     mounted(){
       console.log(this.customerName)
+    },
+    filters:{
+      hidePhone(val){
+        if(isNaN(val)){
+          return val;
+        }else{
+          val = val+"";
+          return val.substring(0,3)+"****"+val.substring(7,100)
+        }
+      }
     }
   }
 </script>

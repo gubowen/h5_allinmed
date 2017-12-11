@@ -32,12 +32,13 @@ const getCustomerInfo = () =>{
     done(data) {
       console.log(data);
       if(data&&data.responseObject&&data.responseObject.responseStatus){
-        state.logUrl = data.responseObject.responseData.headUrl;
-        state.customerName = data.responseObject.responseData.nickName;
+        state.logUrl = (data.responseObject.responseData.headUrl.length)?(data.responseObject.responseData.headUrl):'http://p1.gexing.com/touxiang/20120831/2327/5040d7dbbdc74_200x200_3.jpg';
+        state.customerName = (data.responseObject.responseData.nickName.length)?(data.responseObject.responseData.nickName):(localStorage.getItem("mobile"));
+        console.log(state.customerName);
         state.weixinName = data.responseObject.responseData.uniteNickname;
         state.customerId = data.responseObject.responsePk;
         state.weixinState = (parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1);
-        state.customerPhoneNum = parseInt(data.responseObject.responseData.mobile,10);
+        state.customerPhoneNum = (data.responseObject.responseData.mobile)?parseInt(data.responseObject.responseData.mobile,10):(parseInt(localStorage.getItem("mobile"),10));
 
       }
     },

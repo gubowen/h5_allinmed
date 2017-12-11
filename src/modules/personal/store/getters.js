@@ -23,6 +23,9 @@ const getters = {
   customerId(state){
     return state.customerId;
   },
+  codeNumId(state){
+    return state.codeNumId;
+  },
   codeNum(state){
     return state.codeNum;
   },
