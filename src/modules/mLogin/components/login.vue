@@ -7,6 +7,7 @@
       </ul>
 
       <ul class="loginRegisterContent">
+        <!-- 手机验证登录 -->
         <li class="phoneLogin" v-if="loginStyle == 'phone'">
           <form class="formBox">
             <p class="phoneInput">
@@ -38,11 +39,14 @@
             </article>
           </form>
         </li>
+        <!-- 账号密码登录 -->
         <li class="accountLogin" v-if="loginStyle == 'account'">
           <form class="formBox">
-            <p class="phoneInput"><input type="number" placeholder="请输入手机号"></p>
+            <p class="phoneInput">
+              <input type="number" placeholder="请输入手机号" name="phone" v-validate="'required|mobile'" @blur="validateBlur('phone')" @input="onKeyPress()"  v-model="phoneMessage">
+            </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" >
               <i class="icon-eyesStatus fr" 
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
@@ -83,8 +87,8 @@ import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
 
 const sendCode = new SendCode();
-const validCodeLogin=new ValidCodeLogin();
-const passwordLogin=new PasswordLogin();
+const validCodeLogin = new ValidCodeLogin();
+const passwordLogin = new PasswordLogin();
 const XHRList = {};
 export default {
   data() {
@@ -95,8 +99,8 @@ export default {
       errorMsg: "", // toast 框提示语
       phoneMessage: "", //手机号码
       codeMessage: "", //验证码
-      password:"", //密码
-      pwHide:true, //密码可见
+      password: "", //密码
+      pwHide: true, //密码可见
       codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
@@ -144,14 +148,17 @@ export default {
     // 切换登陆方式
     toggleLogin() {
       this.loginStyle = this.loginStyle == "phone" ? "account" : "phone";
-      this.phoneMessage="";
-      this.codeMessage=""; 
-      this.codeTime= 0;
+      this.phoneMessage = "";
+      this.codeMessage = "";
+      this.codeTime = 0;
     },
     validateBlur(name) {
-
       this.$validator.validateAll();
-      if (this.phoneMessage&&this.codeMessage&&this.errors.items.length === 0) {
+      if (
+        this.phoneMessage &&
+        this.codeMessage &&
+        this.errors.items.length === 0
+      ) {
         this.allPass = true;
       } else {
         this.allPass = false;
@@ -161,7 +168,7 @@ export default {
       }
     },
     //toast提示
-    toastComm(text,fn) {
+    toastComm(text, fn) {
       let _this = this;
       _this.errorMsg = text;
       _this.errorShow = true;
@@ -199,6 +206,7 @@ export default {
       } else {
         return;
       }
+      this.$store.commit("setLoadingState", true);
       sendCode
         .sendInit({
           account: _this.phoneMessage,
@@ -224,12 +232,14 @@ export default {
               _this.errorShow = false;
             }, 2000);
           }
+          this.$store.commit("setLoadingState", false);
         })
         .catch(err => {
           console.log(err);
           _this.finish = false;
           _this.toastComm("网络信号差，建议您稍后再试");
           _this.imgUrl = _this.toastImg.wifi;
+          this.$store.commit("setLoadingState", false);
         });
     },
     //验证码倒计时
@@ -249,43 +259,48 @@ export default {
       }, 1000);
     },
     //验证登录
-    validLogin(){
-      if (this.allPass){
-        validCodeLogin.validInit({
-          account:this.phoneMessage,
-          codeId:this.params.codeCheck.codeId,
-          validCode:this.codeMessage,
-          typeId:3
-        }).then((data)=>{
-          if (data.responseObject.responseStatus){
-            const _obj=data.responseObject.responseData;
+    validLogin() {
+      if (this.allPass) {
+        this.$store.commit("setLoadingState", true);
+        validCodeLogin
+          .validInit({
+            account: this.phoneMessage,
+            codeId: this.params.codeCheck.codeId,
+            validCode: this.codeMessage,
+            typeId: 3
+          })
+          .then(data => {
+            if (data.responseObject.responseStatus) {
+              const _obj = data.responseObject.responseData;
 
-            localStorage.setItem("userId",_obj.customerId);
-            localStorage.setItem("userName",_obj.nickName);
-            localStorage.setItem("mobile",_obj.mobile);
-            localStorage.setItem("logoUrl",_obj.headUrl);
+              localStorage.setItem("userId", _obj.customerId);
+              localStorage.setItem("userName", _obj.nickName);
+              localStorage.setItem("mobile", _obj.mobile);
+              localStorage.setItem("logoUrl", _obj.headUrl);
 
-            this.toastComm("登录成功，即将返回来源页面",()=>{
-              window.location.href="m.allinmed.cn";
-            });
-          }else{
-            this.toastComm(data.responseObject.responseMessage);
-          }
-        })
+              this.toastComm("登录成功，即将返回来源页面", () => {
+                window.location.href = "m.allinmed.cn";
+              });
+            } else {
+              this.toastComm(data.responseObject.responseMessage);
+            }
+            this.$store.commit("setLoadingState", false);
+          });
       }
     },
     // 帐密登录
-    passwordLogin(){
-      passwordLogin.loginInit({
-        account:this.phoneMessage,
-        password:this.password
-      }).then((data)=>{
-          if (data.responseObject.responseStatus){
-
-          }else{
-            this,toastComm(data.responseObject.responseMessage);
+    passwordLogin() {
+      passwordLogin
+        .loginInit({
+          account: this.phoneMessage,
+          password: this.password
+        })
+        .then(data => {
+          if (data.responseObject.responseStatus) {
+          } else {
+            this, toastComm(data.responseObject.responseMessage);
           }
-      })
+        });
     }
   },
   mounted() {
@@ -436,7 +451,7 @@ export default {
   &.hide {
     background: url("../../../common/image/img00/login/eyes_close.png")
       no-repeat;
-      background-size: contain;
+    background-size: contain;
   }
 }
 .icon-clearPassword {

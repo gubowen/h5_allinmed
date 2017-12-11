@@ -907,13 +907,16 @@ export default {
             that.allParams.customerId;
         },
         () => {
-          window.location.href =
-            "/dist/imScene.html?caseId=" +
-            localStorage.getItem("payCaseId") +
-            "&patientId=" +
-            localStorage.getItem("payPatientId") +
-            "&patientCustomerId=" +
-            that.allParams.customerId;
+//          window.location.href =
+//            "/dist/imScene.html?caseId=" +
+//            localStorage.getItem("payCaseId") +
+//            "&patientId=" +
+//            localStorage.getItem("payPatientId") +
+//            "&patientCustomerId=" +
+//            that.allParams.customerId;
+          that.$router.push({
+            name:"conGuide"
+          })
         }
       );
     },
