@@ -318,7 +318,7 @@ export default {
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
                this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = "m.allinmed.cn";
+                window.location.href = "/";
               });
           } else {
             this.toastComm(data.responseObject.responseMessage);
