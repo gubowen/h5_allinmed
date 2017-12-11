@@ -26,7 +26,6 @@ export default class MobileRegister {
           password: param.password, // 密码
           validCode: param.validCode, //验证码
           siteId:api.getSiteId(),
-          accountType:0, //账号类型,0手机 1邮箱
           codeId:param.codeId,// 验证码主键
           optType:1,//操作类型，默认传1
         //   operateType:param.operateType, //1-绑定手机 2－修改手机号 3-手机号找回p密码 5-手机号注册 8-手机号快捷登录 9-老患者报到 16-患者注册

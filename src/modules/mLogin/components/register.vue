@@ -33,18 +33,21 @@
       <p>已向手机号<span>{{phone}}</span>发送短信验证码</p>
       <section class="codeInput">
         <input type="number" placeholder="请输入验证码" v-model="validCode">
-        <span class="getCode">重新发送</span>
+        <span class="getCode" v-if="codeTime<=0" @click="sendCode('again')">重新发送</span>
+        <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
       </section>
       <button class="submitButton" @click="mobileRegisterFun()">提交</button>
     </section>
-    <vConfirm v-if="confirmFlag" :confirmParams="{
-      title:'您的手机号已注册',
-      ensure:'立即登录',
-      cancel:'重新输入',}"
-      @ensureClickEvent = 'ensureClickEvent'
-      @cancelClickEvent = 'cancelClickEvent'
-    >
-    </vConfirm>
+    <transition name="fade">
+      <vConfirm v-if="confirmFlag" :confirmParams="{
+        title:'您的手机号已注册',
+        ensure:'立即登录',
+        cancel:'重新输入',}"
+        @ensureClickEvent = 'ensureClickEvent'
+        @cancelClickEvent = 'cancelClickEvent'
+      >
+      </vConfirm>
+    </transition>
     <transition name="fade">
       <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
@@ -80,7 +83,9 @@ export default {
       passwordHide: true, // 密码是否可见
       codeBoxFlag: false, // 填写验证码盒子是否显示
       validCode: "", //验证码
-      codeId: 0 //验证码id
+      codeId: 0, //验证码id
+      codeTime: 0,//验证码倒计时数
+      timerObj:{},//定时器对象
     };
   },
   methods: {
@@ -180,12 +185,16 @@ export default {
               this.codeId = obj.responsePk;
             }
           } else {
-            this.errorMsg = obj.responseMessage;
-            this.errorShow = true;
-            setTimeout(() => {
-              this.errorShow = false;
-            }, 2000);
-            return;
+            // this.errorMsg = obj.responseMessage;
+            // this.errorShow = true;
+            // setTimeout(() => {
+            //   this.errorShow = false;
+            // }, 2000);
+            // return;
+            if(type == 'validate'){
+              this.confirmFlag = true;
+            }
+            console.log('发送验证码失败 + ' + obj.responseMessage);
           }
         })
         .then(err => {
@@ -198,7 +207,19 @@ export default {
       this.codeBoxFlag = true;
     },
     // 重新发送后的执行函数
-    resetCallback() {},
+    resetCallback() {
+      // 走一个60s 的定时器；
+      let _time = 60;
+      this.codeTime = _time --;
+      this.timerObj = setInterval(() => {
+        if (_time > 0) {
+          this.codeTime =  _time--;
+        } else {
+          this.codeTime = 0;
+          clearInterval(this.timerObj);
+        }
+      },1000);
+    },
     // 手机号注册
     mobileRegisterFun() {
       mobileRegister
@@ -208,8 +229,18 @@ export default {
           validCode: this.validCode,
           codeId: this.codeId
         })
-        .then(() => {})
-        .then(() => {});
+        .then((res) => {
+          console.log(res);
+          let _obj = res.responseObject;
+          if (_obj && _obj.responseStatus && _obj.responseCode == 'success') {
+            this.goLogin();
+          } else {
+            console.log('注册失败');
+          }
+        })
+        .then((err) => {
+          console.log(err);
+        });
     }
   },
 
@@ -301,19 +332,26 @@ export default {
     border: none;
     color: #101010;
     font-weight: 600;
-    width: 60%;
+    width: 50%;
     float: left;
     @include placeholder() {
       color: #a0a0a0;
       font-weight: normal;
     }
   }
-    
+  span{
+    text-align: right;
+    float: right;
+  }
+
   .getCode {
     width: 40%;
-    float: right;
-    text-align: right;
     color: #2fc5bd;
+  }
+
+  .codeCountdown {
+    width: 50%;
+    color: #777777;
   }
 }
 .formBox {
