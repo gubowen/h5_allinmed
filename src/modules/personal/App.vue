@@ -1,6 +1,6 @@
 <template>
-  <section class="allinmed-mainInner" :class="{'have-padding':paddingOnOff}">
-    <router-view></router-view>
+  <section class="allinmed-mainInner">
+    <router-view  :class="{'have-padding':paddingOnOff}"></router-view>
     <tab :selected=3></tab>
   </section>
 </template>
@@ -31,6 +31,7 @@
   @import "../../../scss/library/_common-modules.scss";
 
   .allinmed-mainInner {
+    top:0;
     min-height: 100%;
     height: auto;
     background: #eee;
@@ -241,7 +242,7 @@
     }
   }
   .have-padding{
-    padding:rem(20px) 0;
+    padding:rem(20px) 0 0 0;
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s

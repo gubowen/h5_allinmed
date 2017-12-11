@@ -32,7 +32,7 @@
     padding: 0 rem(48px);
     background:#fff;
     border-radius: rem(16px);
-    margin:rem(20px) auto;
+    margin:0 auto rem(20px) auto;
     .border-bottom{
       border-bottom: 2px solid #EAEAEA;
     }
