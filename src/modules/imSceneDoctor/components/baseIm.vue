@@ -1067,10 +1067,9 @@ export default {
       console.log(file);
       if (file.type.includes("image")) {
         this.sendImageFile(file);
-      } 
-      // else if (file.type.includes("video")) {
-      //   this.sendVideoFile(file);
-      // }
+      } else if (file.type.includes("video")) {
+        this.sendVideoFile(file);
+      }
     },
     sendImageFile(file) {
       const that = this;

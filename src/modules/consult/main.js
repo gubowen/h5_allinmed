@@ -15,7 +15,9 @@ import selectPart from './components/selectPart';
 import discription from './components/discription';
 import history from './components/history';
 import upLoadTip from './components/upLoadTip';
+import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
+import followWechat from 'components/followWechat';
 // import vueg from 'vueg'
 // import 'vueg/css/transition-min.css';
 import "static/css/base.css";
@@ -163,6 +165,22 @@ class Consult {
         meta: {
           keepAlive: false
         },
+      },
+      {
+        path:"/conGuide",
+        name:"conGuide",
+        component:conGuide,
+        meta: {
+          keepAlive: false
+        }
+      },
+      {
+        path:"/followWechat",
+        name:"followWechat",
+        component:followWechat,
+        meta: {
+          keepAlive: false
+        }
       }
     ];
   }
