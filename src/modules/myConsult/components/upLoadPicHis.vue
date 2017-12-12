@@ -443,7 +443,6 @@ export default {
           consultationId: consultationId,
           frequency: "0",
           frequencyType: "2",
-          consultationLevel: "1",
           consultationState: ""
         },
         done(data) {

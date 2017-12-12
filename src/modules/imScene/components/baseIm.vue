@@ -1254,10 +1254,9 @@ export default {
         consultationId: this.orderSourceId,
         frequency: "0",
         frequencyType: typeStr,
-        consultationLevel: "1"
       };
       !!type &&
-        Object.assign(data, { customerId: "0", consultationState: "4" }); //付款回调参数传customerId
+        Object.assign(data, {customerId: "0", consultationState: "4", consultationLevel: "1"}); //付款回调参数传customerId
       api.ajax({
         url: XHRList.updateCount,
         method: "POST",
