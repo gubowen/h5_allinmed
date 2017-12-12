@@ -1,7 +1,7 @@
 <template>
   <section class="main-box">
     <div class="placeholder-ele"></div>
-    <attention></attention>
+      <attention @attentionHandle="focusAllinmed"></attention>
     <section class="main-content">
       <h2 class="main-title">关于唯医互联网医院</h2>
       <p class="main-details">
@@ -32,6 +32,9 @@
       }
     },
     methods: {
+      focusAllinmed(){
+        this.$router.push({path: '/followWechat'});
+      },
       goConsult () {
         location.href = this.consultUrl;
       }
