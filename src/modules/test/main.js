@@ -26,6 +26,9 @@ class Test {
     api.ajax({
       url: "/mcall/patient/customer/unite/v1/checkSession/",
       method: "POST",
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
       done(data) {
         if(!data.responseObject.responseStatus){
           api.ajax({
