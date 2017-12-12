@@ -155,18 +155,10 @@ export default {
         "&scope=snsapi_userinfo" +
         "&state=STATE" +
         "#wechat_redirect";
-      console.log(_url);
       if (api.getPara().code) {
-        let lianjie = XHRUrl +
-          "?ref=" + (window.location.origin + window.location.pathname)+
-          "&response_type=code" +
-          "&scope=snsapi_base" +
-          "&state=bundingWx" +
-          "&code=" + api.getPara().code +
-          "#wechat_redirect";
-        console.log(lianjie);
         window.location.href = XHRUrl +
           "?ref=" + (window.location.origin + window.location.pathname)+
+          "&customerId="+api.getPara().customerId+
           "&response_type=code" +
           "&scope=snsapi_base" +
           "&state=bundingWx" +
