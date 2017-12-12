@@ -34,6 +34,9 @@ class Test {
           api.ajax({
             url: "/mcall/patient/customer/unite/v1/accountlogin/",
             method: "POST",
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
             data: {
               account: "13323033508",
               password:"123456",
