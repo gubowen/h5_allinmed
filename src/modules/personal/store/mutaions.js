@@ -16,6 +16,7 @@ const logOut = (status) =>{
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
         status.loginOnOff = false;
+        status.customerName = '';
         localStorage.removeItem("hasCloseAttention");
       }
     },
