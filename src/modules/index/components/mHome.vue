@@ -4,13 +4,12 @@
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
-      <slider :loop="true" :autoPlay="true" :interval="5000">
-          <div class="banner-slider">
-            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
+      <slider :loop="true" :autoPlay="true" :interval="5000" :dataList="adList">
+          <div class="banner-slider" v-for="(item,index) in adList">
+            <a :href="item.adAdditionalUrl">
+              <img :src="item.adAttUrl" />
+              </a>
             </div>
-          <div class="banner-slider">
-            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
-          </div>
       </slider>
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
@@ -60,20 +59,24 @@ import tabbar from "components/tabbar";
 import api from "common/js/util/util";
 import Vue from "vue";
 
-
 import CheckLogin from "common/js/auth/checkLogin";
 import GetPersonal from "common/js/auth/getPersonal";
 const getPersonal = new GetPersonal();
 const checkLogin = new CheckLogin();
+
+const Owner_Position_Id = "";
 let XHRList = {
   //登录页
   loginUrl: "/dist/mLogin.html",
   //问诊
   diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
   //问诊历史
-  historyUrl: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
+  historyUrl: `/dist/myConsult.html?customerId=${localStorage.getItem(
+    "userId"
+  )}`,
   getOrderHistoryLists: "/mcall/customer/case/consultation/v1/getMapList/", //咨询历史接口
-  personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/"
+  personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+  adList: "/mcall/ad/position/profile/getMapList/"
 };
 
 export default {
@@ -82,7 +85,8 @@ export default {
       loginFlag: false,
       wxLoginFlag: false,
       diagnoseList: [],
-      dataGetFinish:false
+      dataGetFinish: false,
+      adList: []
     };
   },
   components: {
@@ -93,7 +97,7 @@ export default {
   methods: {
     init() {
       this.loginJudge();
-
+      this.getAdList();
     },
     getOrderHistoryLists() {
       const that = this;
@@ -109,10 +113,13 @@ export default {
         },
         timeout: 30000,
         done(response) {
-          if (response &&response.responseObject.responseData.dataList &&response.responseObject.responseData.dataList.length > 0) {
+          if (
+            response &&
+            response.responseObject.responseData.dataList &&
+            response.responseObject.responseData.dataList.length > 0
+          ) {
             that.diagnoseList = response.responseObject.responseData.dataList;
-            that.dataGetFinish=true;
-            
+            that.dataGetFinish = true;
           }
           that.$store.commit("setLoadingState", false);
         }
@@ -161,10 +168,10 @@ export default {
       }
       return consultationLevel;
     },
-    attentionHandle(){
+    attentionHandle() {
       this.$router.push({
-        name:"followWeChat"
-      })
+        name: "followWeChat"
+      });
     },
     //问诊
     diagnoseEvent() {
@@ -186,23 +193,41 @@ export default {
     },
     //登录
     loginEvent() {
-      window.location.href=XHRList.loginUrl
+      window.location.href = XHRList.loginUrl;
+    },
+    getAdList() {
+      const that = this;
+      api.ajax({
+        url: XHRList.adList,
+        method: "post",
+        data: {
+          siteId: api.getSiteId(),
+          channelId: 1339,
+          platformId: 1,
+          positionId: 3305
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            that.adList=data.responseObject.responseData.data_list[0].ad_profile_attachment;
+            console.log(that.adList);
+          }
+          that.$store.commit("setLoadingState", false);
+        }
+      });
     },
     //登录判断
     loginJudge() {
       this.$store.commit("setLoadingState", true);
-      checkLogin.getStatus().then((res) => {
-        console.log(res)
+      checkLogin.getStatus().then(res => {
+        console.log(res);
         if (res.data.responseObject.responseStatus) {
           this.loginFlag = true;
           this.getOrderHistoryLists();
-          
         } else {
           this.loginFlag = false;
-          this.dataGetFinish=true;
+          this.dataGetFinish = true;
           this.$store.commit("setLoadingState", false);
         }
-        
       });
     }
   },
@@ -220,9 +245,17 @@ export default {
   padding: 0 0 rem(140px) 0;
   position: relative;
   .banner-slider {
-    & > img {
+    width: 100%;
+    height: 3.86667rem;
+    & > a {
+      display: block;
+      height: 100%;
       width: 100%;
-      vertical-align: top;
+      > img {
+        width: 100%;
+        height: 100%;
+        vertical-align: top;
+      }
     }
   }
 }

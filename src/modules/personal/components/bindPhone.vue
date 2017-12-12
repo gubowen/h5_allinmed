@@ -2,7 +2,7 @@
   <section class="allinmed-personal-changePhone">
     <section class="allinmed-personal-tableModule">
       <article class="allinmed-changeMobileContent">
-        <figcaption>绑定手机能够保证你的账号安全，随时找回发布的图片</figcaption>
+        <figcaption>绑定手机能够保证你的账号安全，随时找回问诊信息</figcaption>
       </article>
       <article class="allinmed-personal-tableModuleItem">
         <figure class="allinmed-tableModuleItemInput">

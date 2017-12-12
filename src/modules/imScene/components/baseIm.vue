@@ -161,7 +161,7 @@
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
           <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                 accept="image/*">
+                >
           <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
                  accept="image/*">
         </section>

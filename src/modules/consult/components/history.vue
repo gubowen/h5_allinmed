@@ -974,6 +974,7 @@ export default {
         to: "1_doctor00001",
         content: JSON.stringify(data),
         done(error, msg) {
+          console.log("问诊单发送成功...")
           that.tipNewPatient(data);
         }
       });

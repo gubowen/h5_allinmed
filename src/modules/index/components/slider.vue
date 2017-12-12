@@ -50,6 +50,10 @@ export default {
     interval: {
       type: Number,
       default: 4000
+    },
+    dataList: {
+      type: Array,
+      default: []
     }
   },
   data() {
@@ -57,6 +61,18 @@ export default {
       dots: [],
       currentPageIndex: 0
     };
+  },
+  watch: {
+    dataList() {
+      setTimeout(() => {
+        this._setSliderWidth();
+        this._initDots();
+        this._initSlider();
+        if (this.autoPlay) {
+          this._play();
+        }
+      }, 20);
+    }
   },
   mounted() {
     setTimeout(() => {
