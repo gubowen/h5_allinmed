@@ -68,16 +68,28 @@
             :imageMessage="msg"
             :nim="nim"
             ref="bigImg"
-             :userData="userData"
+            :userData="userData"
             :targetData="targetData"
             :imageList="imageList"
             :imageProgress="imageProgress"
-              @deleteMsgEvent="deleteMsgEvent(msg)"
+            @deleteMsgEvent="deleteMsgEvent(msg)"
             @longTouchEmitHandler="deleteMsgIndex=index"
             :currentIndex="index"
             :deleteMsgIndex="deleteMsgIndex"
           >
           </ImageContent>
+          <!-- 视频消息 -->
+          <VideoMessage
+            v-if="msg.type==='video' && msg.file"
+            :videoMessage="msg"
+            :userData="userData"
+            :targetData="targetData"
+            :videoProgress="videoProgress"
+            :currentIndex="index"
+          ></VideoMessage>
+          <!--音频-->
+          <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
+          </AudioMessage>
           <!--上传视诊-->
           <section class="main-message-box"
                    v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
@@ -87,7 +99,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="/image/imScene/error_tips.png" alt="">
+                <img src="../../../common/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传视诊资料</p>
@@ -106,7 +118,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="/image/imScene/error_tips.png" alt="">
+                <img src="../../../common/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传检查资料</p>
@@ -161,9 +173,9 @@
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
           <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                 accept="image/*">
-          <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
-                 accept="image/*">
+                 accept="video/*">
+          <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                 >
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea"
@@ -218,6 +230,8 @@ import Toast from "components/toast";
 import MedicalReport from "./medicalReport";
 import ContentText from "./content";
 import ImageContent from "./image";
+import AudioMessage from "./audioMessage";
+import VideoMessage from "./video";
 import TimeStamp from "./stamp";
 import PreviewSuggestion from "./previewSuggestion";
 import CheckSuggest from "./checkSuggest";
@@ -254,12 +268,20 @@ export default {
     return {
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
+      // 图片发送进度
       imageProgress: {
         uploading: false,
         progress: "0%",
         index: 0
       },
+      // 视频发送进度
+      videoProgress:{
+        uploading: false,
+        progress: "0%",
+        index: 0
+      },
       imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
+      videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
       noWXPayShow: false,
       onFocus: false,
       inputFlag: true, //上传图片input控制
@@ -387,7 +409,11 @@ export default {
                 that.scrollToBottom();
               });
               that.getCId(msg);
+              // 判断如果是图片，则把加入到图片数组中
+              if( msg.type == "image") {
+                that.imageList.push(msg.file.url);
             }
+          }
           }
         });
       });
@@ -1018,15 +1044,29 @@ export default {
     //上传文件
     sendFile(e) {
       const that = this;
+      let _file = e.target.files[0];
+      console.log(_file);
+      console.log(window.URL.createObjectURL(_file));
       that.inputFlag = false;
+      if (_file.type.includes("image")) {
+        this.sendImageFile(_file);
+      } else if (_file.type.includes("video")) {
+        this.sendVideoFile(_file);
+      }
+    },
+    // 上传图片文件
+    sendImageFile (_file) {
+      const that = this;
+      console.log(_file);
       this.msgList.push({
         file: {
-          url: window.URL.createObjectURL(e.target.files[0])
+          url: window.URL.createObjectURL(_file)
         },
-        type: "image"
+        type: "image",
+        from:that.userData.account,
       });
       that.imageLastIndex = that.msgList.length - 1;
-      console.log(window.URL.createObjectURL(e.target.files[0]));
+      console.log(window.URL.createObjectURL(_file));
       this.nim.previewFile({
         type: "image",
         fileInput: this.$refs.imageSender,
@@ -1068,6 +1108,63 @@ export default {
                   progress: "0%",
                   index: 0
                 };
+              }
+            });
+          }
+        }
+      });
+    },
+    // 上传视频文件
+    sendVideoFile (_file) {
+      const that = this;
+      console.log(_file);
+      this.msgList.push({
+        file: {
+          url: window.URL.createObjectURL(_file)
+        },
+        type: "video",
+        from:that.userData.account,
+      });
+      that.videoLastIndex = that.msgList.length - 1;
+      this.nim.previewFile({
+        type: "video",
+        fileInput: this.$refs.imageSender,
+        uploadprogress(obj) {
+          that.scrollToBottom();
+          that.videoProgress = {
+            uploading: true,
+            progress: obj.percentageText,
+            index: that.videoLastIndex
+          };
+          console.log("文件总大小: " + obj.total + "bytes");
+          console.log("已经上传的大小: " + obj.loaded + "bytes");
+          console.log("上传进度: " + obj.percentage);
+          console.log("上传进度文本: " + obj.percentageText);
+        },
+        done(error, file) {
+          console.log("上传video" + (!error ? "成功" : "失败"));
+          // show file to the user
+          console.log(file);
+          if (!error) {
+            let msg = that.nim.sendFile({
+              scene: "p2p",
+              custom: JSON.stringify({
+                cType: "0",
+                cId: that.cId,
+                mType: "1",
+                conId: that.orderSourceId
+              }),
+              to: that.targetData.account,
+              file: file,
+              type: "video",
+              done(error, msg) {
+                that.msgList[that.videoLastIndex] = msg;
+                that.videoProgress = {
+                  uploading: false,
+                  progress: "0%",
+                  index: 0
+                };
+                // that.imageList.push(msg.file.url);
               }
             });
           }
@@ -1580,6 +1677,8 @@ export default {
     MedicalReport,
     ContentText,
     ImageContent,
+    AudioMessage,
+    VideoMessage,
     TimeStamp,
     PreviewSuggestion,
     CheckSuggest,

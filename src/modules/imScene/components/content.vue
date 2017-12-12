@@ -10,7 +10,7 @@
         <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
       </figure>
       <i class="fail-button" style="display:none">
-        <img src="/image/imScene/error_tips.png" alt="">
+        <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content">
         <transition name="fade">

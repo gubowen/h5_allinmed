@@ -10,7 +10,7 @@
         <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
       </figure>
       <i class="fail-button" style="display:none">
-        <img src="/image/imScene/error_tips.png" alt="">
+        <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content image-message">
         <transition name="fade">
@@ -87,6 +87,7 @@ export default {
   methods: {
     showBigImg(item, index) {
       let that = this;
+      let _indexNum = this.imageList.indexOf(this.imageNum) != -1 ? this.imageList.indexOf(this.imageNum) : this.imageList.indexOf(this.imageNum.split("?")[0]); 
       this.showDeleteMsg = false;
       let _params = {
         imgBlob: (function() {
@@ -96,7 +97,7 @@ export default {
           });
           return result;
         })(),
-        indexNum: this.imageList.indexOf(this.imageNum)
+        indexNum: _indexNum
       };
       this.$router.push({
         name: "showBigImg",
@@ -132,7 +133,7 @@ export default {
     deleteMsgIndex: {
       type: Number
     },
-        targetData: {
+    targetData: {
       type: Object
     },
     userData: {
