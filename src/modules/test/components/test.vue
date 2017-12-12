@@ -5,7 +5,7 @@
     <p class="uploadPic" @click="upload()">上传图片</p> -->
     <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxaa5288ad7f627608&redirect_uri=http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/?ref=https://m9.allinmed.cn/dist/consult.html&response_type=code&scope=snsapi_base&state=b6#wechat_redirect">喵！</a>
     <p style="width:500px;line-height:100px;text-align: center;background: red" @click="wxLogin()">点击登录</p>
-    <p style="width:500px;line-height:100px;text-align: center;background: red;margin-top:100px;" @click="wxTest()">点击绑定</p>
+    <p style="width:500px;line-height:100px;text-align: center;background: red;margin-top:100px;">点击绑定</p>
   </div>
 
 </template>
@@ -21,10 +21,7 @@ export default {
     };
   },
   mounted() {
-    // if (localStorage.getItem("askPay") == 1) {
-    //   this.payShow = true;
-    //   this.viewResultH5Pay();
-    // }
+    this.wxTest();
   },
   methods: {
     upload() {
@@ -158,7 +155,16 @@ export default {
         "&scope=snsapi_userinfo" +
         "&state=STATE" +
         "#wechat_redirect";
+      console.log(_url);
       if (api.getPara().code) {
+        let lianjie = XHRUrl +
+          "?ref=" + (window.location.origin + window.location.pathname)+
+          "&response_type=code" +
+          "&scope=snsapi_base" +
+          "&state=bundingWx" +
+          "&code=" + api.getPara().code +
+          "#wechat_redirect";
+        console.log(lianjie);
         window.location.href = XHRUrl +
           "?ref=" + (window.location.origin + window.location.pathname)+
           "&response_type=code" +
