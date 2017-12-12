@@ -24,7 +24,7 @@ export default class checkSession {
         url: XHRList.getPersonal,
         method: "post",
         data: {
-          customerId
+          customerId:customerId
         },
         timeout: 10000,
         done(res) {
