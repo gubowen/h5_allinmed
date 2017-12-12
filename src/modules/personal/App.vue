@@ -23,12 +23,6 @@
         return ((this.$route.path==='/aboutAllinmed')||(this.$route.path==='/contactUs'))?false:true;
       }
     },
-    methods:{
-
-    },
-    mounted(){
-      console.log(this.loadingOnOff)
-    },
     components:{
       tab,Loading
     }
