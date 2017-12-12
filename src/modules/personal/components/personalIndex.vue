@@ -3,9 +3,9 @@
     <userLogo v-show="loginOnOff"></userLogo>
     <noLogin v-show="!loginOnOff"></noLogin>
     <focusWeixin v-show='!weixinState'></focusWeixin>
-    <accountSafe  v-show="loginOnOff"></accountSafe>
+    <accountSafe   v-show='customerName.length>0' ></accountSafe>
     <linkUs></linkUs>
-    <button class="allinmed-personal-logout" v-if="loginOnOff" @click='returnBack'>退出登录</button>
+    <button class="allinmed-personal-logout" v-show='customerName.length>0' @click='returnBack'>退出登录</button>
     <transition name="fade">
       <confirm
         :confirmParams="{
@@ -33,7 +33,7 @@
       }
     },
     computed:{
-      ...mapGetters(["loginOnOff",'weixinState']),
+      ...mapGetters(["loginOnOff",'weixinState','customerName']),
     },
     methods:{
       ...mapActions(['outLogin']),
