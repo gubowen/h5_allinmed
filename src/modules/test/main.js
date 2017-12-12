@@ -24,18 +24,39 @@ class Test {
   constructor() {
     let that =this;
     api.ajax({
-      url: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+      url: "/mcall/patient/customer/unite/v1/checkSession/",
       method: "POST",
-      data: {
-        customerId: api.getPara().customerId
-      },
       done(data) {
-        if(data&&data.responseObject.responseData){
-          if(data.responseObject.responseData.uniteFlagWeixin == 0){
-            that.wxBind();
-          }else{
-            that.init();
-          }
+        if(!data.responseObject.responseStatus){
+          api.ajax({
+            url: "/mcall/patient/customer/unite/v1/accountlogin/",
+            method: "POST",
+            data: {
+              account: "13323033508",
+              password:"123456",
+              siteId:"17"
+            },
+            done(data) {
+              if(data&&data.responseObject.responseStatus){
+                api.ajax({
+                  url: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+                  method: "POST",
+                  data: {
+                    customerId: api.getPara().customerId
+                  },
+                  done(data) {
+                    if(data&&data.responseObject.responseData){
+                      if(data.responseObject.responseData.uniteFlagWeixin == 0){
+                        that.wxBind();
+                      }else{
+                        that.init();
+                      }
+                    }
+                  }
+                });
+              }
+            }
+          });
         }
       }
     });
