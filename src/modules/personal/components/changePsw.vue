@@ -209,7 +209,7 @@
           t.toast("请输入当前密码");
         }
         if(newStr===2){
-          console.log(t.nowPassWord)
+          // console.log(t.nowPassWord)
           if(t.nowPassWord.length===0){
             console.log("进入");
             t.toast("请输入当前密码");

@@ -57,9 +57,9 @@ const checkLoginState = () =>{
     },
     timeout: 20000,
     done(data) {
-      console.log(data);
+      // console.log(data);
       if(data&&data.responseObject&&data.responseObject.responseStatus){
-        console.log("用户已登录");//如果用户已经登录开始请求用户的个人信息
+        // console.log("用户已登录");//如果用户已经登录开始请求用户的个人信息
         state.loginOnOff = true;
         getCustomerInfo();
       }else{

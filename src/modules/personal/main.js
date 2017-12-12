@@ -23,7 +23,7 @@ class Personal {
   }
   init() {
     //Vue实例启动
-    console.log("启动");
+    // console.log("启动");
     //表单验证
     Vue.use(VeeValidator);
     //注册路由
