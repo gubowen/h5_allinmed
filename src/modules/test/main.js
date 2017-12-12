@@ -22,24 +22,23 @@ fastclick.attach(document.body);
 
 class Test {
   constructor() {
-    this.wxBind();
-    // let that =this;
-    // api.ajax({
-    //   url: "/mcall/patient/customer/unite/v1/getPatientInfo/",
-    //   method: "POST",
-    //   data: {
-    //     customerId: api.getPara().customerId
-    //   },
-    //   done(data) {
-    //     if(data&&data.responseObject.responseData){
-    //       if(data.responseObject.responseData.uniteFlagWeixin == 0){
-    //
-    //       }else{
-    //         that.init();
-    //       }
-    //     }
-    //   }
-    // });
+    let that =this;
+    api.ajax({
+      url: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+      method: "POST",
+      data: {
+        customerId: api.getPara().customerId
+      },
+      done(data) {
+        if(data&&data.responseObject.responseData){
+          if(data.responseObject.responseData.uniteFlagWeixin == 0){
+            that.wxBind();
+          }else{
+            that.init();
+          }
+        }
+      }
+    });
   }
   init() {
     Vue.use(VueRouter);
