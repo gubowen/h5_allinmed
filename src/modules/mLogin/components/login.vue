@@ -160,7 +160,8 @@ export default {
       if (
         this.phoneMessage &&
         this.codeMessage &&
-        this.errors.items.length === 0
+        !this.errors.has('phone')&&
+        !this.errors.has('codeInput')
       ) {
         this.allPass = true;
       } else {
@@ -311,6 +312,7 @@ export default {
     // 帐密登录
     accountLoginFn() {
       if(this.allPass){
+        this.$store.commit("setLoadingState", true);
         passwordLogin
           .loginInit({
             account: this.phoneMessage,
@@ -330,6 +332,7 @@ export default {
             } else {
               this.toastComm(data.responseObject.responseMessage);
             }
+            this.$store.commit("setLoadingState", false);
           });
       }
     }
