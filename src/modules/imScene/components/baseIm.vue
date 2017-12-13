@@ -170,28 +170,55 @@
     </payPopup>
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
-        <section class="main-input-box-plus">
-          <i class="icon-im-plus"></i>
-          <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                 accept="video/*">
-          <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                 >
-        </section>
-        <figure class="main-input-box-textarea-inner">
-          <textarea class="main-input-box-textarea"
-                    rows="1"
-                    v-model="sendTextContent"
+        <setion class="footer-box-top">
+          <section class="main-input-box-plus">
+            <i class="icon-im-plus"></i>
+            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="video/*">
+            <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  >
+          </section>
+          <figure class="main-input-box-textarea-inner">
+            <textarea class="main-input-box-textarea"
+                      rows="1"
+                      v-model="sendTextContent"
 
-                    @focus="focusFn()"
-                    @blur="blurFn()"
-                    @click="scrollToBottom"
-                    @input="inputLimit"
-                    @keypress.enter.stop="autoSizeTextarea()">
-          </textarea>
-          <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
-          <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
-        </figure>
-
+                      @focus="focusFn()"
+                      @blur="blurFn()"
+                      @click="scrollToBottom"
+                      @input="inputLimit"
+                      @keypress.enter.stop="autoSizeTextarea()">
+            </textarea>
+            <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
+            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
+          </figure>
+        </setion>
+        <ul class="footer-box-bottom">
+          <li  class="bottom-item">
+            <input type="file" @change="sendFile($event)" ref=""
+                  >
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350" height="234" />
+              <figcaption class="bottom-item-description">图片</figcaption>
+            </figure>
+          </li>
+          <li  class="bottom-item">
+            <input type="file" @change="sendFile($event)" ref=""
+                  >
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350" height="234" />
+              <figcaption class="bottom-item-description">照相</figcaption>
+            </figure>
+          </li>
+          <li  class="bottom-item">
+            <input type="file" @change="sendFile($event)" ref=""
+                  >
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
+              <figcaption class="bottom-item-description">文件</figcaption>
+            </figure>
+          </li>
+        </ul>
       </footer>
     </transition>
     <confirm :confirmParams="{
@@ -1729,6 +1756,116 @@ export default {
     border-bottom: 1px solid #26bdb5;
     line-height: 1;
     display: inline-block;
+  }
+}
+
+//输入区
+.main-input-box {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%; //height: 1.3rem;
+  box-sizing: border-box;
+  font-size: 0;
+  background-color: #fff;
+  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
+  //display: none;
+  z-index: 3;
+  &>* {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .main-input-box-textarea-inner {
+    box-sizing: border-box;
+    margin-left: rem(30px);
+    max-height: 2.5rem;
+    overflow: auto;
+    .main-input-box-textarea {
+      width: rem(490px);
+      border-radius: rem(40px);
+      padding-left: rem(20px);
+      padding-right: rem(20px);
+      padding-top: rem(15px);
+      @include font-dpr(14px);
+      background: #F3F6F7;
+      border: 0 solid #E8ECEF;
+      box-sizing: border-box;
+      min-height: rem(60px);
+    }
+  }
+  .main-input-box-send {
+    @include font-dpr(17px);
+    color: #B6B6B6;
+    position: absolute;
+    right: rem(40px);
+    top: 50%;
+    margin-top: rem(-37.5px);
+    line-height: rem(75px); //height: 1.3rem;
+    &.on {
+      color: #00D6C6;
+    }
+  }
+  .main-input-box-plus {
+    @include font-dpr(16px);
+    width: rem(50px);
+    height: rem(50px);
+    position: absolute;
+    left: rem(40px);
+    top: 50%;
+    margin-top: rem(-25px);
+    input[type="file"] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      display: block;
+      width: rem(50px);
+    }
+  }
+}
+
+.footer-box-top{
+  position: relative;
+  width: 100%;
+  padding: rem(20px) rem(90px);
+  box-sizing: border-box;
+}
+
+// 底部上传文件盒子样式
+.footer-box-bottom{
+  width: 100%;
+  padding:rem(32px) rem(80px);
+  box-sizing: border-box;
+  border-top: 1px solid  #EEEEEE;
+  .bottom-item{
+    display: inline-block;
+    position: relative;
+    input{
+      width:100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      display: block;
+    }
+    .bottom-item-image{
+      width: rem(100px);
+      height: rem(100px);
+    }
+    .bottom-item-description{
+      text-align: center;
+      margin-top:rem(14px);
+      color: #555555;
+      @include font-dpr(12px);
+    }
+  }
+  .bottom-item + .bottom-item {
+    margin-left: rem(64px);
   }
 }
 .fade-enter-active,

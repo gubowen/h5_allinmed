@@ -19,7 +19,7 @@
           </figure>
         </section>
         <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
-        <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.jpg" alt="" style="border-radius: 0.28rem">
+        <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img" v-if="videoMessage.from===userData.account">
         <img :src="logoUrl" alt="">

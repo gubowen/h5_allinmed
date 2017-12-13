@@ -141,74 +141,6 @@
   }
 }
 
-//输入区
-.main-input-box {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  width: 100%; //height: 1.3rem;
-  box-sizing: border-box;
-  font-size: 0;
-  padding: rem(20px) rem(90px);
-  background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
-  //display: none;
-  z-index: 3;
-  &>* {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-  .main-input-box-textarea-inner {
-    box-sizing: border-box;
-    margin-left: rem(30px);
-    max-height: 2.5rem;
-    overflow: auto;
-    .main-input-box-textarea {
-      width: rem(490px);
-      border-radius: rem(40px);
-      padding-left: rem(20px);
-      padding-right: rem(20px);
-      padding-top: rem(15px);
-      @include font-dpr(14px);
-      background: #F3F6F7;
-      border: 0 solid #E8ECEF;
-      box-sizing: border-box;
-      min-height: rem(60px);
-    }
-  }
-  .main-input-box-send {
-    @include font-dpr(17px);
-    color: #B6B6B6;
-    position: absolute;
-    right: rem(40px);
-    top: 50%;
-    margin-top: rem(-37.5px);
-    line-height: rem(75px); //height: 1.3rem;
-    &.on {
-      color: #00D6C6;
-    }
-  }
-  .main-input-box-plus {
-    @include font-dpr(16px);
-    width: rem(50px);
-    height: rem(50px);
-    position: absolute;
-    left: rem(40px);
-    top: 50%;
-    margin-top: rem(-25px);
-    input[type="file"] {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0;
-      display: block;
-      width: rem(50px);
-    }
-  }
-}
 
 //病例单
 .message-result {
@@ -291,7 +223,7 @@
 //测试用，接收反馈
 .icon-im-plus {
   @include square(rem(40px));
-  background: url("../../../../src/common/image/imScene/dialog_photo_default@2x.png") no-repeat;
+  background: url("../../../../src/common/image/imScene/more@2x.png") no-repeat;
   display: inline-block;
   vertical-align: middle;
   background-size: 100% 100%;
