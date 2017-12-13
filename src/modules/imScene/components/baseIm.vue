@@ -78,6 +78,15 @@
             :deleteMsgIndex="deleteMsgIndex"
           >
           </ImageContent>
+          <!-- 图集消息 -->
+          <MulitpleImage
+          v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'mulitpleImage' "
+          :imageMessage="msg"
+                       :userData="userData"
+            :targetData="targetData"
+          >
+
+          </MulitpleImage>
           <!-- 视频消息 -->
           <VideoMessage
             v-if="msg.type==='video' && msg.file"
@@ -271,6 +280,7 @@ import CheckSuggest from "./checkSuggest";
 import Triage from "./triage";
 import MiddleTips from "./middleTips";
 import PayFinishTips from "./payFinishTips.vue";
+import MulitpleImage from "./mulitpleImage";
 
 import WxPayCommon from "common/js/wxPay/wxComm";
 import nimEnv from "common/js/nimEnv/nimEnv";
@@ -308,7 +318,7 @@ export default {
         index: 0
       },
       // 视频发送进度
-      videoProgress:{
+      videoProgress: {
         uploading: false,
         progress: "0%",
         index: 0
@@ -444,7 +454,7 @@ export default {
               });
               that.getCId(msg);
               // 判断如果是图片，则把加入到图片数组中
-              if( msg.type == "image") {
+              if (msg.type == "image") {
                 that.imageList.push(msg.file.url);
               }
             }
@@ -1081,7 +1091,7 @@ export default {
       that.inputFlag = false;
       console.log(e.target.files);
       if (e.target.files.length > 1) {
-        this.sendMulitpleImage(e.target.files);
+        this.getMulitpleImage(e.target.files);
       } else {
         let _file = e.target.files[0];
         console.log(_file);
@@ -1093,45 +1103,75 @@ export default {
         }
       }
     },
-    sendMulitpleImage(list) {
+    getMulitpleImage(list) {
       let mList = [];
       const that = this;
       console.log(list);
-      let promises = Array.from(list).forEach((element, index) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(element);
-          reader.onload = oFREvent => {
-            that.nim.previewFile({
-              type: "image",
-              dataURL: oFREvent.target.result,
-              uploadprogress(obj) {
-                that.scrollToBottom();
-                console.log("文件总大小: " + obj.total + "bytes");
-                console.log("已经上传的大小: " + obj.loaded + "bytes");
-                console.log("上传进度: " + obj.percentage);
-                console.log("上传进度文本: " + obj.percentageText);
-              },
-              done(error, file) {
-                console.log("上传image" + (!error ? "成功" : "失败"));
-                // show file to the user
-                console.log(file);
-                if (!error) {
-                  that.mList.push(file);
-                  resolve(file);
+      let promises = [];
+      Array.from(list).forEach((element, index) => {
+        promises.push(
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(element);
+            reader.onload = oFREvent => {
+              that.nim.previewFile({
+                type: "image",
+                dataURL: oFREvent.target.result,
+                uploadprogress(obj) {
+                  that.scrollToBottom();
+                  console.log("文件总大小: " + obj.total + "bytes");
+                  console.log("已经上传的大小: " + obj.loaded + "bytes");
+                  console.log("上传进度: " + obj.percentage);
+                  console.log("上传进度文本: " + obj.percentageText);
+                },
+                done(error, file) {
+                  console.log("上传image" + (!error ? "成功" : "失败"));
+                  // show file to the user
+                  console.log(file);
+                  if (!error) {
+                    // that.mList.push(file);
+                    resolve(file);
+                  }
                 }
-              }
-            });
-          };
-        });
+              });
+            };
+          })
+        );
       });
-      console.log([promises])
-      Promise.all([promises]).then((result)=>{
-        console.log(result)
+      console.log(promises);
+      Promise.all(promises).then(result => {
+        console.log(result);
+        this.sendMulitpleImage(result);
+      });
+    },
+    // 发送多图文件
+    sendMulitpleImage(list) {
+      const that=this;
+      this.nim.sendCustomMsg({
+        scene: "p2p",
+        to: that.targetData.account,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "32",
+          conId: that.orderSourceId
+        }),
+        content: JSON.stringify({
+          type: "mulitpleImage",
+          data: {
+            list
+          }
+        }),
+        done(error, msg) {
+          if (!error) {
+            console.log(msg)
+            that.sendMessageSuccess(error, msg);
+          }
+        }
       });
     },
     // 上传图片文件
-    sendImageFile (_file) {
+    sendImageFile(_file) {
       const that = this;
       console.log(_file);
       this.msgList.push({
@@ -1139,7 +1179,7 @@ export default {
           url: window.URL.createObjectURL(_file)
         },
         type: "image",
-        from:that.userData.account,
+        from: that.userData.account
       });
       that.imageLastIndex = that.msgList.length - 1;
       console.log(window.URL.createObjectURL(_file));
@@ -1191,7 +1231,7 @@ export default {
       });
     },
     // 上传视频文件
-    sendVideoFile (_file) {
+    sendVideoFile(_file) {
       const that = this;
       console.log(_file);
       this.msgList.push({
@@ -1199,7 +1239,7 @@ export default {
           url: window.URL.createObjectURL(_file)
         },
         type: "video",
-        from:that.userData.account,
+        from: that.userData.account
       });
       that.videoLastIndex = that.msgList.length - 1;
       this.nim.previewFile({
@@ -1764,6 +1804,7 @@ export default {
     payPopup,
     loading,
     confirm,
+    MulitpleImage,
     Toast
   }
 };
@@ -1818,10 +1859,10 @@ export default {
   box-sizing: border-box;
   font-size: 0;
   background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
+  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.5); //position: relative;
   //display: none;
   z-index: 3;
-  &>* {
+  & > * {
     display: inline-block;
     vertical-align: bottom;
   }
@@ -1837,22 +1878,22 @@ export default {
       padding-right: rem(20px);
       padding-top: rem(15px);
       @include font-dpr(14px);
-      background: #F3F6F7;
-      border: 0 solid #E8ECEF;
+      background: #f3f6f7;
+      border: 0 solid #e8ecef;
       box-sizing: border-box;
       min-height: rem(60px);
     }
   }
   .main-input-box-send {
     @include font-dpr(17px);
-    color: #B6B6B6;
+    color: #b6b6b6;
     position: absolute;
     right: rem(40px);
     top: 50%;
     margin-top: rem(-37.5px);
     line-height: rem(75px); //height: 1.3rem;
     &.on {
-      color: #00D6C6;
+      color: #00d6c6;
     }
   }
   .main-input-box-plus {
@@ -1876,7 +1917,7 @@ export default {
   }
 }
 
-.footer-box-top{
+.footer-box-top {
   position: relative;
   width: 100%;
   padding: rem(20px) rem(90px);
@@ -1884,15 +1925,15 @@ export default {
 }
 
 // 底部上传文件盒子样式
-.footer-box-bottom{
+.footer-box-bottom {
   width: 100%;
-  padding:rem(32px) rem(80px);
+  padding: rem(32px) rem(80px);
   box-sizing: border-box;
-  border-top: 1px solid  #EEEEEE;
-  .bottom-item{
+  border-top: 1px solid #eeeeee;
+  .bottom-item {
     display: inline-block;
     position: relative;
-    input{
+    input {
       width: 100%;
       position: absolute;
       top: 0;
@@ -1902,13 +1943,13 @@ export default {
       opacity: 0;
       display: block;
     }
-    .bottom-item-image{
+    .bottom-item-image {
       width: rem(100px);
       height: rem(100px);
     }
-    .bottom-item-description{
+    .bottom-item-description {
       text-align: center;
-      margin-top:rem(14px);
+      margin-top: rem(14px);
       color: #555555;
       @include font-dpr(12px);
     }
