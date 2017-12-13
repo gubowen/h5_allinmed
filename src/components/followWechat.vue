@@ -32,11 +32,14 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
+  import api from "common/js/util/util";
   export default{
     data() {
       return {}
     },
-    mounted(){},
+    mounted(){
+      api.forbidShare();
+    },
     methods: {},
     props: {},
     components: {}

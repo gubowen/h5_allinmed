@@ -207,6 +207,7 @@
     },
     mounted(){
       let t = this;
+      api.forbidShare();
       if(t.codeNum===10){
         t.$router.push({
           path: "/personalIndex"
