@@ -44,7 +44,7 @@
         </p>
       </li>
     </ul>
-    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode">发送验证码</button>
+    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()">发送验证码</button>
     <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword">提交</button>
 
   </section>
@@ -152,6 +152,7 @@ export default {
       }, 2000);
     },
     sendCode() {
+      debugger;
       this.$validator.validateAll();
       this.$store.commit("setLoadingState",true);
       if (this.errors.has("phone")) {
