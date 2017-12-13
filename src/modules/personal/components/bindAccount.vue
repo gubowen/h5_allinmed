@@ -13,7 +13,7 @@
         <span class="title">手机</span>
         <span class="operate">
           <i class="phone-number">{{customerPhoneNum|hidePhone}}</i>
-          <router-link tag="i" to='/changePhone' class="bind phone ev-bind-phone">更换</router-link>
+          <router-link tag="i" to='/changePhone' class="bind phone ev-bind-phone" @click.native="clearPhoneNum">更换</router-link>
         </span>
       </section>
     </section>
@@ -111,12 +111,13 @@
 
 </style>
 <script  type="text/ecmascript-6">
-  import {mapGetters} from "vuex"
+  import {mapGetters,mapActions} from "vuex"
   export default  {
     computed:{
       ...mapGetters(['weixinName','customerPhoneNum'])
     },
     methods:{
+      ...mapActions(['changePhoneNum']),
       bindWeixin(){
         let t = this;
         if(t.weixinName.length){
@@ -127,6 +128,9 @@
           });
         }
         //console.log(this.weixinName);/*data.responseObject*/
+      },
+      clearPhoneNum(){
+       this.changePhoneNum("");
       }
     },
     mounted(){
