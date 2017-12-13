@@ -69,8 +69,12 @@
       }
     },
     watch:{
-      phoneNum(newNum){
-          this.changePhoneNum(newNum);
+      phoneNum(newNum,oldNewStr){
+        let t = this;
+        if(newNum.length>11){
+          t.phoneNum = oldNewStr;
+        }
+          this.changePhoneNum(t.phoneNum);
       },
       phoneError(newStr){
         let t = this;
