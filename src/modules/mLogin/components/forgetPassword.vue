@@ -7,7 +7,7 @@
     <p v-if="!finishMobile">我们会向您的手机发送验证码</p>
     <ul class="loginRegisterContent">
       <li class="registerContent formBox">
-        <p class="codeInput" v-if="!finishMobile">
+        <p class="codeInput" v-show="!finishMobile">
           <input
             type="number"
             placeholder="请输入注册手机号码"
@@ -19,8 +19,9 @@
             style="width:100%"
           >
         </p>
-        <p class="codeInput" v-if="finishMobile">
+        <p class="codeInput" v-show="finishMobile">
           <input type="number"
+          :class="{'getCodeInput':codeTime>0}"
            placeholder="请输入验证码"
             v-model="codeMessage" 
             v-validate="'required|digits:4'" 
@@ -28,7 +29,7 @@
           <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
           <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
-        <p class="codeInput" v-if="finishMobile">
+        <p class="codeInput" v-show="finishMobile">
           <input :type='passwordHide?"password":"text"' 
           name="password"
            v-validate="'required'" 
@@ -43,7 +44,7 @@
         </p>
       </li>
     </ul>
-    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="sendCode">发送验证码</button>
+    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode">发送验证码</button>
     <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword">提交</button>
 
   </section>
@@ -86,7 +87,33 @@ export default {
   components: {
     Toast
   },
-  mounted() {},
+  mounted() {
+    this.$validator.updateDictionary({
+      en: {
+        custom: {
+          //手机号的验证
+          phone: {
+            required: "请输入手机号码",
+            mobile: "请输入正确的手机号码"
+          },
+          account: {
+            required: "请输入手机号码",
+            mobile: "请输入正确的手机号码"
+          },
+          //患者关系的验证规则
+          codeInput: {
+            required: "请输入短信验证码",
+            digits: "验证码错误"
+          },
+          //账号登录密码
+          password: {
+            required: "请输入密码",
+            digits: "密码错误"
+          }
+        }
+      }
+    });
+  },
   methods: {
     onKeyPress() {
       let content = this.phoneMessage;
@@ -127,7 +154,6 @@ export default {
     sendCode() {
       this.$validator.validateAll();
       this.$store.commit("setLoadingState",true);
-      debugger
       if (this.errors.has("phone")) {
         this.toastComm(this.errors.first(name));
       } else {
@@ -208,7 +234,7 @@ export default {
     @include font-dpr(15px);
     color: #222222;
     span {
-      margin: 0 rem(10px);
+      // margin: 0 rem(10px);
       font-weight: 600;
     }
   }
@@ -230,6 +256,9 @@ export default {
     .codeCountdown {
       width: 50%;
       color: #777777;
+    }
+    .getCodeInput{
+      width: 50%;
     }
     & > input {
       outline: none;
