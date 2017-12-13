@@ -9,7 +9,7 @@
           </p>
         </article>
       </transition>
-    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
+    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
@@ -171,12 +171,12 @@
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
         <setion class="footer-box-top">
-          <section class="main-input-box-plus">
+          <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
-            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <!-- <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
                   accept="image/*">
-            <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  >
+            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="image/*"> -->
           </section>
           <figure class="main-input-box-textarea-inner">
             <textarea class="main-input-box-textarea"
@@ -193,30 +193,36 @@
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
           </figure>
         </setion>
-        <ul class="footer-box-bottom">
+        <ul class="footer-box-bottom" v-if="footerBottomFlag">
           <li  class="bottom-item">
-            <input type="file" @change="sendFile($event)" ref=""
-                  >
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">图片</figcaption>
             </figure>
+            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="image/*">
+            <input type="file" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
+                  accept="image/*">
           </li>
           <li  class="bottom-item">
-            <input type="file" @change="sendFile($event)" ref=""
-                  >
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">照相</figcaption>
             </figure>
+            <input type="file" v-if="isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="video/*">
+            <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
+                  accept="video/*">
           </li>
           <li  class="bottom-item">
-            <input type="file" @change="sendFile($event)" ref=""
-                  >
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
+            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="application/pdf,application/vnd.ms-excel,application/msword">
+            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                  accept="application/pdf,application/vnd.ms-excel,application/msword">
           </li>
         </ul>
       </footer>
@@ -309,6 +315,7 @@ export default {
       },
       imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
       videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
+      footerBottomFlag: false, // 底部文件选择框是否显示
       noWXPayShow: false,
       onFocus: false,
       inputFlag: true, //上传图片input控制
@@ -1886,7 +1893,7 @@ export default {
     display: inline-block;
     position: relative;
     input{
-      width:100%;
+      width: 100%;
       position: absolute;
       top: 0;
       right: 0;
