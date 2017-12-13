@@ -40,8 +40,8 @@
     },
     mounted(){
       api.forbidShare();
-      let userId = api.getPara().customerId || api.getPara().patientCustomerId;
-      this.consultUrl = `./consult.html?customerId=${userId}`;
+      let userId = api.getPara().customerId || api.getPara().patientCustomerId || localStorage.getItem("userId");
+      this.consultUrl = `/dist/consult.html?customerId=${userId}`;
     },
     components: {
       attention
