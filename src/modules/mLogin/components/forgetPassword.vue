@@ -16,6 +16,7 @@
             @blur="validateBlur('phone')"
             @input="onPressPhone()"
             v-model="phoneMessage"
+            style="width:100%"
           >
         </p>
         <p class="codeInput" v-if="finishMobile">
@@ -24,8 +25,8 @@
             v-model="codeMessage" 
             v-validate="'required|digits:4'" 
             name="codeInput" />
-          <span class="getCode" v-if="codeTime<=0" @click="sendCode" style="width:38%">重新发送</span>
-          <span class="codeCountdown" v-if="codeTime>0" style="width:45%"><i>{{codeTime}}</i>秒后重新获取</span>
+          <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
+          <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
         <p class="codeInput" v-if="finishMobile">
           <input :type='passwordHide?"password":"text"' 
@@ -126,6 +127,7 @@ export default {
     sendCode() {
       this.$validator.validateAll();
       this.$store.commit("setLoadingState",true);
+      debugger
       if (this.errors.has("phone")) {
         this.toastComm(this.errors.first(name));
       } else {
@@ -191,7 +193,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../../../scss/library/_common-modules";
 
 .forgetPassword {
@@ -220,7 +222,7 @@ export default {
     @include font-dpr(17px);
     @include clearfix();
     .getCode {
-      width: 45%;
+      width: 40%;
       float: right;
       text-align: right;
       color: #2fc5bd;
@@ -233,8 +235,8 @@ export default {
       outline: none;
       border: none;
       color: #101010;
+      width:60%;
       font-weight: 600;
-      width: 57%;
       float: left;
       @include placeholder() {
         color: #a0a0a0;
