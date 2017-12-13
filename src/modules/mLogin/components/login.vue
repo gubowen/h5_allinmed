@@ -301,7 +301,7 @@ export default {
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
               this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = "/";
+                window.location.href = document.referrer;
               });
             } else {
               this.toastComm(data.responseObject.responseMessage);
@@ -329,7 +329,7 @@ export default {
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
               this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = "/";
+                window.location.href = document.referrer;
               });
             } else {
               this.toastComm(data.responseObject.responseMessage, ()=>{
