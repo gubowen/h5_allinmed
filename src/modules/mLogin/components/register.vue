@@ -9,20 +9,17 @@
       <ul class="loginRegisterContent">
         <li class="registerContent formBox">
             <p class="phoneInput">
-              <input type="number" name="phone" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号">
-              <span class="iconBox">
-                <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
-              </span>
+              <input type="number" name="phone" @input="inputMaxLength('phone',11)" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号">
+              
+              <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
             </p>
             <p class="codeInput">
-              <input :type='passwordHide?"password":"text"' name="password" v-validate="'required'" v-model="password" placeholder="设置密码（至少6位）" @blur="validateBlur('password')">
-              <span class="iconBox">
-                <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
-                <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()'></i>
-              </span>
+              <input :type='passwordHide?"password":"text"' name="password" @input="inputMaxLength('password',20)" v-validate="'required|isEmoji|max_length:20|min_length:6'" v-model="password" placeholder="设置密码（至少6位）" @blur="validateBlur('password')">
+              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
+              <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()'></i>
             </p>
             <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
-            <button class="loginButton" @click="validate()">注册</button>
+            <button class="loginButton" :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
         </li>
       </ul>
 
@@ -114,6 +111,10 @@ export default {
     toggleHide() {
       this.passwordHide = this.passwordHide ? false : true;
     },
+    //input最大长度事件
+    inputMaxLength(attr,length){
+      this[attr] = api.getStrByteLen(this[attr], length);
+    },
     // 添加验证提示
     addValidateTips() {
       this.$validator.updateDictionary({
@@ -125,7 +126,10 @@ export default {
               mobile: "请输入正确的手机号码"
             },
             password: {
-              required: "请输入至少6位的密码"
+              required: "请输入至少6位数的密码",
+              isEmoji:'请填写真实密码',
+              max_length:'密码长度请保持在6-20位',
+              min_length:'密码长度请保持在6-20位',
             }
           }
         }
@@ -235,6 +239,11 @@ export default {
           if (_obj && _obj.responseStatus && _obj.responseCode == 'success') {
             this.goLogin();
           } else {
+            this.errorShow = true;
+            this.errorMsg = _obj.responseMessage;
+            setTimeout(() => {
+              this.errorShow = false;
+            }, 2000);
             console.log('注册失败');
           }
         })
@@ -363,6 +372,7 @@ export default {
     padding: rem(36px) rem(30px);
     border-radius: 10px;
     @include font-dpr(17px);
+    position: relative;
     input {
       outline: none;
       border: none;
@@ -378,6 +388,9 @@ export default {
       & > input {
         width: 80%;
       }
+      .icon-clear{
+        right: rem(30px);
+      }
     }
     &.codeInput {
       margin-top: rem(40px);
@@ -388,6 +401,9 @@ export default {
         &.halfWidth {
           width: 50%;
         }
+      }
+      .icon-clear{
+        right: rem(84px);
       }
       span {
         width: 38%;
@@ -440,26 +456,30 @@ export default {
 }
 .icon-eyesStatus {
   display: inline-block;
+  position: absolute;
   width: rem(44px);
-  height: rem(35px);
-  background: url("../../../common/image/img00/login/eyes_open.png") no-repeat;
-  background-size: 100% 100%;
-  margin-top: rem(5px);
+  height: rem(54px);
+  top: 50%;
+  margin-top: rem(-27px);
+  right: rem(30px);
+  background: url("../../../common/image/img00/login/eyes_open.png") center center no-repeat;
+  background-size: rem(44px) rem(32px);
   &.hide {
-    background: url("../../../common/image/img00/login/eyes_close.png")
+    background: url("../../../common/image/img00/login/eyes_close.png") center center
       no-repeat;
-    background-size: contain;
+    background-size: rem(44px) rem(38px);
   }
 }
 .icon-clear {
   display: inline-block;
-  width: rem(40px);
-  height: rem(40px);
-  margin-left: rem(10px);
-  background: url("../../../common/image/img00/login/close_button.png")
-    no-repeat;
-  background-size: 100% 100%;
-  margin-top: rem(5px);
+  position: absolute;
+  width: rem(54px);
+  height: rem(54px);
+  top:50%;
+  margin-top: rem(-27px);
+  background: url("../../../common/image/img00/login/close_button.png") center center
+no-repeat;
+  background-size: rem(38px) rem(38px);
 }
 
 /*vue组件自定义动画开始*/

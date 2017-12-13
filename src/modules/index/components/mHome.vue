@@ -105,7 +105,7 @@ export default {
         url: XHRList.getOrderHistoryLists,
         method: "post",
         data: {
-          patientCustomerId: "", //localStorage.getItem("userId"),
+          patientCustomerId: localStorage.getItem("userId"),
           isValid: 1,
           firstResult: 0,
           maxResult: 1,
@@ -118,10 +118,12 @@ export default {
             response.responseObject.responseData.dataList.length > 0
           ) {
             that.diagnoseList = response.responseObject.responseData.dataList;
-          } else {
-            that.diagnoseList = [];
+
+          }else{
+              that.diagnoseList =[];
+              
           }
-          that.dataGetFinish = true;
+                    that.dataGetFinish = true;
           that.$store.commit("setLoadingState", false);
         }
       });
@@ -146,8 +148,8 @@ export default {
       }
       return logoImg;
     },
-    bannerHref(item) {
-      window.location.href = item.adAdditionalUrl;
+    bannerHref(item){
+      window.location.href=item.adAdditionalUrl;
     },
     getFullName(opt) {
       if (opt.fullName.length > 6) {
@@ -212,8 +214,7 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            that.adList =
-              data.responseObject.responseData.data_list[0].ad_profile_attachment;
+            that.adList=data.responseObject.responseData.data_list[0].ad_profile_attachment;
             console.log(that.adList);
           }
           that.$store.commit("setLoadingState", false);
