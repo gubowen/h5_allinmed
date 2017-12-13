@@ -202,9 +202,9 @@ export default {
         method: "post",
         data: {
           siteId: api.getSiteId(),
-          channelId: 1339,
+          channelId: 169,
           platformId: 1,
-          positionId: 3305
+          positionId: 557
         },
         done(data) {
           if (data.responseObject.responseStatus) {
