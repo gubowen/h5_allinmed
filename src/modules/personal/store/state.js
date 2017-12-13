@@ -4,7 +4,7 @@ const  xhrUrl = {
   loginState:"/mcall/patient/customer/unite/v1/checkSession/"
 }
 const state = {
-  loginUrl:"/mLogin.html",
+  loginUrl:"/dist/mLogin.html",
   loginOnOff:true,//获取登录状态
   customerPhoneNum:'',//用户原本的手机号
   phoneNum:"",//用户当前修改的手机号
