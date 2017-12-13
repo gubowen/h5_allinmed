@@ -244,6 +244,10 @@
   }
   .have-padding{
     padding:rem(20px) 0 0 0;
+    min-height: 100%;
+    height: auto;
+    padding-bottom: rem(100px);
+
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s
