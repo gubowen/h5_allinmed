@@ -170,7 +170,7 @@
     </payPopup>
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
-        <setion class="footer-box-top">
+        <section class="footer-box-top">
           <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
             <!-- <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
@@ -192,7 +192,7 @@
             <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
           </figure>
-        </setion>
+        </section>
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
           <li  class="bottom-item">
             <figure class="bottom-item-content">
