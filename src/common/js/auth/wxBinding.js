@@ -16,10 +16,9 @@ class Wxbinding {
   isBind(){
     let isBinding = new Isbinding();
     let customerId = localStorage.getItem("userId");
-    if(api.getPara().wxState || api.getPara().wxState == 0){
-      alert(localStorage.getItem('protoUrl'));
-      window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
-    }else{
+    if(!(api.getPara().wxState || api.getPara().wxState == 0)){
+      // alert(localStorage.getItem('protoUrl'));
+      // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
       isBinding.getMessage(customerId).then((res)=>{
         if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
           this.wxBind();
@@ -31,7 +30,7 @@ class Wxbinding {
   }
   wxBind() {
     let appId = "",XHRUrl = "",envCode = "";
-    localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
+    // localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
     if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
       return false;
     }
