@@ -2,14 +2,14 @@
   <section class="allinmed-personal-linkUs">
     <router-link tag='section' class="allinmed-personal-link" to='/contactUs'>
       <p class='allinmed-personal-des'>
-      <span class="icon link"></span>
+      <span class="icon about"></span>
       <span class="title">联系我们</span>
       </p>
       <span class="jump"></span>
     </router-link>
     <router-link tag='section' class="allinmed-personal-about"  to='/aboutAllinmed'>
       <p class='allinmed-personal-des'>
-      <span class="icon about"></span>
+      <span class="icon  link"></span>
       <span class="title">关于唯医互联网骨科医院</span>
       </p>
       <span class="jump"></span>

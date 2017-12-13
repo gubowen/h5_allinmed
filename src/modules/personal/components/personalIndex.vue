@@ -33,7 +33,7 @@
       }
     },
     computed:{
-      ...mapGetters(["loginOnOff",'weixinState','customerName']),
+      ...mapGetters(["loginOnOff",'weixinState','customerName','loginUrl']),
     },
     methods:{
       ...mapActions(['outLogin']),
@@ -52,6 +52,14 @@
       returnBack(){
         let t = this;
         t.backShow = true;
+      }
+    },
+    watch:{
+      'customerName'(newStr){
+        let t = this;
+          if(newStr.length===0){
+            window.location.href = t.loginUrl;
+          }
       }
     },
     components: {

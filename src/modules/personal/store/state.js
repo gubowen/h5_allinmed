@@ -31,12 +31,23 @@ const getCustomerInfo = () =>{
     timeout: 20000,
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
+        let judgeLen = (v1,v2)=>{
+          if(v1.length){
+            return v1;
+          }else{
+            if(v2){
+              return v2;
+            }else{
+              return '';
+            }
+          }
+        }
         let imgUrl = require("../../../common/image/img00/avatar.png");
-        state.logUrl = (data.responseObject.responseData.headUrl.length)?(data.responseObject.responseData.headUrl):imgUrl;
-        state.customerName = (data.responseObject.responseData.nickName.length)?(data.responseObject.responseData.nickName):(localStorage.getItem("mobile"));
-        state.weixinName = data.responseObject.responseData.uniteNickname;
+        state.logUrl = judgeLen(data.responseObject.responseData.headUrl,imgUrl);
+        state.customerName = judgeLen(data.responseObject.responseData.nickName,localStorage.getItem("mobile"));
+        state.weixinName = judgeLen(data.responseObject.responseData.uniteNickname);
         state.customerId = data.responseObject.responsePk;
-        state.weixinState = (parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1);
+        state.weixinState = (isNaN(parseInt(data.responseObject.responseData.uniteFlagWeixin,10))?false:(parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1));
         state.customerPhoneNum = (data.responseObject.responseData.mobile)?parseInt(data.responseObject.responseData.mobile,10):(parseInt(localStorage.getItem("mobile"),10));
 
       }
