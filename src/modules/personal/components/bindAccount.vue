@@ -111,7 +111,8 @@
 
 </style>
 <script  type="text/ecmascript-6">
-  import {mapGetters} from "vuex"
+  import {mapGetters} from "vuex";
+  import api from "common/js/util/util";
   export default  {
     computed:{
       ...mapGetters(['weixinName','customerPhoneNum'])
@@ -130,7 +131,7 @@
       }
     },
     mounted(){
-
+      api.forbidShare();
     },
     filters:{
       hidePhone(val){

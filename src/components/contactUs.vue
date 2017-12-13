@@ -45,12 +45,15 @@
    * Created by JuKun on 2017/11/07.
    */
 //  import login from "./contactUs.html";
+  import api from "common/js/util/util";
   import fb from "common/js/third-party/flexible";
   export default{
     data() {
       return {}
     },
-    components: {}
+    mounted() {
+      api.forbidShare();
+    }
   }
 </script>
 

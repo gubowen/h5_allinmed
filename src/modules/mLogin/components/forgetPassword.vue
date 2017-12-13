@@ -23,16 +23,16 @@
           <input type="number"
           :class="{'getCodeInput':codeTime>0}"
            placeholder="请输入验证码"
-            v-model="codeMessage" 
-            v-validate="'required|digits:4'" 
+            v-model="codeMessage"
+            v-validate="'required|digits:4'"
             name="codeInput" />
           <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
           <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
         <p class="codeInput" v-show="finishMobile">
-          <input :type='passwordHide?"password":"text"' 
+          <input :type='passwordHide?"password":"text"'
           name="password"
-           v-validate="'required'" 
+           v-validate="'required'"
            v-model="password"
           placeholder="设置密码（至少6位）"
            @blur="validateBlur('password')"
@@ -49,7 +49,7 @@
 
   </section>
           <transition name="fade">
-        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast> 
+        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
 </div>
 </template>
@@ -88,6 +88,7 @@ export default {
     Toast
   },
   mounted() {
+    api.forbidShare();
     this.$validator.updateDictionary({
       en: {
         custom: {

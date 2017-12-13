@@ -10,7 +10,7 @@
         <li class="registerContent formBox">
             <p class="phoneInput">
               <input type="number" name="phone" @input="inputMaxLength('phone',11)" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号">
-              
+
               <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
             </p>
             <p class="codeInput">
@@ -255,6 +255,7 @@ export default {
 
   mounted() {
     console.log(sendCode);
+    api.forbidShare();
     this.addValidateTips(); // 添加验证规则提示
   },
   components: {
