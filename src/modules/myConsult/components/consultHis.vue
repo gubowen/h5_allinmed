@@ -4,13 +4,13 @@
     <template v-if="items.length <= 0 && noFriend">
       <section class="noFriendText">
         <p>您还没有任何记录</p>
-        <p>添加关心的人，在线问诊，唯医骨科为您开启全新的就医体验</p>
+        <p>添加关心的人，在线咨询预约，唯医骨科为您开启全新的就医体验</p>
       </section>
       <section class="noFriendHref">
-        <a @click="hrefToConsult()">去问诊&gt;&gt;</a>
+        <a @click="hrefToConsult()">去问诊&gt;</a>
       </section>
     </template>
-    <div data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem">
+    <div class="orderHistoryBox" data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem" v-else>
       <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items"
                v-if="item.patientId&&item.patientId.length>0">
         <article class="orderHisItemTop">
@@ -41,6 +41,10 @@
           </button>
         </div>
       </section>
+      <infinite-loading @infinite="onInfinite">
+        <span slot="no-more" class="no-more">没有更多了</span>
+        <span slot="spinner"></span>
+      </infinite-loading>
     </div>
     <loading v-show="finish"></loading>
   </section>
@@ -54,6 +58,7 @@
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
 
   const XHRList = {
@@ -65,26 +70,20 @@
       return {
         finish: false,
         noFriend: false,
-        counter: 1,
-        num: 10,
-        pageStart: 0,
-        pageEnd: 0,
-        items: [],
-        scrollData: {
-          noFlag: false
-        }
+        pageNum: 20,
+        pageStart:0,
+        items: []
       }
     },
     mounted(){
-      api.mobileCheck();
+//      api.mobileCheck();
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);    //获取openId
       }
       api.forbidShare();
-      this.getOrderHistoryLists();
     },
     methods: {
-      getOrderHistoryLists(){
+      onInfinite($state){
         const that = this;
         api.ajax({
           url: XHRList.getOrderHistoryLists,
@@ -92,8 +91,8 @@
           data: {
             patientCustomerId: api.getPara().customerId,
             isValid: 1,
-            firstResult: 0,
-            maxResult: 20,
+            firstResult: that.pageStart,
+            maxResult: that.pageNum,
             logoUseFlag: 3
           },
           headers: {
@@ -104,17 +103,19 @@
             that.finish = true;
           },
           done(response){
-            console.log(response.responseObject.responseData.dataList)
             if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
-              that.items = response.responseObject.responseData.dataList;
-            } else {
-              that.noFriend = true;
+              that.pageStart += that.pageNum;
+              let temp = response.responseObject.responseData.dataList;
+              that.items = that.items.concat(temp);
+              $state.loaded();
+            }else{
+              if(that.pageStart>0){
+                $state.complete()
+              }else{
+                that.noFriend = true;
+              }
             }
-          },
-          fail(error){
-            document.querySelector(".ev-loading").style.display = "none";
-            console.log("数据错误");
-            console.log(error);
+            that.finish = false;
           }
         })
       },
@@ -239,24 +240,32 @@
         window.location.href = '/dist/consult.html?customerId=' + api.getPara().customerId;
       },
       hrefToSuggest(opt){
-        window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+        siteSwitch.weChatJudge(()=>{
+          window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+        },()=>{
+//          alert("关注微信才能看φ(>ω<*)");
+        })
       },
       getThisItem(opt){
-        //缓存orderSourceId
-        sessionStorage.setItem("orderSourceId", opt.consultationId);
-        //缓存医生信息
-        if (opt.consultationType == 1) {
-          let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
-          localStorage.setItem("doctorName", opt.fullName);
-          localStorage.setItem("doctorLogo", docLogo);
-          if (opt.caseType == 10 || opt.caseType == 11) {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+        siteSwitch.weChatJudge(()=>{
+          //缓存orderSourceId
+          sessionStorage.setItem("orderSourceId", opt.consultationId);
+          //缓存医生信息
+          if (opt.consultationType == 1) {
+            let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
+            localStorage.setItem("doctorName", opt.fullName);
+            localStorage.setItem("doctorLogo", docLogo);
+            if (opt.caseType == 10 || opt.caseType == 11) {
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+            } else {
+              window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+            }
           } else {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
           }
-        } else {
-          window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
-        }
+        },()=>{
+//          alert("关注微信才能看φ(>ω<*)");
+        })
       },
       goToUploadPic(opt){
         let that = this;
@@ -317,41 +326,13 @@
             console.log(error);
           }
         })
-      },
-      onRefresh(done) {
-        this.getOrderHistoryLists();
-        done();
-      },
-      onInfinite(done) {
-        console.log(2)
-        this.counter++;
-        let end = this.pageEnd = this.num * this.counter;
-        let i = this.pageStart = this.pageEnd - this.num;
-        let more = this.$el.querySelector('.load-more')
-        for (i; i < end; i++) {
-          if (i >= 30) {
-            more.style.display = 'none'; //隐藏加载条
-            //走完数据调用方法
-            this.scrollData.noFlag = true;
-
-            break;
-          } else {
-            this.listdata.push({
-              date: "2017-06-1" + i,
-              portfolio: "1.5195" + i,
-              drop: i + "+.00 %",
-              state: 2
-            })
-            more.style.display = 'none'; //隐藏加载条
-          }
-        }
-        done();
-      },
+      }
     },
     components: {
       loading,
       toast,
-      loadMore
+  loadMore,
+      InfiniteLoading
     }
   }
 </script>
@@ -366,26 +347,27 @@
     float: right;
   }
 
-  //亲友管理
+  //没有历史
   .noFriendText {
-    padding: rem(340px) rem(94px) 0;
+    padding: rem(450px) rem(86px) 0;
     &:before {
       content: '';
       display: block;
-      width: rem(390px);
-      height: rem(250px);
-      background: url("../../../common/image/img00/myServices/no_friend.png") no-repeat center center;
+      width: rem(320px);
+      height: rem(320px);
+      background: url("../../../common/image/img00/myServices/inquiry_bg.png") no-repeat center center;
       background-size: 100% 100%;
       position: absolute;
-      top: rem(48px);
+      top: rem(90px);
       left: 50%;
-      margin-left: rem(-390px / 2);
+      margin-left: rem(-160px);
     }
     p {
       &:nth-child(1) {
-        @include font-dpr(19px);
+        @include font-dpr(18px);
         color: #222;
         text-align: center;
+        font-weight: 600;
       }
       &:nth-child(2) {
         margin-top: rem(30px);
@@ -400,7 +382,7 @@
     a {
       text-align: center;
       margin-top: rem(60px);
-      color: #00beaf;
+      color: #07B6AC;
       display: block;
       @include font-dpr(18px);
     }
@@ -409,10 +391,12 @@
   //咨询历史
   .orderList {
     box-sizing: border-box;
-    border-top: 1px solid transparent;
-    background: url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
-    background-size: 100% rem(272px);
     min-height: 100%;
+    .orderHistoryBox{
+      background:#eeeeee;
+      border-top: 1px solid transparent;
+      margin-bottom:rem(100px);
+    }
     .orderHistoryItem {
       margin: rem(20px) rem(20px) 0;
       background: #ffffff;
@@ -513,6 +497,12 @@
         }
       }
     }
+  }
+
+  .no-more{
+    display:block;
+    line-height:rem(50px);
+    @include font-dpr(16px);
   }
 
 </style>

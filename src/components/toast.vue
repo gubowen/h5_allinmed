@@ -41,6 +41,7 @@
   }
 
   .middle-tip-modal {
+    position: fixed;
     .middle-tips-box-img {
       width:rem(66px);
       height:rem(66px);

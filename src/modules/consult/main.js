@@ -15,11 +15,14 @@ import selectPart from './components/selectPart';
 import discription from './components/discription';
 import history from './components/history';
 import upLoadTip from './components/upLoadTip';
+import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
+import followWechat from 'components/followWechat';
 // import vueg from 'vueg'
 // import 'vueg/css/transition-min.css';
 import "static/css/base.css";
-import api from '../../common/js/util/util';
+import CheckLogin from 'common/js/auth/checkLogin';
+import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
 
 import searchList from 'components/searchList';
@@ -28,12 +31,18 @@ import fastclick from 'fastclick';
 import valiadteMethods from '../../common/js/util/validate_methods';
 // fastclick.attach(document.body);
 
-
 class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）
     api.banZoom();
-    this.init();
+    let checkLogin = new CheckLogin();
+    checkLogin.getStatus().then((res)=>{
+      if(res.data.responseObject.responseStatus){
+        this.init();
+      }else{
+        window.location.href = '/mLogin.html';
+      }
+    })
   }
 
   init() {
@@ -164,6 +173,22 @@ class Consult {
         meta: {
           keepAlive: false
         },
+      },
+      {
+        path:"/conGuide",
+        name:"conGuide",
+        component:conGuide,
+        meta: {
+          keepAlive: false
+        }
+      },
+      {
+        path:"/followWechat",
+        name:"followWechat",
+        component:followWechat,
+        meta: {
+          keepAlive: false
+        }
       }
     ];
   }

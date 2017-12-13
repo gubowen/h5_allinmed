@@ -126,3 +126,6 @@ class ImScene {
 
 
 let imScene = new ImScene();
+if (module.hot) {  
+  module.hot.accept();
+}

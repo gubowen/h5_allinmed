@@ -254,7 +254,7 @@
     },
     activated(){
       //手机号校验
-      api.mobileCheck();
+//      api.mobileCheck();
       // document.title = "填写患者信息";
       this.finish = false;
       this.initData();
@@ -372,7 +372,7 @@
       //选择出生日期
       selectBirth () {
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber)){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber) && that.IDNumber.length == 18){
           if (that.errorShow === false){
             that.errorMsg = "出生日期以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -387,7 +387,7 @@
       //选择性别时的函数
       selectSex (index){
         let that = this;
-        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber)){
+        if(that.credentialType.id === "1" && that.relationShip.id !== "11" && validatePlugins.identityCard(that.IDNumber) && that.IDNumber.length == 18){
           if (that.errorShow === false){
             that.errorMsg = "性别以身份证信息为准,无需编辑";
             that.errorShow = true;
@@ -582,7 +582,9 @@
               this.errorShow = false;
             }, 2000);
           } else {
-            that.computeInfo();
+            if (this.IDNumber.length == 18) {
+              that.computeInfo();
+            }
           }
         }
         //如果上面验证通过，关系不为子女（无证件），则需要验证是否存在

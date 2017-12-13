@@ -19,7 +19,7 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section> -->
-        <video class="im-image" controls="controls" :src="videoMessage.file.url"  style="border-radius: 0.28rem"></video>
+        <video class="im-image video-message" controls="controls" :src="videoMessage.file.url"  style="border-radius: 0.28rem"></video>
       </figcaption>
       <figure class="main-message-img" v-if="videoMessage.from===userData.account">
         <img :src="logoUrl" alt="">
@@ -59,6 +59,10 @@ export default {
   }
 };
 </script>
-<style lang="sass" scoped>
-
+<style lang="scss" rel="stylesheet/scss">
+@import "../../../../scss/library/_common-modules";
+.video-message{
+  width:2rem;
+  height: 2rem;
+}
 </style>
