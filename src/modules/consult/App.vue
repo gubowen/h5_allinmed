@@ -5,7 +5,7 @@
     </keep-alive>
     
     <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
-
+    <bottomNav :selected="2" :isClick=false v-if="bottomNavShow"></bottomNav>
   </div>
 
 </template>
@@ -21,20 +21,29 @@
    */
   import addPatient from "./components/addPatient";
   import fb from "common/js/third-party/flexible";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import bottomNav from "components/tabbar"
 //  import vconsole from 'common/js/third-party/vconsole.min';
 
   export default{
     data() {
-      return {}
+      return {
+        bottomNavShow:false
+      }
     },
-    components: {}
+    mounted(){
+      siteSwitch.weChatJudge(()=>{
+        this.bottomNavShow = false;
+      },()=>{
+        this.bottomNavShow = true;
+      });
+    },
+    components: {
+      bottomNav
+    }
   }
 </script>
-<style lang="scss" scoped="">
-
-  div{
-    height: 100%;
-  }
+<style lang="scss" scoped=''>
   .child-view {
     position: absolute;
     width: 100%;
