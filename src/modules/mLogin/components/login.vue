@@ -51,7 +51,7 @@
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" @click.prevent="accountLoginFn()">登录</button>
+            <button class="loginButton" :class="{'on':allPass}" v-show="allPass" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
@@ -93,17 +93,18 @@ const XHRList = {};
 export default {
   data() {
     return {
-      confirmFlag: false, //confirm 框的显示隐藏
+      confirmFlag: false,  //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
-      errorShow: false, //toast 框是否显示
-      errorMsg: "", // toast 框提示语
-      phoneMessage: "", //手机号码
-      codeMessage: "", //验证码
-      password: "", //密码
-      pwHide: true, //密码可见
-      codeTime: 0, //验证码有效时间
+      errorShow: false,    //toast 框是否显示
+      errorMsg: "",        // toast 框提示语
+      phoneMessage: "",    //手机号码
+      codeMessage: "",     //验证码
+      password: "",        //密码
+      pwHide: true,        //密码可见
+      codeTime: 0,         //验证码有效时间
       getCode: true,
       imgUrl: "",
+      submitDisable:true,  //是否可点
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
@@ -111,10 +112,10 @@ export default {
       allPass: false,
       params: {
         codeCheck: {
-          validCode: "", //string	是	验证码CODE
-          codeId: "", //	string	是	验证码主键
+          validCode: "",  //string	是	验证码CODE
+          codeId: "",     //string	是	验证码主键
           //              isValid: 1,       //	string	是	修改验证码信息
-          account: "", //	string	是	手机号
+          account: "",    //string	是	手机号
           customerId: "",
           mobile: "",
           isCheckMobile: 1,
@@ -124,11 +125,13 @@ export default {
     };
   },
   methods: {
+    //注册路由
     goReginster() {
       this.$router.push({
         name: "register"
       });
     },
+    //忘记密码路由
     goForgetPass() {
       this.$router.push({
         name: "forgetPassword"
@@ -160,8 +163,8 @@ export default {
       if (
         this.phoneMessage &&
         this.codeMessage &&
-        !this.errors.has('phone')&&
-        !this.errors.has('codeInput')
+        !this.errors.has("phone") &&
+        !this.errors.has("codeInput")
       ) {
         this.allPass = true;
       } else {
@@ -177,8 +180,8 @@ export default {
       if (
         this.phoneMessage &&
         this.password &&
-        !this.errors.has('account')&&
-        !this.errors.has('password')
+        !this.errors.has("account") &&
+        !this.errors.has("password")
       ) {
         this.allPass = true;
       } else {
@@ -199,12 +202,14 @@ export default {
         fn && fn();
       }, 2000);
     },
+    //11位手机号截取
     onKeyPress() {
       let content = this.phoneMessage;
       if (api.getByteLen(content) > 11) {
         this.phoneMessage = api.getStrByteLen(content, 11);
       }
     },
+    //4位验证码截取
     codeKeyPress() {
       let content = this.codeMessage;
       if (api.getByteLen(content) > 4) {
@@ -215,7 +220,6 @@ export default {
     getCodeApi() {
       let _this = this;
       this.$validator.validateAll();
-
       if (this.getCode) {
         if (this.errors.has("phone")) {
           this.toastComm(this.errors.first("phone"));
@@ -236,7 +240,6 @@ export default {
         })
         .then(res => {
           const data = res;
-
           _this.finish = false;
           if (
             data.responseObject.responsePk !== 0 &&
@@ -293,12 +296,10 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-
               localStorage.setItem("userId", _obj.customerId);
               localStorage.setItem("userName", _obj.nickName);
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
-
               this.toastComm("登录成功，即将返回来源页面", () => {
                 window.location.href = "/";
               });
@@ -311,7 +312,9 @@ export default {
     },
     // 帐密登录
     accountLoginFn() {
-      if(this.allPass){
+      let _this = this;
+      _this.submitDisable = false;
+      if (this.allPass) {
         this.$store.commit("setLoadingState", true);
         passwordLogin
           .loginInit({
@@ -321,16 +324,17 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-  
-                localStorage.setItem("userId", _obj.customerId);
-                localStorage.setItem("userName", _obj.nickName);
-                localStorage.setItem("mobile", _obj.mobile);
-                localStorage.setItem("logoUrl", _obj.headUrl);
-                 this.toastComm("登录成功，即将返回来源页面", () => {
-                  window.location.href = "/";
-                });
+              localStorage.setItem("userId", _obj.customerId);
+              localStorage.setItem("userName", _obj.nickName);
+              localStorage.setItem("mobile", _obj.mobile);
+              localStorage.setItem("logoUrl", _obj.headUrl);
+              this.toastComm("登录成功，即将返回来源页面", () => {
+                window.location.href = "/";
+              });
             } else {
-              this.toastComm(data.responseObject.responseMessage);
+              this.toastComm(data.responseObject.responseMessage, ()=>{
+                _this.submitDisable = true;
+              });
             }
             this.$store.commit("setLoadingState", false);
           });
@@ -356,15 +360,15 @@ export default {
             digits: "验证码错误"
           },
           //账号登录密码
-          password:{
-            required:"请输入密码",
-            digits:"密码错误"
+          password: {
+            required: "请输入密码",
+            digits: "密码错误"
           }
         }
       }
     });
   },
-  activated(){
+  activated() {
     this.$validator.updateDictionary({
       en: {
         custom: {
@@ -379,9 +383,9 @@ export default {
             digits: "验证码错误"
           },
           //账号登录密码
-          password:{
-            required:"请输入密码",
-            digits:"密码错误"
+          password: {
+            required: "请输入密码",
+            digits: "密码错误"
           }
         }
       }
