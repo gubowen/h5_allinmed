@@ -1,7 +1,7 @@
 <template>
   <section class="main-box">
     <div class="placeholder-ele"></div>
-      <attention @attentionHandle="focusAllinmed" v-if="!weixinState"></attention>
+      <attention @attentionHandle="focusAllinmed"></attention>
     <section class="main-content">
       <h2 class="main-title">关于唯医互联网医院</h2>
       <p class="main-details">
@@ -24,15 +24,11 @@
    */
   import api from 'common/js/util/util';
   import attention from 'components/attention'
-  import {mapGetters} from "vuex";
   export default{
     data(){
       return {
         consultUrl:'',
       }
-    },
-    computed:{
-      ...mapGetters(['weixinState']),
     },
     methods: {
       focusAllinmed(){
