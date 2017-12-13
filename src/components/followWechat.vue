@@ -25,7 +25,7 @@
       <section class="followWX_waytwo">
         <h3>微信搜索“唯医互联网骨科医院”关注</h3>
         <figure class="searchFollow">
-          <img src="../common/image/img00/followWX/picture.png">
+          <img src="../common/image/img00/followWX/qrcode_for_gh.jpg">
         </figure>
       </section>
     </section>
