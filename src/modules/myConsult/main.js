@@ -42,7 +42,9 @@ class Myconsult {
         console.log("2");
         if(window.location.href.indexOf('?') == -1){
           console.log("4")
-          window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`
+          console.log(`${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`);
+          window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`;
+          return false;
         }else{
           console.log("5")
           window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`
