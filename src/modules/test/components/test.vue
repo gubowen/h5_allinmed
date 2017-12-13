@@ -91,8 +91,8 @@ export default {
           'X-Requested-With': 'XMLHttpRequest'
         },
         data: {
-          account: "13323033508",
-          password:"123456",
+          account: "18810289689",
+          password:"111111",
           siteId:"17"
         },
         done(data) {}
@@ -149,13 +149,8 @@ export default {
       let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect",
           _encodeUrl = encodeURIComponent(encodeUrl);
 
-      let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId +"&redirect_uri=" + _encodeUrl;
+      let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + _encodeUrl;
 
-      if(api.getPara().wxState){
-        return false;
-      }else{
-        alert("你已经绑定其他账号");
-      }
       window.location.href = _url;
     }
   }
