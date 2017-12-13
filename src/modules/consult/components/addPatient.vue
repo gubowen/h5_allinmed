@@ -1,5 +1,5 @@
 <template>
-  <section class="sticky-wrapper">
+  <section class="sticky-wrapper" :class="{'isMB':!isWeChat}">
     <section class="main-inner">
       <section class="main-inner-content">
         <!--头部-->
@@ -187,6 +187,7 @@
   import confirm from 'components/confirm';
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
@@ -202,6 +203,7 @@
   export default{
     data(){
       return {
+        isWeChat:true, //是否是微信
         phoneShow:false,//拨打电话confirm框
         headerShow:2,//头部显示哪个
         patientList: [],//患者列表
@@ -268,6 +270,12 @@
       document.title="为谁问诊";
     },
     mounted() {
+      // 检测是否是微信
+      siteSwitch.weChatJudge(()=>{
+        this.isWeChat = true;
+      },()=>{
+        this.isWeChat = false;
+      });
 //      console.log(PickerDate);
       document.title="为谁问诊";
       if(!api.checkOpenId()){
@@ -993,6 +1001,9 @@
     box-sizing: border-box;
     background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
     background-size:100% rem(272px);
+    &.isMB{
+      padding-bottom: rem(100px);
+    }
   }
 
   .main-inner {

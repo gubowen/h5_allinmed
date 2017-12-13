@@ -1,5 +1,5 @@
 <template>
-  <div data-alcode-mod='710'>
+  <div data-alcode-mod='710' style="height:100%" :class="{'isMB':!isWeChat}">
     <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
     <header class="part-select-title">
       <h3>点选最不适部位：</h3>
@@ -55,6 +55,7 @@
   import loading from "components/loading";
   import api from "common/js/util/util";
   import backPopup from "components/backToastForConsult";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -63,6 +64,7 @@
 
     data() {
       return {
+        isWeChat:true, //是否是微信
         patientParams:{
           customerId:api.getPara().customerId,
           doctorId:api.getPara().doctorId,
@@ -155,6 +157,12 @@
       }
     },
     mounted() {  //渲染启动...接收上一页携带路由参数体
+      // 检测是否是微信
+      siteSwitch.weChatJudge(()=>{
+        this.isWeChat = true;
+      },()=>{
+        this.isWeChat = false;
+      });
       this.patientMessage = this.$route.query;
       document.title = "选择部位";
       this.currentType = this.patientType ();
@@ -372,6 +380,9 @@
    * Created by qiangkailiang on 2017/2/23
    */
   /*新版本三级选项样式*/
+  .isMB{
+    padding-bottom: rem(100px);
+  }
   .part-box{
     background-color: rgba(255,255,255,0);
     position: absolute;

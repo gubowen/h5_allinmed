@@ -49,7 +49,7 @@ export default {
         localStorage.getItem("userId");
       this.homeUrl = `/`;
       if (this.selected == 2) {
-        this.historyUrl = `./consult.html`;
+        this.historyUrl = `/dist/consult.html?customerId=${userId}`;
       } else {
         if (userId) {
           this.historyUrl = `/dist/myConsult.html?customerId=${userId}`;
@@ -67,6 +67,7 @@ export default {
           location.href = this.homeUrl;
           break;
         case 2:
+          if (!this.isClick) return false;
           location.href = this.historyUrl;
           break;
         case 3:
@@ -82,6 +83,10 @@ export default {
     selected: {
       default: 0,
       type: Number
+    },
+    isClick: {
+      default: true,
+      type: Boolean
     }
   }
 };
