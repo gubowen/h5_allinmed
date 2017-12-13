@@ -37,7 +37,7 @@ class Myconsult {
   init() {
     console.log("1");
     //验证url中是否有customerId，若没有则拼接
-    alert(api.getPara().customerId);
+    console.log(api.getPara().customerId);
     if(!api.getPara().customerId){
         console.log("2");
         if(window.location.href.indexOf('?') == -1){
@@ -52,11 +52,11 @@ class Myconsult {
       }else{
       console.log("3");
         //微信中绑定微信
-        // siteSwitch.weChatJudge(()=>{
-        //   wxBind.isBind();
-        // },()=>{
-        //   console.log("无需绑定微信");
-        // });
+        siteSwitch.weChatJudge(()=>{
+          wxBind.isBind();
+        },()=>{
+          console.log("无需绑定微信");
+        });
     }
     console.log("6");
     Vue.use(VueRouter);
