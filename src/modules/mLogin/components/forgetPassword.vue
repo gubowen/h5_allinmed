@@ -153,11 +153,13 @@ export default {
       }, 2000);
     },
     sendCode() {
-      debugger;
+      let _this = this;
       this.$validator.validateAll();
       this.$store.commit("setLoadingState",true);
       if (this.errors.has("phone")) {
-        this.toastComm(this.errors.first(name));
+        this.toastComm(_this.errors.first("phone"));
+         this.$store.commit("setLoadingState",false);
+        return;
       } else {
         sendCode
           .sendInit({
