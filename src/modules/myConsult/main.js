@@ -35,15 +35,15 @@ class Myconsult {
   }
 
   init() {
-    //验证url中是否有customerId，若没有则拼接
-    if(!(api.getPara().customerId&&api.getPara().customerId.length>1)){
-      if(window.location.href.indexOf('?') == -1){
-        window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`
-      }else{
-        window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`
-      }
-    }
-
+    // //验证url中是否有customerId，若没有则拼接
+    // if(!(api.getPara().customerId&&api.getPara().customerId.length>1)){
+    //   if(window.location.href.indexOf('?') == -1){
+    //     window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`
+    //   }else{
+    //     window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`
+    //   }
+    // }
+    // debugger;
     //微信中绑定微信
     siteSwitch.weChatJudge(()=>{
       wxBind.isBind();
