@@ -67,8 +67,10 @@ const mutaions = {
             state.codeNumId = data.responseObject.responsePk;
           }else{
             if(data.responseObject.responseCode==='0B0006'){
-              state.phoneError = '000000';
               state.phoneError = '0B0006';
+              let resetTimer = setTimeout(function(){
+                state.phoneError = '000000';
+              },500);
             }
             if(data.responseObject.responseCode==='SMS0003'){
               state.codeNum  = -1;
