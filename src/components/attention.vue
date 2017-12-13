@@ -10,16 +10,20 @@ const getPersonal = new GetPersonal();
 export default {
   data() {
     return {
-      showFlag:true
+      showFlag: true
     };
   },
 
   methods: {
     init() {
-      if (!localStorage.getItem("hasCloseAttention")) {
-        this.getPersonal();
+      if (localStorage.getItem("userId")) {
+        if (!localStorage.getItem("hasCloseAttention")) {
+          this.getPersonal();
+        } else {
+          this.showFlag = true;
+        }
       }else{
-        this.showFlag=true;
+        this.showFlag = false;
       }
     },
     close() {
@@ -34,9 +38,9 @@ export default {
         const _data = data.responseObject.responseData;
         if (_data && parseInt(_data.uniteFlagWeixin) === 1) {
           localStorage.setItem("hasCloseAttention", true);
-           this.showFlag=true;
-        }else{
-          this.showFlag=false;
+          this.showFlag = true;
+        } else {
+          this.showFlag = false;
         }
       });
     }
