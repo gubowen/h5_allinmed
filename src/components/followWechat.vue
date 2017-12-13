@@ -17,7 +17,7 @@
           <dd>* 苹果用户点击扫一扫页面右上角“相册”即可；</dd>
           <dd>* 安卓用户点击扫一扫页面右上角...后点击“从相册选取二维码”即可。</dd>
           <dd class="QRcodeBox">
-            <img src="../common/image/img00/followWX/QR.png" alt="唯医互联网骨科医院" class="QRcode">
+            <img src="../common/image/img00/followWX/qrcode_for_gh.jpg" alt="唯医互联网骨科医院" class="QRcode">
             <img src="../common/image/img00/followWX/code_entrance.png" class="QRtips">
           </dd>
         </dl>
@@ -25,7 +25,7 @@
       <section class="followWX_waytwo">
         <h3>微信搜索“唯医互联网骨科医院”关注</h3>
         <figure class="searchFollow">
-          <img src="../common/image/img00/followWX/qrcode_for_gh.jpg">
+          <img src="../common/image/img00/followWX/picture.png">
         </figure>
       </section>
     </section>
