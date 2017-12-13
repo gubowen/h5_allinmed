@@ -17,6 +17,7 @@ class Wxbinding {
     let isBinding = new Isbinding();
     let customerId = localStorage.getItem("userId");
     if(api.getPara().wxState || api.getPara().wxState == 0){
+      alert(localStorage.getItem('protoUrl'));
       window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
     }else{
       isBinding.getMessage(customerId).then((res)=>{
