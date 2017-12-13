@@ -8,6 +8,7 @@
  */
 
 import Isbinding from "./getPersonal";
+import api from 'common/js/util/util';
 import "babel-polyfill";
 
 class Wxbinding {
@@ -15,13 +16,17 @@ class Wxbinding {
   isBind(){
     let isBinding = new Isbinding();
     let customerId = localStorage.getItem("userId");
-    isBinding.getMessage(customerId).then((res)=>{
-      if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
-        this.wxBind();
-      }
-    }).catch((err)=>{
-      console.log(err)
-    })
+    debugger
+    if(!api.getPara().wxState && api.getPara().wxState != 0){
+      debugger;
+      isBinding.getMessage(customerId).then((res)=>{
+        if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
+          this.wxBind();
+        }
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
   }
   wxBind() {
     let appId = "",XHRUrl = "",envCode = "";
@@ -44,6 +49,8 @@ class Wxbinding {
 
     let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect",
       _encodeUrl = encodeURIComponent(encodeUrl);
+
+    alert(encodeUrl);
 
     window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
   }

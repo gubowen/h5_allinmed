@@ -70,6 +70,24 @@ class ValidateVerifiPolicy {
       }
     });
 
+    Validator.extend('min_length', {
+      messages: {
+        en: field => '请填写真实姓名',
+      },
+      validate: (value,args) => {
+        let len = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value[i].match(/[^\x00-\xff]/ig) !== null){
+            len += 2;
+          }
+          else{
+            len += 1;
+          }
+        }
+        return len >= parseInt(args[0]);
+      }
+    });
+
     Validator.extend('isEmoji', {
       messages: {
         en: field => '请填写真实姓名，不能输入数字及特殊符号',
