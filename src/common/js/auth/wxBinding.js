@@ -16,9 +16,9 @@ class Wxbinding {
   isBind(){
     let isBinding = new Isbinding();
     let customerId = localStorage.getItem("userId");
-    debugger
-    if(!api.getPara().wxState && api.getPara().wxState != 0){
-      debugger;
+    if(api.getPara().wxState || api.getPara().wxState == 0){
+      window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
+    }else{
       isBinding.getMessage(customerId).then((res)=>{
         if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
           this.wxBind();
@@ -30,6 +30,7 @@ class Wxbinding {
   }
   wxBind() {
     let appId = "",XHRUrl = "",envCode = "";
+    localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
     if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
       return false;
     }
@@ -47,12 +48,13 @@ class Wxbinding {
       XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
 
-    let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect",
-      _encodeUrl = encodeURIComponent(encodeUrl);
+
+    let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     alert(encodeUrl);
-
-    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
+    if(!api.getPara().code){
+      window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
+    }
   }
 }
 
