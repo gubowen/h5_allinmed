@@ -69,8 +69,12 @@
       }
     },
     watch:{
-      phoneNum(newNum){
-          this.changePhoneNum(newNum);
+      phoneNum(newNum,oldNewStr){
+        let t = this;
+        if(newNum.length>11){
+          t.phoneNum = oldNewStr;
+        }
+          this.changePhoneNum(t.phoneNum);
       },
       phoneError(newStr){
         let t = this;
@@ -144,11 +148,11 @@
           return false;
         }
         if(isNaN(parseInt(t.phoneNum,10))){
-          t.toast("不像是正确的手机号。");
+          t.toast("请输入正确的手机号！");
           return false;
         }else{
           if(this.errors.has('phone')){
-            t.toast("不像是正确的手机号。");
+            t.toast("请输入正确的手机号！");
             return false;
           }
         }

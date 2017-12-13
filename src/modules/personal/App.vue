@@ -121,8 +121,8 @@
       height:rem(101px);
       .icon-searchCancel:before {
         content: "";
-        width: rem(26px);
-        height: rem(26px);
+        width: rem(32px);
+        height: rem(32px);
         display: inline-block;
         vertical-align: middle;
         background: url("../../../src/common/image/img00/personal/icon_searchCancel.png") center center no-repeat;
@@ -181,7 +181,7 @@
       }
       .eye{
         display: inline-block;
-        width: rem(38px);
+        width: rem(40px);
         vertical-align: middle;
         margin:0 rem(20px) 0 rem(15px);
         position: absolute;
@@ -190,15 +190,18 @@
       }
       .eyeOpen{
         background: url('../../../src/common/image/img00/personal/eye.png') no-repeat;
+        width: rem(40px);
+        height: rem(40px);
         -webkit-background-size: contain;
         background-size: contain;
-        height: rem(20px);
+
       }
       .eyeClose{
         background: url('../../../src/common/image/img00/personal/Eye_Close.png') no-repeat;
         -webkit-background-size: contain;
+        width: rem(40px);
+        height: rem(40px);
         background-size: contain;
-        height: rem(27px);
         margin-top: rem(-14px);
       }
 
@@ -244,6 +247,10 @@
   }
   .have-padding{
     padding:rem(20px) 0 0 0;
+    min-height: 100%;
+    height: auto;
+    padding-bottom: rem(100px);
+
   }
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s
