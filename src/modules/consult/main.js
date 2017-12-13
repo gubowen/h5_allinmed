@@ -40,7 +40,7 @@ class Consult {
       if(res.data.responseObject.responseStatus){
         this.init();
       }else{
-        window.location.href = '/mLogin.html';
+        window.location.href = '/dist/mLogin.html';
       }
     })
   }
