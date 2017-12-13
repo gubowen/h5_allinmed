@@ -33,7 +33,6 @@ const mutaions = {
     state.loadingOnOff = false;
   },
   changeLoginOnOff(state,data){
-      //state.loginOnOff = false;
       logOut(state);
     },
   changePhoneNum(state,num){
