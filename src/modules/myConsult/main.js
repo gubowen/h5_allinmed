@@ -42,15 +42,14 @@ class Myconsult {
       }else{
         window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`
       }
+    }else{
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        wxBind.isBind();
+      },()=>{
+        console.log("无需绑定微信");
+      });
     }
-
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind();
-    },()=>{
-      console.log("无需绑定微信");
-    });
-
     Vue.use(VueRouter);
     this.routerStart();
     //vue路由
