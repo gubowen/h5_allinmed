@@ -5,8 +5,8 @@
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
       <slider :loop="true" :autoPlay="true" :interval="5000" :dataList="adList">
-          <div class="banner-slider" v-for="(item,index) in adList">
-            <a :href="item.adAdditionalUrl">
+          <div class="banner-slider" v-for="(item,index) in adList" @click.stop="bannerHref(item)">
+            <a href="javascript:void(0)">
               <img :src="item.adAttUrl" />
               </a>
             </div>
@@ -105,7 +105,7 @@ export default {
         url: XHRList.getOrderHistoryLists,
         method: "post",
         data: {
-          patientCustomerId: localStorage.getItem("userId"),
+          patientCustomerId: "", //localStorage.getItem("userId"),
           isValid: 1,
           firstResult: 0,
           maxResult: 1,
@@ -114,13 +114,14 @@ export default {
         timeout: 30000,
         done(response) {
           if (
-            response &&
             response.responseObject.responseData.dataList &&
             response.responseObject.responseData.dataList.length > 0
           ) {
             that.diagnoseList = response.responseObject.responseData.dataList;
-            that.dataGetFinish = true;
+          } else {
+            that.diagnoseList = [];
           }
+          that.dataGetFinish = true;
           that.$store.commit("setLoadingState", false);
         }
       });
@@ -144,6 +145,9 @@ export default {
         }
       }
       return logoImg;
+    },
+    bannerHref(item) {
+      window.location.href = item.adAdditionalUrl;
     },
     getFullName(opt) {
       if (opt.fullName.length > 6) {
@@ -208,7 +212,8 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            that.adList=data.responseObject.responseData.data_list[0].ad_profile_attachment;
+            that.adList =
+              data.responseObject.responseData.data_list[0].ad_profile_attachment;
             console.log(that.adList);
           }
           that.$store.commit("setLoadingState", false);
