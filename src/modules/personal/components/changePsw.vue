@@ -65,6 +65,9 @@
         errorMsg:""
       }
     },
+    mounted(){
+      api.forbidShare();
+    },
     computed:{
       ...mapGetters(["customerId",'customerPhoneNum','loginUrl']),
       pswType(){

@@ -10,7 +10,7 @@
         <li class="registerContent formBox">
             <p class="phoneInput">
               <input type="number" name="phone" @input="inputMaxLength('phone',11)" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号">
-              
+
               <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
             </p>
             <p class="codeInput">
@@ -19,7 +19,7 @@
               <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()'></i>
             </p>
             <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
-            <button class="loginButton" :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
+            <button class="loginButton" :disabled='isRegister' :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
         </li>
       </ul>
 
@@ -70,6 +70,7 @@ export default {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
       },
+      isRegister:false,//注册按钮是否可以点击
       imgUrl: "", // 提示toast框提示
       confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
@@ -150,6 +151,7 @@ export default {
     //验证表单
     validate() {
       console.log("我要验证");
+      this.isRegister = true;
       this.$validator.validateAll().then(result => {
         console.log(result);
         if (result) {
@@ -161,6 +163,7 @@ export default {
           this.errorMsg = this.$validator.errors.items[0].msg;
           this.errorShow = true;
           setTimeout(() => {
+            this.isRegister = false;
             this.errorShow = false;
           }, 2000);
           return;
@@ -178,6 +181,7 @@ export default {
         .then(res => {
           console.log(res);
           let obj = res.responseObject;
+          this.isRegister = false;
           if (res.responseObject && res.responseObject.responseStatus) {
             if (obj.responseCode === "SMS0001") {
               console.log("发送成功");
@@ -255,6 +259,7 @@ export default {
 
   mounted() {
     console.log(sendCode);
+    api.forbidShare();
     this.addValidateTips(); // 添加验证规则提示
   },
   components: {

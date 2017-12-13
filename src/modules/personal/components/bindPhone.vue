@@ -97,6 +97,7 @@
       }
     },
     mounted(){
+      api.forbidShare();
       this.phoneNum = this.$store.state.phoneNum;
       this.$validator.updateDictionary({
         en: {

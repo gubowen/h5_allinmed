@@ -24,6 +24,7 @@
   import noLogin from './../components/noLogin.vue';
   import linkUs from './../components/linkUs.vue';
   import confirm from 'components/confirm';
+  import api from "common/js/util/util";
   import {mapGetters,mapActions} from "vuex";
   export default {
     data () {
@@ -34,6 +35,9 @@
     },
     computed:{
       ...mapGetters(["loginOnOff",'weixinState','customerName','loginUrl']),
+    },
+    mounted(){
+      api.forbidShare();
     },
     methods:{
       ...mapActions(['outLogin']),

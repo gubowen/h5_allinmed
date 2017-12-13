@@ -39,6 +39,7 @@
       }
     },
     mounted(){
+      api.forbidShare();
       let userId = api.getPara().customerId || api.getPara().patientCustomerId;
       this.consultUrl = `./consult.html?customerId=${userId}`;
     },

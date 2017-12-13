@@ -11,23 +11,23 @@
         <li class="phoneLogin" v-show="loginStyle == 'phone'">
           <form class="formBox">
             <p class="phoneInput">
-              <input 
-              type="number" 
+              <input
+              type="number"
               placeholder="请输入手机号"
               v-validate="'required|mobile'"
-              name="phone" 
+              name="phone"
               @blur="validateBlur('phone')"
               @input="onKeyPress()"
               v-model="phoneMessage"
               >
             </p>
             <p class="codeInput">
-              <input type="number" 
+              <input type="number"
               placeholder="请输入验证码"
-              v-model="codeMessage" 
+              v-model="codeMessage"
               @blur="validateBlur('codeInput')"
               v-validate="'required|digits:4'"
-              @input="codeKeyPress()" 
+              @input="codeKeyPress()"
               name="codeInput"
               >
               <span class="getCode" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
@@ -47,7 +47,7 @@
             </p>
             <p class="codeInput">
               <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password">
-              <i class="icon-eyesStatus fr" 
+              <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
             </p>
@@ -70,7 +70,7 @@
     >
     </vConfirm>
     <transition name="fade">
-        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast> 
+        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
   </div>
 </template>
@@ -342,6 +342,7 @@ export default {
     }
   },
   mounted() {
+    api.forbidShare();
     this.$validator.updateDictionary({
       en: {
         custom: {
@@ -369,6 +370,7 @@ export default {
     });
   },
   activated() {
+    api.forbidShare();
     this.$validator.updateDictionary({
       en: {
         custom: {

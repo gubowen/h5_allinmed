@@ -29,8 +29,8 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../../../scss/library/_common-modules";
 .WXlogin{
-    position:absolute;
-    bottom:rem(60px);
+    // position:fixed;
+    margin-top: rem(100px);
     figcaption{
       display: inline-block;
       vertical-align:middle;
@@ -40,7 +40,7 @@
         display: inline-block;
         content: '';
         vertical-align:middle;
-        width:rem(86px);
+        width:rem(80px);
         height:1px;
         background:#D8D8D8;
         margin-right:rem(30px);
@@ -49,7 +49,7 @@
         display: inline-block;
         content: '';
         vertical-align:middle;
-        width:rem(86px);
+        width:rem(80px);
         height:1px;
         background:#D8D8D8;
         margin-left:rem(30px);
