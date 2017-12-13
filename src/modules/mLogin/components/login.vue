@@ -51,7 +51,7 @@
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" v-show="allPass" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
+            <button class="loginButton" :class="{'on':allPass}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
