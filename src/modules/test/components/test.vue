@@ -121,14 +121,12 @@ export default {
       /* env环境变量参数
        * 1代表唯医骨科-正式线上环境
        * 2代表唯仁唯医社区-线下调试环境
-       *
-       *
        */
 
       let appId = "";
       let XHRUrl = "";
-      let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
-        _encodeUrl = encodeURIComponent(_currentPageUrl);
+//      let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
+//        _encodeUrl = encodeURIComponent(_currentPageUrl);
 
       let envCode = "";
       if (window.location.origin.includes("localhost")) {
@@ -148,25 +146,17 @@ export default {
         XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
       }
 
-      let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-        "appid=" + appId +
-        "&redirect_uri=" + _encodeUrl +
-        "&response_type=code" +
-        "&scope=snsapi_userinfo" +
-        "&state=STATE" +
-        "#wechat_redirect";
-      if (api.getPara().code) {
-        window.location.href = XHRUrl +
-          "?ref=" + (window.location.origin + window.location.pathname)+
-          "&customerId="+api.getPara().customerId+
-          "&response_type=code" +
-          "&scope=snsapi_base" +
-          "&state=bundingWx" +
-          "&code=" + api.getPara().code +
-          "#wechat_redirect";
-      } else {
-        window.location.href = _url;
+      let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect",
+          _encodeUrl = encodeURIComponent(encodeUrl);
+
+      let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId +"&redirect_uri=" + _encodeUrl;
+
+      if(api.getPara().wxState){
+        return false;
+      }else{
+        alert("你已经绑定其他账号");
       }
+      window.location.href = _url;
     }
   }
 };
