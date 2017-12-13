@@ -48,6 +48,11 @@ const getCustomerInfo = () =>{
         state.weixinName = judgeLen(data.responseObject.responseData.uniteNickname);
         state.customerId = data.responseObject.responsePk;
         state.weixinState = (isNaN(parseInt(data.responseObject.responseData.uniteFlagWeixin,10))?false:(parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1));
+        if(state.weixinState){
+          localStorage.setItem("hasCloseAttention",true);
+        }else{
+          localStorage.removeItem("hasCloseAttention");
+        }
         state.customerPhoneNum = (data.responseObject.responseData.mobile)?parseInt(data.responseObject.responseData.mobile,10):(parseInt(localStorage.getItem("mobile"),10));
 
       }
