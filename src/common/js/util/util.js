@@ -189,7 +189,11 @@ class Api {
     if (connection.type_text == 'wifi') {
       checkKey = 1;
     } else {
-      checkKey = 0;
+      siteSwitch.weChatJudge(()=>{
+        checkKey = 0;  //微信浏览器
+      },()=>{
+        checkKey = 1;  //非微信浏览器
+      })
     }
     return checkKey;
   }
