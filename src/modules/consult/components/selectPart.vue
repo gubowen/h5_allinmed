@@ -33,7 +33,7 @@
       <!--<section class="btnBox-tips maskers show" vertical="" v-if="secondShow" @click="secondShow=false">-->
         <section class="part-box" :class="clickDirection" v-if="secondShow" @click.stop="secondShow=true">
           <!--<article><h2>请再确认一下不适部位</h2></article>-->
-          <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList" @click="ensurePart(index)">{{item.partName}}</a>
+          <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList" @click="ensurePart(index)">{{item.partNameAlias}}</a>
           <a class="btnBox-btn btn-confirm" @click='surePart' data-alcode='e126'>确认</a>
         </section>
       <!--</section>-->
