@@ -277,15 +277,23 @@ export default {
 .diagnose {
   height: rem(280px);
   margin-bottom: rem(84px);
+  margin-top: rem(40px);
   background: url("../../../common/image/img00/index/button_bg.png") no-repeat;
-  background-size: contain;
-  padding-top: 86px;
+  background-size: 100% 100%;
+  text-align: center;
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
   .btn-diagnose {
     width: rem(474px);
     height: rem(108px);
     background-image: linear-gradient(90deg, #31cfb3 42%, #2fb9b6 84%);
     border-radius: rem(200px);
-    margin: 0 auto;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
     @include font-dpr(22px);
     color: #ffffff;
