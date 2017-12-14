@@ -5,6 +5,7 @@ import vueRouter from 'vue-router';
 import VueLazyLoad from 'vue-lazyload';
 import moreImage from './components/main';
 import followWX from 'components/followWechat';
+import shootTips from 'components/shootTips';
 import "static/css/base.css";
 
 class MoreImage {
@@ -35,6 +36,10 @@ init(){
           path: '/followWX',
           name: "followWX",
           component: followWX
+        },{
+          path: '/shootTips',
+          name: "shootTips",
+          component: shootTips
         }
       ]
     }),
