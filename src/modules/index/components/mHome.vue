@@ -1,6 +1,6 @@
 <template>
   <section class="mHome">
-    <attention @attentionHandle="attentionHandle"></attention>
+    <attention @attentionHandle="attentionHandle" ></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
@@ -60,8 +60,8 @@ import api from "common/js/util/util";
 import Vue from "vue";
 
 import CheckLogin from "common/js/auth/checkLogin";
-import GetPersonal from "common/js/auth/getPersonal";
-const getPersonal = new GetPersonal();
+
+
 const checkLogin = new CheckLogin();
 
 const Owner_Position_Id = "";
@@ -118,12 +118,10 @@ export default {
             response.responseObject.responseData.dataList.length > 0
           ) {
             that.diagnoseList = response.responseObject.responseData.dataList;
-
-          }else{
-              that.diagnoseList =[];
-              
+          } else {
+            that.diagnoseList = [];
           }
-                    that.dataGetFinish = true;
+          that.dataGetFinish = true;
           that.$store.commit("setLoadingState", false);
         }
       });
@@ -148,8 +146,8 @@ export default {
       }
       return logoImg;
     },
-    bannerHref(item){
-      window.location.href=item.adAdditionalUrl;
+    bannerHref(item) {
+      window.location.href = item.adAdditionalUrl;
     },
     getFullName(opt) {
       if (opt.fullName.length > 6) {
@@ -214,7 +212,8 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
-            that.adList=data.responseObject.responseData.data_list[0].ad_profile_attachment;
+            that.adList =
+              data.responseObject.responseData.data_list[0].ad_profile_attachment;
             console.log(that.adList);
           }
           that.$store.commit("setLoadingState", false);
@@ -235,8 +234,10 @@ export default {
           this.$store.commit("setLoadingState", false);
         }
       });
-    }
+    },
+
   },
+
   mounted() {
     this.init();
   }
@@ -276,15 +277,23 @@ export default {
 .diagnose {
   height: rem(280px);
   margin-bottom: rem(84px);
+  margin-top: rem(40px);
   background: url("../../../common/image/img00/index/button_bg.png") no-repeat;
-  background-size: contain;
-  padding-top: 86px;
+  background-size: 100% 100%;
+  text-align: center;
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
   .btn-diagnose {
     width: rem(474px);
     height: rem(108px);
     background-image: linear-gradient(90deg, #31cfb3 42%, #2fb9b6 84%);
     border-radius: rem(200px);
-    margin: 0 auto;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
     @include font-dpr(22px);
     color: #ffffff;
