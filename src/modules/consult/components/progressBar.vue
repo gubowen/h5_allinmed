@@ -3,23 +3,22 @@
     <!-- <img class="progressItem" :src="imageList[progerssBarParams.progerssParams].src" alt=""> -->
     <ul class="progressBar">
       <li class="progressBox">
-        <span class="progressBarItem" :class="{'active':true}"><span class="progressBarNum">1</span><span class="lineLeft"></span><span class="lineRight"></span></span>
+        <span class="progressBarItem pOne" :class="{'active':progerssBarParams.progerssParams>0}"><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">2</span><span class="lineLeft"></span><span class="lineRight"></span></span>
+        <span class="progressBarItem pTwo" :class="{'active':progerssBarParams.progerssParams>1}"><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">3</span><span class="lineLeft"></span><span class="lineRight"></span></span>
+        <span class="progressBarItem pThree" :class="{'active':progerssBarParams.progerssParams>2}"><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">4</span><span class="lineLeft"></span><span class="lineRight"></span></span>
+        <span class="progressBarItem pFour" :class="{'active':progerssBarParams.progerssParams>3}"><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
     </ul>
   </section>
 </template>
 
 <script type="text/ecmascript-6">
-// import "../modules/modules.procedureOrder.details.js"
 export default {
   data() {
     return {
@@ -58,7 +57,6 @@ export default {
 <style lang="scss" rel="stylesheet/scss">
 @import "../../../../scss/library/_common-modules";
 .progressBarBox {
-  // position: absolute;
   padding-top: rem(60px);
   padding-bottom: rem(30px);
   .progressItem {
@@ -77,27 +75,34 @@ export default {
         display: inline-block;
         width: rem(40px);
         height: rem(40px);
-        border-radius: rem(100px);
+        border-radius: 50%;
         color: #ffffff;
-        background-color: #d8d8d8;
+        &.pOne {
+          background: url("../../../common/image/img00/consult_V1.2/progressNumNo_01.png")
+            no-repeat center;
+          background-size: rem(40px) rem(40px);
+        }
+        &.pTwo {
+          background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 3.png")
+            no-repeat center;
+          background-size: rem(40px) rem(40px);
+        }
+        &.pThree {
+          background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 4.png")
+            no-repeat center;
+          background-size: rem(40px) rem(40px);
+        }
+        &.pFour {
+          background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 6.png")
+            no-repeat center;
+          background-size: rem(40px) rem(40px);
+        }
         position: relative;
         text-align: center;
         vertical-align: bottom;
         margin-top: rem(5px);
-        .progressBarNum {
-          @include font-dpr(14px);
-          position: absolute;
-          vertical-align: middle;
+        .lineLeft {
           display: inline-block;
-          color: #ffffff;
-          top: 50%;
-          margin-top: rem(-16px);
-          left: 50%;
-          margin-left: rem(-8px);
-        }
-        .lineLeft{
-          // z-index: -1;
-          display:inline-block;
           position: absolute;
           left: rem(-66px);
           width: rem(66px);
@@ -105,8 +110,8 @@ export default {
           background-color: #d8d8d8;
           top: 50%;
         }
-        .lineRight{
-          display:inline-block;
+        .lineRight {
+          display: inline-block;
           position: absolute;
           right: rem(-66px);
           width: rem(66px);
@@ -116,19 +121,33 @@ export default {
         }
         &.active {
           background-color: #2fc5bd;
-          .lineLeft{
+          &.pOne {
+            background: url("../../../common/image/img00/consult_V1.2/progressNum_01.png")
+              no-repeat center;
+            background-size: rem(40px) rem(40px);
+          }
+          &.pTwo {
+            background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 2.png")
+              no-repeat center;
+            background-size: rem(40px) rem(40px);
+          }
+          &.pThree {
+            background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 5.png")
+              no-repeat center;
+            background-size: rem(40px) rem(40px);
+          }
+          &.pFour {
+            background: url("../../../common/image/img00/consult_V1.2/Artboard 2 Copy 7.png")
+              no-repeat center;
+            background-size: rem(40px) rem(40px);
+          }
+          .lineLeft {
             background-color: #2fc5bd;
           }
-          .lineRight{
+          .lineRight {
             background-color: #2fc5bd;
           }
         }
-      }
-      .progressLine {
-        width: rem(20px);
-        height: rem(2px);
-        background-color: red;
-        float: left;
       }
     }
   }
