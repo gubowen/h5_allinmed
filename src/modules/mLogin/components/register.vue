@@ -247,13 +247,18 @@ export default {
     },
     // 手机号注册
     mobileRegisterFun() {
+      let _this =this;
+      let _sendPrams = {
+        account: this.phone,
+        password: this.password,
+        validCode: this.validCode,
+        codeId: this.codeId
+      }
+      if(api.getPara().customerId&&api.getPara().customerId.length>0){
+        _sendPrams.customerId=api.getPara().customerId;
+      }
       mobileRegister
-        .registerInit({
-          account: this.phone,
-          password: this.password,
-          validCode: this.validCode,
-          codeId: this.codeId
-        })
+        .registerInit(_sendPrams)
         .then((res) => {
           console.log(res);
           let _obj = res.responseObject;
