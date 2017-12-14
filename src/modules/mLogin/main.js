@@ -81,22 +81,37 @@ class MLogin {
       },{
         path: '/login',
         name: "login",
+        meta: {
+          keepAlive: false
+        },
         component: login
       },{
         path: '/loginRule',
         name: "loginRule",
+        meta: {
+          keepAlive: false
+        },
         component: loginRule
       },{
         path: '/forgetPassword',
         name: "forgetPassword",
+        meta: {
+          keepAlive: false
+        },
         component: forgetPassword
       },{
         path: '/wechat',
         name: "wechat",
+        meta: {
+          keepAlive: false
+        },
         component: wechat
       },{
         path: '/register',
         name: "register",
+        meta: {
+          keepAlive: true
+        },
         component: register
       }
     ];
