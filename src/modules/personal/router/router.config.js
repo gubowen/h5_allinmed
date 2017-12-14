@@ -9,6 +9,7 @@ import followWechat from "components/followWechat";
 import contactUs from "components/contactUs";
 import aboutAllinmed from "components/aboutAllinmed";
 import verificationCode from "../components/verificationCode";
+import createPsw from "../components/createPsw";
 
 export default {
   routes: [
@@ -23,6 +24,10 @@ export default {
     {
       path:"/changePsw",
       component:changePsw
+    },
+    {
+      path:"/createPsw",
+      component:createPsw
     },
     {
       path:"/followWechat",

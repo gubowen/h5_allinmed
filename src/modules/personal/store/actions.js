@@ -17,6 +17,9 @@ const  actions = {
   },
   hideLoading:({commit,state})=>{
     commit("hideLoading");
+  },
+  changeIsExistPwd:({commit,state})=>{
+    commit("changeIsExistPwd");
   }
 };
 export  default  actions;

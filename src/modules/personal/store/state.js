@@ -7,6 +7,7 @@ const state = {
   loginUrl:"/dist/mLogin.html",
   loginOnOff:true,//获取登录状态
   customerPhoneNum:'',//用户原本的手机号
+  isExistPwd:false,
   phoneNum:"",//用户当前修改的手机号
   phoneError:"",//手机号错误提示
   weixinName:"",//用户微信昵称
@@ -48,6 +49,7 @@ const getCustomerInfo = () =>{
         state.weixinName = judgeLen(data.responseObject.responseData.uniteNickname);
         state.customerId = data.responseObject.responsePk;
         state.weixinState = (isNaN(parseInt(data.responseObject.responseData.uniteFlagWeixin,10))?false:(parseInt(data.responseObject.responseData.uniteFlagWeixin,10)===1));
+        state.isExistPwd = (isNaN(parseInt(data.responseObject.responseData.isExistPwd,10))?false:(parseInt(data.responseObject.responseData.isExistPwd,10)===1));
         if(state.weixinState){
           localStorage.setItem("hasCloseAttention",true);
         }else{
