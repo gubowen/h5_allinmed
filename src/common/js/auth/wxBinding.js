@@ -7,7 +7,7 @@
  * Created by wangjinglong on 17/12/11.
  */
 
-import personalInfo from "./getPersonal";
+import PersonalInfo from "./getPersonal";
 import api from 'common/js/util/util';
 import "babel-polyfill";
 
@@ -15,7 +15,8 @@ class Wxbinding {
   constructor() {}
   isBind(obj){
     let cId = api.getPara().customerId;
-    if(cId && cId != 0){
+    let personalInfo = new PersonalInfo();
+    if((cId && cId != 0) || localStorage.getItem('userId')){
       personalInfo.getMessage(cId).then((res)=>{
         if(res && res.responseObject.responseData){
           let result = res.responseObject.responseData;
