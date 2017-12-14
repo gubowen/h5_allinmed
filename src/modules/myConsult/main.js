@@ -35,22 +35,17 @@ class Myconsult {
   }
 
   init() {
-    console.log("1");
     //验证url中是否有customerId，若没有则拼接
-    console.log(api.getPara().customerId);
     if(!api.getPara().customerId){
-        console.log("2");
         if(window.location.href.indexOf('?') == -1){
-          console.log("4")
           console.log(`${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`);
           window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`;
           return false;
         }else{
-          console.log("5")
-          window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`
+          window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`;
+          return false;
         }
       }else{
-      console.log("3");
         //微信中绑定微信
         siteSwitch.weChatJudge(()=>{
           wxBind.isBind();
@@ -58,7 +53,6 @@ class Myconsult {
           console.log("无需绑定微信");
         });
     }
-    console.log("6");
     Vue.use(VueRouter);
     this.routerStart();
     //vue路由
