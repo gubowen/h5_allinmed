@@ -12,7 +12,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input :type="pswType" placeholder="请输入当前密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
+          <input :type="pswType" placeholder="请输入6位以上密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
           <i class="eye ev_toggleEye " :class='{"eyeClose":!eyeState,"eyeOpen":eyeState,}' style="right:0;margin-right:0;" @click='changeEyeState'></i>
 
         </figure>
@@ -20,7 +20,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>确认新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
+          <input type="password" placeholder="请输入新密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
           <i class="icon-searchCancel" v-show='(cancelIndex===2)&&(reNewPassWord.length>0)'  @click='removeInput(2)'></i>
 
         </figure>
