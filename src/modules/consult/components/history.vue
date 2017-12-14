@@ -2,6 +2,7 @@
   <div data-alcode-mod='712'>
     <section class="consult-main-inner">
       <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
+        <progerssBar :progerssBarShow.sync="progerssBarShow" :progerssBarParams="{progerssParams:progerssNum}"></progerssBar>
         <span class="consult-page page-two"></span>
         <section class="questionContainMain">
           <section class="questionItem-common isComeCure">
@@ -208,6 +209,7 @@ import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import nimEnv from "common/js/nimEnv/nimEnv";
 import imageCompress from "common/js/imgCompress/toCompress";
+import progerssBar from "../components/progressBar";
 
 siteSwitch.weChatJudge(() => {
 _weChat=true;
@@ -256,6 +258,8 @@ export default {
       noWXPayShow: false,
       upLoadTip: false,
       levelShow: false,
+      progerssBarShow: true, //进度条（显示）
+      progerssNum:'',
       backPopupShow: false,
       submitTip: false,
       uploading1: false,
@@ -1133,7 +1137,8 @@ export default {
     loading,
     toast,
     confirm,
-    backPopup
+    backPopup,
+    progerssBar
   }
 };
 </script>
