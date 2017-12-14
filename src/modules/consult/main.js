@@ -36,28 +36,16 @@ class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）
     api.banZoom();
-    let checkLogin = new CheckLogin();
-    checkLogin.getStatus().then((res)=>{
-      if(res.data.responseObject.responseStatus){
-        this.init();
-      }else{
-        window.location.href = '/dist/mLogin.html';
-      }
-    })
+    this.init();
   }
 
   init() {
-    //验证url中是否有customerId，若没有则拼接
-    if(api.getPara().customerId && api.getPara().customerId != 0){
-      //微信中绑定微信
-      siteSwitch.weChatJudge(()=>{
-        wxBind.isBind();
-      },()=>{
-        console.log("无需绑定微信");
-      });
-    }else{
-      window.location.href = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
-    }
+    //微信中绑定微信
+    siteSwitch.weChatJudge(()=>{
+      wxBind.isBind();
+    },()=>{
+      console.log("无需绑定微信");
+    });
 
     //表单验证注册
     //路由系统注册
