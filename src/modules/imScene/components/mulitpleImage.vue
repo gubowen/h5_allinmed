@@ -11,8 +11,9 @@
         <!-- <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition> -->
+        <header class="mulit-title">图片({{imageList.length}})</header>
         <section class="mulitple-image-box">
-            <figure class="mulitple-image" v-for="item in imageList">
+            <figure class="mulitple-image" v-for="item in imageList.slice(0,3)">
                 <img :src="item.url" alt="">
             </figure>
         </section>
@@ -28,14 +29,34 @@
 <script type="text/ecmascript-6">
 export default {
   data() {
-      return{
-        imageList:[]
-      }
+    return {
+      imageList: []
+    };
   },
   components: {},
-  methods: {},
+  methods: {
+    showBigImg(item, index) {
+      let that = this;
+      let _indexNum =0;
+      this.showDeleteMsg = false;
+      let _params = {
+        imgBlob: (function() {
+          let result = [];
+          that.imageList.forEach((element, index) => {
+            result.push({ blob: element });
+          });
+          return result;
+        })(),
+        indexNum: _indexNum
+      };
+      this.$router.push({
+        name: "showBigImg",
+        params: _params
+      });
+    }
+  },
   mounted() {
-      this.imageList=JSON.parse(this.imageMessage.content).data.list;
+    this.imageList = JSON.parse(this.imageMessage.content).data.list;
 
     console.log(JSON.parse(this.imageMessage.content));
   },
@@ -60,5 +81,30 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-
+@import "../../../../scss/library/_common-modules";
+.mulit-title {
+  padding-bottom: rem(24px);
+  border-bottom: 1px solid #d8d8d8;
+  @include font-dpr(17px);
+  color: #222222;
+}
+.mulitple-image-box {
+  text-align: left;
+  padding-top: rem(24px);
+  & > .mulitple-image {
+    display: inline-block;
+    margin-right: rem(20px);
+    & > img {
+      width: rem(132px);
+      height: rem(132px);
+      vertical-align: top;
+    }
+    &:nth-child(1) {
+      // margin: 0;
+    }
+    &:nth-last-child(1) {
+      margin-right: 0;
+    }
+  }
+}
 </style>
