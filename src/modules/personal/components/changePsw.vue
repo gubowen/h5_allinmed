@@ -165,11 +165,11 @@
               },
               timeout: 20000,
               done(data) {
-                console.log(data);
+                //console.log(data);
                 t.hideLoading();
                 if(data&&data.responseObject&&data.responseObject.responseStatus){
                   console.log(data.responseObject.responseCode,typeof data.responseObject.responseCode)
-                  t.toast("修改密码成功，请重新登录");
+                  t.toast("修改密码成功");
                   clearTimeout(callBackTimer);
                   let callBackTimer = setTimeout(function () {
                     //window.location.href = t.loginUrl;
