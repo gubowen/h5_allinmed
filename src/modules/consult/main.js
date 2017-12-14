@@ -36,17 +36,20 @@ class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）
     api.banZoom();
-    this.init();
+    //微信中绑定微信
+    siteSwitch.weChatJudge(()=>{
+      wxBind.isBind({
+        callBack:()=>{
+          this.init();
+        }
+      });
+    },()=>{
+      console.log("无需绑定微信");
+      this.init();
+    });
   }
 
   init() {
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind();
-    },()=>{
-      console.log("无需绑定微信");
-    });
-
     //表单验证注册
     //路由系统注册
     Vue.use(VeeValidator);
