@@ -3,6 +3,13 @@
     <!--推荐医生-->
     <section class="main-message-box" data-alcode-mod='716' v-if="doctorObj.allData.length">
       <article class="doctor-box">
+        <!-- 推荐医生提示 -->
+        <section class="doctor-tips">
+          <p class="tips-content">
+
+          </p>
+        </section>
+
         <header class="doctor-header">
           <h3 class="doctor-title">匹配医生</h3>
           <p class="doctor-introduce"><span>直达三甲名医</span><span>超时未回复全额退款</span></p>
@@ -617,6 +624,13 @@
     background: #FFFFFF;
     border: 1px solid #E4E9EB;
     border-radius: rem(12px);
+    .doctor-tips{
+      width: 100%;
+      height: rem(146px);
+      background: url("../../../common/image/imScene/card_bg.png") no-repeat;
+      background-size: 100%;
+      margin-bottom: rem(24px);
+    }
     .doctor-header{
       .doctor-title{
         color: #333333;
