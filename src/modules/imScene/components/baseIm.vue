@@ -182,9 +182,9 @@
         <section class="footer-box-top">
           <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
-            <!-- <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <!-- <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
                   accept="image/*">
-            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
                   accept="image/*"> -->
           </section>
           <figure class="main-input-box-textarea-inner">
@@ -208,9 +208,9 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">图片</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)" ref="imageSender"
                   accept="image/*">
-            <input type="file" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
+            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)" ref="imageSender" capture="camera"
                   accept="image/*">
           </li>
           <li  class="bottom-item">
@@ -218,9 +218,9 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">照相</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendFile($event)" ref="videoSender"
                   accept="video/*">
-            <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
+            <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendFile($event)" ref="videoSender" capture="camera"
                   accept="video/*">
           </li>
           <li  class="bottom-item">
@@ -228,9 +228,9 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
                   accept="application/pdf,application/vnd.ms-excel,application/msword">
-            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
                   accept="application/pdf,application/vnd.ms-excel,application/msword">
           </li>
         </ul>
@@ -328,7 +328,8 @@ export default {
       footerBottomFlag: false, // 底部文件选择框是否显示
       noWXPayShow: false,
       onFocus: false,
-      inputFlag: true, //上传图片input控制
+      inputImageFlag: true, //上传图片input控制
+      inputVideoFlag: true, //上传视频input控制
       //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
       imageList: [], //页面图片数组
       consultationId: "",
@@ -1086,9 +1087,9 @@ export default {
       }
     },
     //上传文件
-    sendFile(e) {
+    sendImage(e) {
       const that = this;
-      that.inputFlag = false;
+      that.inputImageFlag = false;
       console.log(e.target.files);
       if (e.target.files.length > 1) {
         this.getMulitpleImage(e.target.files);
@@ -1098,8 +1099,12 @@ export default {
         console.log(window.URL.createObjectURL(_file));
         if (_file.type.includes("image")) {
           this.sendImageFile(_file);
-        } else if (_file.type.includes("video")) {
-          this.sendVideoFile(_file);
+        } else {
+          that.toastTips = `请选择图片`;
+          that.toastShow = true;
+          setTimeout(() => {
+            that.toastShow = false;
+          }, 2000);
         }
       }
     },
@@ -1173,6 +1178,7 @@ export default {
     // 上传图片文件
     sendImageFile(_file) {
       const that = this;
+      debugger;
       console.log(_file);
       this.msgList.push({
         file: {
@@ -1226,9 +1232,25 @@ export default {
                 };
               }
             });
+          } else {
+            console.log(error);
           }
         }
       });
+    },
+    // 选择视频
+    sendVideo () {
+      this.inputVideoFlag = false;
+      let _file = e.target.file[0];
+      if (_file.type.includes("video")) {
+        this.sendVideoFile(_file);
+      } else {
+        this.toastTips = `请选择图片`;
+        this.toastShow = true;
+        setTimeout(() => {
+          this.toastShow = false;
+        }, 2000);
+      }
     },
     // 上传视频文件
     sendVideoFile(_file) {
@@ -1770,7 +1792,7 @@ export default {
     //监听上传完成，可以继续上传；
     progess(newVal, oldVal) {
       if (newVal == "0%" || newVal == "100%") {
-        this.inputFlag = true;
+        this.inputImageFlag = true;
       }
     },
     lastTime: function(time) {
