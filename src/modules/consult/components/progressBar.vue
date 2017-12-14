@@ -83,8 +83,8 @@ export default {
         .lineLeft {
           display: inline-block;
           position: absolute;
-          left: rem(-66px);
-          width: rem(66px);
+          left: rem(-67px);
+          width: rem(67px);
           height: rem(2px);
           background-color: #d8d8d8;
           top: 50%;
@@ -92,8 +92,8 @@ export default {
         .lineRight {
           display: inline-block;
           position: absolute;
-          right: rem(-66px);
-          width: rem(66px);
+          right: rem(-67px);
+          width: rem(67px);
           height: rem(2px);
           background-color: #d8d8d8;
           top: 50%;
