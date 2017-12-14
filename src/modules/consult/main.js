@@ -47,12 +47,23 @@ class Consult {
   }
 
   init() {
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind();
-    },()=>{
-      console.log("无需绑定微信");
-    });
+    //验证url中是否有customerId，若没有则拼接
+    if(!api.getPara().customerId){
+      if(window.location.href.indexOf('?') == -1){
+        window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`;
+        return false;
+      }else{
+        window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`;
+        return false;
+      }
+    }else{
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        wxBind.isBind();
+      },()=>{
+        console.log("无需绑定微信");
+      });
+    }
 
     //表单验证注册
     //路由系统注册

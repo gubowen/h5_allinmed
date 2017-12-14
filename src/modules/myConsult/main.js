@@ -38,7 +38,6 @@ class Myconsult {
     //验证url中是否有customerId，若没有则拼接
     if(!api.getPara().customerId){
         if(window.location.href.indexOf('?') == -1){
-          console.log(`${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`);
           window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`;
           return false;
         }else{
