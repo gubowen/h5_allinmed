@@ -80,7 +80,7 @@
           </ImageContent>
           <!-- 图集消息 -->
           <MulitpleImage
-          v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'mulitpleImage' "
+          v-if="msg.type==='custom' && (JSON.parse(msg.content).type === 'mulitpleImage'||JSON.parse(msg.content).type ==='multipleImage' )"
           :imageMessage="msg"
                        :userData="userData"
             :targetData="targetData"
