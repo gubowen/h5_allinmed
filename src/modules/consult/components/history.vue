@@ -41,16 +41,21 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple ref="uploader">
-                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple  :capture="cameraType" ref="uploader">
+                        <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple ref="uploader" capture="camera">
+                        <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple   ref="uploader">
+                                                       <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,1,index)" multiple   ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList1.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&uploading1===false&&imageList1.length<9"
+                             v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<9"
                              @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<9"
+                             @change="onFileChange($event,1)" multiple ref="uploader">
                        <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="isIos&&uploading1===false&&imageList1.length<9"
                              @change="onFileChange($event,1)" multiple ref="uploader">
@@ -69,16 +74,21 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
+                        <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,2,index)" multiple capture="camera" ref="uploader">
+                        <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
+                               @change="onFileChange($event,2,index)" multiple   ref="uploader">
                         <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple ref="uploader">
-                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple  :capture="cameraType" ref="uploader">
+                               @change="onFileChange($event,2,index)" multiple   ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList2.length<9">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&uploading2===false&&imageList2.length<9"
+                             v-if="!isIos&&isWeChat&&uploading2===false&&imageList2.length<9"
                              @change="onFileChange($event,2)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                             v-if="!isIos&&!isWeChat&&uploading2===false&&imageList2.length<9"
+                             @change="onFileChange($event,2)" multiple ref="uploader">
                        <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="isIos&&uploading2===false&&imageList2.length<9"
                              @change="onFileChange($event,2)" multiple ref="uploader">
@@ -180,7 +190,7 @@
 
 // import selectArea from 'components/selectArea';
 let _cameraType = "";
-
+let _weChat = false;
 if (navigator.userAgent.toLowerCase().includes("iphone")) {
   _cameraType = "";
 } else {
@@ -198,6 +208,12 @@ import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import nimEnv from "common/js/nimEnv/nimEnv";
 import imageCompress from "common/js/imgCompress/toCompress";
+
+siteSwitch.weChatJudge(() => {
+_weChat=true;
+}, () => {
+  _weChat=false;
+});
 
 const XHRList = {
   upload: "/mcall/customer/patient/case/attachment/v1/create/",
@@ -232,6 +248,7 @@ export default {
         doctorId: api.getPara().doctorId
       },
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+      isWeChat:_weChat,
       orderSourceId: "", //进入分诊im需要orderSourceId
       finish: false,
       deletePic: {},
@@ -709,11 +726,11 @@ export default {
       price === "0" ? (flag = "false") : (flag = "true");
       //        that.lastTimeShow=true;
       //        that.sendConsultState(4);
-      console.log(price)
+      console.log(price);
       let data = {
         patientCustomerId: api.getPara().customerId, //	string	是	患者所属用户id
         patientId: that.allParams.patientId, // 	string	是	患者id
-        doctorId: 0,          //	string	是	医生id
+        doctorId: 0, //	string	是	医生id
         orderType: "1", //	string	是	订单类型  1-咨询2-手术3-门诊预约
         orderSourceId: 0, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
         orderSourceType: "1", //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
@@ -974,6 +991,7 @@ export default {
         to: "1_doctor00001",
         content: JSON.stringify(data),
         done(error, msg) {
+          console.log("问诊单发送成功...");
           that.tipNewPatient(data);
         }
       });
@@ -989,7 +1007,7 @@ export default {
           cType: "0",
           cId: 0,
           mType: "32",
-          conId:0// that.orderSourceId
+          conId: 0 // that.orderSourceId
         }),
         to: "1_doctor00001",
         content: JSON.stringify({

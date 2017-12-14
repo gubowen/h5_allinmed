@@ -24,7 +24,8 @@ import "static/css/base.css";
 import CheckLogin from 'common/js/auth/checkLogin';
 import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
-
+import siteSwitch from 'common/js/siteSwitch/siteSwitch';
+import wxBind from 'common/js/auth/wxBinding';
 import searchList from 'components/searchList';
 import fastclick from 'fastclick';
 
@@ -40,12 +41,23 @@ class Consult {
       if(res.data.responseObject.responseStatus){
         this.init();
       }else{
-        window.location.href = '/mLogin.html';
+        window.location.href = '/dist/mLogin.html';
       }
     })
   }
 
   init() {
+    //验证url中是否有customerId，若没有则拼接
+    if(api.getPara().customerId && api.getPara().customerId != 0){
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        wxBind.isBind();
+      },()=>{
+        console.log("无需绑定微信");
+      });
+    }else{
+      window.location.href = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
+    }
 
     //表单验证注册
     //路由系统注册

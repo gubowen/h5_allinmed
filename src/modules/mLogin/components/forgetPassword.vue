@@ -7,7 +7,7 @@
     <p v-if="!finishMobile">我们会向您的手机发送验证码</p>
     <ul class="loginRegisterContent">
       <li class="registerContent formBox">
-        <p class="codeInput" v-if="!finishMobile">
+        <p class="codeInput" v-show="!finishMobile">
           <input
             type="number"
             placeholder="请输入注册手机号码"
@@ -16,21 +16,23 @@
             @blur="validateBlur('phone')"
             @input="onPressPhone()"
             v-model="phoneMessage"
+            style="width:100%"
           >
         </p>
-        <p class="codeInput" v-if="finishMobile">
+        <p class="codeInput" v-show="finishMobile">
           <input type="number"
+          :class="{'getCodeInput':codeTime>0}"
            placeholder="请输入验证码"
-            v-model="codeMessage" 
-            v-validate="'required|digits:4'" 
+            v-model="codeMessage"
+            v-validate="'required|digits:4'"
             name="codeInput" />
-          <span class="getCode" v-if="codeTime<=0" @click="sendCode" style="width:38%">重新发送</span>
-          <span class="codeCountdown" v-if="codeTime>0" style="width:45%"><i>{{codeTime}}</i>秒后重新获取</span>
+          <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
+          <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
-        <p class="codeInput" v-if="finishMobile">
-          <input :type='passwordHide?"password":"text"' 
+        <p class="codeInput" v-show="finishMobile">
+          <input :type='passwordHide?"password":"text"'
           name="password"
-           v-validate="'required'" 
+           v-validate="'required'"
            v-model="password"
           placeholder="设置密码（至少6位）"
            @blur="validateBlur('password')"
@@ -42,12 +44,12 @@
         </p>
       </li>
     </ul>
-    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="sendCode">发送验证码</button>
+    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()">发送验证码</button>
     <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword">提交</button>
 
   </section>
           <transition name="fade">
-        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast> 
+        <toast :content="errorMsg" :imgUrl="imgUrl" v-if="errorShow"></toast>
     </transition>
 </div>
 </template>
@@ -85,7 +87,34 @@ export default {
   components: {
     Toast
   },
-  mounted() {},
+  mounted() {
+    api.forbidShare();
+    this.$validator.updateDictionary({
+      en: {
+        custom: {
+          //手机号的验证
+          phone: {
+            required: "请输入手机号码",
+            mobile: "请输入正确的手机号码"
+          },
+          account: {
+            required: "请输入手机号码",
+            mobile: "请输入正确的手机号码"
+          },
+          //患者关系的验证规则
+          codeInput: {
+            required: "请输入短信验证码",
+            digits: "验证码错误"
+          },
+          //账号登录密码
+          password: {
+            required: "请输入密码",
+            digits: "密码错误"
+          }
+        }
+      }
+    });
+  },
   methods: {
     onKeyPress() {
       let content = this.phoneMessage;
@@ -124,10 +153,13 @@ export default {
       }, 2000);
     },
     sendCode() {
+      let _this = this;
       this.$validator.validateAll();
       this.$store.commit("setLoadingState",true);
       if (this.errors.has("phone")) {
-        this.toastComm(this.errors.first(name));
+        this.toastComm(_this.errors.first("phone"));
+         this.$store.commit("setLoadingState",false);
+        return;
       } else {
         sendCode
           .sendInit({
@@ -191,7 +223,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../../../scss/library/_common-modules";
 
 .forgetPassword {
@@ -206,7 +238,7 @@ export default {
     @include font-dpr(15px);
     color: #222222;
     span {
-      margin: 0 rem(10px);
+      // margin: 0 rem(10px);
       font-weight: 600;
     }
   }
@@ -220,7 +252,7 @@ export default {
     @include font-dpr(17px);
     @include clearfix();
     .getCode {
-      width: 45%;
+      width: 40%;
       float: right;
       text-align: right;
       color: #2fc5bd;
@@ -229,12 +261,15 @@ export default {
       width: 50%;
       color: #777777;
     }
+    .getCodeInput{
+      width: 50%;
+    }
     & > input {
       outline: none;
       border: none;
       color: #101010;
+      width:60%;
       font-weight: 600;
-      width: 57%;
       float: left;
       @include placeholder() {
         color: #a0a0a0;

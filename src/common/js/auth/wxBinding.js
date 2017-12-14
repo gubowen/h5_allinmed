@@ -7,35 +7,31 @@
  * Created by wangjinglong on 17/12/11.
  */
 
-import api from "common/js/util/util";
 import Isbinding from "./getPersonal";
+import api from 'common/js/util/util';
+import "babel-polyfill";
 
-export default class Wxbinding {
+class Wxbinding {
   constructor() {}
   isBind(){
     let isBinding = new Isbinding();
     let customerId = localStorage.getItem("userId");
-    isBinding.getMessage(customerId).then((res)=>{
-      if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
-        this.wxBind();
-      }
-    }).catch((err)=>{
-      console.log(err)
-    })
+    if(!(api.getPara().wxState || api.getPara().wxState == 0)){
+      // alert(localStorage.getItem('protoUrl'));
+      // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
+      isBinding.getMessage(customerId).then((res)=>{
+        if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
+          this.wxBind();
+        }
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
   }
   wxBind() {
-    /* env环境变量参数
-     * 1代表唯医骨科-正式线上环境
-     * 2代表唯仁唯医社区-线下调试环境
-     */
-
-    let appId = "";
-    let XHRUrl = "";
-    let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
-      _encodeUrl = encodeURIComponent(_currentPageUrl);
-
-    let envCode = "";
-    if (window.location.origin.includes("localhost")) {
+    let appId = "",XHRUrl = "",envCode = "";
+    // localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
+    if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
       return false;
     }
     if (!window.location.hostname.includes("m9")) {
@@ -52,25 +48,14 @@ export default class Wxbinding {
       XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
 
-    let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-      "appid=" + appId +
-      "&redirect_uri=" + _encodeUrl +
-      "&response_type=code" +
-      "&scope=snsapi_userinfo" +
-      "&state=STATE" +
-      "#wechat_redirect";
-    if (api.getPara().code) {
-      window.location.href = XHRUrl +
-        "?ref=" + (window.location.origin + window.location.pathname)+
-        "&response_type=code" +
-        "&scope=snsapi_base" +
-        "&state=bundingWx" +
-        "&code=" + api.getPara().code +
-        "#wechat_redirect";
-    } else {
-      window.location.href = _url;
+
+    let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
+
+    // alert(encodeUrl);
+    if(!api.getPara().code){
+      window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }
   }
 }
 
-let wxApprove = new Wxbinding();
+export default new Wxbinding();

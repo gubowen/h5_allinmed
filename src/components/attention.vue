@@ -5,32 +5,44 @@
   </section>
 </template>
 <script>
+import GetPersonal from "common/js/auth/getPersonal";
+const getPersonal = new GetPersonal();
 export default {
   data() {
     return {
-      showFlag: !!localStorage.getItem("hasCloseAttention")
+      showFlag: true
     };
   },
+
   methods: {
     init() {
-      let loginFlag = false;
-      let wxLoginFlag = false;
-
-      //判断用户是否登录
-      if (loginFlag) {
-        //判断用户是否绑定微信
-        if (wxLoginFlag) {
+      if (localStorage.getItem("userId")) {
+        if (!localStorage.getItem("hasCloseAttention")) {
+          this.getPersonal();
+        } else {
           this.showFlag = true;
         }
-      } else {
+      }else{
+        this.showFlag = false;
       }
     },
     close() {
       this.showFlag = true;
-      localStorage.setItem("hasCloseAttention",true);
     },
     attentionEvent() {
       this.$emit("attentionHandle");
+    },
+    // 获取个人信息
+    getPersonal() {
+      getPersonal.getMessage(localStorage.getItem("userId")).then(data => {
+        const _data = data.responseObject.responseData;
+        if (_data && parseInt(_data.uniteFlagWeixin) === 1) {
+          localStorage.setItem("hasCloseAttention", true);
+          this.showFlag = true;
+        } else {
+          this.showFlag = false;
+        }
+      });
     }
   },
   mounted() {

@@ -20,6 +20,8 @@ import valiadteMethods from '../../common/js/util/validate_methods';
 
 import fastclick from 'fastclick';
 import selectArea from 'components/selectArea';
+import siteSwitch from 'common/js/siteSwitch/siteSwitch';
+import wxBind from 'common/js/auth/wxBinding';
 // import medicalInfo from './components/medicalInfo';
 import patientInfo from './components/patientInfo';
 
@@ -33,12 +35,18 @@ class Consult {
       if(res.data.responseObject.responseStatus){
         this.init();
       }else{
-        window.location.href = '/mLogin.html';
+        window.location.href = '/dist/mLogin.html';
       }
     })
   }
 
   init() {
+    //微信中绑定微信
+    siteSwitch.weChatJudge(()=>{
+      wxBind.isBind();
+    },()=>{
+      console.log("无需绑定微信");
+    });
 
     //表单验证注册
     //路由系统注册

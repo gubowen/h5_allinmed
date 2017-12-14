@@ -24,7 +24,6 @@
    */
   import api from 'common/js/util/util';
   import attention from 'components/attention'
-
   export default{
     data(){
       return {
@@ -40,8 +39,9 @@
       }
     },
     mounted(){
-      let userId = api.getPara().customerId || api.getPara().patientCustomerId;
-      this.consultUrl = `./consult.html?customerId=${userId}`;
+      api.forbidShare();
+      let userId = api.getPara().customerId || api.getPara().patientCustomerId || localStorage.getItem("userId");
+      this.consultUrl = `/dist/consult.html?customerId=${userId}`;
     },
     components: {
       attention

@@ -65,6 +65,9 @@
         errorMsg:""
       }
     },
+    mounted(){
+      api.forbidShare();
+    },
     computed:{
       ...mapGetters(["customerId",'customerPhoneNum','loginUrl']),
       pswType(){
@@ -101,21 +104,17 @@
         if(!t.activeOnOff){
           if(t.nowPassWord.length===0){
             //t.toast("请输入当前密码");
-            // allRight = false;
             return false;
           }
           if(t.newPassWord.length===0){
             //t.toast("请输入新密码");
-            // allRight = false;
             return false;
           }
           if(t.reNewPassWord.length===0){
             //t.toast("请确认新密码");
-            // allRight = false;
             return false;
           }
         }else{
-          // (this.nowPassWord.length>0)&&(this.newPassWord.length>0)&&(this.reNewPassWord.length>0);
           if(t.newPassWord.length<6){
             t.toast("新密码长度应大于6位");
             // allRight = false;

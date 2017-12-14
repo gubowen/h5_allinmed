@@ -39,7 +39,7 @@ class ValidateVerifiPolicy {
         }
       },
       validate: value => {
-        return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/).test(value)
+        return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/).test(value)
       }
     });
 
@@ -67,6 +67,24 @@ class ValidateVerifiPolicy {
           }
         }
         return len <= parseInt(args[0]);
+      }
+    });
+
+    Validator.extend('min_length', {
+      messages: {
+        en: field => '请填写真实姓名',
+      },
+      validate: (value,args) => {
+        let len = 0;
+        for (let i = 0; i < value.length; i++) {
+          if (value[i].match(/[^\x00-\xff]/ig) !== null){
+            len += 2;
+          }
+          else{
+            len += 1;
+          }
+        }
+        return len >= parseInt(args[0]);
       }
     });
 

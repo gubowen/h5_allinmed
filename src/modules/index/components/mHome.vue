@@ -1,16 +1,15 @@
 <template>
   <section class="mHome">
-    <attention @attentionHandle="attentionHandle"></attention>
+    <attention @attentionHandle="attentionHandle" ></attention>
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
-      <slider :loop="true" :autoPlay="true" :interval="5000">
-          <div class="banner-slider">
-            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
+      <slider :loop="true" :autoPlay="true" :interval="5000" :dataList="adList">
+          <div class="banner-slider" v-for="(item,index) in adList" @click.stop="bannerHref(item)">
+            <a href="javascript:void(0)">
+              <img :src="item.adAttUrl" />
+              </a>
             </div>
-          <div class="banner-slider">
-            <a href=""><img src="../../../common/image/img00/index/banner_default.png" /></a>
-          </div>
       </slider>
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
@@ -60,20 +59,24 @@ import tabbar from "components/tabbar";
 import api from "common/js/util/util";
 import Vue from "vue";
 
-
 import CheckLogin from "common/js/auth/checkLogin";
-import GetPersonal from "common/js/auth/getPersonal";
-const getPersonal = new GetPersonal();
+
+
 const checkLogin = new CheckLogin();
+
+const Owner_Position_Id = "";
 let XHRList = {
   //登录页
   loginUrl: "/dist/mLogin.html",
   //问诊
   diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
   //问诊历史
-  historyUrl: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
+  historyUrl: `/dist/myConsult.html?customerId=${localStorage.getItem(
+    "userId"
+  )}`,
   getOrderHistoryLists: "/mcall/customer/case/consultation/v1/getMapList/", //咨询历史接口
-  personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/"
+  personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+  adList: "/mcall/ad/position/profile/getMapList/"
 };
 
 export default {
@@ -82,7 +85,8 @@ export default {
       loginFlag: false,
       wxLoginFlag: false,
       diagnoseList: [],
-      dataGetFinish:false
+      dataGetFinish: false,
+      adList: []
     };
   },
   components: {
@@ -93,7 +97,7 @@ export default {
   methods: {
     init() {
       this.loginJudge();
-
+      this.getAdList();
     },
     getOrderHistoryLists() {
       const that = this;
@@ -109,11 +113,15 @@ export default {
         },
         timeout: 30000,
         done(response) {
-          if (response &&response.responseObject.responseData.dataList &&response.responseObject.responseData.dataList.length > 0) {
+          if (
+            response.responseObject.responseData.dataList &&
+            response.responseObject.responseData.dataList.length > 0
+          ) {
             that.diagnoseList = response.responseObject.responseData.dataList;
-            that.dataGetFinish=true;
-            
+          } else {
+            that.diagnoseList = [];
           }
+          that.dataGetFinish = true;
           that.$store.commit("setLoadingState", false);
         }
       });
@@ -138,6 +146,9 @@ export default {
       }
       return logoImg;
     },
+    bannerHref(item) {
+      window.location.href = item.adAdditionalUrl;
+    },
     getFullName(opt) {
       if (opt.fullName.length > 6) {
         return opt.fullName.substring(0, 6) + "...";
@@ -161,10 +172,10 @@ export default {
       }
       return consultationLevel;
     },
-    attentionHandle(){
+    attentionHandle() {
       this.$router.push({
-        name:"followWeChat"
-      })
+        name: "followWeChat"
+      });
     },
     //问诊
     diagnoseEvent() {
@@ -186,26 +197,47 @@ export default {
     },
     //登录
     loginEvent() {
-      window.location.href=XHRList.loginUrl
+      window.location.href = XHRList.loginUrl;
+    },
+    getAdList() {
+      const that = this;
+      api.ajax({
+        url: XHRList.adList,
+        method: "post",
+        data: {
+          siteId: api.getSiteId(),
+          channelId: 169,
+          platformId: 1,
+          positionId: 557
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            that.adList =
+              data.responseObject.responseData.data_list[0].ad_profile_attachment;
+            console.log(that.adList);
+          }
+          that.$store.commit("setLoadingState", false);
+        }
+      });
     },
     //登录判断
     loginJudge() {
       this.$store.commit("setLoadingState", true);
-      checkLogin.getStatus().then((res) => {
-        console.log(res)
+      checkLogin.getStatus().then(res => {
+        console.log(res);
         if (res.data.responseObject.responseStatus) {
           this.loginFlag = true;
           this.getOrderHistoryLists();
-          
         } else {
           this.loginFlag = false;
-          this.dataGetFinish=true;
+          this.dataGetFinish = true;
           this.$store.commit("setLoadingState", false);
         }
-        
       });
-    }
+    },
+
   },
+
   mounted() {
     this.init();
   }
@@ -220,9 +252,17 @@ export default {
   padding: 0 0 rem(140px) 0;
   position: relative;
   .banner-slider {
-    & > img {
+    width: 100%;
+    height: 3.86667rem;
+    & > a {
+      display: block;
+      height: 100%;
       width: 100%;
-      vertical-align: top;
+      > img {
+        width: 100%;
+        height: 100%;
+        vertical-align: top;
+      }
     }
   }
 }
@@ -237,15 +277,23 @@ export default {
 .diagnose {
   height: rem(280px);
   margin-bottom: rem(84px);
+  margin-top: rem(40px);
   background: url("../../../common/image/img00/index/button_bg.png") no-repeat;
-  background-size: contain;
-  padding-top: 86px;
+  background-size: 100% 100%;
+  text-align: center;
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
   .btn-diagnose {
     width: rem(474px);
     height: rem(108px);
     background-image: linear-gradient(90deg, #31cfb3 42%, #2fb9b6 84%);
     border-radius: rem(200px);
-    margin: 0 auto;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
     @include font-dpr(22px);
     color: #ffffff;

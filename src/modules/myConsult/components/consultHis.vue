@@ -243,7 +243,7 @@
         siteSwitch.weChatJudge(()=>{
           window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
         },()=>{
-          alert("关注微信才能看φ(>ω<*)");
+//          alert("关注微信才能看φ(>ω<*)");
         })
       },
       getThisItem(opt){
@@ -264,7 +264,7 @@
             window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
           }
         },()=>{
-          alert("关注微信才能看φ(>ω<*)");
+//          alert("关注微信才能看φ(>ω<*)");
         })
       },
       goToUploadPic(opt){

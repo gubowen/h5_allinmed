@@ -9,7 +9,7 @@
           </p>
         </article>
       </transition>
-    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
+    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index" >
           <!--时间戳-->
@@ -78,27 +78,6 @@
             :deleteMsgIndex="deleteMsgIndex"
           >
           </ImageContent>
-          <!-- 图集消息 -->
-          <MulitpleImage
-          v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'mulitpleImage' "
-          :imageMessage="msg"
-                       :userData="userData"
-            :targetData="targetData"
-          >
-
-          </MulitpleImage>
-          <!-- 视频消息 -->
-          <VideoMessage
-            v-if="msg.type==='video' && msg.file"
-            :videoMessage="msg"
-            :userData="userData"
-            :targetData="targetData"
-            :videoProgress="videoProgress"
-            :currentIndex="index"
-          ></VideoMessage>
-          <!--音频-->
-          <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
-          </AudioMessage>
           <!--上传视诊-->
           <section class="main-message-box"
                    v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
@@ -108,7 +87,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="../../../common/image/imScene/error_tips.png" alt="">
+                <img src="/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传视诊资料</p>
@@ -127,7 +106,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="../../../common/image/imScene/error_tips.png" alt="">
+                <img src="/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传检查资料</p>
@@ -179,61 +158,28 @@
     </payPopup>
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
-        <section class="footer-box-top">
-          <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
-            <i class="icon-im-plus"></i>
-            <!-- <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="image/*">
-            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="image/*"> -->
-          </section>
-          <figure class="main-input-box-textarea-inner">
-            <textarea class="main-input-box-textarea"
-                      rows="1"
-                      v-model="sendTextContent"
-
-                      @focus="focusFn()"
-                      @blur="blurFn()"
-                      @click="scrollToBottom"
-                      @input="inputLimit"
-                      @keypress.enter.stop="autoSizeTextarea()">
-            </textarea>
-            <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
-            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
-          </figure>
+        <section class="main-input-box-plus">
+          <i class="icon-im-plus"></i>
+          <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                >
+          <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
+                 accept="image/*">
         </section>
-        <ul class="footer-box-bottom" v-if="footerBottomFlag">
-          <li  class="bottom-item">
-            <figure class="bottom-item-content">
-              <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350" height="234" />
-              <figcaption class="bottom-item-description">图片</figcaption>
-            </figure>
-            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="image/*">
-            <input type="file" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
-                  accept="image/*">
-          </li>
-          <li  class="bottom-item">
-            <figure class="bottom-item-content">
-              <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350" height="234" />
-              <figcaption class="bottom-item-description">照相</figcaption>
-            </figure>
-            <input type="file" v-if="isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="video/*">
-            <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)" ref="imageSender" capture="camera"
-                  accept="video/*">
-          </li>
-          <li  class="bottom-item">
-            <figure class="bottom-item-content">
-              <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
-              <figcaption class="bottom-item-description">文件</figcaption>
-            </figure>
-            <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="application/pdf,application/vnd.ms-excel,application/msword">
-            <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="application/pdf,application/vnd.ms-excel,application/msword">
-          </li>
-        </ul>
+        <figure class="main-input-box-textarea-inner">
+          <textarea class="main-input-box-textarea"
+                    rows="1"
+                    v-model="sendTextContent"
+
+                    @focus="focusFn()"
+                    @blur="blurFn()"
+                    @click="scrollToBottom"
+                    @input="inputLimit"
+                    @keypress.enter.stop="autoSizeTextarea()">
+          </textarea>
+          <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
+          <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
+        </figure>
+
       </footer>
     </transition>
     <confirm :confirmParams="{
@@ -272,15 +218,12 @@ import Toast from "components/toast";
 import MedicalReport from "./medicalReport";
 import ContentText from "./content";
 import ImageContent from "./image";
-import AudioMessage from "./audioMessage";
-import VideoMessage from "./video";
 import TimeStamp from "./stamp";
 import PreviewSuggestion from "./previewSuggestion";
 import CheckSuggest from "./checkSuggest";
 import Triage from "./triage";
 import MiddleTips from "./middleTips";
 import PayFinishTips from "./payFinishTips.vue";
-import MulitpleImage from "./mulitpleImage";
 
 import WxPayCommon from "common/js/wxPay/wxComm";
 import nimEnv from "common/js/nimEnv/nimEnv";
@@ -311,21 +254,12 @@ export default {
     return {
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
       nim: {},
-      // 图片发送进度
       imageProgress: {
         uploading: false,
         progress: "0%",
         index: 0
       },
-      // 视频发送进度
-      videoProgress: {
-        uploading: false,
-        progress: "0%",
-        index: 0
-      },
       imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
-      videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
-      footerBottomFlag: false, // 底部文件选择框是否显示
       noWXPayShow: false,
       onFocus: false,
       inputFlag: true, //上传图片input控制
@@ -357,8 +291,7 @@ export default {
       bfscrolltop: document.body.scrollTop,
       toastTips: "",
       toastShow: false,
-      deleteMsgIndex: -1,
-      mList: []
+      deleteMsgIndex: -1
     };
   },
 
@@ -386,6 +319,7 @@ export default {
 
       this.onFocus = true;
       this.autoSizeTextarea();
+
     },
     blurFn() {
       if (navigator.userAgent.toLowerCase().includes("11")) {
@@ -453,10 +387,6 @@ export default {
                 that.scrollToBottom();
               });
               that.getCId(msg);
-              // 判断如果是图片，则把加入到图片数组中
-              if (msg.type == "image") {
-                that.imageList.push(msg.file.url);
-              }
             }
           }
         });
@@ -1089,100 +1019,14 @@ export default {
     sendFile(e) {
       const that = this;
       that.inputFlag = false;
-      console.log(e.target.files);
-      if (e.target.files.length > 1) {
-        this.getMulitpleImage(e.target.files);
-      } else {
-        let _file = e.target.files[0];
-        console.log(_file);
-        console.log(window.URL.createObjectURL(_file));
-        if (_file.type.includes("image")) {
-          this.sendImageFile(_file);
-        } else if (_file.type.includes("video")) {
-          this.sendVideoFile(_file);
-        }
-      }
-    },
-    getMulitpleImage(list) {
-      let mList = [];
-      const that = this;
-      console.log(list);
-      let promises = [];
-      Array.from(list).forEach((element, index) => {
-        promises.push(
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(element);
-            reader.onload = oFREvent => {
-              that.nim.previewFile({
-                type: "image",
-                dataURL: oFREvent.target.result,
-                uploadprogress(obj) {
-                  that.scrollToBottom();
-                  console.log("文件总大小: " + obj.total + "bytes");
-                  console.log("已经上传的大小: " + obj.loaded + "bytes");
-                  console.log("上传进度: " + obj.percentage);
-                  console.log("上传进度文本: " + obj.percentageText);
-                },
-                done(error, file) {
-                  console.log("上传image" + (!error ? "成功" : "失败"));
-                  // show file to the user
-                  console.log(file);
-                  if (!error) {
-                    // that.mList.push(file);
-                    resolve(file);
-                  }
-                }
-              });
-            };
-          })
-        );
-      });
-      console.log(promises);
-      Promise.all(promises).then(result => {
-        console.log(result);
-        this.sendMulitpleImage(result);
-      });
-    },
-    // 发送多图文件
-    sendMulitpleImage(list) {
-      const that=this;
-      this.nim.sendCustomMsg({
-        scene: "p2p",
-        to: that.targetData.account,
-        custom: JSON.stringify({
-          cType: "0",
-          cId: that.cId,
-          mType: "32",
-          conId: that.orderSourceId
-        }),
-        content: JSON.stringify({
-          type: "mulitpleImage",
-          data: {
-            list
-          }
-        }),
-        done(error, msg) {
-          if (!error) {
-            console.log(msg)
-            that.sendMessageSuccess(error, msg);
-          }
-        }
-      });
-    },
-    // 上传图片文件
-    sendImageFile(_file) {
-      const that = this;
-      console.log(_file);
       this.msgList.push({
         file: {
-          url: window.URL.createObjectURL(_file)
+          url: window.URL.createObjectURL(e.target.files[0])
         },
-        type: "image",
-        from: that.userData.account
+        type: "image"
       });
       that.imageLastIndex = that.msgList.length - 1;
-      console.log(window.URL.createObjectURL(_file));
+      console.log(window.URL.createObjectURL(e.target.files[0]));
       this.nim.previewFile({
         type: "image",
         fileInput: this.$refs.imageSender,
@@ -1224,63 +1068,6 @@ export default {
                   progress: "0%",
                   index: 0
                 };
-              }
-            });
-          }
-        }
-      });
-    },
-    // 上传视频文件
-    sendVideoFile(_file) {
-      const that = this;
-      console.log(_file);
-      this.msgList.push({
-        file: {
-          url: window.URL.createObjectURL(_file)
-        },
-        type: "video",
-        from: that.userData.account
-      });
-      that.videoLastIndex = that.msgList.length - 1;
-      this.nim.previewFile({
-        type: "video",
-        fileInput: this.$refs.imageSender,
-        uploadprogress(obj) {
-          that.scrollToBottom();
-          that.videoProgress = {
-            uploading: true,
-            progress: obj.percentageText,
-            index: that.videoLastIndex
-          };
-          console.log("文件总大小: " + obj.total + "bytes");
-          console.log("已经上传的大小: " + obj.loaded + "bytes");
-          console.log("上传进度: " + obj.percentage);
-          console.log("上传进度文本: " + obj.percentageText);
-        },
-        done(error, file) {
-          console.log("上传video" + (!error ? "成功" : "失败"));
-          // show file to the user
-          console.log(file);
-          if (!error) {
-            let msg = that.nim.sendFile({
-              scene: "p2p",
-              custom: JSON.stringify({
-                cType: "0",
-                cId: that.cId,
-                mType: "1",
-                conId: that.orderSourceId
-              }),
-              to: that.targetData.account,
-              file: file,
-              type: "video",
-              done(error, msg) {
-                that.msgList[that.videoLastIndex] = msg;
-                that.videoProgress = {
-                  uploading: false,
-                  progress: "0%",
-                  index: 0
-                };
-                // that.imageList.push(msg.file.url);
               }
             });
           }
@@ -1467,10 +1254,9 @@ export default {
         consultationId: this.orderSourceId,
         frequency: "0",
         frequencyType: typeStr,
-        consultationLevel: "1"
       };
       !!type &&
-        Object.assign(data, { customerId: "0", consultationState: "4" }); //付款回调参数传customerId
+        Object.assign(data, {customerId: "0", consultationState: "4", consultationLevel: "1"}); //付款回调参数传customerId
       api.ajax({
         url: XHRList.updateCount,
         method: "POST",
@@ -1666,7 +1452,7 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-
+   
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
@@ -1793,8 +1579,6 @@ export default {
     MedicalReport,
     ContentText,
     ImageContent,
-    AudioMessage,
-    VideoMessage,
     TimeStamp,
     PreviewSuggestion,
     CheckSuggest,
@@ -1804,7 +1588,6 @@ export default {
     payPopup,
     loading,
     confirm,
-    MulitpleImage,
     Toast
   }
 };
@@ -1846,116 +1629,6 @@ export default {
     border-bottom: 1px solid #26bdb5;
     line-height: 1;
     display: inline-block;
-  }
-}
-
-//输入区
-.main-input-box {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  width: 100%; //height: 1.3rem;
-  box-sizing: border-box;
-  font-size: 0;
-  background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.5); //position: relative;
-  //display: none;
-  z-index: 3;
-  & > * {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-  .main-input-box-textarea-inner {
-    box-sizing: border-box;
-    margin-left: rem(30px);
-    max-height: 2.5rem;
-    overflow: auto;
-    .main-input-box-textarea {
-      width: rem(490px);
-      border-radius: rem(40px);
-      padding-left: rem(20px);
-      padding-right: rem(20px);
-      padding-top: rem(15px);
-      @include font-dpr(14px);
-      background: #f3f6f7;
-      border: 0 solid #e8ecef;
-      box-sizing: border-box;
-      min-height: rem(60px);
-    }
-  }
-  .main-input-box-send {
-    @include font-dpr(17px);
-    color: #b6b6b6;
-    position: absolute;
-    right: rem(40px);
-    top: 50%;
-    margin-top: rem(-37.5px);
-    line-height: rem(75px); //height: 1.3rem;
-    &.on {
-      color: #00d6c6;
-    }
-  }
-  .main-input-box-plus {
-    @include font-dpr(16px);
-    width: rem(50px);
-    height: rem(50px);
-    position: absolute;
-    left: rem(40px);
-    top: 50%;
-    margin-top: rem(-25px);
-    input[type="file"] {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0;
-      display: block;
-      width: rem(50px);
-    }
-  }
-}
-
-.footer-box-top {
-  position: relative;
-  width: 100%;
-  padding: rem(20px) rem(90px);
-  box-sizing: border-box;
-}
-
-// 底部上传文件盒子样式
-.footer-box-bottom {
-  width: 100%;
-  padding: rem(32px) rem(80px);
-  box-sizing: border-box;
-  border-top: 1px solid #eeeeee;
-  .bottom-item {
-    display: inline-block;
-    position: relative;
-    input {
-      width: 100%;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0;
-      display: block;
-    }
-    .bottom-item-image {
-      width: rem(100px);
-      height: rem(100px);
-    }
-    .bottom-item-description {
-      text-align: center;
-      margin-top: rem(14px);
-      color: #555555;
-      @include font-dpr(12px);
-    }
-  }
-  .bottom-item + .bottom-item {
-    margin-left: rem(64px);
   }
 }
 .fade-enter-active,

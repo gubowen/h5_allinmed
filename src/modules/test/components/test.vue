@@ -4,11 +4,14 @@
     <p class="H-viewPay" v-if="payShow" @click="payHide">支付成功</p>
     <p class="uploadPic" @click="upload()">上传图片</p> -->
     <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxaa5288ad7f627608&redirect_uri=http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/?ref=https://m9.allinmed.cn/dist/consult.html&response_type=code&scope=snsapi_base&state=b6#wechat_redirect">喵！</a>
+    <p style="width:500px;line-height:100px;text-align: center;background: red" @click="wxLogin()">点击登录</p>
+    <p style="width:500px;line-height:100px;text-align: center;background: red;margin-top:100px;">点击绑定</p>
   </div>
-  
+
 </template>
 <script type="text/ecmascript-6">
 import fb from "common/js/third-party/flexible";
+import api from "common/js/util/util";
 // import WxPayCommon from "../../common/js/wxPay/wxComm";
 // import uploadList from "../../components/uploadList";
 export default {
@@ -18,10 +21,7 @@ export default {
     };
   },
   mounted() {
-    // if (localStorage.getItem("askPay") == 1) {
-    //   this.payShow = true;
-    //   this.viewResultH5Pay();
-    // }
+    this.wxTest();
   },
   methods: {
     upload() {
@@ -82,6 +82,76 @@ export default {
     payHide() {
       localStorage.removeItem("askPay");
       this.payShow = false;
+    },
+    wxLogin(){
+      api.ajax({
+        url: "/mcall/patient/customer/unite/v1/accountlogin/",
+        method: "POST",
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        data: {
+          account: "18810289689",
+          password:"111111",
+          siteId:"17"
+        },
+        done(data) {}
+      });
+    },
+    wxTest(){
+      let that =this;
+      api.ajax({
+        url: "/mcall/patient/customer/unite/v1/getPatientInfo/",
+        method: "POST",
+        data: {
+          customerId: api.getPara().customerId
+        },
+        done(data) {
+          if(data&&data.responseObject.responseData){
+            if(data.responseObject.responseData.uniteFlagWeixin == 0){
+              that.wxBind();
+            }else{
+              return false;
+            }
+          }
+        }
+      });
+    },
+    wxBind() {
+      /* env环境变量参数
+       * 1代表唯医骨科-正式线上环境
+       * 2代表唯仁唯医社区-线下调试环境
+       */
+
+      let appId = "";
+      let XHRUrl = "";
+//      let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
+//        _encodeUrl = encodeURIComponent(_currentPageUrl);
+
+      let envCode = "";
+      if (window.location.origin.includes("localhost")) {
+        return false;
+      }
+      if (!window.location.hostname.includes("m9")) {
+        envCode = 1;
+      } else {
+        envCode = 2;
+      }
+
+      if (envCode == 1) {
+        appId = "wxe8384f7b06c169ef";
+        XHRUrl = "http://m.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
+      } else if (envCode == 2) {
+        appId = "wxaa5288ad7f627608";
+        XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
+      }
+
+      let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect",
+          _encodeUrl = encodeURIComponent(encodeUrl);
+
+      let _url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + _encodeUrl;
+
+      window.location.href = _url;
     }
   }
 };
