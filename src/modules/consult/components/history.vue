@@ -1,9 +1,10 @@
 <template>
   <div data-alcode-mod='712'>
     <section class="consult-main-inner">
+      <progerssBar :progerssBarShow.sync="progerssBarShow" :progerssBarParams="{progerssParams:progerssNum}"></progerssBar>
       <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
-        <progerssBar :progerssBarShow.sync="progerssBarShow" :progerssBarParams="{progerssParams:progerssNum}"></progerssBar>
-        <span class="consult-page page-two"></span>
+        
+        <!-- <span class="consult-page page-two"></span> -->
         <section class="questionContainMain">
           <section class="questionItem-common isComeCure">
             <p class="questionTitleCommon">有去医院就诊过吗？</p>
@@ -259,7 +260,7 @@ export default {
       upLoadTip: false,
       levelShow: false,
       progerssBarShow: true, //进度条（显示）
-      progerssNum:'',
+      progerssNum:'3',
       backPopupShow: false,
       submitTip: false,
       uploading1: false,
