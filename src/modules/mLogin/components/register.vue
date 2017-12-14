@@ -29,11 +29,11 @@
       <h2>验证码</h2>
       <p>已向手机号<span>{{phone}}</span>发送短信验证码</p>
       <section class="codeInput">
-        <input type="number" placeholder="请输入验证码" v-model="validCode">
+        <input type="number" placeholder="请输入验证码" v-validate="'required'" name='validCode' @blur="validateBlur('validCode')" v-model="validCode">
         <span class="getCode" v-if="codeTime<=0" @click="sendCode('again')">重新发送</span>
         <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
       </section>
-      <button class="submitButton" @click="mobileRegisterFun()">提交</button>
+      <button class="submitButton" @click="validateCode()">提交</button>
     </section>
     <transition name="fade">
       <vConfirm v-if="confirmFlag" :confirmParams="{
@@ -54,7 +54,7 @@
 import "common/js/third-party/flexible";
 import api from "common/js/util/util";
 
-import { sendCode, mobileRegister } from "common/js/auth/authMethods.js";
+import { sendCode, mobileRegister,passwordLogin } from "common/js/auth/authMethods.js";
 
 import vConfirm from "components/verticalConfirm";
 import wechatLead from "./wechatLead";
@@ -131,7 +131,10 @@ export default {
               isEmoji:'请填写真实密码',
               max_length:'密码长度请保持在6-20位',
               min_length:'密码长度请保持在6-20位',
-            }
+            },
+            validCode: {
+              required: "请输入手机验证码",
+            },
           }
         }
       });
@@ -154,7 +157,7 @@ export default {
       this.isRegister = true;
       this.$validator.validateAll().then(result => {
         console.log(result);
-        if (result) {
+        if (!this.errors.has('phone') && !this.errors.has('passWord')) {
           this.errorShow = false;
           this.sendCode("validate");
         } else {
@@ -228,6 +231,20 @@ export default {
         }
       },1000);
     },
+    // 验证验证码
+    validateCode(){
+      this.$validator.validateAll().then(() => {
+        if (this.errors.has('validCode')) {
+          this.errorMsg = this.errors.first('validCode');
+          this.errorShow = true;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000);
+        } else {
+          this.mobileRegisterFun();
+        }
+      });
+    },
     // 手机号注册
     mobileRegisterFun() {
       mobileRegister
@@ -241,7 +258,7 @@ export default {
           console.log(res);
           let _obj = res.responseObject;
           if (_obj && _obj.responseStatus && _obj.responseCode == 'success') {
-            this.goLogin();
+            this.accountLoginFn();
           } else {
             this.errorShow = true;
             this.errorMsg = _obj.responseMessage;
@@ -253,6 +270,29 @@ export default {
         })
         .then((err) => {
           console.log(err);
+        });
+    },
+    // 帐密登录
+    accountLoginFn() {
+      let _this = this;
+      
+      passwordLogin
+        .loginInit({
+          account: this.phone,
+          password: this.password
+        })
+        .then(data => {
+          if (data.responseObject.responseStatus) {
+            const _obj = data.responseObject.responseData;
+            localStorage.setItem("userId", _obj.customerId);
+            localStorage.setItem("userName", _obj.nickName);
+            localStorage.setItem("mobile", _obj.mobile);
+            localStorage.setItem("logoUrl", _obj.headUrl);
+            console.log('登录成功')
+            window.location.href = document.referrer;
+          } else {
+            console.log('登录失败')
+          }
         });
     }
   },
