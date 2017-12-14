@@ -7,30 +7,65 @@
  * Created by wangjinglong on 17/12/11.
  */
 
-import Isbinding from "./getPersonal";
+import personalInfo from "./getPersonal";
 import api from 'common/js/util/util';
 import "babel-polyfill";
 
 class Wxbinding {
   constructor() {}
   isBind(){
-    let isBinding = new Isbinding();
-    let customerId = localStorage.getItem("userId");
-    if(!(api.getPara().wxState || api.getPara().wxState == 0)){
-      // alert(localStorage.getItem('protoUrl'));
-      // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
-      isBinding.getMessage(customerId).then((res)=>{
-        if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
-          this.wxBind();
+    let cId = api.getPara().customerId;
+    if(cId && cId != 0){
+      personalInfo.getMessage(cId).then((res)=>{
+        if(res && res.responseObject.responseData){
+          let result = res.responseObject.responseData;
+          if(result.mobile&&result.mobile.length>0){
+            if(result.uniteFlagWeixin == 1){
+              console.log("该用户已绑定手机号（微信）");
+              return false;
+            }else{
+              let url = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
+              this.wxBind(url);
+            }
+          }else{
+            window.location.href = `/dist/mLogin.html?customerId=${cId}#/register`;
+          }
+        }else{
+          console.log("获取个人信息失败");
         }
       }).catch((err)=>{
         console.log(err)
       })
+    }else{
+      if(api.getPara().wxState == 0){
+        console.log("绑定微信成功");
+      }else if(api.getPara().wxState == 1){
+        console.log("您已绑定其他用户");
+      }else if(api.getPara().wxState == 2){
+        console.log("绑定失败");
+      }else{
+        window.location.href = `/dist/mLogin.html`;
+      }
     }
+
+
+
+    // let isBinding = new Isbinding();
+    // let customerId = localStorage.getItem("userId");
+    // if(!(api.getPara().wxState || api.getPara().wxState == 0)){
+    //   // alert(localStorage.getItem('protoUrl'));
+    //   // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
+    //   isBinding.getMessage(customerId).then((res)=>{
+    //     if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
+    //       this.wxBind();
+    //     }
+    //   }).catch((err)=>{
+    //     console.log(err)
+    //   })
+    // }
   }
-  wxBind() {
+  wxBind(url) {
     let appId = "",XHRUrl = "",envCode = "";
-    // localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
     if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
       return false;
     }
@@ -49,13 +84,17 @@ class Wxbinding {
     }
 
 
-    let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
+    let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     // alert(encodeUrl);
     if(!api.getPara().code){
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }
   }
+
+
+
+
 }
 
 export default new Wxbinding();
