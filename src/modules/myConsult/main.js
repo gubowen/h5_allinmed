@@ -36,21 +36,15 @@ class Myconsult {
 
   init() {
     //验证url中是否有customerId，若没有则拼接
-    if(!api.getPara().customerId){
-        if(window.location.href.indexOf('?') == -1){
-          window.location.href = `${window.location.href.split('#')[0]}?customerId=${localStorage.getItem('userId')}`;
-          return false;
-        }else{
-          window.location.href = `${window.location.href.split('#')[0]}&customerId=${localStorage.getItem('userId')}`;
-          return false;
-        }
-      }else{
-        //微信中绑定微信
-        siteSwitch.weChatJudge(()=>{
-          wxBind.isBind();
-        },()=>{
-          console.log("无需绑定微信");
-        });
+    if(api.getPara().customerId && api.getPara().customerId != 0){
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        wxBind.isBind();
+      },()=>{
+        console.log("无需绑定微信");
+      });
+    }else{
+      window.location.href = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
     }
     Vue.use(VueRouter);
     this.routerStart();
