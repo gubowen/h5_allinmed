@@ -172,7 +172,10 @@
                   t.toast("修改密码成功，请重新登录");
                   clearTimeout(callBackTimer);
                   let callBackTimer = setTimeout(function () {
-                    window.location.href = t.loginUrl;
+                    //window.location.href = t.loginUrl;
+                    t.$router.push({
+                      path: "/personalIndex"
+                    });
                   },2000)
                 }else{
                   if(data.responseObject.responseCode==='0A0005'){
