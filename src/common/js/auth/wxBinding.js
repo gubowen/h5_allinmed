@@ -14,9 +14,16 @@ import "babel-polyfill";
 class Wxbinding {
   constructor() {}
   isBind(obj){
-    let cId = api.getPara().customerId;
+    let cId = "";
     let personalInfo = new PersonalInfo();
-    if((cId && cId != 0) || localStorage.getItem('userId')){
+
+    if(api.getPara().customerId && api.getPara().customerId != 0){
+      cId = api.getPara().customerId;
+    }else{
+      cId = localStorage.getItem('userId');
+    }
+
+    if(cId){
       personalInfo.getMessage(cId).then((res)=>{
         if(res && res.responseObject.responseData){
           let result = res.responseObject.responseData;
