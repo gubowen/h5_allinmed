@@ -6,17 +6,18 @@ const  xhrUrl = {
 const state = {
   loginUrl:"/dist/mLogin.html",
   loginOnOff:true,//获取登录状态
-  customerPhoneNum:'',//用户原本的手机号
+  customerPhoneNum:'18210589196',//用户原本的手机号
   isExistPwd:false,
   phoneNum:"",//用户当前修改的手机号
   phoneError:"",//手机号错误提示
-  weixinName:"",//用户微信昵称
+  weixinName:"11111111",//用户微信昵称
   weixinState:true,//微信绑定状态
-  customerName:"",//用户名
+  customerName:"1111111111111111",//用户名
   logUrl:"",//头像
   codeNum:10,//一天可以发送多少次验证码，
   codeNumId:"",//更改手机号的时候，既传验证码，也需要验证码id
-  customerId:localStorage.getItem("userId"),//用户id
+  // customerId:localStorage.getItem("userId"),//用户id
+  customerId: 1513148257028,//用户id
   loadingOnOff:false,
   codeState:false//获取验证码是路由跳转，在浏览器可以通过历史按钮触发，填坑
 };
@@ -90,8 +91,8 @@ const checkLoginState = () =>{
     }
   })
 }
-//getCustomerInfo();
-checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
+getCustomerInfo();
+// checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
 
 
 

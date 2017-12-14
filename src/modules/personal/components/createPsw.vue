@@ -1,6 +1,6 @@
 <template>
   <section class="allinmed-personal-changePsw">
-    <section class="allinmed-personal-tableModule">
+    <section class="allinmed-personal-tableModule createPsw">
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
@@ -36,6 +36,11 @@
     width: rem(710px);
     background: #fff;
     border-radius:rem(16px);
+    min-height: auto !important;
+    height: auto !important;
+    .createPsw{
+      min-height:rem(290px);
+    }
   }
 </style>
 <script  type="text/ecmascript-6">

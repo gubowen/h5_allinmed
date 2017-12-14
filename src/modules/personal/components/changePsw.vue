@@ -44,6 +44,8 @@
     width: rem(710px);
     background: #fff;
     border-radius:rem(16px);
+    min-height: auto !important;
+    height: auto !important;
   }
 </style>
 <script  type="text/ecmascript-6">
