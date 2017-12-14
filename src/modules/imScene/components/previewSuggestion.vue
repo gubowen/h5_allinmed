@@ -2,16 +2,15 @@
   <section>
     <!--推荐医生-->
     <section class="main-message-box" data-alcode-mod='716' v-if="doctorObj.allData.length">
+      <!-- 推荐医生提示 -->
+      <section class="doctor-tips">
+        <p class="tips-content">
+          请点击“去问诊”或“免费问诊”联系医生，深入沟通诊疗意见。次对话将在为您推荐的医生接诊后关闭
+        </p>
+      </section>
       <article class="doctor-box">
-        <!-- 推荐医生提示 -->
-        <section class="doctor-tips">
-          <p class="tips-content">
-
-          </p>
-        </section>
-
         <header class="doctor-header">
-          <h3 class="doctor-title">匹配医生</h3>
+          <h3 class="doctor-title">专家问诊</h3>
           <p class="doctor-introduce"><span>直达三甲名医</span><span>超时未回复全额退款</span></p>
           <!--<p class="doctor-tips">根据您的情况，推荐以下对症专家，请点击查看详情</p>-->
         </header>
@@ -617,6 +616,19 @@
       }
     }
   }
+  .doctor-tips{
+    width: rem(690px);
+    margin: 0 auto;
+    height: rem(146px);
+    background: url("../../../common/image/imScene/card_bg.png") no-repeat;
+    background-size: 100%;
+    margin-bottom: rem(24px);
+    .tips-content{
+      padding:rem(18px) rem(20px) rem(20px) rem(154px);
+      @include font-dpr(14px);
+      color: #4A4A4A;
+    }
+  }
   //推荐医生
   .doctor-box{
     width: rem(690px);
@@ -624,13 +636,6 @@
     background: #FFFFFF;
     border: 1px solid #E4E9EB;
     border-radius: rem(12px);
-    .doctor-tips{
-      width: 100%;
-      height: rem(146px);
-      background: url("../../../common/image/imScene/card_bg.png") no-repeat;
-      background-size: 100%;
-      margin-bottom: rem(24px);
-    }
     .doctor-header{
       .doctor-title{
         color: #333333;
