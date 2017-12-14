@@ -3,16 +3,16 @@
     <!-- <img class="progressItem" :src="imageList[progerssBarParams.progerssParams].src" alt=""> -->
     <ul class="progressBar">
       <li class="progressBox">
-        <span class="progressBarItem" :class="{'active':true}"><span class="progressBarNum">1</span></span>
+        <span class="progressBarItem" :class="{'active':true}"><span class="progressBarNum">1</span><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">2</span></span>
+        <span class="progressBarItem" ><span class="progressBarNum">2</span><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">3</span></span>
+        <span class="progressBarItem" ><span class="progressBarNum">3</span><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
       <li class="progressBox">
-        <span class="progressBarItem" ><span class="progressBarNum">4</span></span>
+        <span class="progressBarItem" ><span class="progressBarNum">4</span><span class="lineLeft"></span><span class="lineRight"></span></span>
       </li>
     </ul>
   </section>
@@ -67,8 +67,11 @@ export default {
   }
   .progressBar {
     padding-left: rem(30px);
+    padding-right: rem(30px);
     @include clearfix();
     .progressBox {
+      width: 25%;
+      text-align: center;
       float: left;
       .progressBarItem {
         display: inline-block;
@@ -92,8 +95,33 @@ export default {
           left: 50%;
           margin-left: rem(-8px);
         }
+        .lineLeft{
+          // z-index: -1;
+          display:inline-block;
+          position: absolute;
+          left: rem(-66px);
+          width: rem(66px);
+          height: rem(2px);
+          background-color: #d8d8d8;
+          top: 50%;
+        }
+        .lineRight{
+          display:inline-block;
+          position: absolute;
+          right: rem(-66px);
+          width: rem(66px);
+          height: rem(2px);
+          background-color: #d8d8d8;
+          top: 50%;
+        }
         &.active {
           background-color: #2fc5bd;
+          .lineLeft{
+            background-color: #2fc5bd;
+          }
+          .lineRight{
+            background-color: #2fc5bd;
+          }
         }
       }
       .progressLine {
