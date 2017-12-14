@@ -12,7 +12,7 @@
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition> -->
         <header class="mulit-title">图片({{imageList.length}})</header>
-        <section class="mulitple-image-box">
+        <section class="mulitple-image-box" @click.stop="showBigImg">
             <figure class="mulitple-image" v-for="item in imageList.slice(0,3)">
                 <img :src="item.url" alt="">
             </figure>
@@ -35,7 +35,7 @@ export default {
   },
   components: {},
   methods: {
-    showBigImg(item, index) {
+    showBigImg() {
       let that = this;
       let _indexNum =0;
       this.showDeleteMsg = false;
@@ -43,11 +43,11 @@ export default {
         imgBlob: (function() {
           let result = [];
           that.imageList.forEach((element, index) => {
-            result.push({ blob: element });
+            result.push({ blob: element.url });
           });
           return result;
         })(),
-        indexNum: _indexNum
+        indexNum: 0
       };
       this.$router.push({
         name: "showBigImg",
