@@ -85,7 +85,7 @@ export default {
           position: absolute;
           left: rem(-67px);
           width: rem(67px);
-          height: rem(2px);
+          height: rem(4px);
           background-color: #d8d8d8;
           top: 50%;
         }
@@ -94,7 +94,7 @@ export default {
           position: absolute;
           right: rem(-67px);
           width: rem(67px);
-          height: rem(2px);
+          height: rem(4px);
           background-color: #d8d8d8;
           top: 50%;
         }
