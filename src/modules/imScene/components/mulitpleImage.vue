@@ -49,6 +49,7 @@ export default {
         })(),
         indexNum: 0
       };
+      
       this.$router.push({
         name: "showBigImg",
         params: _params
