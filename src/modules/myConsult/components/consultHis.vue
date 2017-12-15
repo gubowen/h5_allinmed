@@ -237,7 +237,7 @@
         return result;
       },
       hrefToConsult(){
-        window.location.href = '/dist/consult.html?customerId=' + api.getPara().customerId || localStorage.getItem("userId");
+        window.location.href = `/dist/consult.html?customerId=${localStorage.getItem("userId") || api.getPara().customerId}`;
       },
       hrefToSuggest(opt){
         siteSwitch.weChatJudge(()=>{
