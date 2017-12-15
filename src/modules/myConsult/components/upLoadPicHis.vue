@@ -7,8 +7,9 @@
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-        <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="isIos&&imageList[item.adviceId].length===0&&!loading">
-         <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="isIos&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="!isIos&&!isWeChat&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&isWeChat&&imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -23,14 +24,16 @@
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
               <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="isIos">
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="!isIos">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="!isIos&&!isWeChat">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item,imgIndex)" v-show="imageList[item.adviceId].length>0 && img.finish" v-if="!isIos&&isWeChat">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
                 <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="isIos&&imageList[item.adviceId].length>0&&!loading"/>
-                <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&imageList[item.adviceId].length>0&&!loading"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event,item)" v-if="!isIos&&!isWeChat&&imageList[item.adviceId].length>0&&!loading"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event,item)" v-if="!isIos&&isWeChat&&imageList[item.adviceId].length>0&&!loading"/>
               </span>
             </a>
           </li>
@@ -73,8 +76,16 @@ import confirm from "components/confirm";
 import Loading from "components/loading";
 import Toast from "components/toast";
 import nimEnv from "common/js/nimEnv/nimEnv";
+import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import imageCompress from "common/js/imgCompress/toCompress";
+import "babel-polyfill";
 let nim;
+let _weChat = false;
+siteSwitch.weChatJudge(() => {
+  _weChat=true;
+}, () => {
+  _weChat=false;
+});
 const XHRList = {
   getToken: "/mcall/im/interact/v1/refreshToken/", //获取token
   imgCreate: "/mcall/customer/patient/case/attachment/v1/create/", //上传图片
@@ -101,7 +112,8 @@ export default {
         account: "",
         token: ""
       },
-      isIos: navigator.userAgent.toLowerCase().includes("iphone")
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+      isWeChat:_weChat
     };
   },
   computed: {
