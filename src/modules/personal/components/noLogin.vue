@@ -1,6 +1,6 @@
 <template>
   <section class="allinmed-personal-login">
-    <a class="login" :href="loginUrl">登录/注册</a>
+    <a class="login" :href="loginUrl" @click.stop="local">登录/注册</a>
   </section>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">
@@ -34,6 +34,11 @@
   export default {
     computed: {
       ...mapGetters(['loginUrl'])
+    },
+    methods:{
+      local(){
+        localStorage.setItem("backUrl":window.location.href);
+      }
     }
   }
 </script>
