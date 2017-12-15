@@ -59,7 +59,7 @@
           </form>
         </li>
       </ul>
-      <wechatLead></wechatLead>
+      <wechatLead v-if="isBroswer"></wechatLead>
     </section>
     <vConfirm v-if="confirmFlag" :confirmParams="{
       title:'该手机号尚未注册',
@@ -85,6 +85,7 @@ import "babel-polyfill";
 import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
+import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
@@ -105,6 +106,7 @@ export default {
       getCode: true,
       imgUrl: "",
       submitDisable:true,  //是否可点
+      isBroswer: false,
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
@@ -344,6 +346,15 @@ export default {
     }
   },
   mounted() {
+    let _this = this;
+    siteSwitch.weChatJudge(
+      ua => {
+        _this.isBroswer = false;
+      },
+      ua => {
+        _this.isBroswer = true;
+      }
+    );
     api.forbidShare();
     this.$validator.updateDictionary({
       en: {
