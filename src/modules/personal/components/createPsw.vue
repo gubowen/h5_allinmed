@@ -4,7 +4,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input :type="pswType" placeholder="请输入6位以上密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
+          <input :type="pswType" placeholder="请输入至少6位的密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
           <i class="eye ev_toggleEye " :class='{"eyeClose":!eyeState,"eyeOpen":eyeState,}' style="right:0;margin-right:0;" @click='changeEyeState'></i>
 
         </figure>
