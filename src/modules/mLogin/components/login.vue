@@ -222,10 +222,11 @@ export default {
         }
       }
     },
-    //密码截取
+    //密码输入长度检测（6 ~ 20位）
     onKeyPressPassWord(){
-      let content = this.password;
-      if (api.getByteLen(content) > 5 && api.getByteLen(content) < 20) {
+      let _password = this.password;
+      console.log(api.getByteLen(_password));
+      if (api.getByteLen(_password) > 5) {
         this.$validator.validateAll();
         if(!this.errors.has("account")&&!this.errors.has("password")){
           this.allPass = true
