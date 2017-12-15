@@ -46,7 +46,7 @@
               <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
@@ -59,7 +59,7 @@
           </form>
         </li>
       </ul>
-      <wechatLead></wechatLead>
+      <wechatLead v-if="isBroswer"></wechatLead>
     </section>
     <vConfirm v-if="confirmFlag" :confirmParams="{
       title:'该手机号尚未注册',
@@ -104,7 +104,8 @@ export default {
       codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
-      submitDisable: true, //是否可点
+      submitDisable:true,  //是否可点
+      isBroswer: false,
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
@@ -147,10 +148,6 @@ export default {
     //confirm 框重新输入事件
     cancelClickEvent() {
       this.confirmFlag = false;
-    },
-    changeFontSize(e){
-      console.log(e.target.style);
-      e.target.style.className=e.target.style.className+" hasContent";
     },
     // 切换登陆方式
     toggleLogin() {
@@ -218,6 +215,21 @@ export default {
       let content = this.codeMessage;
       if (api.getByteLen(content) > 4) {
         this.codeMessage = api.getStrByteLen(content, 4);
+      }else if(api.getByteLen(content)==4){
+        this.$validator.validateAll();
+        if(!this.errors.has("phone")&&!this.errors.has("codeInput")){
+          this.allPass = true
+        }
+      }
+    },
+    //密码截取
+    onKeyPressPassWord(){
+      let content = this.password;
+      if (api.getByteLen(content) > 5 && api.getByteLen(content) < 20) {
+        this.$validator.validateAll();
+        if(!this.errors.has("account")&&!this.errors.has("password")){
+          this.allPass = true
+        }
       }
     },
     //获取验证码
@@ -305,7 +317,8 @@ export default {
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
               this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = document.referrer;
+                // window.location.href = document.referrer;
+                window.location.href = localStorage.getItem("backUrl");
               });
             } else {
               this.toastComm(data.responseObject.responseMessage);
@@ -333,7 +346,8 @@ export default {
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);
               this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = document.referrer;
+                // window.location.href = document.referrer;
+                window.location.href = localStorage.getItem("backUrl");
               });
             } else {
               this.toastComm(data.responseObject.responseMessage, () => {
@@ -346,6 +360,15 @@ export default {
     }
   },
   mounted() {
+    let _this = this;
+    siteSwitch.weChatJudge(
+      ua => {
+        _this.isBroswer = false;
+      },
+      ua => {
+        _this.isBroswer = true;
+      }
+    );
     api.forbidShare();
     this.$validator.updateDictionary({
       en: {
@@ -450,20 +473,12 @@ export default {
       @include placeholder() {
         color: #a0a0a0;
         font-weight: normal;
-        @include font-dpr(17px);
-        line-height: rem(56px);
       }
     }
     &.phoneInput {
       margin-top: rem(60px);
       & > input {
         width: 100%;
-       
-        font-weight: bold;
-        &.hasContent{
-          @include font-dpr(28px);
-          font-weight: bold;
-        }
       }
     }
     &.codeInput {
@@ -472,9 +487,6 @@ export default {
       & > input {
         width: 50%;
         float: left;
-       &.hasContent{
-          @include font-dpr(28px);
-        }
         &.halfWidth {
           width: 50%;
         }

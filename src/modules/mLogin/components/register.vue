@@ -23,17 +23,17 @@
         </li>
       </ul>
 
-      <wechatLead></wechatLead>
+      <wechatLead v-if="isBroswer"></wechatLead>
     </section>
     <section class="code-box" v-if="codeBoxFlag">
       <h2>验证码</h2>
       <p>已向手机号<span>{{phone}}</span>发送短信验证码</p>
       <section class="codeInput">
-        <input type="number" placeholder="请输入验证码" v-validate="'required'" name='validCode' @blur="validateBlur('validCode')" v-model="validCode">
+        <input type="number" placeholder="请输入验证码" v-validate="'required'" name='validCode' @input="inputMaxLength('validCode',4)" @blur="validateBlur('validCode')" v-model="validCode">
         <span class="getCode" v-if="codeTime<=0" @click="sendCode('again')">重新发送</span>
         <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
       </section>
-      <button class="submitButton" @click="validateCode()">提交</button>
+      <button class="submitButton" :class="{'on':validCode.length>0}" @click="validateCode()">提交</button>
     </section>
     <transition name="fade">
       <vConfirm v-if="confirmFlag" :confirmParams="{
@@ -54,12 +54,17 @@
 import "common/js/third-party/flexible";
 import api from "common/js/util/util";
 
-import { sendCode, mobileRegister,passwordLogin } from "common/js/auth/authMethods.js";
+import {
+  sendCode,
+  mobileRegister,
+  passwordLogin
+} from "common/js/auth/authMethods.js";
 
 import vConfirm from "components/verticalConfirm";
 import wechatLead from "./wechatLead";
 import toast from "components/toast";
 import "babel-polyfill";
+import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
 
 const XHRList = {};
 
@@ -70,7 +75,7 @@ export default {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
       },
-      isRegister:false,//注册按钮是否可以点击
+      isRegister: false, //注册按钮是否可以点击
       imgUrl: "", // 提示toast框提示
       confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
@@ -82,9 +87,10 @@ export default {
       codeBoxFlag: false, // 填写验证码盒子是否显示
       validCode: "", //验证码
       codeId: 0, //验证码id
-      codeTime: 0,//验证码倒计时数
-      timerObj:{},//定时器对象
-      customerId:'',
+      codeTime: 0, //验证码倒计时数
+      timerObj: {}, //定时器对象
+      customerId: "",
+      isBroswer: false,
     };
   },
   methods: {
@@ -114,7 +120,7 @@ export default {
       this.passwordHide = this.passwordHide ? false : true;
     },
     //input最大长度事件
-    inputMaxLength(attr,length){
+    inputMaxLength(attr, length) {
       this[attr] = api.getStrByteLen(this[attr], length);
     },
     // 添加验证提示
@@ -129,13 +135,13 @@ export default {
             },
             password: {
               required: "请输入至少6位数的密码",
-              isEmoji:'请填写真实密码',
-              max_length:'密码长度请保持在6-20位',
-              min_length:'密码长度请保持在6-20位',
+              isEmoji: "请填写真实密码",
+              max_length: "密码长度请保持在6-20位",
+              min_length: "密码长度请保持在6-20位"
             },
             validCode: {
-              required: "请输入手机验证码",
-            },
+              required: "请输入手机验证码"
+            }
           }
         }
       });
@@ -158,7 +164,7 @@ export default {
       this.isRegister = true;
       this.$validator.validateAll().then(result => {
         console.log(result);
-        if (!this.errors.has('phone') && !this.errors.has('passWord')) {
+        if (!this.errors.has("phone") && !this.errors.has("passWord")) {
           this.errorShow = false;
           this.sendCode("validate");
         } else {
@@ -176,6 +182,7 @@ export default {
     },
     // 发送验证码
     sendCode(type) {
+      this.$store.commit("setLoadingState", true);
       sendCode
         .sendInit({
           account: this.phone,
@@ -203,14 +210,16 @@ export default {
             //   this.errorShow = false;
             // }, 2000);
             // return;
-            if(type == 'validate'){
+            if (type == "validate") {
               this.confirmFlag = true;
             }
-            console.log('发送验证码失败 + ' + obj.responseMessage);
+            console.log("发送验证码失败 + " + obj.responseMessage);
           }
+          this.$store.commit("setLoadingState", false);
         })
         .then(err => {
           console.log(err);
+          this.$store.commit("setLoadingState", false);
         });
     },
 
@@ -222,21 +231,21 @@ export default {
     resetCallback() {
       // 走一个60s 的定时器；
       let _time = 60;
-      this.codeTime = _time --;
+      this.codeTime = _time--;
       this.timerObj = setInterval(() => {
         if (_time > 0) {
-          this.codeTime =  _time--;
+          this.codeTime = _time--;
         } else {
           this.codeTime = 0;
           clearInterval(this.timerObj);
         }
-      },1000);
+      }, 1000);
     },
     // 验证验证码
-    validateCode(){
+    validateCode() {
       this.$validator.validateAll().then(() => {
-        if (this.errors.has('validCode')) {
-          this.errorMsg = this.errors.first('validCode');
+        if (this.errors.has("validCode")) {
+          this.errorMsg = this.errors.first("validCode");
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -248,22 +257,23 @@ export default {
     },
     // 手机号注册
     mobileRegisterFun() {
-      let _this =this;
+      let _this = this;
       let _sendPrams = {
         account: this.phone,
         password: this.password,
         validCode: this.validCode,
         codeId: this.codeId
+      };
+      if (api.getPara().customerId && api.getPara().customerId.length > 0) {
+        _sendPrams.customerId = api.getPara().customerId;
       }
-      if(api.getPara().customerId&&api.getPara().customerId.length>0){
-        _sendPrams.customerId=api.getPara().customerId;
-      }
+      this.$store.commit("setLoadingState", true);
       mobileRegister
         .registerInit(_sendPrams)
-        .then((res) => {
+        .then(res => {
           console.log(res);
           let _obj = res.responseObject;
-          if (_obj && _obj.responseStatus && _obj.responseCode == 'success') {
+          if (_obj && _obj.responseStatus && _obj.responseCode == "success") {
             this.accountLoginFn();
           } else {
             this.errorShow = true;
@@ -271,17 +281,19 @@ export default {
             setTimeout(() => {
               this.errorShow = false;
             }, 2000);
-            console.log('注册失败');
+            console.log("注册失败");
           }
+          this.$store.commit("setLoadingState", false);
         })
-        .then((err) => {
+        .then(err => {
           console.log(err);
+          this.$store.commit("setLoadingState", false);
         });
     },
     // 帐密登录
     accountLoginFn() {
       let _this = this;
-      
+      this.$store.commit("setLoadingState", true);
       passwordLogin
         .loginInit({
           account: this.phone,
@@ -294,19 +306,29 @@ export default {
             localStorage.setItem("userName", _obj.nickName);
             localStorage.setItem("mobile", _obj.mobile);
             localStorage.setItem("logoUrl", _obj.headUrl);
-            console.log('登录成功')
-            window.location.href = document.referrer;
+            console.log("登录成功");
+            window.location.href = localStorage.getItem("backUrl");
           } else {
-            console.log('登录失败')
+            console.log("登录失败");
           }
+          this.$store.commit("setLoadingState", false);
         });
     }
   },
 
   mounted() {
+    let _this = this;
     console.log(sendCode);
     api.forbidShare();
     this.addValidateTips(); // 添加验证规则提示
+    siteSwitch.weChatJudge(
+      ua => {
+        _this.isBroswer = false;
+      },
+      ua => {
+        _this.isBroswer = true;
+      }
+    );
   },
   components: {
     vConfirm,
@@ -399,7 +421,7 @@ export default {
       font-weight: normal;
     }
   }
-  span{
+  span {
     text-align: right;
     float: right;
   }
@@ -439,7 +461,7 @@ export default {
       & > input {
         width: 80%;
       }
-      .icon-clear{
+      .icon-clear {
         right: rem(30px);
       }
     }
@@ -453,7 +475,7 @@ export default {
           width: 50%;
         }
       }
-      .icon-clear{
+      .icon-clear {
         right: rem(84px);
       }
       span {
@@ -513,11 +535,12 @@ export default {
   top: 50%;
   margin-top: rem(-27px);
   right: rem(30px);
-  background: url("../../../common/image/img00/login/eyes_open.png") center center no-repeat;
+  background: url("../../../common/image/img00/login/eyes_open.png") center
+    center no-repeat;
   background-size: rem(44px) rem(32px);
   &.hide {
-    background: url("../../../common/image/img00/login/eyes_close.png") center center
-      no-repeat;
+    background: url("../../../common/image/img00/login/eyes_close.png") center
+      center no-repeat;
     background-size: rem(44px) rem(38px);
   }
 }
@@ -526,10 +549,10 @@ export default {
   position: absolute;
   width: rem(54px);
   height: rem(54px);
-  top:50%;
+  top: 50%;
   margin-top: rem(-27px);
-  background: url("../../../common/image/img00/login/close_button.png") center center
-no-repeat;
+  background: url("../../../common/image/img00/login/close_button.png") center
+    center no-repeat;
   background-size: rem(38px) rem(38px);
 }
 

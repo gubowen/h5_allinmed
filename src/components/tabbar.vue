@@ -54,6 +54,7 @@ export default {
         if (userId) {
           this.historyUrl = `/dist/myConsult.html?customerId=${userId}`;
         } else {
+          localStorage.setItem("backUrl",window.location.href);
           this.historyUrl = "/dist/mLogin.html";
         }
       }

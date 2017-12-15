@@ -32,7 +32,7 @@ class Wxbinding {
               console.log("该用户已绑定手机号（微信）");
               obj.callBack && obj.callBack();
             }else{
-              let url = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
+              let url = `${window.location.origin}${window.location.pathname}?customerId=${cId}`;
               this.wxBind(url);
             }
           }else{
@@ -98,9 +98,7 @@ class Wxbinding {
     let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     // alert(encodeUrl);
-    if(!api.getPara().code){
-      window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
-    }
+    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
   }
 
 
