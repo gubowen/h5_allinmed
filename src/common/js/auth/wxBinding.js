@@ -36,6 +36,7 @@ class Wxbinding {
               this.wxBind(url);
             }
           }else{
+            localStorage.setItem("backUrl",window.location.href);
             window.location.href = `/dist/mLogin.html?customerId=${cId}`;
           }
         }else{
@@ -53,6 +54,7 @@ class Wxbinding {
       }else if(api.getPara().wxState == 2){
         console.log("绑定失败");
       }else{
+        localStorage.setItem("backUrl",window.location.href);
         window.location.href = `/dist/mLogin.html`;
       }
     }
