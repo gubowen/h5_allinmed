@@ -180,7 +180,7 @@
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="footer-box-top">
-          <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
+          <section class="main-input-box-plus" @click='showBottomInputBar()'>
             <i class="icon-im-plus"></i>
             <!-- <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
                   accept="image/*">
@@ -202,6 +202,7 @@
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
           </figure>
         </section>
+        
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
           <li  class="bottom-item">
             <figure class="bottom-item-content">
@@ -400,7 +401,10 @@ export default {
       $(".main-message-time").css({
         top: 0
       });
+      setTimeout(()=>{
       this.onFocus = false;
+      },20);
+
       this.autoSizeTextarea();
     },
     //用户连接IM聊天
@@ -489,6 +493,13 @@ export default {
         this.$refs.bigImg.forEach((element, index) => {
           this.imageList.push(element.imageMessage.file.url);
         });
+      }
+    },
+    showBottomInputBar() {
+      this.footerBottomFlag = this.footerBottomFlag ? false : true;
+      
+      if (this.onFocus) {
+        $(".main-input-box-textarea").focus();
       }
     },
     //获取用户基本信息
@@ -1151,7 +1162,7 @@ export default {
     },
     // 发送多图文件
     sendMulitpleImage(list) {
-      const that=this;
+      const that = this;
       this.nim.sendCustomMsg({
         scene: "p2p",
         to: that.targetData.account,
@@ -1169,7 +1180,7 @@ export default {
         }),
         done(error, msg) {
           if (!error) {
-            console.log(msg)
+            console.log(msg);
             that.sendMessageSuccess(error, msg);
           }
         }
@@ -1239,7 +1250,7 @@ export default {
       });
     },
     // 选择视频
-    sendVideo () {
+    sendVideo() {
       this.inputVideoFlag = false;
       let _file = e.target.file[0];
       if (_file.type.includes("video")) {
@@ -1920,12 +1931,20 @@ export default {
   }
   .main-input-box-plus {
     @include font-dpr(16px);
-    width: rem(50px);
-    height: rem(50px);
+    width: rem(110px);
+    height: rem(75px);
     position: absolute;
-    left: rem(40px);
+    // left: rem(40px);
+    left: 0;
     top: 50%;
-    margin-top: rem(-25px);
+    text-align: center;
+    margin-top: rem(-75px/2);
+    &:before{
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+    }
     input[type="file"] {
       position: absolute;
       top: 0;
