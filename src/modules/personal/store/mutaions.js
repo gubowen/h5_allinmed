@@ -18,6 +18,7 @@ const logOut = (status) =>{
         status.loginOnOff = false;
         status.customerName = '';
         localStorage.removeItem("hasCloseAttention");
+        localStorage.setItem("backUrl",window.location.href);
       }
     },
     fail(err){
