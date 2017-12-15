@@ -89,7 +89,7 @@
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: api.getPara().customerId,
+            patientCustomerId: api.getPara().customerId || localStorage.getItem("userId"),
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,
@@ -237,7 +237,7 @@
         return result;
       },
       hrefToConsult(){
-        window.location.href = '/dist/consult.html?customerId=' + api.getPara().customerId;
+        window.location.href = '/dist/consult.html?customerId=' + aapi.getPara().customerId || localStorage.getItem("userId");
       },
       hrefToSuggest(opt){
         siteSwitch.weChatJudge(()=>{

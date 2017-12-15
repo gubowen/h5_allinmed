@@ -35,17 +35,17 @@ class Myconsult {
   }
 
   init() {
-    //验证url中是否有customerId，若没有则拼接
-    if(api.getPara().customerId && api.getPara().customerId != 0){
-      //微信中绑定微信
-      siteSwitch.weChatJudge(()=>{
-        wxBind.isBind();
-      },()=>{
-        console.log("无需绑定微信");
-      });
-    }else{
-      window.location.href = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
-    }
+    // //验证url中是否有customerId，若没有则拼接
+    // if(api.getPara().customerId && api.getPara().customerId != 0){
+    //   //微信中绑定微信
+    //   siteSwitch.weChatJudge(()=>{
+    //     wxBind.isBind();
+    //   },()=>{
+    //     console.log("无需绑定微信");
+    //   });
+    // }else{
+    //   window.location.href = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
+    // }
     Vue.use(VueRouter);
     this.routerStart();
     //vue路由
