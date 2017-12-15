@@ -15,10 +15,10 @@ const logOut = (status) =>{
     timeout: 20000,
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
-        status.loginOnOff = false;
-        status.customerName = '';
         localStorage.removeItem("hasCloseAttention");
         localStorage.setItem("backUrl",window.location.href);
+        status.loginOnOff = false;
+        status.customerName = '';
       }
     },
     fail(err){
