@@ -35,6 +35,7 @@ class Consult {
       if(res.data.responseObject.responseStatus){
         this.init();
       }else{
+        localStorage.setItem("backUrl",window.location.href);
         window.location.href = '/dist/mLogin.html';
       }
     })

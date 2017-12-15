@@ -183,6 +183,7 @@ export default {
         window.location.href = XHRList.diagnose;
       } else {
         //跳到登录注册页.
+        localStorage.setItem("backUrl",window.location.href);
         window.location.href = XHRList.loginUrl;
       }
     },
@@ -192,11 +193,13 @@ export default {
         window.location.href = XHRList.historyUrl;
       } else {
         //跳到登录注册页.
+        localStorage.setItem("backUrl",window.location.href);
         window.location.href = XHRList.loginUrl;
       }
     },
     //登录
     loginEvent() {
+      localStorage.setItem("backUrl",window.location.href);
       window.location.href = XHRList.loginUrl;
     },
     getAdList() {
