@@ -90,9 +90,18 @@ const checkLoginState = () =>{
     }
   })
 }
-//getCustomerInfo();
-checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
-
+let testPersonal = ()=>{
+  state.weixinName = "萤火虫";
+  state.customerId = 1513148257028;//用户id
+  state.customerName = "萤火虫";
+  state.customerPhoneNum = "18210589196";
+  getCustomerInfo();
+}
+let officialPersonal = ()=>{
+  checkLoginState();//逻辑起点，检查用户的登录状态，检查后获取用户的个人信息
+}
+let testOnOff = false;
+testOnOff?testPersonal():officialPersonal();
 
 
 export default  state;
