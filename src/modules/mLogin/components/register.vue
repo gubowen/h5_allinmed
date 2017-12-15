@@ -84,6 +84,7 @@ export default {
       codeId: 0, //验证码id
       codeTime: 0,//验证码倒计时数
       timerObj:{},//定时器对象
+      customerId:'',
     };
   },
   methods: {
