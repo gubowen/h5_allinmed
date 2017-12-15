@@ -106,6 +106,7 @@ export default {
     flex: 1;
     justify-content: space-between;
     align-content: center;
+    display: block;
     .tabbar-item {
       @include font-dpr(11px);
       color: #97a0b7;
