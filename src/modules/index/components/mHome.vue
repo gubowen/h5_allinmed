@@ -4,13 +4,21 @@
     <figure class="banner">
       <!--<div class="banner-img"></div>-->
       <!--<div class="focus"></div>-->
-      <slider :loop="true" :autoPlay="true" :interval="5000" :dataList="adList">
+      <swiper :options="swiperOption" ref="mySwiper">
+        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider">
+            <a href="javascript:void(0)">
+              <img :src="item.adAttUrl" />
+              </a>
+        </swiper-slide>
+      <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
+      <!-- <slider ref="slider">
           <div class="banner-slider" v-for="(item,index) in adList" @click.stop="bannerHref(item)">
             <a href="javascript:void(0)">
               <img :src="item.adAttUrl" />
               </a>
             </div>
-      </slider>
+      </slider> -->
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
     <figure class="diagnose">
@@ -54,16 +62,18 @@
 <script type="text/ecmascript-6">
 import "common/js/third-party/flexible";
 import attention from "components/attention";
-import slider from "./slider";
+// import slider from "./slider";
 import tabbar from "components/tabbar";
 import api from "common/js/util/util";
 import Vue from "vue";
 
 import CheckLogin from "common/js/auth/checkLogin";
 
-
 const checkLogin = new CheckLogin();
 
+import VueAwesomeSwiper from "vue-awesome-swiper";
+import Swiper from "swiper";
+import "swiper/dist/css/swiper.css";
 const Owner_Position_Id = "";
 let XHRList = {
   //登录页
@@ -78,7 +88,7 @@ let XHRList = {
   personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/",
   adList: "/mcall/ad/position/profile/getMapList/"
 };
-
+Vue.use(VueAwesomeSwiper);
 export default {
   data() {
     return {
@@ -86,12 +96,28 @@ export default {
       wxLoginFlag: false,
       diagnoseList: [],
       dataGetFinish: false,
-      adList: []
+      adList: [],
+      swiperOption: {
+        notNextTick: true,
+        loop:true,
+        autoplay: 3000,
+        direction: "horizontal",
+        grabCursor: true,
+        setWrapperSize: true,
+        zoom: false,
+        autoHeight: true,
+        pagination: ".swiper-pagination",
+        paginationType: "bullets",
+        paginationClickable: true,
+        mousewheelControl: true,
+        observeParents: true,
+        debugger: true
+      }
     };
   },
   components: {
     attention,
-    slider,
+    // slider,
     tabbar
   },
   methods: {
@@ -183,7 +209,7 @@ export default {
         window.location.href = XHRList.diagnose;
       } else {
         //跳到登录注册页.
-        localStorage.setItem("backUrl",window.location.href);
+        localStorage.setItem("backUrl", window.location.href);
         window.location.href = XHRList.loginUrl;
       }
     },
@@ -193,13 +219,13 @@ export default {
         window.location.href = XHRList.historyUrl;
       } else {
         //跳到登录注册页.
-        localStorage.setItem("backUrl",window.location.href);
+        localStorage.setItem("backUrl", window.location.href);
         window.location.href = XHRList.loginUrl;
       }
     },
     //登录
     loginEvent() {
-      localStorage.setItem("backUrl",window.location.href);
+      localStorage.setItem("backUrl", window.location.href);
       window.location.href = XHRList.loginUrl;
     },
     getAdList() {
@@ -217,7 +243,9 @@ export default {
           if (data.responseObject.responseStatus) {
             that.adList =
               data.responseObject.responseData.data_list[0].ad_profile_attachment;
-            console.log(that.adList);
+            // setTimeout(() => {
+            //   that.$refs.slider && that.$refs.slider.refresh();
+            // }, 20);
           }
           that.$store.commit("setLoadingState", false);
         }
@@ -237,12 +265,16 @@ export default {
           this.$store.commit("setLoadingState", false);
         }
       });
-    },
-
+    }
   },
 
-  mounted() {
+  created() {
     this.init();
+  },
+  activated() {
+    // setTimeout(() => {
+    //     this.$refs.slider && this.$refs.slider.refresh()
+    //   }, 20)
   }
 };
 </script>
@@ -254,6 +286,17 @@ export default {
 .banner {
   padding: 0 0 rem(140px) 0;
   position: relative;
+  .swiper-pagination-bullet{
+    width: rem(12px);
+    height:rem(12px);
+    background-color: #e5e5e5;
+
+  }
+  .swiper-pagination-bullet-active{
+        width: rem(12px);
+    height:rem(12px);
+    background-color: #00D6C6;
+  }
   .banner-slider {
     width: 100%;
     height: 3.86667rem;
