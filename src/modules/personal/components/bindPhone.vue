@@ -26,6 +26,7 @@
     .allinmed-personal-changePhone{
       min-height: auto;
       height: auto;
+      padding:0;
     }
   }
   .allinmed-personal-changePhone {
