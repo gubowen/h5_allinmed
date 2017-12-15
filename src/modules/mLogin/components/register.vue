@@ -29,11 +29,11 @@
       <h2>验证码</h2>
       <p>已向手机号<span>{{phone}}</span>发送短信验证码</p>
       <section class="codeInput">
-        <input type="number" placeholder="请输入验证码" v-validate="'required'" name='validCode' @blur="validateBlur('validCode')" v-model="validCode">
+        <input type="number" placeholder="请输入验证码" v-validate="'required'" name='validCode' @input="inputMaxLength('validCode',4)" @blur="validateBlur('validCode')" v-model="validCode">
         <span class="getCode" v-if="codeTime<=0" @click="sendCode('again')">重新发送</span>
         <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
       </section>
-      <button class="submitButton" @click="validateCode()">提交</button>
+      <button class="submitButton" :class="{'on':validCode.length>0}" @click="validateCode()">提交</button>
     </section>
     <transition name="fade">
       <vConfirm v-if="confirmFlag" :confirmParams="{
@@ -176,6 +176,7 @@ export default {
     },
     // 发送验证码
     sendCode(type) {
+      this.$store.commit("setLoadingState", true);
       sendCode
         .sendInit({
           account: this.phone,
@@ -208,9 +209,11 @@ export default {
             }
             console.log('发送验证码失败 + ' + obj.responseMessage);
           }
+          this.$store.commit("setLoadingState", false);
         })
         .then(err => {
           console.log(err);
+          this.$store.commit("setLoadingState", false);
         });
     },
 
@@ -258,6 +261,7 @@ export default {
       if(api.getPara().customerId&&api.getPara().customerId.length>0){
         _sendPrams.customerId=api.getPara().customerId;
       }
+      this.$store.commit("setLoadingState", true);
       mobileRegister
         .registerInit(_sendPrams)
         .then((res) => {
@@ -273,15 +277,17 @@ export default {
             }, 2000);
             console.log('注册失败');
           }
+           this.$store.commit("setLoadingState",false);
         })
         .then((err) => {
           console.log(err);
+           this.$store.commit("setLoadingState", false);
         });
     },
     // 帐密登录
     accountLoginFn() {
       let _this = this;
-      
+       this.$store.commit("setLoadingState", true);
       passwordLogin
         .loginInit({
           account: this.phone,
@@ -295,10 +301,11 @@ export default {
             localStorage.setItem("mobile", _obj.mobile);
             localStorage.setItem("logoUrl", _obj.headUrl);
             console.log('登录成功')
-            window.location.href = document.referrer;
+            window.location.href = localStorage.getItem("backUrl");
           } else {
             console.log('登录失败')
           }
+           this.$store.commit("setLoadingState", false);
         });
     }
   },
