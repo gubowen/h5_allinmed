@@ -36,7 +36,7 @@ class Wxbinding {
               this.wxBind(url);
             }
           }else{
-            window.location.href = `/dist/mLogin.html?customerId=${cId}#/register`;
+            window.location.href = `/dist/mLogin.html?customerId=${cId}`;
           }
         }else{
           console.log("获取个人信息失败");
