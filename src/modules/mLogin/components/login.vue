@@ -43,10 +43,10 @@
         <li class="accountLogin" v-show="loginStyle == 'account'">
           <form class="formBox">
             <p class="phoneInput">
-              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage">
+              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
@@ -85,7 +85,6 @@ import "babel-polyfill";
 import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
-import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
@@ -94,15 +93,15 @@ const XHRList = {};
 export default {
   data() {
     return {
-      confirmFlag: false,  //confirm 框的显示隐藏
+      confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
-      errorShow: false,    //toast 框是否显示
-      errorMsg: "",        // toast 框提示语
-      phoneMessage: "",    //手机号码
-      codeMessage: "",     //验证码
-      password: "",        //密码
-      pwHide: true,        //密码可见
-      codeTime: 0,         //验证码有效时间
+      errorShow: false, //toast 框是否显示
+      errorMsg: "", // toast 框提示语
+      phoneMessage: "", //手机号码
+      codeMessage: "", //验证码
+      password: "", //密码
+      pwHide: true, //密码可见
+      codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
       submitDisable:true,  //是否可点
@@ -114,10 +113,10 @@ export default {
       allPass: false,
       params: {
         codeCheck: {
-          validCode: "",  //string	是	验证码CODE
-          codeId: "",     //string	是	验证码主键
+          validCode: "", //string	是	验证码CODE
+          codeId: "", //string	是	验证码主键
           //              isValid: 1,       //	string	是	修改验证码信息
-          account: "",    //string	是	手机号
+          account: "", //string	是	手机号
           customerId: "",
           mobile: "",
           isCheckMobile: 1,
@@ -352,7 +351,7 @@ export default {
                 window.location.href = localStorage.getItem("backUrl");
               });
             } else {
-              this.toastComm(data.responseObject.responseMessage, ()=>{
+              this.toastComm(data.responseObject.responseMessage, () => {
                 _this.submitDisable = true;
               });
             }
