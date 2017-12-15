@@ -2,12 +2,11 @@
   <section class="main-inner ev-fileUpHide" style="overflow:auto" >
       <transition name="fadeDown">
         <article class="main-message-time" v-if="lastTimeShow">
-          <p class="new-service-time">服务时间：08:00-21:00</p>
-          <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
+          <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
           <p class="service-time">
             <span class="service-time-top">服务时间</span>
             <span class="service-time-bottom">09: 00-22: 00</span>
-          </p> -->
+          </p>
         </article>
       </transition>
     <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">

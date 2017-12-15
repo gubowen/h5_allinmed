@@ -28,7 +28,7 @@ import siteSwitch from 'common/js/siteSwitch/siteSwitch';
 import wxBind from 'common/js/auth/wxBinding';
 import searchList from 'components/searchList';
 import fastclick from 'fastclick';
-
+import ustb from 'common/styles/_ustbPicker.css';
 import valiadteMethods from '../../common/js/util/validate_methods';
 // fastclick.attach(document.body);
 

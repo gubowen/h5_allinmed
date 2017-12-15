@@ -42,7 +42,7 @@
                         <h3>告诉我您的疼痛程度</h3>
                         <p class="pain-level-content">
                           {{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}
-                      </p>
+                        </p>
                         <vue-slider
                           ref="slider"
                           v-model="painValue"
@@ -112,9 +112,23 @@
             <section class="consult-total">
               <header class="consult-inner-title">
                 <h2>
+                  <span>最近一次加重是什么时候？</span>
+                </h2>
+              </header>
+              <section class="consult-question-inner select-item">
+                <article class="consult-question-item dark" @click.stop="delayTimePicker.show()">
+                  <p>最近几天开始</p>
+                  <i class="icon-select"></i>
+                </article>
+              </section>
+            </section>
+            <section class="consult-total">
+              <header class="consult-inner-title">
+                <h2>
                   <span>您还有其他补充吗？</span>
                 </h2>
               </header>
+
               <figure class="input-area">
               <textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"
                         @input="complicationLimit"></textarea>
@@ -171,7 +185,7 @@ import confirm from "components/confirm";
 import vueSlider from "vue-slider-component";
 import autosize from "autosize";
 import backPopup from "components/backToastForConsult";
-
+import Picker from "better-picker";
 const XHRList = {
   query: "/mcall/cms/part/question/relation/v1/getMapList/",
   createMedicalRecord: "/mcall/customer/patient/case/v1/create/",
@@ -227,7 +241,8 @@ export default {
       errorShow: false,
       levelShow: false,
       pageLeaveEnsure: false,
-      backPopupShow: false
+      backPopupShow: false,
+      delayTimePicker:null
     };
   },
   mounted() {
@@ -239,6 +254,9 @@ export default {
     this.getQuestionList();
     this.finish = false;
     this.customerId = api.getPara().customerId;
+    setTimeout(()=>{
+    this.createTimePicker();
+    },1000)
 
     setTimeout(() => {
       document.body.scrollTop = 20;
@@ -253,10 +271,12 @@ export default {
         }
       }
     }
-    
+
     this.$nextTick(() => {
       setTimeout(() => {
-        Array.from(this.$el.querySelectorAll("textarea")).forEach((element, index) => {
+        Array.from(
+          this.$el.querySelectorAll("textarea")
+        ).forEach((element, index) => {
           autosize(element);
           autosize.update(element);
         });
@@ -333,6 +353,32 @@ export default {
     next(this.pageLeaveEnsure);
   },
   methods: {
+    createTimePicker() {
+      const dataTime= [{
+          text: "身份证(选填)",
+          value: "1"
+        }, {
+          text: "军官证(选填)",
+          value: "2"
+        }];
+        const dataType=[{
+          text:"天",
+          value:"1",
+        },{
+          text:"周",
+          value:"2",
+        },{
+          text:"月",
+          value:"3",
+        },{
+          text:"年",
+          value:"4",
+        }]
+      this.delayTimePicker = new Picker({
+        data:[data,],
+        selectedIndex: [0] //默认哪个选中
+      });
+    },
     secondClickEvent(type, scIndex, scoIndex, index, pIndex) {
       const optionId = this.questionList[pIndex].optionList[index].questionList[
         scIndex
@@ -937,6 +983,14 @@ html {
       background-size: contain;
     }
   }
+  &.select-item {
+    .icon-select {
+      width: rem(36px);
+      height: rem(36px);
+      background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png");
+      background-size: contain;
+    }
+  }
   &.sSelector {
     .selected {
       & > .icon-select {
@@ -1230,7 +1284,7 @@ html {
   }
   .pain-level-secondList {
     /*    margin-bottom: rem(-20px);
-          margin-top: rem(20px);*/
+            margin-top: rem(20px);*/
 
     /*overflow: hidden;*/
 
