@@ -22,7 +22,12 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
-
+  .allinmed-mainInner{
+    .allinmed-personal-changePhone{
+      min-height: auto;
+      height: auto;
+    }
+  }
   .allinmed-personal-changePhone {
     position: absolute;
     top: rem(20px);

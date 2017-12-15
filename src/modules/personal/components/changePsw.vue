@@ -36,7 +36,12 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
-
+  .allinmed-mainInner{
+  .allinmed-personal-changePsw{
+    min-height: auto;
+    height: auto;
+  }
+  }
   .allinmed-personal-changePsw {
     position: absolute;
     top: rem(20px);
@@ -44,8 +49,8 @@
     width: rem(710px);
     background: #fff;
     border-radius:rem(16px);
-    min-height: auto !important;
-    height: auto !important;
+    /*min-height: auto !important;
+    height: auto !important;*/
   }
 </style>
 <script  type="text/ecmascript-6">
