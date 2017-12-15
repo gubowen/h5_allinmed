@@ -180,7 +180,7 @@
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="footer-box-top">
-          <section class="main-input-box-plus" @click='showBottomInputBar()'>
+          <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
             <!-- <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
                   accept="image/*">
@@ -202,7 +202,6 @@
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
           </figure>
         </section>
-        
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
           <li  class="bottom-item">
             <figure class="bottom-item-content">
@@ -217,11 +216,11 @@
           <li  class="bottom-item">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350" height="234" />
-              <figcaption class="bottom-item-description">照相</figcaption>
+              <figcaption class="bottom-item-description">视频</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendFile($event)" ref="videoSender"
+            <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)" ref="videoSender"
                   accept="video/*">
-            <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendFile($event)" ref="videoSender" capture="camera"
+            <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)" ref="videoSender" capture="camera"
                   accept="video/*">
           </li>
           <li  class="bottom-item">
@@ -229,9 +228,9 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
+            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
                   accept="application/pdf,application/vnd.ms-excel,application/msword">
-            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
+            <input type="file" v-if="!isIos"  v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
                   accept="application/pdf,application/vnd.ms-excel,application/msword">
           </li>
         </ul>
@@ -331,6 +330,7 @@ export default {
       onFocus: false,
       inputImageFlag: true, //上传图片input控制
       inputVideoFlag: true, //上传视频input控制
+      inputPdfFlag:true,//上传pdf文件控制
       //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
       imageList: [], //页面图片数组
       consultationId: "",
@@ -401,10 +401,7 @@ export default {
       $(".main-message-time").css({
         top: 0
       });
-      setTimeout(()=>{
       this.onFocus = false;
-      },20);
-
       this.autoSizeTextarea();
     },
     //用户连接IM聊天
@@ -493,13 +490,6 @@ export default {
         this.$refs.bigImg.forEach((element, index) => {
           this.imageList.push(element.imageMessage.file.url);
         });
-      }
-    },
-    showBottomInputBar() {
-      this.footerBottomFlag = this.footerBottomFlag ? false : true;
-      
-      if (this.onFocus) {
-        $(".main-input-box-textarea").focus();
       }
     },
     //获取用户基本信息
@@ -1100,7 +1090,6 @@ export default {
     //上传文件
     sendImage(e) {
       const that = this;
-      that.inputImageFlag = false;
       console.log(e.target.files);
       if (e.target.files.length > 1) {
         this.getMulitpleImage(e.target.files);
@@ -1162,7 +1151,7 @@ export default {
     },
     // 发送多图文件
     sendMulitpleImage(list) {
-      const that = this;
+      const that=this;
       this.nim.sendCustomMsg({
         scene: "p2p",
         to: that.targetData.account,
@@ -1180,7 +1169,7 @@ export default {
         }),
         done(error, msg) {
           if (!error) {
-            console.log(msg);
+            console.log(msg)
             that.sendMessageSuccess(error, msg);
           }
         }
@@ -1189,8 +1178,6 @@ export default {
     // 上传图片文件
     sendImageFile(_file) {
       const that = this;
-      debugger;
-      console.log(_file);
       this.msgList.push({
         file: {
           url: window.URL.createObjectURL(_file)
@@ -1204,6 +1191,7 @@ export default {
         type: "image",
         fileInput: this.$refs.imageSender,
         uploadprogress(obj) {
+          // that.inputImageFlag = false;
           that.scrollToBottom();
           that.imageProgress = {
             uploading: true,
@@ -1250,13 +1238,12 @@ export default {
       });
     },
     // 选择视频
-    sendVideo() {
-      this.inputVideoFlag = false;
-      let _file = e.target.file[0];
+    sendVideo (e) {
+      let _file = e.target.files[0];
       if (_file.type.includes("video")) {
         this.sendVideoFile(_file);
       } else {
-        this.toastTips = `请选择图片`;
+        this.toastTips = `请选择视频文件`;
         this.toastShow = true;
         setTimeout(() => {
           this.toastShow = false;
@@ -1277,8 +1264,9 @@ export default {
       that.videoLastIndex = that.msgList.length - 1;
       this.nim.previewFile({
         type: "video",
-        fileInput: this.$refs.imageSender,
+        fileInput: this.$refs.videoSender,
         uploadprogress(obj) {
+          // this.inputVideoFlag = false;
           that.scrollToBottom();
           that.videoProgress = {
             uploading: true,
@@ -1316,6 +1304,8 @@ export default {
                 // that.imageList.push(msg.file.url);
               }
             });
+          }else {
+            console.log(error);
           }
         }
       });
@@ -1659,8 +1649,12 @@ export default {
   },
   computed: {
     //配合watch图片上传进度使用
-    progess() {
+    progressImage() {
       return this.imageProgress.progress;
+    },
+    // 配合watch视频上传进度使用
+    progressVideo () {
+      return this.videoProgress.progress;
     },
     lastTime() {
       return this.$store.state.lastTime;
@@ -1800,10 +1794,20 @@ export default {
       },
       deep: true
     },
-    //监听上传完成，可以继续上传；
-    progess(newVal, oldVal) {
+    //监听图片上传完成，可以继续上传；
+    progressImage(newVal, oldVal) {
       if (newVal == "0%" || newVal == "100%") {
         this.inputImageFlag = true;
+      } else {
+        this.inputImageFlag = false;
+      }
+    },
+    //监听视频上传完成，可以继续上传；
+    progressVideo(newVal, oldVal) {
+      if (newVal == "0%" || newVal == "100%") {
+        this.inputVideoFlag = true;
+      } else {
+        this.inputVideoFlag = false;
       }
     },
     lastTime: function(time) {
@@ -1931,20 +1935,12 @@ export default {
   }
   .main-input-box-plus {
     @include font-dpr(16px);
-    width: rem(110px);
-    height: rem(75px);
+    width: rem(50px);
+    height: rem(50px);
     position: absolute;
-    // left: rem(40px);
-    left: 0;
+    left: rem(40px);
     top: 50%;
-    text-align: center;
-    margin-top: rem(-75px/2);
-    &:before{
-      content: "";
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
-    }
+    margin-top: rem(-25px);
     input[type="file"] {
       position: absolute;
       top: 0;
