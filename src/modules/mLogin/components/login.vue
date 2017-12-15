@@ -43,10 +43,10 @@
         <li class="accountLogin" v-show="loginStyle == 'account'">
           <form class="formBox">
             <p class="phoneInput">
-              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage">
+              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
@@ -93,18 +93,18 @@ const XHRList = {};
 export default {
   data() {
     return {
-      confirmFlag: false,  //confirm 框的显示隐藏
+      confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
-      errorShow: false,    //toast 框是否显示
-      errorMsg: "",        // toast 框提示语
-      phoneMessage: "",    //手机号码
-      codeMessage: "",     //验证码
-      password: "",        //密码
-      pwHide: true,        //密码可见
-      codeTime: 0,         //验证码有效时间
+      errorShow: false, //toast 框是否显示
+      errorMsg: "", // toast 框提示语
+      phoneMessage: "", //手机号码
+      codeMessage: "", //验证码
+      password: "", //密码
+      pwHide: true, //密码可见
+      codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
-      submitDisable:true,  //是否可点
+      submitDisable: true, //是否可点
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
@@ -112,10 +112,10 @@ export default {
       allPass: false,
       params: {
         codeCheck: {
-          validCode: "",  //string	是	验证码CODE
-          codeId: "",     //string	是	验证码主键
+          validCode: "", //string	是	验证码CODE
+          codeId: "", //string	是	验证码主键
           //              isValid: 1,       //	string	是	修改验证码信息
-          account: "",    //string	是	手机号
+          account: "", //string	是	手机号
           customerId: "",
           mobile: "",
           isCheckMobile: 1,
@@ -147,6 +147,10 @@ export default {
     //confirm 框重新输入事件
     cancelClickEvent() {
       this.confirmFlag = false;
+    },
+    changeFontSize(e){
+      console.log(e.target.style);
+      e.target.style.className=e.target.style.className+" hasContent";
     },
     // 切换登陆方式
     toggleLogin() {
@@ -332,7 +336,7 @@ export default {
                 window.location.href = document.referrer;
               });
             } else {
-              this.toastComm(data.responseObject.responseMessage, ()=>{
+              this.toastComm(data.responseObject.responseMessage, () => {
                 _this.submitDisable = true;
               });
             }
@@ -446,12 +450,20 @@ export default {
       @include placeholder() {
         color: #a0a0a0;
         font-weight: normal;
+        @include font-dpr(17px);
+        line-height: rem(56px);
       }
     }
     &.phoneInput {
       margin-top: rem(60px);
       & > input {
         width: 100%;
+       
+        font-weight: bold;
+        &.hasContent{
+          @include font-dpr(28px);
+          font-weight: bold;
+        }
       }
     }
     &.codeInput {
@@ -460,6 +472,9 @@ export default {
       & > input {
         width: 50%;
         float: left;
+       &.hasContent{
+          @include font-dpr(28px);
+        }
         &.halfWidth {
           width: 50%;
         }
