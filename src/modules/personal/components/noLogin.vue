@@ -37,7 +37,7 @@
     },
     methods:{
       local(){
-        localStorage.setItem("backUrl":window.location.href);
+        localStorage.setItem("backUrl",window.location.href);
       }
     }
   }
