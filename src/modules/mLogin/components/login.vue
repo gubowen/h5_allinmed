@@ -19,6 +19,7 @@
               @blur="validateBlur('phone')"
               @input="onKeyPress()"
               v-model="phoneMessage"
+              :class="{'hasContent':phoneMessage.length>0}"
               >
             </p>
             <p class="codeInput">
@@ -29,9 +30,10 @@
               v-validate="'required|digits:4'"
               @input="codeKeyPress()"
               name="codeInput"
+              :class="{'hasContent':codeMessage.length>0}"
               >
-              <span class="getCode" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
-              <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
+              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
+              <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
             <button class="loginButton" :class="{'on':allPass}" @click.prevent="validLogin()">登录</button>
             <article class="changeAndForget">
@@ -49,7 +51,7 @@
               <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
-               :class="{'hide':pwHide}"></i>
+               :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
             <button class="loginButton" :class="{'on':allPass}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
@@ -85,6 +87,7 @@ import "babel-polyfill";
 import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
+import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
@@ -480,6 +483,10 @@ export default {
       margin-top: rem(60px);
       & > input {
         width: 100%;
+        &.hasContent{
+          @include font-dpr(28px);
+          font-weight: bold;
+       }
       }
     }
     &.codeInput {
@@ -488,6 +495,9 @@ export default {
       & > input {
         width: 50%;
         float: left;
+        &.hasContent{
+          @include font-dpr(28px);
+        }
         &.halfWidth {
           width: 50%;
         }
@@ -499,10 +509,16 @@ export default {
       }
       .getCode {
         color: #2fc5bd;
+        &.hasContent{
+          margin-top: rem(20px);
+        }
       }
       .codeCountdown {
         width: 50%;
         color: #777777;
+        &.hasContent{
+          margin-top: rem(20px);
+        }
       }
     }
   }
@@ -548,6 +564,9 @@ export default {
   background: url("../../../common/image/img00/login/eyes_open.png") no-repeat;
   background-size: 100% 100%;
   margin-top: rem(5px);
+  &.hasContent{
+    margin-top: rem(20px);
+  }
   &.hide {
     background: url("../../../common/image/img00/login/eyes_close.png")
       no-repeat;

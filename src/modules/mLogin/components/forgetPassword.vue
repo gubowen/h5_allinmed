@@ -17,35 +17,37 @@
             @input="onPressPhone()"
             v-model="phoneMessage"
             style="width:100%"
+            :class="{'hasContent':phoneMessage.length>0}"
           >
         </p>
         <p class="codeInput" v-show="finishMobile">
           <input type="number"
-          :class="{'getCodeInput':codeTime>0}"
+          :class="{'getCodeInput':codeTime>0,'hasContent':codeMessage.length>0}"
            placeholder="请输入验证码"
             v-model="codeMessage"
             v-validate="'required|digits:4'"
             name="codeInput" />
-          <span class="getCode" v-if="codeTime<=0" @click="sendCode">重新发送</span>
-          <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
+          <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="sendCode">重新发送</span>
+          <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
         </p>
         <p class="codeInput" v-show="finishMobile">
           <input :type='passwordHide?"password":"text"'
           name="password"
-           v-validate="'required'"
-           v-model="password"
+          v-validate="'required|password'"
+          v-model="password"
           placeholder="设置密码（至少6位）"
-           @blur="validateBlur('password')"
+          @blur="validateBlur('password')"
+          :class="{'hasContent':password.length>0}"
            >
           <span class="iconBox" style="position: absolute;right: 15%;">
-                <i class="icon-clearPassword" v-if='password.length' @click='password = ""'></i>
-                <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='passwordHide=!passwordHide'></i>
+                <i class="icon-clearPassword" :class="{'hasContent':password.length>0}" v-if='password.length' @click='password = ""'></i>
+                <i class="icon-eyesStatus" :class="{'hide':passwordHide,'hasContent':password.length>0}" @click='passwordHide=!passwordHide'></i>
               </span>
         </p>
       </li>
     </ul>
     <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()">发送验证码</button>
-    <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword">提交</button>
+    <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword()">提交</button>
 
   </section>
           <transition name="fade">
@@ -199,7 +201,17 @@ export default {
       }, 1000);
     },
     resetPassword() {
-       this.$store.commit("setLoadingState",true);
+      this.$store.commit("setLoadingState",true);
+      this.$validator.validateAll();
+        if (this.errors.has("codeInput")) {
+          this.toastComm(this.errors.first("codeInput"));
+          this.$store.commit("setLoadingState",false);
+          return;
+        } else if (this.errors.has("password")) {
+          this.toastComm(this.errors.first("password"));
+          this.$store.commit("setLoadingState",false);
+          return;
+        }
       searchPassword
         .searchInit({
           account: this.phoneMessage,
@@ -256,10 +268,17 @@ export default {
       float: right;
       text-align: right;
       color: #2fc5bd;
+      &.hasContent{
+        margin-top: rem(20px);
+      }
     }
     .codeCountdown {
       width: 50%;
       color: #777777;
+      &.hasContent{
+        display: inline-block;
+        margin-top: rem(18px);
+      }
     }
     .getCodeInput{
       width: 50%;
@@ -275,6 +294,10 @@ export default {
         color: #a0a0a0;
         font-weight: normal;
       }
+      &.hasContent{
+          @include font-dpr(28px);
+          font-weight: bold;
+      }
     }
     .icon-eyesStatus {
       display: inline-block;
@@ -289,6 +312,9 @@ export default {
           no-repeat;
         background-size: contain;
       }
+      &.hasContent{
+        margin-top: rem(18px);
+      }
     }
 
     .icon-clearPassword {
@@ -300,6 +326,9 @@ export default {
         no-repeat;
       background-size: 100% 100%;
       margin-top: rem(5px);
+      &.hasContent{
+        margin-top: rem(18px);
+      }
     }
   }
   .submitButton {
