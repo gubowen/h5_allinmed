@@ -11,30 +11,15 @@ import App from './App';
 import VueRouter from 'vue-router';
 import consultHis from "./components/consultHis"
 import uploadPic from "./components/upLoadPicHis"
-import 'vueg/css/transition-min.css'
-import "static/css/base.css";
 import showBigImg from '../../components/showBigImg';
 import fastclick from 'fastclick';
-import CheckLogin from 'common/js/auth/checkLogin';
-import siteSwitch from 'common/js/siteSwitch/siteSwitch';
-import wxBind from 'common/js/auth/wxBinding';
-import api from 'common/js/util/util';
+import "static/css/base.css";
 
 fastclick.attach(document.body);
 
 class Myconsult {
   constructor() {
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind({
-        callBack:()=>{
-          this.init();
-        }
-      });
-    },()=>{
-      console.log("无需绑定微信");
-      this.init();
-    });
+    this.init();
   }
 
   init() {

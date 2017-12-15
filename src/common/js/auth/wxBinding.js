@@ -36,8 +36,13 @@ class Wxbinding {
               this.wxBind(url);
             }
           }else{
-            localStorage.setItem("backUrl",window.location.href);
-            window.location.href = `/dist/mLogin.html?customerId=${cId}`;
+            if(api.getPara().wxState == 2){
+              console.log("绑定失败");
+              obj.failCallBack && obj.failCallBack();
+            }else{
+              localStorage.setItem("backUrl",window.location.href);
+              window.location.href = `/dist/mLogin.html?customerId=${cId}`;
+            }
           }
         }else{
           console.log("获取个人信息失败");
@@ -53,6 +58,7 @@ class Wxbinding {
         console.log("您已绑定其他用户");
       }else if(api.getPara().wxState == 2){
         console.log("绑定失败");
+        obj.failCallBack && obj.failCallBack();
       }else{
         localStorage.setItem("backUrl",window.location.href);
         window.location.href = `/dist/mLogin.html`;
