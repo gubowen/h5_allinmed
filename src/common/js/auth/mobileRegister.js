@@ -22,6 +22,7 @@ export default class MobileRegister {
         url: XHRList.registerUrl,
         method: "POST",
         data: {
+          customerId:param.customerId, //customerId
           account: param.account, //账号（手机号）
           password: param.password, // 密码
           validCode: param.validCode, //验证码
