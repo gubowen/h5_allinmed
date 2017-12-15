@@ -7,28 +7,36 @@
  * Created by wangjinglong on 17/12/11.
  */
 
-import personalInfo from "./getPersonal";
+import PersonalInfo from "./getPersonal";
 import api from 'common/js/util/util';
 import "babel-polyfill";
 
 class Wxbinding {
   constructor() {}
-  isBind(){
-    let cId = api.getPara().customerId;
-    if(cId && cId != 0){
+  isBind(obj){
+    let cId = "";
+    let personalInfo = new PersonalInfo();
+
+    if(api.getPara().customerId && api.getPara().customerId != 0){
+      cId = api.getPara().customerId;
+    }else{
+      cId = localStorage.getItem('userId');
+    }
+
+    if(cId){
       personalInfo.getMessage(cId).then((res)=>{
         if(res && res.responseObject.responseData){
           let result = res.responseObject.responseData;
           if(result.mobile&&result.mobile.length>0){
             if(result.uniteFlagWeixin == 1){
               console.log("该用户已绑定手机号（微信）");
-              return false;
+              obj.callBack && obj.callBack();
             }else{
               let url = `${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`;
               this.wxBind(url);
             }
           }else{
-            window.location.href = `/dist/mLogin.html?customerId=${cId}#/register`;
+            window.location.href = `/dist/mLogin.html?customerId=${cId}`;
           }
         }else{
           console.log("获取个人信息失败");
@@ -39,6 +47,7 @@ class Wxbinding {
     }else{
       if(api.getPara().wxState == 0){
         console.log("绑定微信成功");
+        obj.callBack && obj.callBack();
       }else if(api.getPara().wxState == 1){
         console.log("您已绑定其他用户");
       }else if(api.getPara().wxState == 2){
