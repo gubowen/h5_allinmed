@@ -46,7 +46,7 @@
               <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide}"></i>
@@ -216,6 +216,21 @@ export default {
       let content = this.codeMessage;
       if (api.getByteLen(content) > 4) {
         this.codeMessage = api.getStrByteLen(content, 4);
+      }else if(api.getByteLen(content)==4){
+        this.$validator.validateAll();
+        if(!this.errors.has("phone")&&!this.errors.has("codeInput")){
+          this.allPass = true
+        }
+      }
+    },
+    //密码截取
+    onKeyPressPassWord(){
+      let content = this.password;
+      if (api.getByteLen(content) > 5 && api.getByteLen(content) < 20) {
+        this.$validator.validateAll();
+        if(!this.errors.has("account")&&!this.errors.has("password")){
+          this.allPass = true
+        }
       }
     },
     //获取验证码
