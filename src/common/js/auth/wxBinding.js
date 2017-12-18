@@ -98,6 +98,8 @@ class Wxbinding {
 
     // alert(encodeUrl);
     if(api.getPara().code || api.getPara().openId){
+      console.log("正在支付重定向");
+    }else{
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }
   }
