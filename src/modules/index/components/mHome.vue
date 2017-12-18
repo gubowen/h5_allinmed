@@ -4,8 +4,8 @@
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper">
         <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider">
-          <a href="javascript:void(0)">
-            <img :src="item.adAttUrl"/>
+          <a :href="item.adAdditionalUrl" @click="bannerHref(item)">
+            <img :src="item.adAttUrl" />
           </a>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
@@ -169,7 +169,7 @@
         return logoImg;
       },
       bannerHref(item) {
-        window.location.href = item.adAdditionalUrl;
+        // window.location.href = item.adAdditionalUrl;
       },
       getFullName(opt) {
         if (opt.fullName.length > 6) {
