@@ -328,14 +328,32 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-              localStorage.setItem("userId", _obj.customerId);
-              localStorage.setItem("userName", _obj.nickName);
-              localStorage.setItem("mobile", _obj.mobile);
-              localStorage.setItem("logoUrl", _obj.headUrl);
-              this.toastComm("登录成功，即将返回来源页面", () => {
-                // window.location.href = document.referrer;
-                window.location.href = localStorage.getItem("backUrl");
-              });
+              if (
+                api.getPara().customerId &&
+                api.getPara().customerId.length > 0
+              ) {
+                if (data.responseObject.responsePk == api.getPara().customerId) {
+                  localStorage.setItem("userId", _obj.customerId);
+                  localStorage.setItem("userName", _obj.nickName);
+                  localStorage.setItem("mobile", _obj.mobile);
+                  localStorage.setItem("logoUrl", _obj.headUrl);
+                  this.toastComm("登录成功，即将返回来源页面", () => {
+                    // window.location.href = document.referrer;
+                    window.location.href = localStorage.getItem("backUrl");
+                  });
+                } else {
+                  this.toastComm("该手机已注册，请更换其他手机！");
+                }
+              } else {
+                localStorage.setItem("userId", _obj.customerId);
+                localStorage.setItem("userName", _obj.nickName);
+                localStorage.setItem("mobile", _obj.mobile);
+                localStorage.setItem("logoUrl", _obj.headUrl);
+                this.toastComm("登录成功，即将返回来源页面", () => {
+                  // window.location.href = document.referrer;
+                  window.location.href = localStorage.getItem("backUrl");
+                });
+              }
             } else {
               this.toastComm(data.responseObject.responseMessage);
             }
@@ -357,14 +375,32 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-              localStorage.setItem("userId", _obj.customerId);
-              localStorage.setItem("userName", _obj.nickName);
-              localStorage.setItem("mobile", _obj.mobile);
-              localStorage.setItem("logoUrl", _obj.headUrl);
-              this.toastComm("登录成功，即将返回来源页面", () => {
-                // window.location.href = document.referrer;
-                window.location.href = localStorage.getItem("backUrl");
-              });
+              if (
+                api.getPara().customerId &&
+                api.getPara().customerId.length > 0
+              ) {
+                if (data.responseObject.responsePk == api.getPara().customerId) {
+                  localStorage.setItem("userId", _obj.customerId);
+                  localStorage.setItem("userName", _obj.nickName);
+                  localStorage.setItem("mobile", _obj.mobile);
+                  localStorage.setItem("logoUrl", _obj.headUrl);
+                  this.toastComm("登录成功，即将返回来源页面", () => {
+                    // window.location.href = document.referrer;
+                    window.location.href = localStorage.getItem("backUrl");
+                  });
+                } else {
+                  _this.toastComm("该手机已注册，请更换其他手机！");
+                }
+              } else {
+                localStorage.setItem("userId", _obj.customerId);
+                localStorage.setItem("userName", _obj.nickName);
+                localStorage.setItem("mobile", _obj.mobile);
+                localStorage.setItem("logoUrl", _obj.headUrl);
+                this.toastComm("登录成功，即将返回来源页面", () => {
+                  // window.location.href = document.referrer;
+                  window.location.href = localStorage.getItem("backUrl");
+                });
+              }
             } else {
               this.toastComm(data.responseObject.responseMessage, () => {
                 _this.submitDisable = true;
@@ -547,9 +583,9 @@ export default {
           center center no-repeat;
         background-size: rem(38px) rem(38px);
       }
-      &.password{
-        .icon-clear{
-           right: rem(83px);
+      &.password {
+        .icon-clear {
+          right: rem(83px);
         }
       }
       span {
