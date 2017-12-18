@@ -18,8 +18,6 @@ import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import  "../../common/js/third-party/jweixin-1.0.0.js"
 import CheckLogin from 'common/js/auth/checkLogin';
-import siteSwitch from 'common/js/siteSwitch/siteSwitch';
-import wxBind from 'common/js/auth/wxBinding';
 import api from 'common/js/util/util';
 import fastclick from 'fastclick';
 import WxPayCommon from '../../common/js/wxPay/wxComm';
@@ -42,13 +40,6 @@ class Consult {
   }
 
   init() {
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind();
-    },()=>{
-      console.log("无需绑定微信");
-    });
-
     //路由系统注册
     Vue.use(VeeValidator);
     Vue.use(VueRouter);
