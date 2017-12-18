@@ -485,6 +485,7 @@ export default {
 .main-inner.tc-upLoadFile {
   background-color: #ffffff;
   padding-top: rem(22px);
+  padding-bottom:rem(100px);
 }
 
 .upload-wrapper {
@@ -757,7 +758,6 @@ $colorTwo: #222222;
   padding-top: rem(70px);
   text-align: center;
   padding-bottom: rem(60px);
-  margin-bottom:rem(200px);
   .tc-submitBtn {
     width: rem(570px);
     //display: block;
