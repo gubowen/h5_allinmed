@@ -74,6 +74,8 @@ class Wxbinding {
           }
         }
       })
+    }else{
+      obj.callBack && obj.callBack();
     }
   }
   wxBind(url) {
