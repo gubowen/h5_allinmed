@@ -27,7 +27,7 @@
               placeholder="请输入验证码"
               v-model="codeMessage"
               @blur="validateBlur('codeInput')"
-              v-validate="'required|digits:4'"
+              v-validate="'required'"
               @input="codeKeyPress()"
               name="codeInput"
               :class="{'hasContent':codeMessage.length>0}"
@@ -35,7 +35,7 @@
               <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" @click.prevent="validLogin()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">账号密码登录</span>
             </article>
@@ -53,7 +53,7 @@
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
@@ -107,7 +107,8 @@ export default {
       codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
-      submitDisable:true,  //是否可点
+      submitDisable: true, //是否可点
+      isClick:false,
       isBroswer: false,
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
@@ -171,6 +172,7 @@ export default {
         !this.errors.has("codeInput")
       ) {
         this.allPass = true;
+        this.isClick = true;
       } else {
         this.allPass = false;
         if (this.errors.has(name)) {
@@ -188,6 +190,7 @@ export default {
         !this.errors.has("password")
       ) {
         this.allPass = true;
+        this.isClick = true;
       } else {
         this.allPass = false;
         if (this.errors.has(name)) {
@@ -216,24 +219,29 @@ export default {
     //4位验证码截取
     codeKeyPress() {
       let content = this.codeMessage;
+      this.$validator.validateAll();
+      console.log(content.length);
       if (api.getByteLen(content) > 4) {
         this.codeMessage = api.getStrByteLen(content, 4);
-      }else if(api.getByteLen(content)==4){
-        this.$validator.validateAll();
-        if(!this.errors.has("phone")&&!this.errors.has("codeInput")){
-          this.allPass = true
+      } else if (content.length == 4) {
+        if (!this.errors.has("phone")) {
+          this.isClick = true;
         }
+      } else {
+        this.isClick = false;
       }
     },
     //密码输入长度检测（6 ~ 20位）
-    onKeyPressPassWord(){
+    onKeyPressPassWord() {
       let _password = this.password;
       console.log(api.getByteLen(_password));
-      if (api.getByteLen(_password) > 5) {
+      if (_password.length > 5) {
         this.$validator.validateAll();
-        if(!this.errors.has("account")&&!this.errors.has("password")){
-          this.allPass = true
+        if (!this.errors.has("account")) {
+          this.isClick = true;
         }
+      } else {
+        this.isClick = false;
       }
     },
     //获取验证码
@@ -334,8 +342,8 @@ export default {
     // 帐密登录
     accountLoginFn() {
       let _this = this;
-      _this.submitDisable = false;
       if (this.allPass) {
+        _this.submitDisable = false;
         this.$store.commit("setLoadingState", true);
         passwordLogin
           .loginInit({
@@ -360,6 +368,13 @@ export default {
             }
             this.$store.commit("setLoadingState", false);
           });
+      } else {
+        this.$validator.validateAll();
+        if (this.errors.has("account") ) {
+           this.toastComm(this.errors.first("account"));
+        } else if(this.errors.has("password")){
+           this.toastComm(this.errors.first("password"));
+        }
       }
     }
   },
@@ -483,10 +498,10 @@ export default {
       margin-top: rem(60px);
       & > input {
         width: 100%;
-        &.hasContent{
+        &.hasContent {
           @include font-dpr(28px);
           font-weight: bold;
-       }
+        }
       }
     }
     &.codeInput {
@@ -495,7 +510,7 @@ export default {
       & > input {
         width: 50%;
         float: left;
-        &.hasContent{
+        &.hasContent {
           @include font-dpr(28px);
         }
         &.halfWidth {
@@ -509,14 +524,14 @@ export default {
       }
       .getCode {
         color: #2fc5bd;
-        &.hasContent{
+        &.hasContent {
           margin-top: rem(20px);
         }
       }
       .codeCountdown {
         width: 50%;
         color: #777777;
-        &.hasContent{
+        &.hasContent {
           margin-top: rem(20px);
         }
       }
@@ -564,7 +579,7 @@ export default {
   background: url("../../../common/image/img00/login/eyes_open.png") no-repeat;
   background-size: 100% 100%;
   margin-top: rem(5px);
-  &.hasContent{
+  &.hasContent {
     margin-top: rem(20px);
   }
   &.hide {
