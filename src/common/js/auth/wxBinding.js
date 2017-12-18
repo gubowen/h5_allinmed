@@ -20,7 +20,7 @@ class Wxbinding {
     if(api.getPara().customerId && api.getPara().customerId != 0){
       cId = api.getPara().customerId;
     }else{
-      cId = localStorage.getItem('userId');
+      cId = sessionStorage.getItem('userId');
     }
 
     if(cId){
