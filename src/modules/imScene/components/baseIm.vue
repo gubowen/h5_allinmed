@@ -169,12 +169,13 @@
           <textarea class="main-input-box-textarea"
                     rows="1"
                     v-model="sendTextContent"
-
+                    ref="inputTextarea"
                     @focus="focusFn()"
                     @blur="blurFn()"
                     @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
+
           </textarea>
           <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
           <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
@@ -1452,7 +1453,7 @@ export default {
   beforeCreate() {},
   mounted() {
     let that = this;
-   
+
     if (!api.checkOpenId()) {
       api.wxGetOpenId(1);
     }
