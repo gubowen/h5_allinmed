@@ -123,12 +123,12 @@
           }
         }else{
           if(t.newPassWord.length<6){
-            t.toast("新密码长度应大于6位");
+            t.toast("新密码长度至少6位");
             // allRight = false;
             return false;
           }
           if(t.newPassWord.length<6){
-            t.toast("新密码长度应大于6位");
+            t.toast("新密码长度至少6位");
             // allRight = false;
             return false;
           }
