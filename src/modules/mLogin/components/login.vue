@@ -21,6 +21,7 @@
               v-model="phoneMessage"
               :class="{'hasContent':phoneMessage.length>0}"
               >
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
             </p>
             <p class="codeInput">
               <input type="number"
@@ -32,6 +33,7 @@
               name="codeInput"
               :class="{'hasContent':codeMessage.length>0}"
               >
+              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = ""'></i>
               <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
@@ -46,9 +48,11 @@
           <form class="formBox">
             <p class="phoneInput">
               <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
             </p>
-            <p class="codeInput">
+            <p class="codeInput password">
               <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
+              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
@@ -108,7 +112,7 @@ export default {
       getCode: true,
       imgUrl: "",
       submitDisable: true, //是否可点
-      isClick:false,
+      isClick: false,
       isBroswer: false,
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
@@ -370,10 +374,10 @@ export default {
           });
       } else {
         this.$validator.validateAll();
-        if (this.errors.has("account") ) {
-           this.toastComm(this.errors.first("account"));
-        } else if(this.errors.has("password")){
-           this.toastComm(this.errors.first("password"));
+        if (this.errors.has("account")) {
+          this.toastComm(this.errors.first("account"));
+        } else if (this.errors.has("password")) {
+          this.toastComm(this.errors.first("password"));
         }
       }
     }
@@ -496,6 +500,7 @@ export default {
     }
     &.phoneInput {
       margin-top: rem(60px);
+      position: relative;
       & > input {
         width: 100%;
         &.hasContent {
@@ -503,10 +508,23 @@ export default {
           font-weight: bold;
         }
       }
+      .icon-clear {
+        display: inline-block;
+        position: absolute;
+        width: rem(54px);
+        height: rem(54px);
+        top: 50%;
+        margin-top: rem(-27px);
+        right: rem(30px);
+        background: url("../../../common/image/img00/login/close_button.png")
+          center center no-repeat;
+        background-size: rem(38px) rem(38px);
+      }
     }
     &.codeInput {
       margin-top: rem(40px);
       @include clearfix();
+      position: relative;
       & > input {
         width: 50%;
         float: left;
@@ -517,6 +535,23 @@ export default {
           width: 50%;
         }
       }
+      .icon-clear {
+        display: inline-block;
+        position: absolute;
+        width: rem(54px);
+        height: rem(54px);
+        top: 50%;
+        margin-top: rem(-27px);
+        right: rem(280px);
+        background: url("../../../common/image/img00/login/close_button.png")
+          center center no-repeat;
+        background-size: rem(38px) rem(38px);
+      }
+      &.password{
+        .icon-clear{
+           right: rem(83px);
+        }
+      }
       span {
         width: 38%;
         float: right;
@@ -525,14 +560,14 @@ export default {
       .getCode {
         color: #2fc5bd;
         &.hasContent {
-          margin-top: rem(20px);
+          margin-top: rem(16px);
         }
       }
       .codeCountdown {
         width: 50%;
         color: #777777;
         &.hasContent {
-          margin-top: rem(20px);
+          margin-top: rem(16px);
         }
       }
     }
