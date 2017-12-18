@@ -274,15 +274,7 @@
         this.isWeChat = true;
         wxBind.isBind({
           callBack:()=>{
-            this.init();
-          },
-          failCallBack:()=>{
-            this.init();
-            this.errorMsg = "绑定微信失败";
-            this.errorShow = true;
-            setTimeout(() => {
-              this.errorShow = false;
-            }, 2000)
+//            this.init();
           }
         });
       },()=>{
@@ -301,6 +293,7 @@
       init(){
         document.title="为谁问诊";
         if(!api.checkOpenId()){
+          console.log("获取openId");
           api.wxGetOpenId(1);
         }
         api.forbidShare();
