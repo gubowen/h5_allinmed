@@ -15,79 +15,64 @@ import "babel-polyfill";
 class Wxbinding {
   constructor() {}
   isBind(obj){
-    let cId = "";
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
-
-    if(api.getPara().customerId && api.getPara().customerId != 0){
-      cId = api.getPara().customerId;
-    }else{
-      checkLogin.getStatus().then((res)=>{
-        if(res.data.responseObject.responseStatus){
-          alert(res.data.responseObject.responsePk);
-          cId = res.data.responseObject.responsePk;
-        }
-      })
-      // cId = localStorage.getItem("userId");
-    }
-
-    if(cId){
-      personalInfo.getMessage(cId).then((res)=>{
-        if(res && res.responseObject.responseData){
-          let result = res.responseObject.responseData;
-          if(result.mobile&&result.mobile.length>0){
-            if(result.uniteFlagWeixin == 1){
-              console.log("该用户已绑定手机号（微信）");
-              obj.callBack && obj.callBack();
+    new Promise((resolve, reject) => {
+      let cId = "";
+      if(api.getPara().customerId && api.getPara().customerId != 0){
+        resolve(api.getPara().customerId);
+      }else{
+        checkLogin.getStatus().then((res)=>{
+          if(res.data.responseObject.responseStatus){
+            resolve(res.data.responseObject.responsePk);
+          }else{
+            resolve(cId);
+          }
+        })
+      }
+    }).then((data)=>{
+      if(data){
+        personalInfo.getMessage(cId).then((res)=>{
+          if(res && res.responseObject.responseData){
+            let result = res.responseObject.responseData;
+            if(result.mobile&&result.mobile.length>0){
+              if(result.uniteFlagWeixin == 1){
+                console.log("该用户已绑定手机号（微信）");
+                obj.callBack && obj.callBack();
+              }else{
+                let url = `${window.location.origin}${window.location.pathname}?customerId=${cId}`;
+                this.wxBind(url);
+              }
             }else{
-              let url = `${window.location.origin}${window.location.pathname}?customerId=${cId}`;
-              this.wxBind(url);
+              if(api.getPara().wxState == 2){
+                console.log("绑定失败");
+                obj.failCallBack && obj.failCallBack();
+              }else{
+                localStorage.setItem("backUrl",window.location.href);
+                window.location.href = `/dist/mLogin.html?customerId=${cId}`;
+              }
             }
           }else{
-            if(api.getPara().wxState == 2){
-              console.log("绑定失败");
-              obj.failCallBack && obj.failCallBack();
-            }else{
-              localStorage.setItem("backUrl",window.location.href);
-              window.location.href = `/dist/mLogin.html?customerId=${cId}`;
-            }
+            console.log("获取个人信息失败");
           }
-        }else{
-          console.log("获取个人信息失败");
-        }
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }else{
-      if(api.getPara().wxState == 0){
-        console.log("绑定微信成功");
-        obj.callBack && obj.callBack();
-      }else if(api.getPara().wxState == 1){
-        console.log("您已绑定其他用户");
-      }else if(api.getPara().wxState == 2){
-        console.log("绑定失败");
-        obj.failCallBack && obj.failCallBack();
+        }).catch((err)=>{
+          console.log(err)
+        })
       }else{
-        localStorage.setItem("backUrl",window.location.href);
-        window.location.href = `/dist/mLogin.html`;
+        if(api.getPara().wxState == 0){
+          console.log("绑定微信成功");
+          obj.callBack && obj.callBack();
+        }else if(api.getPara().wxState == 1){
+          console.log("您已绑定其他用户");
+        }else if(api.getPara().wxState == 2){
+          console.log("绑定失败");
+          obj.failCallBack && obj.failCallBack();
+        }else{
+          localStorage.setItem("backUrl",window.location.href);
+          window.location.href = `/dist/mLogin.html`;
+        }
       }
-    }
-
-
-
-    // let isBinding = new Isbinding();
-    // let customerId = localStorage.getItem("userId");
-    // if(!(api.getPara().wxState || api.getPara().wxState == 0)){
-    //   // alert(localStorage.getItem('protoUrl'));
-    //   // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
-    //   isBinding.getMessage(customerId).then((res)=>{
-    //     if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
-    //       this.wxBind();
-    //     }
-    //   }).catch((err)=>{
-    //     console.log(err)
-    //   })
-    // }
+    })
   }
   wxBind(url) {
     let appId = "",XHRUrl = "",envCode = "";
