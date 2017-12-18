@@ -28,7 +28,7 @@ export default class checkSession {
         timeout: 30000
       }).then((res) => {
         resolve(res);
-        if (!res.responseObject.responseStatus){
+        if (!res.data.responseObject.responseStatus){
           localStorage.removeItem("userId");
           localStorage.removeItem("userName");
           localStorage.removeItem("mobile");
