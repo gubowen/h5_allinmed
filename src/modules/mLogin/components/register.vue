@@ -196,12 +196,12 @@ export default {
           if (res.responseObject && res.responseObject.responseStatus) {
             if (obj.responseCode === "SMS0001") {
               console.log("发送成功");
-              // if (type == "validate") {
-              //   this.validateCallback(); // 手机密码格式验证通过发送验证码后的执行函数
-              // } else {
-              //   this.resetCallback(); // 重新发送后的执行函数
-              // }
-              this.resetCallback(); // 重新发送后的执行函数
+              if (type == "validate") {
+                this.validateCallback(); // 手机密码格式验证通过发送验证码后的执行函数
+                this.resetCallback(); // 重新发送后的执行函数
+              } else {
+                this.resetCallback(); // 重新发送后的执行函数
+              }
               this.codeId = obj.responsePk;
             }
           } else {
