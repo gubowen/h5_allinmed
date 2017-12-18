@@ -757,7 +757,7 @@ $colorTwo: #222222;
   padding-top: rem(70px);
   text-align: center;
   padding-bottom: rem(60px);
-  margin-bottom:rem(100px);
+  margin-bottom:rem(200px);
   .tc-submitBtn {
     width: rem(570px);
     //display: block;

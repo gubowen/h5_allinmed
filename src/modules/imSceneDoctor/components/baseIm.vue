@@ -128,7 +128,7 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-
+                      ref="inputTextarea"
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -275,7 +275,7 @@ export default {
         }, 100);
       }
       setTimeout(()=>{
-        $(".main-message-time").css({ 
+        $(".main-message-time").css({
           top:document.body.scrollTop
         })
       },500)
@@ -299,7 +299,7 @@ export default {
         }, 20);
       }
       setTimeout(()=>{
-        $(".main-message-time").css({ 
+        $(".main-message-time").css({
           top:0
         })
       },500)

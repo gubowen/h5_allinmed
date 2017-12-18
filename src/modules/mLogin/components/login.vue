@@ -19,6 +19,7 @@
               @blur="validateBlur('phone')"
               @input="onKeyPress()"
               v-model="phoneMessage"
+              :class="{'hasContent':phoneMessage.length>0}"
               >
             </p>
             <p class="codeInput">
@@ -29,9 +30,10 @@
               v-validate="'required|digits:4'"
               @input="codeKeyPress()"
               name="codeInput"
+              :class="{'hasContent':codeMessage.length>0}"
               >
-              <span class="getCode" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
-              <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
+              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
+              <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
             <button class="loginButton" :class="{'on':allPass}" @click.prevent="validLogin()">登录</button>
             <article class="changeAndForget">
@@ -43,13 +45,13 @@
         <li class="accountLogin" v-show="loginStyle == 'account'">
           <form class="formBox">
             <p class="phoneInput">
-              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage">
+              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
             </p>
             <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
-               :class="{'hide':pwHide}"></i>
+               :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
             <button class="loginButton" :class="{'on':allPass}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
@@ -94,15 +96,15 @@ const XHRList = {};
 export default {
   data() {
     return {
-      confirmFlag: false,  //confirm 框的显示隐藏
+      confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
-      errorShow: false,    //toast 框是否显示
-      errorMsg: "",        // toast 框提示语
-      phoneMessage: "",    //手机号码
-      codeMessage: "",     //验证码
-      password: "",        //密码
-      pwHide: true,        //密码可见
-      codeTime: 0,         //验证码有效时间
+      errorShow: false, //toast 框是否显示
+      errorMsg: "", // toast 框提示语
+      phoneMessage: "", //手机号码
+      codeMessage: "", //验证码
+      password: "", //密码
+      pwHide: true, //密码可见
+      codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
       submitDisable:true,  //是否可点
@@ -114,10 +116,10 @@ export default {
       allPass: false,
       params: {
         codeCheck: {
-          validCode: "",  //string	是	验证码CODE
-          codeId: "",     //string	是	验证码主键
+          validCode: "", //string	是	验证码CODE
+          codeId: "", //string	是	验证码主键
           //              isValid: 1,       //	string	是	修改验证码信息
-          account: "",    //string	是	手机号
+          account: "", //string	是	手机号
           customerId: "",
           mobile: "",
           isCheckMobile: 1,
@@ -216,6 +218,22 @@ export default {
       let content = this.codeMessage;
       if (api.getByteLen(content) > 4) {
         this.codeMessage = api.getStrByteLen(content, 4);
+      }else if(api.getByteLen(content)==4){
+        this.$validator.validateAll();
+        if(!this.errors.has("phone")&&!this.errors.has("codeInput")){
+          this.allPass = true
+        }
+      }
+    },
+    //密码输入长度检测（6 ~ 20位）
+    onKeyPressPassWord(){
+      let _password = this.password;
+      console.log(api.getByteLen(_password));
+      if (api.getByteLen(_password) > 5) {
+        this.$validator.validateAll();
+        if(!this.errors.has("account")&&!this.errors.has("password")){
+          this.allPass = true
+        }
       }
     },
     //获取验证码
@@ -336,7 +354,7 @@ export default {
                 window.location.href = localStorage.getItem("backUrl");
               });
             } else {
-              this.toastComm(data.responseObject.responseMessage, ()=>{
+              this.toastComm(data.responseObject.responseMessage, () => {
                 _this.submitDisable = true;
               });
             }
@@ -465,6 +483,10 @@ export default {
       margin-top: rem(60px);
       & > input {
         width: 100%;
+        &.hasContent{
+          @include font-dpr(28px);
+          font-weight: bold;
+       }
       }
     }
     &.codeInput {
@@ -473,6 +495,9 @@ export default {
       & > input {
         width: 50%;
         float: left;
+        &.hasContent{
+          @include font-dpr(28px);
+        }
         &.halfWidth {
           width: 50%;
         }
@@ -484,10 +509,16 @@ export default {
       }
       .getCode {
         color: #2fc5bd;
+        &.hasContent{
+          margin-top: rem(20px);
+        }
       }
       .codeCountdown {
         width: 50%;
         color: #777777;
+        &.hasContent{
+          margin-top: rem(20px);
+        }
       }
     }
   }
@@ -533,6 +564,9 @@ export default {
   background: url("../../../common/image/img00/login/eyes_open.png") no-repeat;
   background-size: 100% 100%;
   margin-top: rem(5px);
+  &.hasContent{
+    margin-top: rem(20px);
+  }
   &.hide {
     background: url("../../../common/image/img00/login/eyes_close.png")
       no-repeat;

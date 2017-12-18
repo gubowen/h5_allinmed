@@ -50,10 +50,6 @@ export default {
     interval: {
       type: Number,
       default: 4000
-    },
-    dataList: {
-      type: Array,
-      default: []
     }
   },
   data() {
@@ -63,16 +59,7 @@ export default {
     };
   },
   watch: {
-    dataList() {
-      setTimeout(() => {
-        this._setSliderWidth();
-        this._initDots();
-        this._initSlider();
-        if (this.autoPlay) {
-          this._play();
-        }
-      }, 20);
-    }
+
   },
   mounted() {
     setTimeout(() => {
@@ -82,7 +69,7 @@ export default {
       if (this.autoPlay) {
         this._play();
       }
-    }, 20);
+    }, 2000);
     window.addEventListener("resize", () => {
       if (!this.slider || !this.slider.enabled) {
         return;

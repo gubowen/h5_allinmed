@@ -21,11 +21,8 @@ import followWechat from 'components/followWechat';
 // import vueg from 'vueg'
 // import 'vueg/css/transition-min.css';
 import "static/css/base.css";
-import CheckLogin from 'common/js/auth/checkLogin';
 import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
-import siteSwitch from 'common/js/siteSwitch/siteSwitch';
-import wxBind from 'common/js/auth/wxBinding';
 import searchList from 'components/searchList';
 import fastclick from 'fastclick';
 
@@ -36,17 +33,7 @@ class Consult {
   constructor() {
     //ios中Safari禁止缩放（并不能完全禁止）
     api.banZoom();
-    //微信中绑定微信
-    siteSwitch.weChatJudge(()=>{
-      wxBind.isBind({
-        callBack:()=>{
-          this.init();
-        }
-      });
-    },()=>{
-      console.log("无需绑定微信");
-      this.init();
-    });
+    this.init();
   }
 
   init() {

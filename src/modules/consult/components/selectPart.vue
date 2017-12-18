@@ -4,7 +4,7 @@
     <header class="part-select-title">
       <h3>点选最不适部位：</h3>
     </header>
-    <section class="main-inner-content">
+    <section class="main-inner-content" :class="{'androidScale':!isIos}">
       <section class="body-picture body-picture-f" :class="pointClassObject">
         <figure class="body-picture-content">
           <img class="body-picture-img" :src="patientBody" alt="">
@@ -69,6 +69,7 @@
           customerId:api.getPara().customerId,
           doctorId:api.getPara().doctorId,
         },
+        isIos:navigator.userAgent.toLowerCase().includes("iphone"),
         backPopupShow:'',
         clickDirection:"right",//用户点击的方向
         bodyImg: { //人体图像集合
@@ -442,6 +443,10 @@
   .main-inner-content {
     border: none;
     display: block;
+    &.androidScale{
+    transform:translateY(5%) scale(0.8);
+    }
+
   }
 
   .part-select-title {

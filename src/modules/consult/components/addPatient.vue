@@ -187,6 +187,7 @@
   import confirm from 'components/confirm';
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
+  import wxBind from 'common/js/auth/wxBinding';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
@@ -262,81 +263,25 @@
       }
     },
     activated(){
-      //手机号校验
-//      api.mobileCheck();
       this.finish=false;
       this.initData();
       this.currentIndex = -1;
       document.title="为谁问诊";
     },
     mounted() {
-      // 检测是否是微信
+      //微信中绑定微信
       siteSwitch.weChatJudge(()=>{
         this.isWeChat = true;
-      },()=>{
-        this.isWeChat = false;
-      });
-//      console.log(PickerDate);
-      document.title="为谁问诊";
-      if(!api.checkOpenId()){
-        api.wxGetOpenId(1);
-      }
-      api.forbidShare();
-      let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId;
-      if (customerIdFlag && customerIdFlag != 0){
-        this.getPatientList();
-      }
-      this.relationPickerInit();//患者关系选择器初始化
-      this.credentialPickerInit();//证件类型选择器初始化
-      this.birthPickerInit();//出生日期选择器初始化
-      this.getPatientPhone();//获取绑定的手机号
-      this.$validator.updateDictionary({
-        en: {
-          custom: {
-            //用户姓名的验证
-            username: {
-              required: '请填写患者姓名',
-              noNumber:'请填写真实姓名',
-              isEmoji:'请填写真实姓名',
-              special:'请填写真实姓名',
-              max_length:'请填写真实姓名',
-            },
-            //用户年龄的验证
-            age:{
-              required: '请填写年龄',
-              max_value:'请填写真实年龄',
-              min_value:'请填写真实年龄',
-              special:'请填写真实年龄',
-            },
-            //手机号的验证
-            phone:{
-              required: '请填写手机号码',
-              mobile:'请填写真实手机号码',
-            },
-            //患者关系的验证规则
-            relationInput: {
-              required: '请选择与患者关系',
-            },
-            //患者所在地的验证规则
-            areaInput: {
-              required: '请选择患者所在地',
-            },
-            //证件号码的验证规则
-            IDNumber: {
-              required: '请输入证件号码',
-            },
-            //出生日期的验证
-            birthInput:{
-              required: '请选择患者出生日期',
-            }
+        wxBind.isBind({
+          callBack:()=>{
+            this.init();
           }
-        }
+        });
+      },()=>{
+        console.log("无需绑定微信");
+        this.isWeChat = false;
+        this.init();
       });
-      console.log("添加患者");
-      console.log(localStorage.getItem("PCIMLinks"));
-      if (localStorage.getItem("PCIMLinks")!==null) {
-        localStorage.removeItem("PCIMLinks");
-      }
     },
     computed: {
 
@@ -345,6 +290,69 @@
 
     },
     methods: {
+      init(){
+        document.title="为谁问诊";
+        if(!api.checkOpenId()){
+          console.log("获取openId");
+          api.wxGetOpenId(1);
+        }
+        api.forbidShare();
+        let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId;
+        if (customerIdFlag && customerIdFlag != 0){
+          this.getPatientList();
+        }
+        this.relationPickerInit();//患者关系选择器初始化
+        this.credentialPickerInit();//证件类型选择器初始化
+        this.birthPickerInit();//出生日期选择器初始化
+        this.getPatientPhone();//获取绑定的手机号
+        this.$validator.updateDictionary({
+          en: {
+            custom: {
+              //用户姓名的验证
+              username: {
+                required: '请填写患者姓名',
+                noNumber:'请填写真实姓名',
+                isEmoji:'请填写真实姓名',
+                special:'请填写真实姓名',
+                max_length:'请填写真实姓名',
+              },
+              //用户年龄的验证
+              age:{
+                required: '请填写年龄',
+                max_value:'请填写真实年龄',
+                min_value:'请填写真实年龄',
+                special:'请填写真实年龄',
+              },
+              //手机号的验证
+              phone:{
+                required: '请填写手机号码',
+                mobile:'请填写真实手机号码',
+              },
+              //患者关系的验证规则
+              relationInput: {
+                required: '请选择与患者关系',
+              },
+              //患者所在地的验证规则
+              areaInput: {
+                required: '请选择患者所在地',
+              },
+              //证件号码的验证规则
+              IDNumber: {
+                required: '请输入证件号码',
+              },
+              //出生日期的验证
+              birthInput:{
+                required: '请选择患者出生日期',
+              }
+            }
+          }
+        });
+        console.log("添加患者");
+        console.log(localStorage.getItem("PCIMLinks"));
+        if (localStorage.getItem("PCIMLinks")!==null) {
+          localStorage.removeItem("PCIMLinks");
+        }
+      },
       //重置表单
       resetForm () {
         let that = this;

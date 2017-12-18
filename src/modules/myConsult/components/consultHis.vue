@@ -47,6 +47,7 @@
       </infinite-loading>
     </div>
     <loading v-show="finish"></loading>
+    <toast :content="errorMsg" v-if="errorShow"></toast>
   </section>
   <!--</loadMore>-->
 </template>
@@ -57,6 +58,8 @@
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
+  import wxBind from 'common/js/auth/wxBinding';
+  import CheckLogin from 'common/js/auth/checkLogin';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
@@ -70,19 +73,49 @@
       return {
         finish: false,
         noFriend: false,
+        errorMsg:"",
+        errorShow:false,
         pageNum: 20,
         pageStart:0,
         items: []
       }
     },
     mounted(){
-//      api.mobileCheck();
-      if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);    //获取openId
-      }
-      api.forbidShare();
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        wxBind.isBind({
+          callBack:()=>{
+            this.init();
+          },
+          failCallBack:()=>{
+            this.init();
+            this.errorMsg = "绑定微信失败";
+            this.errorShow = true;
+            setTimeout(() => {
+              this.errorShow = false;
+            }, 2000)
+          }
+        });
+      },()=>{
+        console.log("无需绑定微信");
+        let checkLogin = new CheckLogin();
+        checkLogin.getStatus().then((res)=>{
+          if(res.data.responseObject.responseStatus){
+            this.init();
+          }else{
+            localStorage.setItem("backUrl",window.location.href);
+            window.location.href = '/dist/mLogin.html';
+          }
+        })
+      });
     },
     methods: {
+      init(){
+        if (!api.checkOpenId()) {
+          api.wxGetOpenId(1);    //获取openId
+        }
+        api.forbidShare();
+      },
       onInfinite($state){
         const that = this;
         api.ajax({
@@ -331,7 +364,7 @@
     components: {
       loading,
       toast,
-  loadMore,
+      loadMore,
       InfiniteLoading
     }
   }
