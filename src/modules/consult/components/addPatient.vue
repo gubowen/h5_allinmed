@@ -274,7 +274,7 @@
         this.isWeChat = true;
         wxBind.isBind({
           callBack:()=>{
-//            this.init();
+            this.init();
           }
         });
       },()=>{
