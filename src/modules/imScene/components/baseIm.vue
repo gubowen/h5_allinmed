@@ -228,10 +228,10 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234" />
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
-                  accept="application/pdf,application/vnd.ms-excel,application/msword">
-            <input type="file" v-if="!isIos"  v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="pdfSender"
-                  accept="application/pdf,application/vnd.ms-excel,application/msword">
+            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)" ref="pdfSender"
+                  accept="application/pdf">
+            <input type="file" v-if="!isIos"  v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)" ref="pdfSender"
+                  accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -1309,6 +1309,23 @@ export default {
           }
         }
       });
+    },
+    // 选择pdf
+    sendPdf(e){
+      let _file = e.target.files[0];
+      if (_file.type.includes("pdf")) {
+        this.sendPdfFile(_file);
+      } else {
+        this.toastTips = `请选择pdf文件`;
+        this.toastShow = true;
+        setTimeout(() => {
+          this.toastShow = false;
+        }, 2000);
+      }
+    },
+    // 发送pdf
+    sendPdfFile (_file) {
+      console.log(_file);
     },
     //滑动到底部
     scrollToBottom(element) {
