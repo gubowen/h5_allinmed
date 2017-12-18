@@ -317,7 +317,6 @@ export default {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
               localStorage.setItem("userId", _obj.customerId);
-              sessionStorage.setItem("userId", _obj.customerId);
               localStorage.setItem("userName", _obj.nickName);
               localStorage.setItem("mobile", _obj.mobile);
               localStorage.setItem("logoUrl", _obj.headUrl);

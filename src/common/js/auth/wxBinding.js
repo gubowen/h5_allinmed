@@ -8,6 +8,7 @@
  */
 
 import PersonalInfo from "./getPersonal";
+import CheckLogin from 'common/js/auth/checkLogin';
 import api from 'common/js/util/util';
 import "babel-polyfill";
 
@@ -20,7 +21,12 @@ class Wxbinding {
     if(api.getPara().customerId && api.getPara().customerId != 0){
       cId = api.getPara().customerId;
     }else{
-      cId = sessionStorage.getItem('userId');
+      let checkLogin = new CheckLogin();
+      checkLogin.getStatus().then((res)=>{
+        if(res.data.responseObject.responseStatus && res.data.responseObject.responsePk){
+          cId = res.data.responseObject.responsePk;
+        }
+      })
     }
 
     if(cId){
