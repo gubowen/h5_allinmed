@@ -17,17 +17,18 @@ class Wxbinding {
   isBind(obj){
     let cId = "";
     let personalInfo = new PersonalInfo();
+    let checkLogin = new CheckLogin();
 
     if(api.getPara().customerId && api.getPara().customerId != 0){
       cId = api.getPara().customerId;
     }else{
-      // let checkLogin = new CheckLogin();
-      // checkLogin.getStatus().then((res)=>{
-      //   if(res.data.responseObject.responseStatus && res.data.responseObject.responsePk){
-      //     cId = res.data.responseObject.responsePk;
-      //   }
-      // })
-      cId = localStorage.getItem("userId");
+      checkLogin.getStatus().then((res)=>{
+        if(res.data.responseObject.responseStatus){
+          alert(res.data.responseObject.responsePk);
+          cId = res.data.responseObject.responsePk;
+        }
+      })
+      // cId = localStorage.getItem("userId");
     }
 
     if(cId){
