@@ -32,7 +32,7 @@ class Wxbinding {
       }
     }).then((data)=>{
       if(data){
-        personalInfo.getMessage(cId).then((res)=>{
+        personalInfo.getMessage(data).then((res)=>{
           if(res && res.responseObject.responseData){
             let result = res.responseObject.responseData;
             if(result.mobile&&result.mobile.length>0){
