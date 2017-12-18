@@ -21,12 +21,13 @@ class Wxbinding {
     if(api.getPara().customerId && api.getPara().customerId != 0){
       cId = api.getPara().customerId;
     }else{
-      let checkLogin = new CheckLogin();
-      checkLogin.getStatus().then((res)=>{
-        if(res.data.responseObject.responseStatus && res.data.responseObject.responsePk){
-          cId = res.data.responseObject.responsePk;
-        }
-      })
+      // let checkLogin = new CheckLogin();
+      // checkLogin.getStatus().then((res)=>{
+      //   if(res.data.responseObject.responseStatus && res.data.responseObject.responsePk){
+      //     cId = res.data.responseObject.responsePk;
+      //   }
+      // })
+      cId = localStorage.getItem("userId");
     }
 
     if(cId){
