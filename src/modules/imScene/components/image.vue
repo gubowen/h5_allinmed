@@ -5,17 +5,17 @@
       class="main-message-box-item"
       :data-clientid="imageMessage.idClient"
       :class="{'my-message':imageMessage.from===userData.account,
-             'others-message':imageMessage.from===targetData.account}">  
+             'others-message':imageMessage.from===targetData.account}">
      <figure class="main-message-img" v-if="imageMessage.from===targetData.account">
         <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
       </figure>
       <i class="fail-button" style="display:none">
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
-      <figcaption class="main-message-content image-message">
-        <transition name="fade">
-          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg"&&imageMessage.from===userData.account>撤回</button>
-        </transition>
+      <figcaption class="main-message-content image-message-box">
+        <!-- <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
+        </transition> -->
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
@@ -23,8 +23,12 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <img class="im-image"  v-touch:tap.stop.prevent="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
-      </figcaption>
+        <section class="mulitple-image-box" @click.stop="showBigImg">
+          <figure class="mulitple-image">
+            <img :src="imageMessage.file.url" alt="" v-touch:tap.stop.prevent="showBigImg">
+          </figure>
+        </section>
+      </figcaption>i
       <figure class="main-message-img" v-if="imageMessage.from===userData.account">
         <img :src="logoUrl" alt="">
       </figure>
@@ -87,7 +91,7 @@ export default {
   methods: {
     showBigImg(item, index) {
       let that = this;
-      let _indexNum = this.imageList.indexOf(this.imageNum) != -1 ? this.imageList.indexOf(this.imageNum) : this.imageList.indexOf(this.imageNum.split("?")[0]); 
+      let _indexNum = this.imageList.indexOf(this.imageNum) != -1 ? this.imageList.indexOf(this.imageNum) : this.imageList.indexOf(this.imageNum.split("?")[0]);
       this.showDeleteMsg = false;
       let _params = {
         imgBlob: (function() {
@@ -155,6 +159,9 @@ export default {
   display: block;
   transform: translateY(-50%);
   @include circle(rem(75px),#CCEDF2);
+}
+.image-message-box{
+  width: rem(514px);
 }
 .fade-enter-active,
 .fade-leave-active {

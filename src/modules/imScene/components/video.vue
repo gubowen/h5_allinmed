@@ -10,16 +10,17 @@
       <i class="fail-button" style="display:none">
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
-      <figcaption class="main-message-content image-message">
-        <section class="middle-tip-box" v-if="progress.uploading">
-          <figure class="middle-tip-box-text">
-            <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
-                 alt="loading...">
-            <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
+      <figcaption class="main-message-content video-message-box">
+        <!-- <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
+        </transition> -->
+        <header class="mulit-title">视频</header>
+        <section class="mulitple-image-box">
+          <figure class="mulitple-image" >
+            <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
+            <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
           </figure>
         </section>
-        <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
-        <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
       </figcaption>
       <figure class="main-message-img" v-if="videoMessage.from===userData.account">
         <img :src="logoUrl" alt="">
@@ -98,5 +99,8 @@ export default {
     height: 0;
     opacity: 0;
     z-index: -1;
+  }
+  .video-message-box{
+    width: rem(514px);
   }
 </style>

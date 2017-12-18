@@ -7,7 +7,7 @@
       <i class="fail-button" style="display:none">
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
-      <figcaption class="main-message-content">
+      <figcaption class="main-message-content multiple-box">
         <!-- <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition> -->
@@ -18,7 +18,7 @@
             </figure>
         </section>
       </figcaption>
-      
+
       <figure class="main-message-img" v-if="imageMessage.from===userData.account">
         <img :src="logoUrl" alt="">
       </figure>
@@ -49,7 +49,7 @@ export default {
         })(),
         indexNum: 0
       };
-      
+
       this.$router.push({
         name: "showBigImg",
         params: _params
@@ -58,8 +58,6 @@ export default {
   },
   mounted() {
     this.imageList = JSON.parse(this.imageMessage.content).data.list;
-
-    console.log(JSON.parse(this.imageMessage.content));
   },
   computed: {
     logoUrl() {
@@ -89,9 +87,13 @@ export default {
   @include font-dpr(17px);
   color: #222222;
 }
+.multiple-box{
+  min-width: 6.8rem;
+}
 .mulitple-image-box {
   text-align: left;
   padding-top: rem(24px);
+
   & > .mulitple-image {
     display: inline-block;
     margin-right: rem(20px);
