@@ -25,6 +25,7 @@ class Wxbinding {
         }else{
           checkLogin.getStatus().then((res)=>{
             if(res.data.responseObject.responseStatus){
+              alert(res.data.responseObject.responsePk);
               resolve(res.data.responseObject.responsePk);
             }else{
               resolve(cId);
