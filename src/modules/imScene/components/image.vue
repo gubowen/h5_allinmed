@@ -160,6 +160,23 @@ export default {
   transform: translateY(-50%);
   @include circle(rem(75px),#CCEDF2);
 }
+.mulitple-image-box {
+  text-align: left;
+  padding-top: rem(24px);
+
+  & > .mulitple-image {
+    display: inline-block;
+    margin-right: rem(20px);
+    & > img {
+      width: rem(132px);
+      height: rem(132px);
+      vertical-align: top;
+    }
+    &:nth-last-child(1) {
+      margin-right: 0;
+    }
+  }
+}
 .image-message-box{
   width: rem(514px);
 }
