@@ -28,15 +28,7 @@ fastclick.attach(document.body);
 
 class Consult {
   constructor() {
-    let checkLogin = new CheckLogin();
-    checkLogin.getStatus().then((res)=>{
-      if(res.data.responseObject.responseStatus){
-        this.init();
-      }else{
-        localStorage.setItem("backUrl",window.location.href);
-        window.location.href = '/dist/mLogin.html';
-      }
-    })
+    this.init();
   }
 
   init() {
