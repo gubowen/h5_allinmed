@@ -25,7 +25,6 @@ class Wxbinding {
         }else{
           checkLogin.getStatus().then((res)=>{
             if(res.data.responseObject.responseStatus){
-              alert(res.data.responseObject.responsePk);
               resolve(res.data.responseObject.responsePk);
             }else{
               resolve(cId);
@@ -40,7 +39,11 @@ class Wxbinding {
               if(result.mobile&&result.mobile.length>0){
                 if(result.uniteFlagWeixin == 1){
                   console.log("该用户已绑定手机号（微信）");
-                  obj.callBack && obj.callBack();
+                  if(api.getPara().customerId == 0){
+                    obj.hintCallBack && obj.hintCallBack();
+                  }else{
+                    obj.callBack && obj.callBack();
+                  }
                 }else{
                   let url = `${window.location.origin}${window.location.pathname}?customerId=${data}`;
                   this.wxBind(url);
