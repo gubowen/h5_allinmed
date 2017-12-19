@@ -87,6 +87,7 @@
             :userData="userData"
             :targetData="targetData"
             :currentIndex="index"
+            :fileProgress="fileProgress"
             :deleteMsgIndex="deleteMsgIndex"
           >
           </FileMessage>
@@ -246,10 +247,10 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+            <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
                    accept="application/pdf">
-            <input type="file" v-if="!isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+            <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
                    accept="application/pdf">
           </li>
@@ -346,8 +347,15 @@
           progress: "0%",
           index: 0
         },
+        // 文件pdf发送进度
+        fileProgress:{
+          uploading: false,
+          progress: "0%",
+          index: 0
+        },
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
+        fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
         footerBottomFlag: false, // 底部文件选择框是否显示
         noWXPayShow: false,
         onFocus: false,
@@ -1354,14 +1362,15 @@
       // 发送pdf
       sendPdfFile(_file) {
         const that = this;
-        // this.msgList.push({
-        //   file: {
-        //     url: window.URL.createObjectURL(_file)
-        //   },
-        //   type: "file",
-        //   from: that.userData.account
-        // });
-        // that.videoLastIndex = that.msgList.length - 1;
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file),
+            ext: "pdf",
+          },
+          type: "file",
+          from: that.userData.account
+        });
+        that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
         reader.onload = oFREvent => {
@@ -1369,13 +1378,13 @@
             type: "file",
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
-              // this.inputVideoFlag = false;
+              this.inputPdfFlag = false;
               that.scrollToBottom();
-              // that.videoProgress = {
-              //   uploading: true,
-              //   progress: obj.percentageText,
-              //   index: that.videoLastIndex
-              // };
+              that.fileProgress = {
+                uploading: true,
+                progress: obj.percentageText,
+                index: that.fileLastIndex
+              };
               console.log("文件总大小: " + obj.total + "bytes");
               console.log("已经上传的大小: " + obj.loaded + "bytes");
               console.log("上传进度: " + obj.percentage);
@@ -1398,13 +1407,12 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
-                    that.msgList.push(msg);
-                    // that.videoProgress = {
-                    //   uploading: false,
-                    //   progress: "0%",
-                    //   index: 0
-                    // };
-                    // that.imageList.push(msg.file.url);
+                    that.msgList[that.fileLastIndex] = msg;
+                    that.fileProgress = {
+                      uploading: false,
+                      progress: "0%",
+                      index: 0
+                    };
                   }
                 });
               } else {
@@ -1761,6 +1769,10 @@
       progressVideo() {
         return this.videoProgress.progress;
       },
+      // 配合watchpdf上传进度使用
+      progressFile() {
+        return this.fileProgress.progress;
+      },
       lastTime() {
         return this.$store.state.lastTime;
       },
@@ -1916,6 +1928,14 @@
           this.inputVideoFlag = true;
         } else {
           this.inputVideoFlag = false;
+        }
+      },
+      // 监听pdf上传完成，可以继续上传；
+      progressFile(newVal, oldVal) {
+        if (newVal == "0%" || newVal == "100%") {
+          this.inputPdfFlag = true;
+        } else {
+          this.inputPdfFlag = false;
         }
       },
       lastTime: function (time) {
