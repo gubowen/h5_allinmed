@@ -29,18 +29,8 @@
       return {
         swiperOption: {
           notNextTick: true,
-          // direction : 'vertical',
-          effect:"coverflow",
-          grabCursor : true,
           setWrapperSize :true,
-          // autoHeight: true,
-          // paginationType:"bullets",
           pagination : '.swiper-pagination',
-          paginationClickable :true,
-          prevButton:'.swiper-button-prev',
-          nextButton:'.swiper-button-next',
-          // scrollbar:'.swiper-scrollbar',
-          mousewheelControl : true,
           observeParents:true
         }
       }
@@ -62,8 +52,9 @@
   .shootTipsBox{
     min-height:100%;
     position:relative;
+    background:#eeeeee;
     .stepOneBox{
-      background:url("../common/image/img00/shootTips/head@2x.png") no-repeat #eeeeee;
+      background:url("../common/image/img00/shootTips/head@2x.png") no-repeat;
       background-size:100% rem(584px);
       overflow: hidden;
       .stepOneMain{
@@ -71,7 +62,7 @@
         margin:rem(320px) rem(20px) 0;
         border-radius: rem(20px);
         box-sizing: border-box;
-        padding-top:1px;
+        padding:1px 0 rem(180px);
         .stepOneTitle{
           width:100%;
           height:rem(60px);
