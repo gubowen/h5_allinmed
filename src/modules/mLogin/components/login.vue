@@ -21,7 +21,7 @@
               v-model="phoneMessage"
               :class="{'hasContent':phoneMessage.length>0}"
               >
-              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = "",isClick=false,allPass=false'></i>
             </p>
             <p class="codeInput">
               <input type="number"
@@ -33,7 +33,7 @@
               name="codeInput"
               :class="{'hasContent':codeMessage.length>0}"
               >
-              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = ""'></i>
+              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = "",isClick=false,allPass=false'></i>
               <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
@@ -48,11 +48,11 @@
           <form class="formBox">
             <p class="phoneInput">
               <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
-              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = "",isClick=false,allPass=false'></i>
             </p>
             <p class="codeInput password">
               <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
-              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
+              <i class="icon-clear" v-if='password.length' @click='password = "",isClick=false,allPass=false'></i>
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
@@ -359,6 +359,13 @@ export default {
             }
             this.$store.commit("setLoadingState", false);
           });
+      }else {
+        this.$validator.validateAll();
+        if (this.errors.has("phone")) {
+          this.toastComm(this.errors.first("phone"));
+        } else if (this.errors.has("codeInput")) {
+          this.toastComm(this.errors.first("codeInput"));
+        }
       }
     },
     // 帐密登录
