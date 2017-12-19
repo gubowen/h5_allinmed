@@ -284,15 +284,15 @@
         if (navigator.userAgent.toLowerCase().includes("11")) {
           this.scrollToBottom();
         } else {
-          // clearInterval(this.interval); //清除计时器
+          clearInterval(this.interval); //清除计时器
           setTimeout(() => {
             document.body.scrollTop = this.bfscrolltop;
           }, 20);
         }
 
-        $(".main-message-time").css({
-          top: 0
-        })
+        // $(".main-message-time").css({
+        //   top: 0
+        // })
 
         this.onFocus = false;
         this.autoSizeTextarea();
