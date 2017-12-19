@@ -35,7 +35,12 @@
         this.$router.push({path: '/followWechat'});
       },
       goConsult () {
-        location.href = this.consultUrl;
+        if (localStorage.getItem("userId")){
+          location.href = this.consultUrl;
+        }else{
+          window.location.href="/dist/mLogin.html";
+        }
+
       }
     },
     mounted(){

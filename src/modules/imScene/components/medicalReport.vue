@@ -87,6 +87,7 @@
         }
       },
       goToDetail(){
+        this.$emit("outClickFn");
           this.$router.push({
             name:"MedicalReportDetail",
           })

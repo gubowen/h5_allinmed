@@ -4,7 +4,7 @@
       <header class="part-select-title">
         <h3>点选最不适部位：</h3>
       </header>
-      <section class="main-inner-content" :class="{'androidScale':!isIos&&dpr<2.5}">
+      <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
           <figure class="body-picture-content">
             <img class="body-picture-img" :src="patientBody" alt="">
@@ -62,6 +62,7 @@
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
+
   export default {
 
     data() {
