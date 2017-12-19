@@ -275,13 +275,6 @@
         wxBind.isBind({
           callBack:()=>{
             this.init();
-          },
-          hintCallBack:()=>{
-            this.errorMsg = '该账号已绑定其他微信，请更换手机号';
-            this.errorShow = true;
-            setTimeout(() => {
-              window.location.href = `/dist/mLogin.html`;
-            }, 2000)
           }
         });
       },()=>{
