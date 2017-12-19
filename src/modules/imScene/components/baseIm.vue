@@ -20,7 +20,6 @@
           <MedicalReport
             v-if="msg.type==='custom' && JSON.parse(msg.content).type==='medicalReport'"
             :medicalReportMessage="JSON.parse(msg.content)"
-            @outClickFn="blurFn()"
             ref="medicalReport">
           </MedicalReport>
           <!--视诊-->
@@ -315,14 +314,13 @@
         } else {
           this.interval = setInterval(function () {
             document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-            console.log(5)
           }, 100);
         }
         setTimeout(() => {
           $(".main-message-time").css({
             top: document.body.scrollTop
           });
-        }, 100);
+        }, 300);
 
         this.onFocus = true;
         this.autoSizeTextarea();
@@ -334,7 +332,6 @@
         } else {
           clearInterval(this.interval); //清除计时器
           setTimeout(() => {
-
             document.body.scrollTop = this.bfscrolltop;
           }, 20);
         }

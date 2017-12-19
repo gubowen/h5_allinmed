@@ -1,12 +1,13 @@
 <template>
   <div>
-    <section class="main-message-box" >
+    <section class="main-message-box">
 
       <!--新的问诊单-->
       <article class="medical-report-box" data-clientid="" @click="goToDetail">
         <header class="medical-report-title">问诊单</header>
         <section class="medical-report-content">
-          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName | ellipsis(8)}}&nbsp</span><span class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
+          <p class="patient-info"><span>患者：</span><span class="patient-name">{{medicalReportMessage.data.patientName | ellipsis(8)}}&nbsp</span><span
+            class="patient-age">{{medicalReportMessage.data.sexName}}&nbsp{{medicalReportMessage.data.age}}岁</span></p>
           <p class="case-describe"><span>主诉：</span><span class="case-describe-main">{{mainCase}}</span></p>
         </section>
         <footer class="medical-report-footer">查看已提交信息</footer>
@@ -39,31 +40,32 @@
    */
   import store from "../store/store";
   import api from 'common/js/util/util';
+
   const XHRList = {
-    caseMain:"/mcall/customer/patient/case/v1/getMainMapById/",
+    caseMain: "/mcall/customer/patient/case/v1/getMainMapById/",
   };
-  export default{
-    data(){
-      return{
-        mainCase:"",//患者主诉详情
-        timeSlot:true,//是否再服务时间段
+  export default {
+    data() {
+      return {
+        mainCase: "",//患者主诉详情
+        timeSlot: true,//是否再服务时间段
       }
     },
-    mounted(){
+    mounted() {
       this.getCaseMain();
       this.getTimeSlot();
-      store.commit("setLogoUrl",this.medicalReportMessage.data)
-      store.commit("setPatientName",this.medicalReportMessage.data.patientName)
+      store.commit("setLogoUrl", this.medicalReportMessage.data)
+      store.commit("setPatientName", this.medicalReportMessage.data.patientName)
     },
-    methods:{
-      getCaseMain(){
-        let that =this;
+    methods: {
+      getCaseMain() {
+        let that = this;
         api.ajax({
           url: XHRList.caseMain,
           method: "POST",
           data: {
-            caseId:	api.getPara().caseId,//string	是	病例id
-            patientId:	api.getPara().patientId,//string	是		患者id
+            caseId: api.getPara().caseId,//string	是	病例id
+            patientId: api.getPara().patientId,//string	是		患者id
           },
           beforeSend: function () {
 
@@ -78,23 +80,22 @@
           }
         })
       },
-      getTimeSlot (){
+      getTimeSlot() {
         let timeTamp = parseInt(this.medicalReportMessage.data.time.split(" ")[1].split(":")[0]);
-        if(timeTamp< 9 || timeTamp>21){
-          this.timeSlot=false;
-        }else {
-          this.timeSlot=true;
+        if (timeTamp < 9 || timeTamp > 21) {
+          this.timeSlot = false;
+        } else {
+          this.timeSlot = true;
         }
       },
-      goToDetail(){
-        this.$emit("outClickFn");
-          this.$router.push({
-            name:"MedicalReportDetail",
-          })
+      goToDetail() {
+        this.$router.push({
+          name: "MedicalReportDetail",
+        })
       }
     },
     filters: {
-      ellipsis: function (value,len) {
+      ellipsis: function (value, len) {
         if (!value) return ''
         let newStr = '',
           newLength = 0;
@@ -116,8 +117,8 @@
         return newStr;
       }
     },
-    computed:{
-      logoUrl(){
+    computed: {
+      logoUrl() {
         return this.$store.state.logoUrl
       }
     },
@@ -131,62 +132,62 @@
 <style lang="scss" rel="stylesheet/scss" scoped="">
   @import "../../../../scss/library/_common-modules";
   //问诊单
-  .medical-report-box{
+  .medical-report-box {
     height: rem(302px);
     width: rem(694px);
     margin: 0 auto;
     background: url("../../../common/image/imScene/interrogation_of_single@2x.png") no-repeat;
     background-size: cover;
-    .medical-report-title{
+    .medical-report-title {
       height: rem(68px);
       line-height: rem(68px);
       @include font-dpr(14px);
       padding-left: rem(72px);
       color: #FFFFFF;
     }
-    .medical-report-content{
+    .medical-report-content {
       height: rem(152px);
       @include font-dpr(16px);
       padding: rem(38px) rem(0px) rem(0px) rem(40px);
       box-sizing: border-box;
       color: #555555;
       line-height: 1;
-      .patient-info{
-        span{
+      .patient-info {
+        span {
           display: inline-block;
           vertical-align: text-bottom;
         }
         line-height: 1.2;
-        .patient-name{
+        .patient-name {
           color: #333333;
           font-weight: bold;
           display: inline-block;
           /*max-width: rem(160px);*/
-//          @include ellipsis();
+          //          @include ellipsis();
         }
-        .patient-age{
+        .patient-age {
           margin-left: rem(10px);
           @include font-dpr(14px);
         }
       }
-      .case-describe{
+      .case-describe {
         margin-top: rem(20px);
-        span{
+        span {
           vertical-align: middle;
         }
-        .case-describe-main{
+        .case-describe-main {
           font-weight: bold;
           display: inline-block;
           width: rem(520px);
-          white-space:nowrap;
-          overflow:hidden;
-          text-overflow:ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           /*vertical-align: sub;*/
           line-height: 1.2;
         }
       }
     }
-    .medical-report-footer{
+    .medical-report-footer {
       height: rem(78px);
       @include font-dpr(14px);
       padding-left: rem(40px);
