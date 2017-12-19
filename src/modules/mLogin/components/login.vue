@@ -327,15 +327,20 @@ export default {
               _this.toastComm("该账号已绑定其他微信，请更换手机号！");
               return false;
             }else{
-              return true;
+              _this.validLoginData();
             }
+          }).catch(err=>{
+            console.log(err);
           });
         },
         ua => {
-          return true;
+          _this.validLoginData();
         }
       );
-      if (this.allPass) {
+    },
+    validLoginData(){
+      let _this = this;
+       if (this.allPass) {
         this.$store.commit("setLoadingState", true);
         validCodeLogin
           .validInit({
@@ -399,14 +404,19 @@ export default {
               _this.toastComm("该账号已绑定其他微信，请更换手机号！");
               return false;
             }else{
-              return true;
+               _this.accountLoginData();
             }
+          }).catch(err=>{
+            console.log(err);
           });
         },
         ua => {
-          return true;
+          _this.accountLoginData();
         }
       );
+    },
+    accountLoginData(){
+      let _this = this;
       if (this.allPass) {
         _this.submitDisable = false;
         this.$store.commit("setLoadingState", true);
