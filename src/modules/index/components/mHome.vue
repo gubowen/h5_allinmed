@@ -231,9 +231,9 @@
           method: "post",
           data: {
             siteId: api.getSiteId(),
-            channelId: 169,
+            channelId: 170,
             platformId: 1,
-            positionId: 557
+            positionId: 801
           },
           done(data) {
             if (data.responseObject.responseStatus) {
