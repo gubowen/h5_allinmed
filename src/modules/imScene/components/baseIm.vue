@@ -1030,7 +1030,8 @@
           file: {
             url: window.URL.createObjectURL(e.target.files[0])
           },
-          type: "image"
+          type: "image",
+          from:this.userData.account
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(e.target.files[0]));
