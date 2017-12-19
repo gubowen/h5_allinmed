@@ -92,6 +92,7 @@ import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
 import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
+import Checkbinding from "../../../common/js/auth/checkBinding";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
@@ -316,6 +317,22 @@ export default {
     },
     //验证登录
     validLogin() {
+      let _this = this;
+      siteSwitch.weChatJudge(
+        ua => {
+          Checkbinding.getMessage(_this.phoneMessage).then(res => {
+            if (res == 1) {
+              _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+              return false;
+            }else{
+              return true;
+            }
+          });
+        },
+        ua => {
+          return true;
+        }
+      );
       if (this.allPass) {
         this.$store.commit("setLoadingState", true);
         validCodeLogin
@@ -332,7 +349,9 @@ export default {
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                if (data.responseObject.responsePk == api.getPara().customerId) {
+                if (
+                  data.responseObject.responsePk == api.getPara().customerId
+                ) {
                   localStorage.setItem("userId", _obj.customerId);
                   localStorage.setItem("userName", _obj.nickName);
                   localStorage.setItem("mobile", _obj.mobile);
@@ -359,7 +378,7 @@ export default {
             }
             this.$store.commit("setLoadingState", false);
           });
-      }else {
+      } else {
         this.$validator.validateAll();
         if (this.errors.has("phone")) {
           this.toastComm(this.errors.first("phone"));
@@ -371,6 +390,21 @@ export default {
     // 帐密登录
     accountLoginFn() {
       let _this = this;
+       siteSwitch.weChatJudge(
+        ua => {
+          CheckBinding.getMessage(_this.phoneMessage).then((res) => {
+            if (res == 1) {
+              _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+              return false;
+            }else{
+              return true;
+            }
+          });
+        },
+        ua => {
+          return true;
+        }
+      );
       if (this.allPass) {
         _this.submitDisable = false;
         this.$store.commit("setLoadingState", true);
@@ -386,7 +420,9 @@ export default {
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                if (data.responseObject.responsePk == api.getPara().customerId) {
+                if (
+                  data.responseObject.responsePk == api.getPara().customerId
+                ) {
                   localStorage.setItem("userId", _obj.customerId);
                   localStorage.setItem("userName", _obj.nickName);
                   localStorage.setItem("mobile", _obj.mobile);
