@@ -13,7 +13,7 @@ const XHRList = {
   checkBinding: "/mcall/patient/customer/unite/v1/getMapList/"
 }
 
-class Checkbinding {
+export default class Checkbinding {
   constructor() {
 
   }
@@ -43,4 +43,4 @@ class Checkbinding {
   }
 }
 
-export default new Checkbinding();
+

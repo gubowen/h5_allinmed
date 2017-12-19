@@ -92,12 +92,14 @@ import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
 import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
-import Checkbinding from "../../../common/js/auth/checkBinding";
+import Checkbinding from "common/js/auth/checkBinding";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
 const passwordLogin = new PasswordLogin();
+const checkbinding=new Checkbinding();
 const XHRList = {};
+
 export default {
   data() {
     return {
@@ -320,7 +322,7 @@ export default {
       let _this = this;
       siteSwitch.weChatJudge(
         ua => {
-          Checkbinding.getMessage(_this.phoneMessage).then(res => {
+          checkbinding.getMessage(_this.phoneMessage).then(res => {
             if (res == 1) {
               _this.toastComm("该账号已绑定其他微信，请更换手机号！");
               return false;
@@ -392,7 +394,7 @@ export default {
       let _this = this;
        siteSwitch.weChatJudge(
         ua => {
-          CheckBinding.getMessage(_this.phoneMessage).then((res) => {
+          checkbinding.getMessage(_this.phoneMessage).then((res) => {
             if (res == 1) {
               _this.toastComm("该账号已绑定其他微信，请更换手机号！");
               return false;
