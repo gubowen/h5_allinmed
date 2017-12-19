@@ -164,7 +164,7 @@ export default {
       this.isRegister = true;
       this.$validator.validateAll().then(result => {
         console.log(result);
-        if (!this.errors.has("phone") && !this.errors.has("passWord")) {
+        if (result) {
           this.errorShow = false;
           this.sendCode("validate");
         } else {
