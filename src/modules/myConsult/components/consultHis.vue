@@ -87,12 +87,11 @@
           callBack:()=>{
             this.init();
           },
-          failCallBack:()=>{
-            this.init();
-            this.errorMsg = "绑定微信失败";
+          hintCallBack:()=>{
+            this.errorMsg = '该账号已绑定其他微信，请更换手机号';
             this.errorShow = true;
             setTimeout(() => {
-              this.errorShow = false;
+              window.location.href = `/dist/mLogin.html`;
             }, 2000)
           }
         });

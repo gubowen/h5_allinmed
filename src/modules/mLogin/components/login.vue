@@ -21,7 +21,7 @@
               v-model="phoneMessage"
               :class="{'hasContent':phoneMessage.length>0}"
               >
-              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = "",isClick=false,allPass=false'></i>
             </p>
             <p class="codeInput">
               <input type="number"
@@ -33,7 +33,7 @@
               name="codeInput"
               :class="{'hasContent':codeMessage.length>0}"
               >
-              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = ""'></i>
+              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = "",isClick=false,allPass=false'></i>
               <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
@@ -48,11 +48,11 @@
           <form class="formBox">
             <p class="phoneInput">
               <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
-              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = "",isClick=false,allPass=false'></i>
             </p>
             <p class="codeInput password">
               <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
-              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
+              <i class="icon-clear" v-if='password.length' @click='password = "",isClick=false,allPass=false'></i>
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
                :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
@@ -92,11 +92,14 @@ import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
 import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
+import Checkbinding from "common/js/auth/checkBinding";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
 const passwordLogin = new PasswordLogin();
+const checkbinding=new Checkbinding();
 const XHRList = {};
+
 export default {
   data() {
     return {
@@ -316,7 +319,28 @@ export default {
     },
     //验证登录
     validLogin() {
-      if (this.allPass) {
+      let _this = this;
+      siteSwitch.weChatJudge(
+        ua => {
+          checkbinding.getMessage(_this.phoneMessage).then(res => {
+            if (res == 1) {
+              _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+              return false;
+            }else{
+              _this.validLoginData();
+            }
+          }).catch(err=>{
+            console.log(err);
+          });
+        },
+        ua => {
+          _this.validLoginData();
+        }
+      );
+    },
+    validLoginData(){
+      let _this = this;
+       if (this.allPass) {
         this.$store.commit("setLoadingState", true);
         validCodeLogin
           .validInit({
@@ -332,7 +356,9 @@ export default {
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                if (data.responseObject.responsePk == api.getPara().customerId) {
+                if (
+                  data.responseObject.responsePk == api.getPara().customerId
+                ) {
                   localStorage.setItem("userId", _obj.customerId);
                   localStorage.setItem("userName", _obj.nickName);
                   localStorage.setItem("mobile", _obj.mobile);
@@ -359,10 +385,37 @@ export default {
             }
             this.$store.commit("setLoadingState", false);
           });
+      } else {
+        this.$validator.validateAll();
+        if (this.errors.has("phone")) {
+          this.toastComm(this.errors.first("phone"));
+        } else if (this.errors.has("codeInput")) {
+          this.toastComm(this.errors.first("codeInput"));
+        }
       }
     },
     // 帐密登录
     accountLoginFn() {
+      let _this = this;
+       siteSwitch.weChatJudge(
+        ua => {
+          checkbinding.getMessage(_this.phoneMessage).then((res) => {
+            if (res == 1) {
+              _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+              return false;
+            }else{
+               _this.accountLoginData();
+            }
+          }).catch(err=>{
+            console.log(err);
+          });
+        },
+        ua => {
+          _this.accountLoginData();
+        }
+      );
+    },
+    accountLoginData(){
       let _this = this;
       if (this.allPass) {
         _this.submitDisable = false;
@@ -379,7 +432,9 @@ export default {
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                if (data.responseObject.responsePk == api.getPara().customerId) {
+                if (
+                  data.responseObject.responsePk == api.getPara().customerId
+                ) {
                   localStorage.setItem("userId", _obj.customerId);
                   localStorage.setItem("userName", _obj.nickName);
                   localStorage.setItem("mobile", _obj.mobile);
