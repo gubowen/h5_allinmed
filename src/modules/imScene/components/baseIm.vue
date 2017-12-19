@@ -1366,6 +1366,7 @@
           file: {
             url: window.URL.createObjectURL(_file),
             ext: "pdf",
+            fileName:_file.name,
           },
           type: "file",
           from: that.userData.account
@@ -1378,7 +1379,7 @@
             type: "file",
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
-              this.inputPdfFlag = false;
+              // this.inputPdfFlag = false;
               that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
@@ -1393,6 +1394,9 @@
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
               // show file to the user
+              file = Object.assign(file,{
+                fileName:_file.name,
+              });
               console.log(file);
               if (!error) {
                 let msg = that.nim.sendFile({

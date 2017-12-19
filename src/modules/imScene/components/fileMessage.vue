@@ -22,9 +22,10 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <section class="mulitple-image-box">
-          <figure class="mulitple-image">
-            <a :href="fileMessage.file.url" target="_blank">{{fileMessage.file.url}}</a>
+        <section class="file-box">
+          <figure class="file-content" @click="seeFile()">
+            <img class="file-image" src="../../../common/image/imScene/pdf@3x.png">
+            <figcaption class="file-name">{{fileMessage.file.fileName}}</figcaption>
           </figure>
         </section>
       </figcaption>
@@ -84,7 +85,11 @@
         type: Number
       }
     },
-    methods: {},
+    methods: {
+      seeFile(){
+        location.href = this.fileMessage.file.url;
+      }
+    },
     mounted() {
       console.log(this.fileMessage)
     },
@@ -93,5 +98,28 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-
+@import "../../../../scss/library/_common-modules";
+  .file-content{
+    width: rem(442px);
+    height: rem(132px);
+    background: #EDEEEE;
+    @include clearfix();
+    .file-image{
+      width: rem(104px);
+      height: rem(132px);
+    }
+    .file-name{
+      float: right;
+      width: rem(306px);
+      vertical-align: top;
+      color: #333333;
+      @include font-dpr(15px);
+      box-sizing: border-box;
+      margin: rem(30px) rem(22px) rem(30px) rem(0px);
+      display:-webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
 </style>
