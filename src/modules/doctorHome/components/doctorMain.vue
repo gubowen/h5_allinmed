@@ -151,6 +151,9 @@
     import toast from 'components/toast';
     import confirm from 'components/confirm';
     import payPopup from 'components/payLayer';
+    import wxBind from 'common/js/auth/wxBinding';
+    import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+
     const XHRList = {
       getPersonalProXHR: "/mcall/mcall/customer/patent/v1/getMapList/",                    // 个人简介
       getDocMain: "/mcall/customer/auth/v1/getMapById/",                                   //医生信息
@@ -277,26 +280,35 @@
         }
       },
       mounted() {
-        let _this=this;
-        this.getPersonalProDate();
-        this.getDocInfo();
-        this.questionStatus({callBack:(data)=>{
-          _this.checkPatientState(data);
-        }});
-        this.getGoodsInfo();
-//        api.mobileCheck();    //注册检测（医生名片）
+        if(api.getPara().doctorCustomerId){//医生主页
+          localStorage.setItem("bindDocId",api.getPara().doctorCustomerId);
+        }
         if(api.getPara().customerId&&api.getPara().customerId.length>0){
-          _this.isDoctorID = true;
-        }
-        if(localStorage.getItem("payOk") == 1){
-          this.payPopupShow = true;
+          this.isDoctorID = true;
+          if(!api.getPara().doctorCustomerId&&typeof Number(api.getPara().wxState) == 'number'){
+            window.location.href=`${window.location.href.split("#")[0]}&doctorCustomerId=${localStorage.getItem("bindDocId")}`;
+          }else{
+            //微信中绑定微信
+            wxBind.isBind({
+              callBack:()=>{
+                this.init();
+              }
+            });
+          }
         }else{
-          this.payPopupShow = false;
+          this.init();
         }
-        api.forbidShare();
       },
       methods: {
-        //view cureTime
+        init(){
+          this.getPersonalProDate();
+          this.getDocInfo();
+          this.questionStatus({callBack:(data)=>{
+            _this.checkPatientState(data);
+          }});
+          this.getGoodsInfo();
+          api.forbidShare();
+        },
         viewCureTime(){
           let _this=this;
           this.ruleShow=true;

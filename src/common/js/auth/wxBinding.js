@@ -7,30 +7,79 @@
  * Created by wangjinglong on 17/12/11.
  */
 
-import Isbinding from "./getPersonal";
+import PersonalInfo from "./getPersonal";
+import CheckLogin from 'common/js/auth/checkLogin';
 import api from 'common/js/util/util';
 import "babel-polyfill";
 
 class Wxbinding {
   constructor() {}
-  isBind(){
-    let isBinding = new Isbinding();
-    let customerId = localStorage.getItem("userId");
-    if(!(api.getPara().wxState || api.getPara().wxState == 0)){
-      // alert(localStorage.getItem('protoUrl'));
-      // window.location.href = localStorage.getItem('protoUrl') + '&wxState=' + api.getPara().wxState;
-      isBinding.getMessage(customerId).then((res)=>{
-        if(res && res.responseObject.responseData && res.responseObject.responseData.uniteFlagWeixin == 0){
-          this.wxBind();
+  isBind(obj){
+    let personalInfo = new PersonalInfo();
+    let checkLogin = new CheckLogin();
+    if(!api.getPara().openId){
+      new Promise((resolve, reject) => {
+        let cId = "";
+        if(api.getPara().customerId && api.getPara().customerId != 0){
+          resolve(api.getPara().customerId);
+        }else{
+          checkLogin.getStatus().then((res)=>{
+            if(res.data.responseObject.responseStatus){
+              resolve(res.data.responseObject.responsePk);
+            }else{
+              resolve(cId);
+            }
+          })
         }
-      }).catch((err)=>{
-        console.log(err)
+      }).then((data)=>{
+        if(data){
+          personalInfo.getMessage(data).then((res)=>{
+            if(res && res.responseObject.responseData){
+              let result = res.responseObject.responseData;
+              if(result.mobile&&result.mobile.length>0){
+                if(result.uniteFlagWeixin == 1){
+                  console.log("该用户已绑定手机号（微信）");
+                  obj.callBack && obj.callBack();
+                }else{
+                  let url = `${window.location.origin}${window.location.pathname}?customerId=${data}`;
+                  this.wxBind(url);
+                }
+              }else{
+                if(api.getPara().wxState == 2){
+                  console.log("绑定失败");
+                  obj.failCallBack && obj.failCallBack();
+                }else{
+                  localStorage.setItem("backUrl",window.location.href);
+                  window.location.href = `/dist/mLogin.html?customerId=${data}`;
+                }
+              }
+            }else{
+              console.log("获取个人信息失败");
+            }
+          }).catch((err)=>{
+            console.log(err)
+          })
+        }else{
+          if(api.getPara().wxState == 0){
+            console.log("绑定微信成功");
+            obj.callBack && obj.callBack();
+          }else if(api.getPara().wxState == 1){
+            console.log("您已绑定其他用户");
+          }else if(api.getPara().wxState == 2){
+            console.log("绑定失败");
+            obj.failCallBack && obj.failCallBack();
+          }else{
+            localStorage.setItem("backUrl",window.location.href);
+            window.location.href = `/dist/mLogin.html`;
+          }
+        }
       })
+    }else{
+      obj.callBack && obj.callBack();
     }
   }
-  wxBind() {
+  wxBind(url) {
     let appId = "",XHRUrl = "",envCode = "";
-    // localStorage.setItem('protoUrl',window.location.origin + window.location.pathname + window.location.search);
     if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
       return false;
     }
@@ -49,13 +98,19 @@ class Wxbinding {
     }
 
 
-    let encodeUrl = XHRUrl + "?ref=" + window.location.href.split('#')[0] + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
+    let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     // alert(encodeUrl);
-    if(!api.getPara().code){
+    if(api.getPara().code || api.getPara().openId){
+      console.log("正在支付重定向");
+    }else{
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }
   }
+
+
+
+
 }
 
 export default new Wxbinding();

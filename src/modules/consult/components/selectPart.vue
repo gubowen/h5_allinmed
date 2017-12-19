@@ -1,45 +1,47 @@
 <template>
   <div data-alcode-mod='710' style="height:100%" :class="{'isMB':!isWeChat}">
-    <section class="main-inner select-part"  @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
-    <header class="part-select-title">
-      <h3>点选最不适部位：</h3>
-    </header>
-    <section class="main-inner-content">
-      <section class="body-picture body-picture-f" :class="pointClassObject">
-        <figure class="body-picture-content">
-          <img class="body-picture-img" :src="patientBody" alt="">
-          <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
-          <img v-for="item in imgArray" :src="item">
-          <section class="pain-point-box">
-            <div class="pain-point"
-                 v-for="(item , pIndex) in pointList.front"
-                 @click="selectPartToSecond(pIndex,'show')">
-            </div>
-          </section>
-          <!--<section class="hide-point-box">-->
+    <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
+      <header class="part-select-title">
+        <h3>点选最不适部位：</h3>
+      </header>
+      <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
+        <section class="body-picture body-picture-f" :class="pointClassObject">
+          <figure class="body-picture-content">
+            <img class="body-picture-img" :src="patientBody" alt="">
+            <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
+            <img v-for="item in imgArray" :src="item">
+            <section class="pain-point-box">
+              <div class="pain-point"
+                   v-for="(item , pIndex) in pointList.front"
+                   @click="selectPartToSecond(pIndex,'show')">
+              </div>
+            </section>
+            <!--<section class="hide-point-box">-->
             <!--<div class="hide-point"-->
-                 <!--v-for="(item,hIndex) in hidePoint.front"-->
-                 <!--@click="selectPartToSecond(hIndex,'hide')"-->
-                 <!--:class="{on:currentHindex===hIndex}">-->
+            <!--v-for="(item,hIndex) in hidePoint.front"-->
+            <!--@click="selectPartToSecond(hIndex,'hide')"-->
+            <!--:class="{on:currentHindex===hIndex}">-->
             <!--</div>-->
-          <!--</section>-->
-        </figure>
+            <!--</section>-->
+          </figure>
+        </section>
+        <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
       </section>
-      <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
-    </section>
 
-    <loading v-show="finish"></loading>
-    <transition name="fade">
-      <!--<section class="btnBox-tips maskers show" vertical="" v-if="secondShow" @click="secondShow=false">-->
+      <loading v-show="finish"></loading>
+      <transition name="fade">
+        <!--<section class="btnBox-tips maskers show" vertical="" v-if="secondShow" @click="secondShow=false">-->
         <section class="part-box" :class="clickDirection" v-if="secondShow" @click.stop="secondShow=true">
           <!--<article><h2>请再确认一下不适部位</h2></article>-->
-          <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList" @click="ensurePart(index)">{{item.partName}}</a>
+          <a class="btnBox-btn btn-hollow" :class="{'on':index == currentThreeLevel}" v-for="(item,index) in secondList"
+             @click="ensurePart(index)">{{item.partNameAlias}}</a>
           <a class="btnBox-btn btn-confirm" @click='surePart' data-alcode='e126'>确认</a>
         </section>
-      <!--</section>-->
-    </transition>
-    <backPopup v-if="backPopupShow"  :backPopupShow.sync="backPopupShow" :backPopupParams = "{patientParams:patientParams}"></backPopup>
-  </section>
+        <!--</section>-->
+      </transition>
+      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
+                 :backPopupParams="{patientParams:patientParams}"></backPopup>
+    </section>
   </div>
   <!--@backSuccess="backSuccessBack" @docCallBack="docStatusChange"-->
 </template>
@@ -56,21 +58,24 @@
   import api from "common/js/util/util";
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
 
-  export default{
+  export default {
 
     data() {
       return {
-        isWeChat:true, //是否是微信
-        patientParams:{
-          customerId:api.getPara().customerId,
-          doctorId:api.getPara().doctorId,
+        isWeChat: true, //是否是微信
+        patientParams: {
+          customerId: api.getPara().customerId,
+          doctorId: api.getPara().doctorId,
         },
-        backPopupShow:'',
-        clickDirection:"right",//用户点击的方向
+        dpr: window.devicePixelRatio,
+        isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+        backPopupShow: '',
+        clickDirection: "right",//用户点击的方向
         bodyImg: { //人体图像集合
           man: {
 //            front: require('../../../common/image/img00/patientConsult/body_man_front.png'),
@@ -143,13 +148,13 @@
             '1502699009330',//23
           ],
         },
-        imgArray:[],//选择部位热点图片数组
+        imgArray: [],//选择部位热点图片数组
         patientMessage: {},  //患者基本信息...由Router.params传递
         direction: "back", //人体朝向...驱动点位切换
         finish: false,  //加载态
-        currentType:"",//当前患者类型
-        currentTwoLevel:-1,//当前二级部位
-        currentThreeLevel:0,//当前三级部位
+        currentType: "",//当前患者类型
+        currentTwoLevel: -1,//当前二级部位
+        currentThreeLevel: 0,//当前三级部位
         currentPindex: -1,//当前显示热区点
 //        currentHindex: -1,//当前隐藏热区点
         secondShow: false,//二级问题显示状态钩子
@@ -158,16 +163,16 @@
     },
     mounted() {  //渲染启动...接收上一页携带路由参数体
       // 检测是否是微信
-      siteSwitch.weChatJudge(()=>{
+      siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
-      },()=>{
+      }, () => {
         this.isWeChat = false;
       });
       this.patientMessage = this.$route.query;
       document.title = "选择部位";
-      this.currentType = this.patientType ();
+      this.currentType = this.patientType();
       localStorage.removeItem("hasCome");
-      if (localStorage.getItem("PCIMLinks")!==null) {
+      if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
       } else {
         this.backPopupShow = false;
@@ -175,7 +180,7 @@
       api.forbidShare();
     },
     computed: {
-      patientBody(){   //反应数据驱动...获取人体性别年龄
+      patientBody() {   //反应数据驱动...获取人体性别年龄
         const age = parseInt(this.patientMessage.age);
         const sex = parseInt(this.patientMessage.sex);
         if (age <= 12) {
@@ -200,9 +205,9 @@
       }
     },
     props: {},
-    beforeRouteLeave   (to, from, next){
+    beforeRouteLeave(to, from, next) {
       if (to.name === "addPatient") {
-        if (localStorage.getItem("PCIMLinks")!==null) {
+        if (localStorage.getItem("PCIMLinks") !== null) {
           localStorage.removeItem("PCIMLinks");
           this.pageLeaveEnsure = true;
         }
@@ -210,7 +215,7 @@
       next(this.pageLeaveEnsure)
     },
     methods: {
-      patientType () { //患者基本类型
+      patientType() { //患者基本类型
         const age = parseInt(this.patientMessage.age);
         const sex = parseInt(this.patientMessage.sex);
         if (age <= 12) {
@@ -224,7 +229,7 @@
         }
       },
       turnDirection() { //翻转图片
-        this.imgArray=[];
+        this.imgArray = [];
         if (this.direction === "front") {
           this.direction = "back";
         } else {
@@ -232,39 +237,39 @@
         }
       },
       //获取用户点击屏幕左右还是右侧
-      leftRightClick () {
-        let frontFlag = [1,3,5,7,9,11,13,15,17,19];//根据正面可点区域的顺序总结的；
-        let backFlag = [1,3,5,7,9,11,13,15,17];//根据背面可点区域的顺序总结的；
-        switch (this.direction){
+      leftRightClick() {
+        let frontFlag = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];//根据正面可点区域的顺序总结的；
+        let backFlag = [1, 3, 5, 7, 9, 11, 13, 15, 17];//根据背面可点区域的顺序总结的；
+        switch (this.direction) {
           case "front":
-            frontFlag.indexOf(this.currentPindex) === -1 ?this.clickDirection="right":this.clickDirection="left";
+            frontFlag.indexOf(this.currentPindex) === -1 ? this.clickDirection = "right" : this.clickDirection = "left";
             break;
           case "back":
-            backFlag.indexOf(this.currentPindex) === -1 ?this.clickDirection="right":this.clickDirection="left";
+            backFlag.indexOf(this.currentPindex) === -1 ? this.clickDirection = "right" : this.clickDirection = "left";
             break;
           default:
             break;
         }
       },
       //获取左侧还是右侧部位
-      leftRightPart () {
+      leftRightPart() {
         let result = "0";//默认都需要传双侧；
-        let frontFlag = [1,3,5,7,9,11,13,15,17,19];//根据正面可点区域的顺序总结的；
-        let backFlag = [1,3,5,7,9,11,13,15,17];//根据背面可点区域的顺序总结的；
-        switch (this.direction){
+        let frontFlag = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];//根据正面可点区域的顺序总结的；
+        let backFlag = [1, 3, 5, 7, 9, 11, 13, 15, 17];//根据背面可点区域的顺序总结的；
+        switch (this.direction) {
           case "front":
 //            frontFlag.indexOf(this.currentPindex)?(return result + ",1"):(return result + ",2");
-            if (frontFlag.indexOf(this.currentPindex) === -1 ){
+            if (frontFlag.indexOf(this.currentPindex) === -1) {
               return result + ",2"
-            } else{
+            } else {
               return result + ",1"
             }
             break;
           case "back":
 //            backFlag.indexOf(this.currentPindex)?(return result + ",2"):(return result + ",1");
-            if (backFlag.indexOf(this.currentPindex) === -1 ){
+            if (backFlag.indexOf(this.currentPindex) === -1) {
               return result + ",1"
-            } else{
+            } else {
               return result + ",2"
             }
             break;
@@ -293,8 +298,8 @@
             isValid: "1",
             firstResult: "0",
             maxResult: "9999",
-            directionId	:that.direction === "front" ? "0":"1",//string方向0-正面1-反面
-            positionIdList:that.leftRightPart(),//	string位置0-双侧1-左侧2-右侧
+            directionId: that.direction === "front" ? "0" : "1",//string方向0-正面1-反面
+            positionIdList: that.leftRightPart(),//	string位置0-双侧1-左侧2-右侧
           },
           beforeSend(config) {
             this.finish = true;
@@ -315,7 +320,7 @@
           }
         })
       },
-      partImg () {
+      partImg() {
         let that = this;
         that.imgArray = [];
         //初始的思路，图片全部展示
@@ -323,12 +328,12 @@
 //          that.imgArray.push(require('../../../common/image/img00/patientConsult/'+ that.currentType +'/'+ that.direction +'/'+ item.partId +".png"))
 //        } )
         //之后的思路，默认第一个展示
-        that.imgArray=[require('../../../common/image/img00/patientConsult/'+ that.currentType +'/'+ that.direction +'/'+ that.secondList[0].partId +".png")];
+        that.imgArray = [require('../../../common/image/img00/patientConsult/' + that.currentType + '/' + that.direction + '/' + that.secondList[0].partId + ".png")];
       },
       ensurePart(index) { //二级部位选取...路由数据驱动症状选择启动加载...
         let that = this;
         that.currentThreeLevel = index;
-        that.imgArray=[require('../../../common/image/img00/patientConsult/'+ that.currentType +'/'+ that.direction +'/'+ that.secondList[index].partId +".png")];
+        that.imgArray = [require('../../../common/image/img00/patientConsult/' + that.currentType + '/' + that.direction + '/' + that.secondList[index].partId + ".png")];
 //        this.$router.push({
 //          name: "discription",
 //          query: {
@@ -342,7 +347,7 @@
 //          },
 //        })
       },
-      surePart () {
+      surePart() {
         localStorage.removeItem("selectList");
         localStorage.removeItem("secondList");
         localStorage.removeItem("questionList");
@@ -355,7 +360,7 @@
             patientId: this.patientMessage.patientId,
             partId: this.secondList[this.currentThreeLevel].partId,
             count: this.$route.query.count,
-            from:this.$route.name
+            from: this.$route.name
           },
         })
       },
@@ -380,20 +385,21 @@
    * Created by qiangkailiang on 2017/2/23
    */
   /*新版本三级选项样式*/
-  .isMB{
+  .isMB {
     padding-bottom: rem(100px);
   }
-  .part-box{
-    background-color: rgba(255,255,255,0);
+
+  .part-box {
+    background-color: rgba(255, 255, 255, 0);
     position: absolute;
     top: rem(130px);
-    &.left{
+    &.left {
       left: rem(24px);
     }
-    &.right{
-      right:rem(24px);
+    &.right {
+      right: rem(24px);
     }
-    .btnBox-btn{
+    .btnBox-btn {
       display: block;
       width: rem(200px);
       padding: rem(24px) 0;
@@ -401,31 +407,32 @@
       opacity: 0.7;
       background: #FFFFFF;
       border: 1px solid #E0E0E0;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.10);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10);
       border-radius: rem(8px);
       line-height: 1;
       @include font-dpr(15px);
       color: #555555;
-      &.on{
-        border: 1px solid rgba(7,182,172,0.50);
+      &.on {
+        border: 1px solid rgba(7, 182, 172, 0.50);
         color: #07B6AC;
         font-weight: bold;
       }
-      &.btn-confirm{
+      &.btn-confirm {
         background: #2FC5BD;
         color: #ffffff;
         border: 1px solid #2FC5BD;
         opacity: 1;
       }
     }
-    .btnBox-btn + .btnBox-btn{
+    .btnBox-btn + .btnBox-btn {
       margin-top: rem(8px);
     }
   }
 
-  .main-inner{
+  .main-inner {
     height: 100%;
   }
+
   .main-inner.select-part {
     background-color: #fff;
   }
@@ -442,6 +449,10 @@
   .main-inner-content {
     border: none;
     display: block;
+    &.androidScale {
+      transform: translateY(5%) scale(0.9);
+    }
+
   }
 
   .part-select-title {
@@ -461,11 +472,11 @@
   .body-picture {
     margin-top: rem(0px);
     height: 100%;
-    &.front{
+    &.front {
       background: url("../../../common/image/img00/patientConsult/front_bg.png") no-repeat left bottom;
       background-size: cover;
     }
-    &.back{
+    &.back {
       background: url("../../../common/image/img00/patientConsult/back_bg.png") no-repeat left bottom;
       background-size: cover;
     }
@@ -864,13 +875,13 @@
         bottom: 8.6rem;
       }
       &:nth-child(9) {
-        left:  1.7rem;
+        left: 1.7rem;
         width: 1.4rem;
         height: 1.4rem;
         bottom: 7rem;
       }
       &:nth-child(10) {
-        right:  1.7rem;
+        right: 1.7rem;
         width: 1.4rem;
         height: 1.4rem;
         bottom: 7rem;
@@ -1026,13 +1037,13 @@
         bottom: 8.6rem;
       }
       &:nth-child(9) {
-        left:  1.7rem;
+        left: 1.7rem;
         width: 1.4rem;
         height: 1.4rem;
         bottom: 7rem;
       }
       &:nth-child(10) {
-        right:  1.7rem;
+        right: 1.7rem;
         width: 1.4rem;
         height: 1.4rem;
         bottom: 7rem;
@@ -1100,7 +1111,7 @@
       }
       &:nth-child(23) {
         left: 50%;
-        margin-left:  -0.9rem;
+        margin-left: -0.9rem;
         bottom: 11.1rem;
         width: 1.8rem;
       }
@@ -1161,7 +1172,7 @@
         bottom: 7.8rem;
       }
       &:nth-child(6) {
-        right:2.6rem;
+        right: 2.6rem;
         bottom: 7.8rem;
       }
       &:nth-child(7) {
@@ -1185,13 +1196,13 @@
         bottom: 5.6rem;
       }
       &:nth-child(11) {
-        left:  3.4rem;
+        left: 3.4rem;
         width: 1.5rem;
         height: 1rem;
         bottom: 5.3rem;
       }
       &:nth-child(12) {
-        right:  3.4rem;
+        right: 3.4rem;
         width: 1.5rem;
         height: 1rem;
         bottom: 5.3rem;
@@ -1217,13 +1228,13 @@
         bottom: 2.8rem;
       }
       &:nth-child(17) {
-        left:  2.8rem;
+        left: 2.8rem;
         width: 1.4rem;
         height: 1.2rem;
         bottom: 1.7rem;
       }
       &:nth-child(18) {
-        right:  2.8rem;
+        right: 2.8rem;
         width: 1.4rem;
         height: 1.2rem;
         bottom: 1.7rem;
@@ -1238,7 +1249,7 @@
       }
       &:nth-child(21) {
         left: 50%;
-        margin-left:-0.9rem;
+        margin-left: -0.9rem;
         width: 1.8rem;
         bottom: 6.8rem;
       }
@@ -1334,7 +1345,7 @@
         bottom: 7.8rem;
       }
       &:nth-child(6) {
-        right:2.6rem;
+        right: 2.6rem;
         bottom: 7.8rem;
       }
       &:nth-child(7) {
@@ -1358,13 +1369,13 @@
         bottom: 5.6rem;
       }
       &:nth-child(11) {
-        left:  3.4rem;
+        left: 3.4rem;
         width: 1.5rem;
         height: 1rem;
         bottom: 5.2rem;
       }
       &:nth-child(12) {
-        right:  3.4rem;
+        right: 3.4rem;
         width: 1.5rem;
         height: 1rem;
         bottom: 5.2rem;
@@ -1390,13 +1401,13 @@
         bottom: 2.8rem;
       }
       &:nth-child(17) {
-        left:  2.8rem;
+        left: 2.8rem;
         width: 1.4rem;
         height: 1.2rem;
         bottom: 1.7rem;
       }
       &:nth-child(18) {
-        right:  2.8rem;
+        right: 2.8rem;
         width: 1.4rem;
         height: 1.2rem;
         bottom: 1.7rem;
@@ -1430,7 +1441,7 @@
       }
       &:nth-child(23) {
         left: 50%;
-        margin-left:  -0.9rem;
+        margin-left: -0.9rem;
         bottom: 9.2rem;
         width: 1.8rem;
       }

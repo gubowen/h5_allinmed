@@ -15,9 +15,14 @@ const logOut = (status) =>{
     timeout: 20000,
     done(data) {
       if(data&&data.responseObject&&data.responseObject.responseStatus){
+        localStorage.removeItem("hasCloseAttention");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("mobile");
+        localStorage.removeItem("logoUrl");
+        localStorage.setItem("backUrl",window.location.href);
         status.loginOnOff = false;
         status.customerName = '';
-        localStorage.removeItem("hasCloseAttention");
       }
     },
     fail(err){
@@ -40,6 +45,9 @@ const mutaions = {
   },
   changeCodeState(state,status){
     state.codeState = status;
+  },
+  changeIsExistPwd(state){
+    state.isExistPwd = true;
   },
   getValidCode(state){
     let param = {

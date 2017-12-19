@@ -54,6 +54,7 @@ export default {
         if (userId) {
           this.historyUrl = `/dist/myConsult.html?customerId=${userId}`;
         } else {
+          localStorage.setItem("backUrl",window.location.href);
           this.historyUrl = "/dist/mLogin.html";
         }
       }
@@ -106,6 +107,7 @@ export default {
     flex: 1;
     justify-content: space-between;
     align-content: center;
+    display: block;
     .tabbar-item {
       @include font-dpr(11px);
       color: #97a0b7;

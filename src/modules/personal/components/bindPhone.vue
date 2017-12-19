@@ -2,7 +2,7 @@
   <section class="allinmed-personal-changePhone">
     <section class="allinmed-personal-tableModule">
       <article class="allinmed-changeMobileContent">
-        <figcaption>绑定手机能够保证你的账号安全，随时找回发布的图片</figcaption>
+        <figcaption>请输入新手机号</figcaption>
       </article>
       <article class="allinmed-personal-tableModuleItem">
         <figure class="allinmed-tableModuleItemInput">
@@ -22,7 +22,13 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
-
+  .allinmed-mainInner{
+    .allinmed-personal-changePhone{
+      min-height: auto;
+      height: auto;
+      padding:0;
+    }
+  }
   .allinmed-personal-changePhone {
     position: absolute;
     top: rem(20px);

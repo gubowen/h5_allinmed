@@ -17,7 +17,7 @@
         </span>
       </section>
     </section>
-    <router-link class="allinmed-personal-changePsw" tag="section" to="/changePsw">
+    <router-link class="allinmed-personal-changePsw" tag="section" :to="'/'+pswRouterLink">
       <span class="title">修改密码</span>
       <span class="jump"></span>
     </router-link>
@@ -115,7 +115,10 @@
   import api from "common/js/util/util";
   export default  {
     computed:{
-      ...mapGetters(['weixinName','customerPhoneNum'])
+      ...mapGetters(['weixinName','customerPhoneNum','isExistPwd']),
+      pswRouterLink(){
+        return (this.isExistPwd)?"changePsw":"createPsw";
+      }
     },
     methods:{
       ...mapActions(['changePhoneNum']),

@@ -43,6 +43,9 @@ const getters = {
   },
   phoneNum(state){
     return state.phoneNum;
+  },
+  isExistPwd(state){
+    return state.isExistPwd;
   }
 };
 export default getters;

@@ -19,21 +19,25 @@
               @blur="validateBlur('phone')"
               @input="onKeyPress()"
               v-model="phoneMessage"
+              :class="{'hasContent':phoneMessage.length>0}"
               >
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
             </p>
             <p class="codeInput">
               <input type="number"
               placeholder="请输入验证码"
               v-model="codeMessage"
               @blur="validateBlur('codeInput')"
-              v-validate="'required|digits:4'"
+              v-validate="'required'"
               @input="codeKeyPress()"
               name="codeInput"
+              :class="{'hasContent':codeMessage.length>0}"
               >
-              <span class="getCode" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
-              <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
+              <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = ""'></i>
+              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
+              <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" @click.prevent="validLogin()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">账号密码登录</span>
             </article>
@@ -43,15 +47,17 @@
         <li class="accountLogin" v-show="loginStyle == 'account'">
           <form class="formBox">
             <p class="phoneInput">
-              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage">
+              <input type="number" placeholder="请输入手机号" name="account" v-validate="'required|mobile'" @blur="accountValidateBlur('account')" @input="onKeyPress()" v-model="phoneMessage" :class="{'hasContent':phoneMessage.length>0}">
+              <i class="icon-clear" v-if='phoneMessage.length' @click='phoneMessage = ""'></i>
             </p>
-            <p class="codeInput">
-              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @blur="accountValidateBlur('password')" v-model="password">
+            <p class="codeInput password">
+              <input type="number" placeholder="请输入密码" :type="pwHide?'password':'text'" name="password" v-validate="'required|password'" @input="onKeyPressPassWord()" @blur="accountValidateBlur('password')" v-model="password" :class="{'hasContent':password.length>0}">
+              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
               <i class="icon-eyesStatus fr"
               @click="pwHide=!pwHide"
-               :class="{'hide':pwHide}"></i>
+               :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
-            <button class="loginButton" :class="{'on':allPass}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
@@ -59,7 +65,7 @@
           </form>
         </li>
       </ul>
-      <wechatLead></wechatLead>
+      <wechatLead v-if="isBroswer"></wechatLead>
     </section>
     <vConfirm v-if="confirmFlag" :confirmParams="{
       title:'该手机号尚未注册',
@@ -85,6 +91,7 @@ import "babel-polyfill";
 import SendCode from "common/js/auth/sendCode";
 import ValidCodeLogin from "common/js/auth/validCodeLogin";
 import PasswordLogin from "common/js/auth/passwordLogin";
+import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
 
 const sendCode = new SendCode();
 const validCodeLogin = new ValidCodeLogin();
@@ -93,18 +100,20 @@ const XHRList = {};
 export default {
   data() {
     return {
-      confirmFlag: false,  //confirm 框的显示隐藏
+      confirmFlag: false, //confirm 框的显示隐藏
       loginStyle: "phone", //登录方式
-      errorShow: false,    //toast 框是否显示
-      errorMsg: "",        // toast 框提示语
-      phoneMessage: "",    //手机号码
-      codeMessage: "",     //验证码
-      password: "",        //密码
-      pwHide: true,        //密码可见
-      codeTime: 0,         //验证码有效时间
+      errorShow: false, //toast 框是否显示
+      errorMsg: "", // toast 框提示语
+      phoneMessage: "", //手机号码
+      codeMessage: "", //验证码
+      password: "", //密码
+      pwHide: true, //密码可见
+      codeTime: 0, //验证码有效时间
       getCode: true,
       imgUrl: "",
-      submitDisable:true,  //是否可点
+      submitDisable: true, //是否可点
+      isClick: false,
+      isBroswer: false,
       toastImg: {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
@@ -112,10 +121,10 @@ export default {
       allPass: false,
       params: {
         codeCheck: {
-          validCode: "",  //string	是	验证码CODE
-          codeId: "",     //string	是	验证码主键
+          validCode: "", //string	是	验证码CODE
+          codeId: "", //string	是	验证码主键
           //              isValid: 1,       //	string	是	修改验证码信息
-          account: "",    //string	是	手机号
+          account: "", //string	是	手机号
           customerId: "",
           mobile: "",
           isCheckMobile: 1,
@@ -167,6 +176,7 @@ export default {
         !this.errors.has("codeInput")
       ) {
         this.allPass = true;
+        this.isClick = true;
       } else {
         this.allPass = false;
         if (this.errors.has(name)) {
@@ -184,6 +194,7 @@ export default {
         !this.errors.has("password")
       ) {
         this.allPass = true;
+        this.isClick = true;
       } else {
         this.allPass = false;
         if (this.errors.has(name)) {
@@ -212,8 +223,29 @@ export default {
     //4位验证码截取
     codeKeyPress() {
       let content = this.codeMessage;
+      this.$validator.validateAll();
+      console.log(content.length);
       if (api.getByteLen(content) > 4) {
         this.codeMessage = api.getStrByteLen(content, 4);
+      } else if (content.length == 4) {
+        if (!this.errors.has("phone")) {
+          this.isClick = true;
+        }
+      } else {
+        this.isClick = false;
+      }
+    },
+    //密码输入长度检测（6 ~ 20位）
+    onKeyPressPassWord() {
+      let _password = this.password;
+      console.log(api.getByteLen(_password));
+      if (_password.length > 5) {
+        this.$validator.validateAll();
+        if (!this.errors.has("account")) {
+          this.isClick = true;
+        }
+      } else {
+        this.isClick = false;
       }
     },
     //获取验证码
@@ -296,13 +328,32 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-              localStorage.setItem("userId", _obj.customerId);
-              localStorage.setItem("userName", _obj.nickName);
-              localStorage.setItem("mobile", _obj.mobile);
-              localStorage.setItem("logoUrl", _obj.headUrl);
-              this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = document.referrer;
-              });
+              if (
+                api.getPara().customerId &&
+                api.getPara().customerId.length > 0
+              ) {
+                if (data.responseObject.responsePk == api.getPara().customerId) {
+                  localStorage.setItem("userId", _obj.customerId);
+                  localStorage.setItem("userName", _obj.nickName);
+                  localStorage.setItem("mobile", _obj.mobile);
+                  localStorage.setItem("logoUrl", _obj.headUrl);
+                  this.toastComm("登录成功，即将返回来源页面", () => {
+                    // window.location.href = document.referrer;
+                    window.location.href = localStorage.getItem("backUrl");
+                  });
+                } else {
+                  this.toastComm("该手机已注册，请更换其他手机！");
+                }
+              } else {
+                localStorage.setItem("userId", _obj.customerId);
+                localStorage.setItem("userName", _obj.nickName);
+                localStorage.setItem("mobile", _obj.mobile);
+                localStorage.setItem("logoUrl", _obj.headUrl);
+                this.toastComm("登录成功，即将返回来源页面", () => {
+                  // window.location.href = document.referrer;
+                  window.location.href = localStorage.getItem("backUrl");
+                });
+              }
             } else {
               this.toastComm(data.responseObject.responseMessage);
             }
@@ -313,8 +364,8 @@ export default {
     // 帐密登录
     accountLoginFn() {
       let _this = this;
-      _this.submitDisable = false;
       if (this.allPass) {
+        _this.submitDisable = false;
         this.$store.commit("setLoadingState", true);
         passwordLogin
           .loginInit({
@@ -324,24 +375,59 @@ export default {
           .then(data => {
             if (data.responseObject.responseStatus) {
               const _obj = data.responseObject.responseData;
-              localStorage.setItem("userId", _obj.customerId);
-              localStorage.setItem("userName", _obj.nickName);
-              localStorage.setItem("mobile", _obj.mobile);
-              localStorage.setItem("logoUrl", _obj.headUrl);
-              this.toastComm("登录成功，即将返回来源页面", () => {
-                window.location.href = document.referrer;
-              });
+              if (
+                api.getPara().customerId &&
+                api.getPara().customerId.length > 0
+              ) {
+                if (data.responseObject.responsePk == api.getPara().customerId) {
+                  localStorage.setItem("userId", _obj.customerId);
+                  localStorage.setItem("userName", _obj.nickName);
+                  localStorage.setItem("mobile", _obj.mobile);
+                  localStorage.setItem("logoUrl", _obj.headUrl);
+                  this.toastComm("登录成功，即将返回来源页面", () => {
+                    // window.location.href = document.referrer;
+                    window.location.href = localStorage.getItem("backUrl");
+                  });
+                } else {
+                  _this.toastComm("该手机已注册，请更换其他手机！");
+                }
+              } else {
+                localStorage.setItem("userId", _obj.customerId);
+                localStorage.setItem("userName", _obj.nickName);
+                localStorage.setItem("mobile", _obj.mobile);
+                localStorage.setItem("logoUrl", _obj.headUrl);
+                this.toastComm("登录成功，即将返回来源页面", () => {
+                  // window.location.href = document.referrer;
+                  window.location.href = localStorage.getItem("backUrl");
+                });
+              }
             } else {
-              this.toastComm(data.responseObject.responseMessage, ()=>{
+              this.toastComm(data.responseObject.responseMessage, () => {
                 _this.submitDisable = true;
               });
             }
             this.$store.commit("setLoadingState", false);
           });
+      } else {
+        this.$validator.validateAll();
+        if (this.errors.has("account")) {
+          this.toastComm(this.errors.first("account"));
+        } else if (this.errors.has("password")) {
+          this.toastComm(this.errors.first("password"));
+        }
       }
     }
   },
   mounted() {
+    let _this = this;
+    siteSwitch.weChatJudge(
+      ua => {
+        _this.isBroswer = false;
+      },
+      ua => {
+        _this.isBroswer = true;
+      }
+    );
     api.forbidShare();
     this.$validator.updateDictionary({
       en: {
@@ -450,18 +536,56 @@ export default {
     }
     &.phoneInput {
       margin-top: rem(60px);
+      position: relative;
       & > input {
         width: 100%;
+        &.hasContent {
+          @include font-dpr(28px);
+          font-weight: bold;
+        }
+      }
+      .icon-clear {
+        display: inline-block;
+        position: absolute;
+        width: rem(54px);
+        height: rem(54px);
+        top: 50%;
+        margin-top: rem(-27px);
+        right: rem(30px);
+        background: url("../../../common/image/img00/login/close_button.png")
+          center center no-repeat;
+        background-size: rem(38px) rem(38px);
       }
     }
     &.codeInput {
       margin-top: rem(40px);
       @include clearfix();
+      position: relative;
       & > input {
         width: 50%;
         float: left;
+        &.hasContent {
+          @include font-dpr(28px);
+        }
         &.halfWidth {
           width: 50%;
+        }
+      }
+      .icon-clear {
+        display: inline-block;
+        position: absolute;
+        width: rem(54px);
+        height: rem(54px);
+        top: 50%;
+        margin-top: rem(-27px);
+        right: rem(280px);
+        background: url("../../../common/image/img00/login/close_button.png")
+          center center no-repeat;
+        background-size: rem(38px) rem(38px);
+      }
+      &.password {
+        .icon-clear {
+          right: rem(83px);
         }
       }
       span {
@@ -471,10 +595,16 @@ export default {
       }
       .getCode {
         color: #2fc5bd;
+        &.hasContent {
+          margin-top: rem(16px);
+        }
       }
       .codeCountdown {
         width: 50%;
         color: #777777;
+        &.hasContent {
+          margin-top: rem(16px);
+        }
       }
     }
   }
@@ -520,6 +650,9 @@ export default {
   background: url("../../../common/image/img00/login/eyes_open.png") no-repeat;
   background-size: 100% 100%;
   margin-top: rem(5px);
+  &.hasContent {
+    margin-top: rem(20px);
+  }
   &.hide {
     background: url("../../../common/image/img00/login/eyes_close.png")
       no-repeat;

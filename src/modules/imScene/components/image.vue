@@ -5,7 +5,7 @@
       class="main-message-box-item"
       :data-clientid="imageMessage.idClient"
       :class="{'my-message':imageMessage.from===userData.account,
-             'others-message':imageMessage.from===targetData.account}">  
+             'others-message':imageMessage.from===targetData.account}">
      <figure class="main-message-img" v-if="imageMessage.from===targetData.account">
         <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
       </figure>
@@ -14,7 +14,7 @@
       </i>
       <figcaption class="main-message-content image-message">
         <transition name="fade">
-          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg"&&imageMessage.from===userData.account>撤回</button>
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</button>
         </transition>
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">

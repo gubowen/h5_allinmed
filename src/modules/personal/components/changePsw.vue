@@ -12,7 +12,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input :type="pswType" placeholder="请输入当前密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
+          <input :type="pswType" placeholder="请输入至少6位的密码"    v-model="newPassWord" @focus='inputBegin(1)'  @blur='inputEnd'>
           <i class="eye ev_toggleEye " :class='{"eyeClose":!eyeState,"eyeOpen":eyeState,}' style="right:0;margin-right:0;" @click='changeEyeState'></i>
 
         </figure>
@@ -20,7 +20,7 @@
       <article class="allinmed-personal-tableModuleItem">
         <h3>确认新密码</h3>
         <figure class="allinmed-tableModuleItemInput">
-          <input type="password" placeholder="请输入当前密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
+          <input type="password" placeholder="请输入新密码"   v-model="reNewPassWord" @focus='inputBegin(2)'  @blur='inputEnd'>
           <i class="icon-searchCancel" v-show='(cancelIndex===2)&&(reNewPassWord.length>0)'  @click='removeInput(2)'></i>
 
         </figure>
@@ -36,7 +36,12 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
-
+  .allinmed-mainInner{
+  .allinmed-personal-changePsw{
+    min-height: auto;
+    height: auto;
+  }
+  }
   .allinmed-personal-changePsw {
     position: absolute;
     top: rem(20px);
@@ -44,6 +49,8 @@
     width: rem(710px);
     background: #fff;
     border-radius:rem(16px);
+    /*min-height: auto !important;
+    height: auto !important;*/
   }
 </style>
 <script  type="text/ecmascript-6">
@@ -116,12 +123,12 @@
           }
         }else{
           if(t.newPassWord.length<6){
-            t.toast("新密码长度应大于6位");
+            t.toast("新密码长度至少6位");
             // allRight = false;
             return false;
           }
           if(t.newPassWord.length<6){
-            t.toast("新密码长度应大于6位");
+            t.toast("新密码长度至少6位");
             // allRight = false;
             return false;
           }
@@ -165,14 +172,17 @@
               },
               timeout: 20000,
               done(data) {
-                console.log(data);
+                //console.log(data);
                 t.hideLoading();
                 if(data&&data.responseObject&&data.responseObject.responseStatus){
                   console.log(data.responseObject.responseCode,typeof data.responseObject.responseCode)
-                  t.toast("修改密码成功，请重新登录");
+                  t.toast("修改密码成功");
                   clearTimeout(callBackTimer);
                   let callBackTimer = setTimeout(function () {
-                    window.location.href = t.loginUrl;
+                    //window.location.href = t.loginUrl;
+                    t.$router.push({
+                      path: "/personalIndex"
+                    });
                   },2000)
                 }else{
                   if(data.responseObject.responseCode==='0A0005'){
