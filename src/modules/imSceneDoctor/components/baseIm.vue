@@ -705,7 +705,7 @@
           custom: JSON.stringify({
             cType: "1",
             cId: api.getPara().doctorCustomerId,
-            mType: "43",
+            mType: "44",
             conId: this.orderSourceId
           }),
           content: JSON.stringify({
