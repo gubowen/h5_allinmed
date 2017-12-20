@@ -693,6 +693,27 @@
           // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
+            that.sendHistoryTips();
+          }
+        });
+      },
+      sendHistoryTips(){
+        const that=this;
+        this.nim.sendCustomMsg({
+          scene: "p2p",
+          to: this.targetData.account,
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "43",
+            conId: this.orderSourceId
+          }),
+          content: JSON.stringify({
+            type:"getHistoryTip"
+          }),
+          isPushable: false,
+          done(error, msg) {
+            that.sendMessageSuccess(error, msg);
           }
         });
       },
