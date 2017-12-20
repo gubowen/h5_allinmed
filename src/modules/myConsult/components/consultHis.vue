@@ -62,6 +62,7 @@
 <script type="text/ecmascript-6">
 
   import fb from "../../../common/js/third-party/flexible";
+  import Vue from 'vue';
   import loading from "../../../components/loading";
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
@@ -81,7 +82,7 @@
     data() {
       return {
         finish: false,
-        wxTips:true,
+        wxTips:false,
         noFriend: false,
         errorMsg:"",
         errorShow:false,
@@ -145,6 +146,15 @@
           },
           done(response){
             if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
+              siteSwitch.weChatJudge(()=>{
+                console.log("不需弹层")
+              },()=>{
+                if(that.pageStart>0){
+                  that.wxTips = false;
+                }else{
+                  that.wxTips = true;
+                }
+              });
               that.pageStart += that.pageNum;
               let temp = response.responseObject.responseData.dataList;
               that.items = that.items.concat(temp);
