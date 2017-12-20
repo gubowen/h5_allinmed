@@ -591,8 +591,11 @@ export default {
     }
     &.phoneInput {
       margin-top: rem(60px);
+      @include clearfix();
+      // height: rem(116px);
       position: relative;
       & > input {
+        float: left;
         width: 100%;
         &.hasContent {
           @include font-dpr(28px);
