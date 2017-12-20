@@ -12,6 +12,7 @@ import VueRouter from 'vue-router';
 import consultHis from "./components/consultHis"
 import uploadPic from "./components/upLoadPicHis"
 import showBigImg from '../../components/showBigImg';
+import wechat from 'components/followWechat';
 import fastclick from 'fastclick';
 import "static/css/base.css";
 
@@ -62,6 +63,13 @@ class Myconsult {
         meta: {
           keepAlive: false
         },
+      },{
+        path: '/wechat',
+        name: "wechat",
+        meta: {
+          keepAlive: false
+        },
+        component: wechat
       }
     ];
   }

@@ -48,6 +48,14 @@
     </div>
     <loading v-show="finish"></loading>
     <toast :content="errorMsg" v-if="errorShow"></toast>
+    <transition name="fade">
+      <confirm :confirmParams="{
+          'ensure':'去关注',
+          'cancel':'取消',
+          'title':'手机浏览器无法接收和查看医生回复，请关注【唯医互联网骨科医院】官方微信，第一时间接收医生回复'
+          }" v-if="wxTips" @cancelClickEvent="wxTips=false" @ensureClickEvent="toWXchat()">
+      </confirm>
+    </transition>
   </section>
   <!--</loadMore>-->
 </template>
@@ -58,6 +66,7 @@
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
+  import confirm from "components/confirm";
   import wxBind from 'common/js/auth/wxBinding';
   import CheckLogin from 'common/js/auth/checkLogin';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
@@ -72,6 +81,7 @@
     data() {
       return {
         finish: false,
+        wxTips:true,
         noFriend: false,
         errorMsg:"",
         errorShow:false,
@@ -107,6 +117,12 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
+      },
+      toWXchat(){
+        this.wxTips = false;
+        this.$router.push({
+          name:"wechat"
+        })
       },
       onInfinite($state){
         const that = this;
@@ -268,7 +284,7 @@
         siteSwitch.weChatJudge(()=>{
           window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
         },()=>{
-//          alert("关注微信才能看φ(>ω<*)");
+          this.wxTips = true;
         })
       },
       getThisItem(opt){
@@ -289,7 +305,7 @@
             window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
           }
         },()=>{
-//          alert("关注微信才能看φ(>ω<*)");
+          this.wxTips = true;
         })
       },
       goToUploadPic(opt){
@@ -357,6 +373,7 @@
       loading,
       toast,
       loadMore,
+      confirm,
       InfiniteLoading
     }
   }
