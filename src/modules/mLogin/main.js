@@ -34,15 +34,7 @@ class MLogin {
   }
 
   init() {
-    siteSwitch.weChatJudge(
-      ua => {
-        if (!api.getPara().customerId&&!api.getPara().isSubscribe){
-          checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
-        }
-      },
-      ua => {
-      }
-    );
+
 
 
     Vue.use(VueRouter);

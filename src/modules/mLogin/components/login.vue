@@ -93,11 +93,12 @@
   import PasswordLogin from "common/js/auth/passwordLogin";
   import siteSwitch from "../../../common/js/siteSwitch/siteSwitch";
   import Checkbinding from "common/js/auth/checkBinding";
-
+  import CheckSubscribe from "common/js/auth/checkSubscribe";
   const sendCode = new SendCode();
   const validCodeLogin = new ValidCodeLogin();
   const passwordLogin = new PasswordLogin();
   const checkbinding=new Checkbinding();
+  const checkSubscribe=new CheckSubscribe();
   const XHRList = {};
 
   export default {
@@ -471,11 +472,42 @@
         }
       }
     },
-    mounted() {
+    activated(){
       let _this = this;
       siteSwitch.weChatJudge(
         ua => {
           _this.isBroswer = false;
+          if (!api.getPara().customerId&&!api.getPara().isSubscribe){
+            checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
+          }else if (api.getPara().isSubscribe==0){
+            _this.toastComm("您还未关注'唯医互联网骨科医院'微信公众号，请先关注。",()=>{
+              _this.$router.push({
+                path:"/wechat"
+              })
+            });
+
+          }
+        },
+        ua => {
+          _this.isBroswer = true;
+        }
+      );
+    },
+    mounted() {
+      let _this = this;
+
+      siteSwitch.weChatJudge(
+        ua => {
+          _this.isBroswer = false;
+          if (!api.getPara().customerId&&!api.getPara().isSubscribe){
+            checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
+          }else if (api.getPara().isSubscribe==0){
+            _this.toastComm("您还未关注'唯医互联网骨科医院'微信公众号，请先关注。",()=>{
+              _this.$router.push({
+                path:"/wechat"
+              })
+            });
+          }
         },
         ua => {
           _this.isBroswer = true;
