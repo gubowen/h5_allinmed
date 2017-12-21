@@ -34,7 +34,7 @@ export default class CheckSubscribe{
       appId = "wxaa5288ad7f627608";
       XHRUrl = "http://m9.allinmed.cn/mcall/wx/tocure/interact/v1/view/";
     }
-    let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&subscribe=bundingWx#wechat_redirect";
+    let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=subscribe#wechat_redirect";
 
     if(api.getPara().isSubscribe){
       console.log("finish");
