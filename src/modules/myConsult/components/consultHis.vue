@@ -288,7 +288,7 @@
         return result;
       },
       hrefToConsult(){
-        window.location.href = `/dist/consult.html?customerId=${localStorage.getItem("userId") || api.getPara().customerId}`;
+        window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId||localStorage.getItem("userId")}`;
       },
       hrefToSuggest(opt){
         siteSwitch.weChatJudge(()=>{
@@ -316,8 +316,8 @@
               window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
             }
           } else {
-            if (localStorage.getItem("userId") || api.getPara().customerId){
-              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + (localStorage.getItem("userId")||api.getPara().customerId) + '&patientId=' + opt.patientId
+            if (api.getPara().customerId||localStorage.getItem("userId")){
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + (api.getPara().customerId||localStorage.getItem("userId")) + '&patientId=' + opt.patientId
             }else{
               window.location.href='/dist/mLogin.html';
             }
