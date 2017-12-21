@@ -29,9 +29,7 @@ export default class Checkbinding {
         },
         timeout: 10000,
         done(res) {
-          debugger
           if(res&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
-            debugger
             resolve(res.responseObject.responseData.dataList[0].uniteFlagWeixin);
           }else{
             reject("数据错误");
