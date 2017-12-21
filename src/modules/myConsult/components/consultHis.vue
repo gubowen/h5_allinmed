@@ -292,7 +292,7 @@
       },
       hrefToSuggest(opt){
         siteSwitch.weChatJudge(()=>{
-          window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+          window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
         },()=>{
           this.wxTips = true;
         })
