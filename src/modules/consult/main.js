@@ -18,6 +18,7 @@ import upLoadTip from './components/upLoadTip';
 import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
 import followWechat from 'components/followWechat';
+import BodyMessage from "./components/bodyMessage";
 // import vueg from 'vueg'
 // import 'vueg/css/transition-min.css';
 import "static/css/base.css";
@@ -136,6 +137,14 @@ class Consult {
         path: '/selectArea',
         name: "selectArea",
         component: selectArea,
+        meta: {
+          keepAlive: false
+        },
+      },
+      {
+        path: '/bodyMessage',
+        name: "bodyMessage",
+        component: BodyMessage,
         meta: {
           keepAlive: false
         },
