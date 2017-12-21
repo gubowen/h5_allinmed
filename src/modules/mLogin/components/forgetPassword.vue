@@ -224,14 +224,15 @@ export default {
         .then(data => {
           if (data.responseObject.responseStatus) {
             this.toastComm("密码修改成功");
+            const from=api.getPara().from;
             setTimeout(() => {
                if (
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                window.location.href=`/dist/mLogin.html?customerId=${api.getPara().customerId}`;
+                window.location.href=`/dist/mLogin.html?from=${from}&customerId=${api.getPara().customerId}`;
               }else{
-                window.location.href="/dist/mLogin.html";
+                window.location.href=`/dist/mLogin.html?from=${from}`;
               }
             }, 3000);
             this.$store.commit("setLoadingState",false);
