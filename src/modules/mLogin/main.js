@@ -23,6 +23,7 @@ import store from "./store/store";
 import valiadteMethods from '../../common/js/util/validate_methods';
 import CheckSubscribe from "common/js/auth/checkSubscribe";
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
+import api from '../../common/js/util/util';
 // fastclick.attach(document.body);
 
 

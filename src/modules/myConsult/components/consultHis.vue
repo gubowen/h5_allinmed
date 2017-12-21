@@ -316,7 +316,11 @@
               window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
             }
           } else {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
+            if (localStorage.getItem("userId") || api.getPara().customerId){
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + (localStorage.getItem("userId")||api.getPara().customerId) + '&patientId=' + opt.patientId
+            }else{
+              window.location.href='/dist/mLogin.html';
+            }
           }
         },()=>{
           this.wxTips = true;
