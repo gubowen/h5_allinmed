@@ -73,7 +73,7 @@
   import "swiper/dist/css/swiper.css";
   let XHRList = {
     //登录页
-    loginUrl: "/dist/mLogin.html",
+    loginUrl: "/dist/mLogin.html?from=index",
     //问诊
     diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
     //问诊历史
