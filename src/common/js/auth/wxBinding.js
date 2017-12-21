@@ -42,7 +42,11 @@ class Wxbinding {
                   obj.callBack && obj.callBack();
                 }else{
                   let url = `${window.location.origin}${window.location.pathname}?customerId=${data}`;
-                  this.wxBind(url);
+                  if (api.getPara().wxState == 1){
+                    window.location.href="/";
+                  }else{
+                    this.wxBind(url);
+                  }
                 }
               }else{
                 if(api.getPara().wxState == 2){
@@ -65,6 +69,7 @@ class Wxbinding {
             obj.callBack && obj.callBack();
           }else if(api.getPara().wxState == 1){
             console.log("您已绑定其他用户");
+
           }else if(api.getPara().wxState == 2){
             console.log("绑定失败");
             obj.failCallBack && obj.failCallBack();

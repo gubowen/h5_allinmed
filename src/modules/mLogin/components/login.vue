@@ -335,6 +335,7 @@
                 _this.validLoginData();
               }
             }).catch(err=>{
+              _this.toastComm("用户不存在");
               console.log(err);
             });
           },
@@ -411,6 +412,7 @@
                 _this.accountLoginData();
               }
             }).catch(err=>{
+              _this.toastComm("用户不存在");
               console.log(err);
             });
           },
