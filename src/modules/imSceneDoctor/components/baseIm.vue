@@ -693,7 +693,7 @@
           // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
-            that.sendHistoryTips();
+            // that.sendHistoryTips();
           }
         });
       },
