@@ -491,7 +491,7 @@
         ua => {
           _this.isBroswer = false;
           if (!api.getPara().customerId&&!api.getPara().isSubscribe){
-            checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
+            checkSubscribe.check(window.location.href);
           }else if (api.getPara().isSubscribe==0){
             _this.toastComm("您还未关注'唯医互联网骨科医院'微信公众号，请先关注。",()=>{
               _this.$router.push({
