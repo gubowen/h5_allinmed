@@ -693,7 +693,7 @@
           // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
-            // that.sendHistoryTips();
+            that.sendHistoryTips();
           }
         });
       },
@@ -709,7 +709,10 @@
             conId: this.orderSourceId
           }),
           content: JSON.stringify({
-            type:"getHistoryTip"
+            type:"getHistoryTip",
+            data:{
+              caseId:this.targetData.account.substring(2)
+            }
           }),
           isPushable: false,
           done(error, msg) {
