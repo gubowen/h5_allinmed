@@ -7,12 +7,15 @@
       <article class="allinmed-personal-tableModuleItem">
         <figure class="allinmed-tableModuleItemInput">
           <i class="icon-mobile" :class="{'icon-mobile-on':cancelIndex===0}"></i>
-          <input type="text" placeholder="请输入手机号" id="password" v-model='phoneNum' @focus='inputBegin(0)' @blur='inputEnd'  v-validate="'required|mobile'"  name="phone">
-          <i class="icon-searchCancel"  v-show='(cancelIndex===0)&&(phoneNum.length>0)'   @click='removeInput(0)'></i>
+          <input type="text" placeholder="请输入手机号" id="password" v-model='phoneNum' @focus='inputBegin(0)'
+                 @blur='inputEnd' v-validate="'required|mobile'" name="phone">
+          <i class="icon-searchCancel" v-show='(cancelIndex===0)&&(phoneNum.length>0)' @click='removeInput(0)'></i>
         </figure>
       </article>
       <article class="allinmed-personal-tableModuleItem">
-        <button class="btn-primary-lg " :class='{"allinmed-personal-msgWriting":!activeOnOff}' id="save" on="false" @click='saveInfo'>确认</button>
+        <button class="btn-primary-lg " :class='{"allinmed-personal-msgWriting":!activeOnOff}' id="save" on="false"
+                @click='saveInfo'>确认
+        </button>
       </article>
     </section>
     <transition name="fade">
@@ -22,13 +25,15 @@
 </template>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules.scss";
-  .allinmed-mainInner{
-    .allinmed-personal-changePhone{
+
+  .allinmed-mainInner {
+    .allinmed-personal-changePhone {
       min-height: auto;
       height: auto;
-      padding:0;
+      padding: 0;
     }
   }
+
   .allinmed-personal-changePhone {
     position: absolute;
     top: rem(20px);
@@ -36,64 +41,62 @@
     width: rem(710px);
     background: #fff;
     border-radius: rem(16px);
+    .allinmed-personal-tableModule {
+      .allinmed-personal-tableModuleItem {
+        margin-top: rem(30px);
+        margin-bottom: rem(30px);
+        padding-top: 0;
+        .allinmed-tableModuleItemInput {
+          left: 0;
+          width: 100%;
+          input {
+            height: rem(70px);
+            margin-left: rem(10px);
+          }
+          .icon-searchCancel:before {
+            margin-top: rem(26px);
+          }
+        }
 
-  .allinmed-personal-tableModule {
-
-  .allinmed-personal-tableModuleItem {
-    margin-top: rem(30px);
-    margin-bottom: rem(30px);
-    padding-top:0;
-  .allinmed-tableModuleItemInput {
-    left: 0;
-    width: 100%;
-    input{
-      height: rem(70px);
-      margin-left: rem(10px);
+      }
     }
-  .icon-searchCancel:before {
-
-    margin-top: rem(26px);
-  }
-  }
-
-  }
-  }
 
   }
 </style>
-<script  type="text/ecmascript-6">
+<script type="text/ecmascript-6">
   import toast from "components/toast";
   import api from 'common/js/util/util';
-  import {mapGetters,mapActions} from "vuex";
+  import {mapGetters, mapActions} from "vuex";
+
   export default {
-    data(){
+    data() {
       return {
-        phoneNum:"",
-        cancelIndex:-1,
-        errorShow:false,
-        errorMsg:""
+        phoneNum: "",
+        cancelIndex: -1,
+        errorShow: false,
+        errorMsg: ""
       }
     },
-    watch:{
-      phoneNum(newNum,oldNewStr){
+    watch: {
+      phoneNum(newNum, oldNewStr) {
         let t = this;
-        if(newNum.length>11){
+        if (newNum.length > 11) {
           t.phoneNum = oldNewStr;
         }
-          this.changePhoneNum(t.phoneNum);
+        this.changePhoneNum(t.phoneNum);
       },
-      phoneError(newStr){
+      phoneError(newStr) {
         let t = this;
-        if(newStr==='0B0006'){
+        if (newStr === '0B0006') {
           t.toast("手机号已被使用过！");
         }
 
       },
-      codeNum(newStr){
+      codeNum(newStr) {
         let t = this;
-        if(newStr<0){
+        if (newStr < 0) {
           t.toast("一天只能发十次");
-        }else{
+        } else {
           t.$router.push({
             path: "/verificationCode"
           });
@@ -102,7 +105,7 @@
         }
       }
     },
-    mounted(){
+    mounted() {
       api.forbidShare();
       this.phoneNum = this.$store.state.phoneNum;
       this.$validator.updateDictionary({
@@ -117,64 +120,64 @@
         }
       });
     },
-    computed:{
-      ...mapGetters(["customerPhoneNum",'customerId','codeNum','phoneError','codeState']),
-      activeOnOff(){
-        return (this.phoneNum.length===11);
+    computed: {
+      ...mapGetters(["customerPhoneNum", 'customerId', 'codeNum', 'phoneError', 'codeState']),
+      activeOnOff() {
+        return (this.phoneNum.length === 11);
       },
-      allRight(){
+      allRight() {
         let t = this;
-        return (t.activeOnOff)&&(t.phoneNum.length>0)&&(!t.errors.has('phone'))&&(!isNaN(parseInt(t.phoneNum,10)))
+        return (t.activeOnOff) && (t.phoneNum.length > 0) && (!t.errors.has('phone')) && (!isNaN(parseInt(t.phoneNum, 10)))
       }
     },
-    methods:{
-      ...mapActions(["changePhoneNum",'getValidCode','changeCodeState']),
-      inputBegin(index){
+    methods: {
+      ...mapActions(["changePhoneNum", 'getValidCode', 'changeCodeState']),
+      inputBegin(index) {
         this.cancelIndex = index;
       },
-      inputEnd(){
+      inputEnd() {
         this.cancelIndex = -1;
       },
-      removeInput(index){
+      removeInput(index) {
         let arr = ['phoneNum'];
         this[(arr[index])] = '';
       },
-      toast(msg){
+      toast(msg) {
         let t = this;
         this.errorMsg = msg;
         t.errorShow = true;
-        setTimeout(function(){
+        setTimeout(function () {
           t.errorShow = false;
-        },2000);
+        }, 2000);
         return false;
       },
-      saveInfo(){
+      saveInfo() {
         let t = this;
-        if(t.phoneNum.length===0){
+        if (t.phoneNum.length === 0) {
           t.toast("您还没有填写手机号");
           return false;
         }
-        if(isNaN(parseInt(t.phoneNum,10))){
+        if (isNaN(parseInt(t.phoneNum, 10))) {
           t.toast("请输入正确的手机号！");
           return false;
-        }else{
-          if(this.errors.has('phone')){
+        } else {
+          if (this.errors.has('phone')) {
             t.toast("请输入正确的手机号！");
             return false;
           }
         }
-        if(t.allRight){
-          if(t.codeNum===0){
+        if (t.allRight) {
+          if (t.codeNum === 0) {
             t.toast("一天只能发十次");
             return false;
-          }else{
+          } else {
             t.getValidCode();
           }
 
         }
       }
     },
-    components:{
+    components: {
       toast
     }
   }

@@ -145,6 +145,9 @@
             timeout: 20000,
             done(data) {
               if(data&&data.responseObject&&data.responseObject.responseStatus){
+                if (!isNaN(t.$store.state.customerName)){
+                  t.$store.state.customerName=t.$store.state.phoneNum;
+                }
                 t.$store.state.customerPhoneNum = t.$store.state.phoneNum;
                 t.$router.push({
                   path: "/bindAccount"
