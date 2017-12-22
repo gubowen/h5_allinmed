@@ -1190,7 +1190,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "32",
+            mType: "38",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
