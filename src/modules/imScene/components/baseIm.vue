@@ -1507,7 +1507,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "34",
+            mType: "39",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1534,7 +1534,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "0",
+            mType: "40",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({

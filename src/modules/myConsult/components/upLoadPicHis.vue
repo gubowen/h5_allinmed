@@ -431,7 +431,7 @@ export default {
         custom: JSON.stringify({
           cType: "0",
           cId: cd,
-          mType: "0"
+          mType: "40"
         }),
         content: JSON.stringify({
           type: "checkSuggestSendTips",
