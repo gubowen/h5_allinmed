@@ -20,7 +20,7 @@ import ShowBigImg from "components/showBigImg";
 import MedicalReportDetail from "./components/medicalReportDetail";
 
 import store from "./store/store";
-
+import touch from "common/js/customDirective/vTouch";
 import "babel-polyfill";
 
 fastclick.attach(document.body);
