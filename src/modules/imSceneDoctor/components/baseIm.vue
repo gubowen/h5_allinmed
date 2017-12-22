@@ -32,6 +32,14 @@
             <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
             </MiddleTips>
+            <!--消息撤回提示-->
+            <div data-alcode-mod='717' :key="0">
+              <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
+                <figcaption class="first-message">
+                  <p>{{msg.from==="1_doctor00001"?"分诊医生":"您"}}撤回了一条消息</p>
+                </figcaption>
+              </section>
+            </div>
             <!--问诊结束-->
             <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
             </MiddleTips>
@@ -148,6 +156,9 @@
       <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
                 v-if="payPopupShow"></payPopup>
       <Loading v-if="loading"></Loading>
+      <transition name="fade">
+        <Toast :content="toastTips" v-if="toastShow"></Toast>
+      </transition>
     </section>
   </div>
 </template>
@@ -176,6 +187,7 @@
   import ImageContent from "./image";
   import BottomTips from "./bottomTips";
   import MiddleTips from "./middleTips";
+  import Toast from "components/toast";
   import PayFinishTips from "./payFinishTips";
   import PayTypePopup from "./payTypePopup";
   import OutpatientInvite from "./outpatientInvite";
@@ -253,7 +265,9 @@
         sendTextContent: "",
         footerPosition: "main-input-box",
         scrollHeight: document.body.scrollTop,
-        deleteMsgIndex: -1
+        deleteMsgIndex: -1,
+        toastTips: "",
+        toastShow: false,
       };
     },
 
@@ -1638,7 +1652,8 @@
       SendCount,
       AudioMessage,
       VideoMessage,
-      Loading
+      Loading,
+      Toast
     }
   };
 </script>
