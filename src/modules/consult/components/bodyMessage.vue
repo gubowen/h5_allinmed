@@ -14,7 +14,7 @@
               </header>
 
               <figure class="input-area">
-                <textarea class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent"></textarea>
+                <textarea class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent" @input></textarea>
                 <p class="text-num-tips">{{disContent.length}}/1000</p>
               </figure>
             </section>
@@ -28,7 +28,7 @@
 
               <figure class="input-area">
                 <textarea class="input-textarea" placeholder="请输入至少6个字" v-model="helpContent"></textarea>
-                <p class="text-num-tips">{{helpContent}}/1000</p>
+                <p class="text-num-tips">{{helpContent.length}}/1000</p>
               </figure>
             </section>
             <section class="consult-total">
@@ -85,7 +85,25 @@
         isWeChat: true
       }
     },
-    methods: {},
+    methods: {
+      contentLimit(element,limit){
+        let ranges = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi;
+
+        if (ranges.test(this[element])) {
+          this.complication = this[element].replace(ranges, "");
+        }
+        let content = this[element];
+        if (api.getByteLen(content) > 2*limit) {
+          this.complication = api.getStrByteLen(content, 2*limit);
+          this.errorShow = true;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000);
+          this.errorMsg = `最多只能输入${limit}字`;
+          return false;
+        }
+      }
+    },
     mounted() {
       siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
