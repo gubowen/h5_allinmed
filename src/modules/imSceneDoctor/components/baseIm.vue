@@ -454,6 +454,24 @@
           });
         });
       },
+      showFlagDeleteTips(msg) {
+        let flag = false;
+        if (
+          msg.type === "custom" &&
+          JSON.parse(msg.content).type === "deleteMsgTips"
+        ) {
+          flag = true;
+          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+          this.msgList.forEach((element, index) => {
+            if (element.idClient === idClient) {
+              this.msgList.removeByValue(element);
+              return;
+            }
+          });
+          // this.msgList.removeByValue(JSON.parse(msg.content).data.deleteMsg)
+        }
+        return flag;
+      },
       getFirstTargetMsg(msg) {
         if (msg.from === this.targetData.account) {
           this.targetMsg.push(msg);
