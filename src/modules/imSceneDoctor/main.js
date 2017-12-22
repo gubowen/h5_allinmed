@@ -39,7 +39,7 @@ class ImScene {
     //表单验证注册
     //路由系统注册
     Vue.use(VueRouter);
-
+    Vue.use(touch);
     this.routerStart();
     this.registerRouter();
     //Vue实例启动
