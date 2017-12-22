@@ -357,17 +357,18 @@
       //上传图片
       upLoadPic(files, item, index, base64) {
         const that = this;
+        let _localViewUrl = window.URL.createObjectURL(files);
         //本地图片预览处理
         if (typeof index !== "undefined") {
           that["imageList"][index] = {
-            blob: base64,
+            blob: _localViewUrl,
             imgId: "",
             uploading: true,
             fail: false
           };
         } else {
           that["imageList"].push({
-            blob: base64,
+            blob: _localViewUrl,
             imgId: "",
             uploading: true,
             fail: false
