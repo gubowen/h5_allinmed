@@ -828,7 +828,7 @@
           content: JSON.stringify({
             type:"getHistoryTip",
             data:{
-              caseId:this.targetData.account.substring(2)
+              caseId:this.userData.account.substring(2)
             }
           }),
           isPushable: false,
