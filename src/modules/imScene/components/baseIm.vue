@@ -1369,6 +1369,9 @@
             ext: "pdf",
             fileName:_file.name,
           },
+          custom: JSON.stringify({
+            name: _file.name
+          }),
           type: "file",
           from: that.userData.account
         });
@@ -1406,7 +1409,8 @@
                     cType: "0",
                     cId: that.cId,
                     mType: "1",
-                    conId: that.orderSourceId
+                    conId: that.orderSourceId,
+                    name: _file.name
                   }),
                   to: that.targetData.account,
                   file: file,

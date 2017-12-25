@@ -25,7 +25,8 @@
         <section class="file-box">
           <figure class="file-content" @click="seeFile()">
             <img class="file-image" src="../../../common/image/imScene/pdf@3x.png">
-            <figcaption class="file-name">{{fileMessage.file.fileName}}</figcaption>
+            <!-- <figcaption class="file-name">{{fileMessage.file.fileName}}</figcaption> -->
+            <figcaption class="file-name">{{custom.name}}</figcaption>
           </figure>
         </section>
       </figcaption>
@@ -39,7 +40,9 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        custom:null,
+      }
     },
     computed: {
       logoUrl() {
@@ -92,6 +95,8 @@
     },
     mounted() {
       console.log(this.fileMessage)
+      this.custom = JSON.parse(this.fileMessage.custom);
+      console.log(this.custom);
     },
 
   }
