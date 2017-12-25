@@ -36,7 +36,7 @@
     <section class="main-message-box">
       <article class="main-message-box-item others-message">
         <figcaption class="first-message">
-          <p>已通知医生尽快接诊，医生回复将在公众号中即时通知，请保持关注</p>
+          <p>已通知医生尽快接诊，医生回复将在公众号中即时通 知，请保持关注，<span style="color: #07B6AC">48小时未接诊将自动退诊</span></p>
         </figcaption>
       </article>
     </section>

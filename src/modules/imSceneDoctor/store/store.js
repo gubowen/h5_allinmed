@@ -18,7 +18,8 @@ export default new Vuex.Store({
     logoUrl: "",
     lastTime:"",
     lastCount:"",
-    targetMsg:{}
+    targetMsg:{},
+    targetList:[]
   },
   mutations: {
     setConsultation(state, id){
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     setLastCount(state,count){
       state.lastCount=count;
+    },
+    setTargetList(state,param){
+      state.targetList.push(param);
     },
     setLogoUrl(state, param){
       let sex = param.sexName,

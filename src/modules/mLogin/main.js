@@ -39,6 +39,7 @@ class MLogin {
 
     Vue.use(VueRouter);
     Vue.use(VeeValidator);//vue使用验证插件
+
     this.routerStart();
     this.registerRouter();
     //vue路由

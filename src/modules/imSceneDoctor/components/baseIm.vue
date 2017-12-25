@@ -15,6 +15,19 @@
           </article>
         </article>
       </transition>
+      <transition name="fadeDown">
+        <article class="main-message-time doctor-title-message" v-if="getTargetMsgFinish&&!lastTimeShow" @click.stop="goToDoctorHomePage">
+          <figure class="doctor-title-img">
+            <img :src="$store.state.targetMsg.avatar" alt="">
+          </figure>
+          <figcaption class="doctor-title-content">
+            <h4 class="name">{{$store.state.targetMsg.nick}}</h4>
+            <span class="title" v-if="$store.state.targetMsg.title">{{$store.state.targetMsg.title.substring(2)}}</span>
+            <span class="hospital">{{$store.state.targetMsg.hospital}}</span>
+            <i class="icon-rightArrow"></i>
+          </figcaption>
+        </article>
+      </transition>
       <section class="main-message" ref="wrapper"
                :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}">
 
@@ -69,12 +82,12 @@
             </HospitalNotice>
             <!--文本消息-->
             <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
-                         :targetData="targetData"  @deleteMsgEvent="deleteMsgEvent(msg)" @longTouchEmitHandler="deleteMsgIndex=index">
+                         :targetData="targetData"  @deleteMsgEvent="deleteMsgEvent(msg)" @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
             </ContentText>
             <!--图像消息-->
             <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
                           ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
-                          :userData="userData" :targetData="targetData">
+                          :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
             </ImageContent>
             <!-- 视频消息 -->
             <VideoMessage
@@ -82,6 +95,8 @@
               :videoMessage="msg"
               :userData="userData"
               :targetData="targetData"
+              :videoProgress="videoProgress"
+              :currentIndex="index"
             ></VideoMessage>
             <!--音频-->
             <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
@@ -196,6 +211,7 @@
   import SendCount from "./SendCount";
   import AudioMessage from "./audioMessage";
   import VideoMessage from "./video";
+  import MulitpleImage from "./mulitpleImage";
 
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
@@ -233,6 +249,18 @@
           progress: 0,
           index: 0
         },
+        // 视频发送进度
+        videoProgress: {
+          uploading: false,
+          progress: "0%",
+          index: 0
+        },
+        // 文件pdf发送进度
+        fileProgress:{
+          uploading: false,
+          progress: "0%",
+          index: 0
+        },
         onFocus: false,
         inputFlag: true, //上传图片input控制
         loading: true,
@@ -268,6 +296,7 @@
         deleteMsgIndex: -1,
         toastTips: "",
         toastShow: false,
+        getTargetMsgFinish:false
       };
     },
 
@@ -313,19 +342,7 @@
         this.autoSizeTextarea();
       },
       deleteMsgEvent(msg) {
-        // const deleteMsg = new DeleteMsg(this.nim, msg);
-        // const deleteMsgTips = new DeleteMsgTips(
-        //   this.nim,
-        //   this.targetData.account,
-        //   {
-        //     cType: "0",
-        //     cId: this.cId,
-        //     mType: "36",
-        //     conId: this.orderSourceId,
-        //     patientName: this.$store.state.patientName,
-        //     deleteMsg: msg
-        //   }
-        // );
+
         const _DeleteTimeLimit = "2分钟";
         const that = this;
         this.nim.deleteMsg({
@@ -375,27 +392,6 @@
             }
           }
         });
-        // deleteMsg
-        //   .deleteMessage()
-        //   .then(msg => {
-        //     console.log(99999);
-        //     deleteMsgTips.sendDeleteTips().then((tipsMsg, tipsError) => {
-        //       console.log(tipsMsg, tipsError);
-        //       console.log(`撤回消息提示--发送成功`);
-        //       that.sendMessageSuccess(tipsError, tipsMsg);
-        //     });
-        //   })
-        //   .catch((error, msg) => {
-        //     console.log(error);
-        //     console.log(8888);
-        //     if (parseInt(error.code) === 508) {
-        //       this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
-        //       this.toastShow = true;
-        //       setTimeout(() => {
-        //         this.toastShow = false;
-        //       }, 2000);
-        //     }
-        //   });
       },
       connectToNim() {
         const that = this;
@@ -516,6 +512,9 @@
             this.imageList.push(element.imageMessage.file.url);
           });
         }
+      },
+      goToDoctorHomePage(){
+        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' +api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
       },
       getUserBaseData() {
         const that = this;
@@ -674,6 +673,7 @@
       // 四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
       // 因此通过云信SDK获取已经是不安全的方式
       getDoctorMsg(callback) {
+        const that=this;
         api.ajax({
           url: XHRList.getDoctorBaseMsg,
           method: "POST",
@@ -686,10 +686,14 @@
               let dataList = data.responseObject.responseData.dataList[0];
               store.commit("setTargetMsg", {
                 avatar: dataList.logoUrl,
-                nick: dataList.customerName
+                nick: dataList.customerName,
+                title:dataList.medicalTitle,
+                hospital:dataList.company
               });
               document.title = `${dataList.customerName}医生`;
+              that.getTargetMsgFinish=true;
               callback && callback();
+
             }
           }
         });
@@ -697,6 +701,7 @@
       getTargetMessage(element) {
         if (element.from === this.targetData.account) {
           this.targetMsg.push(element);
+          store.commit("setTargetList",element);
         }
       },
       getMedicalMessage() {
@@ -1670,6 +1675,7 @@
       SendCount,
       AudioMessage,
       VideoMessage,
+      MulitpleImage,
       Loading,
       Toast
     }

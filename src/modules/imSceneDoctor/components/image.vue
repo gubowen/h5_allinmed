@@ -4,7 +4,7 @@
              :data-clientid="imageMessage.idClient"
              :class="{'my-message':imageMessage.from===userData.account,
              'others-message':imageMessage.from===targetData.account}">
-      <figure class="main-message-img" v-if="imageMessage.from===targetData.account">
+      <figure class="main-message-img" v-if="imageMessage.from===targetData.account" @click.stop="$emit('clickLogo')">
         <img :src="targetLogo" alt="">
       </figure>
       <i class="fail-button" style="display:none">

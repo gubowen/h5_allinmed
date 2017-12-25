@@ -5,7 +5,7 @@
       :data-clientid="contentMessage.idClient"
       :class="{'my-message':contentMessage.from===userData.account,
              'others-message':contentMessage.from===targetData.account}">
-      <figure class="main-message-img" v-if="contentMessage.from===targetData.account">
+      <figure class="main-message-img" v-if="contentMessage.from===targetData.account" @click.stop="$emit('clickLogo')">
         <img :src="targetLogo" alt="">
       </figure>
       <i class="fail-button" style="display:none">
@@ -16,6 +16,9 @@
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition>
         <p>{{contentMessage.text}}</p>
+        <article class="disclaimer-content" v-if="$store.state.targetList.indexOf(contentMessage)===1&&contentMessage.from===targetData.account">
+          <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+        </article>
       </figcaption>
       <figure class="main-message-img" v-if="contentMessage.from===userData.account">
         <img :src="logoUrl" alt="">
@@ -39,6 +42,7 @@
       };
     },
     mounted(){
+      console.log(this.$store.state.targetList.indexOf(this.contentMessage));
     },
     computed: {
       logoUrl(){
@@ -95,7 +99,19 @@
   .fade-leave-active {
     transition: opacity 0.5s;
   }
-
+  .disclaimer-content{
+    color: #97A8BA;
+    background: #fafafb;
+    @include font-dpr(13px);
+    margin: -0.5rem -0.4rem;
+    margin-top: 0.45333rem;
+    padding: rem(20px) rem(36px);
+    box-sizing: border-box;
+    border-radius: rem(21px);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 2px solid #d8d8d8;
+  }
   .fade-enter,
   .fade-leave-to {
     opacity: 0;
