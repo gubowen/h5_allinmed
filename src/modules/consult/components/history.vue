@@ -1,8 +1,9 @@
 <template>
   <div data-alcode-mod='712'>
     <section class="consult-main-inner">
+      <progerssBar :progerssBarShow.sync="progerssBarShow" :progerssBarParams="{progerssParams:'3'}"></progerssBar>
       <section class="consult-wrapper" v-show="!showSelectHospital&&!showSelectDisease&&!upLoadTip">
-        <span class="consult-page page-two"></span>
+        <!-- <span class="consult-page page-two"></span> -->
         <section class="questionContainMain">
           <section class="questionItem-common isComeCure">
             <p class="questionTitleCommon">有去医院就诊过吗？</p>
@@ -208,6 +209,7 @@ import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import nimEnv from "common/js/nimEnv/nimEnv";
 import imageCompress from "common/js/imgCompress/toCompress";
+import progerssBar from "../components/progressBar";
 
 siteSwitch.weChatJudge(() => {
 _weChat=true;
@@ -256,6 +258,8 @@ export default {
       noWXPayShow: false,
       upLoadTip: false,
       levelShow: false,
+      progerssBarShow: true, //进度条（显示）
+      // progerssNum:'3',
       backPopupShow: false,
       submitTip: false,
       uploading1: false,
@@ -1137,7 +1141,8 @@ export default {
     loading,
     toast,
     confirm,
-    backPopup
+    backPopup,
+    progerssBar
   }
 };
 </script>

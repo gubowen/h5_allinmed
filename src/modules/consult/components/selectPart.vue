@@ -1,5 +1,6 @@
 <template>
   <div data-alcode-mod='710' style="height:100%" :class="{'isMB':!isWeChat}">
+    <progerssBar :progerssBarParams="{progerssParams:'1'}"></progerssBar>
     <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
       <header class="part-select-title">
         <h3>点选最不适部位：</h3>
@@ -58,7 +59,7 @@
   import api from "common/js/util/util";
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
-
+  import progerssBar from "../components/progressBar";
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -161,6 +162,7 @@
         secondList: [] //二级问题数据集合
       }
     },
+
     mounted() {  //渲染启动...接收上一页携带路由参数体
       // 检测是否是微信
       siteSwitch.weChatJudge(() => {
@@ -367,7 +369,8 @@
     },
     components: {
       'loading': loading,
-      backPopup
+      backPopup,
+      progerssBar
     }
 
   }
@@ -463,8 +466,8 @@
     h3 {
       line-height: 1;
       padding: rem(28px) rem(50px);
-      @include font-dpr(14px);
-      color: #07B6AC;
+      @include font-dpr(16px);
+      color: #666666;
       font-weight: normal;
     }
   }
@@ -484,6 +487,7 @@
       position: relative;
       border: none;
       height: 100%;
+      top: -2.4rem;
       & > img {
         position: absolute;
         bottom: 0;
