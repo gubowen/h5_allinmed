@@ -18,13 +18,17 @@
         <figure class="main-message-img">
           <img src="../../../common/image/imScene/chatting_portrait_system@2x.png" alt="">
         </figure>
-        <figcaption class="main-message-content">
+        <figcaption class="medical-report-tips">
           <p v-if="timeSlot">您好！分诊医生正在详细阅读您提交的资料，将尽快给您答复，并根据情况为您推荐对症专家。</p>
           <p v-else-if="!timeSlot">您好！分诊服务时间为09：00-22：00，如有问题请留言，分诊医生上班后会为您答复。</p>
           <!--<p>①  与您沟通分析病情</p>-->
           <!--<p>②  根据病情推荐对症专家</p>-->
           <!--<p>分诊医生通常会在5分钟内回复，请您耐心等候</p>-->
+          <article class="disclaimer-content" >
+            <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+          </article>
         </figcaption>
+
       </article>
     </section>
   </div>
@@ -131,6 +135,33 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped="">
   @import "../../../../scss/library/_common-modules";
+
+  // 问诊单提示术语内容
+  .medical-report-tips{
+    display: inline-block;
+    vertical-align: top;
+    max-width: rem(510px);
+    margin: 0 rem(30px);
+    @include font-dpr(17px);
+    word-break: break-all;
+    box-sizing: border-box;
+    border: 0 solid #E4E9EB;
+    box-shadow: 0 1px 0 0 rgba(204, 204, 204, 0.20);
+    p{
+      background: #FFFFFF;
+      padding: rem(34px) rem(36px);
+      border-top-right-radius: rem(21px);
+    }
+    .tips-content{
+      padding:rem(18px) rem(36px);
+      background: #FAFAFB;
+      color: #97A8BA;
+      @include font-dpr(13px);
+      border-top: 1px solid #D8D8D8;
+      border-bottom-right-radius: rem(21px);
+      border-bottom-left-radius: rem(21px);
+    }
+  }
   //问诊单
   .medical-report-box {
     height: rem(302px);

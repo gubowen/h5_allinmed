@@ -9,7 +9,8 @@
         </p>
       </article>
     </transition>
-    <section class="main-message" ref="wrapper" :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow}">
+    <section class="main-message" ref="wrapper"
+             :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
           <!--时间戳-->
@@ -64,7 +65,7 @@
           </ContentText>
           <!--图像消息-->
           <ImageContent
-            v-if="(msg.type==='file' || msg.type==='image') && msg.file"
+            v-if="(msg.type==='file' || msg.type==='image') && msg.file && msg.file.ext!=='pdf'"
             :imageMessage="msg"
             :nim="nim"
             ref="bigImg"
@@ -77,7 +78,39 @@
             :currentIndex="index"
             :deleteMsgIndex="deleteMsgIndex"
           >
+
           </ImageContent>
+          <!--文件消息-->
+          <FileMessage
+            v-if="msg.type==='file'&&msg.file&&msg.file.ext==='pdf'"
+            :fileMessage="msg"
+            :userData="userData"
+            :targetData="targetData"
+            :currentIndex="index"
+            :deleteMsgIndex="deleteMsgIndex"
+          >
+          </FileMessage>
+          <!-- 图集消息 -->
+          <MulitpleImage
+            v-if="msg.type==='custom' && (JSON.parse(msg.content).type === 'mulitpleImage'||JSON.parse(msg.content).type ==='multipleImage' )"
+            :imageMessage="msg"
+            :userData="userData"
+            :targetData="targetData"
+          >
+
+          </MulitpleImage>
+          <!-- 视频消息 -->
+          <VideoMessage
+            v-if="msg.type==='video' && msg.file"
+            :videoMessage="msg"
+            :userData="userData"
+            :targetData="targetData"
+            :videoProgress="videoProgress"
+            :currentIndex="index"
+          ></VideoMessage>
+          <!--音频-->
+          <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
+          </AudioMessage>
           <!--上传视诊-->
           <section class="main-message-box"
                    v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'triageSendTips'"
@@ -87,7 +120,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="/image/imScene/error_tips.png" alt="">
+                <img src="../../../common/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传视诊资料</p>
@@ -106,7 +139,7 @@
               :data-clientid="msg.idClient"
             >
               <i class="fail-button" style="display:none">
-                <img src="/image/imScene/error_tips.png" alt="">
+                <img src="../../../common/image/imScene/error_tips.png" alt="">
               </i>
               <figcaption class="main-message-content">
                 <p>患者已上传检查资料</p>
@@ -158,31 +191,69 @@
     </payPopup>
     <transition name="fadeUp">
       <footer v-if="inputBoxShow" :class="footerPosition">
-        <section class="main-input-box-plus">
+        <section class="footer-box-top">
+          <section class="main-input-box-plus"@click='footerBottomFlag = footerBottomFlag?false:true'>
           <i class="icon-im-plus"></i>
-          <input type="file" v-if="isIos&&inputFlag"  id="ev-file-send" @change="sendFile($event)"
-                 ref="imageSender" accept="image/*"
-          >
-          <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)"
-                 ref="imageSender" capture="camera"
-                 accept="image/*">
+          <!-- <input type="file" v-if="isIos&&inputImageFlag"  id="ev-file-send" @change="sendFile($event)" ref="imageSender"accept="image/*"
+                accept="image/*">
+          <input type="file" v-if="!isIos&&inputImageFlag"  id="ev-file-send" @change="sendFile($event)" ref="imageSender"
+                 accept="image/*">-->
         </section>
         <figure class="main-input-box-textarea-inner">
           <textarea class="main-input-box-textarea"
                     rows="1"
                     v-model="sendTextContent"
-                    ref="inputTextarea"
+ref="inputTextarea"
                     @focus="focusFn()"
                     @blur="blurFn()"
                     @click="scrollToBottom"
                     @input="inputLimit"
                     @keypress.enter.stop="autoSizeTextarea()">
-
           </textarea>
           <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
           <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
         </figure>
-
+</section>
+        <ul class="footer-box-bottom" v-if="footerBottomFlag">
+          <li class="bottom-item">
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
+                   height="234"/>
+              <figcaption class="bottom-item-description">图片</figcaption>
+            </figure>
+            <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
+                   ref="imageSender"
+                   accept="image/*">
+            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
+                   ref="imageSender" capture="camera"
+                   accept="image/*">
+          </li>
+          <li class="bottom-item">
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
+                   height="234"/>
+              <figcaption class="bottom-item-description">视频</figcaption>
+            </figure>
+            <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+                   ref="videoSender"
+                   accept="video/*">
+            <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+                   ref="videoSender" capture="camera"
+                   accept="video/*">
+          </li>
+          <li class="bottom-item">
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
+              <figcaption class="bottom-item-description">文件</figcaption>
+            </figure>
+            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+                   ref="pdfSender"
+                   accept="application/pdf">
+            <input type="file" v-if="!isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+                   ref="pdfSender"
+                   accept="application/pdf">
+          </li>
+        </ul>
       </footer>
     </transition>
     <confirm :confirmParams="{
@@ -222,12 +293,16 @@
   import MedicalReport from "./medicalReport";
   import ContentText from "./content";
   import ImageContent from "./image";
+  import AudioMessage from "./audioMessage";
+  import VideoMessage from "./video";
   import TimeStamp from "./stamp";
   import PreviewSuggestion from "./previewSuggestion";
   import CheckSuggest from "./checkSuggest";
   import Triage from "./triage";
   import MiddleTips from "./middleTips";
   import PayFinishTips from "./payFinishTips.vue";
+  import MulitpleImage from "./mulitpleImage";
+  import FileMessage from "./fileMessage";
 
   import WxPayCommon from "common/js/wxPay/wxComm";
   import nimEnv from "common/js/nimEnv/nimEnv";
@@ -252,53 +327,62 @@
     updateShunt: "/mcall/customer/case/consultation/v1/createConsultation/" //继续问诊后分流
   };
 
-  const IS_IOS = net.browser().ios;
-  const IS_Android = net.browser().android;
-  export default {
-    data() {
-      return {
-        isIos: navigator.userAgent.toLowerCase().includes("iphone"),
-        nim: {},
-        imageProgress: {
-          uploading: false,
+const IS_IOS = net.browser().ios;
+const IS_Android = net.browser().android;
+export default {
+  data() {
+    return {
+      isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+      nim: {},
+      // 图片发送进度
+      imageProgress: {
+        uploading: false,
           progress: "0%",
           index: 0
         },
-        imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
-        noWXPayShow: false,
-        onFocus: false,
-        inputFlag: true, //上传图片input控制
-        //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
-        imageList: [], //页面图片数组
-        consultationId: "",
-        timeStampShowList: [], //时间戳数组
-        orderSourceId: "",
-        beginTimestamp: 0,
-        finish: true,
-        lastTimeShow: false, //顶部时间的提示和输入框是否展示
-        inputBoxShow: false, //底部是否显示
-        consultTipsShow: false, //购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
-        msgList: [], //消息列表
-        //用户数据
-        userData: {
-          account: "",
-          token: ""
-        },
-        payPopupShow: false, //支付弹窗是否显示
-        isClick: false, //立即咨询按钮是否点击
-        //聊天目标数据
-        targetData: {
-          account: "1_doctor00001"
-        },
-        sendTextContent: "", //文本消息
-        cId: "0", //聊天消息拓展字段的customerId
-        footerPosition: "main-input-box",
-        bfscrolltop: document.body.scrollTop,
-        toastTips: "",
-        toastShow: false,
-        deleteMsgIndex: -1
-      };
-    },
+        // 视频发送进度
+        videoProgress: {uploading: false,
+        progress: "0%",
+        index: 0
+      },
+      imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
+      videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
+        footerBottomFlag: false, // 底部文件选择框是否显示noWXPayShow: false,
+      onFocus: false,
+      inputImageFlag: true, //上传图片input控制
+      inputVideoFlag: true, //上传视频input控制
+        inputPdfFlag: true,//上传pdf文件控制//        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
+      imageList: [], //页面图片数组
+      consultationId: "",
+      timeStampShowList: [], //时间戳数组
+      orderSourceId: "",
+      beginTimestamp: 0,
+      finish: true,
+      lastTimeShow: false, //顶部时间的提示和输入框是否展示
+      inputBoxShow: false, //底部是否显示
+      consultTipsShow: false, //购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
+      msgList: [], //消息列表
+      //用户数据
+      userData: {
+        account: "",
+        token: ""
+      },
+      payPopupShow: false, //支付弹窗是否显示
+      isClick: false, //立即咨询按钮是否点击
+      //聊天目标数据
+      targetData: {
+        account: "1_doctor00001"
+      },
+      sendTextContent: "", //文本消息
+      cId: "0", //聊天消息拓展字段的customerId
+      footerPosition: "main-input-box",
+      bfscrolltop: document.body.scrollTop,
+      toastTips: "",
+      toastShow: false,
+      deleteMsgIndex: -1,
+        mList: []
+    };
+  },
 
     methods: {
       setFooterPosition() {
@@ -322,90 +406,92 @@
           });
         }, 300);
 
-        this.onFocus = true;
-        this.autoSizeTextarea();
+      this.onFocus = true;
+      this.autoSizeTextarea();
+},
 
-      },
-      blurFn() {
-        if (navigator.userAgent.toLowerCase().includes("11")) {
-          this.scrollToBottom();
-        } else {
+    blurFn() {
+      if (navigator.userAgent.toLowerCase().includes("11")) {
+        this.scrollToBottom();
+      } else {
+
           clearInterval(this.interval); //清除计时器
-          setTimeout(() => {
-            document.body.scrollTop = this.bfscrolltop;
-          }, 20);
-        }
-        $(".main-message-time").css({
-          top: 0
-        });
+          setTimeout(() => {document.body.scrollTop = this.bfscrolltop;
+        }, 20);
+      }
+      $(".main-message-time").css({
+        top: 0});
 
-        this.onFocus = false;
-        this.autoSizeTextarea();
-      },
-      //用户连接IM聊天
-      connectToNim() {
-        const that = this;
-        nimEnv().then(nimEnv => {
-          this.nim = NIM.getInstance({
-            //          debug: true,
-            appKey: nimEnv,
-            account: this.userData.account,
-            token: this.userData.token,
-            //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
-            onconnect(data) {
-              console.log("连接成功");
-            },
-            //同步登录用户名片的回调, 会传入用户名片
-            onmyinfo(userData) {
-              that.getMessageList();
-            },
-            onwillreconnect(obj) {
-              console.log(
-                "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
-              );
-            },
-            //断开连接后的回调
-            ondisconnect() {
-              console.log("链接已中断...");
-            },
-            //发生错误的回调, 会传入错误对象
-            onerror: this.onError,
-            onroamingmsgs(obj) {
-              console.log("漫游消息...");
-              console.log(obj);
-              obj.msgs.forEach((index, element) => {
-                that.msgList.push(element);
+      this.onFocus = false;
+      this.autoSizeTextarea();
+    },
+    //用户连接IM聊天
+    connectToNim() {
+      const that = this;
+      nimEnv().then(nimEnv => {
+        this.nim = NIM.getInstance({
+          //          debug: true,
+          appKey: nimEnv,
+          account: this.userData.account,
+          token: this.userData.token,
+          //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
+          onconnect(data) {
+            console.log("连接成功");
+          },
+          //同步登录用户名片的回调, 会传入用户名片
+          onmyinfo(userData) {
+            that.getMessageList();
+          },
+          onwillreconnect(obj) {
+            console.log(
+              "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
+            );
+          },
+          //断开连接后的回调
+          ondisconnect() {
+            console.log("链接已中断...");
+          },
+          //发生错误的回调, 会传入错误对象
+          onerror: this.onError,
+          onroamingmsgs(obj) {
+            console.log("漫游消息...");
+            console.log(obj);
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
+            });
+          },
+          onofflinemsgs(obj) {
+            console.log("离线消息...");
+            obj.msgs.forEach((index, element) => {
+              that.msgList.push(element);
+            });
+          },
+          //收到消息的回调, 会传入消息对象
+          onmsg(msg) {
+            if (msg.from === that.targetData.account) {
+              console.log("收到回复消息：" + JSON.stringify(msg));
+              that.pauseTime(msg); //收到检查检验隐藏顶部框；
+              that.msgList.push(msg);
+              that.$nextTick(function() {
+                that.scrollToBottom();
               });
-            },
-            onofflinemsgs(obj) {
-              console.log("离线消息...");
-              obj.msgs.forEach((index, element) => {
-                that.msgList.push(element);
-              });
-            },
-            //收到消息的回调, 会传入消息对象
-            onmsg(msg) {
-              if (msg.from === that.targetData.account) {
-                console.log("收到回复消息：" + JSON.stringify(msg));
-                that.pauseTime(msg); //收到检查检验隐藏顶部框；
-                that.msgList.push(msg);
-                that.$nextTick(function () {
-                  that.scrollToBottom();
-                });
-                that.getCId(msg);
-              }
+              that.getCId(msg);// 判断如果是图片，则把加入到图片数组中
+                if (msg.type == "image") {
+                  that.imageList.push(msg.file.url);
+                }
             }
-          });
+          }
         });
-      },
-      //每次收到消息更新cId(分诊台医生id);
-      getCId(msg) {
-        const that = this;
-        console.log(!!msg.custom);
-        if (!!msg.custom) {
-          that.cId = JSON.parse(msg.custom).cId;
-        }
-      },
+      });
+    },
+    //每次收到消息更新cId(分诊台医生id);
+    getCId(msg) {
+      const that = this;
+      console.log(!!msg.custom);
+      if (!!msg.custom) {
+        that.cId = JSON.parse(msg.custom).cId;
+      }
+    },
 
       //收到检查检验隐藏顶部框；
       pauseTime(msg) {
@@ -1045,302 +1131,163 @@
               progress: obj.percentageText,
               index: that.imageLastIndex
             };
-
-            console.log("文件总大小: " + obj.total + "bytes");
-            console.log("已经上传的大小: " + obj.loaded + "bytes");
-            console.log("上传进度: " + obj.percentage);
-            console.log("上传进度文本: " + obj.percentageText);
-          },
-          done(error, file) {
-            console.log("上传image" + (!error ? "成功" : "失败"));
-            // show file to the user
-            if (!error) {
-              let msg = that.nim.sendFile({
-                scene: "p2p",
-                to: that.targetData.account,
-                custom: JSON.stringify({
-                  cType: "0",
-                  cId: that.cId,
-                  mType: "1",
-                  conId: that.orderSourceId
-                }),
-                file: file,
-                done(error, msg) {
-                  that.msgList[that.imageLastIndex] = msg;
-                  that.imageList.push(
-                    that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
-                      .file.url
-                  );
-                  that.imageProgress = {
-                    uploading: false,
-                    progress: "0%",
-                    index: 0
-                  };
-                }
-              });
-            }
-          }
-        });
-      },
-      //滑动到底部
-      scrollToBottom(element) {
-        let that = this;
-        that.$nextTick(() => {
-          $(".main-message").animate(
-            {
-              scrollTop: $(".main-message>section").height() + 1000
-            },
-            300
-          );
-        });
-      },
-      //滑动到某个元素
-      scrollElement(distance) {
-        let that = this;
-        // that.refreshScroll();
-        // this.scroll.scrollToElement(element, 1000);
-        console.log("position" + distance);
-        $(".main-message").animate(
-          {
-            scrollTop: distance
-          },
-          300
-        );
-      },
-
-      //输入框字数限制
-      inputLimit() {
-        this.scrollToBottom();
-        let content = this.sendTextContent;
-        if (api.getByteLen(content) > 1000) {
-          this.sendTextContent = api.getStrByteLen(content, 1000);
+          // this.refreshScroll();
+        } else {
+          //消息发送失败的处理
+          that.sendErrorTips(msg);
         }
       },
-      //获取咨询价格
-      getConsultPrice() {
-        const that = this;
-        if (that.isClick) {
-          return false;
-        }
-        that.isClick = true;
-        that.finish = false;
-        console.log("获取价格");
-        api.ajax({
-          url: XHRList.getPrice,
-          method: "POST",
-          data: {
-            visitSiteId: 17, //string	是	站点
-            maxResult: 999,
-            id: 0
-          },
-          done(data) {
-            if (
-              data.responseObject.responseStatus &&
-              data.responseObject.responseData
-            ) {
-              let price = data.responseObject.responseData.dataList.adviceAmount;
-              console.log("获取分诊医生价格成功" + price);
-              that.buyTime(price);
-            } else {
-              console.log("获取分诊医生价格失败");
-            }
-          }
-        });
-      },
-      //购买时间
-      buyTime(price) {
-        const that = this;
-        let flag;
-        price === "0" ? (flag = "false") : (flag = "true");
-        //        that.lastTimeShow=true;
-        //        that.sendConsultState(4);
-        console.log("走支付方法");
-        let data = {
-          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
-          patientId: api.getPara().patientId, // 	string	是	患者id
-          //          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
-          doctorId: 0, //	string	是	医生id
-          orderType: "1", //	string	是	订单类型  1-咨询2-手术3-门诊预约
-          orderSourceId: this.orderSourceId, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
-          orderSourceType: "1", //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
-          orderAmount: price, //	string	否	订单金额  （单位/元 保留两位小数）
-          status: "1", //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-          body: "咨询", //   string  否  订单描述 （微信支付展示用）
-          isCharge: flag, //   string  是  true-收费  false-免费
-          caseId: api.getPara().caseId
+      //聊天记录时间戳处理
+      transformTimeStamp(time) {
+        let format = function (num) {
+          return num > 9 ? num : "0" + num;
         };
-        WxPayCommon.wxCreateOrder({
-          data: data, //data为Object 参考下面给出格式
-          backCreateSuccess(_data) {
-            //创建订单成功  （手术必选）
-            console.log("创建订单成功 ");
-            that.refreashOrderTime("free");
-          },
-          backCreateError(_data) {
-            //创建订单失败  (必选)
-          },
-          wxPaySuccess(_data) {
-            console.log("支付成功");
-            that.refreashOrderTime("pay");
-            //支付成功回调  (问诊/门诊类型 必选)
-          },
-          wxPayError(_data) {
-            that.isClick = false; //是否点击立即咨询重置
-            //支付失败回调  (问诊/门诊类型 必选)
+        let normalTime = function (time) {
+          let d = new Date(time);
+          let obj = {
+            y: d.getFullYear(),
+            m: d.getMonth() + 1,
+            dd: d.getDate(),
+            h: d.getHours(),
+            mm: format(d.getMinutes())
+          };
+          return obj;
+        };
+        let result = "";
+        let now = new Date().getTime(),
+          day1 =
+            normalTime(time).y +
+            "-" +
+            normalTime(time).m +
+            "-" +
+            normalTime(time).dd,
+          day2 =
+            normalTime(now).y +
+            "-" +
+            normalTime(now).m +
+            "-" +
+            normalTime(now).dd;
+        if (day1 === day2) {
+          result = normalTime(time).h + ":" + normalTime(time).mm;
+        } else if (normalTime(time).y === normalTime(now).y) {
+          result =
+            normalTime(time).m +
+            "月" +
+            normalTime(time).dd +
+            "日  " +
+            normalTime(time).h +
+            ":" +
+            normalTime(time).mm;
+        } else if (normalTime(time).y !== normalTime(now).y) {
+          result =
+            normalTime(time).y +
+            "年" +
+            normalTime(time).m +
+            "月" +
+            normalTime(time).dd +
+            "日  " +
+            normalTime(time).h +
+            ":" +
+            normalTime(time).mm;
+        }
+        return result;
+      },
+      //聊天记录时间处理压入是0还是1
+      getTimeStampShowList() {
+        this.msgList.forEach((element, index) => {
+          if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
+            this.beginTimestamp = element.time;
+            this.timeStampShowList.push(1);
+          } else {
+            this.timeStampShowList.push(0);
           }
         });
-        //      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
       },
-      //判断是否显示支付结果弹层
-      isShowPaySuccess() {
-        localStorage.removeItem("payCaseId");
-        localStorage.removeItem("payPatientId");
-        if (localStorage.getItem("payOk") == 1) {
-          if (localStorage.getItem("mOrder")) {
-            this.payPopupShow = true;
+      //聊天记录里时间戳是否显示
+      getTimeStampShowFlag(msg, index) {
+        if (msg.type === "custom") {
+          if (
+            JSON.parse(msg.content).type.includes("new-") ||
+            JSON.parse(msg.content).type === "payFinishTips" ||
+            JSON.parse(msg.content).type === "triagePatientTips" ||
+            JSON.parse(msg.content).type === "reTriageTip"
+          ) {
+            return false;
           } else {
-            this.noWXPayShow = true;
+            if (this.timeStampShowList[index] == 1) {
+              return true;
+            }
           }
         } else {
-          this.payPopupShow = false;
-          this.noWXPayShow = false;
+          if (this.timeStampShowList[index] == 1) {
+            return true;
+          }
         }
       },
-      //查看m站支付结果
-      viewPayResult() {
-        let that = this;
-        WxPayCommon.PayResult({
-          outTradeNo: localStorage.getItem("orderNumber") //微信订单号
-        })
-          .then(function (data) {
-            console.log("查看回调", data);
-            if (data.resultCode == "SUCCESS") {
-              that.noWXPayShow = false;
-              localStorage.removeItem("payOk");
-              that.refreashOrderTime("pay");
-            } else {
-              that.isClick = false; //是否点击立即咨询重置
-              console.log("未支付成功");
-            }
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
-      },
-      //支付成功后重新分流
-      againShunt() {
-        let that = this;
-        console.log("分流参数：" + that.orderSourceId);
-        api.ajax({
-          url: XHRList.updateShunt,
-          method: "POST",
-          data: {
-            caseId: api.getPara().caseId,
-            //            andConsultationId:that.orderSourceId,
-            patientId: api.getPara().patientId,
-            patientCustomerId: api.getPara().patientCustomerId,
-            isShunt: 1 //是否分流0-否1-是
-          },
-          done(data) {
-            if (data.responseObject.responseStatus) {
-              //              that.getLastTime();
-              console.log("分流成功");
-              that.isClick = false; //是否点击立即咨询重置
-              that.finish = true;
-            } else {
-              console.log("分流失败");
-            }
-          }
-        });
-      },
-      //重置时间
-      refreashOrderTime(type) {
+      //上传文件
+      sendImage(e) {
         const that = this;
-        let typeStr = type ? "2" : "6";
-        console.log("更新时间");
-        let data = {
-          consultationId: this.orderSourceId,
-          frequency: "0",
-          frequencyType: typeStr,
-        };
-        !!type &&
-        Object.assign(data, {customerId: "0", consultationState: "4", consultationLevel: "1"}); //付款回调参数传customerId
-        api.ajax({
-          url: XHRList.updateCount,
-          method: "POST",
-          data: data,
-          done(data) {
-            if (
-              data.responseObject.responseData &&
-              data.responseObject.responseStatus
-            ) {
-              //              that.lastTimeShow = true;
-              //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
-              //              store.commit("lastTimeCount");
-              if (type) {
-                //                that.againShunt();
-                if (type === "pay") {
-                  that.sendPayFinish();
-                }
-              }
-              that.getLastTime();
-            } else {
-              console.log("重置时间失败");
-            }
+        console.log(e.target.files);
+        if (e.target.files.length > 1) {
+          this.getMulitpleImage(e.target.files);
+        } else {
+          let _file = e.target.files[0];
+          console.log(_file);
+          console.log(window.URL.createObjectURL(_file));
+          if (_file.type.includes("image")) {
+            this.sendImageFile(_file);
+          } else {
+            that.toastTips = `请选择图片`;
+            that.toastShow = true;
+            setTimeout(() => {
+              that.toastShow = false;
+            }, 2000);
           }
+        }
+      },
+      getMulitpleImage(list) {
+        let mList = [];
+        const that = this;
+        console.log(list);
+        let promises = [];
+        Array.from(list).forEach((element, index) => {
+          promises.push(
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(element);
+              reader.onload = oFREvent => {
+                that.nim.previewFile({
+                  type: "image",
+                  dataURL: oFREvent.target.result,
+                  uploadprogress(obj) {
+                    that.scrollToBottom();
+                    console.log("文件总大小: " + obj.total + "bytes");
+                    console.log("已经上传的大小: " + obj.loaded + "bytes");
+                    console.log("上传进度: " + obj.percentage);
+                    console.log("上传进度文本: " + obj.percentageText);
+                  },
+                  done(error, file) {
+                    console.log("上传image" + (!error ? "成功" : "失败"));
+                    // show file to the user
+                    console.log(file);
+                    if (!error) {
+                      // that.mList.push(file);
+                      resolve(file);
+                    }
+                  }
+                });
+              };
+            })
+          );
+        });
+        console.log(promises);
+        Promise.all(promises).then(result => {
+          console.log(result);
+          this.sendMulitpleImage(result);
         });
       },
-      //更新上传了检查检验
-      updateMedical() {
-        let that = this;
-        api.ajax({
-          url: XHRList.updateMedicalList,
-          method: "POST",
-          data: {
-            caseId: api.getPara().caseId,
-            state: 1
-          },
-          done(data) {
-            if (data.responseObject.responseStatus) {
-              that.refreashOrderTime();
-            }
-          }
-        });
-      },
-      toUpLoadTimes(opt) {
-        let that = this;
-        //        debugger
-        api.ajax({
-          url: XHRList.updateCount,
-          method: "POST",
-          data: {
-            consultationId: sessionStorage.getItem("orderSourceId"),
-            frequency: opt.orderFrequency,
-            frequencyType: 2,
-            consultationState: -1,
-            consultationLevel: opt.orderType
-          },
-          done(data) {
-            if (data.responseObject.responseStatus) {
-              localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.payPopupShow = false;
-              window.location.href =
-                "/dist/imSceneDoctor.html?from=im&caseId=" +
-                api.getPara().caseId +
-                "&doctorCustomerId=" +
-                (that.$store.state.targetDoctor.customerId ||
-                  JSON.parse(localStorage.getItem("mPayDoctorDetails"))
-                    .customerId) +
-                "&patientCustomerId=" +
-                api.getPara().patientCustomerId +
-                "&patientId=" +
-                api.getPara().patientId;
-            }
-          }
-        });
-      },
-      //支付成功回调
-      sendPayFinish() {
+      // 发送多图文件
+      sendMulitpleImage(list) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: "p2p",
@@ -1352,92 +1299,592 @@
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
-            type: "payFinishTips"
-          }),
-          done(error, msg) {
-            if (!error) {
-              that.sendMessageSuccess(error, msg);
-            }
-          }
-        });
-      },
-      //发送问诊结束或者开始消息--4开始、5结束
-      sendConsultState(num) {
-        let that = this;
-        this.nim.sendCustomMsg({
-          scene: "p2p",
-          to: that.targetData.account,
-          custom: JSON.stringify({
-            cType: "0",
-            cId: that.cId,
-            mType: "24",
-            conId: that.orderSourceId
-          }),
-          content: JSON.stringify({
-            type: "notification",
+            type: "multipleImage",
             data: {
-              actionType: num
+              list
             }
           }),
-          type: "custom",
           done(error, msg) {
             if (!error) {
+              console.log(msg)
               that.sendMessageSuccess(error, msg);
             }
           }
         });
       },
-      //IOS手机微信返回按钮不刷新
-      forceRefresh() {
-        var nua = navigator.userAgent;
-        if (nua.indexOf("iPhone") > -1) {
-          //苹果手机
-          window.onload = function () {
-            setTimeout(() => {
-              window.addEventListener("popstate", function (e) {
-                // alert("我监听到了浏览器的返回按钮事件啦");
-                self.location = document.referrer;
-              });
-            }, 500);
-          };
-        }
-      },
-      initScroll() {
-        if (!this.$refs.wrapper) {
-          return;
-        }
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          probeType: 3,
-          click: true,
-          // swipeTime:1500,
-          momentum: true,
-          deceleration: 0.01
+      // 上传图片文件
+      sendImageFile(_file) {
+        const that = this;
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file)
+          },
+          type: "image",
+          from: that.userData.account
+        });
+        that.imageLastIndex = that.msgList.length - 1;
+        console.log(window.URL.createObjectURL(_file));
+        this.nim.previewFile({
+          type: "image",
+          fileInput: this.$refs.imageSender,
+          uploadprogress(obj) {
+            // that.inputImageFlag = false;
+            that.scrollToBottom();
+            that.imageProgress = {
+              uploading: true,
+              progress: obj.percentageText,
+              index: that.imageLastIndex
+            };
+
+          console.log("文件总大小: " + obj.total + "bytes");
+          console.log("已经上传的大小: " + obj.loaded + "bytes");
+          console.log("上传进度: " + obj.percentage);
+          console.log("上传进度文本: " + obj.percentageText);
+        },
+        done(error, file) {
+          console.log("上传image" + (!error ? "成功" : "失败"));
+          // show file to the user
+          if (!error) {
+            let msg = that.nim.sendFile({
+              scene: "p2p",
+              to: that.targetData.account,
+              custom: JSON.stringify({
+                cType: "0",
+                cId: that.cId,
+                mType: "1",
+                conId: that.orderSourceId
+              }),
+              file: file,
+              done(error, msg) {
+                that.msgList[that.imageLastIndex] = msg;
+                that.imageList.push(
+                  that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
+                    .file.url
+                );
+                that.imageProgress = {
+                  uploading: false,
+                  progress: "0%",
+                  index: 0
+                };
+              }
+            });
+          }else {
+              console.log(error);
+            }
+          }
         });
       },
-      refreshScroll() {
-        this.scroll && this.scroll.refresh();
+
+      // 选择视频
+      sendVideo(e) {
+        let _file = e.target.files[0];
+        if (_file.type.includes("video")) {
+          this.sendVideoFile(_file);
+        } else {
+          this.toastTips = `请选择视频文件`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
+      },
+      // 上传视频文件
+      sendVideoFile(_file) {
+        const that = this;
+        console.log(_file);
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file)
+          },
+          type: "video",
+          from: that.userData.account
+        });
+        that.videoLastIndex = that.msgList.length - 1;
+        this.nim.previewFile({
+          type: "video",
+          fileInput: this.$refs.videoSender,
+          uploadprogress(obj) {
+            // this.inputVideoFlag = false;
+            that.scrollToBottom();
+            that.videoProgress = {
+              uploading: true,
+              progress: obj.percentageText,
+              index: that.videoLastIndex
+            };
+            console.log("文件总大小: " + obj.total + "bytes");
+            console.log("已经上传的大小: " + obj.loaded + "bytes");
+            console.log("上传进度: " + obj.percentage);
+            console.log("上传进度文本: " + obj.percentageText);
+          },
+          done(error, file) {
+            console.log("上传video" + (!error ? "成功" : "失败"));
+            // show file to the user
+            console.log(file);
+            if (!error) {
+              let msg = that.nim.sendFile({
+                scene: "p2p",
+                custom: JSON.stringify({
+                  cType: "0",
+                  cId: that.cId,
+                  mType: "1",
+                  conId: that.orderSourceId
+                }),
+                to: that.targetData.account,
+                file: file,
+                type: "video",
+                done(error, msg) {
+                  that.msgList[that.videoLastIndex] = msg;
+                  that.videoProgress = {
+                    uploading: false,
+                    progress: "0%",
+                    index: 0
+                  };
+                  // that.imageList.push(msg.file.url);
+                }
+              });
+            } else {
+              console.log(error);
+            }
+          }
+        });
+      },
+      // 选择pdf
+      sendPdf(e) {
+        let _file = e.target.files[0];
+        console.log(_file)
+        if (_file.type.includes("pdf")) {
+          this.sendPdfFile(_file);
+        } else {
+          this.toastTips = `请选择pdf文件`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
+      },
+      // 发送pdf
+      sendPdfFile(_file) {
+        const that = this;
+        // this.msgList.push({
+        //   file: {
+        //     url: window.URL.createObjectURL(_file)
+        //   },
+        //   type: "file",
+        //   from: that.userData.account
+        // });
+        // that.videoLastIndex = that.msgList.length - 1;
+        const reader = new FileReader();
+        reader.readAsDataURL(_file);
+        reader.onload = oFREvent => {
+          this.nim.previewFile({
+            type: "file",
+            dataURL: oFREvent.target.result,
+            uploadprogress(obj) {
+              // this.inputVideoFlag = false;
+              that.scrollToBottom();
+              // that.videoProgress = {
+              //   uploading: true,
+              //   progress: obj.percentageText,
+              //   index: that.videoLastIndex
+              // };
+              console.log("文件总大小: " + obj.total + "bytes");
+              console.log("已经上传的大小: " + obj.loaded + "bytes");
+              console.log("上传进度: " + obj.percentage);
+              console.log("上传进度文本: " + obj.percentageText);
+            },
+            done(error, file) {
+              console.log("上传文件" + (!error ? "成功" : "失败"));
+              // show file to the user
+              console.log(file);
+              if (!error) {
+                let msg = that.nim.sendFile({
+                  scene: "p2p",
+                  custom: JSON.stringify({
+                    cType: "0",
+                    cId: that.cId,
+                    mType: "1",
+                    conId: that.orderSourceId
+                  }),
+                  to: that.targetData.account,
+                  file: file,
+                  type: "file",
+                  done(error, msg) {
+                    that.msgList.push(msg);
+                    // that.videoProgress = {
+                    //   uploading: false,
+                    //   progress: "0%",
+                    //   index: 0
+                    // };
+                    // that.imageList.push(msg.file.url);
+                  }
+                });
+              } else {
+                console.log(error);
+              }
+            }
+          });
+        };
+
+    },
+    //滑动到底部
+    scrollToBottom(element) {
+      let that = this;
+      that.$nextTick(() => {
+        $(".main-message").animate(
+          {
+            scrollTop: $(".main-message>section").height() + 1000
+          },
+          300
+        );
+      });
+    },
+    //滑动到某个元素
+    scrollElement(distance) {
+      let that = this;
+      // that.refreshScroll();
+      // this.scroll.scrollToElement(element, 1000);
+      console.log("position" + distance);
+      $(".main-message").animate(
+        {
+          scrollTop: distance
+        },
+        300
+      );
+    },
+
+    //输入框字数限制
+    inputLimit() {
+      this.scrollToBottom();
+      let content = this.sendTextContent;
+      if (api.getByteLen(content) > 1000) {
+        this.sendTextContent = api.getStrByteLen(content, 1000);
       }
     },
-    computed: {
-      //配合watch图片上传进度使用
-      progess() {
-        return this.imageProgress.progress;
-      },
-      lastTime() {
-        return this.$store.state.lastTime;
-      },
-      lastTimeText() {
-        return api.MillisecondToDateNew(this.$store.state.lastTime);
-      },
-      logoUrl() {
-        return this.$store.state.logoUrl;
-      },
-      //      payPopupShow(){
-      //        return this.$store.state.payPopupShow;
-      //      }
-      payPopupDate() {
-        return {
-          docName:
+    //获取咨询价格
+    getConsultPrice() {
+      const that = this;
+      if (that.isClick) {
+        return false;
+      }
+      that.isClick = true;
+      that.finish = false;
+      console.log("获取价格");
+      api.ajax({
+        url: XHRList.getPrice,
+        method: "POST",
+        data: {
+          visitSiteId: 17, //string	是	站点
+          maxResult: 999,
+          id: 0
+        },
+        done(data) {
+          if (
+            data.responseObject.responseStatus &&
+            data.responseObject.responseData
+          ) {
+            let price = data.responseObject.responseData.dataList.adviceAmount;
+            console.log("获取分诊医生价格成功" + price);
+            that.buyTime(price);
+          } else {
+            console.log("获取分诊医生价格失败");
+          }
+        }
+      });
+    },
+    //购买时间
+    buyTime(price) {
+      const that = this;
+      let flag;
+      price === "0" ? (flag = "false") : (flag = "true");
+      //        that.lastTimeShow=true;
+      //        that.sendConsultState(4);
+      console.log("走支付方法");
+      let data = {
+        patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
+        patientId: api.getPara().patientId, // 	string	是	患者id
+        //          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
+        doctorId: 0, //	string	是	医生id
+        orderType: "1", //	string	是	订单类型  1-咨询2-手术3-门诊预约
+        orderSourceId: this.orderSourceId, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
+        orderSourceType: "1", //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
+        orderAmount: price, //	string	否	订单金额  （单位/元 保留两位小数）
+        status: "1", //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
+        body: "咨询", //   string  否  订单描述 （微信支付展示用）
+        isCharge: flag, //   string  是  true-收费  false-免费
+        caseId: api.getPara().caseId
+      };
+      WxPayCommon.wxCreateOrder({
+        data: data, //data为Object 参考下面给出格式
+        backCreateSuccess(_data) {
+          //创建订单成功  （手术必选）
+          console.log("创建订单成功 ");
+          that.refreashOrderTime("free");
+        },
+        backCreateError(_data) {
+          //创建订单失败  (必选)
+        },
+        wxPaySuccess(_data) {
+          console.log("支付成功");
+          that.refreashOrderTime("pay");
+          //支付成功回调  (问诊/门诊类型 必选)
+        },
+        wxPayError(_data) {
+          that.isClick = false; //是否点击立即咨询重置
+          //支付失败回调  (问诊/门诊类型 必选)
+        }
+      });
+      //      siteSwitch.weChatJudge(()=>that.noWXPayShow = false,()=>that.noWXPayShow = true);
+    },
+    //判断是否显示支付结果弹层
+    isShowPaySuccess() {
+      localStorage.removeItem("payCaseId");
+      localStorage.removeItem("payPatientId");
+      if (localStorage.getItem("payOk") == 1) {
+        if (localStorage.getItem("mOrder")) {
+          this.payPopupShow = true;
+        } else {
+          this.noWXPayShow = true;
+        }
+      } else {
+        this.payPopupShow = false;
+        this.noWXPayShow = false;
+      }
+    },
+    //查看m站支付结果
+    viewPayResult() {
+      let that = this;
+      WxPayCommon.PayResult({
+        outTradeNo: localStorage.getItem("orderNumber") //微信订单号
+      })
+        .then(function(data) {
+          console.log("查看回调", data);
+          if (data.resultCode == "SUCCESS") {
+            that.noWXPayShow = false;
+            localStorage.removeItem("payOk");
+            that.refreashOrderTime("pay");
+          } else {
+            that.isClick = false; //是否点击立即咨询重置
+            console.log("未支付成功");
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+    //支付成功后重新分流
+    againShunt() {
+      let that = this;
+      console.log("分流参数：" + that.orderSourceId);
+      api.ajax({
+        url: XHRList.updateShunt,
+        method: "POST",
+        data: {
+          caseId: api.getPara().caseId,
+          //            andConsultationId:that.orderSourceId,
+          patientId: api.getPara().patientId,
+          patientCustomerId: api.getPara().patientCustomerId,
+          isShunt: 1 //是否分流0-否1-是
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            //              that.getLastTime();
+            console.log("分流成功");
+            that.isClick = false; //是否点击立即咨询重置
+            that.finish = true;
+          } else {
+            console.log("分流失败");
+          }
+        }
+      });
+    },
+    //重置时间
+    refreashOrderTime(type) {
+      const that = this;
+      let typeStr = type ? "2" : "6";
+      console.log("更新时间");
+      let data = {
+        consultationId: this.orderSourceId,
+        frequency: "0",
+        frequencyType: typeStr,
+      consultationLevel: "1"};
+      !!type &&
+        Object.assign(data, {customerId: "0", consultationState: "4"}); //付款回调参数传customerId
+      api.ajax({
+        url: XHRList.updateCount,
+        method: "POST",
+        data: data,
+        done(data) {
+          if (
+            data.responseObject.responseData &&
+            data.responseObject.responseStatus
+          ) {
+            //              that.lastTimeShow = true;
+            //              store.commit("setLastTime", 24 * 60 * 60 * 1000);
+            //              store.commit("lastTimeCount");
+            if (type) {
+              //                that.againShunt();
+              if (type === "pay") {
+                that.sendPayFinish();
+              }
+            }
+            that.getLastTime();
+          } else {
+            console.log("重置时间失败");
+          }
+        }
+      });
+    },
+    //更新上传了检查检验
+    updateMedical() {
+      let that = this;
+      api.ajax({
+        url: XHRList.updateMedicalList,
+        method: "POST",
+        data: {
+          caseId: api.getPara().caseId,
+          state: 1
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            that.refreashOrderTime();
+          }
+        }
+      });
+    },
+    toUpLoadTimes(opt) {
+      let that = this;
+      //        debugger
+      api.ajax({
+        url: XHRList.updateCount,
+        method: "POST",
+        data: {
+          consultationId: sessionStorage.getItem("orderSourceId"),
+          frequency: opt.orderFrequency,
+          frequencyType: 2,
+          consultationState: -1,
+          consultationLevel: opt.orderType
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            localStorage.setItem("sendTips", JSON.stringify(opt));
+            that.payPopupShow = false;
+            window.location.href =
+              "/dist/imSceneDoctor.html?from=im&caseId=" +
+              api.getPara().caseId +
+              "&doctorCustomerId=" +
+              (that.$store.state.targetDoctor.customerId ||
+                JSON.parse(localStorage.getItem("mPayDoctorDetails"))
+                  .customerId) +
+              "&patientCustomerId=" +
+              api.getPara().patientCustomerId +
+              "&patientId=" +
+              api.getPara().patientId;
+          }
+        }
+      });
+    },
+    //支付成功回调
+    sendPayFinish() {
+      const that = this;
+      this.nim.sendCustomMsg({
+        scene: "p2p",
+        to: that.targetData.account,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "32",
+          conId: that.orderSourceId
+        }),
+        content: JSON.stringify({
+          type: "payFinishTips"
+        }),
+        done(error, msg) {
+          if (!error) {
+            that.sendMessageSuccess(error, msg);
+          }
+        }
+      });
+    },
+    //发送问诊结束或者开始消息--4开始、5结束
+    sendConsultState(num) {
+      let that = this;
+      this.nim.sendCustomMsg({
+        scene: "p2p",
+        to: that.targetData.account,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "24",
+          conId: that.orderSourceId
+        }),
+        content: JSON.stringify({
+          type: "notification",
+          data: {
+            actionType: num
+          }
+        }),
+        type: "custom",
+        done(error, msg) {
+          if (!error) {
+            that.sendMessageSuccess(error, msg);
+          }
+        }
+      });
+    },
+    //IOS手机微信返回按钮不刷新
+    forceRefresh() {
+      var nua = navigator.userAgent;
+      if (nua.indexOf("iPhone") > -1) {
+        //苹果手机
+        window.onload = function() {
+          setTimeout(() => {
+            window.addEventListener("popstate", function(e) {
+              // alert("我监听到了浏览器的返回按钮事件啦");
+              self.location = document.referrer;
+            });
+          }, 500);
+        };
+      }
+    },
+    initScroll() {
+      if (!this.$refs.wrapper) {
+        return;
+      }
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        probeType: 3,
+        click: true,
+        // swipeTime:1500,
+        momentum: true,
+        deceleration: 0.01
+      });
+    },
+    refreshScroll() {
+      this.scroll && this.scroll.refresh();
+    }
+  },
+  computed: {
+    //配合watch图片上传进度使用
+    progressImage() {
+      return this.imageProgress.progress;},
+      // 配合watch视频上传进度使用
+      progressVideo() {
+        return this.videoProgress.progress;
+    },
+    lastTime() {
+      return this.$store.state.lastTime;
+    },
+    lastTimeText() {
+      return api.MillisecondToDateNew(this.$store.state.lastTime);
+    },
+    logoUrl() {
+      return this.$store.state.logoUrl;
+    },
+    //      payPopupShow(){
+    //        return this.$store.state.payPopupShow;
+    //      }
+    payPopupDate() {
+      return {
+        docName:
           this.$store.state.targetDoctor.nick ||
           JSON.parse(localStorage.getItem("mPayDoctorDetails")).nick,
           docId:
@@ -1450,158 +1897,167 @@
           payType:
           this.$store.state.targetDoctor.payType ||
           JSON.parse(localStorage.getItem("mPayDoctorDetails")).payType
-        };
-      },
-      // 输入框的长度
-      textLength() {
-        return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "");
-      }
+      };
     },
-    beforeCreate() {
-    },
-    mounted() {
-      let that = this;
-
-      if (!api.checkOpenId()) {
-        api.wxGetOpenId(1);
-      }
-      api.forbidShare();
-      that.getUserBaseData();
-      that.triageDoctorAssign();
-      //      that.forceRefresh();
-      localStorage.setItem("PCIMLinks", location.href);
-      this.setFooterPosition();
-      setTimeout(() => {
-        // this.initScroll();
-      }, 20);
-      that.isShowPaySuccess(); //支付弹层
-    },
-    //组件更新之前的生命钩子
-    beforeUpdate() {
-    },
-    //组件更新之后的生命钩子
-    updated() {
-    },
-    beforeRouteLeave(to, from, next) {
-      // 记录查看大图时离开的位置
-      if (to.name === "showBigImg") {
-        console.log($(".main-message").scrollTop());
-        sessionStorage.setItem("imagePosition", $(".main-message").scrollTop());
-      }
-      next(true);
-    },
-    activated() {
-      let that = this;
-      // document.body.scrollTop = 1;
-      api.forbidShare();
-      // that.refreshScroll();
-      // 判断是否有查看大图的位置，定位到响应位置
-      if (sessionStorage.getItem("imagePosition")) {
-        $(".main-message").scrollTop(sessionStorage.getItem("imagePosition"));
-        sessionStorage.removeItem("imagePosition");
-      }
-      if (that.$route.query.queryType === "triage") {
-        that.nim.sendCustomMsg({
-          scene: "p2p",
-          to: that.targetData.account,
-          custom: JSON.stringify({
-            cType: "0",
-            cId: that.cId,
-            mType: "39",
-            conId: that.orderSourceId
-          }),
-          content: JSON.stringify({
-            type: "triageSendTips",
-            data: {
-              actionType: that.$route.query.triageType
-            }
-          }),
-          type: "custom",
-          done(error, msg) {
-            if (!error) {
-              that.sendMessageSuccess(error, msg);
-            }
-          }
-        });
-      } else if (
-        that.$route.query &&
-        that.$route.query.queryType === "checkSuggest"
-      ) {
-        that.updateMedical();
-        that.nim.sendCustomMsg({
-          scene: "p2p",
-          to: that.targetData.account,
-          custom: JSON.stringify({
-            cType: "0",
-            cId: that.cId,
-            mType: "40",
-            conId: that.orderSourceId
-          }),
-          content: JSON.stringify({
-            type: "checkSuggestSendTips",
-            data: {
-              actionType: that.$route.query.queryType
-            }
-          }),
-          type: "custom",
-          done(error, msg) {
-            if (!error) {
-              that.sendMessageSuccess(error, msg);
-            }
-          }
-        });
-      }
-      that.$router.replace({
-        query: {}
-      });
-    },
-    watch: {
-      msgList: {
-        handler(newValue, oldValue) {
-          setTimeout(() => {
-            this.refreshScroll();
-          }, 20);
-        },
-        deep: true
-      },
-      //监听上传完成，可以继续上传；
-      progess(newVal, oldVal) {
-        if (newVal == "0%" || newVal == "100%") {
-          this.inputFlag = true;
-        }
-      },
-      lastTime: function (time) {
-        if (time <= 0) {
-          if (this.inputBoxShow) {
-            this.sendConsultState(5);
-            this.refreshState();
-          }
-          this.lastTimeShow = false;
-          this.inputBoxShow = false;
-          this.consultTipsShow = true;
-        } else {
-          this.lastTimeShow = true;
-          this.inputBoxShow = true;
-          this.consultTipsShow = false;
-        }
-      }
-    },
-    components: {
-      MedicalReport,
-      ContentText,
-      ImageContent,
-      TimeStamp,
-      PreviewSuggestion,
-      CheckSuggest,
-      Triage,
-      PayFinishTips,
-      MiddleTips,
-      payPopup,
-      loading,
-      confirm,
-      Toast
+    // 输入框的长度
+    textLength() {
+      return this.sendTextContent.replace(/(^(\r|\n|\s)*)|((\r|\n|\s)*$)/g, "");
     }
-  };
+  },
+  beforeCreate() {
+  },
+  mounted() {
+    let that = this;
+
+    if (!api.checkOpenId()) {
+      api.wxGetOpenId(1);
+    }
+    api.forbidShare();
+    that.getUserBaseData();
+    that.triageDoctorAssign();
+    //      that.forceRefresh();
+    localStorage.setItem("PCIMLinks", location.href);
+    this.setFooterPosition();
+    setTimeout(() => {
+      // this.initScroll();
+    }, 20);
+    that.isShowPaySuccess(); //支付弹层
+  },
+  //组件更新之前的生命钩子
+  beforeUpdate() {},
+  //组件更新之后的生命钩子
+  updated() {},
+  beforeRouteLeave(to, from, next) {
+    // 记录查看大图时离开的位置
+    if (to.name === "showBigImg") {
+      console.log($(".main-message").scrollTop());
+      sessionStorage.setItem("imagePosition", $(".main-message").scrollTop());
+    }
+    next(true);
+  },
+  activated() {
+    let that = this;
+    // document.body.scrollTop = 1;
+    api.forbidShare();
+    // that.refreshScroll();
+    // 判断是否有查看大图的位置，定位到响应位置
+    if (sessionStorage.getItem("imagePosition")) {
+      $(".main-message").scrollTop(sessionStorage.getItem("imagePosition"));
+      sessionStorage.removeItem("imagePosition");
+    }
+    if (that.$route.query.queryType === "triage") {
+      that.nim.sendCustomMsg({
+        scene: "p2p",
+        to: that.targetData.account,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "39",
+          conId: that.orderSourceId
+        }),
+        content: JSON.stringify({
+          type: "triageSendTips",
+          data: {
+            actionType: that.$route.query.triageType
+          }
+        }),
+        type: "custom",
+        done(error, msg) {
+          if (!error) {
+            that.sendMessageSuccess(error, msg);
+          }
+        }
+      });
+    } else if (
+      that.$route.query &&
+      that.$route.query.queryType === "checkSuggest"
+    ) {
+      that.updateMedical();
+      that.nim.sendCustomMsg({
+        scene: "p2p",
+        to: that.targetData.account,
+        custom: JSON.stringify({
+          cType: "0",
+          cId: that.cId,
+          mType: "40",
+          conId: that.orderSourceId
+        }),
+        content: JSON.stringify({
+          type: "checkSuggestSendTips",
+          data: {
+            actionType: that.$route.query.queryType
+          }
+        }),
+        type: "custom",
+        done(error, msg) {
+          if (!error) {
+            that.sendMessageSuccess(error, msg);
+          }
+        }
+      });
+    }
+    that.$router.replace({
+      query: {}
+    });
+  },
+  watch: {
+    msgList: {
+      handler(newValue, oldValue) {
+        setTimeout(() => {
+          this.refreshScroll();
+        }, 20);
+      },
+      deep: true
+    },
+    //监听图片上传完成，可以继续上传；
+      progressImage(newVal, oldVal) {
+        if (newVal == "0%" || newVal == "100%") {
+          this.inputImageFlag = true;
+        } else {
+          this.inputImageFlag = false;
+        }
+      },
+      //监听视频上传完成，可以继续上传；
+    progressVideo(newVal, oldVal) {
+      if (newVal == "0%" || newVal == "100%") {
+        this.inputVideoFlag = true;} else {
+          this.inputVideoFlag = false;
+      }
+    },
+    lastTime: function(time) {
+      if (time <= 0) {
+        if (this.inputBoxShow) {
+          this.sendConsultState(5);
+          this.refreshState();
+        }
+        this.lastTimeShow = false;
+        this.inputBoxShow = false;
+        this.consultTipsShow = true;
+      } else {
+        this.lastTimeShow = true;
+        this.inputBoxShow = true;
+        this.consultTipsShow = false;
+      }
+    }
+  },
+  components: {
+    MedicalReport,
+    ContentText,
+    ImageContent,AudioMessage,
+      VideoMessage,
+    TimeStamp,
+    PreviewSuggestion,
+    CheckSuggest,
+    Triage,
+    PayFinishTips,
+    MiddleTips,
+    payPopup,
+    loading,
+    confirm,MulitpleImage,
+      FileMessage,
+    Toast
+  }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
@@ -1633,21 +2089,128 @@
     text-align: center;
   }
 
-  //继续问诊样式
-  .go-consult {
-    text-align: center;
-    span {
-      color: #26bdb5;
-      border-bottom: 1px solid #26bdb5;
-      line-height: 1;
+//继续问诊样式
+.go-consult {
+  text-align: center;
+  span {
+    color: #26bdb5;
+    border-bottom: 1px solid #26bdb5;
+    line-height: 1;
+    display: inline-block;
+  }
+}
+//输入区
+  .main-input-box {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%; //height: 1.3rem;
+    box-sizing: border-box;
+    font-size: 0;
+    background-color: #fff;
+    box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.5); //position: relative;
+    //display: none;
+    z-index: 3;
+    & > * {
       display: inline-block;
+      vertical-align: bottom;
+    }
+    .main-input-box-textarea-inner {
+      box-sizing: border-box;
+      margin-left: rem(30px);
+      max-height: 2.5rem;
+      overflow: auto;
+      .main-input-box-textarea {
+        width: rem(490px);
+        border-radius: rem(40px);
+        padding-left: rem(20px);
+        padding-right: rem(20px);
+        padding-top: rem(15px);
+        @include font-dpr(14px);
+        background: #f3f6f7;
+        border: 0 solid #e8ecef;
+        box-sizing: border-box;
+        min-height: rem(60px);
+      }
+    }
+    .main-input-box-send {
+      @include font-dpr(17px);
+      color: #b6b6b6;
+      position: absolute;
+      right: rem(40px);
+      top: 50%;
+      margin-top: rem(-37.5px);
+      line-height: rem(75px); //height: 1.3rem;
+      &.on {
+        color: #00d6c6;
+      }
+    }
+    .main-input-box-plus {
+      @include font-dpr(16px);
+      width: rem(50px);
+      height: rem(50px);
+      position: absolute;
+      left: rem(40px);
+      top: 50%;
+      margin-top: rem(-25px);
+      input[type="file"] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        display: block;
+        width: rem(50px);
+      }
     }
   }
 
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s;
+  .footer-box-top {
+    position: relative;
+    width: 100%;
+    padding: rem(20px) rem(90px);
+    box-sizing: border-box;
   }
+
+  // 底部上传文件盒子样式
+  .footer-box-bottom {
+    width: 100%;
+    padding: rem(32px) rem(80px);
+    box-sizing: border-box;
+    border-top: 1px solid #eeeeee;
+    .bottom-item {
+      display: inline-block;
+      position: relative;
+      input {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        display: block;
+      }
+      .bottom-item-image {
+        width: rem(100px);
+        height: rem(100px);
+      }
+      .bottom-item-description {
+        text-align: center;
+        margin-top: rem(14px);
+        color: #555555;
+        @include font-dpr(12px);
+      }
+    }
+    .bottom-item + .bottom-item {
+      margin-left: rem(64px);
+    }
+  }.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
 
   .fade-enter,
   .fade-leave-to {
