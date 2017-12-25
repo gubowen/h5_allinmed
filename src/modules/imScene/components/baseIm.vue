@@ -2040,11 +2040,11 @@
     }
     .main-input-box-textarea-inner {
       box-sizing: border-box;
-      margin-left: rem(30px);
+      margin-left: rem(15px);
       max-height: 2.5rem;
       overflow: auto;
       .main-input-box-textarea {
-        width: rem(490px);
+        width: rem(508px);
         border-radius: rem(40px);
         padding-left: rem(20px);
         padding-right: rem(20px);
@@ -2073,7 +2073,7 @@
       width: rem(50px);
       height: rem(50px);
       position: absolute;
-      left: rem(40px);
+      left: rem(30px);
       top: 50%;
       margin-top: rem(-25px);
       input[type="file"] {
@@ -2092,7 +2092,7 @@
   .footer-box-top {
     position: relative;
     width: 100%;
-    padding: rem(20px) rem(90px);
+    padding: rem(14px) rem(90px);
     box-sizing: border-box;
   }
 
