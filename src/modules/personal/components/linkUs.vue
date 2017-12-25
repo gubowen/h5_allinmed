@@ -7,6 +7,13 @@
       </p>
       <span class="jump"></span>
     </router-link>
+    <router-link tag='section' class="allinmed-personal-link" to='/feedback'>
+      <p class='allinmed-personal-des'>
+        <span class="icon about"></span>
+        <span class="title">建议反馈</span>
+      </p>
+      <span class="jump"></span>
+    </router-link>
     <router-link tag='section' class="allinmed-personal-about"  to='/aboutAllinmed'>
       <p class='allinmed-personal-des'>
       <span class="icon  link"></span>
@@ -27,7 +34,7 @@
     padding: rem(58px) rem(46px) rem(62px) rem(46px);
     .allinmed-personal-link,.allinmed-personal-about{
       padding: rem(58px) 0 rem(62px) 0;
-      height: rem(40px);
+      height: rem(55px);
       display: block;
     }
   .allinmed-personal-link{
@@ -35,7 +42,7 @@
   }
     .allinmed-personal-about{
       padding-bottom: 0;
-      border-top: 2px solid #EAEAEA;
+      border-top: 1.5px solid #EAEAEA;
     }
   }
 </style>

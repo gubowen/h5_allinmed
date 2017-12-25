@@ -218,7 +218,7 @@
           display: "inline-block",
           fontSize: "0.37rem",
           color: "#909090",
-          top: "-1.5rem "
+          top: "-1.5rem"
         },
         patientParams: {
           customerId: api.getPara().customerId,

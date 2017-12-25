@@ -12,9 +12,6 @@ import VueRouter from 'vue-router';
 import fastclick from 'fastclick';
 import "static/css/base.css";
 import route from "./route/route.config";
-
-
-
 import store from "./store/store";
 import "babel-polyfill";
 fastclick.attach(document.body);
@@ -29,7 +26,7 @@ class Home{
 
   init(){
     Vue.use(VueRouter);
- 
+
     this.registerRouter();
 
     this.goToRouter();
@@ -42,7 +39,7 @@ class Home{
       render: h => h(App)
     });
   }
-  
+
   //路由实例化生成
   registerRouter(){
     const options={
@@ -77,6 +74,6 @@ class Home{
 }
 
 let home = new Home();
-if (module.hot) {  
+if (module.hot) {
   module.hot.accept();
 }
