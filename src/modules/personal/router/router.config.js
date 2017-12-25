@@ -50,10 +50,6 @@ export default {
       component:changePhone
     },
     {
-      path:"/feedback",
-      component:feedback
-    },
-    {
       path:"*",
       redirect:"/personalIndex"
     }
