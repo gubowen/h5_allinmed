@@ -403,6 +403,7 @@ export default {
         return;
       }
       for (let i = 0; i < files.length; i++) {
+        console.log(files[i].size);
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
           this.errorMsg = "图片不能超过10M";
@@ -459,6 +460,7 @@ export default {
         _imageType = "";
       that.uploading1 = true;
       that.uploading2 = true;
+      let _localViewUrl = window.URL.createObjectURL(files);
       switch (type) {
         case 1:
           _imageType = 0;
@@ -469,14 +471,14 @@ export default {
       }
       if (typeof index !== "undefined") {
         that["imageList" + type][index] = {
-          blob: base64,
+          blob: _localViewUrl,
           imgId: "",
           uploading: true,
           fail: false
         };
       } else {
         that["imageList" + type].push({
-          blob: base64,
+          blob: _localViewUrl,
           imgId: "",
           uploading: true,
           fail: false
@@ -1104,13 +1106,15 @@ export default {
       }, 2000);
     },
     contentLimit() {
+      console.log(api.getByteLen(this.medicalMessage));
+      console.log(api.getStrByteLen(this.medicalMessage));
       if (api.getByteLen(this.medicalMessage) > 1000) {
         this.medicalMessage = api.getStrByteLen(this.medicalMessage, 1000);
         this.validateToast("最多只能输入500字");
       }
     },
     getByteLen(len) {
-      return 1000 - api.getByteLen(len);
+      return Math.ceil((1000 - api.getByteLen(len))/2);
     },
     clearPageData() {
       let _this = this;

@@ -160,10 +160,10 @@
       <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="main-input-box-plus">
           <i class="icon-im-plus"></i>
-          <input type="file" v-if="isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)"
-                 ref="imageSender"
+          <input type="file" v-if="isIos&&inputFlag"  id="ev-file-send" @change="sendFile($event)"
+                 ref="imageSender" accept="image/*"
           >
-          <input type="file" v-if="!isIos&&inputFlag" multiple id="ev-file-send" @change="sendFile($event)"
+          <input type="file" v-if="!isIos&&inputFlag" id="ev-file-send" @change="sendFile($event)"
                  ref="imageSender" capture="camera"
                  accept="image/*">
         </section>
@@ -753,7 +753,7 @@
                   custom: JSON.stringify({
                     cType: "0",
                     cId: that.cId,
-                    mType: "36",
+                    mType: "37",
                     conId: that.orderSourceId,
                     patientName: that.$store.state.patientName,
                     idClient: msg.idClient
@@ -1030,7 +1030,8 @@
           file: {
             url: window.URL.createObjectURL(e.target.files[0])
           },
-          type: "image"
+          type: "image",
+          from:this.userData.account
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(e.target.files[0]));
@@ -1506,7 +1507,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "34",
+            mType: "39",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1533,7 +1534,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "0",
+            mType: "40",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({

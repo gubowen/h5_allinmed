@@ -75,6 +75,7 @@ export default {
         wifi: require("../../../common/image/img00/login/wifi@2x.png.png"),
         success: require("../../../common/image/img00/login/Send a success@2x.png")
       },
+      isLeave:true, // 是否离开当前路由
       isRegister: false, //注册按钮是否可以点击
       imgUrl: "", // 提示toast框提示
       confirmFlag: false, //confirm 框的显示隐藏
@@ -92,6 +93,16 @@ export default {
       customerId: "",
       isBroswer: false,
     };
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.isLeave) {
+      next(true);
+    } else {
+      this.codeBoxFlag = false;
+      this.isLeave = true;
+      clearInterval(this.timerObj);
+      next(false);
+    }
   },
   methods: {
     goLogin() {
@@ -211,9 +222,18 @@ export default {
             //   this.errorShow = false;
             // }, 2000);
             // return;
-            if (type == "validate") {
-              this.confirmFlag = true;
+            if (obj.responseCode === "SMS0003") {
+              this.errorMsg = obj.responseMessage;
+              this.errorShow = true;
+              setTimeout(() => {
+                this.errorShow = false;
+              }, 2000);
+            } else {
+              if (type == "validate") {
+                this.confirmFlag = true;
+              }
             }
+            
             console.log("发送验证码失败 + " + obj.responseMessage);
           }
           this.$store.commit("setLoadingState", false);
@@ -226,6 +246,7 @@ export default {
 
     // 手机密码格式验证通过发送验证码后的执行函数
     validateCallback() {
+      this.isLeave =false;
       this.codeBoxFlag = true;
     },
     // 重新发送后的执行函数
@@ -459,8 +480,10 @@ export default {
     }
     &.phoneInput {
       margin-top: rem(60px);
+      @include clearfix();
       & > input {
         width: 80%;
+        float: left;
         &.hasContent{
           @include font-dpr(28px);
           font-weight: bold;

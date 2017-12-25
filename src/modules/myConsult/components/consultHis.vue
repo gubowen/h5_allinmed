@@ -48,16 +48,26 @@
     </div>
     <loading v-show="finish"></loading>
     <toast :content="errorMsg" v-if="errorShow"></toast>
+    <transition name="fade">
+      <confirm :confirmParams="{
+          'ensure':'去关注',
+          'cancel':'取消',
+          'title':'手机浏览器无法接收和查看医生回复，请关注【唯医互联网骨科医院】官方微信，第一时间接收医生回复'
+          }" v-if="wxTips" @cancelClickEvent="wxTips=false" @ensureClickEvent="toWXchat()">
+      </confirm>
+    </transition>
   </section>
   <!--</loadMore>-->
 </template>
 <script type="text/ecmascript-6">
 
   import fb from "../../../common/js/third-party/flexible";
+  import Vue from 'vue';
   import loading from "../../../components/loading";
   import toast from "../../../components/toast";
   import api from '../../../common/js/util/util';
   import loadMore from '../../../components/loadMore';
+  import confirm from "components/confirm";
   import wxBind from 'common/js/auth/wxBinding';
   import CheckLogin from 'common/js/auth/checkLogin';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
@@ -72,6 +82,7 @@
     data() {
       return {
         finish: false,
+        wxTips:false,
         noFriend: false,
         errorMsg:"",
         errorShow:false,
@@ -86,14 +97,6 @@
         wxBind.isBind({
           callBack:()=>{
             this.init();
-          },
-          failCallBack:()=>{
-            this.init();
-            this.errorMsg = "绑定微信失败";
-            this.errorShow = true;
-            setTimeout(() => {
-              this.errorShow = false;
-            }, 2000)
           }
         });
       },()=>{
@@ -116,6 +119,12 @@
         }
         api.forbidShare();
       },
+      toWXchat(){
+        this.wxTips = false;
+        this.$router.push({
+          name:"wechat"
+        })
+      },
       onInfinite($state){
         const that = this;
         api.ajax({
@@ -137,6 +146,15 @@
           },
           done(response){
             if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
+              siteSwitch.weChatJudge(()=>{
+                console.log("不需弹层")
+              },()=>{
+                if(that.pageStart>0){
+                  that.wxTips = false;
+                }else{
+                  that.wxTips = true;
+                }
+              });
               that.pageStart += that.pageNum;
               let temp = response.responseObject.responseData.dataList;
               that.items = that.items.concat(temp);
@@ -270,13 +288,17 @@
         return result;
       },
       hrefToConsult(){
-        window.location.href = `/dist/consult.html?customerId=${localStorage.getItem("userId") || api.getPara().customerId}`;
+        window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId||localStorage.getItem("userId")}`;
       },
       hrefToSuggest(opt){
         siteSwitch.weChatJudge(()=>{
-          window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+          if (localStorage.getItem("userId") || api.getPara().customerId){
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+          }else{
+            window.location.href='/dist/mLogin.html';
+          }
         },()=>{
-//          alert("关注微信才能看φ(>ω<*)");
+          this.wxTips = true;
         })
       },
       getThisItem(opt){
@@ -294,10 +316,14 @@
               window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
             }
           } else {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId
+            if (api.getPara().customerId||localStorage.getItem("userId")){
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + (api.getPara().customerId||localStorage.getItem("userId")) + '&patientId=' + opt.patientId
+            }else{
+              window.location.href='/dist/mLogin.html';
+            }
           }
         },()=>{
-//          alert("关注微信才能看φ(>ω<*)");
+          this.wxTips = true;
         })
       },
       goToUploadPic(opt){
@@ -365,6 +391,7 @@
       loading,
       toast,
       loadMore,
+      confirm,
       InfiniteLoading
     }
   }

@@ -2,7 +2,7 @@
   <section class="mHome">
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
-      <swiper :options="swiperOption" ref="mySwiper">
+      <swiper :options="swiperOption" ref="mySwiper" style="width:90%">
         <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider">
           <a :href="item.adAdditionalUrl" @click="bannerHref(item)">
             <img :src="item.adAttUrl" />
@@ -17,7 +17,7 @@
     </figure>
     <figure class="history" v-show="dataGetFinish">
       <header><h3>问诊历史</h3>
-        <p class="btn-more" @click="moreEvent">更多></p></header>
+        <p class="btn-more" @click="moreEvent">更多</p></header>
       <!--未登录-->
       <section class="content" v-if="!loginFlag">
         <section class="login">
@@ -73,7 +73,7 @@
   import "swiper/dist/css/swiper.css";
   let XHRList = {
     //登录页
-    loginUrl: "/dist/mLogin.html",
+    loginUrl: "/dist/mLogin.html?from=index",
     //问诊
     diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
     //问诊历史
@@ -96,7 +96,7 @@
         swiperOption: {
           notNextTick: true,
           loop: true,
-          autoplay: 3000,
+//          autoplay: 3000,
           direction: "horizontal",
           grabCursor: true,
           setWrapperSize: true,
@@ -226,26 +226,38 @@
       },
       getAdList() {
         const that = this;
-        api.ajax({
-          url: XHRList.adList,
-          method: "post",
-          data: {
-            siteId: api.getSiteId(),
-            channelId: 169,
-            platformId: 1,
-            positionId: 557
-          },
-          done(data) {
-            if (data.responseObject.responseStatus) {
-              that.adList =
-                data.responseObject.responseData.data_list[0].ad_profile_attachment;
-              // setTimeout(() => {
-              //   that.$refs.slider && that.$refs.slider.refresh();
-              // }, 20);
-            }
-            that.$store.commit("setLoadingState", false);
-          }
-        });
+        that.adList =[
+         {
+          imgId:1,
+          adAdditionalUrl:'www.baidu.com',
+          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        },
+        {
+            imgId:2,
+            adAdditionalUrl:'www.baidu.com',
+            adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        }
+        ];
+//        api.ajax({
+//          url: XHRList.adList,
+//          method: "post",
+//          data: {
+//            siteId: api.getSiteId(),
+//            channelId: 170,
+//            platformId: 1,
+//            positionId: 583
+//          },
+//          done(data) {
+//            if (data.responseObject.responseStatus) {
+//              that.adList =
+//                data.responseObject.responseData.data_list[0].ad_profile_attachment;
+//              // setTimeout(() => {
+//              //   that.$refs.slider && that.$refs.slider.refresh();
+//              // }, 20);
+//            }
+//            that.$store.commit("setLoadingState", false);
+//          }
+//        });
       },
       //登录判断
       loginJudge() {
@@ -269,7 +281,7 @@
     },
 
   };
-</script>
+ </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
 
@@ -280,6 +292,9 @@
   .banner {
     padding: 0 0 rem(140px) 0;
     position: relative;
+    .swiper-container{
+      overflow:visible;
+    }
     .swiper-pagination-bullet {
       width: rem(12px);
       height: rem(12px);
@@ -292,18 +307,25 @@
       background-color: #00D6C6;
     }
     .banner-slider {
-      width: 100%;
+      width: 86%;
       height: 3.86667rem;
+      opacity: 0.6;
       & > a {
         display: block;
         height: 100%;
         width: 100%;
+        border-radius: rem(26px);
         > img {
+          padding:rem(10px);
           width: 100%;
           height: 100%;
           vertical-align: top;
+          box-sizing: border-box;
         }
       }
+    }
+    .swiper-slide-active{
+      opacity: 1;
     }
   }
 
@@ -314,6 +336,7 @@
     line-height: rem(48px);
     text-align: center;
     margin-bottom: rem(80px);
+    font-weight: 600;
   }
 
   .diagnose {
@@ -342,6 +365,8 @@
       letter-spacing: 0;
       line-height: rem(108px);
       text-shadow: 0 rem(7px) rem(15px) rgba(0, 183, 175, 0.68);
+      margin-top:rem(-50px);
+      box-shadow:0 8px 16px #B3B3B3
     }
   }
 
@@ -364,6 +389,15 @@
         color: #909090;
         letter-spacing: 0;
         line-height: rem(44px);
+        &:after{
+          content:'';
+          background: url("../../../common/image/img00/index/arrow.png") no-repeat;
+          display: inline-block;
+          vertical-align: middle;
+          width: rem(25px);
+          height: rem(25px);
+          margin-left:rem(10px);
+        }
       }
     }
     .content {

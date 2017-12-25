@@ -52,10 +52,10 @@ export default {
         this.historyUrl = `/dist/consult.html?customerId=${userId}`;
       } else {
         if (userId) {
-          this.historyUrl = `/dist/myConsult.html?customerId=${userId}`;
+          this.historyUrl = `/dist/myConsult.html`;
         } else {
           localStorage.setItem("backUrl",window.location.href);
-          this.historyUrl = "/dist/mLogin.html";
+          this.historyUrl = "/dist/mLogin.html?from=index";
         }
       }
       this.myUrl = `/dist/personal.html`;

@@ -21,16 +21,22 @@ import "static/css/base.css";
 import fastclick from 'fastclick';
 import store from "./store/store";
 import valiadteMethods from '../../common/js/util/validate_methods';
-
+import CheckSubscribe from "common/js/auth/checkSubscribe";
+import siteSwitch from "common/js/siteSwitch/siteSwitch";
+import api from '../../common/js/util/util';
 // fastclick.attach(document.body);
 
-console.log(module)
+
+const checkSubscribe=new CheckSubscribe();
 class MLogin {
   constructor() {
     this.init();
   }
 
   init() {
+
+
+
     Vue.use(VueRouter);
     Vue.use(VeeValidator);//vue使用验证插件
     this.routerStart();
@@ -179,6 +185,6 @@ Validator.extend('noNumber', {
 
 
 new MLogin();
-if (module.hot) {  
+if (module.hot) {
   module.hot.accept();
 }

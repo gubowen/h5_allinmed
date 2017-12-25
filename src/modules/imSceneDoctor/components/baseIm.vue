@@ -32,6 +32,14 @@
             <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
             </MiddleTips>
+            <!--消息撤回提示-->
+            <div data-alcode-mod='717' :key="0">
+              <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
+                <figcaption class="first-message">
+                  <p>{{msg.from==="1_doctor00001"?"分诊医生":"您"}}撤回了一条消息</p>
+                </figcaption>
+              </section>
+            </div>
             <!--问诊结束-->
             <MiddleTips v-if="receivedTreatOver(msg)" :tipsType="5">
             </MiddleTips>
@@ -61,7 +69,7 @@
             </HospitalNotice>
             <!--文本消息-->
             <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
-                         :targetData="targetData">
+                         :targetData="targetData"  @deleteMsgEvent="deleteMsgEvent(msg)" @longTouchEmitHandler="deleteMsgIndex=index">
             </ContentText>
             <!--图像消息-->
             <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
@@ -148,6 +156,9 @@
       <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
                 v-if="payPopupShow"></payPopup>
       <Loading v-if="loading"></Loading>
+      <transition name="fade">
+        <Toast :content="toastTips" v-if="toastShow"></Toast>
+      </transition>
     </section>
   </div>
 </template>
@@ -176,6 +187,7 @@
   import ImageContent from "./image";
   import BottomTips from "./bottomTips";
   import MiddleTips from "./middleTips";
+  import Toast from "components/toast";
   import PayFinishTips from "./payFinishTips";
   import PayTypePopup from "./payTypePopup";
   import OutpatientInvite from "./outpatientInvite";
@@ -252,7 +264,10 @@
         },
         sendTextContent: "",
         footerPosition: "main-input-box",
-        scrollHeight: document.body.scrollTop
+        scrollHeight: document.body.scrollTop,
+        deleteMsgIndex: -1,
+        toastTips: "",
+        toastShow: false,
       };
     },
 
@@ -272,11 +287,11 @@
             document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 100);
         }
-        setTimeout(() => {
-          $(".main-message-time").css({
-            top: document.body.scrollTop
-          });
-        }, 300);
+        // setTimeout(() => {
+        //   $(".main-message-time").css({
+        //     top: document.body.scrollTop
+        //   });
+        // }, 300);
         this.onFocus = true;
         this.autoSizeTextarea();
       },
@@ -290,14 +305,98 @@
           }, 20);
         }
 
-        $(".main-message-time").css({
-          top: 0
-        })
+        // $(".main-message-time").css({
+        //   top: 0
+        // })
 
         this.onFocus = false;
         this.autoSizeTextarea();
       },
-
+      deleteMsgEvent(msg) {
+        // const deleteMsg = new DeleteMsg(this.nim, msg);
+        // const deleteMsgTips = new DeleteMsgTips(
+        //   this.nim,
+        //   this.targetData.account,
+        //   {
+        //     cType: "0",
+        //     cId: this.cId,
+        //     mType: "36",
+        //     conId: this.orderSourceId,
+        //     patientName: this.$store.state.patientName,
+        //     deleteMsg: msg
+        //   }
+        // );
+        const _DeleteTimeLimit = "2分钟";
+        const that = this;
+        this.nim.deleteMsg({
+          msg: msg,
+          done(error) {
+            console.log(error);
+            if (!error) {
+              setTimeout(() => {
+                that.nim.sendCustomMsg({
+                  scene: "p2p",
+                  to: that.targetData.account,
+                  custom: JSON.stringify({
+                    cType: "0",
+                    cId: that.cId,
+                    mType: "36",
+                    conId: that.orderSourceId,
+                    patientName: that.$store.state.patientName,
+                    idClient: msg.idClient
+                  }),
+                  content: JSON.stringify({
+                    type: "deleteMsgTips",
+                    data: {
+                      from: that.$store.state.patientName || "患者",
+                      deleteMsg: msg || {}
+                    }
+                  }),
+                  done(tipsError, tipsMsg) {
+                    console.log("发送撤回消息完成");
+                    console.log(tipsError);
+                    console.log(tipsMsg);
+                    if (!tipsError) {
+                      console.log(tipsError, tipsMsg);
+                      console.log(`撤回消息提示--发送成功`);
+                      that.sendMessageSuccess(tipsError, tipsMsg);
+                    }
+                  }
+                });
+              }, 20);
+            } else {
+              if (parseInt(error.code) === 508) {
+                that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
+                that.toastShow = true;
+                setTimeout(() => {
+                  that.toastShow = false;
+                }, 2000);
+              }
+            }
+          }
+        });
+        // deleteMsg
+        //   .deleteMessage()
+        //   .then(msg => {
+        //     console.log(99999);
+        //     deleteMsgTips.sendDeleteTips().then((tipsMsg, tipsError) => {
+        //       console.log(tipsMsg, tipsError);
+        //       console.log(`撤回消息提示--发送成功`);
+        //       that.sendMessageSuccess(tipsError, tipsMsg);
+        //     });
+        //   })
+        //   .catch((error, msg) => {
+        //     console.log(error);
+        //     console.log(8888);
+        //     if (parseInt(error.code) === 508) {
+        //       this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
+        //       this.toastShow = true;
+        //       setTimeout(() => {
+        //         this.toastShow = false;
+        //       }, 2000);
+        //     }
+        //   });
+      },
       connectToNim() {
         const that = this;
         nimEnv().then(nimEnv => {
@@ -354,6 +453,24 @@
             }
           });
         });
+      },
+      showFlagDeleteTips(msg) {
+        let flag = false;
+        if (
+          msg.type === "custom" &&
+          JSON.parse(msg.content).type === "deleteMsgTips"
+        ) {
+          flag = true;
+          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+          this.msgList.forEach((element, index) => {
+            if (element.idClient === idClient) {
+              this.msgList.removeByValue(element);
+              return;
+            }
+          });
+          // this.msgList.removeByValue(JSON.parse(msg.content).data.deleteMsg)
+        }
+        return flag;
       },
       getFirstTargetMsg(msg) {
         if (msg.from === this.targetData.account) {
@@ -691,6 +808,30 @@
           //   "account": "0_" + api.getPara().caseId,
           //   "type": "1"
           // }),
+          done(error, msg) {
+            that.sendMessageSuccess(error, msg);
+            that.sendHistoryTips();
+          }
+        });
+      },
+      sendHistoryTips(){
+        const that=this;
+        this.nim.sendCustomMsg({
+          scene: "p2p",
+          to: this.targetData.account,
+          custom: JSON.stringify({
+            cType: "1",
+            cId: api.getPara().doctorCustomerId,
+            mType: "44",
+            conId: this.orderSourceId
+          }),
+          content: JSON.stringify({
+            type:"getHistoryTip",
+            data:{
+              caseId:this.userData.account.substring(2)
+            }
+          }),
+          isPushable: false,
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
           }
@@ -1529,7 +1670,8 @@
       SendCount,
       AudioMessage,
       VideoMessage,
-      Loading
+      Loading,
+      Toast
     }
   };
 </script>
