@@ -70,7 +70,7 @@
       display: inline-block;
       vertical-align: top;
       max-width: rem(510px);
-      padding: rem(34px) rem(36px);
+      padding: rem(34px) rem(36px); //line-height: 1;
       margin: 0 rem(30px);
       border-radius: rem(21px);
       @include font-dpr(17px);
@@ -99,7 +99,7 @@
         display: inline-block;
         vertical-align: top;
         background: #FFFFFF;
-        border: 1px solid #E4E9EB;
+        border: 1pxsolid #E4E9EB;
         box-shadow: 0 1px 0 0 rgba(204, 204, 204, 0.20);
         border-top-left-radius: 0;
         &.image-message {
@@ -144,74 +144,6 @@
   }
 }
 
-//输入区
-.main-input-box {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  width: 100%; //height: 1.3rem;
-  box-sizing: border-box;
-  font-size: 0;
-  padding: rem(14px) rem(90px) rem(14px) rem(112px);
-  background-color: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
-  //display: none;
-  z-index: 3;
-  &>* {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-  .main-input-box-textarea-inner {
-    box-sizing: border-box;
-    // margin-left: rem(30px);
-    max-height: rem(72px);
-    overflow: auto;
-    .main-input-box-textarea {
-      width: rem(490px);
-      border-radius: rem(40px);
-      padding-left: rem(20px);
-      padding-right: rem(20px);
-      padding-top: rem(15px);
-      @include font-dpr(14px);
-      background: #F3F6F7;
-      border: 0 solid #E8ECEF;
-      box-sizing: border-box;
-      min-height: rem(60px);
-    }
-  }
-  .main-input-box-send {
-    @include font-dpr(17px);
-    color: #B6B6B6;
-    position: absolute;
-    right: rem(40px);
-    top: 50%;
-    margin-top: rem(-37.5px);
-    line-height: rem(75px); //height: 1.3rem;
-    &.on {
-      color: #00D6C6;
-    }
-  }
-  .main-input-box-plus {
-    @include font-dpr(16px);
-    width: rem(50px);
-    height: rem(50px);
-    position: absolute;
-    left: rem(40px);
-    top: 50%;
-    margin-top: rem(-25px);
-    input[type="file"] {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0;
-      display: block;
-      width: rem(50px);
-    }
-  }
-}
 
 //病例单
 .message-result {
@@ -403,9 +335,9 @@
 //头部时间提示
 .main-message-time {
   @include clearfix(); //padding: rem(10px) 0;
-  height: rem(88px);
+  height: rem(64px);
   background: url("../../../common/image/imScene/top_hint@2x.png") no-repeat;
-  background-size: 100% 100%; //text-align: center;
+  background-size: cover; //text-align: center;
   //display: none;
   position: fixed;
   top: 0;
@@ -414,16 +346,6 @@
   z-index: 5;
   p {
     display: inline-block;
-  }
-  .new-service-time{
-    line-height: rem(88px);
-    opacity: 0.7;
-    @include font-dpr(15px);
-    color: #FFFFFF;
-    margin-left: rem(30px);
-    padding-left: rem(38px);
-    background: url("../../../common/image/imScene/time@2x.png") left center no-repeat;
-    background-size: rem(28px) rem(28px);
   }
   .residue-time {
     line-height: rem(61px);
