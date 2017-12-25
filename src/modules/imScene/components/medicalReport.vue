@@ -24,11 +24,10 @@
           <!--<p>①  与您沟通分析病情</p>-->
           <!--<p>②  根据病情推荐对症专家</p>-->
           <!--<p>分诊医生通常会在5分钟内回复，请您耐心等候</p>-->
-          <article class="disclaimer-content" >
-            <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
-          </article>
+          <section class="tips-content">
+            重要提示：在线咨询不能代替面诊，医生建议仅供参考。
+          </section>
         </figcaption>
-
       </article>
     </section>
   </div>

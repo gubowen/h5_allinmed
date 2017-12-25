@@ -2,11 +2,12 @@
   <section class="main-inner ev-fileUpHide" style="overflow:auto">
     <transition name="fadeDown">
       <article class="main-message-time" v-if="lastTimeShow">
-        <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
+        <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
         <p class="service-time">
           <span class="service-time-top">服务时间</span>
           <span class="service-time-bottom">09: 00-22: 00</span>
-        </p>
+        </p> -->
+        <p class="new-service-time">服务时间：08:00-21:00</p>
       </article>
     </transition>
     <section class="main-message" ref="wrapper"
@@ -87,6 +88,7 @@
             :userData="userData"
             :targetData="targetData"
             :currentIndex="index"
+            :fileProgress="fileProgress"
             :deleteMsgIndex="deleteMsgIndex"
           >
           </FileMessage>
@@ -246,10 +248,10 @@
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+            <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
                    accept="application/pdf">
-            <input type="file" v-if="!isIos" v-show="inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+            <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
                    accept="application/pdf">
           </li>
@@ -346,8 +348,15 @@
           progress: "0%",
           index: 0
         },
+        // 文件pdf发送进度
+        fileProgress:{
+          uploading: false,
+          progress: "0%",
+          index: 0
+        },
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
+        fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
         footerBottomFlag: false, // 底部文件选择框是否显示
         noWXPayShow: false,
         onFocus: false,
@@ -842,7 +851,7 @@
                   custom: JSON.stringify({
                     cType: "0",
                     cId: that.cId,
-                    mType: "36",
+                    mType: "37",
                     conId: that.orderSourceId,
                     patientName: that.$store.state.patientName,
                     idClient: msg.idClient
@@ -1182,7 +1191,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "32",
+            mType: "38",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1354,14 +1363,19 @@
       // 发送pdf
       sendPdfFile(_file) {
         const that = this;
-        // this.msgList.push({
-        //   file: {
-        //     url: window.URL.createObjectURL(_file)
-        //   },
-        //   type: "file",
-        //   from: that.userData.account
-        // });
-        // that.videoLastIndex = that.msgList.length - 1;
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file),
+            ext: "pdf",
+            fileName:_file.name,
+          },
+          custom: JSON.stringify({
+            name: _file.name
+          }),
+          type: "file",
+          from: that.userData.account
+        });
+        that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
         reader.onload = oFREvent => {
@@ -1369,13 +1383,13 @@
             type: "file",
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
-              // this.inputVideoFlag = false;
+              // this.inputPdfFlag = false;
               that.scrollToBottom();
-              // that.videoProgress = {
-              //   uploading: true,
-              //   progress: obj.percentageText,
-              //   index: that.videoLastIndex
-              // };
+              that.fileProgress = {
+                uploading: true,
+                progress: obj.percentageText,
+                index: that.fileLastIndex
+              };
               console.log("文件总大小: " + obj.total + "bytes");
               console.log("已经上传的大小: " + obj.loaded + "bytes");
               console.log("上传进度: " + obj.percentage);
@@ -1384,6 +1398,9 @@
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
               // show file to the user
+              file = Object.assign(file,{
+                fileName:_file.name,
+              });
               console.log(file);
               if (!error) {
                 let msg = that.nim.sendFile({
@@ -1392,19 +1409,19 @@
                     cType: "0",
                     cId: that.cId,
                     mType: "1",
-                    conId: that.orderSourceId
+                    conId: that.orderSourceId,
+                    name: _file.name
                   }),
                   to: that.targetData.account,
                   file: file,
                   type: "file",
                   done(error, msg) {
-                    that.msgList.push(msg);
-                    // that.videoProgress = {
-                    //   uploading: false,
-                    //   progress: "0%",
-                    //   index: 0
-                    // };
-                    // that.imageList.push(msg.file.url);
+                    that.msgList[that.fileLastIndex] = msg;
+                    that.fileProgress = {
+                      uploading: false,
+                      progress: "0%",
+                      index: 0
+                    };
                   }
                 });
               } else {
@@ -1761,6 +1778,10 @@
       progressVideo() {
         return this.videoProgress.progress;
       },
+      // 配合watchpdf上传进度使用
+      progressFile() {
+        return this.fileProgress.progress;
+      },
       lastTime() {
         return this.$store.state.lastTime;
       },
@@ -1845,7 +1866,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "34",
+            mType: "39",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1872,7 +1893,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "0",
+            mType: "40",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1916,6 +1937,14 @@
           this.inputVideoFlag = true;
         } else {
           this.inputVideoFlag = false;
+        }
+      },
+      // 监听pdf上传完成，可以继续上传；
+      progressFile(newVal, oldVal) {
+        if (newVal == "0%" || newVal == "100%") {
+          this.inputPdfFlag = true;
+        } else {
+          this.inputPdfFlag = false;
         }
       },
       lastTime: function (time) {
@@ -2015,11 +2044,11 @@
     }
     .main-input-box-textarea-inner {
       box-sizing: border-box;
-      margin-left: rem(30px);
+      margin-left: rem(15px);
       max-height: 2.5rem;
       overflow: auto;
       .main-input-box-textarea {
-        width: rem(490px);
+        width: rem(508px);
         border-radius: rem(40px);
         padding-left: rem(20px);
         padding-right: rem(20px);
@@ -2048,7 +2077,7 @@
       width: rem(50px);
       height: rem(50px);
       position: absolute;
-      left: rem(40px);
+      left: rem(30px);
       top: 50%;
       margin-top: rem(-25px);
       input[type="file"] {
@@ -2067,7 +2096,7 @@
   .footer-box-top {
     position: relative;
     width: 100%;
-    padding: rem(20px) rem(90px);
+    padding: rem(14px) rem(90px);
     box-sizing: border-box;
   }
 

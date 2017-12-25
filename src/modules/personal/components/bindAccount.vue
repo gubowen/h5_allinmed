@@ -6,7 +6,7 @@
         <span class="operate">
           <em v-if="weixinName.length>0">{{weixinName}}</em>
           <a class="bind ev-bind-weixin" v-if="weixinName.length===0">去绑定</a>
-          <i class="jump"></i>
+          <!--<i class="jump"></i>-->
         </span>
       </section>
       <section class="account-item">

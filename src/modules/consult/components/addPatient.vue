@@ -27,18 +27,24 @@
         <!--<transition name="fadeDown" mode="out-in">-->
         <div data-alcode-mod='708' data-alcode-item-selector=".patient-list-item">
           <section class="patient-list" v-if="!createNewPatient">
-          <section
-            @click="toSelectPart(index)"
-            :class="{'on':createNewPatient===false && currentIndex==index}"
-            class="patient-list-item"
-            v-for="(item, index) in patientList"
-            :key="index"
-          >
-            <figcaption>
-              {{item.patientName}}
-            </figcaption>
+            <section
+              @click="toSelectPart(index)"
+              :class="{'on':createNewPatient===false && currentIndex==index}"
+              class="patient-list-item"
+              v-for="(item, index) in patientList"
+              :key="index"
+            >
+              <figcaption>
+                {{item.patientName}}
+              </figcaption>
+            </section>
           </section>
-        </section>
+          <section class="dutyTips" v-if="!createNewPatient">
+            <section class="dutyTips-bg"></section>
+            <p class="dutyTips-text">
+              提示：危重症、急诊患者不适合在线咨询服务，建议尽快到医院就诊。
+            </p>
+          </section>
           <section data-alcode='e122' class="add-patient-box" v-if="headerShow == 2" @click="addFun()">
             <span class="add-patient-btn" :class="{'on':createNewPatient}">添加新患者</span>
           </section>
@@ -120,6 +126,12 @@
               <!--</article>-->
             </section>
           </section>
+          <section class="dutyTips"  v-if="createNewPatient">
+            <section class="dutyTips-bg"></section>
+            <p class="dutyTips-text">
+              提示：危重症、急诊患者不适合在线咨询服务，建议尽快到医院就诊。
+            </p>
+          </section>
           <!--联系我们消息-->
           <section class="info-error-tips" v-if="infoErrorShow">
             <p class="tips-box" @click="phoneShow =true">
@@ -131,7 +143,7 @@
         <!--无患者提示-->
         <!--<transition name="fade">-->
         <div data-alcode-mod='709'>
-            <section v-if="createNewPatient">
+          <section v-if="createNewPatient">
             <button data-alcode='e123' class="btn-primary go-next" @click="validate">去问诊</button>
             <p data-alcode='e124' class="cancel-add-btn" v-if="headerShow == 3" @click="cancelAddFun()">取消添加</p>
           </section>
@@ -1024,7 +1036,22 @@
     overflow: hidden;
     position: relative;
   }
-
+  // 免责声明提示
+  .dutyTips{
+    background-color: white;
+    border-radius:0 0 rem(16px) rem(16px);
+    .dutyTips-bg{
+      width: 100%;
+      height: rem(26px);
+      background: url(../../../common/image/img00/patientConsult/line.png) no-repeat  center;
+      background-size: cover;
+    }
+    .dutyTips-text{
+      @include font-dpr(14px);
+      color: #97A8BA; 
+      padding: rem(0px) rem(44px) rem(28px);
+    }
+  }
   /*头部*/
   .patient-consult-rate.add-patient-title{
     /*background-color: yellow;*/
@@ -1054,8 +1081,7 @@
   //患者咨询
   .add-patient-content {
     background-color: white;
-    margin-bottom: rem(36px);
-    border-radius: rem(16px);
+    border-radius: rem(16px) rem(16px) 0 0;
     padding: rem(60px) rem(24px) rem(60px) rem(64px);
     .add-patient-content-form {
       background-color: white;
@@ -1187,7 +1213,7 @@
   }
   .patient-list {
     background-color: white;
-    border-radius: rem(16px);
+    border-radius: rem(16px) rem(16px) 0 0;
     text-align: left;
     font-size: 0;
     padding: rem(16px) rem(0px) rem(80px) rem(34px);
@@ -1266,7 +1292,7 @@
     color: #fff;
     outline: medium;
     padding: 0;
-    margin: rem(0px) auto rem(40px);
+    margin: rem(36px) auto rem(40px);
   }
 
   .cancel-add-btn{

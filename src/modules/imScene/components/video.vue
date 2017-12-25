@@ -14,6 +14,13 @@
         <!-- <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition> -->
+        <section class="middle-tip-box" v-if="progress.uploading">
+          <figure class="middle-tip-box-text">
+            <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
+                 alt="loading...">
+            <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
+          </figure>
+        </section>
         <header class="mulit-title">视频</header>
         <section class="mulitple-image-box">
           <figure class="mulitple-image" >
