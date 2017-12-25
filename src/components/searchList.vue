@@ -68,7 +68,7 @@
       this.returnRouter = this.$route.params.from;
       this.$refs.searchInput.focus();
 
-      document.body.scrollTop=0;
+      document.body.scrollTop = 0;
 
       window.addEventListener("scroll", () => {
         clearTimeout(this.scrollTimeTip);
@@ -77,7 +77,7 @@
             this.scrollTimeTip=setTimeout(()=>{
               page++;
               this.getMessageList(this.searchText, page)
-            },100);
+            }, 100);
           }
         }
       });

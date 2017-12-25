@@ -185,7 +185,7 @@ export default {
         display: "inline-block",
         fontSize: "0.37rem",
         color: "#909090",
-        top: "-1.5rem "
+        top: "-1.5rem"
       },
       patientParams: {
         customerId: api.getPara().customerId,
@@ -253,7 +253,7 @@ export default {
         }
       }
     }
-    
+
     this.$nextTick(() => {
       setTimeout(() => {
         Array.from(this.$el.querySelectorAll("textarea")).forEach((element, index) => {

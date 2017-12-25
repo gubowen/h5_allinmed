@@ -14,7 +14,7 @@ const logOut = (status) =>{
     },
     timeout: 20000,
     done(data) {
-      if(data&&data.responseObject&&data.responseObject.responseStatus){
+      if (data&&data.responseObject&&data.responseObject.responseStatus){
         localStorage.removeItem("hasCloseAttention");
         localStorage.removeItem("userId");
         localStorage.removeItem("userName");

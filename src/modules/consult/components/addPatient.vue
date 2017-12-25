@@ -200,7 +200,6 @@
     IDCheckLink:"/mcall/customer/patient/baseinfo/v1/getMapListByCustomerId/",//校验证件号码重复信息
   };
 
-
   export default{
     data(){
       return {

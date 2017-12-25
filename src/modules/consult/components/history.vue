@@ -53,10 +53,10 @@
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<9"
                              @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
-                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                      <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<9"
                              @change="onFileChange($event,1)" multiple ref="uploader">
-                       <input class="ev-upLoadInput" accept="image/*" type="file"
+                      <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="isIos&&uploading1===false&&imageList1.length<9"
                              @change="onFileChange($event,1)" multiple ref="uploader">
                     </li>
