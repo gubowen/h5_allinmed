@@ -753,7 +753,7 @@
                   custom: JSON.stringify({
                     cType: "0",
                     cId: that.cId,
-                    mType: "36",
+                    mType: "37",
                     conId: that.orderSourceId,
                     patientName: that.$store.state.patientName,
                     idClient: msg.idClient
