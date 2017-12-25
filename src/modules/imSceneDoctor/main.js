@@ -20,7 +20,7 @@ import ShowBigImg from "components/showBigImg";
 import MedicalReportDetail from "./components/medicalReportDetail";
 
 import store from "./store/store";
-
+import touch from "common/js/customDirective/vTouch";
 import "babel-polyfill";
 
 fastclick.attach(document.body);
@@ -39,7 +39,7 @@ class ImScene {
     //表单验证注册
     //路由系统注册
     Vue.use(VueRouter);
-
+    Vue.use(touch);
     this.routerStart();
     this.registerRouter();
     //Vue实例启动

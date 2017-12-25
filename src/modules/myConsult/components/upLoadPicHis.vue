@@ -211,17 +211,18 @@ export default {
     //图片上传
     upLoadPic(files, item, index, base64) {
       const that = this;
+      let _localViewUrl = window.URL.createObjectURL(files);
       //本地图片预览处理
       if (typeof index !== "undefined") {
         that["imageList"][item.adviceId][index] = {
-          blob: base64,
+          blob: _localViewUrl,
           imgId: "",
           uploading: true,
           fail: false
         };
       } else {
         that["imageList"][item.adviceId].push({
-          blob: base64,
+          blob: _localViewUrl,
           imgId: "",
           uploading: true,
           fail: false
@@ -431,7 +432,7 @@ export default {
         custom: JSON.stringify({
           cType: "0",
           cId: cd,
-          mType: "0"
+          mType: "40"
         }),
         content: JSON.stringify({
           type: "checkSuggestSendTips",
