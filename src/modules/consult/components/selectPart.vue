@@ -476,18 +476,18 @@
     margin-top: rem(0px);
     height: 100%;
     &.front {
-      background: url("../../../common/image/img00/patientConsult/front_bg.png") no-repeat left bottom;
-      background-size: cover;
+      background: url("../../../common/image/img00/patientConsult/front_bg.png") no-repeat center center;
+      background-size: contain;
     }
     &.back {
-      background: url("../../../common/image/img00/patientConsult/back_bg.png") no-repeat left bottom;
-      background-size: cover;
+      background: url("../../../common/image/img00/patientConsult/back_bg.png") no-repeat center center;
+      background-size: contain;
     }
     &-content {
       position: relative;
       border: none;
       height: 100%;
-      top: -2.4rem;
+      top: -1rem;
       & > img {
         position: absolute;
         bottom: 0;
@@ -1474,4 +1474,10 @@
     }
   }
 
+  @include iphoneX(){
+    .body-picture .body-picture-content{
+      position: relative;
+      top: -3rem;
+    }
+  }
 </style>

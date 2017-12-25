@@ -48,6 +48,11 @@
         @content;
     }
 }
+@mixin iphoneX(){
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio:3) {
+    @content;
+  }
+}
 @mixin query($process:null){
     $process:750px !default;
     @media (max-width:$process){
