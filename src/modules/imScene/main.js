@@ -21,6 +21,7 @@ import MedicalReportDetail from "./components/medicalReportDetail";
 import UploadList from "./components/uploadList";
 import TriageDetail from "./components/triageDetail";
 import knowledgeDetail from "./components/knowledgeDetail";
+import videoPlay from "./components/videoPlay";
 
 import store from "./store/store";
 import touch from "common/js/customDirective/vTouch";
@@ -119,7 +120,14 @@ class ImScene {
         keepAlive: true
       },
       component: knowledgeDetail
-      }
+    }, {
+      path: "/videoPlay",
+      name: "videoPlay",
+      meta: {
+        keepAlive: true
+      },
+      component: videoPlay
+      } 
     ]
   }
 }
