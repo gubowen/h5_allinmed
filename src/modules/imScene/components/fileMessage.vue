@@ -41,7 +41,7 @@
   export default {
     data() {
       return {
-        custom:null,
+        custom:{name:''},
       }
     },
     computed: {

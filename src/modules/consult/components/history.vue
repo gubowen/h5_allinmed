@@ -627,16 +627,16 @@ export default {
         }, 1000);
       } else {
         //跳转第四部分
-        this.$router.push({
-          name:"bodyMessage"
-        });
-        //提示用户提交后不可修改提交内容
-        // if (localStorage.getItem("PCIMLinks") !== null) {
-        //   this.backPopupShow = true;
-        // } else {
-        //   this.backPopupShow = false;
-        //   this.submitTip = true;
-        // }
+        // this.$router.push({
+        //   name:"bodyMessage"
+        // });
+        // 提示用户提交后不可修改提交内容
+        if (localStorage.getItem("PCIMLinks") !== null) {
+          this.backPopupShow = true;
+        } else {
+          this.backPopupShow = false;
+          this.submitTip = true;
+        }
       }
     },
     //提交数据
