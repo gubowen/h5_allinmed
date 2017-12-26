@@ -16,7 +16,8 @@
         </article>
       </transition>
       <transition name="fadeDown">
-        <article class="main-message-time doctor-title-message" v-if="getTargetMsgFinish&&!lastTimeShow" @click.stop="goToDoctorHomePage">
+        <article class="main-message-time doctor-title-message" v-if="getTargetMsgFinish&&!lastTimeShow"
+                 @click.stop="goToDoctorHomePage">
           <figure class="doctor-title-img">
             <img :src="$store.state.targetMsg.avatar" alt="">
           </figure>
@@ -82,13 +83,23 @@
             </HospitalNotice>
             <!--文本消息-->
             <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
-                         :targetData="targetData"  @deleteMsgEvent="deleteMsgEvent(msg)" @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
+                         :targetData="targetData" @deleteMsgEvent="deleteMsgEvent(msg)"
+                         @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
             </ContentText>
             <!--图像消息-->
-            <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file" :imageMessage="msg" :nim="nim"
+            <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file &&msg.file.ext!=='pdf'" :imageMessage="msg" :nim="nim"
                           ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
                           :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
             </ImageContent>
+            <!-- 图集消息 -->
+            <MulitpleImage
+              v-if="msg.type==='custom' && (JSON.parse(msg.content).type === 'mulitpleImage'||JSON.parse(msg.content).type ==='multipleImage' )"
+              :imageMessage="msg"
+              :userData="userData"
+              :targetData="targetData"
+            >
+
+            </MulitpleImage>
             <!-- 视频消息 -->
             <VideoMessage
               v-if="msg.type==='video' && msg.file"
@@ -97,9 +108,22 @@
               :targetData="targetData"
               :videoProgress="videoProgress"
               :currentIndex="index"
+              @clickLogo="goToDoctorHomePage"
             ></VideoMessage>
+            <!--文件消息-->
+            <FileMessage
+              v-if="msg.type==='file'&&msg.file&&msg.file.ext==='pdf'"
+              :fileMessage="msg"
+              :userData="userData"
+              :targetData="targetData"
+              :currentIndex="index"
+              :fileProgress="fileProgress"
+              :deleteMsgIndex="deleteMsgIndex"
+              @clickLogo="goToDoctorHomePage"
+            >
+            </FileMessage>
             <!--音频-->
-            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
+            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg" @clickLogo="goToDoctorHomePage">
             </AudioMessage>
             <!--患者扫码报道-->
             <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
@@ -114,43 +138,40 @@
 
       <transition name="fadeUp">
         <footer :class="footerPosition" v-if="inputBoxShow">
-          <transition name="fadeUp">
-            <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
-            </BottomTips>
-          </transition>
-          <!--医生拒绝-->
-          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
-            <div>
-              <span>重新推荐</span>
-            </div>
-          </section>
-          <!--超时未接诊-->
-          <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
-            <div>
-              <span>重新支付</span>
-            </div>
-          </section>
-          <!--超时未接诊-扫码报道-->
-          <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
-            <div>
-              <span>已退诊</span>
-            </div>
-          </section>
-          <!--继续沟通-->
-          <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1"
-                   @click="retryClick(1)">
-            <div>
-              <span>继续沟通</span>
-            </div>
-          </section>
-          <section class="main-input-box-plus">
-            <i class="icon-im-plus"></i>
-            <input v-if="isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)"
-                   ref="imageSender">
-            <input v-if="!isIos&&inputFlag" multiple type="file" id="ev-file-send" @change="sendFile($event)"
-                   ref="imageSender" capture="camera" accept="image/*">
-          </section>
-          <figure class="main-input-box-textarea-inner">
+          <section class="footer-box-top">
+            <transition name="fadeUp">
+              <BottomTips v-if="bottomTipsShow" :bottomTipsType="bottomTipsType">
+              </BottomTips>
+            </transition>
+            <!--医生拒绝-->
+            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
+              <div>
+                <span>重新推荐</span>
+              </div>
+            </section>
+            <!--超时未接诊-->
+            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
+              <div>
+                <span>重新支付</span>
+              </div>
+            </section>
+            <!--超时未接诊-扫码报道-->
+            <section class="prohibit-input" v-if="!lastTimeShow&&(bottomTipsType==2&&from==='report')">
+              <div>
+                <span>已退诊</span>
+              </div>
+            </section>
+            <!--继续沟通-->
+            <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1"
+                     @click="retryClick(1)">
+              <div>
+                <span>继续沟通</span>
+              </div>
+            </section>
+            <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
+              <i class="icon-im-plus"></i>
+            </section>
+            <figure class="main-input-box-textarea-inner">
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
@@ -161,10 +182,50 @@
                       @input="inputLimit"
                       @keypress.enter.stop="autoSizeTextarea()">
             </textarea>
-            <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
-          </figure>
+              <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
+            </figure>
 
-
+          </section>
+          <ul class="footer-box-bottom" v-if="footerBottomFlag">
+            <li class="bottom-item">
+              <figure class="bottom-item-content">
+                <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
+                     height="234"/>
+                <figcaption class="bottom-item-description">图片</figcaption>
+              </figure>
+              <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
+                     ref="imageSender"
+                     accept="image/*">
+              <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
+                     ref="imageSender" capture="camera"
+                     accept="image/*">
+            </li>
+            <li class="bottom-item">
+              <figure class="bottom-item-content">
+                <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
+                     height="234"/>
+                <figcaption class="bottom-item-description">视频</figcaption>
+              </figure>
+              <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+                     ref="videoSender"
+                     accept="video/*">
+              <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+                     ref="videoSender" capture="camera"
+                     accept="video/*">
+            </li>
+            <li class="bottom-item">
+              <figure class="bottom-item-content">
+                <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
+                <figcaption class="bottom-item-description">文件</figcaption>
+              </figure>
+              <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+                     ref="pdfSender"
+                     accept="application/pdf">
+              <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
+                     ref="pdfSender"
+                     accept="application/pdf">
+            </li>
+          </ul>
         </footer>
       </transition>
       <!--支付弹层-->
@@ -212,6 +273,7 @@
   import AudioMessage from "./audioMessage";
   import VideoMessage from "./video";
   import MulitpleImage from "./mulitpleImage";
+  import FileMessage from "./fileMessage";
 
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
@@ -256,12 +318,15 @@
           index: 0
         },
         // 文件pdf发送进度
-        fileProgress:{
+        fileProgress: {
           uploading: false,
           progress: "0%",
           index: 0
         },
         onFocus: false,
+        inputImageFlag: true, //上传图片input控制
+        inputVideoFlag: true, //上传视频input控制
+        inputPdfFlag: true,//上传pdf文件控制
         inputFlag: true, //上传图片input控制
         loading: true,
         payPopupShow: false,
@@ -269,6 +334,7 @@
         bottomTipsShow: false,
         bottomTipsType: "",
         receiveTreatmentStatus: false,
+        footerBottomFlag: false, // 底部文件选择框是否显示
         receiveTime: "",
         imageList: [],
         consultationId: "",
@@ -296,7 +362,7 @@
         deleteMsgIndex: -1,
         toastTips: "",
         toastShow: false,
-        getTargetMsgFinish:false
+        getTargetMsgFinish: false
       };
     },
 
@@ -357,7 +423,7 @@
                   custom: JSON.stringify({
                     cType: "0",
                     cId: that.cId,
-                    mType: "36",
+                    mType: "37",
                     conId: that.orderSourceId,
                     patientName: that.$store.state.patientName,
                     idClient: msg.idClient
@@ -497,6 +563,7 @@
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
+                this.footerBottomFlag=false;
                 this.showBottomTips(2);
                 break;
               case 4: //医生接诊
@@ -513,8 +580,8 @@
           });
         }
       },
-      goToDoctorHomePage(){
-        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' +api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
+      goToDoctorHomePage() {
+        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
       },
       getUserBaseData() {
         const that = this;
@@ -673,7 +740,7 @@
       // 四证统一后，医生数据从唯医数据库获取，不确保能准确同步云信名片
       // 因此通过云信SDK获取已经是不安全的方式
       getDoctorMsg(callback) {
-        const that=this;
+        const that = this;
         api.ajax({
           url: XHRList.getDoctorBaseMsg,
           method: "POST",
@@ -687,11 +754,11 @@
               store.commit("setTargetMsg", {
                 avatar: dataList.logoUrl,
                 nick: dataList.customerName,
-                title:dataList.medicalTitle,
-                hospital:dataList.company
+                title: dataList.medicalTitle,
+                hospital: dataList.company
               });
               document.title = `${dataList.customerName}医生`;
-              that.getTargetMsgFinish=true;
+              that.getTargetMsgFinish = true;
               callback && callback();
 
             }
@@ -701,7 +768,7 @@
       getTargetMessage(element) {
         if (element.from === this.targetData.account) {
           this.targetMsg.push(element);
-          store.commit("setTargetList",element);
+          store.commit("setTargetList", element);
         }
       },
       getMedicalMessage() {
@@ -740,18 +807,6 @@
                   },
                   dataList[0].patientCasemap.patientName
                 );
-                //                const userData = {
-                //                  nick: dataList[0].patientCasemap.patientName,
-                //                  avatar: that.$store.state.logoUrl,
-                //                  sign: 'newSign',
-                //                  gender: dataList[0].patientCasemap.sexName === "男" ? "male" : "female",
-                //                  email: '',
-                //                  birth: '',
-                //                  tel: '',
-                //                };
-                //
-                //                that.nim.updateMyInfo(userData);
-                //                that.userData = Object.assign({}, that.userData, userData);
               }
             }
           }
@@ -815,12 +870,14 @@
           // }),
           done(error, msg) {
             that.sendMessageSuccess(error, msg);
-            that.sendHistoryTips();
+            if (!api.getPara().from || api.getPara().from !== "report") {
+              that.sendHistoryTips();
+            }
           }
         });
       },
-      sendHistoryTips(){
-        const that=this;
+      sendHistoryTips() {
+        const that = this;
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: this.targetData.account,
@@ -831,9 +888,9 @@
             conId: this.orderSourceId
           }),
           content: JSON.stringify({
-            type:"getHistoryTip",
-            data:{
-              caseId:this.userData.account.substring(2)
+            type: "getHistoryTip",
+            data: {
+              caseId: this.userData.account.substring(2)
             }
           }),
           isPushable: false,
@@ -885,7 +942,6 @@
            * query：from=report则为扫码问诊与扫码报道
            * 此时正常发送问诊单，但被拒状态不同
            * */
-        //        this.getPatientBase(this.sendReportTipMessage);
         if (state < 0) {
           setTimeout(() => {
             if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
@@ -1190,38 +1246,142 @@
         }
       },
 
-      sendFile(e) {
+      //上传文件
+      sendImage(e) {
         const that = this;
-        that.inputFlag = false;
-        const file = e.target.files[0];
-        this.msgList.push({
-          file: {
-            url: window.URL.createObjectURL(file)
-          },
-          type: "file",
-          idClient: "",
-          from: this.userData.account
-        });
-        console.log(file);
-        if (file.type.includes("image")) {
-          this.sendImageFile(file);
-        } else if (file.type.includes("video")) {
-          this.sendVideoFile(file);
+        console.log(e.target.files);
+        if (e.target.files.length > 1) {
+          if (e.target.files.length>9){
+            that.toastTips = `您最多只能选择9张图片`;
+            that.toastShow = true;
+            setTimeout(() => {
+              that.toastShow = false;
+            }, 2000);
+            e.target.files=e.target.files.slice(0,10);
+          }
+          this.getMulitpleImage(e.target.files);
+        } else {
+          let _file = e.target.files[0];
+          console.log(_file);
+          console.log(window.URL.createObjectURL(_file));
+          if (_file.type.includes("image")) {
+            this.sendImageFile(_file);
+          } else {
+            that.toastTips = `请选择图片`;
+            that.toastShow = true;
+            setTimeout(() => {
+              that.toastShow = false;
+            }, 2000);
+          }
         }
       },
-      sendImageFile(file) {
+      getMulitpleImage(list) {
+        let mList = [];
         const that = this;
+        console.log(list);
+        let promises = [];
+        this.msgList.push({
+          type:"custom",
+          content:JSON.stringify({
+            type:"multipleImage",
+            data:{
+              list:[]
+            }
+          }),
+          loading:true,
+          from: this.userData.account
+        });
+
+        Array.from(list).forEach((element, index) => {
+          promises.push(
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(element);
+              reader.onload = oFREvent => {
+                that.nim.previewFile({
+                  type: "image",
+                  dataURL: oFREvent.target.result,
+                  uploadprogress(obj) {
+                    that.scrollToBottom();
+                    console.log("文件总大小: " + obj.total + "bytes");
+                    console.log("已经上传的大小: " + obj.loaded + "bytes");
+                    console.log("上传进度: " + obj.percentage);
+                    console.log("上传进度文本: " + obj.percentageText);
+                  },
+                  done(error, file) {
+                    console.log("上传image" + (!error ? "成功" : "失败"));
+                    // show file to the user
+                    console.log(file);
+                    if (!error) {
+                      // that.mList.push(file);
+                      resolve(file);
+                    }
+                  }
+                });
+              };
+            })
+          );
+        });
+        console.log(promises);
+        Promise.all(promises).then(result => {
+          console.log(result);
+          this.sendMulitpleImage(result);
+        });
+      },
+      // 发送多图文件
+      sendMulitpleImage(list) {
+        const that = this;
+
+        this.nim.sendCustomMsg({
+          scene: "p2p",
+          to: that.targetData.account,
+          custom: JSON.stringify({
+            cType: "0",
+            cId: that.cId,
+            mType: "38",
+            conId: that.orderSourceId
+          }),
+          content: JSON.stringify({
+            type: "multipleImage",
+            data: {
+              list
+            }
+          }),
+          done(error, msg) {
+            if (!error) {
+              console.log(msg);
+
+              // that.msgList[that.msgList.length-1] = msg;
+              that.msgList.splice(-1,1,msg);
+              // that.sendMessageSuccess(error, msg);
+            }
+          }
+        });
+      },
+      // 上传图片文件
+      sendImageFile(_file) {
+        const that = this;
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file)
+          },
+          type: "image",
+          from: that.userData.account
+        });
         that.imageLastIndex = that.msgList.length - 1;
+        console.log(window.URL.createObjectURL(_file));
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
+            // that.inputImageFlag = false;
             that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
               progress: obj.percentageText,
-              index: that.imageLastIndex,
+              index: that.imageLastIndex
             };
+
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
             console.log("上传进度: " + obj.percentage);
@@ -1230,52 +1390,71 @@
           done(error, file) {
             console.log("上传image" + (!error ? "成功" : "失败"));
             // show file to the user
-            console.log(file);
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: "p2p",
+                to: that.targetData.account,
                 custom: JSON.stringify({
-                  cType: "1",
-                  cId: api.getPara().doctorCustomerId,
+                  cType: "0",
+                  cId: that.cId,
                   mType: "1",
                   conId: that.orderSourceId
                 }),
-                to: that.targetData.account,
                 file: file,
-                needPushNick: false,
-                pushContent: `患者<${that.userData.nick
-                  ? that.userData.nick
-                  : ""}>向您问诊，点击查看详情`,
-                pushPayload: JSON.stringify({
-                  account: "0_" + api.getPara().caseId,
-                  type: "1"
-                }),
-                type: "image",
                 done(error, msg) {
                   that.msgList[that.imageLastIndex] = msg;
+                  that.imageList.push(
+                    that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
+                      .file.url
+                  );
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
                     index: 0
                   };
-                  that.imageList.push(msg.file.url);
                 }
               });
+            } else {
+              console.log(error);
             }
           }
         });
       },
-      sendVideoFile(file) {
+      // 选择视频
+      sendVideo(e) {
+        let _file = e.target.files[0];
+        if (_file.type.includes("video")) {
+          this.sendVideoFile(_file);
+        } else {
+          this.toastTips = `请选择视频文件`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
+      },
+      // 上传视频文件
+      sendVideoFile(_file) {
         const that = this;
+        console.log(_file);
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file)
+          },
+          type: "video",
+          from: that.userData.account
+        });
+        that.videoLastIndex = that.msgList.length - 1;
         this.nim.previewFile({
           type: "video",
-          fileInput: this.$refs.imageSender,
+          fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
+            // this.inputVideoFlag = false;
             that.scrollToBottom();
-            that.imageProgress = {
+            that.videoProgress = {
               uploading: true,
               progress: obj.percentageText,
-              index: that.msgList.length - 1
+              index: that.videoLastIndex
             };
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1290,35 +1469,116 @@
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
-                  cType: "1",
-                  cId: api.getPara().doctorCustomerId,
+                  cType: "0",
+                  cId: that.cId,
                   mType: "1",
                   conId: that.orderSourceId
                 }),
                 to: that.targetData.account,
                 file: file,
-                needPushNick: false,
-                pushContent: `患者<${that.userData.nick
-                  ? that.userData.nick
-                  : ""}>向您问诊，点击查看详情`,
-                pushPayload: JSON.stringify({
-                  account: "0_" + api.getPara().caseId,
-                  type: "1"
-                }),
                 type: "video",
                 done(error, msg) {
-                  that.msgList[that.msgList.length - 1] = msg;
-                  that.imageProgress = {
+                  that.msgList[that.videoLastIndex] = msg;
+                  that.videoProgress = {
                     uploading: false,
                     progress: "0%",
                     index: 0
                   };
-                  that.imageList.push(msg.file.url);
+                  // that.imageList.push(msg.file.url);
                 }
               });
+            } else {
+              console.log(error);
             }
           }
         });
+      },
+      // 选择pdf
+      sendPdf(e) {
+        let _file = e.target.files[0];
+        console.log(_file)
+        if (_file.type.includes("pdf")) {
+          this.sendPdfFile(_file);
+        } else {
+          this.toastTips = `请选择pdf文件`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
+      },
+      // 发送pdf
+      sendPdfFile(_file) {
+        const that = this;
+        this.msgList.push({
+          file: {
+            url: window.URL.createObjectURL(_file),
+            ext: "pdf",
+            fileName:_file.name,
+          },
+          custom: JSON.stringify({
+            name: _file.name
+          }),
+          type: "file",
+          from: that.userData.account
+        });
+        that.fileLastIndex = that.msgList.length - 1;
+        const reader = new FileReader();
+        reader.readAsDataURL(_file);
+        reader.onload = oFREvent => {
+          this.nim.previewFile({
+            type: "file",
+            dataURL: oFREvent.target.result,
+            uploadprogress(obj) {
+              // this.inputPdfFlag = false;
+              that.scrollToBottom();
+              that.fileProgress = {
+                uploading: true,
+                progress: obj.percentageText,
+                index: that.fileLastIndex
+              };
+              console.log("文件总大小: " + obj.total + "bytes");
+              console.log("已经上传的大小: " + obj.loaded + "bytes");
+              console.log("上传进度: " + obj.percentage);
+              console.log("上传进度文本: " + obj.percentageText);
+            },
+            done(error, file) {
+              console.log("上传文件" + (!error ? "成功" : "失败"));
+              // show file to the user
+              file = Object.assign(file,{
+                fileName:_file.name,
+              });
+              console.log(file);
+              file.name=_file.name;
+              if (!error) {
+                let msg = that.nim.sendFile({
+                  scene: "p2p",
+                  custom: JSON.stringify({
+                    cType: "0",
+                    cId: that.cId,
+                    mType: "1",
+                    conId: that.orderSourceId,
+                    name: _file.name
+                  }),
+                  to: that.targetData.account,
+                  file: file,
+                  type: "file",
+                  done(error, msg) {
+                    that.msgList[that.fileLastIndex] = msg;
+                    that.fileProgress = {
+                      uploading: false,
+                      progress: "0%",
+                      index: 0
+                    };
+                  }
+                });
+              } else {
+                console.log(error);
+              }
+            }
+          });
+        };
+
       },
       scrollToBottom() {
         let that = this;
@@ -1643,6 +1903,7 @@
         if (time <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
+          this.footerBottomFlag=false;
           this.showBottomTips(1);
         } else {
           this.lastTimeShow = true;
@@ -1653,6 +1914,7 @@
         if (count <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
+          this.footerBottomFlag=false;
           store.commit("stopLastTimeCount");
           this.showBottomTips(1);
         } else {
@@ -1677,6 +1939,7 @@
       VideoMessage,
       MulitpleImage,
       Loading,
+      FileMessage,
       Toast
     }
   };

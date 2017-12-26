@@ -22,15 +22,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  &.padding-top{
-    padding-top: 1rem;
-  }
+  padding-top: 1rem;
   overflow: scroll;
   // height: 92.5%;
   -webkit-overflow-scrolling: touch;
   z-index: 3;
-  transform-style: preserve-3d;
-  transform: translate3d(0, 0, 0);
   & > section{
     -webkit-overflow-scrolling: touch;
     transform-style: preserve-3d;
@@ -144,7 +140,6 @@
   width: 100%; //height: 1.3rem;
   box-sizing: border-box;
   font-size: 0;
-  padding: rem(20px) rem(90px);
   background-color: #fff;
   box-shadow: 0px 0px 6px 0px rgba(226, 226, 226, 0.50); //position: relative;
   //display: none;
@@ -296,7 +291,7 @@
 
 .icon-im-plus {
   @include square(rem(40px));
-  background: url("../../../../src/common/image/imScene/dialog_photo_default@2x.png") no-repeat;
+  background: url("../../../../src/common/image/imScene/more@2x.png") no-repeat;
   display: inline-block;
   vertical-align: middle;
   background-size: 100% 100%;
@@ -744,4 +739,96 @@ html, body {
 }
 .grey-tips{
   text-align: center;
+}
+
+
+.main-message-time.doctor-title-message{
+  background-image: linear-gradient(90deg,rgba(47,197,189,0.00)  0%, rgba(92,228,224,0.55) 100%);
+  .doctor-title-img{
+    @include circle(rem(56px),transparent);
+    display: inline-block;
+    vertical-align: middle;
+    & > img{
+      width: 100%;
+      height: 100%;
+      vertical-align: top;
+      border-radius: 50%;
+    }
+  }
+  .doctor-title-content{
+    display: inline-block;
+    vertical-align: middle;
+    @include ellipsis();
+    font-size: rem(30px);
+    max-width: 8rem;
+    & > h4{
+      color: #FFFFFF;
+      font-size: rem(30px);
+      opacity: 0.9;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 rem(8px);
+    }
+    & > span{
+      vertical-align: middle;
+      color: #ffffff;
+      opacity: 0.9;
+      font-size: rem(30px);
+      &.hospital{
+        margin: 0 rem(12px);
+      }
+    }
+    & > .icon-rightArrow{
+      width: rem(36px);
+      height: rem(36px);
+      background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png");
+      background-size: contain;
+      display: block;
+      position: absolute;
+      right: rem(30px);
+      top: 50%;
+      margin-top: rem(-18px);
+    }
+  }
+}
+.footer-box-top {
+  position: relative;
+  width: 100%;
+  padding: rem(14px) rem(90px);
+  box-sizing: border-box;
+}
+
+// 底部上传文件盒子样式
+.footer-box-bottom {
+  width: 100%;
+  padding: rem(32px) rem(80px);
+  box-sizing: border-box;
+  border-top: 1px solid #eeeeee;
+  .bottom-item {
+    display: inline-block;
+    position: relative;
+    input {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      display: block;
+    }
+    .bottom-item-image {
+      width: rem(100px);
+      height: rem(100px);
+    }
+    .bottom-item-description {
+      text-align: center;
+      margin-top: rem(14px);
+      color: #555555;
+      @include font-dpr(12px);
+    }
+  }
+  .bottom-item + .bottom-item {
+    margin-left: rem(64px);
+  }
 }

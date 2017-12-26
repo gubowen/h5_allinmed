@@ -28,6 +28,10 @@
             <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
           </figure>
         </section>
+        <article class="disclaimer-content" v-if="videoMessage.from===targetData.account">
+          <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+        </article>
+      </figcaption>
       </figcaption>
       <figure class="main-message-img" v-if="videoMessage.from===userData.account">
         <img :src="logoUrl" alt="">

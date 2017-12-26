@@ -1,7 +1,7 @@
 <template>
   <section class="main-message-box">
     <article class="main-message-box-item others-message" @click="audioPlay">
-      <figure class="main-message-img">
+      <figure class="main-message-img" @click.stop="$emit('clickLogo')">
         <img :src="targetLogo" alt="">
       </figure>
       <figcaption class="main-message-content audio-message" :class="{'playing':playing===true}">

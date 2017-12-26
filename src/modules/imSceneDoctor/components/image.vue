@@ -20,6 +20,9 @@
           </figure>
         </section>
         <img class="im-image" @click.stop="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
+        <article class="disclaimer-content" v-if="imageMessage.from===targetData.account">
+          <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+        </article>
       </figcaption>
       <figure class="main-message-img" v-if="imageMessage.from===userData.account">
         <img :src="logoUrl" alt="">
@@ -130,5 +133,23 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-
+  @import "../../../../scss/library/_common-modules";
+.image-message{
+  background-color: #fff !important;
+  .im-image{
+    margin: rem(36px);
+  }
+  .disclaimer-content{
+    color: #97A8BA;
+    background: #fafafb;
+    @include font-dpr(13px);
+    margin: 0;
+    padding: rem(20px) rem(36px);
+    box-sizing: border-box;
+    border-radius: rem(21px);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 2px solid #d8d8d8;
+  }
+}
 </style>
