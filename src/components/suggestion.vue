@@ -17,19 +17,19 @@
   export default{
     data(){
       return {
-        
+
       }
     },
     methods: {
       goFeedback () {
-        location.href = '/dist/feedback.html';
+        location.href = '/dist/feedback.html?from=im';
       }
     },
     mounted(){
-      
+
     },
     components: {
-      
+
     },
   }
 </script>
@@ -60,7 +60,7 @@
       color: #FFFFFF;
       text-align: center;
       margin-top: rem(6px);
-      line-height: 1.1;      
+      line-height: 1.1;
     }
   }
 </style>

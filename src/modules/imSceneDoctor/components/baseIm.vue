@@ -183,7 +183,7 @@
                 <span>继续沟通</span>
               </div>
             </section>
-            <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
+            <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true;$refs.inputTextarea.focus()'>
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
@@ -251,6 +251,9 @@
       <transition name="fade">
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
+      <transition name="fade">
+        <Suggestion></Suggestion>
+      </transition>
     </section>
   </div>
 </template>
@@ -290,6 +293,7 @@
   import VideoMessage from "./video";
   import MulitpleImage from "./mulitpleImage";
   import FileMessage from "./fileMessage";
+  import Suggestion from "components/suggestion";
 
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
@@ -1417,6 +1421,7 @@
                   conId: that.orderSourceId
                 }),
                 file: file,
+                type:"image",
                 done(error, msg) {
                   that.msgList[that.imageLastIndex] = msg;
                   that.imageList.push(
@@ -1955,6 +1960,7 @@
       VideoMessage,
       MulitpleImage,
       Loading,
+      Suggestion,
       FileMessage,
       Toast
     }

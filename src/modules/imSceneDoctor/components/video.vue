@@ -66,6 +66,10 @@ export default {
         ? "/src/common/image/imScene/default.png"
         : this.$store.state.targetMsg.avatar;
     },
+    videoPlay () {
+      this.$refs.videoHtml.play();
+
+    },
     progress() {
       if (this.currentIndex === this.videoProgress.index) {
         // return this.imageProgress;
