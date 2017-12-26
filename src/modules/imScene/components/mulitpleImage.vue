@@ -96,14 +96,11 @@ export default {
 
   & > .mulitple-image {
     display: inline-block;
-    margin-right: rem(20px);
+    margin-right: rem(18px);
     & > img {
       width: rem(132px);
       height: rem(132px);
       vertical-align: top;
-    }
-    &:nth-child(1) {
-      // margin: 0;
     }
     &:nth-last-child(1) {
       margin-right: 0;

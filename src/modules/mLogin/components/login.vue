@@ -632,8 +632,10 @@
       &.phoneInput {
         margin-top: rem(60px);
         position: relative;
+        @include clearfix();
         & > input {
           width: 100%;
+          float: left;
           &.hasContent {
             @include font-dpr(28px);
             font-weight: bold;
