@@ -1,5 +1,5 @@
 <template>
-  <section class="main-message-box">
+  <section class="main-message-box" v-touch:long="longTouchHandler">
     <article
       class="main-message-box-item my-message"
       :data-clientid="imageMessage.idClient">
@@ -8,9 +8,9 @@
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content multiple-box">
-        <!-- <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
-        </transition> -->
+         <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</span>
+        </transition>
         <section class="middle-tip-modal" v-if="imageMessage.loading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
@@ -37,7 +37,8 @@
   export default {
     data() {
       return {
-        imageList: []
+        imageList: [],
+        showDeleteMsg: false
       };
     },
     watch: {
@@ -66,6 +67,14 @@
           name: "showBigImg",
           params: _params
         });
+      },
+      longTouchHandler() {
+        this.showDeleteMsg = true;
+        this.$emit("longTouchEmitHandler");
+      },
+      deleteMsgEvent() {
+        this.showDeleteMsg = false;
+        this.$emit("deleteMsgEvent");
       }
     },
     mounted() {
@@ -89,6 +98,12 @@
       },
       mulitpleLoading: {
         type: Boolean
+      },
+      currentIndex:{
+        type:Number
+      },
+      deleteMsgIndex:{
+        type:Number
       }
     }
   };

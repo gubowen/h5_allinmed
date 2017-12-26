@@ -1,7 +1,7 @@
 <template>
   <section class="main-inner ev-fileUpHide" style="overflow:auto">
     <transition name="fadeDown">
-      <article class="main-message-time" v-if="lastTimeShow">
+      <article class="main-message-time">
         <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
         <p class="service-time">
           <span class="service-time-top">服务时间</span>
@@ -164,6 +164,13 @@
             :tipsType="5"
           >
           </MiddleTips>
+          <!--拒绝问诊-->
+          <MiddleTips
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'refusePatient'"
+            :tipsType="6"
+            :tipsText="JSON.parse(msg.content).text"
+          >
+          </MiddleTips>
           <!--消息撤回提示-->
           <div data-alcode-mod='717' :key="0">
             <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
@@ -269,6 +276,7 @@
     <transition name="fade">
       <Toast :content="toastTips" v-if="toastShow"></Toast>
     </transition>
+    <suggestion></suggestion>
   </section>
 
 </template>
@@ -289,6 +297,7 @@
   import payPopup from "components/payLayer";
   import loading from "components/loading";
   import confirm from "components/confirm";
+  import suggestion from "components/suggestion";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
   import Toast from "components/toast";
 
@@ -482,11 +491,12 @@
               if (msg.from === that.targetData.account) {
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 that.pauseTime(msg); //收到检查检验隐藏顶部框；
+                that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框
                 that.msgList.push(msg);
                 that.$nextTick(function () {
                   that.scrollToBottom();
                 });
-                that.getCId(msg);
+                that.getCId(msg);//每次收到消息更新cId(分诊台医生id);
                 // 判断如果是图片，则把加入到图片数组中
                 if (msg.type == "image") {
                   that.imageList.push(msg.file.url);
@@ -502,6 +512,17 @@
         console.log(!!msg.custom);
         if (!!msg.custom) {
           that.cId = JSON.parse(msg.custom).cId;
+        }
+      },
+
+      // 患者端收到拒绝问诊隐藏输入框
+      hideInput (msg) {
+        if (
+          msg.type === "custom" &&
+          JSON.parse(msg.content).type === "refusePatient"
+        ) {
+          this.inputBoxShow = false; //顶部时间取消
+          store.commit("setconsultationState", 7);
         }
       },
 
@@ -787,18 +808,18 @@
         });
       },
       //
-      refreshState() {
+      refreshState(state) {
         const that = this;
         api.ajax({
           url: XHRList.refresh,
           method: "POST",
           data: {
             consultationId: that.orderSourceId,
-            consultationState: 1 //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
+            consultationState: state //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              console.log("状态更新成功");
+              console.log("状态更新成功" + state);
             } else {
               console.log("状态更新失败" + data);
             }
@@ -923,43 +944,63 @@
             maxResult: 9999
           },
           done(param) {
-            that.inputBoxShow = true;
+            // that.inputBoxShow = true;
             console.log(param);
             if (param.responseObject.responseStatus) {
               let dataList = param.responseObject.responseData.dataList;
               that.cId = dataList.customerId;
-              let time = parseInt(dataList.remainingTime); //responseData.dataList.remainingTime 剩余时间
+              // let time = parseInt(dataList.remainingTime); //responseData.dataList.remainingTime 剩余时间
               store.commit("setConsultation", dataList.consultationId);
-              time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
-              //  time = 100000;
-              if (dataList.consultationState === -2) {
-                that.lastTimeShow = false;
-                that.inputBoxShow = true;
-                that.consultTipsShow = false;
-              } else {
-                if (time > 0) {
-                  store.commit("setLastTime", time);
-                  store.commit("lastTimeCount");
-                  that.lastTimeShow = true;
-                  that.inputBoxShow = true;
-                  that.consultTipsShow = false;
-                } else {
-                  that.lastTimeShow = false;
-                  that.inputBoxShow = false;
-                  that.consultTipsShow = true;
-                }
+              store.commit("setconsultationState", dataList.consultationState);
+              // time = time > 24 * 60 * 60 * 1000 ? 24 * 60 * 60 * 1000 : time;
+              // if (dataList.consultationState === -2) {
+              //   that.lastTimeShow = false;
+              //   that.inputBoxShow = true;
+              //   that.consultTipsShow = false;
+              // } else {
+              //   if (time > 0) {
+              //     store.commit("setLastTime", time);
+              //     store.commit("lastTimeCount");
+              //     that.lastTimeShow = true;
+              //     that.inputBoxShow = true;
+              //     that.consultTipsShow = false;
+              //   } else {
+              //     that.lastTimeShow = false;
+              //     that.inputBoxShow = false;
+              //     that.consultTipsShow = true;
+              //   }
+              // }
+              console.log(that.inputBoxShow);
+              switch (dataList.consultationState) {//	会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
+                case 1:
+                case 2:
+                case 3:
+                case 7:
+                  break;
+                case -1:
+                case 0:
+                case 4:
+                case 5:
+                case 6:
+                case 8:
+                case 9:
+                case 10:
+                case 11: 
+                  that.inputBoxShow = true
+                  break;
               }
+              console.log(that.inputBoxShow);
               that.$nextTick(() => {
                 that.inputBoxShow && autosize(that.$refs.inputTextarea);
               });
-              if (
-                (dataList.consultationState == 0 ||
-                  dataList.consultationState == 4 ||
-                  dataList.consultationState == 5) &&
-                time <= 0
-              ) {
-                that.refreshState();
-              }
+              // if (
+              //   (dataList.consultationState == 0 ||
+              //     dataList.consultationState == 4 ||
+              //     dataList.consultationState == 5) &&
+              //   time <= 0
+              // ) {
+              //   that.refreshState();
+              // }
             }
           },
           fail(err) {
@@ -1106,7 +1147,8 @@
             JSON.parse(msg.content).type.includes("new-") ||
             JSON.parse(msg.content).type === "payFinishTips" ||
             JSON.parse(msg.content).type === "triagePatientTips" ||
-            JSON.parse(msg.content).type === "reTriageTip"
+            JSON.parse(msg.content).type === "reTriageTip" || 
+            JSON.parse(msg.content).type === "refusePatient"
           ) {
             return false;
           } else {
@@ -1218,6 +1260,9 @@
           type: "image",
           from: that.userData.account
         });
+        this.$nextTick( () => {
+          that.scrollToBottom();
+        })
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(_file));
         this.nim.previewFile({
@@ -1324,7 +1369,7 @@
                 custom: JSON.stringify({
                   cType: "0",
                   cId: that.cId,
-                  mType: "1",
+                  mType: "3",
                   conId: that.orderSourceId
                 }),
                 to: that.targetData.account,
@@ -1399,7 +1444,7 @@
               console.log("上传文件" + (!error ? "成功" : "失败"));
               // show file to the user
               file = Object.assign(file,{
-                fileName:_file.name,
+                name:_file.name,
               });
               console.log(file);
               if (!error) {
@@ -1408,7 +1453,7 @@
                   custom: JSON.stringify({
                     cType: "0",
                     cId: that.cId,
-                    mType: "1",
+                    mType: "6",
                     conId: that.orderSourceId,
                     name: _file.name
                   }),
@@ -1654,6 +1699,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               that.refreashOrderTime();
+              console.log("更新上传了检查检验");
             }
           }
         });
@@ -1887,6 +1933,7 @@
         that.$route.query.queryType === "checkSuggest"
       ) {
         that.updateMedical();
+        that.refreshState(6);
         that.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -1947,21 +1994,21 @@
           this.inputPdfFlag = false;
         }
       },
-      lastTime: function (time) {
-        if (time <= 0) {
-          if (this.inputBoxShow) {
-            this.sendConsultState(5);
-            this.refreshState();
-          }
-          this.lastTimeShow = false;
-          this.inputBoxShow = false;
-          this.consultTipsShow = true;
-        } else {
-          this.lastTimeShow = true;
-          this.inputBoxShow = true;
-          this.consultTipsShow = false;
-        }
-      }
+      // lastTime: function (time) {
+      //   if (time <= 0) {
+      //     if (this.inputBoxShow) {
+      //       this.sendConsultState(5);
+      //       this.refreshState();
+      //     }
+      //     this.lastTimeShow = false;
+      //     this.inputBoxShow = false;
+      //     this.consultTipsShow = true;
+      //   } else {
+      //     this.lastTimeShow = true;
+      //     this.inputBoxShow = true;
+      //     this.consultTipsShow = false;
+      //   }
+      // }
     },
     components: {
       MedicalReport,
@@ -1980,6 +2027,7 @@
       confirm,
       MulitpleImage,
       FileMessage,
+      suggestion,
       Toast
     }
   };
@@ -2003,7 +2051,7 @@
     color: #aaa;
     background-color: #edeeee;
     text-align: center;
-    margin: 0 rem(30px);
+    margin: 0 rem(10px);
     padding: rem(15px) rem(26px);
     box-sizing: border-box;
     border-radius: 0.2rem;

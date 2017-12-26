@@ -17,9 +17,9 @@
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
         </transition>
         <p>{{contentMessage.text}}</p>
-        <article class="disclaimer-content" v-if="contentMessage.from===targetData.account">
+        <!-- <article class="disclaimer-content" v-if="contentMessage.from===targetData.account">
           <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
-        </article>
+        </article> -->
       </figcaption>
 
       <figure class="main-message-img" v-if="contentMessage.from===userData.account">
@@ -93,9 +93,9 @@ export default {
   @include circle(rem(75px),#CCEDF2);
 }
 .disclaimer-content{
+  background: #FAFAFB;
   color: #97A8BA;
-  background: rgba(151,168,186,0.1);
-  @include font-dpr(17px);
+  @include font-dpr(13px);
   margin: -0.45333rem -0.48rem;
   margin-top: 0.45333rem;
   padding: rem(20px) rem(36px);

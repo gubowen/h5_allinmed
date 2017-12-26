@@ -9,12 +9,12 @@
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                 @change="onFileChange($event, item)" v-if="isIos&&imageList[item.adviceId].length===0&&!loading">
+                 @change="onFileChange($event, item)" v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
            <input class="ev-upLoadInput" accept="image/*" type="file" multiple
                  capture="camera"
-                 @change="onFileChange($event, item)" v-if="!isIos&&imageList[item.adviceId].length===0&&!loading">
+                 @change="onFileChange($event, item)" v-if="!isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
         </figure>
-        <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId].length>0">
+        <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
             <img alt="" @click="showBigImg(img,imgIndex,item.adviceId)" :src="img.blob">
             <span class="tc-upLoadDel" style="cursor: pointer"
@@ -47,14 +47,14 @@
                        accept="image/*"
                        type="file"
                        multiple
-                       v-if="isIos&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
+                       v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
                        <input class="ev-upLoadInput"
                        accept="image/*"
                        type="file"
                        multiple
                        capture="camera"
-                       v-if="!isIos&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
+                       v-if="!isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
                        @change="onFileChange($event, item)"/>
               </span>
             </a>

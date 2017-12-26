@@ -1,19 +1,19 @@
 <template>
-    <section class="main-message-box">
+  <section class="main-message-box" v-touch:long="longTouchHandler">
     <article class="main-message-box-item"
              :data-clientid="videoMessage.idClient"
              :class="{'my-message':videoMessage.from===userData.account,
              'others-message':videoMessage.from===targetData.account}">
-      <figure class="main-message-img" v-if="videoMessage.from===targetData.account">
+      <figure class="main-message-img" v-if="videoMessage.from===targetData.account" @click.stop="$emit('clickLogo')">
         <img :src="targetLogo" alt="">
       </figure>
       <i class="fail-button" style="display:none">
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content video-message-box">
-        <!-- <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
-        </transition> -->
+        <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</span>
+        </transition>
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
@@ -43,7 +43,19 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      showDeleteMsg: false
+    }
+  },
+  methods:{
+    longTouchHandler() {
+      this.showDeleteMsg = true;
+      this.$emit("longTouchEmitHandler");
+    },
+    deleteMsgEvent() {
+      this.showDeleteMsg = false;
+      this.$emit("deleteMsgEvent");
+    }
   },
   computed: {
     logoUrl() {
@@ -87,9 +99,12 @@ export default {
     userData: {
       type: Object
     },
-    currentIndex: {
-      type: Number
+    currentIndex:{
+      type:Number
     },
+    deleteMsgIndex:{
+      type:Number
+    }
   },
   mounted() {
     console.log(this.videoMessage);

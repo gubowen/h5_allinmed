@@ -15,6 +15,7 @@ let totalTimeCount;
 export default new Vuex.Store({
   state: {
     consultationId: "",
+    consultationState: 0,//会话咨询状态
     logoUrl: "",
     lastTime:"",
     upLoadPercent:"",
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     setConsultation(state, id){
       state.consultationId = id;
+    },
+    setconsultationState(state, num){
+      state.consultationState = num;
     },
     setTargetMsg(state,params){
       state.targetDoctor= Object.assign({},state.targetDoctor,params);

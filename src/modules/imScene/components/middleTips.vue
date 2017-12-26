@@ -5,7 +5,7 @@
         <p>{{tipsContent}}</p>
       </figcaption>
     </section>
-    <p v-if="tipsType==5" class="receive-treatment"><span>问诊已结束</span></p>
+    <p v-if="tipsType !==4" class="receive-treatment"><span>问诊已结束</span></p>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -20,7 +20,7 @@
   export default{
     data(){
       return {
-        tipsContent: ""
+        tipsContent: "",
       }
     },
     mounted(){
@@ -31,6 +31,8 @@
           break;
         case 5:
           this.tipsContent = "分诊医生的职责是为您完善就诊病历信息，诊疗意见请在分诊后与主诊专家详细沟通。";
+        case 6:
+          this.tipsContent = this.tipsText;
           break;
       }
     },
@@ -38,7 +40,10 @@
     props: {
       tipsType: {
         type: Number
-      }
+      },
+      tipsText: {
+        type: String
+      },
     }
   }
 </script>

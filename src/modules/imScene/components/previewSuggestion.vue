@@ -302,7 +302,7 @@
           done(data){
             if (data.responseObject.responseData.dataList) {
               that.doctorObj.allData = data.responseObject.responseData.dataList;
-//              that.doctorObj.allData = data.responseObject.responseData.dataList;
+              //that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
             }
