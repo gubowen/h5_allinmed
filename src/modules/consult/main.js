@@ -14,7 +14,7 @@ import addPatient from './components/addPatient';
 import selectPart from './components/selectPart';
 import discription from './components/discription';
 import history from './components/history';
-import upLoadTip from './components/upLoadTip';
+import upLoadTip from 'components/shootTips';
 import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
 import followWechat from 'components/followWechat';

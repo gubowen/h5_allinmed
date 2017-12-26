@@ -104,7 +104,8 @@
     },
     methods:{
       skipCallBack(){
-        this.$emit("skipCallBack");
+        history.go(-1);
+        // this.$emit("skipCallBack");
       }
     },
     components:{
