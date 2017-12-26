@@ -416,10 +416,15 @@
       },
       goToUpload(){
         localStorage.removeItem("upload");
-        this.$router.push({
-          name: "UploadList",
-          params: this.checkSuggestObj.allData
-        })
+        if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1) {
+          this.$store.commit("setToastTips","您不能上传资料！！");
+          this.$store.commit('setToastShow');
+        } else {
+          this.$router.push({
+            name: "UploadList",
+            params: this.checkSuggestObj.allData
+          })
+        }
       }
     },
     filters: {

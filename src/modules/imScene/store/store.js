@@ -16,6 +16,8 @@ export default new Vuex.Store({
   state: {
     consultationId: "",
     consultationState: 0,//会话咨询状态
+    toastTips: "",// toast框提示内容
+    toastShow: false,// toast框是否显示
     logoUrl: "",
     lastTime:"",
     upLoadPercent:"",
@@ -77,6 +79,17 @@ export default new Vuex.Store({
       // Attention
       // 若直接置为0，业务组件引用Vuex状态作监听体，归零直接进入另一状态
       // state.lastTime=0;
+    },
+    // 设置toast框话术
+    setToastTips (state,str) {
+      state.toastTips = str;
+    },
+    // 设置toast框显示
+    setToastShow (state) {
+      state.toastShow = true;
+      setTimeout(() => {
+        state.toastShow = false;
+      }, 2000);
     },
     lastTimeCount(state){
       clearInterval(totalTimeCount);
