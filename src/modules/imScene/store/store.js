@@ -18,6 +18,7 @@ export default new Vuex.Store({
     consultationState: 0,//会话咨询状态
     toastTips: "",// toast框提示内容
     toastShow: false,// toast框是否显示
+    ensureShow: false,// ensure框是否显示
     logoUrl: "",
     lastTime:"",
     upLoadPercent:"",
@@ -33,7 +34,10 @@ export default new Vuex.Store({
   },
   mutations: {
     setPatientName(state,name){
-        state.patientName=name;
+      state.patientName=name;
+    },
+    setEnsureShow(state,flag) {
+      state.ensureShow=flag;
     },
     upLoadPercentFn(state,percent){
       state.upLoadPercent = percent;

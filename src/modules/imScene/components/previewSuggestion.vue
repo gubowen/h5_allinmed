@@ -34,13 +34,13 @@
                 </figcaption>
               </section>
               <section class="doctor-item-bottom" v-if="item.isFreeTimes">
-                <span data-alcode='e132' class="go-consult" @click="goConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">免费问诊</span>
+                <span data-alcode='e132' class="go-consult" @click="queryConsult(index,'free')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">免费问诊</span>
                 <span class="free-consult">免费问诊</span>
                 <span class="free-price">{{item.generalPrice}}元</span>
                 <!--<span class="general-money">{{item.generalPrice}}元</span>-->
               </section>
               <section class="doctor-item-bottom" v-else-if="!item.isFreeTimes">
-                <span data-alcode='e132' class="go-consult" @click="goConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">去问诊</span>
+                <span data-alcode='e132' class="go-consult" @click="queryConsult(index,'pay')" v-if="item.adviceStatus==='1' && item.adviceNum && !item.isRefuse" :sps-data="getSpsData(item)">去问诊</span>
                 <span class="general-money">{{item.generalPrice}}元</span>
               </section>
             </section>
@@ -123,7 +123,7 @@
         </section>
       </article>
     </section>
-
+    
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -144,6 +144,7 @@
     getRecommedDoctor: "/mcall/patient/recommend/v1/getMapList/",//推荐医生
     getToken: "/mcall/im/interact/v1/refreshToken/",
     getCurrentByCustomerId:'/mcall/customer/advice/setting/v1/getCurrentByCustomerId/',//获取是否与专业医生建立过im
+    queryIsValid:"/mcall/patient/recommend/v1/getMapById/", // 查询该医生是否有效
   };
 
   export default{
@@ -290,7 +291,7 @@
             diagnosisId: that.message.diagnosisId,
             caseId:api.getPara().caseId,
             patientId:api.getPara().patientId,
-            isValid: 1,
+            isValidList: "1,2",
             firstResult: 0,
             maxResult: 9999,
             sortType: 1,
@@ -382,7 +383,34 @@
         let that = this;
         window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
       },
-      //免费问诊
+      // 查询是否可以咨询
+      queryConsult(index,type){
+        const that = this;
+        api.ajax({
+          url: XHRList.queryIsValid,
+          method: "POST",
+          data: {
+            diagnosisId:that.message.diagnosisId,
+            recommendId:that.doctorObj.allData[index].customerId,
+            isValid:1,
+          },
+          beforeSend(){
+
+          },
+          done(data){
+            console.log(data);
+            if (data.responseObject&&data.responseObject.responseMessage == 'NO DATA') {
+              that.$store.commit("setEnsureShow",true);
+            } else {
+              that.goConsult(index,type);
+            }
+          },
+          fail(){
+            console.log('查询医生是否可以问诊失败');
+          },
+        })
+      },
+      //问诊
       goConsult(index,type){
         let that = this;
         that.$emit('update:payPopupShow', true);
@@ -417,7 +445,7 @@
       goToUpload(){
         localStorage.removeItem("upload");
         if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1) {
-          this.$store.commit("setToastTips","您不能上传资料！！");
+          this.$store.commit("setToastTips","分诊服务已结束");
           this.$store.commit('setToastShow');
         } else {
           this.$router.push({
@@ -469,7 +497,10 @@
         type: Function,
         default: null
       },
-    }
+    },
+    components:{
+      
+    },
   }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped="">

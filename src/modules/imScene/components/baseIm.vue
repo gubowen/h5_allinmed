@@ -276,6 +276,14 @@
     <transition name="fade">
       <Toast :content="toastTips" v-if="toastShow"></Toast>
     </transition>
+    <transition name="fade">
+      <ensure
+        :ensureParams="{
+          'content':'抱歉，经平台审核，您的咨询不在该医生的接诊范围，请咨询其他匹配医生',
+          'ensure':'好的'
+        }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
+      ></ensure>
+    </transition>
     <suggestion></suggestion>
   </section>
 
@@ -300,6 +308,7 @@
   import suggestion from "components/suggestion";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
   import Toast from "components/toast";
+  import ensure from "components/ensure";
 
   import MedicalReport from "./medicalReport";
   import ContentText from "./content";
@@ -410,6 +419,10 @@
       toastControl (message) {
         store.commit("setToastTips",message);
         store.commit('setToastShow');
+      },
+      // 取消ensure框
+      ensureClickEvent () {
+        this.$store.commit("setEnsureShow",false);
       },
       setFooterPosition() {
         if (IS_IOS) {
@@ -991,7 +1004,7 @@
                 case 8:
                 case 9:
                 case 10:
-                case 11: 
+                case 11:
                   that.inputBoxShow = true
                   break;
               }
@@ -1153,7 +1166,7 @@
             JSON.parse(msg.content).type.includes("new-") ||
             JSON.parse(msg.content).type === "payFinishTips" ||
             JSON.parse(msg.content).type === "triagePatientTips" ||
-            JSON.parse(msg.content).type === "reTriageTip" || 
+            JSON.parse(msg.content).type === "reTriageTip" ||
             JSON.parse(msg.content).type === "refusePatient"
           ) {
             return false;
@@ -1754,7 +1767,7 @@
           custom: JSON.stringify({
             cType: "0",
             cId: that.cId,
-            mType: "32",
+            mType: "33",
             conId: that.orderSourceId
           }),
           content: JSON.stringify({
@@ -1832,6 +1845,9 @@
       // toast 是否显示
       toastShow () {
         return this.$store.state.toastShow;
+      },
+      ensureShow () {
+        return this.$store.state.ensureShow;
       },
       //配合watch图片上传进度使用
       progressImage() {
@@ -2045,6 +2061,7 @@
       MulitpleImage,
       FileMessage,
       suggestion,
+      ensure,
       Toast
     }
   };

@@ -130,7 +130,7 @@ export default {
     goToUpload() {
       localStorage.removeItem("upload");
       if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1) {
-        store.commit("setToastTips","您不能上传资料！！");
+        store.commit("setToastTips","分诊服务已结束");
         store.commit('setToastShow');
       } else {
         this.$router.push({
