@@ -60,6 +60,7 @@
    * Created by lichenyang on 2017/8/21.
    */
 import api from 'common/js/util/util';
+import store from "../store/store";
 export default {
   data() {
     return {
@@ -128,10 +129,15 @@ export default {
     },
     goToUpload() {
       localStorage.removeItem("upload");
-      this.$router.push({
-        name: "UploadList",
-        params: this.paramsData
-      });
+      if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1) {
+        store.commit("setToastTips","您不能上传资料！！");
+        store.commit('setToastShow');
+      } else {
+        this.$router.push({
+          name: "UploadList",
+          params: this.paramsData
+        });
+      }
     }
   },
   props: {

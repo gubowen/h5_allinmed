@@ -9,9 +9,9 @@
             <p class="questionTitleCommon">有去医院就诊过吗？</p>
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="visit.none=true;visit.has=false" :class="{'selected':visit.none}">
-                没有</p>
+                没有就诊过</p>
               <p class="questionSelectBtn selected-right" @click="visit.none=false;visit.has=true"
-                 :class="{'selected':visit.has}">有</p>
+                 :class="{'selected':visit.has}">就诊过</p>
             </section>
             <section class="questionHiddenCommon selectHospitalBox" v-show="visit.has">
               <p class="selected-HospitalBtn" @click="selectHospital()" :class="{'selected':hospitalMessage.id}">
@@ -21,18 +21,19 @@
             </section>
           </section>
           <section class="questionItem-common upLoadResource">
-            <p class="questionTitleCommon">有X光片/CT等影像资料吗？</p>
+            <p class="questionTitleCommon">请上传X光/CT/核磁等影像资料<span class="qu-upLoadTips" @click="upLoadTips()"></span></p>
+            <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p>
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="upload.none=true;upload.has=false" :class="{'selected':upload.none}">
-                没有</p>
-              <p class="questionSelectBtn selected-right" @click="uploadEvent" :class="{'selected':upload.has}">有</p>
+                暂不上传</p>
+              <p class="questionSelectBtn selected-right" @click="uploadBtnFn" :class="{'selected':upload.has}">去上传</p>
             </section>
             <section class="questionHiddenCommon upLoadBox" v-show="upload.has">
               <section class="tc-upLoadBox upLoadCommon-box-s">
                 <form class="qu-upFormBox qu-upFormBox-s" action="">
                   <figure class="qu-upLoadTitle qu-upLoadTitle-s">
-                    <p class="tc-upLoadTitleName">请上传X光片/超声/CT等检查资料，便于医生为您准确诊断（最多上传9张）</p>
-                    <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p>
+                    <p class="tc-upLoadTitleName">温馨提示：患病处如有外观变化，请将患处照片一并上传，以便医生了解病情</p>
+                    <!-- <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p> -->
                   </figure>
                   <ul class="qu-upLoadItemBox qu-upLoadItemBox-s docInt">
                     <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1">
@@ -50,20 +51,22 @@
                                @change="onFileChange($event,1,index)" multiple   ref="uploader">
                       </figure>
                     </li>
-                    <li class="ev-upLoadAdd" v-show="imageList1.length<9">
+                    <li class="ev-upLoadAdd" v-show="imageList1.length<50">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<9"
+                             v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50"
                              @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<9"
+                             v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50"
                              @change="onFileChange($event,1)" multiple ref="uploader">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="isIos&&uploading1===false&&imageList1.length<9"
+                             v-if="isIos&&uploading1===false&&imageList1.length<50"
                              @change="onFileChange($event,1)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
-                <form class="qu-upFormBox qu-upFormBox-s" action="">
+                <p class="upLoadContentNum">已上传{{imageList1.length}}张，<span class="upLoadViewAll" @click="showBigImg()">查看全部</span></p>
+                <!-- <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p> -->
+                <form class="qu-upFormBox qu-upFormBox-s" action="" v-show="false">
                   <figure class="qu-upLoadTitle-s">
                     <p class="tc-upLoadTitleName">请上传患病处照片</p>
                   </figure>
@@ -104,9 +107,9 @@
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
                  :class="{'selected':medical.none}">
-                没有</p>
+                暂无服用</p>
               <p class="questionSelectBtn selected-right" @click="medical.none=false;medical.has=true"
-                 :class="{'selected':medical.has}">有</p>
+                 :class="{'selected':medical.has}">有服用</p>
             </section>
             <section class="questionHiddenCommon qu-setMedicineBox" @click="textAreaFocus" v-show="medical.has">
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
@@ -118,7 +121,7 @@
           </section>
         </section>
         <section class="questionSubmitBtnBox">
-          <button class="questionSubmitBtn" @click="submitParamsInstall" data-alcode='e128'>填好了</button>
+          <button class="questionSubmitBtn" @click="submitParamsInstall" data-alcode='e128'>下一页</button>
         </section>
       </section>
       <!--<transition name="fadeRight">-->
@@ -211,11 +214,14 @@ import nimEnv from "common/js/nimEnv/nimEnv";
 import imageCompress from "common/js/imgCompress/toCompress";
 import progerssBar from "../components/progressBar";
 
-siteSwitch.weChatJudge(() => {
-_weChat=true;
-}, () => {
-  _weChat=false;
-});
+siteSwitch.weChatJudge(
+  () => {
+    _weChat = true;
+  },
+  () => {
+    _weChat = false;
+  }
+);
 
 const XHRList = {
   upload: "/mcall/customer/patient/case/attachment/v1/create/",
@@ -250,7 +256,7 @@ export default {
         doctorId: api.getPara().doctorId
       },
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
-      isWeChat:_weChat,
+      isWeChat: _weChat,
       orderSourceId: "", //进入分诊im需要orderSourceId
       finish: false,
       deletePic: {},
@@ -266,6 +272,8 @@ export default {
       uploading2: false,
       imageList1: [],
       imageList2: [],
+      uploadContalNum: 0, //已上传数量
+      upLoadGuideTip: 1,   //上传指导路径 （1-问号提示 2-去上传按钮）
       filesObj: [],
       base64Arr: [],
       uploadIndex: 0,
@@ -322,6 +330,10 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
+    if(this.upLoadGuideTip =="2"){
+        //展示上传按钮
+        this.uploadEvent();
+      }
   },
   mounted() {
     document.title = "描述病情";
@@ -448,6 +460,20 @@ export default {
         }
       }
     },
+    //去上传按钮
+    uploadBtnFn(){
+      let _this = this;
+      _this.upLoadGuideTip = "2";
+      if (_this.upload.has) {
+        return;
+      } else {
+        //是否上传过检测
+        //未上传过
+        _this.upLoadTips();
+        //上传过
+        // _this.uploadEvent();
+      }
+    },
     uploadEvent() {
       this.upload.none = false;
       this.upload.has = true;
@@ -465,6 +491,16 @@ export default {
       that.uploading1 = true;
       that.uploading2 = true;
       let _localViewUrl = window.URL.createObjectURL(files);
+      let _fileName = "",
+        _rex = /\./g;
+      console.log(files.name.match(_rex));
+      console.log(files.name.match(_rex).length);
+      if (files.name.match(_rex).length == 1) {
+        _fileName = files.name.split(".")[1];
+      } else {
+        _fileName = files.name.split(".")[2];
+        console.log(files.name.split("."));
+      }
       switch (type) {
         case 1:
           _imageType = 0;
@@ -497,13 +533,14 @@ export default {
             .replace(/\+/g, "%2B")
             .replace(/\n/g, ""),
           fileName: files.name,
-          extName: files.name.split(".")[1],
+          extName: _fileName,
           caseId: "",
           imageType: _imageType,
           caseCategoryId: ""
         },
         timeout: 300000,
         done(res) {
+          console.log(res);
           if (res.responseObject.responseStatus) {
             let num = index ? index : that["imageList" + type].length - 1;
             that["imageList" + type][num].imgId = res.responseObject.responsePk;
@@ -523,7 +560,7 @@ export default {
             if (
               that.filesObj[that.uploadIndex] !== "undefined" &&
               that.uploadIndex < that.base64Arr.length &&
-              totalUpNum < 9
+              totalUpNum < 50
             ) {
               that.upLoadPic(
                 that.filesObj[that.uploadIndex],
@@ -534,7 +571,7 @@ export default {
             } else {
               if (that.filesObj[that.uploadIndex]) {
                 that.errorShow = true;
-                that.errorMsg = "图片最多上传9张！";
+                that.errorMsg = "图片最多上传50张！";
                 setTimeout(() => {
                   that.errorShow = false;
                   that.errorMsg = "";
@@ -587,7 +624,6 @@ export default {
     upLoadTips() {
       this.$router.push({
         name: "upLoadTip",
-        params: ""
       });
     },
     //取消
@@ -612,6 +648,10 @@ export default {
         name: "showBigImg",
         params: _params
       });
+    },
+    //跳过指导
+    skipCallBackFn() {
+      console.log("已跳过");
     },
     // 提交校验
     submitParamsInstall() {
@@ -680,7 +720,14 @@ export default {
       }
       //装载完成...
       //数据提交开始...
-      this.paramsSubmit();
+      //跳转第四部分
+      this.$router.push({
+        name: "bodyMessage",
+        params: {
+          pageParam: this.allParams
+        }
+      });
+      // this.paramsSubmit();
     },
     paramsSubmit() {
       const that = this;
@@ -1122,7 +1169,7 @@ export default {
       }
     },
     getByteLen(len) {
-      return Math.ceil((1000 - api.getByteLen(len))/2);
+      return Math.ceil((1000 - api.getByteLen(len)) / 2);
     },
     clearPageData() {
       let _this = this;
@@ -1226,6 +1273,18 @@ body {
           top: 50%;
           margin-top: rem(-8px);
         }
+        .qu-upLoadTips {
+          position: absolute;
+          content: "";
+          width: rem(48px);
+          height: rem(48px);
+          right: rem(23px);
+          top: 50%;
+          margin-top: rem(-24px);
+          background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png")
+            no-repeat center;
+          background-size: 100% 100%;
+        }
       }
       //单选按钮
       .questionContain-center {
@@ -1323,6 +1382,25 @@ body {
             color: #0ab375;
             @include font-dpr(12px);
           }
+        }
+      }
+      .upLoadForPerson {
+        @include font-dpr(15px);
+        color: #555555;
+        position: relative;
+        padding-left: rem(64px);
+        padding-top: rem(5px);
+        .upLoadForPersonIcon {
+          position: absolute;
+          content: "";
+          width: rem(18px);
+          height: rem(18px);
+          left: rem(32px);
+          top: 50%;
+          margin-top: rem(-9px);
+          background: url("../../../common/image/img00/consult_V1.2/uploadStar.png")
+            no-repeat center;
+          background-size: 100% 100%;
         }
       }
     }
@@ -1592,6 +1670,13 @@ body {
           width: 100%;
           height: 100%;
         }
+      }
+    }
+    .upLoadContentNum {
+      @include font-dpr(14px);
+      color: #666666;
+      .upLoadViewAll {
+        color: #07b6ac;
       }
     }
   }

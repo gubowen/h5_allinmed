@@ -398,14 +398,19 @@
         cId: "0", //聊天消息拓展字段的customerId
         footerPosition: "main-input-box",
         bfscrolltop: document.body.scrollTop,
-        toastTips: "",
-        toastShow: false,
+        // toastTips: "",
+        // toastShow: false,
         deleteMsgIndex: -1,
         mList: []
       };
     },
 
     methods: {
+      // 控制 vuex toast控制
+      toastControl (message) {
+        store.commit("setToastTips",message);
+        store.commit('setToastShow');
+      },
       setFooterPosition() {
         if (IS_IOS) {
           this.footerPosition = "main-input-box relative";
@@ -898,11 +903,12 @@
               }, 20);
             } else {
               if (parseInt(error.code) === 508) {
-                that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
-                that.toastShow = true;
-                setTimeout(() => {
-                  that.toastShow = false;
-                }, 2000);
+                // that.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
+                // that.toastShow = true;
+                // setTimeout(() => {
+                //   that.toastShow = false;
+                // }, 2000);
+                that.toastControl(`您只能撤回${_DeleteTimeLimit}内的消息`);
               }
             }
           }
@@ -1175,11 +1181,12 @@
           if (_file.type.includes("image")) {
             this.sendImageFile(_file);
           } else {
-            that.toastTips = `请选择图片`;
-            that.toastShow = true;
-            setTimeout(() => {
-              that.toastShow = false;
-            }, 2000);
+            // that.toastTips = `请选择图片`;
+            // that.toastShow = true;
+            // setTimeout(() => {
+            //   that.toastShow = false;
+            // }, 2000);
+            this.toastControl("请选择图片");
           }
         }
       },
@@ -1324,11 +1331,12 @@
         if (_file.type.includes("video")) {
           this.sendVideoFile(_file);
         } else {
-          this.toastTips = `请选择视频文件`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
+          // this.toastTips = `请选择视频文件`;
+          // this.toastShow = true;
+          // setTimeout(() => {
+          //   this.toastShow = false;
+          // }, 2000);
+          this.toastControl("请选择视频文件");
         }
       },
       // 上传视频文件
@@ -1398,11 +1406,12 @@
         if (_file.type.includes("pdf")) {
           this.sendPdfFile(_file);
         } else {
-          this.toastTips = `请选择pdf文件`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
+          // this.toastTips = `请选择pdf文件`;
+          // this.toastShow = true;
+          // setTimeout(() => {
+          //   this.toastShow = false;
+          // }, 2000);
+          this.toastControl("请选择pdf文件");
         }
       },
       // 发送pdf
@@ -1816,6 +1825,14 @@
       }
     },
     computed: {
+      // toast 提示
+      toastTips () {
+        return this.$store.state.toastTips;
+      },
+      // toast 是否显示
+      toastShow () {
+        return this.$store.state.toastShow;
+      },
       //配合watch图片上传进度使用
       progressImage() {
         return this.imageProgress.progress;
