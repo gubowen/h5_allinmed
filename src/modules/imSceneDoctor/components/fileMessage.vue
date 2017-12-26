@@ -1,5 +1,5 @@
 <template>
-  <section class="main-message-box">
+  <section class="main-message-box" v-touch:long="longTouchHandler">
     <article class="main-message-box-item"
              :data-clientid="fileMessage.idClient"
              :class="{'my-message':fileMessage.from===userData.account,
@@ -11,10 +11,9 @@
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content file-message-box">
-        <!-- <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
-        </transition> -->
-        <!-- <header class="mulit-title">视频</header> -->
+       <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&fileMessage.from===userData.account">撤回</span>
+        </transition>
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
@@ -29,6 +28,9 @@
             <figcaption class="file-name" v-if="custom">{{custom.name}}</figcaption>
           </figure>
         </section>
+        <article class="disclaimer-content" v-if="fileMessage.from===targetData.account">
+          <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+        </article>
       </figcaption>
       <figure class="main-message-img" v-if="fileMessage.from===userData.account">
         <img :src="logoUrl" alt="">
@@ -42,6 +44,7 @@
     data() {
       return {
         custom:null,
+        showDeleteMsg: false
       }
     },
     computed: {
@@ -91,6 +94,14 @@
     methods: {
       seeFile(){
         location.href = this.fileMessage.file.url;
+      },
+      longTouchHandler() {
+        this.showDeleteMsg = true;
+        this.$emit("longTouchEmitHandler");
+      },
+      deleteMsgEvent() {
+        this.showDeleteMsg = false;
+        this.$emit("deleteMsgEvent");
       }
     },
     mounted() {

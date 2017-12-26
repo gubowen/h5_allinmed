@@ -1,5 +1,5 @@
 <template>
-  <section class="main-message-box">
+  <section class="main-message-box" v-touch:long="longTouchHandler">
     <article class="main-message-box-item"
              :data-clientid="imageMessage.idClient"
              :class="{'my-message':imageMessage.from===userData.account,
@@ -19,7 +19,12 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <img class="im-image" @click.stop="showBigImg" :src="imageMessage.file.url" alt="" style="border-radius: 0.28rem">
+        <transition name="fade">
+          <span class="delete-msg-btn" @click.stop="deleteMsgEvent"
+                v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</span>
+        </transition>
+        <img class="im-image" @click.stop="showBigImg" :src="imageMessage.file.url" alt=""
+             style="border-radius: 0.28rem">
         <article class="disclaimer-content" v-if="imageMessage.from===targetData.account">
           <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
         </article>
@@ -39,23 +44,25 @@
    *
    * Created by qiangkailiang on 2017/8/17.
    */
-  export default{
-    data(){
-      return {}
+  export default {
+    data() {
+      return {
+        showDeleteMsg: false
+      }
     },
     computed: {
-     progress(){
-        if (this.currentIndex===this.imageProgress.index){
+      progress() {
+        if (this.currentIndex === this.imageProgress.index) {
           // return this.imageProgress;
-          if (this.imageProgress.progress.includes(".")){
-            let returnObj = Object.assign(this.imageProgress,{
-              progress:`${this.imageProgress.progress.split(".")[0]}%`
+          if (this.imageProgress.progress.includes(".")) {
+            let returnObj = Object.assign(this.imageProgress, {
+              progress: `${this.imageProgress.progress.split(".")[0]}%`
             })
             return returnObj;
           } else {
             return this.imageProgress;
           }
-        }else{
+        } else {
           return {
             uploading: false,
             progress: "0",
@@ -64,15 +71,15 @@
         }
       },
 
-      logoUrl(){
+      logoUrl() {
         return this.$store.state.logoUrl
       },
-      targetLogo(){
-        return this.$store.state.targetMsg.avatar.length===0? "/src/common/image/imScene/default.png":this.$store.state.targetMsg.avatar;
+      targetLogo() {
+        return this.$store.state.targetMsg.avatar.length === 0 ? "/src/common/image/imScene/default.png" : this.$store.state.targetMsg.avatar;
       }
 
     },
-    mounted(){
+    mounted() {
       this.imageNum = "";
       if (!this.imageMessage.file.url.includes("blob:")) {
         let qualityUrl = this.nim.viewImageQuality({
@@ -89,7 +96,15 @@
 
     },
     methods: {
-      showBigImg(item, index){
+      longTouchHandler() {
+        this.showDeleteMsg = true;
+        this.$emit("longTouchEmitHandler");
+      },
+      deleteMsgEvent() {
+        this.showDeleteMsg = false;
+        this.$emit("deleteMsgEvent");
+      },
+      showBigImg(item, index) {
         let that = this;
         let _params = {
           imgBlob: (function () {
@@ -126,6 +141,9 @@
       targetData: {
         type: Object
       },
+      deleteMsgIndex: {
+        type: Number
+      },
       userData: {
         type: Object
       }
@@ -134,22 +152,23 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
-.image-message{
-  background-color: #fff !important;
-  .im-image{
-    margin: rem(36px);
+
+  .image-message {
+    background-color: #fff !important;
+    .im-image {
+      margin: rem(36px);
+    }
+    .disclaimer-content {
+      color: #97A8BA;
+      background: #fafafb;
+      @include font-dpr(13px);
+      margin: 0;
+      padding: rem(20px) rem(36px);
+      box-sizing: border-box;
+      border-radius: rem(21px);
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-top: 2px solid #d8d8d8;
+    }
   }
-  .disclaimer-content{
-    color: #97A8BA;
-    background: #fafafb;
-    @include font-dpr(13px);
-    margin: 0;
-    padding: rem(20px) rem(36px);
-    box-sizing: border-box;
-    border-radius: rem(21px);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top: 2px solid #d8d8d8;
-  }
-}
 </style>

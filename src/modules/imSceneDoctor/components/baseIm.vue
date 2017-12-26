@@ -87,16 +87,26 @@
                          @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
             </ContentText>
             <!--图像消息-->
-            <ImageContent v-if="(msg.type==='file'||msg.type==='image') && msg.file &&msg.file.ext!=='pdf'" :imageMessage="msg" :nim="nim"
-                          ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
-                          :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
+            <ImageContent
+              v-if="(msg.type==='file'||msg.type==='image') && msg.file &&msg.file.ext!=='pdf'"
+              :imageMessage="msg"
+              :nim="nim"
+              ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
+              @deleteMsgEvent="deleteMsgEvent(msg)"
+              @longTouchEmitHandler="deleteMsgIndex=index"
+              :deleteMsgIndex="deleteMsgIndex"
+              :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
             </ImageContent>
             <!-- 图集消息 -->
             <MulitpleImage
               v-if="msg.type==='custom' && (JSON.parse(msg.content).type === 'mulitpleImage'||JSON.parse(msg.content).type ==='multipleImage' )"
               :imageMessage="msg"
               :userData="userData"
+              @deleteMsgEvent="deleteMsgEvent(msg)"
+              @longTouchEmitHandler="deleteMsgIndex=index"
               :targetData="targetData"
+              :deleteMsgIndex="deleteMsgIndex"
+              :currentIndex="index"
             >
 
             </MulitpleImage>
@@ -107,8 +117,11 @@
               :userData="userData"
               :targetData="targetData"
               :videoProgress="videoProgress"
+              :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
               @clickLogo="goToDoctorHomePage"
+              @deleteMsgEvent="deleteMsgEvent(msg)"
+              @longTouchEmitHandler="deleteMsgIndex=index"
             ></VideoMessage>
             <!--文件消息-->
             <FileMessage
@@ -120,6 +133,8 @@
               :fileProgress="fileProgress"
               :deleteMsgIndex="deleteMsgIndex"
               @clickLogo="goToDoctorHomePage"
+              @deleteMsgEvent="deleteMsgEvent(msg)"
+              @longTouchEmitHandler="deleteMsgIndex=index"
             >
             </FileMessage>
             <!--音频-->
@@ -215,7 +230,8 @@
             </li>
             <li class="bottom-item">
               <figure class="bottom-item-content">
-                <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
+                <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350"
+                     height="234"/>
                 <figcaption class="bottom-item-description">文件</figcaption>
               </figure>
               <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
@@ -563,7 +579,7 @@
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
-                this.footerBottomFlag=false;
+                this.footerBottomFlag = false;
                 this.showBottomTips(2);
                 break;
               case 4: //医生接诊
@@ -1251,13 +1267,13 @@
         const that = this;
         console.log(e.target.files);
         if (e.target.files.length > 1) {
-          if (e.target.files.length>9){
+          if (e.target.files.length > 9) {
             that.toastTips = `您最多只能选择9张图片`;
             that.toastShow = true;
             setTimeout(() => {
               that.toastShow = false;
             }, 2000);
-            e.target.files=e.target.files.slice(0,10);
+            e.target.files = e.target.files.slice(0, 10);
           }
           this.getMulitpleImage(e.target.files);
         } else {
@@ -1281,14 +1297,14 @@
         console.log(list);
         let promises = [];
         this.msgList.push({
-          type:"custom",
-          content:JSON.stringify({
-            type:"multipleImage",
-            data:{
-              list:[]
+          type: "custom",
+          content: JSON.stringify({
+            type: "multipleImage",
+            data: {
+              list: []
             }
           }),
-          loading:true,
+          loading: true,
           from: this.userData.account
         });
 
@@ -1352,7 +1368,7 @@
               console.log(msg);
 
               // that.msgList[that.msgList.length-1] = msg;
-              that.msgList.splice(-1,1,msg);
+              that.msgList.splice(-1, 1, msg);
               // that.sendMessageSuccess(error, msg);
             }
           }
@@ -1514,7 +1530,7 @@
           file: {
             url: window.URL.createObjectURL(_file),
             ext: "pdf",
-            fileName:_file.name,
+            fileName: _file.name,
           },
           custom: JSON.stringify({
             name: _file.name
@@ -1545,11 +1561,11 @@
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
               // show file to the user
-              file = Object.assign(file,{
-                fileName:_file.name,
+              file = Object.assign(file, {
+                fileName: _file.name,
               });
               console.log(file);
-              file.name=_file.name;
+              file.name = _file.name;
               if (!error) {
                 let msg = that.nim.sendFile({
                   scene: "p2p",
@@ -1903,7 +1919,7 @@
         if (time <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
-          this.footerBottomFlag=false;
+          this.footerBottomFlag = false;
           this.showBottomTips(1);
         } else {
           this.lastTimeShow = true;
@@ -1914,7 +1930,7 @@
         if (count <= 0) {
           this.lastTimeShow = false;
           this.bottomTipsShow = true;
-          this.footerBottomFlag=false;
+          this.footerBottomFlag = false;
           store.commit("stopLastTimeCount");
           this.showBottomTips(1);
         } else {
