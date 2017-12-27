@@ -91,7 +91,10 @@
     background: #fff url("../../../src/common/image/img00/personal/icon_02.png") no-repeat center 50%;
     background-size: contain;
   }
-
+  &.suggesstion {
+    background: #fff url("../../../src/common/image/img00/personal/suggesstion02.png") no-repeat center 50%;
+    background-size: contain;
+  }
   }
   .title {
     font-family: PingFangSC-Regular;
