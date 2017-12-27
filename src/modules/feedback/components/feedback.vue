@@ -17,7 +17,7 @@
         <section class="question">
           <span class="question-feedback">请简要描述你的问题?</span>
           <em class="question-em">(选填)</em>
-          <textarea class="input-textArea" name="question" placeholder="请输入问题" v-model="suggestionContent"
+          <textarea class="input-textArea" name="question" placeholder="请输入问题" v-model.trim="suggestionContent"
                     @input="contentLimit">
             </textarea>
           <span class="qu-underline"></span>
@@ -64,6 +64,24 @@
   import toast from "components/toast";
   const feedbackUrl='mcall/customer/suggestion/v1/create/';
   export default {
+    // browser:{
+    //   versions:function(){
+    //     var u = navigator.userAgent, app = navigator.appVersion;
+    //     return {//移动终端浏览器版本信息
+    //       trident: u.indexOf('Trident') > -1, //IE内核
+    //       presto: u.indexOf('Presto') > -1, //opera内核
+    //       webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+    //       gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+    //       mobile: !!u.match(/AppleWebKit.*Mobile.*/)||!!u.match(/AppleWebKit/), //是否为移动终端
+    //       ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+    //       android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+    //       iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+    //       iPad: u.indexOf('iPad') > -1, //是否iPad
+    //       webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+    //     };
+    //   }(),
+    //   language:(navigator.browserLanguage || navigator.language).toLowerCase()
+    // },
     data() {
       return {
         customerId:"",
@@ -130,7 +148,8 @@
               suggestionType:_arr.join(","),
               suggestionContent:this.suggestionContent,
               suggestionNumbers:this.suggestionNumbers,
-              customerId:localStorage.getItem("userId")
+              customerId:localStorage.getItem("userId"),
+              siteId: api.getSiteId()
             },
             done(data) {
               if (data.responseObject.responseStatus){
