@@ -1,5 +1,5 @@
 /**
- * @Desc：上传图片数量限制
+ * @Desc：查看用户是否上传过图片
  * @Usage:
  * @Notify：
  * @Depend：
@@ -11,7 +11,7 @@ import api from "common/js/util/util";
 const XHRList = {
   validLogin: "/mcall/comm/data/tool/v1/getMapList/"
 };
-export default class GetUploadLimit {
+export default class GetIsUpload {
   constructor() {
 
   }
