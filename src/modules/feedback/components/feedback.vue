@@ -62,7 +62,7 @@
   import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
-  const feedbackUrl='mcall/customer/suggestion/v1/create/';
+  const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
     // browser:{
     //   versions:function(){
