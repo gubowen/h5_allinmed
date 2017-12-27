@@ -62,7 +62,8 @@
   import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
-  const feedbackUrl='mcall/customer/suggestion/v1/create/';
+  import Loading from "components/loading";
+  const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
     // browser:{
     //   versions:function(){
@@ -95,7 +96,7 @@
         errorShow:false,
         errorMsg:"",
         submitSuccess:false,
-        backTimeout:3
+        backTimeout:3,
       }
     },
     components: {
@@ -149,7 +150,8 @@
               suggestionContent:this.suggestionContent,
               suggestionNumbers:this.suggestionNumbers,
               customerId:localStorage.getItem("userId"),
-              siteId: api.getSiteId()
+              siteId: api.getSiteId(),
+              equipmentVersion:"123"
             },
             done(data) {
               if (data.responseObject.responseStatus){
