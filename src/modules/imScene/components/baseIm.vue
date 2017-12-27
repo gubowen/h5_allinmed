@@ -221,7 +221,6 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -293,7 +292,7 @@
         }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
       ></ensure>
     </transition>
-    <suggestion></suggestion>
+    <suggestion :customerId="patientCustomerId"></suggestion>
   </section>
 
 </template>
@@ -381,6 +380,7 @@
           progress: "0%",
           index: 0
         },
+        patientCustomerId:api.getPara().patientCustomerId,
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
         fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
@@ -660,7 +660,7 @@
           if (
             (msg.type === "custom" &&
               JSON.parse(msg.content).type === "notification" &&
-              JSON.parse(msg.content).data.actionType === 5) 
+              JSON.parse(msg.content).data.actionType === 5)
           ) {
             return true;
           } else {
