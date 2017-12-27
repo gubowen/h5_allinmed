@@ -251,7 +251,7 @@
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion></Suggestion>
+        <Suggestion :customerId="patientCustomerId"></Suggestion>
       </transition>
     </section>
   </div>
@@ -342,6 +342,7 @@
           progress: "0%",
           index: 0
         },
+        patientCustomerId:api.getPara().patientCustomerId,
         onFocus: false,
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
