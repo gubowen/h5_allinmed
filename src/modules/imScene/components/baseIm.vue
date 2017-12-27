@@ -229,7 +229,7 @@
                       @keypress.enter.stop="autoSizeTextarea()">
             </textarea>
             <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
-            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
+            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage()">发送</p>
           </figure>
         </section>
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
@@ -916,6 +916,7 @@
                     if (!tipsError) {
                       console.log(tipsError, tipsMsg);
                       console.log(`撤回消息提示--发送成功`);
+                      that.checkMsg(msg);//检查撤回的消息；
                       that.sendMessageSuccess(tipsError, tipsMsg);
                     }
                   }
@@ -933,27 +934,19 @@
             }
           }
         });
-        // deleteMsg
-        //   .deleteMessage()
-        //   .then(msg => {
-        //     console.log(99999);
-        //     deleteMsgTips.sendDeleteTips().then((tipsMsg, tipsError) => {
-        //       console.log(tipsMsg, tipsError);
-        //       console.log(`撤回消息提示--发送成功`);
-        //       that.sendMessageSuccess(tipsError, tipsMsg);
-        //     });
-        //   })
-        //   .catch((error, msg) => {
-        //     console.log(error);
-        //     console.log(8888);
-        //     if (parseInt(error.code) === 508) {
-        //       this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
-        //       this.toastShow = true;
-        //       setTimeout(() => {
-        //         this.toastShow = false;
-        //       }, 2000);
-        //     }
-        //   });
+      },
+      // 检查撤回的消息
+      checkMsg(msg) {
+        if (JSON.parse(msg.custom).mType == 1) {
+          console.log(msg);
+          let _imageUrl = msg.file.url;
+          this.imageList.forEach((element, index) => {
+            if (element === _imageUrl) {
+              this.imageList.removeByValue(element);
+              return;
+            }
+          });
+        }
       },
       //获取剩余时间
       getLastTime() {
@@ -1092,7 +1085,7 @@
           setTimeout(() => {
             this.scrollToBottom();
             // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 1000);
+          }, 20);
 
           // this.refreshScroll();
         } else {
@@ -1324,11 +1317,16 @@
                 }),
                 file: file,
                 done(error, msg) {
+                  // debugger;
                   that.msgList[that.imageLastIndex] = msg;
-                  that.imageList.push(
-                    that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
-                      .file.url
-                  );
+                  // 老版本的imageList push
+                  // that.imageList.push(
+                  //   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
+                  //     .file.url
+                  // );
+                  // 新版本的imageList push
+                  that.imageList.push(msg.file.url);
+
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
@@ -2081,7 +2079,7 @@
   @import "../../../../static/scss/modules/imStyle";
 
   * {
-    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .ev-fileUpHide {
