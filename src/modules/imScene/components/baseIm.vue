@@ -221,7 +221,6 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -659,7 +658,7 @@
           if (
             (msg.type === "custom" &&
               JSON.parse(msg.content).type === "notification" &&
-              JSON.parse(msg.content).data.actionType === 5) 
+              JSON.parse(msg.content).data.actionType === 5)
           ) {
             return true;
           } else {

@@ -292,6 +292,7 @@
   .banner {
     padding: 0 0 rem(140px) 0;
     position: relative;
+    overflow: hidden;
     .swiper-container{
       overflow:visible;
     }

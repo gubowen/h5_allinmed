@@ -190,7 +190,6 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-                      ref="inputTextarea"
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -402,11 +401,11 @@
             document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 100);
         }
-        // setTimeout(() => {
-        //   $(".main-message-time").css({
-        //     top: document.body.scrollTop
-        //   });
-        // }, 300);
+        setTimeout(() => {
+          $(".main-message-time").css({
+            top: document.body.scrollTop
+          });
+        }, 500);
         this.onFocus = true;
         this.autoSizeTextarea();
       },
@@ -420,9 +419,9 @@
           }, 20);
         }
 
-        // $(".main-message-time").css({
-        //   top: 0
-        // })
+        $(".main-message-time").css({
+          top: 0
+        })
 
         this.onFocus = false;
         this.autoSizeTextarea();
