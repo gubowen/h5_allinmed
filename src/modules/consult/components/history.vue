@@ -474,13 +474,16 @@ export default {
       } else {
         //是否上传过检测
         checkUpLoadStatus
-          .getDataInit()
+          .getDataInit({patientCustomerId:api.getPara().customerId})
           .then(res => {
             console.log(res);
-            //未上传过
-            _this.upLoadTips();
-            //上传过
-            // _this.uploadEvent();
+            if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
+            // 上传过
+              _this.uploadEvent();
+            }else{
+              //未上传过
+              _this.upLoadTips();
+            }
           })
           .catch(err => {
             console.log(err);
