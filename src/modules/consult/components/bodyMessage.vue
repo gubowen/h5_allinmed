@@ -120,6 +120,10 @@
           inspectionAttId: "",
           takeMedicine: "",
           complication: "",
+          height:"",
+          weight:"",
+          descriptionDisease:"",
+          needHelp:"",
           optionList: []
         },
         userData: {
@@ -132,7 +136,7 @@
     },
     methods: {
       initCaseParams(){
-        let params = this.$route.params;
+        let params = this.$route.params.pageParam;
         this.createParams.patientId = params.patientId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
@@ -241,6 +245,10 @@
         let that = this;
         this.submitTip = false;
         this.finish = true;
+        this.createParams.height = this.heightContent;
+        this.createParams.weight = this.weightContent;
+        this.createParams.descriptionDisease = this.disContent;
+        this.createParams.needHelp = this.helpContent;
         api.ajax({
           url: XHRList.createCase,
           method: "POST",

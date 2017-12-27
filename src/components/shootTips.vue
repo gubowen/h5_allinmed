@@ -31,7 +31,7 @@
             <h2 class="stepThreeTitle"></h2>
             <p class="stepThreeImgComputer"></p>
             <h3>通过片子上的R/L或豁口找正反</h3>
-            <article>如图，L保持在右侧R在左侧，或者在片子上找到豁口，将豁口保持在右上方</article>
+            <article class="stepThreeInfo">如图，L保持在右侧R在左侧，或者在片子上找到豁口，将豁口保持在右上方</article>
             <p class="stepThreeImgWindow"></p>
             <h3>根据片子上的文字判断正反</h3>
             <article>如图，根据文字顺序正反来分清正反</article>
@@ -114,13 +114,14 @@
         width:rem(12px);
         height:rem(12px);
         margin:0 rem(14px);
-        border: 1px solid #0089F3;
+        border: 2px solid #0089F3;
         border-radius: 50%;
         background:#fff;
+        opacity: 1;
       }
       .swiper-pagination-bullet-active{
         background: #00BCB3;
-        border: 1px solid #0089F3;
+        border: 2px solid #0089F3;
       }
     };
     .swiper-container{
@@ -140,14 +141,14 @@
         overflow: hidden;
         .stepOneTitle{
           width:100%;
-          height:7%;
+          height:0.8rem;
           margin-top:3%;
           background:url("../common/image/img00/shootTips/shooting-tool@2x.png") no-repeat center;
           background-size:rem(240px) 100%;
         }
         .stepOneImg{
           width:100%;
-          height:39%;
+          height:4.85rem;
           margin-top:3%;
           background:url("../common/image/img00/shootTips/tool@2x.png") no-repeat center;
           background-size:100% 100%;
@@ -181,9 +182,9 @@
         overflow: hidden;
         .stepTwoTitle{
           width:100%;
-          height:5.3%;
+          height:0.8rem;
           margin-top:2.7%;
-          background:url("../common/image/img00/shootTips/background@2x.png") no-repeat center;
+          background:url("../common/image/img00/shootTips/bg-shoot.png") no-repeat center;
           background-size:rem(240px) 100%;
         }
         .stepTwoImgComputer{
@@ -228,7 +229,7 @@
         overflow: hidden;
         .stepThreeTitle{
           width:100%;
-          height:6%;
+          height:0.85rem;
           margin-top:2.7%;
           background:url("../common/image/img00/shootTips/positive@2x.png") no-repeat center;
           background-size:rem(216px) 100%;
@@ -254,10 +255,13 @@
           text-align: center;
         }
         article{
-          padding:3.5% rem(110px);
+          padding:3.5% rem(160px);
           color: #555555;
           font-size: 0.42rem;
           text-align: center;
+        }
+        .stepThreeInfo{
+          padding:3.5% rem(110px);
         }
       }
     }
@@ -275,7 +279,7 @@
         overflow: hidden;
         .stepFourTitle{
           width:100%;
-          height:6%;
+          height:0.85rem;
           margin-top:2.7%;
           background:url("../common/image/img00/shootTips/shooting@2x.png") no-repeat center;
           background-size:rem(194px) 100%;

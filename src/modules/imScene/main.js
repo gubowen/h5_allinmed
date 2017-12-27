@@ -17,7 +17,7 @@ import "static/css/base.css";
 
 import BaseIm from "./components/baseIm";
 import ShowBigImg from "components/showBigImg";
-import MedicalReportDetail from "./components/medicalReportDetail";
+import MedicalReportDetail from "components/medicalReportDetail";
 import UploadList from "./components/uploadList";
 import TriageDetail from "./components/triageDetail";
 import knowledgeDetail from "./components/knowledgeDetail";
@@ -127,13 +127,13 @@ class ImScene {
         keepAlive: true
       },
       component: videoPlay
-      } 
+      }
     ]
   }
 }
 
 
 let imScene = new ImScene();
-if (module.hot) {  
+if (module.hot) {
   module.hot.accept();
 }

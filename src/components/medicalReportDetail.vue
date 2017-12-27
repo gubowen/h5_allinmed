@@ -157,9 +157,7 @@
     },
     mounted(){
       this.getMedicalReport();
-    },
-    computed: {
-
+      api.forbidShare();
     },
     methods: {
       getMedicalReport() {
@@ -182,7 +180,11 @@
               that.patientCasemap = data.responseObject.responseData.dataList[0].patientCasemap;
               that.resultMainList = data.responseObject.responseData.dataList[0].resultMainList;
               that.resultMainList[0].symptomOptions.forEach((element,index)=>{
-                that.symptomDescription += element.optionName + '、';
+                if(element.optionDesc.length>0){
+                  that.symptomDescription += element.optionDesc + '、'
+                }else{
+                  that.symptomDescription += element.optionName + '、';
+                }
               });
               that.symptomDescription = that.symptomDescription.substring(0,that.symptomDescription.length-1);
               if(that.resultMainList[0].symptomOptions[0].refQuestionList.length){
@@ -243,9 +245,7 @@
         }
         this.logoUrl = img;
       },
-    },
-    props: {},
-
+    }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
