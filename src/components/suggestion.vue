@@ -22,7 +22,7 @@
     },
     methods: {
       goFeedback () {
-        location.href = '/dist/feedback.html?from=im&customerId=';
+        location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}`;
       }
     },
     mounted(){
