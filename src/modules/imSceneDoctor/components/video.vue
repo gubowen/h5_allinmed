@@ -137,10 +137,13 @@ export default {
   & > .mulitple-image {
     display: inline-block;
     margin-right: rem(20px);
+    background-color: #000000;
     & > img {
       width: rem(132px);
       height: rem(132px);
       vertical-align: top;
+      position: relative;
+      left: -4%;
     }
     &:nth-child(1) {
       // margin: 0;

@@ -138,7 +138,7 @@
             >
             </FileMessage>
             <!--音频-->
-            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg" @clickLogo="goToDoctorHomePage">
+            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg" @clickLogo="goToDoctorHomePage" :targetData="targetData">
             </AudioMessage>
             <!--患者扫码报道-->
             <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">

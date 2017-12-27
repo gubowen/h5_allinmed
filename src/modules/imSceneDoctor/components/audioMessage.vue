@@ -13,6 +13,9 @@
           </audio>
           <span>{{formatTime}}</span>
         </p>
+        <article class="disclaimer-content" v-if="audioMessage.from===targetData.account">
+          <span>重要提示：在线咨询不能代替面诊，医生建议仅供参考。</span>
+        </article>
       </figcaption>
     </article>
   </section>
@@ -72,7 +75,10 @@
     props: {
       audioMessage: {
         type: Object
-      }
+      },
+      targetData: {
+        type: Object
+      },
     }
   }
 </script>
