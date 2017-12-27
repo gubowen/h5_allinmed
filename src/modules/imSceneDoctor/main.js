@@ -17,7 +17,7 @@ import fastclick from 'fastclick';
 import api from "common/js/util/util";
 import BaseIm from "./components/baseIm";
 import ShowBigImg from "components/showBigImg";
-import MedicalReportDetail from "./components/medicalReportDetail";
+import MedicalReportDetail from "components/medicalReportDetail";
 
 import store from "./store/store";
 import touch from "common/js/customDirective/vTouch";

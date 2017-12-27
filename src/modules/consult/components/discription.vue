@@ -40,7 +40,7 @@
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
                       <section class="pain-level-box">
-                        <h3>告诉我您的疼痛程度</h3>
+                        <h3><span>告诉我您的疼痛程度</span><i class="icon-closePainLevel" @click="painValue=-1;showPainProgress=false;"></i></h3>
                         <p class="pain-level-content">
                           {{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}
                         </p>
@@ -57,9 +57,7 @@
                           class="pain-level-progress"
                           :label-style="labelStyle"
                         ></vue-slider>
-                        <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了
-
-                        </button>
+                        <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了</button>
                       </section>
                     </section>
                   </transition>
@@ -73,13 +71,10 @@
                              v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected"
                              v-for="(scItem,scIndex) in item.questionList2"
                              :data-qId="scItem.questionId">
-                      <section class="pain-level-title-box" @click.stop="">
-                        <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass"
-                                @click.stop="showPainProgress=true;showSymptomDetail=false">
+                      <section class="pain-level-title-box">
+                        <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass" @click.stop="painValue=2;showPainProgress=true;showSymptomDetail=false">
                           <i class="icon-pain-level-tips"></i>
-                          <p>
-                            <em>疼痛等级：</em><span>{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span>
-                          </p>
+                          <p><em>{{painValue == -1?'请选择您的疼痛等级':'疼痛等级：'}}</em><span v-if="painValue != -1">{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span></p>
                         </header>
                       </section>
                       <header class="consult-inner-title" v-if="scItem.questionType!=3">
@@ -110,47 +105,46 @@
                 </transition>
               </section>
             </section>
+            <!--<section class="consult-total">-->
+              <!--<header class="consult-inner-title">-->
+                <!--<h2>-->
+                  <!--<span>这种情况多久了？</span>-->
+                <!--</h2>-->
+              <!--</header>-->
+              <!--<section class="consult-question-inner select-item">-->
+                <!--<article class="consult-question-item dark" @click.stop="delayTimePicker.show()">-->
+                  <!--<p>{{delayTimeContent}}</p>-->
+                  <!--<i class="icon-select"></i>-->
+                <!--</article>-->
+              <!--</section>-->
+            <!--</section>-->
+            <!--<section class="consult-total">-->
+              <!--<header class="consult-inner-title">-->
+                <!--<h2>-->
+                  <!--<span>最近一次加重是什么时候？</span>-->
+                <!--</h2>-->
+              <!--</header>-->
+              <!--<section class="consult-question-inner select-item">-->
+                <!--<article class="consult-question-item dark" @click.stop="heavyTimePicker.show()">-->
+                  <!--<p>{{heavyTimeContent}}</p>-->
+                  <!--<i class="icon-select"></i>-->
+                <!--</article>-->
+              <!--</section>-->
+            <!--</section>-->
+            <!--<section class="consult-total">-->
+              <!--<header class="consult-inner-title">-->
+                <!--<h2>-->
+                  <!--<span>您还有其他补充吗？</span>-->
+                <!--</h2>-->
+              <!--</header>-->
 
-            <section class="consult-total">
-              <header class="consult-inner-title">
-                <h2>
-                  <span>这种情况多久了？</span>
-                </h2>
-              </header>
-              <section class="consult-question-inner select-item">
-                <article class="consult-question-item dark" @click.stop="delayTimePicker.show()">
-                  <p>{{delayTimeContent}}</p>
-                  <i class="icon-select"></i>
-                </article>
-              </section>
-            </section>
-            <section class="consult-total">
-              <header class="consult-inner-title">
-                <h2>
-                  <span>最近一次加重是什么时候？</span>
-                </h2>
-              </header>
-              <section class="consult-question-inner select-item">
-                <article class="consult-question-item dark" @click.stop="heavyTimePicker.show()">
-                  <p>{{heavyTimeContent}}</p>
-                  <i class="icon-select"></i>
-                </article>
-              </section>
-            </section>
-            <section class="consult-total">
-              <header class="consult-inner-title">
-                <h2>
-                  <span>您还有其他补充吗？</span>
-                </h2>
-              </header>
-
-              <figure class="input-area">
-              <textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"
-                        @input="complicationLimit"></textarea>
-                <p class="text-num-tips" v-show="getByteLen(complication)<=100">
-                {{getByteLen(complication)}}</p>
-              </figure>
-            </section>
+              <!--<figure class="input-area">-->
+              <!--<textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"-->
+                        <!--@input="complicationLimit"></textarea>-->
+                <!--<p class="text-num-tips" v-show="getByteLen(complication)<=100">-->
+                  <!--{{getByteLen(complication)}}</p>-->
+              <!--</figure>-->
+            <!--</section>-->
             <transition name="fade">
               <section class="welcome-tips" v-if="firstConsult" @click="firstConsult=false">
                 <figure @click.stop="firstConsult=true">
@@ -178,8 +172,7 @@
         </section>
       </transition>
       <loading :show="!finish"></loading>
-      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
-                 :backPopupParams="{patientParams:patientParams}"></backPopup>
+      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow" :backPopupParams="{patientParams:patientParams}"></backPopup>
     </section>
   </div>
 </template>
@@ -233,7 +226,7 @@
         firstConsult: false,
         painProgress: [],
         painQuestion: "",
-        painValue: "2",
+        painValue: "-1",
         count: 0,
         showPainProgress: false,
         hasSelectedLevel: false,
@@ -328,6 +321,9 @@
       painLevelClass() {
         let className = "";
         switch (parseInt(this.painValue)) {
+          case -1:
+            className = "pain";
+            break;
           case 0:
             className = "pain0";
             break;
@@ -439,6 +435,10 @@
         })
       },
       secondClickEvent(type, scIndex, scoIndex, index, pIndex) {
+        if(Object.keys(this.secondQuestionList).length == 0 && this.painValue == -1){
+          this.painValue = 2;
+          this.showPainProgress = true;
+        }
         const optionId = this.questionList[pIndex].optionList[index].questionList[
           scIndex
           ].optionList[scoIndex].optionId;
@@ -591,10 +591,7 @@
           if (this.questionList[pIndex].optionList[index].isSelected) {
             // debugger;
             console.log(this.questionList[pIndex].optionList[index].optionId);
-            if (
-              this.questionList[pIndex].optionList[index].optionId ==
-              this.hasSecondQuestionId
-            ) {
+            if (this.questionList[pIndex].optionList[index].optionId == this.hasSecondQuestionId) {
               this.selectList[pIndex].optionIdList.unshift(
                 this.questionList[pIndex].optionList[index].optionId
               );
@@ -626,24 +623,17 @@
           api.removeDub(this.selectList[pIndex].optionIdList);
         }
 
-        if (
-          this.renderList[pIndex].optionList1[index].questionList2 &&
-          this.renderList[pIndex].optionList1[index].questionList2.length !== 0
-        ) {
-          let secondList = this.renderList[pIndex].optionList1[index]
-            .questionList2;
-          secondList.forEach(element => {
-            if (
-              parseInt(element.questionType) === 3 &&
-              this.questionList[pIndex].optionList[index].isSelected
-            ) {
-              if (!this.hasSelectedLevel) {
-                this.showPainProgress = true;
-                this.hasSelectedLevel = true;
-              }
-            }
-          });
-        }
+//        if (this.renderList[pIndex].optionList1[index].questionList2 && this.renderList[pIndex].optionList1[index].questionList2.length !== 0) {
+//          let secondList = this.renderList[pIndex].optionList1[index].questionList2;
+//          secondList.forEach(element => {
+//            if (parseInt(element.questionType) === 3 && this.questionList[pIndex].optionList[index].isSelected) {
+//              if (!this.hasSelectedLevel) {
+//                this.showPainProgress = true;
+//                this.hasSelectedLevel = true;
+//              }
+//            }
+//          });
+//        }
 
         if (item.isAttachment == 2) {
           if ($event.currentTarget.className.indexOf("selected") < 0) {
@@ -751,6 +741,15 @@
       },
       //数据装载...
       paramsInstall() {
+        if(this.questionList[0].optionList[0].isSelected && this.painValue == -1){
+          window.scroll(0,document.querySelector(".pain").offsetTop-250);
+          this.errorMsg = "请填写疼痛等级";
+          this.errorShow = true;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000);
+          return false;
+        }
         if (!this.answerValidator()) {
           return false;
         }
@@ -1162,11 +1161,20 @@
     }
     & > h3 {
       @include font-dpr(15px);
-      text-align: left;
       color: #909090;
       font-weight: normal;
-      padding-left: rem(40px);
-      padding-top: rem(40px);
+      padding: rem(40px) rem(40px) 0;
+      @include clearfix();
+      span{
+        float:left;
+      }
+      .icon-closePainLevel{
+        float:right;
+        width: rem(30px);
+        height:rem(30px);
+        background: url("../../../common/image/img00/index/close.png") no-repeat;
+        background-size: 100% 100%;
+      }
     }
     & > p {
       padding: rem(30px) 0;
@@ -1380,6 +1388,10 @@
     padding: rem(14px) rem(16px);
     box-sizing: border-box;
     margin-top: rem(54px);
+    &.pain .icon-pain-level-tips {
+      background: url(../../../common/image/img00/consult_V1.2/secondary_expression00@2x.png) no-repeat;
+      background-size: contain;
+    }
     &.pain0 .icon-pain-level-tips {
       background: url(../../../common/image/img00/consult_V1.2/secondary_expression00@2x.png) no-repeat;
       background-size: contain;
