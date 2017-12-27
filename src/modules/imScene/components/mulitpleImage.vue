@@ -1,8 +1,8 @@
 <template>
-     <section class="main-message-box" v-touch:long.stop="longTouchHandler">
-          <article
-            class="main-message-box-item my-message"
-            :data-clientid="imageMessage.idClient">
+  <section class="main-message-box" v-touch:long.stop="longTouchHandler">
+    <article
+      class="main-message-box-item my-message"
+      :data-clientid="imageMessage.idClient">
 
       <i class="fail-button" style="display:none">
         <img src="../../../common/image/imScene/error_tips.png" alt="">
@@ -11,6 +11,13 @@
         <transition name="fade">
           <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</button>
         </transition>
+        <section class="middle-tip-modal" v-if="imageMessage.loading">
+          <figure class="middle-tip-box-text">
+            <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
+                 alt="loading...">
+          </figure>
+        </section>
+
         <header class="mulit-title">图片({{imageList.length}})</header>
         <section class="mulitple-image-box" @click.stop="showBigImg">
             <figure class="mulitple-image" v-for="item in imageList.slice(0,3)">
@@ -23,7 +30,7 @@
         <img :src="logoUrl" alt="">
       </figure>
     </article>
-     </section>
+  </section>
 </template>
 
 <script type="text/ecmascript-6">
@@ -62,7 +69,7 @@ export default {
     },
     deleteMsgEvent() {
       this.showDeleteMsg = false;
-      console.log("video组件里的我要删除");
+      console.log("多图组件里的我要删除");
       this.$emit("deleteMsgEvent");
     }
   },
@@ -72,6 +79,11 @@ export default {
   computed: {
     logoUrl() {
       return this.$store.state.logoUrl;
+    }
+  },
+  watch: {
+    "imageMessage"(data) {
+      this.imageList = JSON.parse(data.content).data.list;
     }
   },
   props: {
@@ -96,31 +108,87 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-@import "../../../../scss/library/_common-modules";
-.mulit-title {
-  padding-bottom: rem(24px);
-  border-bottom: 1px solid #d8d8d8;
-  @include font-dpr(17px);
-  color: #222222;
-}
-.multiple-box{
-  min-width: 6.8rem;
-}
-.mulitple-image-box {
-  text-align: left;
-  padding-top: rem(24px);
+  @import "../../../../scss/library/_common-modules";
 
-  & > .mulitple-image {
-    display: inline-block;
-    margin-right: rem(18px);
-    & > img {
-      width: rem(132px);
-      height: rem(132px);
-      vertical-align: top;
+  .mulit-title {
+    padding-bottom: rem(24px);
+    border-bottom: 1px solid #d8d8d8;
+    @include font-dpr(17px);
+    color: #222222;
+  }
+
+  .multiple-box {
+    min-width: 6.8rem;
+    position: relative;
+    .mulitple-image-box {
+      text-align: left;
+      padding-top: rem(24px);
+
+      & > .mulitple-image {
+        display: inline-block;
+        margin-right: rem(20px);
+        & > img {
+          width: rem(132px);
+          height: rem(132px);
+          vertical-align: top;
+        }
+        &:nth-child(1) {
+          // margin: 0;
+        }
+        &:nth-last-child(1) {
+          margin-right: 0;
+        }
+      }
     }
-    &:nth-last-child(1) {
-      margin-right: 0;
+
+    .middle-tip-modal {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.5);
+      transform: translate(0,0);
+      text-align: center;
+      border-radius: rem(21px);
+      &:before{
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+      }
+      .middle-tip-modal .middle-tip-box-text > img {
+        width: 0.53333rem;
+        height: 0.53333rem;
+        border-radius: 50%;
+        background-color: transparent;
+        -webkit-animation: rotate 1s linear forwards infinite;
+        animation: rotate 1s linear forwards infinite;
+      }
+    }
+
+  }
+
+
+  @keyframes rotate {
+    0% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
-}
+
+  @-webkit-keyframes rotate {
+    0% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
 </style>

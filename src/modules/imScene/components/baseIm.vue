@@ -384,6 +384,7 @@
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
         fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
+        mulitpleLastIndex:0,//多图上传最后一个记录在数组中的位置
         footerBottomFlag: false, // 底部文件选择框是否显示
         noWXPayShow: false,
         onFocus: false,
@@ -1208,6 +1209,19 @@
         const that = this;
         console.log(list);
         let promises = [];
+        this.msgList.push({
+          type: "custom",
+          content: JSON.stringify({
+            type: "multipleImage",
+            data: {
+              list: []
+            }
+          }),
+          loading: true,
+          from: this.userData.account
+        });
+        that.mulitpleLastIndex = that.msgList.length - 1;
+        that.inputImageFlag = false;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1263,9 +1277,10 @@
             }
           }),
           done(error, msg) {
+            that.inputImageFlag = true;
             if (!error) {
-              console.log(msg)
-              that.sendMessageSuccess(error, msg);
+              console.log(msg);
+              that.msgList[that.mulitpleLastIndex] = msg;
             }
           }
         });
