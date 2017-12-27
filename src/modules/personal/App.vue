@@ -82,6 +82,10 @@
     background: #fff url("../../../src/common/image/img00/personal/icon_03.png") no-repeat center 50%;
      background-size: contain;
   }
+  &.feedback {
+    background: #fff url("../../../src/common/image/img00/personal/icon_04.png") no-repeat center 50%;
+    background-size: contain;
+  }
 
   &.about {
     background: #fff url("../../../src/common/image/img00/personal/icon_02.png") no-repeat center 50%;

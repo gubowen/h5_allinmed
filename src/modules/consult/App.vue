@@ -3,7 +3,7 @@
     <keep-alive style="height:100%">
       <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
     </keep-alive>
-    
+
     <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
     <bottomNav :selected="2" :isClick=false v-if="bottomNavShow"></bottomNav>
   </div>
@@ -19,8 +19,8 @@
    *
    * Created by Qiangkailiang on 17/7/10.
    */
-  import addPatient from "./components/addPatient";
-  import fb from "common/js/third-party/flexible";
+  import "./components/addPatient";
+  import "common/js/third-party/flexible";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import bottomNav from "components/tabbar"
 //  import vconsole from 'common/js/third-party/vconsole.min';

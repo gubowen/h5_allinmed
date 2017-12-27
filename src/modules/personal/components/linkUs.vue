@@ -7,13 +7,13 @@
       </p>
       <span class="jump"></span>
     </router-link>
-    <section class="allinmed-personal-link" @click="goSuggestFn()">
+    <router-link tag='section' class="allinmed-personal-link" to='/contactUs'>
       <p class='allinmed-personal-des'>
-        <span class="icon about"></span>
+        <span class="icon feedback"></span>
         <span class="title">建议反馈</span>
       </p>
       <span class="jump"></span>
-    </section>
+    </router-link>
     <router-link tag='section' class="allinmed-personal-about"  to='/aboutAllinmed'>
       <p class='allinmed-personal-des'>
       <span class="icon  link"></span>
@@ -23,15 +23,6 @@
     </router-link>
   </section>
 </template>
-<script>
-  export default{
-    methods: {
-      goSuggestFn() {
-        window.location.href=`/dist/feedback.html?customerId=${localStorage.getItem('userId')}`;
-      }
-    }
-  }
-</script>
 <style scoped lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules.scss";
   .allinmed-personal-linkUs{

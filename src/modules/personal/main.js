@@ -13,7 +13,7 @@ import Router from "vue-router";
 import VeeValidator, {Validator}  from 'vee-validate';
 import store from "./store/store.js"
 import "static/css/base.css";
-import api from '../../common/js/util/util';
+import '../../common/js/util/util';
 fastclick.attach(document.body);
 import routes from "./router/router.config"
 import "babel-polyfill";

@@ -45,7 +45,7 @@
    * Created by JuKun on 2017/11/07.
    */
 //  import login from "./contactUs.html";
-  import fb from "common/js/third-party/flexible";
+  import "common/js/third-party/flexible";
   export default{
     data() {
       return {}
