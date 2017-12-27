@@ -44,11 +44,11 @@
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
                         <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple ref="uploader" capture="camera">
+                               @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
                         <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple   ref="uploader">
+                               @change="onFileChange($event,1,index)"    ref="uploader">
                                                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)" multiple   ref="uploader">
+                               @change="onFileChange($event,1,index)"    ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList1.length<50">
@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                 </form>
-                <p class="upLoadContentNum">已上传{{imageList1.length}}张，<span class="upLoadViewAll" @click="showBigImg()">查看全部</span></p>
+                <p class="upLoadContentNum">已上传{{imageList1.length}}张，<span class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">查看全部</span></p>
                 <!-- <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p> -->
                 <form class="qu-upFormBox qu-upFormBox-s" action="" v-show="false">
                   <figure class="qu-upLoadTitle-s">
@@ -213,6 +213,11 @@ import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import nimEnv from "common/js/nimEnv/nimEnv";
 import imageCompress from "common/js/imgCompress/toCompress";
 import progerssBar from "../components/progressBar";
+import GetUploadLimit from "../api/getUploadLimit";
+import CheckUpLoadStatus from "../api/checkUpLoadStatus";
+
+const getUploadLimit = new GetUploadLimit();
+const checkUpLoadStatus = new CheckUpLoadStatus();
 
 siteSwitch.weChatJudge(
   () => {
@@ -273,7 +278,7 @@ export default {
       imageList1: [],
       imageList2: [],
       uploadContalNum: 0, //已上传数量
-      upLoadGuideTip: 1,   //上传指导路径 （1-问号提示 2-去上传按钮）
+      upLoadGuideTip: 1, //上传指导路径 （1-问号提示 2-去上传按钮）
       filesObj: [],
       base64Arr: [],
       uploadIndex: 0,
@@ -330,10 +335,10 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
-    if(this.upLoadGuideTip =="2"){
-        //展示上传按钮
-        this.uploadEvent();
-      }
+    if (this.upLoadGuideTip == "2") {
+      //展示上传按钮
+      this.uploadEvent();
+    }
   },
   mounted() {
     document.title = "描述病情";
@@ -461,17 +466,29 @@ export default {
       }
     },
     //去上传按钮
-    uploadBtnFn(){
+    uploadBtnFn() {
       let _this = this;
       _this.upLoadGuideTip = "2";
       if (_this.upload.has) {
         return;
       } else {
         //是否上传过检测
-        //未上传过
-        _this.upLoadTips();
-        //上传过
-        // _this.uploadEvent();
+        checkUpLoadStatus
+          .getDataInit()
+          .then(res => {
+            console.log(res);
+            //未上传过
+            _this.upLoadTips();
+            //上传过
+            // _this.uploadEvent();
+          })
+          .catch(err => {
+            console.log(err);
+            _this.finish = false;
+            // _this.toastComm("网络信号差，建议您稍后再试");
+            // _this.imgUrl = _this.toastImg.wifi;
+            // this.$store.commit("setLoadingState", false);
+          });
       }
     },
     uploadEvent() {
@@ -586,6 +603,30 @@ export default {
             //            that["uploading" + type] = false;
             that.uploading1 = false;
             that.uploading2 = false;
+            //上传下一张图片
+            that.uploadIndex = parseInt(that.uploadIndex) + 1;
+            let totalUpNum = that["imageList" + type].length;
+            if (
+              that.filesObj[that.uploadIndex] !== "undefined" &&
+              that.uploadIndex < that.base64Arr.length &&
+              totalUpNum < 50
+            ) {
+              that.upLoadPic(
+                that.filesObj[that.uploadIndex],
+                type,
+                index,
+                that.base64Arr[that.uploadIndex]
+              );
+            } else {
+              if (that.filesObj[that.uploadIndex]) {
+                that.errorShow = true;
+                that.errorMsg = "图片最多上传50张！";
+                setTimeout(() => {
+                  that.errorShow = false;
+                  that.errorMsg = "";
+                }, 3000);
+              }
+            }
           }
         },
         fail(res) {
@@ -623,7 +664,7 @@ export default {
     //上传指导页
     upLoadTips() {
       this.$router.push({
-        name: "upLoadTip",
+        name: "upLoadTip"
       });
     },
     //取消
@@ -666,17 +707,19 @@ export default {
           this.errorShow = false;
         }, 1000);
       } else {
+        this.submitData();
         //跳转第四部分
         // this.$router.push({
         //   name:"bodyMessage"
         // });
+        
         // 提示用户提交后不可修改提交内容
-        if (localStorage.getItem("PCIMLinks") !== null) {
-          this.backPopupShow = true;
-        } else {
-          this.backPopupShow = false;
-          this.submitTip = true;
-        }
+        // if (localStorage.getItem("PCIMLinks") !== null) {
+        //   this.backPopupShow = true;
+        // } else {
+        //   this.backPopupShow = false;
+        //   this.submitTip = true;
+        // }
       }
     },
     //提交数据

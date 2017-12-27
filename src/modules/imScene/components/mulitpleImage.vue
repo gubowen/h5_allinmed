@@ -1,5 +1,5 @@
 <template>
-     <section class="main-message-box">
+     <section class="main-message-box" v-touch:long.stop="longTouchHandler">
           <article
             class="main-message-box-item my-message"
             :data-clientid="imageMessage.idClient">
@@ -8,9 +8,9 @@
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content multiple-box">
-        <!-- <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
-        </transition> -->
+        <transition name="fade">
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</button>
+        </transition>
         <header class="mulit-title">图片({{imageList.length}})</header>
         <section class="mulitple-image-box" @click.stop="showBigImg">
             <figure class="mulitple-image" v-for="item in imageList.slice(0,3)">
@@ -30,7 +30,8 @@
 export default {
   data() {
     return {
-      imageList: []
+      imageList: [],
+      showDeleteMsg:false,//撤回按钮是否显示
     };
   },
   components: {},
@@ -54,6 +55,15 @@ export default {
         name: "showBigImg",
         params: _params
       });
+    },
+    longTouchHandler() {
+      this.showDeleteMsg = true;
+      this.$emit("longTouchEmitHandler");
+    },
+    deleteMsgEvent() {
+      this.showDeleteMsg = false;
+      console.log("video组件里的我要删除");
+      this.$emit("deleteMsgEvent");
     }
   },
   mounted() {
@@ -74,7 +84,13 @@ export default {
     },
     userData: {
       type: Object
-    }
+    },
+    deleteMsgIndex: {
+      type: Number
+    },
+    currentIndex: {
+      type: Number
+    },
   }
 };
 </script>
