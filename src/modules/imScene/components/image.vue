@@ -132,7 +132,7 @@ export default {
     deleteMsgIndex: {
       type: Number
     },
-        targetData: {
+    targetData: {
       type: Object
     },
     userData: {

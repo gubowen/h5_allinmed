@@ -87,8 +87,10 @@
             :fileMessage="msg"
             :userData="userData"
             :targetData="targetData"
-            :currentIndex="index"
             :fileProgress="fileProgress"
+            @deleteMsgEvent="deleteMsgEvent(msg)"
+            @longTouchEmitHandler="deleteMsgIndex=index"
+            :currentIndex="index"
             :deleteMsgIndex="deleteMsgIndex"
           >
           </FileMessage>
@@ -98,6 +100,10 @@
             :imageMessage="msg"
             :userData="userData"
             :targetData="targetData"
+            @deleteMsgEvent="deleteMsgEvent(msg)"
+            @longTouchEmitHandler="deleteMsgIndex=index"
+            :currentIndex="index"
+            :deleteMsgIndex="deleteMsgIndex"
           >
 
           </MulitpleImage>
@@ -108,7 +114,10 @@
             :userData="userData"
             :targetData="targetData"
             :videoProgress="videoProgress"
+            @deleteMsgEvent="deleteMsgEvent(msg)"
+            @longTouchEmitHandler="deleteMsgIndex=index"
             :currentIndex="index"
+            :deleteMsgIndex="deleteMsgIndex"
           ></VideoMessage>
           <!--音频-->
           <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg">
@@ -172,7 +181,7 @@
           >
           </MiddleTips>
           <!--消息撤回提示-->
-          <div data-alcode-mod='717' :key="0">
+          <div :key="0">
             <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
               <figcaption class="first-message">
                 <p>{{msg.from==="1_doctor00001"?"分诊医生":"您"}}撤回了一条消息</p>
@@ -181,14 +190,14 @@
           </div>
         </section>
         <!--继续问诊去购买时间-->
-        <div data-alcode-mod='717' :key="0">
+        <!-- <div data-alcode-mod='717' :key="0">
           <section class="main-message-box grey-tips" v-if="consultTipsShow" :key="0">
             <figcaption data-alcode='e130' class="first-message" @click="getConsultPrice()">
               <p>分诊服务已结束，如需帮助，请选择</p>
               <p class="go-consult"><span>继续问诊</span></p>
             </figcaption>
           </section>
-        </div>
+        </div> -->
 
       </transition-group>
     </section>
@@ -508,7 +517,7 @@
             onmsg(msg) {
               if (msg.from === that.targetData.account) {
                 console.log("收到回复消息：" + JSON.stringify(msg));
-                that.pauseTime(msg); //收到检查检验隐藏顶部框；
+                // that.pauseTime(msg); //收到检查检验隐藏顶部框；
                 that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框
                 that.msgList.push(msg);
                 that.$nextTick(function () {
@@ -545,16 +554,16 @@
       },
 
       //收到检查检验隐藏顶部框；
-      pauseTime(msg) {
-        let that = this;
-        if (
-          msg.type === "custom" &&
-          JSON.parse(msg.content).type === "checkSuggestion"
-        ) {
-          that.lastTimeShow = false; //顶部时间取消
-          store.commit("stopLastTimeCount"); //时间计时取消
-        }
-      },
+      // pauseTime(msg) {
+      //   let that = this;
+      //   if (
+      //     msg.type === "custom" &&
+      //     JSON.parse(msg.content).type === "checkSuggestion"
+      //   ) {
+      //     that.lastTimeShow = false; //顶部时间取消
+      //     store.commit("stopLastTimeCount"); //时间计时取消
+      //   }
+      // },
       //获取页面图片消息存到数组里
       getImageList() {
         if (this.$refs.bigImg) {
@@ -650,8 +659,7 @@
           if (
             (msg.type === "custom" &&
               JSON.parse(msg.content).type === "notification" &&
-              JSON.parse(msg.content).data.actionType === 5) ||
-            !that.consultTipsShow
+              JSON.parse(msg.content).data.actionType === 5) 
           ) {
             return true;
           } else {
@@ -664,7 +672,6 @@
         let that = this;
         let medicalFlag = true; //是否有问诊单；
         for (let i = 0; i < that.msgList.length; i++) {
-          //          console.log(i);
           //判断消息列表里面是否有问诊单，没有的话发送一条
           if (
             that.msgList[i].type === "custom" &&
@@ -687,7 +694,7 @@
           that.getMedicalMessage();
         } else {
           //判断消息列表里面是否有结束问诊，没有的话发送一条
-          that.hasMiddleTips();
+          // that.hasMiddleTips();
         }
       },
       //获取患者问诊单
@@ -721,7 +728,7 @@
                   type: "medicalReport" //自定义类型 问诊单
                 });
                 //判断消息列表里面是否有结束问诊，没有的话发送一条
-                that.hasMiddleTips();
+                // that.hasMiddleTips();
               }
             }
           }
@@ -1966,7 +1973,10 @@
         that.$route.query.queryType === "checkSuggest"
       ) {
         that.updateMedical();
-        that.refreshState(6);
+        // 如果会话消息不是结束，则更新状态；
+        if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1) {
+          that.refreshState(6);
+        }
         that.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -2105,6 +2115,20 @@
       line-height: 1;
       display: inline-block;
     }
+  }
+
+  // 撤回按钮
+  .delete-msg-btn {
+    @include font-dpr(14px);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-left: -1rem;
+    line-height: rem(75px);
+    text-align: center;
+    display: block;
+    transform: translateY(-50%);
+    @include circle(rem(75px),#CCEDF2);
   }
 
   //输入区

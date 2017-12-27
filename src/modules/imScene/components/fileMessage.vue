@@ -1,5 +1,5 @@
 <template>
-  <section class="main-message-box">
+  <section class="main-message-box" v-touch:long.stop="longTouchHandler">
     <article class="main-message-box-item"
              :data-clientid="fileMessage.idClient"
              :class="{'my-message':fileMessage.from===userData.account,
@@ -11,9 +11,9 @@
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content file-message-box">
-        <!-- <transition name="fade">
-          <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&contentMessage.from===userData.account">撤回</span>
-        </transition> -->
+        <transition name="fade">
+          <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&fileMessage.from===userData.account">撤回</button>
+        </transition>
         <!-- <header class="mulit-title">视频</header> -->
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
@@ -23,7 +23,7 @@
           </figure>
         </section>
         <section class="file-box">
-          <figure class="file-content" @click="seeFile()">
+          <figure class="file-content" @click.stop="seeFile()">
             <img class="file-image" src="../../../common/image/imScene/pdf@3x.png">
             <!-- <figcaption class="file-name">{{fileMessage.file.fileName}}</figcaption> -->
             <figcaption class="file-name">{{custom.name}}</figcaption>
@@ -42,6 +42,7 @@
     data() {
       return {
         custom:{name:''},
+        showDeleteMsg:false,//撤回按钮是否显示
       }
     },
     computed: {
@@ -91,6 +92,15 @@
     methods: {
       seeFile(){
         location.href = this.fileMessage.file.url;
+      },
+      longTouchHandler() {
+        this.showDeleteMsg = true;
+        this.$emit("longTouchEmitHandler");
+      },
+      deleteMsgEvent() {
+        this.showDeleteMsg = false;
+        console.log("video组件里的我要删除");
+        this.$emit("deleteMsgEvent");
       }
     },
     mounted() {
