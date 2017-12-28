@@ -966,6 +966,10 @@
         localStorage.setItem("payPatientId",this.patientList[index].patientId);
         this.$router.push({
           name: "selectPart",
+          params:{
+            height:this.patientList[index].height,
+            weight:this.patientList[index].weight
+          },
           query: {
             userId:this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
             sex: this.patientList[index].patientSex,
@@ -1048,7 +1052,7 @@
     }
     .dutyTips-text{
       @include font-dpr(14px);
-      color: #97A8BA; 
+      color: #97A8BA;
       padding: rem(0px) rem(44px) rem(28px);
     }
   }

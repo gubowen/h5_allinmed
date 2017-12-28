@@ -226,38 +226,38 @@
       },
       getAdList() {
         const that = this;
-        that.adList =[
-         {
-          imgId:1,
-          adAdditionalUrl:'www.baidu.com',
-          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        },
-        {
-            imgId:2,
-            adAdditionalUrl:'www.baidu.com',
-            adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        }
-        ];
-//        api.ajax({
-//          url: XHRList.adList,
-//          method: "post",
-//          data: {
-//            siteId: api.getSiteId(),
-//            channelId: 170,
-//            platformId: 1,
-//            positionId: 583
-//          },
-//          done(data) {
-//            if (data.responseObject.responseStatus) {
-//              that.adList =
-//                data.responseObject.responseData.data_list[0].ad_profile_attachment;
-//              // setTimeout(() => {
-//              //   that.$refs.slider && that.$refs.slider.refresh();
-//              // }, 20);
-//            }
-//            that.$store.commit("setLoadingState", false);
-//          }
-//        });
+        // that.adList =[
+        //  {
+        //   imgId:1,
+        //   adAdditionalUrl:'www.baidu.com',
+        //   adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        // },
+        // {
+        //     imgId:2,
+        //     adAdditionalUrl:'www.baidu.com',
+        //     adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        // }
+        // ];
+       api.ajax({
+         url: XHRList.adList,
+         method: "post",
+         data: {
+           siteId: api.getSiteId(),
+           channelId: 170,
+           platformId: 1,
+           positionId: 583
+         },
+         done(data) {
+           if (data.responseObject.responseStatus) {
+             that.adList =
+               data.responseObject.responseData.data_list[0].ad_profile_attachment;
+             // setTimeout(() => {
+             //   that.$refs.slider && that.$refs.slider.refresh();
+             // }, 20);
+           }
+           that.$store.commit("setLoadingState", false);
+         }
+       });
       },
       //登录判断
       loginJudge() {

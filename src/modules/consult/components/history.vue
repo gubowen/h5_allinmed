@@ -705,7 +705,7 @@ export default {
         // this.$router.push({
         //   name:"bodyMessage"
         // });
-        
+
         // 提示用户提交后不可修改提交内容
         // if (localStorage.getItem("PCIMLinks") !== null) {
         //   this.backPopupShow = true;
@@ -760,7 +760,9 @@ export default {
       this.$router.push({
         name: "bodyMessage",
         params: {
-          pageParam: this.allParams
+          pageParam: this.allParams,
+          height:this.$route.params.height,
+          weight:this.$route.params.weight
         }
       });
       // this.paramsSubmit();

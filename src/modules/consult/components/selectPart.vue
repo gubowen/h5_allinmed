@@ -355,6 +355,10 @@
         localStorage.removeItem("questionList");
         this.$router.push({
           name: "discription",
+          params:{
+            height:this.$route.params.height,
+            weight:this.$route.params.weight
+          },
           query: {
             userId: this.patientMessage.userId,
             sex: this.patientMessage.sex,
