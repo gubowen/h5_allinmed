@@ -20,17 +20,13 @@ class Wxbinding {
     if(!api.getPara().openId){
       new Promise((resolve, reject) => {
         let cId = "";
-        if(api.getPara().customerId && api.getPara().customerId != 0){
-          resolve(api.getPara().customerId);
-        }else{
-          checkLogin.getStatus().then((res)=>{
-            if(res.data.responseObject.responseStatus){
-              resolve(res.data.responseObject.responsePk);
-            }else{
-              resolve(cId);
-            }
-          })
-        }
+        checkLogin.getStatus().then((res)=>{
+          if(res.data.responseObject.responseStatus){
+            resolve(res.data.responseObject.responsePk);
+          }else{
+            resolve(cId);
+          }
+        })
       }).then((data)=>{
         if(data){
           personalInfo.getMessage(data).then((res)=>{
