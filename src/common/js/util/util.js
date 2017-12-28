@@ -133,10 +133,38 @@ class Api {
     }
     return newStr;
   }
+  getNetWork(){
+    let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {type: 'unknown'};
+    let type_text = ['unknown', 'wifi', '2g', '3g', '4g', 'none'];
+    if (typeof(connection.bandwidth) == "number") {
+      if (connection.bandwidth > 10) {
+        connection.type = 'wifi';
+      } else if (connection.bandwidth > 2) {
+        connection.type = '3g';
+      } else if (connection.bandwidth > 0) {
+        connection.type = '2g';
+      } else if (connection.bandwidth == 0) {
+        connection.type = 'none';
+      } else {
+        connection.type = 'unknown';
+      }
+    }
+    return connection.type
+  }
+  getDeviceType(){
+    let connection ="";
+    let _browseType = this.isWXBrowse();1
+      if (_browseType === "androidWX") {
+        connection='Android';
+      } else if (_browseType === "iphoneWX"){
+        connection='IOS';
+    }
+    return connection
+  }
 
   getConnectType() {
-    let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {tyep: 'unknown'};
-    let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'none'];
+    let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {type: 'unknown'};
+    let type_text = ['unknown', '1', 'wifi', '2g', '3g', '4g', 'none'];
     let _browseType = this.isWXBrowse(),
       userAgentInfo = navigator.userAgent;
     let checkKey = '';
