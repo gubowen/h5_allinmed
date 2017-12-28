@@ -33,6 +33,8 @@ export default class checkSession {
           localStorage.removeItem("userName");
           localStorage.removeItem("mobile");
           localStorage.removeItem("logoUrl");
+        }else{
+          localStorage.setItem("userId",res.data.responseObject.responsePk)
         }
       }, (err) => {
         reject(err);
