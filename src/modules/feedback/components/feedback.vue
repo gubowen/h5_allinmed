@@ -24,7 +24,7 @@
           </section>
           <span class="qu-underline"></span>
           <p class="text-num-tips">
-            {{getByteLen(suggestionContent)}}/500</p>
+            {{(suggestionContent).length}}/500</p>
         </section>
         <section class="question">
           <span class="question-feedback">我们通过何种方式联系您?</span>
@@ -123,6 +123,7 @@
       autosize(this.$el.querySelector(".input-textArea"));
     },
     methods:{
+      //根据入口切换内容
       CheckFrom(){
         if(api.getPara().from==="im"){
             this.FromText="自动返回";
@@ -184,7 +185,7 @@
             suggestionNumbers:this.suggestionNumbers,
             customerId:_this.customerId||0,
             visitSiteId: api.getSiteId(),
-            //equipmentVersion:"123"
+            equipmentVersion:api.getConnectType(),
           },
           done(data) {
             if (data.responseObject.responseStatus){
@@ -222,12 +223,10 @@
         }, 2000);
       },
       contentLimit() {
-        document.scrolldown=99999;
-        if (api.getByteLen(this.suggestionContent) > 500){
-          this.suggestionContent = api.getStrByteLen(this.suggestionContent, 500);
+        if (api.getByteLen(this.suggestionContent) > 1000){
+          this.suggestionContent = api.getStrByteLen(this.suggestionContent,1000);
           this.errorShow = true;
           this.validateToast("最多只能输入500字");
-          document.scrollTop=20;
         }
       },
       Limit() {
