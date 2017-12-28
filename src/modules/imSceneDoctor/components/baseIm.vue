@@ -138,7 +138,8 @@
             >
             </FileMessage>
             <!--音频-->
-            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg" @clickLogo="goToDoctorHomePage" :targetData="targetData">
+            <AudioMessage v-if="msg.type==='audio'" :audioMessage="msg" @clickLogo="goToDoctorHomePage"
+                          :targetData="targetData">
             </AudioMessage>
             <!--患者扫码报道-->
             <section class="main-message-box grey-tips" v-if="receivedReportTips(msg)" ref="reportTip">
@@ -183,19 +184,24 @@
                 <span>继续沟通</span>
               </div>
             </section>
-            <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true;$refs.inputTextarea.focus()'>
+            <section class="main-input-box-plus"
+                     @click='footerBottomFlag = footerBottomFlag?false:true;$refs.inputTextarea.focus()'>
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
-            <textarea class="main-input-box-textarea"
-                      rows="1"
-                      v-model="sendTextContent"
-                      @focus="focusFn()"
-                      @blur="blurFn()"
-                      @click="scrollToBottom"
-                      @input="inputLimit"
-                      @keypress.enter.stop="autoSizeTextarea()">
-            </textarea>
+
+              <textarea class="main-input-box-textarea"
+                        rows="1"
+                        v-model="sendTextContent"
+                        ref="inputTextarea"
+                        @focus="focusFn()"
+                        @blur="blurFn()"
+                        @click="scrollToBottom"
+                        @input="inputLimit"
+                        @keypress.enter.stop="autoSizeTextarea()">
+              </textarea>
+
+
               <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
             </figure>
 
@@ -342,7 +348,7 @@
           progress: "0%",
           index: 0
         },
-        patientCustomerId:api.getPara().patientCustomerId,
+        patientCustomerId: api.getPara().patientCustomerId,
         onFocus: false,
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
@@ -1421,7 +1427,7 @@
                   conId: that.orderSourceId
                 }),
                 file: file,
-                type:"image",
+                type: "image",
                 done(error, msg) {
                   that.msgList[that.imageLastIndex] = msg;
                   that.imageList.push(
