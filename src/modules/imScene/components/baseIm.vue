@@ -2182,7 +2182,7 @@
           padding-right: rem(20px);
           padding-top: rem(15px);
           box-sizing: border-box;
-          min-height: rem(60px);
+          min-height: rem(72px);
         }
         .main-input-box-textarea {
           width: rem(508px);
@@ -2239,7 +2239,7 @@
   .footer-box-top {
     position: relative;
     width: 100%;
-    padding: rem(20px) rem(90px);
+    padding: rem(14px) rem(90px);
     box-sizing: border-box;
   }
 
