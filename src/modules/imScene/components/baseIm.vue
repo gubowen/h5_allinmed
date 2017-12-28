@@ -227,8 +227,7 @@
                         @focus="focusFn()"
                         @blur="blurFn()"
                         @click="scrollToBottom"
-                        @input="inputLimit"
-                        @keypress.enter.stop="autoSizeTextarea()">
+                        @input="inputLimit">
               </textarea>
             </section>
 
@@ -311,7 +310,6 @@
    * Created by qiangkailiang&&lichenyang on 2017/8/16.
    */
   import api from "common/js/util/util";
-  import autosize from "autosize";
   import store from "../store/store";
   import net from "common/js/util/net";
 
@@ -407,7 +405,7 @@
         inputBoxShow: false, //底部是否显示
         consultTipsShow: false, //购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
         msgList: [], //消息列表
-        //用户数据
+        // 用户数据
         userData: {
           account: "",
           token: ""
@@ -461,7 +459,6 @@
         }, 500);
 
         this.onFocus = true;
-        // this.autoSizeTextarea();
       },
       blurFn() {
         if (navigator.userAgent.toLowerCase().includes("11")) {
@@ -476,7 +473,6 @@
           top: 0
         });
         this.onFocus = false;
-        // this.autoSizeTextarea();
       },
       //用户连接IM聊天
       connectToNim() {
@@ -600,7 +596,6 @@
               };
             }
             that.finish = true;
-            // autosize(that.$refs.inputTextarea);
             that.connectToNim();
           },
           fail(err) {
@@ -1032,27 +1027,15 @@
           }
         });
       },
-      // 调整输入框大小
-      autoSizeTextarea() {
-        const that = this;
-        // that.sendTextContent = that.textLength;
-        // autosize.update(that.$refs.inputTextarea);
-        return false;
-      },
       //点击发送消息
       sendMessage() {
         const that = this;
         that.sendTextContent = that.textLength;
         if (that.sendTextContent === "") {
-          // autosize.update(that.$refs.inputTextarea);
-          // autosize.destroy(that.$refs.inputTextarea);
-          // autosize(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
-        // autosize.destroy(that.$refs.inputTextarea);
-        // autosize(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: "p2p",
           to: this.targetData.account,
@@ -1066,7 +1049,6 @@
           done(error, obj) {
             console.log(obj);
             that.sendMessageSuccess(error, obj);
-            // autosize(that.$refs.inputTextarea);
           }
         });
 
@@ -2182,7 +2164,7 @@
           padding-right: rem(20px);
           padding-top: rem(15px);
           box-sizing: border-box;
-          min-height: rem(60px);
+          min-height: rem(72px);
         }
         .main-input-box-textarea {
           width: rem(508px);
@@ -2239,7 +2221,7 @@
   .footer-box-top {
     position: relative;
     width: 100%;
-    padding: rem(20px) rem(90px);
+    padding: rem(14px) rem(90px);
     box-sizing: border-box;
   }
 
