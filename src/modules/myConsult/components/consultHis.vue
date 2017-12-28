@@ -104,6 +104,7 @@
         let checkLogin = new CheckLogin();
         checkLogin.getStatus().then((res)=>{
           if(res.data.responseObject.responseStatus){
+            localStorage.setItem("userId",res.)
             this.init();
           }else{
             localStorage.setItem("backUrl",window.location.href);

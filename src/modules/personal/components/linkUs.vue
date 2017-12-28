@@ -27,7 +27,7 @@
   export default{
     methods: {
       goSuggestFn() {
-        window.location.href=`/dist/feedback.html?customerId=${localStorage.getItem('userId')}`;
+        window.location.href=`/dist/feedback.html`;
       }
     }
   }
