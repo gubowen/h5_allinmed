@@ -151,22 +151,40 @@
   }
   .main-input-box-textarea-inner {
     box-sizing: border-box;
-    margin-left: rem(30px);
+    margin-left: rem(15px);
     max-height: 2.5rem;
     overflow: auto;
-
-    .main-input-box-textarea {
-      width: rem(490px);
-      border-radius: rem(40px);
-      padding-left: rem(20px);
-      padding-right: rem(20px);
-      padding-top: rem(15px);
-      @include font-dpr(14px);
-      background: #F3F6F7;
-      border: 0 solid #E8ECEF;
-      box-sizing: border-box;
-      min-height: rem(60px);
+    .area-content{
+      position: relative;
+      pre {
+        display: block;
+        visibility: hidden;
+        @include font-dpr(14px);
+        width: rem(508px);
+        padding-left: rem(20px);
+        padding-right: rem(20px);
+        padding-top: rem(15px);
+        box-sizing: border-box;
+        min-height: rem(60px);
+      }
+      .main-input-box-textarea {
+        width: rem(508px);
+        border-radius: rem(40px);
+        padding-left: rem(20px);
+        padding-right: rem(20px);
+        padding-top: rem(15px);
+        @include font-dpr(14px);
+        background: #f3f6f7;
+        border: 0 solid #e8ecef;
+        box-sizing: border-box;
+        min-height: rem(60px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+      }
     }
+
   }
 
   .main-input-box-send {
