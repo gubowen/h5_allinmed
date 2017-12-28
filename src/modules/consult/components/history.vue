@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                 </form>
-                <p class="upLoadContentNum">已上传{{imageList1.length}}张<span v-show="imageList1.length>0" class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">，查看全部</span></p>
+                <p class="upLoadContentNum">已上传{{imageList1.length}}张<span v-show="imageList1.length>0">，</span><span v-show="imageList1.length>0" class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">查看全部</span></p>
                 <!-- <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p> -->
                 <form class="qu-upFormBox qu-upFormBox-s" action="" v-show="false">
                   <figure class="qu-upLoadTitle-s">
