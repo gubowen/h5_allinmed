@@ -1115,8 +1115,8 @@
       // 调整输入框大小
       autoSizeTextarea() {
         const that = this;
-        that.sendTextContent = that.textLength;
-        autosize.update(that.$refs.inputTextarea);
+        // that.sendTextContent = that.textLength;
+        // autosize.update(that.$refs.inputTextarea);
         return false;
       },
       //点击发送消息
@@ -1125,7 +1125,6 @@
         that.sendTextContent = that.textLength;
         if (that.sendTextContent === "") {
           autosize.update(that.$refs.inputTextarea);
-          // autosize.destroy(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;

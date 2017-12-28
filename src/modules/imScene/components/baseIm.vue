@@ -223,12 +223,13 @@
               <textarea class="main-input-box-textarea"
                         rows="1"
                         v-model="sendTextContent"
+                        ref="inputTextarea"
                         @focus="focusFn()"
                         @blur="blurFn()"
                         @click="scrollToBottom"
                         @input="inputLimit"
                         @keypress.enter.stop="autoSizeTextarea()">
-            </textarea>
+              </textarea>
             </section>
 
             <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
@@ -460,7 +461,7 @@
         }, 500);
 
         this.onFocus = true;
-        this.autoSizeTextarea();
+        // this.autoSizeTextarea();
       },
       blurFn() {
         if (navigator.userAgent.toLowerCase().includes("11")) {
@@ -475,7 +476,7 @@
           top: 0
         });
         this.onFocus = false;
-        this.autoSizeTextarea();
+        // this.autoSizeTextarea();
       },
       //用户连接IM聊天
       connectToNim() {
@@ -599,7 +600,7 @@
               };
             }
             that.finish = true;
-            autosize(that.$refs.inputTextarea);
+            // autosize(that.$refs.inputTextarea);
             that.connectToNim();
           },
           fail(err) {
@@ -1015,9 +1016,7 @@
                   break;
               }
               console.log(that.inputBoxShow);
-              that.$nextTick(() => {
-                that.inputBoxShow && autosize(that.$refs.inputTextarea);
-              });
+
               // if (
               //   (dataList.consultationState == 0 ||
               //     dataList.consultationState == 4 ||
@@ -1036,8 +1035,8 @@
       // 调整输入框大小
       autoSizeTextarea() {
         const that = this;
-        that.sendTextContent = that.textLength;
-        autosize.update(that.$refs.inputTextarea);
+        // that.sendTextContent = that.textLength;
+        // autosize.update(that.$refs.inputTextarea);
         return false;
       },
       //点击发送消息
@@ -1046,13 +1045,13 @@
         that.sendTextContent = that.textLength;
         if (that.sendTextContent === "") {
           // autosize.update(that.$refs.inputTextarea);
-          autosize.destroy(that.$refs.inputTextarea);
-          autosize(that.$refs.inputTextarea);
+          // autosize.destroy(that.$refs.inputTextarea);
+          // autosize(that.$refs.inputTextarea);
           return false;
         }
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
-        autosize.destroy(that.$refs.inputTextarea);
+        // autosize.destroy(that.$refs.inputTextarea);
         // autosize(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: "p2p",
@@ -1067,7 +1066,7 @@
           done(error, obj) {
             console.log(obj);
             that.sendMessageSuccess(error, obj);
-            autosize(that.$refs.inputTextarea);
+            // autosize(that.$refs.inputTextarea);
           }
         });
 
@@ -2178,7 +2177,12 @@
           display: block;
           visibility: hidden;
           @include font-dpr(14px);
-
+          width: rem(508px);
+          padding-left: rem(20px);
+          padding-right: rem(20px);
+          padding-top: rem(15px);
+          box-sizing: border-box;
+          min-height: rem(60px);
         }
         .main-input-box-textarea {
           width: rem(508px);
@@ -2190,7 +2194,7 @@
           background: #f3f6f7;
           border: 0 solid #e8ecef;
           box-sizing: border-box;
-          /*min-height: rem(60px);*/
+          min-height: rem(60px);
           position: absolute;
           top: 0;
           left: 0;
@@ -2235,7 +2239,7 @@
   .footer-box-top {
     position: relative;
     width: 100%;
-    padding: rem(14px) rem(90px);
+    padding: rem(20px) rem(90px);
     box-sizing: border-box;
   }
 
