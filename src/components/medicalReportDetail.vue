@@ -8,34 +8,37 @@
               <img :src="logoUrl" alt="">
             </div>
             <div class="tc-baseInfoItemRight">
-              <span
-                class="tc-baseInfoName">{{patientCasemap.patientName.length > 5 ? patientCasemap.patientName.substring(0, 5) + "..." : patientCasemap.patientName}}</span>
-              <span class="tc-baseInfoSex"> {{patientCasemap.sexName}}</span>
-              <span class="tc-baseInfoAge">{{patientCasemap.age}}  岁</span>
+              <article class="sexAgeBox">
+                <span class="tc-baseInfoName">{{patientCasemap.patientName.length > 5 ? patientCasemap.patientName.substring(0, 5) + "..." : patientCasemap.patientName}}</span>
+                <span class="tc-baseInfoSex"> {{patientCasemap.sexName}}</span>
+                <span class="tc-baseInfoAge">{{patientCasemap.age}}  岁</span>
+              </article>
+              <div class="inquiryTimeBox">问诊日期:{{caseTime}}</div>
             </div>
           </li>
-          <li class="tc-baseInfoItem">
-            <div class="tc-baseInfoItemLeft">问诊日期</div>
-            <div class="tc-baseInfoItemRight">{{caseTime}}</div>
-          </li>
         </ul>
-        <section class="tc-baseInfoItem">
-          <div class="tc-baseInfoItemLeft">主诉</div>
-          <div class="tc-baseInfoItemRight tc-recommendUserMain">{{patientCasemap.caseMain.caseMain}}</div>
+        <ul class="basicData">
+          <li><span class="basicDataName">身高</span><span class="basicDataInfo" v-if=""><i>{{patientCasemap.height}}</i>cm</span></li>
+          <li><span class="basicDataName">体重</span><span class="basicDataInfo" v-if=""><i>{{patientCasemap.weight}}</i>kg</span></li>
+          <li><span class="basicDataName">BMI</span><span class="basicDataInfo" v-if="">{{patientCasemap.bmi}}</span></li>
+        </ul>
+        <section class="recommendUserMainBox">
+          <div class="recommendUserMainLeft">主诉</div>
+          <div class="recommendUserMainRight">{{patientCasemap.caseMain.caseMain}}</div>
         </section>
       </section>
       <section class="tc-caseDescribe tc-module">
-        <section class="tc-caseDescribeTitle title"><h3>症状描述</h3>
+        <section class="tc-caseDescribeTitle title"><h3>详情</h3>
         </section>
         <ul class="tc-caseDescribeList">
-          <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">不适部位</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>
-          </li>
-          <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">症状描述</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>
-          </li>
+          <!--<li class="tc-caseDescribeItem">-->
+            <!--<span class="tc-caseDescribeItemLeft">不适部位</span>-->
+            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>-->
+          <!--</li>-->
+          <!--<li class="tc-caseDescribeItem">-->
+            <!--<span class="tc-caseDescribeItemLeft">症状描述</span>-->
+            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>-->
+          <!--</li>-->
           <li class="tc-caseDescribeItem" v-if="acheType.length">
             <span class="tc-caseDescribeItemLeft">疼痛性质</span>
             <span class="tc-caseDescribeItemRight tc-noRevice">{{acheType}}</span>
@@ -45,17 +48,17 @@
             <span class="tc-caseDescribeItemRight tc-noRevice">{{VASGrade}}</span>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">持续时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessTime}}</span>
+            <span class="tc-caseDescribeItemLeft">病情描述</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{illnessDis}}</span>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">加重时间</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{heavyTime}}</span>
+            <span class="tc-caseDescribeItemLeft">想获得的帮助</span>
+            <span class="tc-caseDescribeItemRight tc-noRevice">{{getHelp}}</span>
           </li>
-          <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">其他症状</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>
-          </li>
+          <!--<li class="tc-caseDescribeItem">-->
+            <!--<span class="tc-caseDescribeItemLeft">其他症状</span>-->
+            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>-->
+          <!--</li>-->
         </ul>
       </section>
       <section class="tc-caseDescribe tc-module">
@@ -73,22 +76,14 @@
             <span class="tc-caseDescribeItemLeft">检查资料</span>
             <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList1.length===0?"未填写":"&nbsp&nbsp"}}</span>
             <ul class="uploadListsBox" v-if="imageList1.length!==0">
-              <li v-for="(item,index) in imageList1" @click="showBigImg(item,index,1)">
-                <img :src="item">
+              <li v-for="(item,index) in imageList1" @click="showBigImg(index)" v-show="item.isShow">
+                <img :src="item.caseAttUrl">
+                <span class="moreImg" v-if="imageList1.length>9&&index == 8&&showMoreImg">更多{{imageList1.length - 9}}张</span>
               </li>
             </ul>
           </li>
           <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">患处照片</span>
-            <span class="tc-caseDescribeItemRight tc-noRevice">{{imageList2.length===0?"未填写":"&nbsp&nbsp"}}</span>
-            <ul class="uploadListsBox" v-if="imageList2.length!==0">
-              <li v-for="(item,index) in imageList2" @click="showBigImg(item,index,2)">
-                <img :src="item">
-              </li>
-            </ul>
-          </li>
-          <li class="tc-caseDescribeItem">
-            <span class="tc-caseDescribeItemLeft">服用药物</span>
+            <span class="tc-caseDescribeItemLeft">在用药物</span>
             <span class="tc-caseDescribeItemRight tc-noRevice">{{takeMedicine}}</span>
           </li>
         </ul>
@@ -134,6 +129,7 @@
           caseMain: "",
           attachmentList: ""
         },
+        showMoreImg:true,
         partName: "",
         logoUrl: "",
         remarkContent: "",
@@ -142,11 +138,12 @@
         heavyTime: "",
         treatmentName:"",
         illnessName:"",
+        illnessDis:"",
         takeMedicine:"",
         complication: "",
+        getHelp:"",
         resultMainList: [],
         imageList1: [],
-        imageList2: [],
         symptomDescription:'',//症状描述
         acheType:"",//疼痛类型
         VASGrade:'',//VAS评分
@@ -200,14 +197,15 @@
               that.complication = that.patientCasemap.caseMain.caseAlong  || "未填写";
               that.treatmentName = that.patientCasemap.treatmentName || "未填写";
               that.illnessName = that.patientCasemap.illnessName || "未填写";
+              that.illnessDis = that.patientCasemap.descriptionDisease || "未填写";
+              that.getHelp = that.patientCasemap.needHelp || "未填写";
               that.takeMedicine = that.patientCasemap.takeMedicine || "未填写";
 
               that.patientCasemap.attachmentList.forEach((element, index) => {
-                if (element.caseAttSource == 0) {
-                  that.imageList1.push(element.caseAttUrl);
-                } else {
-                  that.imageList2.push(element.caseAttUrl);
-                }
+                that.imageList1.push({
+                  caseAttUrl:element.caseAttUrl,
+                  isShow:(index>=9?false:true)
+                });
               });
               that.getLogoUrl();
             }
@@ -215,18 +213,24 @@
           }
         })
       },
-      showBigImg(item, index,type){
+      showBigImg(index){
         let that = this;
         let _params = {
           imgBlob: (function () {
             let result = [];
-            that["imageList"+type].forEach((element, index) => {
-              result.push({blob: element});
+            that.imageList1.forEach((element) => {
+              result.push({blob: element.caseAttUrl});
             });
             return result;
           }()),
           indexNum: index
         };
+        if(that.imageList1.length>9&&index == 8){
+          that.showMoreImg = false;
+          that.imageList1.forEach((value)=>{
+            value.isShow = true;
+          })
+        }
         this.$router.push({
           name: "showBigImg",
           params: _params
@@ -264,12 +268,13 @@
           padding-top: rem(40px);
           /*background: url("../../../common/image/img00/myServices/interrogation_bg.png") no-repeat;*/
           background-size: 100%;
+          border-bottom: 2px solid #F8F8F8;
         }
         .tc-baseInfoItem {
           padding-bottom: rem(50px);
           @include clearfix();
           &:first-child {
-            padding-bottom: rem(90px);
+            padding-bottom: rem(60px);
           }
           .tc-baseInfoItemLeft {
             width: rem(170px);
@@ -291,17 +296,24 @@
             margin-right: rem(30px);
             color: #222222;
             @include font-dpr(18px);
+            .sexAgeBox{
+              padding-top:rem(20px);
+              .tc-baseInfoName {
+                @include font-dpr(20px);
+                margin-right: rem(28px);
+                font-weight: bold;
+              }
+              .tc-baseInfoSex {
+                margin-right: rem(32px);
+              }
+            }
+            .inquiryTimeBox{
+              margin-top:rem(20px);
+              @include font-dpr(16px);
+              color: #AAAAAA;
+            }
             span {
               display: inline-block;
-              margin-top: rem(44px);
-            }
-            .tc-baseInfoName {
-              @include font-dpr(20px);
-              margin-right: rem(32px);
-              font-weight: bold;
-            }
-            .tc-baseInfoSex {
-              margin-right: rem(28px);
             }
             .tc-baseInfoDate {
               display: block;
@@ -330,10 +342,44 @@
                 background-size: 100% 100%;
               }
             }
-            &.tc-recommendUserMain {
-              line-height: rem(52px);
-            }
           }
+        }
+      }
+      .basicData{
+        @include clearfix();
+        padding:rem(50px) rem(30px) rem(60px);
+        li{
+          float: left;
+          margin-right:rem(15px);
+          &:last-child{
+            margin-right:0;
+          }
+          .basicDataName{
+            margin-right:rem(32px);
+            color: #AAAAAA;
+            @include font-dpr(17px);
+          }
+          .basicDataInfo{
+            color: #444444;
+            @include font-dpr(18px);
+          }
+        }
+      }
+      .recommendUserMainBox{
+        @include clearfix();
+        padding:0 rem(30px) rem(50px);
+        .recommendUserMainLeft{
+          float: left;
+          width:rem(68px);
+          color: #AAAAAA;
+          margin-right:rem(30px);
+          @include font-dpr(17px);
+        }
+        .recommendUserMainRight{
+          line-height: rem(52px);
+          color: #444444;
+          @include font-dpr(18px);
+          margin-left:rem(98px);
         }
       }
       .tc-module {
@@ -802,10 +848,25 @@
       float:left;
       list-style: none;
       margin:0 rem(20px) rem(20px) 0;
+      position:relative;
       img{
         display: block;
         width:rem(180px);
         height:rem(180px);
+      }
+      .moreImg{
+        display: block;
+        width:rem(180px);
+        height:rem(180px);
+        line-height: rem(180px);
+        padding:0 rem(60px);
+        background: rgba(0,0,0,0.5);
+        position:absolute;
+        left: 0;
+        top:0;
+        color: #FFFFFF;
+        text-align: center;
+        @include font-dpr(15px);
       }
     }
   }

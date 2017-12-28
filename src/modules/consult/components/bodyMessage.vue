@@ -137,6 +137,8 @@
     methods: {
       initCaseParams(){
         let params = this.$route.params.pageParam;
+        this.heightContent = this.$route.params.height;
+        this.weightContent = this.$route.params.weight;
         this.createParams.patientId = params.patientId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
@@ -227,6 +229,14 @@
           window.scrollTo(0,helpHeight);
           this.errorShow = true;
           this.errorMsg = `请详细描述所需帮助，至少6个字`;
+          setTimeout(() => {
+            this.errorShow = false;
+          }, 2000);
+          return false;
+        }
+        if(this.heightContent.length == 0 || this.weightContent.length == 0){
+          this.errorShow = true;
+          this.errorMsg = `请补全身高体重`;
           setTimeout(() => {
             this.errorShow = false;
           }, 2000);
@@ -573,6 +583,7 @@
       position: relative;
       padding: rem(64px) rem(64px);
       padding-bottom: rem(80px);
+      margin:0;
       .text-num-tips {
         position: absolute;
         right: rem(30px);
