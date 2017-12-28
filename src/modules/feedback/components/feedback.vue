@@ -47,7 +47,7 @@
     <section class="description">您的反馈我们已经收到<br>
       感谢对我们的支持理解</section>
     <section class="back" @click="goToHref">
-      <span class="back-timing" >{{backTimeout}}s后</span><em>返回首页</em>
+      <span class="back-timing" >{{backTimeout}}s后</span><em v-if="CheckFrom">{{FromText}}</em>
     </section>
   </section>
 </template>
@@ -66,6 +66,7 @@
   import toast from "components/toast";
   import Loading from "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
+
   // const checkLogin = new CheckLogin();
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
@@ -89,6 +90,7 @@
     // },
     data() {
       return {
+        FromText:"返回首页",
         customerId:"",
         suggestionType:{
           service:false,
@@ -121,6 +123,11 @@
       autosize(this.$el.querySelector(".input-textArea"));
     },
     methods:{
+      CheckFrom(){
+        if(api.getPara().from==="im"){
+            this.FromText="自动返回";
+        }
+      },
       //检查后没有error后提交所有数据
       checkAllData(){
         const _this=this;
@@ -132,7 +139,11 @@
           return false;
         }else {
           //登陆检测
-          _this.customerId=api.getPara().customerId|| localStorage.getItem("userId")
+          if(api.getPara().customerId===!null && localStorage.getItem("userId")===!null){
+            _this.customerId=api.getPara().customerId;
+          }else{
+            _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
+          }
           _this.submitAllData();
           // siteSwitch.weChatJudge(ua =>{
           //   //微信
