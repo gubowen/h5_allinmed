@@ -66,8 +66,8 @@
   import toast from "components/toast";
   import Loading from "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
-  const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   // const checkLogin = new CheckLogin();
+  const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
     // browser:{
     //   versions:function(){
@@ -100,7 +100,7 @@
         errorShow:false,
         errorMsg:"",
         submitSuccess:false,
-        backTimeout:100,
+        backTimeout:3,
       }
     },
     components: {
