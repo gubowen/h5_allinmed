@@ -22,7 +22,7 @@
     },
     methods: {
       goFeedback () {
-        location.href = '/dist/feedback.html?from=im';
+        location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}`;
       }
     },
     mounted(){
@@ -31,6 +31,11 @@
     components: {
 
     },
+    props:{
+      customerId:{
+        type:String
+      }
+    }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">

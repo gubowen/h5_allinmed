@@ -51,6 +51,10 @@ export default {
     logoUrl() {
       return this.$store.state.logoUrl;
     },
+    // 配合watch图片的url 变化
+    imageUrl () {
+      return this.imageMessage.file.url;
+    },
     progress() {
       if (this.currentIndex === this.imageProgress.index) {
         // return this.imageProgress;
@@ -71,7 +75,13 @@ export default {
       }
     }
   },
+  watch : {
+    imageUrl (newVal, oldVal) {
+      this.imageNum = newVal;
+    },
+  },
   mounted() {
+    // debugger;
     if (!this.imageMessage.file.url.includes("blob:")) {
       let qualityUrl = this.nim.viewImageQuality({
         url: this.imageMessage.file.url,
@@ -80,9 +90,6 @@ export default {
       this.imageMessage.file.url = qualityUrl;
     }
     this.imageNum = this.imageMessage.file.url;
-    // setTimeout(() => {
-    //   document.body.scrollTop = Math.pow(10, 10);
-    // }, 100);
   },
   methods: {
     showBigImg(item, index) {

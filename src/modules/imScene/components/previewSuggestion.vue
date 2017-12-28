@@ -444,7 +444,7 @@
       },
       goToUpload(){
         localStorage.removeItem("upload");
-        if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1) {
+        if (this.$store.state.consultationState == 7 || this.$store.state.consultationState == 1 || this.$store.state.consultationState == 8) {
           this.$store.commit("setToastTips","分诊服务已结束");
           this.$store.commit('setToastShow');
         } else {

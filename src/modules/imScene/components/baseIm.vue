@@ -221,7 +221,6 @@
             <textarea class="main-input-box-textarea"
                       rows="1"
                       v-model="sendTextContent"
-
                       @focus="focusFn()"
                       @blur="blurFn()"
                       @click="scrollToBottom"
@@ -229,7 +228,7 @@
                       @keypress.enter.stop="autoSizeTextarea()">
             </textarea>
             <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
-            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage">发送</p>
+            <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage()">发送</p>
           </figure>
         </section>
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
@@ -293,7 +292,7 @@
         }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
       ></ensure>
     </transition>
-    <suggestion></suggestion>
+    <suggestion :customerId="patientCustomerId"></suggestion>
   </section>
 
 </template>
@@ -381,9 +380,11 @@
           progress: "0%",
           index: 0
         },
+        patientCustomerId:api.getPara().patientCustomerId,
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
         fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
+        mulitpleLastIndex:0,//多图上传最后一个记录在数组中的位置
         footerBottomFlag: false, // 底部文件选择框是否显示
         noWXPayShow: false,
         onFocus: false,
@@ -515,6 +516,7 @@
             },
             //收到消息的回调, 会传入消息对象
             onmsg(msg) {
+              console.log(msg);
               if (msg.from === that.targetData.account) {
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 // that.pauseTime(msg); //收到检查检验隐藏顶部框；
@@ -659,7 +661,7 @@
           if (
             (msg.type === "custom" &&
               JSON.parse(msg.content).type === "notification" &&
-              JSON.parse(msg.content).data.actionType === 5) 
+              JSON.parse(msg.content).data.actionType === 5)
           ) {
             return true;
           } else {
@@ -916,6 +918,7 @@
                     if (!tipsError) {
                       console.log(tipsError, tipsMsg);
                       console.log(`撤回消息提示--发送成功`);
+                      that.checkMsg(msg);//检查撤回的消息；
                       that.sendMessageSuccess(tipsError, tipsMsg);
                     }
                   }
@@ -933,27 +936,19 @@
             }
           }
         });
-        // deleteMsg
-        //   .deleteMessage()
-        //   .then(msg => {
-        //     console.log(99999);
-        //     deleteMsgTips.sendDeleteTips().then((tipsMsg, tipsError) => {
-        //       console.log(tipsMsg, tipsError);
-        //       console.log(`撤回消息提示--发送成功`);
-        //       that.sendMessageSuccess(tipsError, tipsMsg);
-        //     });
-        //   })
-        //   .catch((error, msg) => {
-        //     console.log(error);
-        //     console.log(8888);
-        //     if (parseInt(error.code) === 508) {
-        //       this.toastTips = `您只能撤回${_DeleteTimeLimit}内的消息`;
-        //       this.toastShow = true;
-        //       setTimeout(() => {
-        //         this.toastShow = false;
-        //       }, 2000);
-        //     }
-        //   });
+      },
+      // 检查撤回的消息
+      checkMsg(msg) {
+        if (JSON.parse(msg.custom).mType == 1) {
+          console.log(msg);
+          let _imageUrl = msg.file.url;
+          this.imageList.forEach((element, index) => {
+            if (element === _imageUrl) {
+              this.imageList.removeByValue(element);
+              return;
+            }
+          });
+        }
       },
       //获取剩余时间
       getLastTime() {
@@ -1092,7 +1087,7 @@
           setTimeout(() => {
             this.scrollToBottom();
             // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 1000);
+          }, 20);
 
           // this.refreshScroll();
         } else {
@@ -1215,6 +1210,19 @@
         const that = this;
         console.log(list);
         let promises = [];
+        this.msgList.push({
+          type: "custom",
+          content: JSON.stringify({
+            type: "multipleImage",
+            data: {
+              list: []
+            }
+          }),
+          loading: true,
+          from: this.userData.account
+        });
+        that.mulitpleLastIndex = that.msgList.length - 1;
+        that.inputImageFlag = false;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1270,9 +1278,10 @@
             }
           }),
           done(error, msg) {
+            that.inputImageFlag = true;
             if (!error) {
-              console.log(msg)
-              that.sendMessageSuccess(error, msg);
+              console.log(msg);
+              that.msgList[that.mulitpleLastIndex] = msg;
             }
           }
         });
@@ -1324,11 +1333,16 @@
                 }),
                 file: file,
                 done(error, msg) {
+                  // debugger;
                   that.msgList[that.imageLastIndex] = msg;
-                  that.imageList.push(
-                    that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
-                      .file.url
-                  );
+                  // 老版本的imageList push
+                  // that.imageList.push(
+                  //   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
+                  //     .file.url
+                  // );
+                  // 新版本的imageList push
+                  that.imageList.push(msg.file.url);
+
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
@@ -1974,7 +1988,7 @@
       ) {
         that.updateMedical();
         // 如果会话消息不是结束，则更新状态；
-        if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1) {
+        if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1 && this.$store.state.consultationState != 8) {
           that.refreshState(6);
         }
         that.nim.sendCustomMsg({
@@ -2081,7 +2095,7 @@
   @import "../../../../static/scss/modules/imStyle";
 
   * {
-    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .ev-fileUpHide {
