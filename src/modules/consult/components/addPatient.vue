@@ -201,6 +201,8 @@
   import ustb from 'common/styles/_ustbPicker.css';
   import wxBind from 'common/js/auth/wxBinding';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import CheckLogin from 'common/js/auth/checkLogin';
+  const checkLogin = new CheckLogin();
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
@@ -292,6 +294,15 @@
         console.log("无需绑定微信");
         this.isWeChat = false;
         this.init();
+        checkLogin.getStatus().then((res)=>{
+          if(res.data.responseObject.responseStatus){
+
+            this.init();
+          }else{
+            localStorage.setItem("backUrl",window.location.href);
+            window.location.href = '/dist/mLogin.html';
+          }
+        })
       });
     },
     computed: {
@@ -308,7 +319,7 @@
           api.wxGetOpenId(1);
         }
         api.forbidShare();
-        let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId;
+        let customerIdFlag = this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId'));
         if (customerIdFlag && customerIdFlag != 0){
           this.getPatientList();
         }
@@ -441,7 +452,7 @@
             isValid: 1,                           // string 是   1
             firstResult: 0,                       // string 是  分页参数
             maxResult: 99999,                     //  string 是  分页参数
-            customerId: api.getPara().customerId,                       //  string 是  用户id
+            customerId: (api.getPara().customerId||localStorage.getItem('userId')),                       //  string 是  用户id
           },
           beforeSend(config) {
 
@@ -513,7 +524,7 @@
           url: XHRList.patientList,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
+            customerId: this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),
             isValid: "1",
             firstResult: "0",
             maxResult: "9999"
@@ -707,7 +718,7 @@
           data: {
             certificateId:that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
             certificateCode:that.IDNumber,//	string	是	证件号码
-            customerId: that.$route.query.customerId?that.$route.query.customerId:api.getPara().customerId,
+            customerId: that.$route.query.customerId?that.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),
             firstResult:"0",	//string	是	分页参数
             maxResult:"999",	//string	是	分页参数
           },
@@ -755,7 +766,7 @@
           url: XHRList.addPatient,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,//用户id
+            customerId: this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),//用户id
             patientName: this.username,//患者姓名
 //            patientAge: this.userage,
             patientSex: this.sexSelect,
@@ -971,7 +982,7 @@
             weight:this.patientList[index].weight
           },
           query: {
-            userId:this.$route.query.customerId?this.$route.query.customerId:api.getPara().customerId,
+            userId:this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),
             sex: this.patientList[index].patientSex,
             age: this.patientList[index].patientAge,
             patientId: this.patientList[index].patientId,

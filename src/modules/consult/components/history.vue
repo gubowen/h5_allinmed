@@ -258,7 +258,7 @@ export default {
       },
       cameraType: _cameraType,
       patientParams: {
-        customerId: api.getPara().customerId,
+        customerId: localStorage.getItem('userId'),
         doctorId: api.getPara().doctorId
       },
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
@@ -317,7 +317,7 @@ export default {
         takeMedicine: "",
         complication: "",
         optionList: [],
-        customerId: api.getPara().customerId,
+        customerId: localStorage.getItem('userId'),
         patientId: ""
       }
     };
@@ -475,7 +475,7 @@ export default {
       } else {
         //是否上传过检测
         checkUpLoadStatus
-          .getDataInit({patientCustomerId:api.getPara().customerId})
+          .getDataInit({patientCustomerId:localStorage.getItem('userId')})
           .then(res => {
             if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
             // 上传过

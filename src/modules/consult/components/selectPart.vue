@@ -70,7 +70,7 @@
       return {
         isWeChat: true, //是否是微信
         patientParams: {
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId,
         },
         dpr: window.devicePixelRatio,

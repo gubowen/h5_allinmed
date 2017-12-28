@@ -103,14 +103,14 @@
         submitTip: false,
         backPopupShow: false,
         patientParams: {
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
         },
         createParams:{
           visitSiteId: 17,
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           patientId: "",
           illnessHistoryId: "",
           illnessHistory: "",

@@ -212,7 +212,7 @@
           top: "-1.5rem"
         },
         patientParams: {
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
         },
         patientMessage: {},
@@ -263,7 +263,7 @@
       this.patientMessage = this.$route.query;
       this.getQuestionList();
       this.finish = false;
-      this.customerId = api.getPara().customerId;
+      this.customerId = localStorage.getItem('userId');
 
       this.createTimePicker();
 
