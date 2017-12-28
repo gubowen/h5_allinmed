@@ -137,8 +137,8 @@
     methods: {
       initCaseParams(){
         let params = this.$route.params.pageParam;
-        this.heightContent = this.$route.params.height;
-        this.weightContent = this.$route.params.weight;
+        this.heightContent = this.$route.params.height || "";
+        this.weightContent = this.$route.params.weight || "";
         this.createParams.patientId = params.patientId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
