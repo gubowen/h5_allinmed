@@ -41,7 +41,7 @@
           </button>
         </div>
       </section>
-      <infinite-loading @infinite="onInfinite">
+      <infinite-loading @infinite="onInfinite" v-if="">
         <span slot="no-more" class="no-more">没有更多了</span>
         <span slot="spinner"></span>
       </infinite-loading>
@@ -88,7 +88,8 @@
         errorShow:false,
         pageNum: 20,
         pageStart:0,
-        items: []
+        items: [],
+        checkFinish:false
       }
     },
     mounted(){
@@ -119,6 +120,8 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
+        this.checkFinish=true;
+
       },
       toWXchat(){
         this.wxTips = false;
