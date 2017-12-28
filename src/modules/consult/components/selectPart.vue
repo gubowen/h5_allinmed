@@ -3,7 +3,7 @@
     <progerssBar :progerssBarParams="{progerssParams:'1'}"></progerssBar>
     <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
       <header class="part-select-title">
-        <h3>点选最不适部位：</h3>
+        <h3 v-if="!secondShow">点选最不适位置：</h3>
       </header>
       <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
