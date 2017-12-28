@@ -218,15 +218,19 @@
                   accept="image/*"> -->
           </section>
           <figure class="main-input-box-textarea-inner">
-            <textarea class="main-input-box-textarea"
-                      rows="1"
-                      v-model="sendTextContent"
-                      @focus="focusFn()"
-                      @blur="blurFn()"
-                      @click="scrollToBottom"
-                      @input="inputLimit"
-                      @keypress.enter.stop="autoSizeTextarea()">
+            <section class="area-content">
+              <pre><span>{{sendTextContent}}<br></span></pre>
+              <textarea class="main-input-box-textarea"
+                        rows="1"
+                        v-model="sendTextContent"
+                        @focus="focusFn()"
+                        @blur="blurFn()"
+                        @click="scrollToBottom"
+                        @input="inputLimit"
+                        @keypress.enter.stop="autoSizeTextarea()">
             </textarea>
+            </section>
+
             <!-- <textarea class="main-input-box-textarea"  rows="1" v-model="sendTextContent" ></textarea> -->
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage()">发送</p>
           </figure>
@@ -375,16 +379,16 @@
           index: 0
         },
         // 文件pdf发送进度
-        fileProgress:{
+        fileProgress: {
           uploading: false,
           progress: "0%",
           index: 0
         },
-        patientCustomerId:api.getPara().patientCustomerId,
+        patientCustomerId: api.getPara().patientCustomerId,
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
-        fileLastIndex:0,//上传pdf 最后一个记录在数组中的位置
-        mulitpleLastIndex:0,//多图上传最后一个记录在数组中的位置
+        fileLastIndex: 0,//上传pdf 最后一个记录在数组中的位置
+        mulitpleLastIndex: 0,//多图上传最后一个记录在数组中的位置
         footerBottomFlag: false, // 底部文件选择框是否显示
         noWXPayShow: false,
         onFocus: false,
@@ -426,13 +430,13 @@
 
     methods: {
       // 控制 vuex toast控制
-      toastControl (message) {
-        store.commit("setToastTips",message);
+      toastControl(message) {
+        store.commit("setToastTips", message);
         store.commit('setToastShow');
       },
       // 取消ensure框
-      ensureClickEvent () {
-        this.$store.commit("setEnsureShow",false);
+      ensureClickEvent() {
+        this.$store.commit("setEnsureShow", false);
       },
       setFooterPosition() {
         if (IS_IOS) {
@@ -545,7 +549,7 @@
       },
 
       // 患者端收到拒绝问诊隐藏输入框
-      hideInput (msg) {
+      hideInput(msg) {
         if (
           msg.type === "custom" &&
           JSON.parse(msg.content).type === "refusePatient"
@@ -1296,7 +1300,7 @@
           type: "image",
           from: that.userData.account
         });
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           that.scrollToBottom();
         })
         that.imageLastIndex = that.msgList.length - 1;
@@ -1455,7 +1459,7 @@
           file: {
             url: window.URL.createObjectURL(_file),
             ext: "pdf",
-            fileName:_file.name,
+            fileName: _file.name,
           },
           custom: JSON.stringify({
             name: _file.name
@@ -1486,8 +1490,8 @@
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
               // show file to the user
-              file = Object.assign(file,{
-                name:_file.name,
+              file = Object.assign(file, {
+                name: _file.name,
               });
               console.log(file);
               if (!error) {
@@ -1860,14 +1864,14 @@
     },
     computed: {
       // toast 提示
-      toastTips () {
+      toastTips() {
         return this.$store.state.toastTips;
       },
       // toast 是否显示
-      toastShow () {
+      toastShow() {
         return this.$store.state.toastShow;
       },
-      ensureShow () {
+      ensureShow() {
         return this.$store.state.ensureShow;
       },
       //配合watch图片上传进度使用
@@ -2142,7 +2146,7 @@
     text-align: center;
     display: block;
     transform: translateY(-50%);
-    @include circle(rem(75px),#CCEDF2);
+    @include circle(rem(75px), #CCEDF2);
   }
 
   //输入区
@@ -2167,18 +2171,32 @@
       margin-left: rem(15px);
       max-height: 2.5rem;
       overflow: auto;
-      .main-input-box-textarea {
-        width: rem(508px);
-        border-radius: rem(40px);
-        padding-left: rem(20px);
-        padding-right: rem(20px);
-        padding-top: rem(15px);
-        @include font-dpr(14px);
-        background: #f3f6f7;
-        border: 0 solid #e8ecef;
-        box-sizing: border-box;
-        min-height: rem(60px);
+      .area-content{
+        position: relative;
+        pre {
+          display: block;
+          visibility: hidden;
+          @include font-dpr(14px);
+
+        }
+        .main-input-box-textarea {
+          width: rem(508px);
+          border-radius: rem(40px);
+          padding-left: rem(20px);
+          padding-right: rem(20px);
+          padding-top: rem(15px);
+          @include font-dpr(14px);
+          background: #f3f6f7;
+          border: 0 solid #e8ecef;
+          box-sizing: border-box;
+          /*min-height: rem(60px);*/
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+        }
       }
+
     }
     .main-input-box-send {
       @include font-dpr(17px);

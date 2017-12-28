@@ -189,7 +189,6 @@
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
-
               <textarea class="main-input-box-textarea"
                         rows="1"
                         v-model="sendTextContent"
