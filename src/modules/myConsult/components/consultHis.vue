@@ -41,7 +41,7 @@
           </button>
         </div>
       </section>
-      <infinite-loading @infinite="onInfinite" v-if="">
+      <infinite-loading @infinite="onInfinite" v-if="checkFinish">
         <span slot="no-more" class="no-more">没有更多了</span>
         <span slot="spinner"></span>
       </infinite-loading>
@@ -120,8 +120,11 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
-        this.checkFinish=true;
 
+        this.$nextTick(()=>{
+          this.checkFinish=true;
+          console.log(localStorage.getItem('userId'));
+        })
       },
       toWXchat(){
         this.wxTips = false;
@@ -135,7 +138,7 @@
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: api.getPara().customerId || localStorage.getItem("userId"),
+            patientCustomerId: localStorage.getItem("userId") ||api.getPara().customerId ,
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,
