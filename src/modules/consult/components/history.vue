@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                 </form>
-                <p class="upLoadContentNum">已上传{{imageList1.length}}张，<span class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">查看全部</span></p>
+                <p class="upLoadContentNum">已上传{{imageList1.length}}张<span v-show="imageList1.length>0" class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">，查看全部</span></p>
                 <!-- <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p> -->
                 <form class="qu-upFormBox qu-upFormBox-s" action="" v-show="false">
                   <figure class="qu-upLoadTitle-s">
@@ -149,7 +149,7 @@
           }" v-if="levelShow&&netTipsNum==1" :showFlag.sync="levelShow" @cancelClickEvent="cancelEvent"
           @ensureClickEvent="ensureEvent"></confirm>
       </transition>
-      <transition name="fade">
+      <!-- <transition name="fade">
         <confirm
           :confirmParams="{
           'ensure':'确定提交',
@@ -158,7 +158,7 @@
           'title':'问诊单提交后不可修改\n请确定填写信息无误'
           }" v-if="submitTip" :showFlag.sync="submitTip" @cancelClickEvent="subCancelEvent"
           @ensureClickEvent="submitData()"></confirm>
-      </transition>
+      </transition> -->
       <transition name="fade">
         <confirm
           :confirmParams="{
@@ -169,14 +169,14 @@
           }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
           @ensureClickEvent="cancelDeletePic"></confirm>
       </transition>
-      <transition name="fade">
+      <!-- <transition name="fade">
         <confirm :confirmParams="{
           'ensure':'支付成功',
           'cancel':'支付失败',
           'title':'请确认微信支付是否已经完成'
           }" v-if="noWXPayShow" @cancelClickEvent="payFail()" @ensureClickEvent="viewPayResult()">
         </confirm>
-      </transition>
+      </transition> -->
       <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
                  :backPopupParams="{patientParams:patientParams}"></backPopup>
     </section>
@@ -324,7 +324,7 @@ export default {
   activated() {
     this.finish = false;
     this.initData();
-    this.isShowPaySuccess(); //支付弹层
+    // this.isShowPaySuccess(); //支付弹层
     document.title = "描述病情";
     if (localStorage.getItem("PCIMLinks") !== null) {
       this.backPopupShow = true;
@@ -343,7 +343,7 @@ export default {
   mounted() {
     document.title = "描述病情";
     this.initData();
-    this.isShowPaySuccess(); //支付弹层
+    // this.isShowPaySuccess(); //支付弹层
     // document.body.scrollTop = 0;
     autosize(this.$el.querySelector(".medicineBox"));
     localStorage.setItem("hasCome", 0);
@@ -424,7 +424,6 @@ export default {
         return;
       }
       for (let i = 0; i < files.length; i++) {
-        console.log(files[i].size);
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
           this.errorMsg = "图片不能超过10M";
@@ -476,7 +475,6 @@ export default {
         checkUpLoadStatus
           .getDataInit({patientCustomerId:api.getPara().customerId})
           .then(res => {
-            console.log(res);
             if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
             // 上传过
               _this.uploadEvent();
@@ -486,11 +484,8 @@ export default {
             }
           })
           .catch(err => {
-            console.log(err);
-            _this.finish = false;
             // _this.toastComm("网络信号差，建议您稍后再试");
             // _this.imgUrl = _this.toastImg.wifi;
-            // this.$store.commit("setLoadingState", false);
           });
       }
     },
@@ -513,13 +508,10 @@ export default {
       let _localViewUrl = window.URL.createObjectURL(files);
       let _fileName = "",
         _rex = /\./g;
-      console.log(files.name.match(_rex));
-      console.log(files.name.match(_rex).length);
       if (files.name.match(_rex).length == 1) {
         _fileName = files.name.split(".")[1];
       } else {
         _fileName = files.name.split(".")[2];
-        console.log(files.name.split("."));
       }
       switch (type) {
         case 1:
@@ -560,7 +552,6 @@ export default {
         },
         timeout: 300000,
         done(res) {
-          console.log(res);
           if (res.responseObject.responseStatus) {
             let num = index ? index : that["imageList" + type].length - 1;
             that["imageList" + type][num].imgId = res.responseObject.responsePk;
@@ -640,7 +631,6 @@ export default {
           //            that["uploading" + type] = false;
           that.uploading1 = false;
           that.uploading2 = false;
-          console.log("net error");
         }
       });
     },
@@ -776,384 +766,6 @@ export default {
         }
       });
       // this.paramsSubmit();
-    },
-    paramsSubmit() {
-      const that = this;
-      this.finish = true;
-      api.ajax({
-        url: XHRList.create,
-        method: "POST",
-        data: this.allParams,
-        beforeSend: function() {},
-        timeout: 20000,
-        done(data) {
-          if (data.responseObject.responsePk !== 0) {
-            that.responseCaseId = data.responseObject.responsePk;
-            localStorage.setItem("payCaseId", that.responseCaseId);
-            //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
-            api.getPara().doctorId
-              ? that.getProfessionalDoctor()
-              : that.getConsultPrice();
-          } else {
-            that.finish = false;
-          }
-        }
-      });
-    },
-    //获取咨询价格
-    getConsultPrice(caseId) {
-      const that = this;
-      api.ajax({
-        url: XHRList.getPrice,
-        method: "POST",
-        data: {
-          visitSiteId: 17, //string	是	站点
-          maxResult: 999,
-          id: 0
-        },
-        done(data) {
-          if (
-            data.responseObject.responseStatus &&
-            data.responseObject.responseData
-          ) {
-            let price = data.responseObject.responseData.dataList.firstAmount;
-            that.buyTime(price);
-          } else {
-            console.log("获取分诊医生价格失败");
-          }
-        }
-      });
-    },
-    //购买时间
-    buyTime(price) {
-      const that = this;
-      let flag;
-      price === "0" ? (flag = "false") : (flag = "true");
-      //        that.lastTimeShow=true;
-      //        that.sendConsultState(4);
-      console.log(price);
-      let data = {
-        patientCustomerId: api.getPara().customerId, //	string	是	患者所属用户id
-        patientId: that.allParams.patientId, // 	string	是	患者id
-        doctorId: 0, //	string	是	医生id
-        orderType: "1", //	string	是	订单类型  1-咨询2-手术3-门诊预约
-        orderSourceId: 0, //	string	是	来源id，  对应 咨询id,手术单id，门诊预约id
-        orderSourceType: "1", //	string	是	来源类型  问诊：1-普通2-特需3-加急 | 手术：1-互联网2-公立 | 门诊：1-普通2-专家3-特需
-        orderAmount: price, //	string	否	订单金额  （单位/元 保留两位小数）
-        status: "1", //	string	否	订单状态: 1-待支付 2-已支付 3-已完成 4-已取消 5-退款中
-        body: "咨询", //   string  否  订单描述 （微信支付展示用）
-        isCharge: flag, //   string  是  true-收费  false-免费
-        caseId: that.responseCaseId,
-        doctorType: "shuntDoctor"
-      };
-      WxPayCommon.wxCreateOrder({
-        data: data, //data为Object 参考下面给出格式
-        backCreateSuccess(_data) {
-          //创建订单成功  （手术必选）
-          that.getTriageDoctorId();
-          //            that.refreashOrderTime('free')
-        },
-        backCreateError(_data) {
-          //创建订单失败  (必选)
-        },
-        wxPaySuccess(_data) {
-          console.log("支付成功");
-          that.getTriageDoctorId();
-          //            that.refreashOrderTime('pay');
-          //支付成功回调  (问诊/门诊类型 必选)
-        },
-        wxPayError(_data) {
-          that.isClick = false; //是否点击立即咨询重置
-          that.finish = false;
-          //支付失败回调  (问诊/门诊类型 必选)
-        }
-      });
-      //      siteSwitch.weChatJudge(
-      //        ()=>{
-      //          if(price>0){
-      //            that.noWXPayShow = false;
-      //          }
-      //        },
-      //        ()=>that.noWXPayShow = true
-      //      );
-    },
-    //判断是否显示支付结果弹层
-    isShowPaySuccess() {
-      if (localStorage.getItem("payOk") == 1) {
-        this.noWXPayShow = true;
-      } else {
-        this.noWXPayShow = false;
-      }
-    },
-    //查看m站支付结果
-    viewPayResult() {
-      let that = this;
-      WxPayCommon.PayResult({
-        outTradeNo: localStorage.getItem("orderNumber") //微信订单号
-      })
-        .then(function(data) {
-          console.log("查看回调", data);
-          if (data.resultCode == "SUCCESS") {
-            localStorage.removeItem("payOk");
-            that.noWXPayShow = false;
-            that.getTriageDoctorId();
-          } else {
-            that.isClick = false; //是否点击立即咨询重置
-            console.log("未支付成功");
-          }
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    },
-    //支付失败跳转
-    payFail() {
-      localStorage.removeItem("payOk");
-      window.location.href = `/dist/consult.html?customerId=${api.getPara()
-        .customerId}`;
-    },
-    //创建专业医生会话
-    getProfessionalDoctor() {
-      let that = this;
-      api.ajax({
-        url: XHRList.createProfessionalConsultation,
-        method: "POST",
-        data: {
-          caseId: that.responseCaseId,
-          customerId: api.getPara().doctorId,
-          patientCustomerId: that.allParams.customerId,
-          patientId: that.allParams.patientId,
-          consultationType: 1,
-          consultationState: -1,
-          consultationLevel: 6, //咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
-          siteId: 17,
-          caseType: 11 //从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
-        },
-        done(d) {
-          if (d.responseObject.responseStatus) {
-            that.updateTimes(d.responseObject.responsePk);
-          }
-        }
-      });
-    },
-    //更新次数
-    updateTimes(consultationId) {
-      let that = this;
-      //        debugger
-      api.ajax({
-        url: XHRList.updateCount,
-        method: "POST",
-        data: {
-          consultationId: consultationId,
-          frequency: 3,
-          frequencyType: 2,
-          consultationState: -1,
-          consultationLevel: 0
-        },
-        done(data) {
-          if (data.responseObject.responseStatus) {
-            localStorage.setItem(
-              "sendTips",
-              JSON.stringify({
-                orderType: 0,
-                orderAmount: 0,
-                orderFrequency: 3
-              })
-            );
-            that.finish = false;
-
-            localStorage.removeItem("selectList");
-            localStorage.removeItem("secondList");
-            localStorage.removeItem("questionList");
-            localStorage.removeItem("complication");
-            localStorage.removeItem("noMR");
-
-            that.backPopupShow = true;
-            that.clearPageData();
-            window.location.href =
-              "/dist/imSceneDoctor.html?from=report&caseId=" +
-              that.responseCaseId +
-              "&doctorCustomerId=" +
-              api.getPara().doctorId +
-              "&patientCustomerId=" +
-              that.allParams.customerId +
-              "&patientId=" +
-              that.allParams.patientId;
-          }
-        }
-      });
-    },
-    // 获取分流ID
-    getTriageDoctorId() {
-      const that = this;
-      localStorage.removeItem("selectList");
-      localStorage.removeItem("secondList");
-      localStorage.removeItem("questionList");
-      localStorage.removeItem("complication");
-      that.finish = false;
-      that.isClick = false;
-      that.backPopupShow = true;
-      that.clearPageData();
-      siteSwitch.weChatJudge(
-        () => {
-          window.location.href =
-            "/dist/imScene.html?caseId=" +
-            that.responseCaseId +
-            "&patientId=" +
-            that.allParams.patientId +
-            "&patientCustomerId=" +
-            that.allParams.customerId;
-        },
-        () => {
-          that.getUserBaseData();
-        }
-      );
-    },
-    //用户连接IM聊天
-    connectToNim() {
-      const that = this;
-      nimEnv().then(nimEnv => {
-        this.nim = NIM.getInstance({
-          appKey: nimEnv,
-          account: this.userData.account,
-          token: this.userData.token,
-          //连接建立后的回调, 会传入一个对象, 包含登录的信息, 有以下字段
-          onconnect(data) {
-            console.log("连接成功");
-            that.createTriageMessage();
-          }
-        });
-      });
-    },
-    getUserBaseData() {
-      const that = this;
-      api.ajax({
-        url: XHRList.getToken,
-        method: "POST",
-        data: {
-          accid: "0_" + this.responseCaseId,
-          patientName: this.allParams.patientId
-        },
-        done(param) {
-          if (param.responseObject.responseStatus) {
-            that.userData = {
-              account: "0_" + that.responseCaseId,
-              token: param.responseObject.responseData.token
-            };
-          }
-          that.connectToNim();
-        },
-        fail(err) {
-          console.log(err.message);
-        }
-      });
-    },
-    //获取问诊单...M站预发送消息
-    getMedicalMessage() {
-      const that = this;
-      api.ajax({
-        url: XHRList.getMedicalList,
-        method: "POST",
-        data: {
-          caseId: that.responseCaseId,
-          attUseFlag: 1,
-          isOrder: 0
-        },
-        beforeSend(config) {},
-        done(data) {
-          if (data.responseObject && data.responseObject.responseData) {
-            let dataList = data.responseObject.responseData.dataList;
-            if (dataList && dataList.length !== 0) {
-              that.sendMedicalReport({
-                data: {
-                  caseId: that.responseCaseId, //问诊单 病例ID
-                  patientName: dataList[0].patientCasemap.patientName, //患者姓名
-                  sexName: dataList[0].patientCasemap.sexName, //患者性别
-                  age: dataList[0].patientCasemap.age, //患者年龄
-                  createDate: new Date().getTime(),
-                  diagnoseConTent: "",
-                  isAttachment: dataList[0].patientCasemap.isAttachment,
-                  time: dataList[0].patientCasemap.caseTime
-                },
-                type: "medicalReport" //自定义类型 问诊单
-              });
-            }
-          }
-        }
-      });
-    },
-    //发送问诊单
-    sendMedicalReport(data) {
-      const that = this;
-      this.nim.sendCustomMsg({
-        scene: "p2p",
-        custom: JSON.stringify({
-          cType: "0",
-          cId: 0,
-          mType: "27",
-          conId: 0
-        }),
-        to: "1_doctor00001",
-        content: JSON.stringify(data),
-        done(error, msg) {
-          console.log("问诊单发送成功...");
-          that.tipNewPatient(data);
-        }
-      });
-    },
-    //新患者提示
-    tipNewPatient(data) {
-      const that = this;
-      //提示信息
-      //分诊台刷新患者
-      this.nim.sendCustomMsg({
-        scene: "p2p",
-        custom: JSON.stringify({
-          cType: "0",
-          cId: 0,
-          mType: "32",
-          conId: 0 // that.orderSourceId
-        }),
-        to: "1_doctor00001",
-        content: JSON.stringify({
-          type: "new-health",
-          data: Object.assign({}, data.data, {
-            patientId: this.allParams.patientId,
-            consultationid: this.orderSourceId
-          })
-        }),
-        done(error, msg) {
-          console.log("新用户提醒发送...");
-          that.$router.push({
-            name: "conGuide"
-          });
-        }
-      });
-    },
-    //创建分流
-    createTriageMessage() {
-      const that = this;
-      api.ajax({
-        url: XHRList.triageAssign,
-        method: "POST",
-        data: {
-          caseId: this.responseCaseId,
-          customerId: 0,
-          patientCustomerId: api.getPara().customerId,
-          patientId: this.allParams.patientId,
-          consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
-          consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-          siteId: 17,
-          caseType: 0
-        },
-        done(data) {
-          if (data.responseObject.responseStatus) {
-            console.log("用户已分流...");
-            that.orderSourceId = data.responseObject.responsePk;
-            that.getMedicalMessage();
-          }
-        }
-      });
     },
     // 填写情况验证
     validateParamsFull() {
