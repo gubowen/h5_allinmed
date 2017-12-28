@@ -215,6 +215,7 @@ import imageCompress from "common/js/imgCompress/toCompress";
 import progerssBar from "../components/progressBar";
 import GetUploadLimit from "../api/getUploadLimit";
 import CheckUpLoadStatus from "../api/checkUpLoadStatus";
+import store from "../store/store";
 
 const getUploadLimit = new GetUploadLimit();
 const checkUpLoadStatus = new CheckUpLoadStatus();
@@ -335,6 +336,7 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
+    store.commit("setbottomNav",true);
     if (this.upLoadGuideTip == "2") {
       //展示上传按钮
       this.uploadEvent();
@@ -656,6 +658,7 @@ export default {
     },
     //上传指导页
     upLoadTips() {
+      store.commit("setbottomNav",false);
       this.$router.push({
         name: "upLoadTip"
       });
@@ -678,6 +681,7 @@ export default {
         imgBlob: this["imageList" + type],
         indexNum: index
       };
+      store.commit("setbottomNav",false);
       this.$router.push({
         name: "showBigImg",
         params: _params
@@ -762,7 +766,8 @@ export default {
         params: {
           pageParam: this.allParams,
           height:this.$route.params.height,
-          weight:this.$route.params.weight
+          weight:this.$route.params.weight,
+          sex: this.$route.params.sex
         }
       });
       // this.paramsSubmit();
