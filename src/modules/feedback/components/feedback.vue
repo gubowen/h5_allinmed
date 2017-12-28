@@ -17,9 +17,11 @@
         <section class="question">
           <span class="question-feedback">请简要描述你的问题?</span>
           <em class="question-em">(选填)</em>
+          <section  @click="textAreaFocus">
           <textarea class="input-textArea" name="question" placeholder="请输入问题" v-model.trim="suggestionContent"
-                    @input="contentLimit">
-            </textarea>
+                    @input="contentLimit" autofocus="autofocus">
+          </textarea>
+          </section>
           <span class="qu-underline"></span>
           <p class="text-num-tips">
             {{getByteLen(suggestionContent)}}/500</p>
@@ -33,7 +35,7 @@
           <span class="qu-underline"></span>
         </section>
       </section>
-      <button class="btn-primary go-next" @click="submitAllData">提交</button>
+      <button class="btn-primary go-next" @click="checkAllData">提交</button>
     </section>
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
@@ -63,7 +65,9 @@
   import api from "common/js/util/util";
   import toast from "components/toast";
   import Loading from "components/loading";
+  import siteSwitch from "common/js/siteSwitch/siteSwitch";
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
+  // const checkLogin = new CheckLogin();
   export default {
     // browser:{
     //   versions:function(){
@@ -96,7 +100,7 @@
         errorShow:false,
         errorMsg:"",
         submitSuccess:false,
-        backTimeout:3,
+        backTimeout:100,
       }
     },
     components: {
@@ -105,7 +109,9 @@
     watch:{
       //监听大量的文字输入情况，ex：复制粘贴。这样可以保持被撑大的text-area可以恢复到限定的高度
       "suggestionContent"(){
+        document.body.scrollTop= -99999;
         setTimeout(()=>{
+          document.body.scrollTop= -99999;
           autosize.update(this.$el.querySelector(".input-textArea"))
         },10);
       }
@@ -116,7 +122,7 @@
     },
     methods:{
       //检查后没有error后提交所有数据
-      submitAllData(){
+      checkAllData(){
         const _this=this;
         if (!this.suggestionType.service && !this.suggestionType.setting && !this.suggestionType.others) {
           this.validateToast("您还有问题未完善");
@@ -125,45 +131,60 @@
           ).offsetTop;
           return false;
         }else {
-          let _arr=[];
-          for (let i in this.suggestionType){
-            if (this.suggestionType[i]){
-              switch (i){
-                case "service":
-                  _arr.push(1);
-                  break;
-                case "setting":
-                  _arr.push(2);
-                  break;
-                case "others":
-                  _arr.push(3);
-                  break;
-              }
+          //登陆检测
+          _this.customerId=api.getPara().customerId|| localStorage.getItem("userId")
+          _this.submitAllData();
+          // siteSwitch.weChatJudge(ua =>{
+          //   //微信
+          //   _this.customerId = api.getPara().customerId;
+          //   _this.submitAllData();
+          // }, ua =>{
+          //   //other
+          //   _this.customerId = localStorage.getItem("userId");
+          //   _this.submitAllData();
+          // })
+        }
+      },
+      submitAllData(){
+        let _this =this,
+          _arr=[];
+        console.log(_this.customerId);
+        for (let i in this.suggestionType){
+          if (this.suggestionType[i]){
+            switch (i){
+              case "service":
+                _arr.push(1);
+                break;
+              case "setting":
+                _arr.push(2);
+                break;
+              case "others":
+                _arr.push(3);
+                break;
             }
           }
-
-          api.ajax({
-            url:feedbackUrl,
-            method: "POST",
-            data: {
-              suggestionType:_arr.join(","),
-              suggestionContent:this.suggestionContent,
-              suggestionNumbers:this.suggestionNumbers,
-              customerId:localStorage.getItem("userId"),
-              siteId: api.getSiteId(),
-              equipmentVersion:"123"
-            },
-            done(data) {
-              if (data.responseObject.responseStatus){
-                _this.submitSuccess=true;
-                _this.backToPast();
-              }else{
-                _this.submitSuccess=false;
-                _this.validateToast("提交失败，请检查您的网络");
-              }
-            }
-          });
         }
+        api.ajax({
+          url:feedbackUrl,
+          method: "POST",
+          data: {
+            suggestionType:_arr.join(","),
+            suggestionContent:this.suggestionContent,
+            suggestionNumbers:this.suggestionNumbers,
+            customerId:_this.customerId||0,
+            visitSiteId: api.getSiteId(),
+            //equipmentVersion:"123"
+          },
+          done(data) {
+            if (data.responseObject.responseStatus){
+              _this.submitSuccess=true;
+              _this.backToPast();
+            }else{
+              _this.submitSuccess=false;
+              _this.validateToast("提交失败，请检查您的网络");
+            }
+          }
+        });
       },
       backToPast(){
         let _interval;
@@ -190,10 +211,12 @@
         }, 2000);
       },
       contentLimit() {
+        document.scrolldown=99999;
         if (api.getByteLen(this.suggestionContent) > 500){
           this.suggestionContent = api.getStrByteLen(this.suggestionContent, 500);
           this.errorShow = true;
           this.validateToast("最多只能输入500字");
+          document.scrollTop=20;
         }
       },
       Limit() {
@@ -203,6 +226,9 @@
       },
       getByteLen(len) {
         return api.getByteLen(len);
+      },
+      textAreaFocus() {
+        this.$el.querySelector(".input-textArea").focus();
       },
     }
   }
@@ -373,8 +399,8 @@
     color: #AFAFAF;
   }
   .get-back{
+    top:50%;
     width: 100%;
-    height: 100%;
     padding: 0 rem(30px);
     box-sizing: border-box;
     text-align: center;
