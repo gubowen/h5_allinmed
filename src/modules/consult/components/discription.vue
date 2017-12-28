@@ -766,7 +766,9 @@
           optionList: this.selectList,
           patientId: this.patientMessage.patientId,
           complication: this.complication,
-          count: this.$route.query.count
+          count: this.$route.query.count,
+          height:this.$route.params.height,
+          weight:this.$route.params.weight
         };
         for (let i in this.secondQuestionList) {
           if (

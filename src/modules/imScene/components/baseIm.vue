@@ -1332,6 +1332,7 @@
                   conId: that.orderSourceId
                 }),
                 file: file,
+                type: "image",
                 done(error, msg) {
                   // debugger;
                   that.msgList[that.imageLastIndex] = msg;
