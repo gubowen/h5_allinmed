@@ -189,18 +189,18 @@
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
-              <textarea class="main-input-box-textarea"
-                        rows="1"
-                        v-model="sendTextContent"
-                        ref="inputTextarea"
-                        @focus="focusFn()"
-                        @blur="blurFn()"
-                        @click="scrollToBottom"
-                        @input="inputLimit"
-                        @keypress.enter.stop="autoSizeTextarea()">
-              </textarea>
-
-
+              <section class="area-content">
+                <pre><span>{{sendTextContent}}<br></span></pre>
+                <textarea class="main-input-box-textarea"
+                          rows="1"
+                          v-model="sendTextContent"
+                          ref="inputTextarea"
+                          @focus="focusFn()"
+                          @blur="blurFn()"
+                          @click="scrollToBottom"
+                          @input="inputLimit">
+                </textarea>
+              </section>
               <p class="main-input-box-send" :class="{'on':sendTextContent.length}" @click="sendMessage">发送</p>
             </figure>
 
@@ -277,7 +277,6 @@
      * 底部不可点击，新状态至组件bottomTips规定为组件状态4，于状态3中区分
      */
   import api from "common/js/util/util";
-  import autosize from "autosize";
   import store from "../store/store";
   import net from "common/js/util/net";
 
@@ -413,7 +412,7 @@
           });
         }, 500);
         this.onFocus = true;
-        this.autoSizeTextarea();
+
       },
       blurFn() {
         if (navigator.userAgent.toLowerCase().includes("11")) {
@@ -430,7 +429,7 @@
         })
 
         this.onFocus = false;
-        this.autoSizeTextarea();
+
       },
       deleteMsgEvent(msg) {
 
@@ -628,7 +627,6 @@
               };
             }
             that.finish = true;
-            autosize(that.$refs.inputTextarea);
             that.connectToNim();
           },
           fail(err) {
@@ -1096,9 +1094,7 @@
                 that.lastTimeShow = false;
                 that.showBottomTips(1);
               }
-              that.$nextTick(() => {
-                autosize(that.$refs.inputTextarea);
-              });
+
             }
           },
           fail(err) {
@@ -1112,24 +1108,14 @@
 
         this.scrollToBottom();
       },
-      // 调整输入框大小
-      autoSizeTextarea() {
-        const that = this;
-        // that.sendTextContent = that.textLength;
-        // autosize.update(that.$refs.inputTextarea);
-        return false;
-      },
+
       //点击发送消息
       sendMessage() {
         const that = this;
         that.sendTextContent = that.textLength;
-        if (that.sendTextContent === "") {
-          autosize.update(that.$refs.inputTextarea);
-          return false;
-        }
+
         let sendTextTemp = this.sendTextContent;
         this.sendTextContent = "";
-        autosize.destroy(that.$refs.inputTextarea);
         this.nim.sendText({
           scene: "p2p",
           custom: JSON.stringify({
@@ -1151,7 +1137,6 @@
           done(error, obj) {
             console.log(obj);
             that.sendMessageSuccess(error, obj);
-            autosize(that.$refs.inputTextarea);
           }
         });
         $(".main-input-box-textarea").focus();
@@ -1302,7 +1287,7 @@
       getMulitpleImage(list) {
         let mList = [];
         const that = this;
-        console.log(list);
+
         let promises = [];
         this.msgList.push({
           type: "custom",
@@ -1315,7 +1300,7 @@
           loading: true,
           from: this.userData.account
         });
-
+        let nowNum=this.msgList.length-1;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1349,11 +1334,11 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result);
+          this.sendMulitpleImage(result,nowNum);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list) {
+      sendMulitpleImage(list,nowNum) {
         const that = this;
 
         this.nim.sendCustomMsg({
@@ -1376,7 +1361,7 @@
               console.log(msg);
 
               // that.msgList[that.msgList.length-1] = msg;
-              that.msgList.splice(-1, 1, msg);
+              that.msgList.splice(nowNum, 1, msg);
               // that.sendMessageSuccess(error, msg);
             }
           }
@@ -1999,5 +1984,6 @@
     opacity: 0;
     transform: translateY(50%);
   }
+
 </style>
 
