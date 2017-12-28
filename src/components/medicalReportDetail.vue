@@ -856,10 +856,7 @@
       }
       .moreImg{
         display: block;
-        width:rem(180px);
-        height:rem(180px);
-        line-height: rem(180px);
-        padding:0 rem(60px);
+        padding:rem(45px) rem(52px);
         background: rgba(0,0,0,0.5);
         position:absolute;
         left: 0;
@@ -867,6 +864,7 @@
         color: #FFFFFF;
         text-align: center;
         @include font-dpr(15px);
+        box-sizing: border-box;
       }
     }
   }
