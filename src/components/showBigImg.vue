@@ -82,8 +82,6 @@ export default {
       initialSlide: index,
       pagination : '.swiper-pagination',
       paginationType : 'fraction',
-      // prevButton: ".swiper-left-gray",
-      // nextButton: ".swiper-right-gray", //前进按钮的css选择器或HTML元素。
       onInit: function(swiper) {
         console.log(swiper.activeIndex + "当前索引");
         console.log("sipwer初始化完成!,回调函数，初始化后执行。");
@@ -108,8 +106,9 @@ export default {
       direction: "horizontal",
       centeredSlides: true,
       slidesPerView: "auto",
-      touchRatio: 1,
-      slideToClickedSlide: true,
+      // touchRatio: 1,
+      speed:600,
+      // slideToClickedSlide: true,
       observer: true,
       // prevButton: ".swiper-button-prev",
       // nextButton: ".swiper-button-next", //前进按钮的css选择器或HTML元素。

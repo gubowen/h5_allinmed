@@ -103,7 +103,7 @@
             </section>
           </section>
           <section class="questionItem-common isUseDrug">
-            <p class="questionTitleCommon">有正在使用的药物吗？</p>
+            <p class="questionTitleCommon">最近的用药情况</p>
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
                  :class="{'selected':medical.none}">
