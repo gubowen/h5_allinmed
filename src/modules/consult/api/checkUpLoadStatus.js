@@ -9,22 +9,20 @@
 
 import api from "common/js/util/util";
 const XHRList = {
-  validLogin: "/mcall/comm/data/tool/v1/getMapList/"
+  validLogin: "/mcall/customer/patient/case/attachment/v1/getMapListByPatientCustomerId/"
 };
 export default class GetIsUpload {
   constructor() {
 
   }
 
-  getDataInit() {
+  getDataInit(param) {
     return new Promise((resolve, reject) => {
       api.ajax({
         url: XHRList.validLogin,
         method: "POST",
         data: {
-            deviceType: "WEB",
-            sortType: 1,
-            visitSiteId: 21,
+          patientCustomerId:param.patientCustomerId
         },
         timeout: 10000,
         done(res) {
