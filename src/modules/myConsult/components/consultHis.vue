@@ -206,10 +206,19 @@
             case 2:
             case 4:
             case 5:
+            case 6:
+            case 9:
+            case 10:
               statusName = '问诊中';
               break;
             case 1:
+            case 8:
+            case 11:
               statusName = '已结束';
+              fontGray = 'font-gray';
+              break;
+            case 7:
+              statusName = '已拒绝';
               fontGray = 'font-gray';
               break;
           }
@@ -223,6 +232,7 @@
               statusName = '问诊中';
               break;
             case 1:
+            case 11:
               statusName = '已结束';
               fontGray = 'font-gray';
               break;

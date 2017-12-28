@@ -516,6 +516,7 @@
             },
             //收到消息的回调, 会传入消息对象
             onmsg(msg) {
+              console.log(msg);
               if (msg.from === that.targetData.account) {
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 // that.pauseTime(msg); //收到检查检验隐藏顶部框；
@@ -1987,7 +1988,7 @@
       ) {
         that.updateMedical();
         // 如果会话消息不是结束，则更新状态；
-        if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1) {
+        if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1 && this.$store.state.consultationState != 8) {
           that.refreshState(6);
         }
         that.nim.sendCustomMsg({
