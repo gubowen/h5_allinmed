@@ -41,7 +41,7 @@
           </button>
         </div>
       </section>
-      <infinite-loading @infinite="onInfinite">
+      <infinite-loading @infinite="onInfinite" v-if="checkFinish">
         <span slot="no-more" class="no-more">没有更多了</span>
         <span slot="spinner"></span>
       </infinite-loading>
@@ -88,7 +88,8 @@
         errorShow:false,
         pageNum: 20,
         pageStart:0,
-        items: []
+        items: [],
+        checkFinish:false
       }
     },
     mounted(){
@@ -104,7 +105,7 @@
         let checkLogin = new CheckLogin();
         checkLogin.getStatus().then((res)=>{
           if(res.data.responseObject.responseStatus){
-            localStorage.setItem("userId",res.data.responseObject.responsePk)
+
             this.init();
           }else{
             localStorage.setItem("backUrl",window.location.href);
@@ -119,6 +120,11 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
+
+        this.$nextTick(()=>{
+          this.checkFinish=true;
+          console.log(localStorage.getItem('userId'));
+        })
       },
       toWXchat(){
         this.wxTips = false;
@@ -132,7 +138,7 @@
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: api.getPara().customerId || localStorage.getItem("userId"),
+            patientCustomerId: localStorage.getItem("userId") ||api.getPara().customerId ,
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,

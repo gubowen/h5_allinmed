@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="consult-main-inner" :class="{'isMB':!isWeChat}">
+    <section class="consult-main-inner dis-four" :class="{'isMB':!isWeChat}">
       <progerssBar :progerssBarParams="{progerssParams:'4'}"></progerssBar>
       <transition name="fade">
         <section class="consult-wrapper">
@@ -103,14 +103,14 @@
         submitTip: false,
         backPopupShow: false,
         patientParams: {
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
         },
         createParams:{
           visitSiteId: 17,
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
-          customerId: api.getPara().customerId,
+          customerId: localStorage.getItem('userId'),
           patientId: "",
           illnessHistoryId: "",
           illnessHistory: "",
@@ -137,8 +137,8 @@
     methods: {
       initCaseParams(){
         let params = this.$route.params.pageParam;
-        this.heightContent = this.$route.params.height;
-        this.weightContent = this.$route.params.weight;
+        this.heightContent = this.$route.params.height || "";
+        this.weightContent = this.$route.params.weight || "";
         this.createParams.patientId = params.patientId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
@@ -573,227 +573,229 @@
     box-sizing: border-box;
   }
 
-  .consult-wrapper {
-    padding: rem(30px);
-  }
+  .dis-four{
+    .consult-wrapper {
+      padding: rem(30px);
+    }
 
-  .consult-total {
-    .input-area {
-      background-color: #e5e5e5;
-      position: relative;
-      padding: rem(64px) rem(64px);
-      padding-bottom: rem(80px);
-      margin:0;
-      .text-num-tips {
-        position: absolute;
-        right: rem(30px);
-        bottom: rem(36px);
-        color: #aaaaaa;
-        @include font-dpr(15px);
+    .consult-total {
+      .input-area {
+        background-color: #e5e5e5;
+        position: relative;
+        padding: rem(64px) rem(64px);
+        padding-bottom: rem(80px);
+        margin:0;
+        .text-num-tips {
+          position: absolute;
+          right: rem(30px);
+          bottom: rem(36px);
+          color: #aaaaaa;
+          @include font-dpr(15px);
+        }
+        & > textarea {
+          outline: medium;
+          resize: none;
+          width: 100%;
+          height: 0.6rem;
+          max-height: 1.7rem;
+          padding-bottom: rem(20px);
+          border:none;
+          border-bottom: 1px solid #D5D5D5;
+          background: none;
+          @include font-dpr(16px);
+          color: #333333;
+          @include placeholder() {
+            @include font-dpr(16px);
+            color: #AAAAAA;
+          }
+        }
       }
-      & > textarea {
-        outline: medium;
-        resize: none;
-        width: 100%;
-        height: 0.6rem;
-        max-height: 1.7rem;
-        padding-bottom: rem(20px);
-        border:none;
-        border-bottom: 1px solid #D5D5D5;
-        background: none;
+      .hwBox{
+        padding:0 rem(60px);
         @include font-dpr(16px);
         color: #333333;
-        @include placeholder() {
-          @include font-dpr(16px);
-          color: #AAAAAA;
+        li{
+          span{
+            display:inline-block;
+            margin-left:rem(16px);
+            padding-bottom:rem(12px);
+            border-bottom:1px solid #D5D5D5;
+          }
+          i{
+            display:inline-block;
+            width:rem(200px);
+            height:rem(32px);
+          }
+        }
+        .wBox{
+          margin-top:rem(20px);
         }
       }
     }
-    .hwBox{
-      padding:0 rem(60px);
-      @include font-dpr(16px);
-      color: #333333;
-      li{
-        span{
-          display:inline-block;
-          margin-left:rem(16px);
-          padding-bottom:rem(12px);
-          border-bottom:1px solid #D5D5D5;
-        }
-        i{
-          display:inline-block;
-          width:rem(200px);
-          height:rem(32px);
-        }
-      }
-      .wBox{
-        margin-top:rem(20px);
-      }
-    }
-  }
 
-  .consult-inner {
-    background: #ffffff;
-    border-radius: rem(16px);
-    padding-bottom: rem(100px);
-    .consult-page {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: rem(86px);
-      height: rem(64px);
-      &.page-one {
-        background: url("../../../common/image/img00/consult_V1.2/page number@2x.png");
-        background-size: contain;
-      }
-      &.page-two {
-        background: url("../../../common/image/img00/consult_V1.2/pagenumber02@2x.png");
-        background-size: contain;
+    .consult-inner {
+      background: #ffffff;
+      border-radius: rem(16px);
+      padding-bottom: rem(100px);
+      .consult-page {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: rem(86px);
+        height: rem(64px);
+        &.page-one {
+          background: url("../../../common/image/img00/consult_V1.2/page number@2x.png");
+          background-size: contain;
+        }
+        &.page-two {
+          background: url("../../../common/image/img00/consult_V1.2/pagenumber02@2x.png");
+          background-size: contain;
+        }
       }
     }
-  }
 
-  .consult-total {
-    .consult-inner-title {
-      padding: rem(60px) rem(60px);
-      padding-bottom: rem(50px);
-      & > p {
-        @include font-dpr(15px);
-        color: #555555;
-        margin-top: rem(10px);
+    .consult-total {
+      .consult-inner-title {
+        padding: rem(60px) rem(60px);
+        padding-bottom: rem(50px);
+        & > p {
+          @include font-dpr(15px);
+          color: #555555;
+          margin-top: rem(10px);
+        }
+        & > h2 {
+          @include font-dpr(20px);
+          color: #222222;
+          position: relative;
+          &:before {
+            content: "";
+            position: absolute;
+            @include circle(rem(16px), #2fc5bd);
+            top: 50%;
+            margin-top: rem(-4px);
+            margin-left: rem(-32px);
+          }
+          span {
+            vertical-align: middle;
+          }
+          & > em {
+            @include font-dpr(16px);
+            color: #666666;
+            font-style: normal;
+            font-weight: normal;
+            vertical-align: middle;
+          }
+        }
       }
-      & > h2 {
-        @include font-dpr(20px);
-        color: #222222;
-        position: relative;
+    }
+
+    .consult-question-inner {
+      .detail-tips {
+        @include font-dpr(14px);
+        color: #07b6ac;
+        vertical-align: middle;
         &:before {
           content: "";
-          position: absolute;
-          @include circle(rem(16px), #2fc5bd);
-          top: 50%;
-          margin-top: rem(-4px);
-          margin-left: rem(-32px);
-        }
-        span {
+          display: inline-block;
           vertical-align: middle;
+          width: rem(48px);
+          height: rem(48px);
+          background: url(../../../common/image/img00/consult_V1.2/doubt2@2x.png);
+          background-size: contain;
+          margin-left: rem(28px);
         }
-        & > em {
-          @include font-dpr(16px);
-          color: #666666;
-          font-style: normal;
-          font-weight: normal;
+      }
+      &.mSelector {
+        .selected {
+          & > .icon-select {
+            background: url("../../../common/image/img00/consult_V1.2/multiplechoice_on@2x.png");
+            background-size: contain;
+          }
+        }
+        .icon-select {
+          background: url("../../../common/image/img00/consult_V1.2/multiplechoice_off@2x.png");
+          background-size: contain;
+        }
+      }
+      &.select-item {
+        .icon-select {
+          width: rem(36px);
+          height: rem(36px);
+          background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png");
+          background-size: contain;
+        }
+      }
+      &.sSelector {
+        .selected {
+          & > .icon-select {
+            background: url("../../../common/image/img00/consult_V1.2/radio_on@2x.png");
+            background-size: contain;
+          }
+        }
+        .icon-select {
+          background: url("../../../common/image/img00/consult_V1.2/radio_off@2x.png");
+          background-size: contain;
+        }
+      }
+      .consult-question-item {
+        &.selected > p {
+          color: #07b6ac;
+        }
+        padding: rem(38px) rem(60px);
+        &.dark {
+          background-color: rgba(239, 239, 239, 0.3);
+        }
+        & > .icon-select {
+          width: rem(48px);
+          height: rem(48px);
+          float: right;
+        }
+        & > p {
+          @include font-dpr(18px);
+          color: #333333;
+          display: inline-block;
+          max-width: 80%;
+          @include ellipsis();
           vertical-align: middle;
         }
       }
     }
-  }
 
-  .consult-question-inner {
-    .detail-tips {
-      @include font-dpr(14px);
-      color: #07b6ac;
-      vertical-align: middle;
+    .welcome-tips {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      z-index: 5;
       &:before {
         content: "";
         display: inline-block;
         vertical-align: middle;
-        width: rem(48px);
-        height: rem(48px);
-        background: url(../../../common/image/img00/consult_V1.2/doubt2@2x.png);
-        background-size: contain;
-        margin-left: rem(28px);
-      }
-    }
-    &.mSelector {
-      .selected {
-        & > .icon-select {
-          background: url("../../../common/image/img00/consult_V1.2/multiplechoice_on@2x.png");
-          background-size: contain;
-        }
-      }
-      .icon-select {
-        background: url("../../../common/image/img00/consult_V1.2/multiplechoice_off@2x.png");
-        background-size: contain;
-      }
-    }
-    &.select-item {
-      .icon-select {
-        width: rem(36px);
-        height: rem(36px);
-        background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png");
-        background-size: contain;
-      }
-    }
-    &.sSelector {
-      .selected {
-        & > .icon-select {
-          background: url("../../../common/image/img00/consult_V1.2/radio_on@2x.png");
-          background-size: contain;
-        }
-      }
-      .icon-select {
-        background: url("../../../common/image/img00/consult_V1.2/radio_off@2x.png");
-        background-size: contain;
-      }
-    }
-    .consult-question-item {
-      &.selected > p {
-        color: #07b6ac;
-      }
-      padding: rem(38px) rem(60px);
-      &.dark {
-        background-color: rgba(239, 239, 239, 0.3);
-      }
-      & > .icon-select {
-        width: rem(48px);
-        height: rem(48px);
-        float: right;
-      }
-      & > p {
-        @include font-dpr(18px);
-        color: #333333;
-        display: inline-block;
-        max-width: 80%;
-        @include ellipsis();
-        vertical-align: middle;
-      }
-    }
-  }
-
-  .welcome-tips {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.8);
-    text-align: center;
-    z-index: 5;
-    &:before {
-      content: "";
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
-    }
-    & > figure {
-      display: inline-block;
-      vertical-align: middle;
-      width: rem(716px);
-      height: rem(760px);
-      position: relative;
-      & > img {
-        width: 100%;
         height: 100%;
-        vertical-align: top;
       }
-      .welcome-tips-ensure {
-        width: 66.7%;
-        position: absolute;
-        bottom: rem(96px);
-        padding: rem(30px) 0;
-        left: 50%;
-        transform: translateX(-50%);
-        box-shadow: 0 rem(4px) rem(12px) 0 rgba(74, 74, 74, 0.5);
+      & > figure {
+        display: inline-block;
+        vertical-align: middle;
+        width: rem(716px);
+        height: rem(760px);
+        position: relative;
+        & > img {
+          width: 100%;
+          height: 100%;
+          vertical-align: top;
+        }
+        .welcome-tips-ensure {
+          width: 66.7%;
+          position: absolute;
+          bottom: rem(96px);
+          padding: rem(30px) 0;
+          left: 50%;
+          transform: translateX(-50%);
+          box-shadow: 0 rem(4px) rem(12px) 0 rgba(74, 74, 74, 0.5);
+        }
       }
     }
   }

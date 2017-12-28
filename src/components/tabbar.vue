@@ -51,12 +51,7 @@ export default {
       if (this.selected == 2) {
         this.historyUrl = `/dist/consult.html?customerId=${userId}`;
       } else {
-        if (userId) {
-          this.historyUrl = `/dist/myConsult.html`;
-        } else {
-          localStorage.setItem("backUrl",window.location.href);
-          this.historyUrl = "/dist/mLogin.html?from=index";
-        }
+        this.historyUrl = `/dist/myConsult.html`;
       }
       this.myUrl = `/dist/personal.html`;
     },

@@ -547,10 +547,7 @@
 
       // 患者端收到拒绝问诊隐藏输入框
       hideInput(msg) {
-        if (
-          msg.type === "custom" &&
-          JSON.parse(msg.content).type === "refusePatient"
-        ) {
+        if (msg.type === "custom" && JSON.parse(msg.content).type === "refusePatient") {
           this.inputBoxShow = false; //顶部时间取消
           store.commit("setconsultationState", 7);
         }

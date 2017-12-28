@@ -27,13 +27,16 @@ export default class checkSession {
         },
         timeout: 30000
       }).then((res) => {
-        resolve(res);
+
         if (!res.data.responseObject.responseStatus){
           localStorage.removeItem("userId");
           localStorage.removeItem("userName");
           localStorage.removeItem("mobile");
           localStorage.removeItem("logoUrl");
+        }else{
+          localStorage.setItem("userId",res.data.responseObject.responsePk)
         }
+        resolve(res);
       }, (err) => {
         reject(err);
       });
