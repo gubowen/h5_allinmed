@@ -5,7 +5,6 @@
       <transition name="fade">
         <section class="consult-wrapper" v-show="finish">
           <section class="consult-inner">
-            <span class="consult-page page-one"></span>
             <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
               <header class="consult-inner-title">
                 <h2>
@@ -74,7 +73,7 @@
                       <section class="pain-level-title-box">
                         <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass" @click.stop="painValue=2;showPainProgress=true;showSymptomDetail=false">
                           <i class="icon-pain-level-tips"></i>
-                          <p><em>{{painValue == -1?'请选择您的疼痛等级':'疼痛等级：'}}</em><span v-if="painValue != -1">{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span></p>
+                          <p :class="{choicePain:painValue == -1}"><em>{{painValue == -1?'请选择您的疼痛等级':'疼痛等级：'}}</em><span v-if="painValue != -1">{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span></p>
                         </header>
                       </section>
                       <header class="consult-inner-title" v-if="scItem.questionType!=3">
@@ -768,7 +767,8 @@
           complication: this.complication,
           count: this.$route.query.count,
           height:this.$route.params.height,
-          weight:this.$route.params.weight
+          weight:this.$route.params.weight,
+          sex: this.$route.query.sex
         };
         for (let i in this.secondQuestionList) {
           if (
@@ -1433,6 +1433,18 @@
       display: inline-block;
       position: relative;
       width: 6rem;
+      &.choicePain:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: rem(-18px);
+        @include square(rem(36px));
+        background: url("../../../common/image/img00/consult_V1.2/arrow@2x.png");
+        background-size: contain;
+      }
       em {
         font-style: normal;
         vertical-align: middle;
