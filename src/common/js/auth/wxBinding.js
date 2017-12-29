@@ -41,7 +41,7 @@ class Wxbinding {
                   console.log("该用户已绑定手机号（微信）");
                   obj.callBack && obj.callBack();
                 }else{
-                  let url = `${window.location.origin}${window.location.pathname}?customerId=${data}`;
+                  let url = `${window.location.origin}${window.location.pathname}`;
                   if (api.getPara().wxState == 1){
                     window.location.href="/";
                   }else{

@@ -49,7 +49,7 @@ export default {
         localStorage.getItem("userId");
       this.homeUrl = `/`;
       if (this.selected == 2) {
-        this.historyUrl = `/dist/consult.html?customerId=${userId}`;
+        this.historyUrl = `/dist/consult.html`;
       } else {
         this.historyUrl = `/dist/myConsult.html`;
       }
