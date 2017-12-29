@@ -19,7 +19,7 @@
       }
     },
     mounted(){
-
+      localStorage.setItem("PCIMLinks", location.href);
     },
     methods: {
 

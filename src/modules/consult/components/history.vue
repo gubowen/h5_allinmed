@@ -115,7 +115,7 @@
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
                       @input="contentLimit"></textarea>
               <span class="qu-underline"></span>
-              <p class="limit" v-show="getByteLen(medicalMessage)<=100">{{getByteLen(medicalMessage)}}</p>
+              <p class="limit" v-show="getByteLen(medicalMessage.length)<=50">{{getByteLen(medicalMessage.length)}}</p>
               <p class="qu-setMedicineTipText">填写示例:双氯芬酸钠缓释片、盐酸乙哌立松</p>
             </section>
           </section>
@@ -842,7 +842,11 @@ export default {
       }
     },
     getByteLen(len) {
-      return Math.ceil((1000 - api.getByteLen(len)) / 2);
+      if(500 - len <= 0){
+        return 0
+      }else{
+        return 500 - len;
+      }
     },
     clearPageData() {
       let _this = this;

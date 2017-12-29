@@ -32,9 +32,9 @@
                   >
                   </textarea>
                     <p class="text-num-tips"
-                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=500"
+                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50"
                     >
-                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}/500</p>
+                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc.length)}}/50</p>
                   </figure>
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
@@ -895,7 +895,11 @@
         this.$router.go(-1);
       },
       getByteLen(len) {
-        return 1000 - api.getByteLen(len);
+        if(500 - len <= 0){
+          return 0
+        }else{
+          return 500 - len;
+        }
       }
     },
     components: {

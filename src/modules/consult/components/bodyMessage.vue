@@ -326,6 +326,7 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
               localStorage.removeItem("noMR");
+              that.backPopupShow = true;
               that.finish = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=report&caseId=" +
@@ -349,6 +350,7 @@
         localStorage.removeItem("complication");
         siteSwitch.weChatJudge(
           () => {
+            that.backPopupShow = true;
             that.finish = false;
             window.location.href =
               "/dist/imScene.html?caseId=" +
@@ -503,6 +505,7 @@
           }),
           done(error, msg) {
             console.log("新用户提醒发送...");
+            that.backPopupShow = true;
             that.finish = false;
             that.$router.push({
               name: "conGuide"
