@@ -110,7 +110,7 @@
           visitSiteId: 17,
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
-          customerId: localStorage.getItem('userId'),
+          customerId: "",
           patientId: "",
           illnessHistoryId: "",
           illnessHistory: "",
@@ -140,6 +140,7 @@
         this.heightContent = this.$route.params.height || "";
         this.weightContent = this.$route.params.weight || "";
         this.createParams.patientId = params.patientId;
+        this.createParams.customerId = params.customerId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
         this.createParams.treatmentHospital = params.treatmentHospital;
