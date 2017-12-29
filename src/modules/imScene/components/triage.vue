@@ -27,6 +27,9 @@
                 上传{{triageMessage.data.type==1?"视频":"照片"}}
       </figcaption>
     </article>
+    <section class="tips-content">
+      重要提示：在线咨询不能代替面诊，医生建议仅供参考。
+    </section>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -70,7 +73,8 @@
     box-sizing: border-box;
     background: #FFFFFF;
     border: 1px solid #E4E9EB;
-    border-radius: rem(12px);
+    border-bottom: none;
+    border-radius:rem(12px) rem(12px) 0 0;
     padding: rem(70px) rem(60px);
     .video-triage-content{
       color: #333333;
@@ -90,4 +94,17 @@
       line-height: 1;
     }
   }
+  .tips-content{
+      width: rem(690px);
+      margin: 0 auto;
+      padding:rem(18px) rem(36px);
+      box-sizing: border-box;
+      background: #FAFAFB;
+      color: #97A8BA;
+      @include font-dpr(13px);
+      border: 1px solid  #e4e9eb;
+      border-top: none;
+      border-bottom-right-radius: rem(21px);
+      border-bottom-left-radius: rem(21px);
+    }
 </style>

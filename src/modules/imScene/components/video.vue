@@ -27,6 +27,9 @@
             <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
             <img class="im-image" @click.stop="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
           </figure>
+          <section class="tips-content" v-if="videoMessage.from===targetData.account">
+            重要提示：在线咨询不能代替面诊，医生建议仅供参考。
+          </section>
         </section>
       </figcaption>
       <figure class="main-message-img" v-if="videoMessage.from===userData.account">
@@ -115,13 +118,44 @@ export default {
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../../../scss/library/_common-modules";
+
+  .video-message-box{
+    position: relative;
+  }
+  .tips-content{
+    padding:rem(18px) rem(36px);
+    background: #FAFAFB;
+    color: #97A8BA;
+    @include font-dpr(13px);
+    // border: 1px solid  #e4e9eb;
+    border-top: none;
+    margin: rem(34px) rem(-36px) 0;
+    border-bottom-right-radius: rem(21px);
+    border-bottom-left-radius: rem(21px);
+  }
   .im-video{
     width: 0;
     height: 0;
     opacity: 0;
     z-index: -1;
   }
+  .mulitple-image{
+    padding-top:rem(36px);
+  }
+  .im-image{
+    width: rem(132px);
+    height: rem(132px);
+  }
   .video-message-box{
     width: rem(514px);
+  }
+  .main-message-box-item.others-message > .main-message-content{
+    padding-bottom: 0;
+  }
+  .mulit-title {
+    padding-bottom: rem(24px);
+    border-bottom: 1px solid #d8d8d8;
+    @include font-dpr(17px);
+    color: #222222;
   }
 </style>

@@ -3,7 +3,7 @@
     <progerssBar :progerssBarParams="{progerssParams:'1'}"></progerssBar>
     <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
       <header class="part-select-title">
-        <h3 v-if="!secondShow">点选最不适位置：</h3>
+        <h3 v-if="!secondShow">点选最不适位置</h3>
       </header>
       <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
@@ -464,12 +464,12 @@
 
   .part-select-title {
     position: absolute;
-    background: #FAFAFA;
+    background: #ebebeb;
     border-top-right-radius: rem(9999px);
     border-bottom-right-radius: rem(9999px);
     h3 {
       line-height: 1;
-      padding: rem(28px) rem(50px);
+      padding: rem(20px) rem(30px);
       @include font-dpr(16px);
       color: #666666;
       font-weight: normal;
@@ -480,11 +480,11 @@
     margin-top: rem(0px);
     height: 100%;
     &.front {
-      background: url("../../../common/image/img00/patientConsult/front_bg.png") no-repeat center center;
+      background: url("../../../common/image/img00/patientConsult/bg_front.png") no-repeat center center;
       background-size: contain;
     }
     &.back {
-      background: url("../../../common/image/img00/patientConsult/back_bg.png") no-repeat center center;
+      background: url("../../../common/image/img00/patientConsult/bg_behind.png") no-repeat center center;
       background-size: contain;
     }
     &-content {
