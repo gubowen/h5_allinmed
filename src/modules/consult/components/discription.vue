@@ -709,10 +709,10 @@
             ].optionDesc.replace(ranges, "");
         }
         let content = this.questionList[pIndex].optionList[index].optionDesc;
-        if (api.getByteLen(content) > 1000) {
+        if (content.length > 500) {
           this.questionList[pIndex].optionList[
             index
-            ].optionDesc = api.getStrByteLen(content, 1000);
+            ].optionDesc = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -874,8 +874,8 @@
           this.complication = this.complication.replace(ranges, "");
         }
         let content = this.complication;
-        if (api.getByteLen(content) > 1000) {
-          this.complication = api.getStrByteLen(content, 1000);
+        if (content.length > 500) {
+          this.complication = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;

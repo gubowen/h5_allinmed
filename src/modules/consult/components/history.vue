@@ -844,10 +844,8 @@ export default {
       }, 2000);
     },
     contentLimit() {
-      console.log(api.getByteLen(this.medicalMessage));
-      console.log(api.getStrByteLen(this.medicalMessage));
-      if (api.getByteLen(this.medicalMessage) > 1000) {
-        this.medicalMessage = api.getStrByteLen(this.medicalMessage, 1000);
+      if (this.medicalMessage.length > 500) {
+        this.medicalMessage = this.medicalMessage.substring(0,500);
         this.validateToast("最多只能输入500字");
       }
     },
