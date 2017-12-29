@@ -817,10 +817,14 @@ export default {
         return false;
       }
       console.log(this.$el.querySelector(".upload-fail").length>0);
-      
-      if (this.$el.querySelector(
-          ".upload-fail"
-      ).length>0) {
+      //是否存在上传失败的图片
+      let _failNum = 0;
+      for(let item in this.imageList1){
+        if (item.fail) {
+          _failNum++;
+        }
+      }
+      if (_failNum>0) {
         this.validateToast("请完成未上传成功的图片");
         return false;
       }
