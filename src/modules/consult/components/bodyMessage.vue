@@ -77,6 +77,7 @@
   import backPopup from "components/backToastForConsult";
   import Picker from 'better-picker';
   import 'common/styles/_ustbPicker.css';
+  import "babel-polyfill";
 
   const XHRList = {
     createCase: "/mcall/customer/patient/case/v2/create/",
@@ -327,7 +328,9 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
               localStorage.removeItem("noMR");
-              that.backPopupShow = true;
+              if(navigator.userAgent.toLowerCase().includes("iphone")){
+                that.backPopupShow = true;
+              }
               that.finish = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=report&caseId=" +
@@ -351,7 +354,9 @@
         localStorage.removeItem("complication");
         siteSwitch.weChatJudge(
           () => {
-            that.backPopupShow = true;
+            if(navigator.userAgent.toLowerCase().includes("iphone")){
+              that.backPopupShow = true;
+            }
             that.finish = false;
             window.location.href =
               "/dist/imScene.html?caseId=" +
@@ -506,7 +511,9 @@
           }),
           done(error, msg) {
             console.log("新用户提醒发送...");
-            that.backPopupShow = true;
+            if(navigator.userAgent.toLowerCase().includes("iphone")){
+              that.backPopupShow = true;
+            }
             that.finish = false;
             that.$router.push({
               name: "conGuide"
