@@ -226,18 +226,7 @@
       },
       getAdList() {
         const that = this;
-        // that.adList =[
-        //  {
-        //   imgId:1,
-        //   adAdditionalUrl:'www.baidu.com',
-        //   adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        // },
-        // {
-        //     imgId:2,
-        //     adAdditionalUrl:'www.baidu.com',
-        //     adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        // }
-        // ];
+
        api.ajax({
          url: XHRList.adList,
          method: "post",
@@ -251,9 +240,11 @@
            if (data.responseObject.responseStatus) {
              that.adList =
                data.responseObject.responseData.data_list[0].ad_profile_attachment;
-             // setTimeout(() => {
-             //   that.$refs.slider && that.$refs.slider.refresh();
-             // }, 20);
+             if(that.adList.length<=1){
+               that.swiperOption.loop=false;
+             }
+           }else{
+             that.swiperOption.loop=false;
            }
            that.$store.commit("setLoadingState", false);
          }
