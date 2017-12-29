@@ -470,12 +470,13 @@ export default {
     uploadBtnFn() {
       let _this = this;
       _this.upLoadGuideTip = "2";
+      let _customerId = localStorage.getItem('customerId')?localStorage.getItem('customerId'):localStorage.getItem('userId');
       if (_this.upload.has) {
         return;
       } else {
         //是否上传过检测
         checkUpLoadStatus
-          .getDataInit({patientCustomerId:localStorage.getItem('userId')})
+          .getDataInit({patientCustomerId:_customerId})
           .then(res => {
             if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
             // 上传过
@@ -815,7 +816,14 @@ export default {
         this.validateToast("请填写药物名称");
         return false;
       }
-
+      console.log(this.$el.querySelector(".upload-fail").length>0);
+      
+      if (this.$el.querySelector(
+          ".upload-fail"
+      ).length>0) {
+        this.validateToast("请完成未上传成功的图片");
+        return false;
+      }
       return true;
     },
     validateToast(content) {
