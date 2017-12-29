@@ -19,6 +19,7 @@ import BaseIm from "./components/baseIm";
 import ShowBigImg from "components/showBigImg";
 import MedicalReportDetail from "components/medicalReportDetail";
 import UploadList from "./components/uploadList";
+import upLoadTip from 'components/shootTips';
 import TriageDetail from "./components/triageDetail";
 import knowledgeDetail from "./components/knowledgeDetail";
 import videoPlay from "./components/videoPlay";
@@ -120,6 +121,13 @@ class ImScene {
         keepAlive: true
       },
       component: knowledgeDetail
+    }, {
+      path: "/upLoadTip",
+      name: "upLoadTip",
+      component: upLoadTip,
+      meta: {
+        keepAlive: true
+      },
     }, {
       path: "/videoPlay",
       name: "videoPlay",
