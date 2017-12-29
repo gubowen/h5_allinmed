@@ -22,7 +22,7 @@
      <div class="gallery-thumbs" v-show="imageListBox.length>1">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-zoom-container" v-for="item in imageListBox" :key="item.imgId">
+            <div class="swiper-slide" v-for="item in imageListBox" :key="item.imgId">
               <img :src="item.blob"/>
             </div>
           </div>
