@@ -816,10 +816,9 @@ export default {
         this.validateToast("请填写药物名称");
         return false;
       }
-      console.log(this.$el.querySelector(".upload-fail").length>0);
       //是否存在上传失败的图片
       let _failNum = 0;
-      for(let item in this.imageList1){
+      for(let item of this.imageList1){
         if (item.fail) {
           _failNum++;
         }
