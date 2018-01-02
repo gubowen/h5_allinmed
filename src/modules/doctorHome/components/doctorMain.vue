@@ -283,7 +283,7 @@
         if(api.getPara().doctorCustomerId){//医生主页
           localStorage.setItem("bindDocId",api.getPara().doctorCustomerId);
         }
-        if(api.getPara().customerId&&api.getPara().customerId.length>0){
+        if(api.getPara().from&&api.getPara().from=='report'){
           this.isDoctorID = true;
           if(!api.getPara().doctorCustomerId&&typeof Number(api.getPara().wxState) == 'number'){
             window.location.href=`${window.location.href.split("#")[0]}&doctorCustomerId=${localStorage.getItem("bindDocId")}`;
