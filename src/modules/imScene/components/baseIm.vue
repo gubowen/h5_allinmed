@@ -1179,7 +1179,12 @@
       sendImage(e) {
         const that = this;
         console.log(e.target.files);
+
         if (e.target.files.length > 1) {
+          if (e.target.files.length > 9) {
+            this.toastControl("您最多只能选择9张图片");
+            e.target.files = e.target.files.slice(0, 10);
+          }
           this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
