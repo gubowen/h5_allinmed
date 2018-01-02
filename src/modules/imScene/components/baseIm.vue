@@ -180,6 +180,12 @@
             :tipsText="JSON.parse(msg.content).text"
           >
           </MiddleTips>
+          <!--分诊台发送问诊-->
+          <MiddleTips
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'consultFinishTip'"
+            :tipsType="7"
+          >
+          </MiddleTips>
           <!--消息撤回提示-->
           <div :key="0">
             <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
@@ -1346,17 +1352,14 @@
       // 选择视频
       sendVideo(e) {
         let _file = e.target.files[0];
-        if (_file.type.includes("video")) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
+        } else if (_file.type.includes("video")){
+          this.toastControl("请选择mp4文件");
         } else {
-          // this.toastTips = `请选择视频文件`;
-          // this.toastShow = true;
-          // setTimeout(() => {
-          //   this.toastShow = false;
-          // }, 2000);
-          this.toastControl("请选择视频文件");
+          this.toastControl("请选择视频文件");     
         }
-      },
+      }, 
       // 上传视频文件
       sendVideoFile(_file) {
         const that = this;

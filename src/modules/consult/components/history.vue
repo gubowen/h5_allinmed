@@ -336,7 +336,11 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
-    store.commit("setbottomNav",true);
+    siteSwitch.weChatJudge(()=>{
+      store.commit("setbottomNav",false);
+    },()=>{
+      store.commit("setbottomNav",true);
+    });
     if (this.upLoadGuideTip == "2") {
       //展示上传按钮
       this.uploadEvent();
