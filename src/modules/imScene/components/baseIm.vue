@@ -275,6 +275,7 @@
             </figure>
             <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
+                   accept="application/pdf"
                   >
             <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender" accept="application/pdf">
@@ -1357,9 +1358,9 @@
         } else if (_file.type.includes("video")){
           this.toastControl("请选择mp4文件");
         } else {
-          this.toastControl("请选择视频文件");     
+          this.toastControl("请选择视频文件");
         }
-      }, 
+      },
       // 上传视频文件
       sendVideoFile(_file) {
         const that = this;
