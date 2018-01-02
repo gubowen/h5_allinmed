@@ -17,7 +17,7 @@ export default class CheckSubscribe{
 
   check(url){
     let appId = "",XHRUrl = "",envCode = "";
-    if (window.location.origin.includes("localhost") || window.location.origin.includes("10.1")) {
+    if (window.location.origin.includes("localhost") || window.location.origin.includes("10")) {
       return false;
     }
 
