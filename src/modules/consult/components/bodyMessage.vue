@@ -159,8 +159,8 @@
           this[element] = this[element].replace(ranges, "");
         }
         let content = this[element];
-        if (api.getByteLen(content) > limit * 2) {
-          this[element] = api.getStrByteLen(content, limit * 2);
+        if (api.getByteLen(content) > limit ) {
+          this[element] = api.getStrByteLen(content, limit );
           this.errorShow = true;
           this.errorMsg = `最多只能输入${limit}字`;
           setTimeout(() => {
