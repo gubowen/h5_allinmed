@@ -1355,7 +1355,8 @@
       // 选择视频
       sendVideo(e) {
         let _file = e.target.files[0];
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type))) {
+        console.log(_file.type);
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
           this.toastControl("请选择mp4或者mov文件");
@@ -1752,6 +1753,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
+              that.refreshState(9);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +
