@@ -180,6 +180,12 @@
             :tipsText="JSON.parse(msg.content).text"
           >
           </MiddleTips>
+          <!--分诊台发送问诊-->
+          <MiddleTips
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'consultFinishTip'"
+            :tipsType="7"
+          >
+          </MiddleTips>
           <!--消息撤回提示-->
           <div :key="0">
             <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
