@@ -36,8 +36,9 @@ export default class CheckSubscribe{
     }
     let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=subscribe#wechat_redirect";
 
-    if(api.getPara().isSubscribe){
+    if(api.getPara().isSubscribe||localStorage.getItem("isSubscribe")){
       console.log("finish");
+      localStorage.setItem("isSubscribe");
     }else{
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }

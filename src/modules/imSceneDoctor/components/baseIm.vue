@@ -301,6 +301,8 @@
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
 
+  import getFileType from "common/js/util/getFileType.js";
+
   import WxPayCommon from "common/js/wxPay/wxComm";
   import nimEnv from "common/js/nimEnv/nimEnv";
   import scrollPosition from "../api/scrollPosition";
@@ -1300,7 +1302,7 @@
           loading: true,
           from: this.userData.account
         });
-        let nowNum=this.msgList.length-1;
+        let nowNum = this.msgList.length - 1;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1334,11 +1336,11 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result,nowNum);
+          this.sendMulitpleImage(result, nowNum);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list,nowNum) {
+      sendMulitpleImage(list, nowNum) {
         const that = this;
 
         this.nim.sendCustomMsg({
@@ -1506,16 +1508,15 @@
       // 选择pdf
       sendPdf(e) {
         let _file = e.target.files[0];
-        console.log(_file)
-        if (_file.type.includes("pdf")) {
-          this.sendPdfFile(_file);
-        } else {
-          this.toastTips = `请选择pdf文件`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
-        }
+        getFileType(_file).then((flag) => {
+          if (_file.type.includes("pdf")) {
+            this.sendPdfFile(_file);
+          } else if (_file.type.length === 0 && flag) {
+            this.sendPdfFile(_file);
+          } else {
+            this.toastControl("请选择pdf文件");
+          }
+        });
       },
       // 发送pdf
       sendPdfFile(_file) {
@@ -1560,6 +1561,7 @@
               });
               console.log(file);
               file.name = _file.name;
+              file.ext = "pdf";
               if (!error) {
                 let msg = that.nim.sendFile({
                   scene: "p2p",

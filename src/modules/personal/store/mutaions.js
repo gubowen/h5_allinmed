@@ -20,6 +20,7 @@ const logOut = (status) =>{
         localStorage.removeItem("userName");
         localStorage.removeItem("mobile");
         localStorage.removeItem("logoUrl");
+        localStorage.removeItem("isSubscribe");
         localStorage.setItem("backUrl",window.location.href);
         status.loginOnOff = false;
         status.customerName = '';

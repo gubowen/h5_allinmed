@@ -269,10 +269,9 @@
             </figure>
             <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
-                   accept="application/pdf">
+                  >
             <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
-                   ref="pdfSender"
-                   accept="application/pdf">
+                   ref="pdfSender" accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -342,6 +341,9 @@
 
   import DeleteMsg from "common/js/IM_BaseMethod/deleteMsg";
   import DeleteMsgTips from "common/js/IM_BaseMethod/deleteMsgAfterTips.js";
+
+  import getFileType from "common/js/util/getFileType.js";
+
   import "babel-polyfill";
 
   let nim;
@@ -611,7 +613,6 @@
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
             console.log("dom更新前");
-            console.log(obj);
             that.getTimeStampShowList();
             // 判断是否需要发送推荐医生
             that.sendSuggestDoctor();
@@ -1419,17 +1420,15 @@
       // 选择pdf
       sendPdf(e) {
         let _file = e.target.files[0];
-        console.log(_file)
-        if (_file.type.includes("pdf")) {
-          this.sendPdfFile(_file);
-        } else {
-          // this.toastTips = `请选择pdf文件`;
-          // this.toastShow = true;
-          // setTimeout(() => {
-          //   this.toastShow = false;
-          // }, 2000);
-          this.toastControl("请选择pdf文件");
-        }
+        getFileType(_file).then((flag)=>{
+          if (_file.type.includes("pdf")) {
+            this.sendPdfFile(_file);
+          } else if (_file.type.length===0&&flag){
+            this.sendPdfFile(_file);
+          }else{
+            this.toastControl("请选择pdf文件");
+          }
+        });
       },
       // 发送pdf
       sendPdfFile(_file) {
@@ -1471,6 +1470,7 @@
               // show file to the user
               file = Object.assign(file, {
                 name: _file.name,
+                ext:"pdf"
               });
               console.log(file);
               if (!error) {
