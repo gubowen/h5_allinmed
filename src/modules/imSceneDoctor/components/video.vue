@@ -140,6 +140,9 @@ export default {
     position: relative;
     width: rem(200px);
     height: rem(200px);
+    background: url("../../../../src/common/image/imScene/default_video.jpg");
+    background-size: 100% 100%;
+    border-radius: 0.28rem;
     & > img {
       width: rem(76px);
       height: rem(76px);
@@ -168,8 +171,7 @@ export default {
   padding: 0;
   width: rem(200px);
   height: rem(200px);
-  background: url("../../../../src/common/image/imScene/default_video.jpg");
-  background-size: 100% 100%;
+
   border-top-right-radius:0.28rem;
   .mulitple-image-box{
     padding-top: 0;

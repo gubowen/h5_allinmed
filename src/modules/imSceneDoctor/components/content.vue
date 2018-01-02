@@ -89,7 +89,7 @@
     top: 50%;
     left: 0;
     margin-left: -1.5rem;
-    text-indent: -.1rem;
+    text-indent: -.2rem;
     color: #fff;
     line-height: rem(70px);
     text-align: center;
