@@ -5,7 +5,7 @@
       <header class="part-select-title">
         <h3 v-if="!secondShow">点选最不适位置</h3>
       </header>
-      <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
+      <section class="main-inner-content" :class="{'androidScale':!isIos&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
           <figure class="body-picture-content">
             <img class="body-picture-img" :src="patientBody" alt="">
