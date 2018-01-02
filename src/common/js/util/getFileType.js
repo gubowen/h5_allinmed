@@ -16,7 +16,7 @@ export default function checkFileType(file, cb) {
       let view = new Uint8Array(slice);
       let arr = [];
       view.forEach(function (v) {
-        arr.pletush(v.toString(16));
+        arr.push(v.toString(16));
       });
       let result = view.join(" ");
 
