@@ -186,6 +186,7 @@
   import ensure from 'components/ensure';
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import CheckLogin from 'common/js/auth/checkLogin';
   const checkLogin = new CheckLogin();
 
