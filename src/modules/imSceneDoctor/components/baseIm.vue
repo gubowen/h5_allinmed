@@ -225,10 +225,10 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender"
                      accept="video/*">
-              <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="!isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender" capture="camera"
                      accept="video/*">
             </li>

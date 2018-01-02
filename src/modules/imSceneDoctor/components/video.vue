@@ -10,7 +10,7 @@
       <i class="fail-button" style="display:none">
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
-      <figcaption class="main-message-content video-message-box">
+      <figcaption class="main-message-content video-message-box" :class="{'my-video':videoMessage.from===userData.account}">
         <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</span>
         </transition>
@@ -21,11 +21,11 @@
             <figcaption class="progress"><p>{{progress.progress}}</p></figcaption>
           </figure>
         </section>
-        <header class="mulit-title">视频</header>
+        <header class="mulit-title" v-if="videoMessage.from===targetData.account">视频</header>
         <section class="mulitple-image-box">
           <figure class="mulitple-image" >
             <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
-            <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/play.png" alt="" style="border-radius: 0.28rem">
+            <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/video_play@76.png" alt="" style="border-radius: 0.28rem">
           </figure>
         </section>
         <article class="disclaimer-content" v-if="videoMessage.from===targetData.account">
@@ -137,13 +137,18 @@ export default {
   & > .mulitple-image {
     display: inline-block;
     margin-right: rem(20px);
-    background-color: #000000;
+    position: relative;
+    width: rem(200px);
+    height: rem(200px);
     & > img {
-      width: rem(132px);
-      height: rem(132px);
+      width: rem(76px);
+      height: rem(76px);
       vertical-align: top;
-      position: relative;
-      left: -4%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: rem(-38px);
+      margin-top: rem(-38px);
     }
     &:nth-child(1) {
       // margin: 0;
@@ -159,4 +164,15 @@ export default {
   opacity: 0;
   z-index: -1;
 }
+.main-message-box-item.my-message > .main-message-content.video-message-box{
+  padding: 0;
+  width: rem(200px);
+  height: rem(200px);
+  background: url("../../../../src/common/image/imScene/default_video.jpg");
+  background-size: 100% 100%;
+  border-top-right-radius:0.28rem;
+  .mulitple-image-box{
+    padding-top: 0;
+  }
+  }
 </style>
