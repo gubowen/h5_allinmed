@@ -186,6 +186,8 @@
   import ensure from 'components/ensure';
   import toast from 'components/toast';
   import ustb from 'common/styles/_ustbPicker.css';
+  import CheckLogin from 'common/js/auth/checkLogin';
+  const checkLogin = new CheckLogin();
 
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
@@ -273,69 +275,93 @@
       this.currentIndex = -1;
     },
     mounted() {
-      document.title = "诊后报到";
-      localStorage.removeItem('APPIMLinks');
-      this.getPatientList();
-      this.relationPickerInit();//患者关系选择器初始化
-      this.credentialPickerInit();//患者关系选择器初始化
-      this.birthPickerInit();//患者关系选择器初始化
-      this.getPatientPhone();//获取绑定的手机号
-      this.$validator.updateDictionary({
-        en: {
-          custom: {
-            //用户姓名的验证
-            username: {
-              required: '请填写患者姓名',
-              noNumber: '请填写真实姓名',
-              isEmoji: '请填写真实姓名',
-              special: '请填写真实姓名',
-              max_length: '请填写真实姓名',
-            },
-            //用户年龄的验证
-            age: {
-              required: '请填写年龄',
-              max_value: '请填写真实年龄',
-              min_value: '请填写真实年龄',
-              special: '请填写真实年龄',
-            },
-            //手机号的验证
-            phone: {
-              required: '请填写手机号码',
-              mobile: '请填写真实手机号码',
-            },
-            //患者关系的验证规则
-            relationInput: {
-              required: '请选择与患者关系',
-            },
-            //患者所在地的验证规则
-            areaInput: {
-              required: '请选择患者所在地',
-            },
-            //证件号码的验证规则
-            IDNumber: {
-              required: '请输入证件号码',
-            },
-            //出生日期的验证
-            birthInput: {
-              required: '请选择患者出生日期',
-            }
+      //微信中绑定微信
+      siteSwitch.weChatJudge(()=>{
+        // this.isWeChat = true;
+        wxBind.isBind({
+          callBack:()=>{
+            this.init();
           }
-        }
+        });
+      },()=>{
+        console.log("无需绑定微信");
+        // this.isWeChat = false;
+        this.init();
+        checkLogin.getStatus().then((res)=>{
+          if(res.data.responseObject.responseStatus){
+
+            this.init();
+          }else{
+            localStorage.setItem("backUrl",window.location.href);
+            window.location.href = '/dist/mLogin.html';
+          }
+        })
       });
-      if (localStorage.getItem("PCIMLinks") !== null) {
-        localStorage.removeItem("PCIMLinks");
-      };
-      api.forbidShare();
     },
     computed: {},
     filters: {},
     methods: {
+      // 页面初始化
+      init () {
+        document.title = "诊后报到";
+        localStorage.removeItem('APPIMLinks');
+        this.getPatientList();
+        this.relationPickerInit();//患者关系选择器初始化
+        this.credentialPickerInit();//患者关系选择器初始化
+        this.birthPickerInit();//患者关系选择器初始化
+        this.getPatientPhone();//获取绑定的手机号
+        this.$validator.updateDictionary({
+          en: {
+            custom: {
+              //用户姓名的验证
+              username: {
+                required: '请填写患者姓名',
+                noNumber: '请填写真实姓名',
+                isEmoji: '请填写真实姓名',
+                special: '请填写真实姓名',
+                max_length: '请填写真实姓名',
+              },
+              //用户年龄的验证
+              age: {
+                required: '请填写年龄',
+                max_value: '请填写真实年龄',
+                min_value: '请填写真实年龄',
+                special: '请填写真实年龄',
+              },
+              //手机号的验证
+              phone: {
+                required: '请填写手机号码',
+                mobile: '请填写真实手机号码',
+              },
+              //患者关系的验证规则
+              relationInput: {
+                required: '请选择与患者关系',
+              },
+              //患者所在地的验证规则
+              areaInput: {
+                required: '请选择患者所在地',
+              },
+              //证件号码的验证规则
+              IDNumber: {
+                required: '请输入证件号码',
+              },
+              //出生日期的验证
+              birthInput: {
+                required: '请选择患者出生日期',
+              }
+            }
+          }
+        });
+        if (localStorage.getItem("PCIMLinks") !== null) {
+          localStorage.removeItem("PCIMLinks");
+        };
+        api.forbidShare();
+      },
       initData () {
 
         if (this.$route.params.areaParam) {
           this.areaParam = this.$route.params.areaParam;
           this.areaClick = false;
-
 //          this.areaParam.districtId = true;
         }
       },
@@ -434,7 +460,7 @@
           url: XHRList.patientList,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId ? this.$route.query.customerId : api.getPara().customerId,
+            customerId: this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),
             isValid: "1",
             firstResult: "0",
             maxResult: "9999"
