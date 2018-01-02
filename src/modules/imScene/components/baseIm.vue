@@ -263,9 +263,11 @@
             </figure>
             <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
                    ref="videoSender"
+                   multiple
                    accept="video/*">
             <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
-                   ref="videoSender" capture="camera"
+                   ref="videoSender" capture="camera" 
+                   multiple
                    accept="video/*">
           </li>
           <li class="bottom-item">
@@ -1353,10 +1355,10 @@
       // 选择视频
       sendVideo(e) {
         let _file = e.target.files[0];
-        if (_file.type.includes("video") && (/mp4/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
-          this.toastControl("请选择mp4文件");
+          this.toastControl("请选择mp4或者mov文件");
         } else {
           this.toastControl("请选择视频文件");
         }

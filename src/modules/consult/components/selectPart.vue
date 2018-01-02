@@ -5,7 +5,7 @@
       <header class="part-select-title">
         <h3 v-if="!secondShow">点选最不适位置</h3>
       </header>
-      <section class="main-inner-content" :class="{'androidScale':!isIos&&dpr<=3}">
+        <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
           <figure class="body-picture-content">
             <img class="body-picture-img" :src="patientBody" alt="">
@@ -26,8 +26,8 @@
             <!--</section>-->
           </figure>
         </section>
-        <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
       </section>
+      <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
 
       <loading v-show="finish"></loading>
       <transition name="fade">
@@ -393,7 +393,7 @@
    */
   /*新版本三级选项样式*/
   .isMB {
-    padding-bottom: rem(100px);
+    padding-bottom: rem(150px);
   }
 
   .part-box {
@@ -491,7 +491,7 @@
       position: relative;
       border: none;
       height: 100%;
-      top: -1rem;
+      top: -0.3rem;
       & > img {
         position: absolute;
         bottom: 0;

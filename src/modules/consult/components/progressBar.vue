@@ -36,7 +36,7 @@ export default {
 <style lang="scss" rel="stylesheet/scss">
 @import "../../../../scss/library/_common-modules";
 .progressBarBox {
-  padding-top: rem(60px);
+  padding-top: rem(20px);
   padding-bottom: rem(30px);
   .progressItem {
     width: 100%;
