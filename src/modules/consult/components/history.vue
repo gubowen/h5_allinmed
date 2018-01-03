@@ -47,7 +47,7 @@
                                @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
                         <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"    ref="uploader">
-                                                       <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"    ref="uploader">
                       </figure>
                     </li>
@@ -443,7 +443,7 @@ export default {
             }
           }, 3000);
         } else {
-          that.filesObj.unshift(files[i]);
+          that.filesObj.push(files[i]);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -460,7 +460,7 @@ export default {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
                     type,
-                    index,
+                    index, 
                     that.base64Arr[that.uploadIndex]
                   );
                 }
@@ -469,6 +469,8 @@ export default {
           };
         }
       }
+      console.log(this.filesObj);
+      console.log(this.base64Arr);
     },
     //去上传按钮
     uploadBtnFn() {
@@ -605,7 +607,7 @@ export default {
               }
             }
           } else {
-            let num = index ? index : that["imageList" + type].length - 1;
+            let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
             that["imageList" + type][num].finish = false;
