@@ -5,7 +5,7 @@
       <!-- 推荐医生提示 -->
       <section class="doctor-tips">
         <p class="tips-content">
-          请点击“去问诊”或“免费问诊”联系医生，深入沟通诊疗意见。次对话将在为您推荐的医生接诊后关闭
+          请点击“去问诊”或“免费问诊”联系医生，深入沟通诊疗意见。此对话将在为您推荐的医生接诊后关闭
         </p>
       </section>
       <article class="doctor-box">
