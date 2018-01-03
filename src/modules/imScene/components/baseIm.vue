@@ -266,7 +266,7 @@
                    multiple
                    accept="video/*">
             <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
-                   ref="videoSender" capture="camera" 
+                   ref="videoSender" capture="camera"
                    multiple
                    accept="video/*">
           </li>

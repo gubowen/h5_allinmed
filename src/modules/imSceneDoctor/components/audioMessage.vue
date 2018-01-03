@@ -102,8 +102,8 @@
       vertical-align: middle;
       position: absolute;
       left: rem(20px);
-      top: 50%;
-      margin-top: rem(-20px);
+/*      top: 50%;
+      margin-top: rem(-20px);*/
       background: url("../../../../src/common/image/imScene/chat_play.png") no-repeat;
       background-size: contain;
     }

@@ -251,12 +251,22 @@
       <!--支付弹层-->
       <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
                 v-if="payPopupShow"></payPopup>
+      <confirm :confirmParams="{
+      'ensure':'取消',
+      'cancel':'离开',
+      'title':'您的信息正在发送中',
+      'content':'现在离开还需重新发送',
+      }" v-if="isLeave"
+               @cancelClickEvent="goFeedback()"
+               @ensureClickEvent="isLeave =false;"
+      >
+      </confirm>
       <Loading v-if="loading"></Loading>
       <transition name="fade">
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId"></Suggestion>
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></Suggestion>
       </transition>
     </section>
   </div>
@@ -297,6 +307,7 @@
   import MulitpleImage from "./mulitpleImage";
   import FileMessage from "./fileMessage";
   import Suggestion from "components/suggestion";
+  import confirm from "components/confirm";
 
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
@@ -348,7 +359,8 @@
           progress: "0%",
           index: 0
         },
-        patientCustomerId: api.getPara().patientCustomerId,
+        isLeave:false,
+        patientCustomerId: localStorage.getItem("userId")||api.getPara().patientCustomerId,
         onFocus: false,
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
@@ -388,11 +400,14 @@
         deleteMsgIndex: -1,
         toastTips: "",
         toastShow: false,
-        getTargetMsgFinish: false
+        getTargetMsgFinish: false,
       };
     },
 
     methods: {
+      goFeedback () {
+        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
       setFooterPosition() {
         if (IS_IOS) {
           this.footerPosition = "main-input-box relative";
@@ -1830,6 +1845,13 @@
       }
     },
     computed: {
+      leaveFlag () {
+        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       //配合watch图片上传进度使用
       progess() {
         return this.imageProgress.progress;
@@ -1953,7 +1975,8 @@
       Loading,
       Suggestion,
       FileMessage,
-      Toast
+      Toast,
+      confirm
     }
   };
 </script>
