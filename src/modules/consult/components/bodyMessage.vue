@@ -367,7 +367,21 @@
               that.createParams.customerId;
           },
           () => {
-            that.getUserBaseData();
+            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")){
+              if(navigator.userAgent.toLowerCase().includes("iphone")){
+                that.backPopupShow = true;
+              }
+              that.finish = false;
+              window.location.href =
+                "/dist/imScene.html?caseId=" +
+                that.responseCaseId +
+                "&patientId=" +
+                that.createParams.patientId +
+                "&patientCustomerId=" +
+                that.createParams.customerId;
+            }else{
+              that.getUserBaseData();
+            }
           }
         );
       },

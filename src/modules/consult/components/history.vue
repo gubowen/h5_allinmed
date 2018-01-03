@@ -443,7 +443,7 @@ export default {
             }
           }, 3000);
         } else {
-          that.filesObj.push(files[i]);
+          that.filesObj.unshift(files[i]);
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
