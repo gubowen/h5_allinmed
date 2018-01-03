@@ -85,12 +85,17 @@ export default {
   position: absolute;
   top: 50%;
   left: 0;
-  margin-left: -1rem;
-  line-height: rem(75px);
+  margin-left: -1.5rem;
+  text-indent: -.2rem;
+  color: #fff;
+  line-height: rem(70px);
   text-align: center;
   display: block;
   transform:translateY(-50%);
-  @include circle(rem(75px),#CCEDF2);
+  width: rem(136px);
+  height: rem(70px);
+  background: url("../../../../src/common/image/imScene/bullet_withdraw.png");
+  background-size: 100% 100%;
 }
 .disclaimer-content{
   background: #FAFAFB;

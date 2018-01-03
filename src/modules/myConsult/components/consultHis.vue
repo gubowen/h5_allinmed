@@ -19,7 +19,7 @@
             <section class="docType right">
               <p class="docName"><span>{{item.consultationType == 0 ? "唯医门诊医生" : getFullName(item)}}</span><span
                 class="medicalTitleRight">{{item.medicalTitle}}</span></p>
-              <p class="inquiryType">{{getInquiryType(item)}}  {{getCaseTime(item.createTime)}}</p>
+              <p class="inquiryType">{{getInquiryType(item)}} {{getCaseTime(item.createTime)}}</p>
             </section>
           </figure>
           <div class="doctorState right" :class="getStatusName(item).fontGray">{{getStatusName(item).statusName}}</div>
@@ -70,75 +70,80 @@
   import confirm from "components/confirm";
   import wxBind from 'common/js/auth/wxBinding';
   import CheckLogin from 'common/js/auth/checkLogin';
+  import CheckSubscribe from 'common/js/auth/checkSubscribe';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
 
+  const checkSubscribe = new CheckSubscribe();
   const XHRList = {
     getOrderHistoryLists: '/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
     getPicList: '/mcall/patient/recovery/advice/v1/getMapList/'//图片列表
   }
-  export default{
+  export default {
     data() {
       return {
         finish: false,
-        wxTips:false,
+        wxTips: false,
         noFriend: false,
-        errorMsg:"",
-        errorShow:false,
+        errorMsg: "",
+        errorShow: false,
         pageNum: 20,
-        pageStart:0,
+        pageStart: 0,
         items: [],
-        checkFinish:false
+        checkFinish: false,
+        isSubscribe: (api.getPara().isSubscribe && api.getPara().isSubscribe == 1)||localStorage.getItem("isSubscribe") ? true : false
       }
     },
-    mounted(){
+    mounted() {
       //微信中绑定微信
-      siteSwitch.weChatJudge(()=>{
+      checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
+      siteSwitch.weChatJudge(() => {
         wxBind.isBind({
-          callBack:()=>{
+          callBack: () => {
             this.init();
           }
         });
-      },()=>{
+      }, () => {
         console.log("无需绑定微信");
+
         let checkLogin = new CheckLogin();
-        checkLogin.getStatus().then((res)=>{
-          if(res.data.responseObject.responseStatus){
+        checkLogin.getStatus().then((res) => {
+          if (res.data.responseObject.responseStatus) {
 
             this.init();
-          }else{
-            localStorage.setItem("backUrl",window.location.href);
+          } else {
+            localStorage.setItem("backUrl", window.location.href);
             window.location.href = '/dist/mLogin.html';
           }
         })
       });
     },
     methods: {
-      init(){
+      init() {
         if (!api.checkOpenId()) {
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
 
-        this.$nextTick(()=>{
-          this.checkFinish=true;
+        this.$nextTick(() => {
+          this.checkFinish = true;
           console.log(localStorage.getItem('userId'));
         })
       },
-      toWXchat(){
+      toWXchat() {
         this.wxTips = false;
         this.$router.push({
-          name:"wechat"
+          name: "wechat"
         })
       },
-      onInfinite($state){
+      onInfinite($state) {
         const that = this;
         api.ajax({
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: localStorage.getItem("userId") ||api.getPara().customerId ,
+            patientCustomerId: localStorage.getItem("userId") || api.getPara().customerId,
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,
@@ -148,28 +153,30 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           timeout: 30000,
-          beforeSend(){
+          beforeSend() {
             that.finish = true;
           },
-          done(response){
+          done(response) {
             if (response && response.responseObject.responseData.dataList && response.responseObject.responseData.dataList.length > 0) {
-              siteSwitch.weChatJudge(()=>{
+              siteSwitch.weChatJudge(() => {
                 console.log("不需弹层")
-              },()=>{
-                if(that.pageStart>0){
+              }, () => {
+                if (that.pageStart > 0) {
                   that.wxTips = false;
-                }else{
-                  that.wxTips = true;
+                } else {
+                  if (!that.isSubscribe){
+                    that.wxTips = true;
+                  }
                 }
               });
               that.pageStart += that.pageNum;
               let temp = response.responseObject.responseData.dataList;
               that.items = that.items.concat(temp);
               $state.loaded();
-            }else{
-              if(that.pageStart>0){
+            } else {
+              if (that.pageStart > 0) {
                 $state.complete()
-              }else{
+              } else {
                 that.noFriend = true;
               }
             }
@@ -177,7 +184,7 @@
           }
         })
       },
-      getImgUrl(opt){
+      getImgUrl(opt) {
         let logoImg = '';
         //分诊医生
         if (opt.consultationType == 0) {
@@ -197,14 +204,14 @@
         }
         return logoImg;
       },
-      getFullName(opt){
+      getFullName(opt) {
         if (opt.fullName.length > 6) {
           return opt.fullName.substring(0, 6) + "..."
         } else {
           return opt.fullName;
         }
       },
-      getStatusName(opt){
+      getStatusName(opt) {
         let statusName = '', fontGray = '';
         if (opt.consultationType == 0) {
           //分诊医生
@@ -258,7 +265,7 @@
           fontGray: fontGray
         }
       },
-      getInquiryType(opt){
+      getInquiryType(opt) {
         //判断问诊类型
         let consultationLevel = '';
         if (opt.consultationType == 1) {
@@ -275,7 +282,7 @@
         }
         return consultationLevel;
       },
-      getCaseTime(times){
+      getCaseTime(times) {
         let time = times.substring(0, 19).replace(/-/g, "/");
         let format = function (num) {
           return num > 9 ? num : "0" + num;
@@ -304,46 +311,61 @@
         }
         return result;
       },
-      hrefToConsult(){
-        window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId||localStorage.getItem("userId")}`;
+      hrefToConsult() {
+        window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId || localStorage.getItem("userId")}`;
       },
-      hrefToSuggest(opt){
-        siteSwitch.weChatJudge(()=>{
-          if (localStorage.getItem("userId") || api.getPara().customerId){
+      hrefToSuggest(opt) {
+        siteSwitch.weChatJudge(() => {
+          if (localStorage.getItem("userId") || api.getPara().customerId) {
             window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
-          }else{
-            window.location.href='/dist/mLogin.html';
+          } else {
+            window.location.href = '/dist/mLogin.html';
           }
-        },()=>{
-          this.wxTips = true;
-        })
-      },
-      getThisItem(opt){
-        siteSwitch.weChatJudge(()=>{
-          //缓存orderSourceId
-          sessionStorage.setItem("orderSourceId", opt.consultationId);
-          //缓存医生信息
-          if (opt.consultationType == 1) {
-            let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
-            localStorage.setItem("doctorName", opt.fullName);
-            localStorage.setItem("doctorLogo", docLogo);
-            if (opt.caseType == 10 || opt.caseType == 11) {
-              window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+        }, () => {
+          if (this.isSubscribe) {
+            if (localStorage.getItem("userId") || api.getPara().customerId) {
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
             } else {
-              window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+              window.location.href = '/dist/mLogin.html';
             }
           } else {
-            if (api.getPara().customerId||localStorage.getItem("userId")){
-              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId +'&patientCustomerId=' + (api.getPara().customerId||localStorage.getItem("userId")) + '&patientId=' + opt.patientId
-            }else{
-              window.location.href='/dist/mLogin.html';
-            }
+            this.wxTips = true;
           }
-        },()=>{
-          this.wxTips = true;
         })
       },
-      goToUploadPic(opt){
+      getThisItem(opt) {
+        siteSwitch.weChatJudge(() => {
+          this.goHref(opt);
+        }, () => {
+          if (this.isSubscribe) {
+            this.goHref(opt);
+          } else {
+            this.wxTips = true;
+          }
+        })
+      },
+      goHref(opt) {
+        //缓存orderSourceId
+        sessionStorage.setItem("orderSourceId", opt.consultationId);
+        //缓存医生信息
+        if (opt.consultationType == 1) {
+          let docLogo = (opt.logoUrl || "/image/img00/doctorMain/doc_logo.png");
+          localStorage.setItem("doctorName", opt.fullName);
+          localStorage.setItem("doctorLogo", docLogo);
+          if (opt.caseType == 10 || opt.caseType == 11) {
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+          } else {
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+          }
+        } else {
+          if (api.getPara().customerId || localStorage.getItem("userId")) {
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientCustomerId=' + (api.getPara().customerId || localStorage.getItem("userId")) + '&patientId=' + opt.patientId
+          } else {
+            window.location.href = '/dist/mLogin.html';
+          }
+        }
+      },
+      goToUploadPic(opt) {
         let that = this;
         api.ajax({
           url: XHRList.getPicList,
@@ -359,7 +381,7 @@
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           timeout: 30000,
-          done(response){
+          done(response) {
             console.log(response.responseObject.responseData.dataList)
             if (response && response.responseObject.responseData.dataList.length > 0) {
               let items = response.responseObject.responseData.dataList[0];
@@ -382,8 +404,9 @@
                     "adviceName": elemen.inspectionName
                   })
                 })
-              };
-              localStorage.setItem("picList",JSON.stringify(hisPicLists));
+              }
+              ;
+              localStorage.setItem("picList", JSON.stringify(hisPicLists));
               that.$router.push({
                 name: "uploadPic",
                 params: {
@@ -396,7 +419,7 @@
               });
             }
           },
-          fail(error){
+          fail(error) {
 //            document.querySelector(".ev-loading").style.display="none";
             console.log("数据错误");
             console.log(error);
@@ -469,10 +492,10 @@
   .orderList {
     box-sizing: border-box;
     min-height: 100%;
-    .orderHistoryBox{
-      background:#eeeeee;
+    .orderHistoryBox {
+      background: #eeeeee;
       border-top: 1px solid transparent;
-      margin-bottom:rem(100px);
+      margin-bottom: rem(100px);
     }
     .orderHistoryItem {
       margin: rem(20px) rem(20px) 0;
@@ -576,9 +599,9 @@
     }
   }
 
-  .no-more{
-    display:block;
-    line-height:rem(50px);
+  .no-more {
+    display: block;
+    line-height: rem(50px);
     @include font-dpr(16px);
   }
 

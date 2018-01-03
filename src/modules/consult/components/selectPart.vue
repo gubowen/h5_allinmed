@@ -3,9 +3,9 @@
     <progerssBar :progerssBarParams="{progerssParams:'1'}"></progerssBar>
     <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
       <header class="part-select-title">
-        <h3 v-if="!secondShow">点选最不适位置：</h3>
+        <h3 v-if="!secondShow">点选最不适位置</h3>
       </header>
-      <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
+        <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
           <figure class="body-picture-content">
             <img class="body-picture-img" :src="patientBody" alt="">
@@ -26,8 +26,8 @@
             <!--</section>-->
           </figure>
         </section>
-        <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
       </section>
+      <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
 
       <loading v-show="finish"></loading>
       <transition name="fade">
@@ -393,7 +393,7 @@
    */
   /*新版本三级选项样式*/
   .isMB {
-    padding-bottom: rem(100px);
+    padding-bottom: rem(150px);
   }
 
   .part-box {
@@ -464,12 +464,12 @@
 
   .part-select-title {
     position: absolute;
-    background: #FAFAFA;
+    background: #ebebeb;
     border-top-right-radius: rem(9999px);
     border-bottom-right-radius: rem(9999px);
     h3 {
       line-height: 1;
-      padding: rem(28px) rem(50px);
+      padding: rem(20px) rem(30px);
       @include font-dpr(16px);
       color: #666666;
       font-weight: normal;
@@ -480,18 +480,18 @@
     margin-top: rem(0px);
     height: 100%;
     &.front {
-      background: url("../../../common/image/img00/patientConsult/front_bg.png") no-repeat center center;
+      background: url("../../../common/image/img00/patientConsult/bg_front.png") no-repeat center center;
       background-size: contain;
     }
     &.back {
-      background: url("../../../common/image/img00/patientConsult/back_bg.png") no-repeat center center;
+      background: url("../../../common/image/img00/patientConsult/bg_behind.png") no-repeat center center;
       background-size: contain;
     }
     &-content {
       position: relative;
       border: none;
       height: 100%;
-      top: -1rem;
+      top: -0.3rem;
       & > img {
         position: absolute;
         bottom: 0;

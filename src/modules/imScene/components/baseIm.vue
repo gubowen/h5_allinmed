@@ -180,6 +180,12 @@
             :tipsText="JSON.parse(msg.content).text"
           >
           </MiddleTips>
+          <!--分诊台发送问诊-->
+          <MiddleTips
+            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'consultFinishTip'"
+            :tipsType="7"
+          >
+          </MiddleTips>
           <!--消息撤回提示-->
           <div :key="0">
             <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
@@ -257,9 +263,11 @@
             </figure>
             <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
                    ref="videoSender"
+                   multiple
                    accept="video/*">
             <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
                    ref="videoSender" capture="camera"
+                   multiple
                    accept="video/*">
           </li>
           <li class="bottom-item">
@@ -269,10 +277,10 @@
             </figure>
             <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
                    ref="pdfSender"
-                   accept="application/pdf">
+                   accept="application/pdf"
+                  >
             <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
-                   ref="pdfSender"
-                   accept="application/pdf">
+                   ref="pdfSender" accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -283,6 +291,16 @@
         'title':'请确认微信支付是否已经完成'
         }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false;localStorage.removeItem('payOk');"
              @ensureClickEvent="viewPayResult()">
+    </confirm>
+    <confirm :confirmParams="{
+      'ensure':'取消',
+      'cancel':'离开',
+      'title':'您的信息正在发送中',
+      'content':'现在离开还需重新发送',
+      }" v-if="isLeave"
+        @cancelClickEvent="goFeedback()"
+        @ensureClickEvent="isLeave =false;"
+    >
     </confirm>
     <loading :show="finish"></loading>
     <transition name="fade">
@@ -296,7 +314,7 @@
         }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
       ></ensure>
     </transition>
-    <suggestion :customerId="patientCustomerId"></suggestion>
+    <suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></suggestion>
   </section>
 
 </template>
@@ -342,6 +360,9 @@
 
   import DeleteMsg from "common/js/IM_BaseMethod/deleteMsg";
   import DeleteMsgTips from "common/js/IM_BaseMethod/deleteMsgAfterTips.js";
+
+  import getFileType from "common/js/util/getFileType.js";
+
   import "babel-polyfill";
 
   let nim;
@@ -423,11 +444,16 @@
         // toastTips: "",
         // toastShow: false,
         deleteMsgIndex: -1,
-        mList: []
+        mList: [],
+        isLeave: false,
       };
     },
 
     methods: {
+      // 去意见反馈；
+      goFeedback () {
+        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
       // 控制 vuex toast控制
       toastControl(message) {
         store.commit("setToastTips", message);
@@ -611,7 +637,6 @@
           done(error, obj) {
             that.msgList = obj.msgs.reverse();
             console.log("dom更新前");
-            console.log(obj);
             that.getTimeStampShowList();
             // 判断是否需要发送推荐医生
             that.sendSuggestDoctor();
@@ -994,13 +1019,13 @@
                 case 2:
                 case 3:
                 case 7:
+                case 8:
                   break;
                 case -1:
                 case 0:
                 case 4:
                 case 5:
                 case 6:
-                case 8:
                 case 9:
                 case 10:
                 case 11:
@@ -1169,7 +1194,12 @@
       sendImage(e) {
         const that = this;
         console.log(e.target.files);
+
         if (e.target.files.length > 1) {
+          if (e.target.files.length > 9) {
+            this.toastControl("您最多只能选择9张图片");
+            e.target.files = e.target.files.slice(0, 10);
+          }
           this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
@@ -1345,14 +1375,12 @@
       // 选择视频
       sendVideo(e) {
         let _file = e.target.files[0];
-        if (_file.type.includes("video")) {
+        console.log(_file.type);
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
+        } else if (_file.type.includes("video")){
+          this.toastControl("请选择mp4或者mov文件");
         } else {
-          // this.toastTips = `请选择视频文件`;
-          // this.toastShow = true;
-          // setTimeout(() => {
-          //   this.toastShow = false;
-          // }, 2000);
           this.toastControl("请选择视频文件");
         }
       },
@@ -1419,17 +1447,15 @@
       // 选择pdf
       sendPdf(e) {
         let _file = e.target.files[0];
-        console.log(_file)
-        if (_file.type.includes("pdf")) {
-          this.sendPdfFile(_file);
-        } else {
-          // this.toastTips = `请选择pdf文件`;
-          // this.toastShow = true;
-          // setTimeout(() => {
-          //   this.toastShow = false;
-          // }, 2000);
-          this.toastControl("请选择pdf文件");
-        }
+        getFileType(_file).then((flag)=>{
+          if (_file.type.includes("pdf")) {
+            this.sendPdfFile(_file);
+          } else if (_file.type.length===0&&flag){
+            this.sendPdfFile(_file);
+          }else{
+            this.toastControl("请选择pdf文件");
+          }
+        });
       },
       // 发送pdf
       sendPdfFile(_file) {
@@ -1471,6 +1497,7 @@
               // show file to the user
               file = Object.assign(file, {
                 name: _file.name,
+                ext:"pdf"
               });
               console.log(file);
               if (!error) {
@@ -1746,6 +1773,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
+              that.refreshState(9);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +
@@ -1842,6 +1870,14 @@
       }
     },
     computed: {
+      // 是否可以离开，传给suggest 的参数
+      leaveFlag () {
+        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       // toast 提示
       toastTips() {
         return this.$store.state.toastTips;
@@ -2115,17 +2151,34 @@
   }
 
   // 撤回按钮
+  // .delete-msg-btn {
+  //   @include font-dpr(14px);
+  //   position: absolute;
+  //   top: 50%;
+  //   left: 0;
+  //   margin-left: -1rem;
+  //   line-height: rem(75px);
+  //   text-align: center;
+  //   display: block;
+  //   transform: translateY(-50%);
+  //   @include circle(rem(75px), #CCEDF2);
+  // }
   .delete-msg-btn {
     @include font-dpr(14px);
     position: absolute;
     top: 50%;
     left: 0;
-    margin-left: -1rem;
-    line-height: rem(75px);
+    margin-left: -1.5rem;
+    text-indent: -.2rem;
+    color: #fff;
+    line-height: rem(70px);
     text-align: center;
     display: block;
-    transform: translateY(-50%);
-    @include circle(rem(75px), #CCEDF2);
+    transform:translateY(-50%);
+    width: rem(136px);
+    height: rem(70px);
+    background: url("../../../../src/common/image/imScene/bullet_withdraw.png");
+    background-size: 100% 100%;
   }
 
   //输入区

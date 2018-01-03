@@ -5,7 +5,7 @@
       <!-- 推荐医生提示 -->
       <section class="doctor-tips">
         <p class="tips-content">
-          请点击“去问诊”或“免费问诊”联系医生，深入沟通诊疗意见。次对话将在为您推荐的医生接诊后关闭
+          请点击“去问诊”或“免费问诊”联系医生，深入沟通诊疗意见。此对话将在为您推荐的医生接诊后关闭
         </p>
       </section>
       <article class="doctor-box">
@@ -78,7 +78,7 @@
 
     <!--处置建议-->
     <section class="main-message-box" v-if="treatmentObj.allData.length">
-      <article class="check-suggest-box">
+      <article class="advice-box">
         <header class="check-suggest-title">根据您的情况，为您推荐以下康复方式，请务必在医生的指导下进行</header>
         <section class="check-suggest-bg"></section>
         <section class="check-suggest-content">
@@ -120,6 +120,9 @@
                    @click="goToUpload">
             上传检查资料
           </section>
+        </section>
+        <section class="tips-content">
+          重要提示：在线咨询不能代替面诊，医生建议仅供参考。
         </section>
       </article>
     </section>
@@ -524,8 +527,8 @@
       /*background-size: rem(32px) rem(32px);*/
     /*}*/
   }
-  /*检查检验样式和处置建议样式，两者一样*/
-  .check-suggest-box{
+  /*处置建议样式*/
+  .advice-box{
     width: rem(690px);
     margin: 0 auto;
     .check-suggest-title{
@@ -590,6 +593,83 @@
       }
     }
   }
+  /*检查检验样式*/
+  .check-suggest-box{
+    width: rem(690px);
+    margin: 0 auto;
+    .check-suggest-title{
+      box-sizing: border-box;
+      padding: rem(36px) rem(36px) rem(10px);
+      background: #EDEEEE;
+      color: #666666;
+      @include font-dpr(14px);
+      border: 1px solid #E4E9EB;
+      border-radius: rem(12px) rem(12px) rem(0px) rem(0px);
+      border-bottom: none;
+    }
+    .check-suggest-bg{
+      width: rem(690px);
+      height: rem(54px);
+      background: url("../../../common/image/imScene/list_style@2x.png") no-repeat;
+      background-size: cover;
+    }
+    .check-suggest-content{
+      color: #333333;
+      padding: rem(20px) 0 rem(70px);
+      @include font-dpr(17px);
+      background: #FFFFFF;
+      border-left: 1px solid #e4e9eb;
+      border-right: 1px solid #e4e9eb;
+      // border-radius:rem(0px) rem(0px) rem(12px) rem(12px);
+      .check-suggest-list{
+        .check-suggest-item{
+          color: #222222;
+          box-sizing: border-box;
+          line-height: 1;
+          padding: rem(0px) rem(64px);
+          position: relative;
+          font-weight: bold;
+          &::before{
+            content: '';
+            width: rem(8px);
+            height: rem(8px);
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            margin-top: rem(-6px);
+            left: rem(39px);
+            background: #406181;
+            border-radius: rem(4px);
+          }
+        }
+        .check-suggest-item +.check-suggest-item{
+          margin-top: rem(50px);
+        }
+      }
+      .check-suggest-btn{
+        background: #2FC5BD;
+        border-radius: 999px;
+        width: rem(560px);
+        margin: rem(56px) auto rem(0px);
+        color: #FFFFFF;
+        text-align: center;
+        line-height: 1;
+        @include font-dpr(18px);
+        padding: rem(30px) 0;
+      }
+    }
+    .tips-content{
+      padding:rem(18px) rem(36px);
+      background: #FAFAFB;
+      color: #97A8BA;
+      @include font-dpr(13px);
+      border: 1px solid  #e4e9eb;
+      border-top: none;
+      border-bottom-right-radius: rem(21px);
+      border-bottom-left-radius: rem(21px);
+    }
+  }
+
   //患教知识
   .knowledge-box{
     width: rem(690px);

@@ -85,11 +85,14 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   .audio-message {
-    width: 4rem;
+    width: 6.8rem;
     text-align: right;
     position: relative;
     &.playing:before{
       animation:fade_in_out 1s linear infinite;
+    }
+    .disclaimer-content{
+      text-align: left;
     }
     &:before {
       content: '';
@@ -99,8 +102,8 @@
       vertical-align: middle;
       position: absolute;
       left: rem(20px);
-      top: 50%;
-      margin-top: rem(-20px);
+/*      top: 50%;
+      margin-top: rem(-20px);*/
       background: url("../../../../src/common/image/imScene/chat_play.png") no-repeat;
       background-size: contain;
     }

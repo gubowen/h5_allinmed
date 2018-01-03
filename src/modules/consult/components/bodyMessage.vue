@@ -77,6 +77,7 @@
   import backPopup from "components/backToastForConsult";
   import Picker from 'better-picker';
   import 'common/styles/_ustbPicker.css';
+  import "babel-polyfill";
 
   const XHRList = {
     createCase: "/mcall/customer/patient/case/v2/create/",
@@ -110,7 +111,7 @@
           visitSiteId: 17,
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
-          customerId: localStorage.getItem('userId'),
+          customerId: "",
           patientId: "",
           illnessHistoryId: "",
           illnessHistory: "",
@@ -140,6 +141,7 @@
         this.heightContent = this.$route.params.height || "";
         this.weightContent = this.$route.params.weight || "";
         this.createParams.patientId = params.patientId;
+        this.createParams.customerId = params.customerId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
         this.createParams.illnessHistory = params.illnessHistory;
         this.createParams.treatmentHospital = params.treatmentHospital;
@@ -157,8 +159,8 @@
           this[element] = this[element].replace(ranges, "");
         }
         let content = this[element];
-        if (api.getByteLen(content) > limit * 2) {
-          this[element] = api.getStrByteLen(content, limit * 2);
+        if (api.getByteLen(content) > limit ) {
+          this[element] = api.getStrByteLen(content, limit );
           this.errorShow = true;
           this.errorMsg = `最多只能输入${limit}字`;
           setTimeout(() => {
@@ -326,6 +328,9 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
               localStorage.removeItem("noMR");
+              if(navigator.userAgent.toLowerCase().includes("iphone")){
+                that.backPopupShow = true;
+              }
               that.finish = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=report&caseId=" +
@@ -349,6 +354,9 @@
         localStorage.removeItem("complication");
         siteSwitch.weChatJudge(
           () => {
+            if(navigator.userAgent.toLowerCase().includes("iphone")){
+              that.backPopupShow = true;
+            }
             that.finish = false;
             window.location.href =
               "/dist/imScene.html?caseId=" +
@@ -359,7 +367,21 @@
               that.createParams.customerId;
           },
           () => {
-            that.getUserBaseData();
+            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")){
+              if(navigator.userAgent.toLowerCase().includes("iphone")){
+                that.backPopupShow = true;
+              }
+              that.finish = false;
+              window.location.href =
+                "/dist/imScene.html?caseId=" +
+                that.responseCaseId +
+                "&patientId=" +
+                that.createParams.patientId +
+                "&patientCustomerId=" +
+                that.createParams.customerId;
+            }else{
+              that.getUserBaseData();
+            }
           }
         );
       },
@@ -503,6 +525,9 @@
           }),
           done(error, msg) {
             console.log("新用户提醒发送...");
+            if(navigator.userAgent.toLowerCase().includes("iphone")){
+              that.backPopupShow = true;
+            }
             that.finish = false;
             that.$router.push({
               name: "conGuide"

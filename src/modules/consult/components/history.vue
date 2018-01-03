@@ -47,7 +47,7 @@
                                @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
                         <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"    ref="uploader">
-                                                       <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"    ref="uploader">
                       </figure>
                     </li>
@@ -64,7 +64,7 @@
                     </li>
                   </ul>
                 </form>
-                <p class="upLoadContentNum">已上传{{imageList1.length}}张<span v-show="imageList1.length>0">，</span><span v-show="imageList1.length>0" class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">查看全部</span></p>
+                <p class="upLoadContentNum"  v-show="imageList1.length>0">已上传{{imageList1.length}}张，<span class="upLoadViewAll" @click="showBigImg( {}, 0 , 1)">查看全部</span></p>
                 <!-- <p class="upLoadForPerson"><span class="upLoadForPersonIcon"></span>影像资料是您咨询的重要依据，请尽量上传</p> -->
                 <form class="qu-upFormBox qu-upFormBox-s" action="" v-show="false">
                   <figure class="qu-upLoadTitle-s">
@@ -115,7 +115,7 @@
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
                       @input="contentLimit"></textarea>
               <span class="qu-underline"></span>
-              <p class="limit" v-show="getByteLen(medicalMessage)<=100">{{getByteLen(medicalMessage)}}</p>
+              <p class="limit" v-show="getByteLen(medicalMessage.length)<=50">{{getByteLen(medicalMessage.length)}}</p>
               <p class="qu-setMedicineTipText">填写示例:双氯芬酸钠缓释片、盐酸乙哌立松</p>
             </section>
           </section>
@@ -336,7 +336,11 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
-    store.commit("setbottomNav",true);
+    siteSwitch.weChatJudge(()=>{
+      store.commit("setbottomNav",false);
+    },()=>{
+      store.commit("setbottomNav",true);
+    });
     if (this.upLoadGuideTip == "2") {
       //展示上传按钮
       this.uploadEvent();
@@ -456,7 +460,7 @@ export default {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
                     type,
-                    index,
+                    index, 
                     that.base64Arr[that.uploadIndex]
                   );
                 }
@@ -465,17 +469,27 @@ export default {
           };
         }
       }
+      console.log(this.filesObj);
+      console.log(this.base64Arr);
     },
     //去上传按钮
     uploadBtnFn() {
       let _this = this;
       _this.upLoadGuideTip = "2";
+      let _customerId = localStorage.getItem('customerId')?localStorage.getItem('customerId'):localStorage.getItem('userId');
+      if (localStorage.getItem('customerId')) {
+        _customerId = localStorage.getItem('customerId');
+      } else if (localStorage.getItem('userId')) {
+        _customerId = localStorage.getItem('userId');
+      } else {
+        _customerId = api.getPara().customerId;
+      }
       if (_this.upload.has) {
         return;
       } else {
         //是否上传过检测
         checkUpLoadStatus
-          .getDataInit({patientCustomerId:localStorage.getItem('userId')})
+          .getDataInit({patientCustomerId:_customerId})
           .then(res => {
             if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
             // 上传过
@@ -531,7 +545,7 @@ export default {
           fail: false
         };
       } else {
-        that["imageList" + type].push({
+        that["imageList" + type].unshift({
           blob: _localViewUrl,
           imgId: "",
           uploading: true,
@@ -555,7 +569,8 @@ export default {
         timeout: 300000,
         done(res) {
           if (res.responseObject.responseStatus) {
-            let num = index ? index : that["imageList" + type].length - 1;
+            // let num = index ? index : that["imageList" + type].length - 1;
+            let num = index ? index : 0;
             that["imageList" + type][num].imgId = res.responseObject.responsePk;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = false;
@@ -592,7 +607,7 @@ export default {
               }
             }
           } else {
-            let num = index ? index : that["imageList" + type].length - 1;
+            let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
             that["imageList" + type][num].finish = false;
@@ -815,7 +830,17 @@ export default {
         this.validateToast("请填写药物名称");
         return false;
       }
-
+      //是否存在上传失败的图片
+      let _failNum = 0;
+      for(let item of this.imageList1){
+        if (item.fail) {
+          _failNum++;
+        }
+      }
+      if (_failNum>0) {
+        this.validateToast("请完成未上传成功的图片");
+        return false;
+      }
       return true;
     },
     validateToast(content) {
@@ -826,15 +851,17 @@ export default {
       }, 2000);
     },
     contentLimit() {
-      console.log(api.getByteLen(this.medicalMessage));
-      console.log(api.getStrByteLen(this.medicalMessage));
-      if (api.getByteLen(this.medicalMessage) > 1000) {
-        this.medicalMessage = api.getStrByteLen(this.medicalMessage, 1000);
+      if (this.medicalMessage.length > 500) {
+        this.medicalMessage = this.medicalMessage.substring(0,500);
         this.validateToast("最多只能输入500字");
       }
     },
     getByteLen(len) {
-      return Math.ceil((1000 - api.getByteLen(len)) / 2);
+      if(500 - len <= 0){
+        return 0
+      }else{
+        return 500 - len;
+      }
     },
     clearPageData() {
       let _this = this;

@@ -14,7 +14,6 @@
         <transition name="fade">
           <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&fileMessage.from===userData.account">撤回</button>
         </transition>
-        <!-- <header class="mulit-title">视频</header> -->
         <section class="middle-tip-box" v-if="progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
@@ -28,6 +27,9 @@
             <!-- <figcaption class="file-name">{{fileMessage.file.fileName}}</figcaption> -->
             <figcaption class="file-name">{{custom.name}}</figcaption>
           </figure>
+          <section class="tips-content" v-if="fileMessage.from===targetData.account">
+            重要提示：在线咨询不能代替面诊，医生建议仅供参考。
+          </section>
         </section>
       </figcaption>
       <figure class="main-message-img" v-if="fileMessage.from===userData.account">
@@ -112,8 +114,22 @@
   }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../../../scss/library/_common-modules";
+  .file-message-box{
+    position: relative;
+  }
+  .tips-content{
+    padding:rem(18px) rem(36px);
+    background: #FAFAFB;
+    color: #97A8BA;
+    @include font-dpr(13px);
+    // border: 1px solid  #e4e9eb;
+    border-top: none;
+    margin: rem(34px) rem(-36px) 0;
+    border-bottom-right-radius: rem(21px);
+    border-bottom-left-radius: rem(21px);
+  }
   .file-content{
     width: rem(442px);
     height: rem(132px);
@@ -136,5 +152,8 @@
       -webkit-line-clamp: 2;
       overflow: hidden;
     }
+  }
+  .main-message-box-item.others-message > .main-message-content{
+    padding-bottom: 0;
   }
 </style>

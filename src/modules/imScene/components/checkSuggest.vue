@@ -46,6 +46,9 @@
           上传检查资料
         </section>
       </section>
+      <section class="tips-content">
+        重要提示：在线咨询不能代替面诊，医生建议仅供参考。
+      </section>
     </article>
   </section>
   </div>
@@ -186,9 +189,9 @@ export default {
     padding: rem(20px) 0 rem(70px);
     @include font-dpr(17px);
     background: #ffffff;
-    border: 1px solid #e4e9eb;
-    border-top: none;
-    border-radius: rem(0px) rem(0px) rem(12px) rem(12px);
+    border-left: 1px solid #e4e9eb;
+    border-right: 1px solid #e4e9eb;
+    // border-radius: rem(0px) rem(0px) rem(12px) rem(12px);
     .check-suggest-list {
       .check-suggest-item {
         color: #222222;
@@ -243,6 +246,17 @@ export default {
       @include font-dpr(18px);
       padding: rem(30px) 0;
     }
+  }
+
+  .tips-content{
+    padding:rem(18px) rem(36px);
+    background: #FAFAFB;
+    color: #97A8BA;
+    @include font-dpr(13px);
+    border: 1px solid  #e4e9eb;
+    border-top: none;
+    border-bottom-right-radius: rem(21px);
+    border-bottom-left-radius: rem(21px);
   }
 }
 </style>

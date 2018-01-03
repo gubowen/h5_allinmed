@@ -6,11 +6,12 @@
         <section class="consult-wrapper" v-show="finish">
           <section class="consult-inner">
             <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
-              <header class="consult-inner-title">
+              <header class="consult-inner-title" :class="{'consolt-specialOne':pIndex==0}">
                 <h2>
                   <span>{{question.questionName}}</span>
                   <em v-if="question.questionType==2">(可多选)</em>
                 </h2>
+                <p class="consult-text-discript" v-if="pIndex==0">医生需要了解你的身体状况，不适程度</p>
               </header>
               <section class="consult-question-inner"
                        :class="{mSelector:question.questionType==2,sSelector:question.questionType==1}"
@@ -32,9 +33,9 @@
                   >
                   </textarea>
                     <p class="text-num-tips"
-                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc)<=500"
+                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50"
                     >
-                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc)}}/500</p>
+                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc.length)}}/50</p>
                   </figure>
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
@@ -709,10 +710,10 @@
             ].optionDesc.replace(ranges, "");
         }
         let content = this.questionList[pIndex].optionList[index].optionDesc;
-        if (api.getByteLen(content) > 1000) {
+        if (content.length > 500) {
           this.questionList[pIndex].optionList[
             index
-            ].optionDesc = api.getStrByteLen(content, 1000);
+            ].optionDesc = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -874,8 +875,8 @@
           this.complication = this.complication.replace(ranges, "");
         }
         let content = this.complication;
-        if (api.getByteLen(content) > 1000) {
-          this.complication = api.getStrByteLen(content, 1000);
+        if (content.length > 500) {
+          this.complication = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -895,7 +896,11 @@
         this.$router.go(-1);
       },
       getByteLen(len) {
-        return 1000 - api.getByteLen(len);
+        if(500 - len <= 0){
+          return 0
+        }else{
+          return 500 - len;
+        }
       }
     },
     components: {
@@ -993,6 +998,9 @@
     .consult-inner-title {
       padding: rem(60px) rem(60px);
       padding-bottom: rem(50px);
+      &.consolt-specialOne{
+        padding: rem(60px) rem(60px) rem(40px) rem(60px);
+      }
       & > h2 {
         @include font-dpr(20px);
         color: #222222;
@@ -1016,6 +1024,11 @@
           vertical-align: middle;
         }
       }
+      .consult-text-discript{
+          @include font-dpr(16px);
+          color: #666666;
+          padding-top: rem(4px);
+        }
     }
   }
 
@@ -1375,6 +1388,7 @@
       .consult-inner-title h2 {
         @include font-dpr(16px);
         color: #333333;
+        
       }
       .consult-question-item {
         @include font-dpr(16px);

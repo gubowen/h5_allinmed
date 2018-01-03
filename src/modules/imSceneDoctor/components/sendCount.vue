@@ -1,9 +1,9 @@
 <template>
   <section class="send-count-box">
     <article class="send-count">
-      <span>{{doctorName}}医生送给您</span>
+      <span>{{doctorName}}医生赠送了您</span>
       <em>3</em>
-      <span>次免费回答机会</span>
+      <span>条回复</span>
     </article>
   </section>
 </template>

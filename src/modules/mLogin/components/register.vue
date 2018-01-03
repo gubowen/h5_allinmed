@@ -8,18 +8,18 @@
 
       <ul class="loginRegisterContent">
         <li class="registerContent formBox">
-            <p class="phoneInput">
-              <input type="number" name="phone" @input="inputMaxLength('phone',11)" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号" :class="{'hasContent':phone.length>0}">
+          <p class="phoneInput">
+            <input type="number" name="phone" @input="inputMaxLength('phone',11)" v-validate="'required|mobile'" @blur="validateBlur('phone')" v-model="phone" placeholder="请输入手机号" :class="{'hasContent':phone.length>0}">
 
-              <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
-            </p>
-            <p class="codeInput">
-              <input :type='passwordHide?"password":"text"' :class="{'hasContent':password.length>0}" name="password" @input="inputMaxLength('password',20)" v-validate="'required|isEmoji|max_length:20|min_length:6'" v-model="password" placeholder="设置密码（至少6位）" @blur="validateBlur('password')">
-              <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
-              <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()' ></i>
-            </p>
-            <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
-            <button class="loginButton" :disabled='isRegister' :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
+            <i class="icon-clear" v-if='phone.length' @click='phone = ""'></i>
+          </p>
+          <p class="codeInput">
+            <input :type='passwordHide?"password":"text"' :class="{'hasContent':password.length>0}" name="password" @input="inputMaxLength('password',20)" v-validate="'required|isEmoji|max_length:20|min_length:6'" v-model="password" placeholder="设置密码（至少6位）" @blur="validateBlur('password')">
+            <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
+            <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()' ></i>
+          </p>
+          <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
+          <button class="loginButton" :disabled='isRegister' :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
         </li>
       </ul>
 

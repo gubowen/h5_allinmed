@@ -83,17 +83,17 @@ export default {
       pagination : '.swiper-pagination',
       paginationType : 'fraction',
       onInit: function(swiper) {
-        console.log(swiper.activeIndex + "当前索引");
-        console.log("sipwer初始化完成!,回调函数，初始化后执行。");
+        // console.log(swiper.activeIndex + "当前索引");
+        // console.log("sipwer初始化完成!,回调函数，初始化后执行。");
         //  setTimeout(function(){
         // $.openPhotoGallery($(".swiper-slide-active").eq(0));
         //  },500);
       },
       onTap: function(swiper, event) {
-        console.log(swiper.activeIndex); //swiper当前的活动块的索引
+        // console.log(swiper.activeIndex); //swiper当前的活动块的索引
       },
       onSlideChangeStart(swiper) {
-        console.log(swiper.activeIndex + "当前索引");
+        // console.log(swiper.activeIndex + "当前索引");
         // setTimeout(function(){
         // $.openPhotoGallery($(".swiper-slide-active").eq(0));
         // },500);
@@ -116,7 +116,7 @@ export default {
       // pagination: ".swiper-pagination",
       // paginationType: "fraction",
       imgElementCallBack: function() {
-        console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+        // console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
       },
       onTap: function(swiper, event) {
         swiper.slideTo(swiper.activeIndex);
@@ -157,6 +157,7 @@ html {
     }
   }
   .gallery-thumbs {
+    height: 13%;
     padding: rem(24px) 0;
     opacity: 0.96;
     background: #555555;

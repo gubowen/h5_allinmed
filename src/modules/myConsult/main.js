@@ -11,6 +11,7 @@ import App from './App';
 import VueRouter from 'vue-router';
 import consultHis from "./components/consultHis"
 import uploadPic from "./components/upLoadPicHis"
+import upLoadTip from 'components/shootTips';
 import showBigImg from '../../components/showBigImg';
 import wechat from 'components/followWechat';
 import fastclick from 'fastclick';
@@ -55,6 +56,13 @@ class Myconsult {
         meta: {
           keepAlive: true
         }
+      }, {
+        path: "/upLoadTip",
+        name: "upLoadTip",
+        component: upLoadTip,
+        meta: {
+          keepAlive: true
+        },
       },
       {
         path: "/showBigImg",

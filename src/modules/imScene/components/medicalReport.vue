@@ -156,7 +156,7 @@
       background: #FAFAFB;
       color: #97A8BA;
       @include font-dpr(13px);
-      border-top: 1px solid #D8D8D8;
+      // border-top: 1px solid #D8D8D8;
       border-bottom-right-radius: rem(21px);
       border-bottom-left-radius: rem(21px);
     }

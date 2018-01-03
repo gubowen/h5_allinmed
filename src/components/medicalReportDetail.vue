@@ -257,6 +257,9 @@
 
   .main-inner {
     //基本信息以下模块样式
+    &.medical-report-detail{
+      overflow: auto;
+    }
     .tc-caseContentBox {
       background: #E6E6ED;
       padding: rem(30px);

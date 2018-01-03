@@ -225,10 +225,10 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender"
                      accept="video/*">
-              <input type="file" v-if="!isIos&&inputVideoFlag" id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="!isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender" capture="camera"
                      accept="video/*">
             </li>
@@ -251,12 +251,22 @@
       <!--支付弹层-->
       <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
                 v-if="payPopupShow"></payPopup>
+      <confirm :confirmParams="{
+      'ensure':'取消',
+      'cancel':'离开',
+      'title':'您的信息正在发送中',
+      'content':'现在离开还需重新发送',
+      }" v-if="isLeave"
+               @cancelClickEvent="goFeedback()"
+               @ensureClickEvent="isLeave =false;"
+      >
+      </confirm>
       <Loading v-if="loading"></Loading>
       <transition name="fade">
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId"></Suggestion>
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></Suggestion>
       </transition>
     </section>
   </div>
@@ -297,9 +307,12 @@
   import MulitpleImage from "./mulitpleImage";
   import FileMessage from "./fileMessage";
   import Suggestion from "components/suggestion";
+  import confirm from "components/confirm";
 
   import Loading from "components/loading";
   import payPopup from "components/payLayer";
+
+  import getFileType from "common/js/util/getFileType.js";
 
   import WxPayCommon from "common/js/wxPay/wxComm";
   import nimEnv from "common/js/nimEnv/nimEnv";
@@ -346,7 +359,8 @@
           progress: "0%",
           index: 0
         },
-        patientCustomerId: api.getPara().patientCustomerId,
+        isLeave:false,
+        patientCustomerId: localStorage.getItem("userId")||api.getPara().patientCustomerId,
         onFocus: false,
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
@@ -386,11 +400,14 @@
         deleteMsgIndex: -1,
         toastTips: "",
         toastShow: false,
-        getTargetMsgFinish: false
+        getTargetMsgFinish: false,
       };
     },
 
     methods: {
+      goFeedback () {
+        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
       setFooterPosition() {
         if (IS_IOS) {
           this.footerPosition = "main-input-box relative";
@@ -1300,7 +1317,7 @@
           loading: true,
           from: this.userData.account
         });
-        let nowNum=this.msgList.length-1;
+        let nowNum = this.msgList.length - 1;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1334,18 +1351,18 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result,nowNum);
+          this.sendMulitpleImage(result, nowNum);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list,nowNum) {
+      sendMulitpleImage(list, nowNum) {
         const that = this;
 
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
           custom: JSON.stringify({
-            cType: "0",
+            cType: "1",
             cId: that.cId,
             mType: "38",
             conId: that.orderSourceId
@@ -1404,7 +1421,7 @@
                 scene: "p2p",
                 to: that.targetData.account,
                 custom: JSON.stringify({
-                  cType: "0",
+                  cType: "1",
                   cId: that.cId,
                   mType: "1",
                   conId: that.orderSourceId
@@ -1479,9 +1496,9 @@
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
-                  cType: "0",
+                  cType: "1",
                   cId: that.cId,
-                  mType: "1",
+                  mType: "3",
                   conId: that.orderSourceId
                 }),
                 to: that.targetData.account,
@@ -1506,16 +1523,15 @@
       // 选择pdf
       sendPdf(e) {
         let _file = e.target.files[0];
-        console.log(_file)
-        if (_file.type.includes("pdf")) {
-          this.sendPdfFile(_file);
-        } else {
-          this.toastTips = `请选择pdf文件`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
-        }
+        getFileType(_file).then((flag) => {
+          if (_file.type.includes("pdf")) {
+            this.sendPdfFile(_file);
+          } else if (_file.type.length === 0 && flag) {
+            this.sendPdfFile(_file);
+          } else {
+            this.toastControl("请选择pdf文件");
+          }
+        });
       },
       // 发送pdf
       sendPdfFile(_file) {
@@ -1560,13 +1576,14 @@
               });
               console.log(file);
               file.name = _file.name;
+              file.ext = "pdf";
               if (!error) {
                 let msg = that.nim.sendFile({
                   scene: "p2p",
                   custom: JSON.stringify({
-                    cType: "0",
+                    cType: "1",
                     cId: that.cId,
-                    mType: "1",
+                    mType: "6",
                     conId: that.orderSourceId,
                     name: _file.name
                   }),
@@ -1828,6 +1845,13 @@
       }
     },
     computed: {
+      leaveFlag () {
+        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       //配合watch图片上传进度使用
       progess() {
         return this.imageProgress.progress;
@@ -1951,7 +1975,8 @@
       Loading,
       Suggestion,
       FileMessage,
-      Toast
+      Toast,
+      confirm
     }
   };
 </script>

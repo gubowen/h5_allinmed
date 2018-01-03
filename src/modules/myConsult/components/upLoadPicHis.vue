@@ -1,7 +1,13 @@
 <template>
   <section class="upload-wrapper">
-    <section class="al-uploadNumLimit"><span>提示：每一项最多可以上传9张图片</span></section>
+    <!-- <section class="al-uploadNumLimit"><span>提示：每一项最多可以上传9张图片</span></section> -->
     <section class="main-inner tc-upLoadFile ev-delete">
+      <section class="tc-upLoadBox" @click="goUploadTips()">
+        <figure class="tc-upLoadTitle uploadTips-box">
+          <span class="tc-upLoadTitleName  uploadTips-title">医学影像拍摄过程</span>
+          <span class="tc-upLoadRightIcon  uploadTips-icon"></span>
+        </figure>
+      </section>
       <section class="tc-upLoadBox" v-for="(item,index) in uploadList">
         <figure class="tc-upLoadTitle ev-upLoadList">
           <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
@@ -140,6 +146,12 @@ export default {
   methods: {
     initData() {
 
+    },
+    // 去上传提示
+    goUploadTips () {
+      this.$router.push({
+        name: "upLoadTip",
+      })
     },
     getUploadList() {
       if (localStorage.getItem("picList")) {
@@ -538,7 +550,23 @@ $colorTwo: #222222;
   .tc-upLoadTitle {
     padding: rem(30px) rem(48px) rem(30px) rem(48px);
     position: relative;
-
+    &.uploadTips-box{
+      padding-left: rem(86px);
+      background: url("../../../common/image/img00/consult_V1.2/doubt2@2x.png") no-repeat rem(48px) center;
+      background-size: rem(38px);
+      .tc-upLoadTitleName{
+        color: #07B6AC;
+      }
+      .tc-upLoadRightIcon {
+        float: right;
+        display: inline-block;
+        width: rem(26px);
+        margin-top: rem(10px);
+        height: rem(26px);
+        background: url("../../../common/image/img00/patientConsult/arrow.png");
+        background-size: 100% 100%;
+      }
+    }
     .tc-upLoadTitleName {
       display: inline-block;
       @include font-dpr(16px);
@@ -557,6 +585,7 @@ $colorTwo: #222222;
       display: inline-block;
       width: rem(26px);
       height: rem(26px);
+      margin-top: rem(10px);
       background: url("../../../common/image/img00/patientConsult/file_upload@2x.png");
       background-size: 100% 100%;
     }
