@@ -31,12 +31,12 @@
           <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
         </div>
         <div class="orderHistoryItemBottom"
-             v-if="(item.consultationType==0&&(item.consultationState==0 || item.consultationState == 9)&&item.state==3) || (item.consultationType==0&&item.isRecommend==1)">
-          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==9&&item.state==3"
+             v-if="(item.consultationType==0&&item.consultationState==0&&item.state==3) || (item.consultationType==0&&(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1)">
+          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==0&&item.state==3"
                   @click.stop="goToUploadPic(item)">补全检查资料
           </button>
           <button data-alcode='e137' class="hrefBtn"
-                  v-if="item.isRecommend==1"
+                  v-if="(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1"
                   @click.stop="hrefToSuggest(item)">查看推荐专家
           </button>
         </div>
@@ -92,7 +92,7 @@
         pageStart: 0,
         items: [],
         checkFinish: false,
-        isSubscribe: api.getPara().isSubscribe && api.getPara().isSubscribe == 1 ? true : false
+        isSubscribe: (api.getPara().isSubscribe && api.getPara().isSubscribe == 1)||localStorage.getItem("isSubscribe") ? true : false
       }
     },
     mounted() {
