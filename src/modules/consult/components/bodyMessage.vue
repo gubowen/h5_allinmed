@@ -368,7 +368,7 @@
               that.createParams.customerId;
           },
           () => {
-            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")){
+            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")==1){
               if(navigator.userAgent.toLowerCase().includes("iphone")){
                 that.backPopupShow = true;
               }
