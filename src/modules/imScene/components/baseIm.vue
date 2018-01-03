@@ -1810,7 +1810,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshState(9);
+              that.refreshState(-1);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +

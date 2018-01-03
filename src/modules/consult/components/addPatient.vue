@@ -285,6 +285,8 @@
     },
     mounted() {
       //微信中绑定微信
+      this.init();
+      return;
       siteSwitch.weChatJudge(()=>{
         this.isWeChat = true;
         wxBind.isBind({
