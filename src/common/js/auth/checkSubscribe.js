@@ -38,7 +38,7 @@ export default class CheckSubscribe{
 
     if(api.getPara().isSubscribe||localStorage.getItem("isSubscribe")){
       console.log("finish");
-      localStorage.setItem("isSubscribe");
+      localStorage.setItem("isSubscribe","1");
     }else{
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
     }
