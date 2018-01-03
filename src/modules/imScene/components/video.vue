@@ -14,7 +14,7 @@
         <transition name="fade">
           <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</button>
         </transition>
-        <section class="middle-tip-box" v-if="progress.uploading">
+        <section class="middle-tip-box" v-if="videoMessage.loading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
                  alt="loading...">
@@ -51,7 +51,7 @@ export default {
       return this.$store.state.logoUrl;
     },
     progress() {
-      if (this.currentIndex === this.videoProgress.index) {
+      // if (this.currentIndex === this.videoProgress.index) {
         // return this.imageProgress;
         if (this.videoProgress.progress.includes(".")) {
           let returnObj = Object.assign(this.videoProgress, {
@@ -61,13 +61,13 @@ export default {
         } else {
           return this.videoProgress;
         }
-      } else {
-        return {
-          uploading: false,
-          progress: "0",
-          index: 0
-        };
-      }
+      // } else {
+        // return {
+        //   uploading: false,
+        //   progress: "0",
+        //   index: 0
+        // };
+      // }
     }
   },
   props: {

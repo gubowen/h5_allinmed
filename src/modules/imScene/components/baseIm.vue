@@ -1170,6 +1170,9 @@
       },
       //聊天记录里时间戳是否显示
       getTimeStampShowFlag(msg, index) {
+        if (!msg.time) {
+          return false;
+        }
         if (msg.type === "custom") {
           if (
             JSON.parse(msg.content).type.includes("new-") ||
@@ -1189,6 +1192,17 @@
             return true;
           }
         }
+      },
+      // 替换的索引
+      replaceIndex (type) {
+        let indexTemp
+        this.msgList.map( (item,index) => {
+          if (item.replace && item.replace == type) {
+            indexTemp = index;
+            return;
+          }
+        });
+        return indexTemp;
       },
       //上传文件
       sendImage(e) {
@@ -1231,7 +1245,8 @@
             }
           }),
           loading: true,
-          from: this.userData.account
+          from: this.userData.account,
+          replace:"multiple",
         });
         that.mulitpleLastIndex = that.msgList.length - 1;
         that.inputImageFlag = false;
@@ -1293,7 +1308,14 @@
             that.inputImageFlag = true;
             if (!error) {
               console.log(msg);
-              that.msgList[that.mulitpleLastIndex] = msg;
+              // that.msgList.map( (item,index) => {
+              //   if (item.replace && item.replace == 'multiple') {
+              //     that.mulitpleLastIndex = index;
+              //     return;
+              //   }
+              // });
+              console.log(that.replaceIndex('multiple'));
+              that.msgList[that.replaceIndex('multiple')] = msg;
             }
           }
         });
@@ -1306,7 +1328,9 @@
             url: window.URL.createObjectURL(_file)
           },
           type: "image",
-          from: that.userData.account
+          from: that.userData.account,
+          replace:'image',
+          loading: true,
         });
         this.$nextTick(() => {
           that.scrollToBottom();
@@ -1347,7 +1371,8 @@
                 type: "image",
                 done(error, msg) {
                   // debugger;
-                  that.msgList[that.imageLastIndex] = msg;
+                  // that.msgList[that.imageLastIndex] = msg;
+                  that.msgList[that.replaceIndex('image')] = msg;
                   // 老版本的imageList push
                   // that.imageList.push(
                   //   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
@@ -1393,7 +1418,9 @@
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
-          from: that.userData.account
+          loading: true,
+          from: that.userData.account,
+          replace:'video',
         });
         that.videoLastIndex = that.msgList.length - 1;
         this.nim.previewFile({
@@ -1429,7 +1456,14 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.msgList[that.videoLastIndex] = msg;
+                  // that.msgList[that.videoLastIndex] = msg;
+                  // that.msgList.map( (item,index) => {
+                  //   if (item.replace && item.replace == 'video') {
+                  //     that.videoLastIndex = index;
+                  //     return;
+                  //   }
+                  // });
+                  that.msgList[that.replaceIndex('video')] = msg;
                   that.videoProgress = {
                     uploading: false,
                     progress: "0%",
@@ -1470,7 +1504,9 @@
             name: _file.name
           }),
           type: "file",
-          from: that.userData.account
+          from: that.userData.account,
+          replace:"pdf",
+          loading:true,
         });
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
@@ -1514,7 +1550,8 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
-                    that.msgList[that.fileLastIndex] = msg;
+                    // that.msgList[that.fileLastIndex] = msg;
+                    that.msgList[that.replaceIndex('pdf')] = msg;
                     that.fileProgress = {
                       uploading: false,
                       progress: "0%",
