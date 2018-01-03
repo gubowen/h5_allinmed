@@ -543,7 +543,7 @@ export default {
           fail: false
         };
       } else {
-        that["imageList" + type].push({
+        that["imageList" + type].unshift({
           blob: _localViewUrl,
           imgId: "",
           uploading: true,
@@ -567,7 +567,8 @@ export default {
         timeout: 300000,
         done(res) {
           if (res.responseObject.responseStatus) {
-            let num = index ? index : that["imageList" + type].length - 1;
+            // let num = index ? index : that["imageList" + type].length - 1;
+            let num = index ? index : 0;
             that["imageList" + type][num].imgId = res.responseObject.responsePk;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = false;
