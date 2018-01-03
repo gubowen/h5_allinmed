@@ -1248,6 +1248,7 @@
           from: this.userData.account,
           replace:"multiple",
         });
+        that.scrollToBottom();
         that.mulitpleLastIndex = that.msgList.length - 1;
         that.inputImageFlag = false;
         Array.from(list).forEach((element, index) => {
@@ -1260,7 +1261,6 @@
                   type: "image",
                   dataURL: oFREvent.target.result,
                   uploadprogress(obj) {
-                    that.scrollToBottom();
                     console.log("文件总大小: " + obj.total + "bytes");
                     console.log("已经上传的大小: " + obj.loaded + "bytes");
                     console.log("上传进度: " + obj.percentage);
@@ -1342,7 +1342,7 @@
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
             // that.inputImageFlag = false;
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1373,6 +1373,7 @@
                   // debugger;
                   // that.msgList[that.imageLastIndex] = msg;
                   that.msgList[that.replaceIndex('image')] = msg;
+                  that.scrollToBottom();
                   // 老版本的imageList push
                   // that.imageList.push(
                   //   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
@@ -1422,13 +1423,14 @@
           from: that.userData.account,
           replace:'video',
         });
+        that.scrollToBottom();
         that.videoLastIndex = that.msgList.length - 1;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
             // this.inputVideoFlag = false;
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.videoProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1458,12 +1460,13 @@
                 done(error, msg) {
                   // that.msgList[that.videoLastIndex] = msg;
                   // that.msgList.map( (item,index) => {
-                  //   if (item.replace && item.replace == 'video') {
-                  //     that.videoLastIndex = index;
+                    //   if (item.replace && item.replace == 'video') {
+                      //     that.videoLastIndex = index;
                   //     return;
                   //   }
                   // });
                   that.msgList[that.replaceIndex('video')] = msg;
+                  that.scrollToBottom();
                   that.videoProgress = {
                     uploading: false,
                     progress: "0%",
@@ -1508,6 +1511,7 @@
           replace:"pdf",
           loading:true,
         });
+        that.scrollToBottom();
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
@@ -1517,7 +1521,7 @@
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
               // this.inputPdfFlag = false;
-              that.scrollToBottom();
+              // that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
                 progress: obj.percentageText,
@@ -1552,6 +1556,7 @@
                   done(error, msg) {
                     // that.msgList[that.fileLastIndex] = msg;
                     that.msgList[that.replaceIndex('pdf')] = msg;
+                    that.scrollToBottom();
                     that.fileProgress = {
                       uploading: false,
                       progress: "0%",

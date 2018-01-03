@@ -34,9 +34,9 @@ export default new Vuex.Store({
     deleteBtnShow:false,
     toolbarConfig: {
       image: false,
-        video: false,
-        file: false,
-        delete: false
+      video: false,
+      file: false,
+      delete: false,
     }
   },
   mutations: {
