@@ -67,9 +67,8 @@
   import CheckLogin from "common/js/auth/checkLogin";
 
   const checkLogin = new CheckLogin();
-
   import VueAwesomeSwiper from "vue-awesome-swiper";
-  import Swiper from "swiper";
+  import "swiper";
   import "swiper/dist/css/swiper.css";
   let XHRList = {
     //登录页
@@ -226,18 +225,23 @@
       },
       getAdList() {
         const that = this;
-        // that.adList =[
-        //  {
-        //   imgId:1,
-        //   adAdditionalUrl:'www.baidu.com',
-        //   adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        // },
-        // {
-        //     imgId:2,
-        //     adAdditionalUrl:'www.baidu.com',
-        //     adAttUrl:require('../../../common/image/img00/index/banner_default.png')
-        // }
-        // ];
+        that.adList =[
+         {
+          imgId:1,
+          adAdditionalUrl:'www.baidu.com',
+          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        },
+        {
+          imgId:2,
+          adAdditionalUrl:'www.baidu.com',
+          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+        },
+          {
+          imgId:3,
+          adAdditionalUrl:'www.baidu.com',
+            adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+          }
+        ];
        api.ajax({
          url: XHRList.adList,
          method: "post",
@@ -284,33 +288,32 @@
  </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
-
   .mHome {
     padding: 0 0 rem(100px) 0;
   }
-
   .banner {
-    padding: 0 0 rem(140px) 0;
+    padding: 0 0 rem(70px) 0;
     position: relative;
     overflow: hidden;
     .swiper-container{
       overflow:visible;
+      padding-bottom: rem(60px);
     }
     .swiper-pagination-bullet {
       width: rem(12px);
       height: rem(12px);
-      background-color: #e5e5e5;
-
+      background-color:#7f7c7c;
     }
     .swiper-pagination-bullet-active {
       width: rem(12px);
       height: rem(12px);
-      background-color: #00D6C6;
+      background-color:#00D6C6;
     }
     .banner-slider {
       width: 86%;
-      height: 3.86667rem;
-      opacity: 0.6;
+      height: 3.6rem;
+      opacity: 0.4;
+      vertical-align: middle;
       & > a {
         display: block;
         height: 100%;
@@ -326,7 +329,8 @@
       }
     }
     .swiper-slide-active{
-      opacity: 1;
+      opacity:1;
+      height: 3.8666rem;
     }
   }
 

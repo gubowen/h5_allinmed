@@ -6,9 +6,7 @@
 
     <Loading v-if="$store.state.loading"></Loading>
   </div>
-
 </template>
-
 <script type="text/ecmascript-6">
   import Loading from "components/loading";
   export default {
@@ -17,7 +15,6 @@
     }
   };
 </script>
-
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../scss/library/_common-modules";
   body{
