@@ -159,8 +159,9 @@
           this[element] = this[element].replace(ranges, "");
         }
         let content = this[element];
-        if (api.getByteLen(content) > limit ) {
-          this[element] = api.getStrByteLen(content, limit );
+        if (content.length > limit ) {
+          // this[element] = api.getStrByteLen(content, limit );
+          this[element] = content.substring(0,1000);
           this.errorShow = true;
           this.errorMsg = `最多只能输入${limit}字`;
           setTimeout(() => {
@@ -173,9 +174,9 @@
         const that = this;
         let heightData = [],defaultHeight;
         if(that.$route.params.sex == 1){
-          defaultHeight = 169;
+          defaultHeight = 170;
         }else{
-          defaultHeight = 159;
+          defaultHeight = 160;
         }
         for(let i=1;i<=300;i++){
           heightData.push({
@@ -195,9 +196,9 @@
         const that = this;
         let weightData = [],defaultWeight;
         if(that.$route.params.sex == 1){
-          defaultWeight = 64;
+          defaultWeight = 65;
         }else{
-          defaultWeight = 49;
+          defaultWeight = 50;
         }
         for(let i=1;i<=200;i++){
           weightData.push({
