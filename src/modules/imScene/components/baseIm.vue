@@ -242,7 +242,7 @@
           </figure>
         </section>
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.image">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
                    height="234"/>
@@ -255,7 +255,7 @@
                    ref="imageSender" capture="camera"
                    accept="image/*">
           </li>
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
                    height="234"/>
@@ -270,7 +270,7 @@
                    multiple
                    accept="video/*">
           </li>
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
