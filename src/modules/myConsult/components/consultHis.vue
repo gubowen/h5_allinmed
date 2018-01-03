@@ -97,7 +97,7 @@
     },
     mounted() {
       //微信中绑定微信
-      checkSubscribe.check(`${window.location.origin}${window.location.pathname}${window.location.search}`);
+      checkSubscribe.check(`${window.location.origin}${window.location.pathname}?customerId=${localStorage.getItem('userId')}`);
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
           callBack: () => {
