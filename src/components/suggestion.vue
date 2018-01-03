@@ -22,7 +22,12 @@
     },
     methods: {
       goFeedback () {
-        location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}`;
+        if (this.leaveFlag) {
+          location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}`;
+        } else {
+          // debugger;
+          this.$emit('update:isLeave',true);
+        }
       }
     },
     mounted(){
@@ -34,6 +39,13 @@
     props:{
       customerId:{
         type:String
+      },
+      isLeave:{
+        type:Boolean,
+      },
+      leaveFlag:{
+        type:Boolean,
+        default:true,
       }
     }
   }

@@ -292,6 +292,16 @@
         }" v-if="noWXPayShow" @cancelClickEvent="noWXPayShow = false;isClick = false;localStorage.removeItem('payOk');"
              @ensureClickEvent="viewPayResult()">
     </confirm>
+    <confirm :confirmParams="{
+      'ensure':'取消',
+      'cancel':'离开',
+      'title':'您的信息正在发送中',
+      'content':'现在离开还需重新发送',
+      }" v-if="isLeave"
+        @cancelClickEvent="goFeedback()"
+        @ensureClickEvent="isLeave =false;"
+    >
+    </confirm>
     <loading :show="finish"></loading>
     <transition name="fade">
       <Toast :content="toastTips" v-if="toastShow"></Toast>
@@ -304,7 +314,7 @@
         }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
       ></ensure>
     </transition>
-    <suggestion :customerId="patientCustomerId"></suggestion>
+    <suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></suggestion>
   </section>
 
 </template>
@@ -434,11 +444,16 @@
         // toastTips: "",
         // toastShow: false,
         deleteMsgIndex: -1,
-        mList: []
+        mList: [],
+        isLeave: false,
       };
     },
 
     methods: {
+      // 去意见反馈；
+      goFeedback () {
+        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
       // 控制 vuex toast控制
       toastControl(message) {
         store.commit("setToastTips", message);
@@ -1855,6 +1870,14 @@
       }
     },
     computed: {
+      // 是否可以离开，传给suggest 的参数
+      leaveFlag () {
+        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       // toast 提示
       toastTips() {
         return this.$store.state.toastTips;
