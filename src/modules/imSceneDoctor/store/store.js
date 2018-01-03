@@ -22,9 +22,9 @@ export default new Vuex.Store({
     targetMsg: {},
     targetList: [],
     toolbarConfig: {
-      image: false,
-      video: false,
-      file: false,
+      image: true,
+      video: true,
+      file: true,
       delete: false
     }
   },
@@ -57,6 +57,7 @@ export default new Vuex.Store({
     setLastTime(state, time) {
       state.lastTime = time;
     },
+    /*艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹艹*/
     stopLastTimeCount(state) {
       clearInterval(totalTimeCount);
       // Attention
@@ -81,26 +82,29 @@ export default new Vuex.Store({
         console.log(data)
         if (data.responseObject.responseData) {
           let dataList = data.responseObject.responseData.dataList;
-          dataList.forEach((element, index) => {
-            if (element.state==1){
-              switch (parseInt(element.toolType)) {
-                case 1://图片
-                  state.toolbarConfig.image = true;
-                  break;
-                case 4://撤回
-                  state.toolbarConfig.delete = true;
-                  break;
-                case 5://视频
-                  state.toolbarConfig.video = true;
-                  break;
-                case 6://文件
-                  state.toolbarConfig.file = true;
-                  break;
-                default:
-                  break;
+          if (dataList){
+            dataList.forEach((element, index) => {
+              if (element.state==1){
+                switch (parseInt(element.toolType)) {
+                  case 1://图片
+                    state.toolbarConfig.image = true;
+                    break;
+                  case 4://撤回
+                    state.toolbarConfig.delete = true;
+                    break;
+                  case 5://视频
+                    state.toolbarConfig.video = true;
+                    break;
+                  case 6://文件
+                    state.toolbarConfig.file = true;
+                    break;
+                  default:
+                    break;
+                }
               }
-            }
-          });
+            });
+          }
+
         }
       })
     }

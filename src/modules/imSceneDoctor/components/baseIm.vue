@@ -116,7 +116,7 @@
               :videoMessage="msg"
               :userData="userData"
               :targetData="targetData"
-              :videoProgress="videoProgress"
+              :videoProgress="videoProgress[index]"
               :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
               @clickLogo="goToDoctorHomePage"
@@ -185,7 +185,7 @@
               </div>
             </section>
             <section class="main-input-box-plus"
-                     @click='footerBottomFlag = footerBottomFlag?false:true;$refs.inputTextarea.focus()'>
+                     @click='footerBottomFlag = footerBottomFlag?false:true'>
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
@@ -225,10 +225,10 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="isIos" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender"
                      accept="video/*">
-              <input type="file" v-if="!isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="!isIos" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender" capture="camera"
                      accept="video/*">
             </li>
@@ -349,9 +349,7 @@
         },
         // 视频发送进度
         videoProgress: {
-          uploading: false,
-          progress: "0%",
-          index: 0
+
         },
         // 文件pdf发送进度
         fileProgress: {
@@ -550,6 +548,7 @@
                 that.getTimeStampShowList(msg);
                 that.minusLastCount(msg);
                 that.getFirstTargetMsg(msg);
+                that.setMediaProgress(msg,that.msgList.length-1);
                 if (msg.type === "image") {
                   let qualityUrl = that.nim.viewImageQuality({
                     url: msg.file.url,
@@ -561,6 +560,29 @@
             }
           });
         });
+      },
+      setMediaProgress(msg,index){
+        switch (msg.type){
+          case "image":
+
+            this.imageProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "file":
+            this.fileProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "video":
+            this.videoProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+        }
       },
       showFlagDeleteTips(msg) {
         let flag = false;
@@ -751,14 +773,9 @@
               that.msgList.forEach((element, index) => {
                 that.getTargetMessage(element);
                 that.getTimeStampShowList(element);
+                that.setMediaProgress(element,index);
               });
               that.$nextTick(() => {
-                //        通过动画结束判断
-                //                  that.$refs.outpatientInvite[that.$refs.outpatientInvite.length-1].$el.addEventListener("transitionend",()=>{
-                //
-                //                    console.log(that.$refs.outpatientInvite)
-                //                  });
-
                 setTimeout(() => {
                   if (
                     api.getPara().position === "push" &&
@@ -1333,7 +1350,7 @@
                   type: "image",
                   dataURL: oFREvent.target.result,
                   uploadprogress(obj) {
-                    that.scrollToBottom();
+                    // that.scrollToBottom();
                     console.log("文件总大小: " + obj.total + "bytes");
                     console.log("已经上传的大小: " + obj.loaded + "bytes");
                     console.log("上传进度: " + obj.percentage);
@@ -1407,7 +1424,7 @@
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
 
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1471,25 +1488,27 @@
       sendVideoFile(_file) {
         const that = this;
         console.log(_file);
+
         this.msgList.push({
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
-          from: that.userData.account
+          from: this.userData.account
         });
-        that.videoLastIndex = that.msgList.length - 1;
+        const videoLastIndex=this.msgList.length-1;
+
         this.inputVideoFlag=false;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
 
-            that.scrollToBottom();
-            that.videoProgress = {
+            // that.scrollToBottom();
+            that.videoProgress[videoLastIndex] = {
               uploading: true,
               progress: obj.percentageText,
-              index: that.videoLastIndex
+              index: videoLastIndex
             };
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1513,8 +1532,8 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.msgList[that.videoLastIndex] = msg;
-                  that.videoProgress = {
+                  that.msgList[videoLastIndex] = msg;
+                  that.videoProgress[videoLastIndex] = {
                     uploading: false,
                     progress: "0%",
                     index: 0
@@ -1566,7 +1585,7 @@
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
               // this.inputPdfFlag = false;
-              that.scrollToBottom();
+              // that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
                 progress: obj.percentageText,

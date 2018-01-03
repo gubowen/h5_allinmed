@@ -73,23 +73,25 @@ export default {
 
     },
     progress() {
-      if (this.currentIndex === this.videoProgress.index) {
-        // return this.imageProgress;
-        if (this.videoProgress.progress.includes(".")) {
-          let returnObj = Object.assign(this.videoProgress, {
-            progress: `${this.videoProgress.progress.split(".")[0]}%`
-          });
-          return returnObj;
+      if (this.videoProgress){
+        if (this.currentIndex === this.videoProgress.index) {
+          if (this.videoProgress.progress.includes(".")) {
+            let returnObj = Object.assign(this.videoProgress, {
+              progress: `${this.videoProgress.progress.split(".")[0]}%`
+            });
+            return returnObj;
+          } else {
+            return this.videoProgress;
+          }
         } else {
-          return this.videoProgress;
+          return {
+            uploading: false,
+            progress: "0",
+            index: 0
+          };
         }
-      } else {
-        return {
-          uploading: false,
-          progress: "0",
-          index: 0
-        };
       }
+
     }
   },
   props: {
@@ -173,7 +175,7 @@ export default {
   padding: 0;
   width: rem(200px);
   height: rem(200px);
-
+  position: relative;
   border-top-right-radius:0.28rem;
   .mulitple-image-box{
     padding-top: 0;
