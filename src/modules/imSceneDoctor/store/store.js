@@ -22,9 +22,9 @@ export default new Vuex.Store({
     targetMsg: {},
     targetList: [],
     toolbarConfig: {
-      image: true,
-      video: true,
-      file: true,
+      image: false,
+      video: false,
+      file: false,
       delete: false
     }
   },
