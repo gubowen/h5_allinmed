@@ -564,7 +564,7 @@
           JSON.parse(msg.content).type === "deleteMsgTips"
         ) {
           flag = true;
-          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient||JSON.parse(msg.content).data.imMessage.idClient;
           this.msgList.forEach((element, index) => {
             if (element.idClient === idClient) {
               this.msgList.removeByValue(element);
@@ -622,7 +622,7 @@
         }
       },
       goToDoctorHomePage() {
-        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
+        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
       },
       getUserBaseData() {
         const that = this;
@@ -1037,7 +1037,7 @@
           data: {
             caseId: api.getPara().caseId,
             customerId: api.getPara().doctorCustomerId,
-            patientCustomerId: api.getPara().patientCustomerId,
+            patientCustomerId: this.patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 1,
             consultationState: -1,
@@ -1357,7 +1357,7 @@
       // 发送多图文件
       sendMulitpleImage(list, nowNum) {
         const that = this;
-
+        this.inputImageFlag=false;
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -1376,7 +1376,7 @@
           done(error, msg) {
             if (!error) {
               console.log(msg);
-
+              that.inputImageFlag=true;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(nowNum, 1, msg);
               // that.sendMessageSuccess(error, msg);
@@ -1396,11 +1396,12 @@
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(_file));
+        this.inputImageFlag=false;
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
-            // that.inputImageFlag = false;
+
             that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
@@ -1416,6 +1417,7 @@
           done(error, file) {
             console.log("上传image" + (!error ? "成功" : "失败"));
             // show file to the user
+            that.inputImageFlag = true;
             if (!error) {
               let msg = that.nim.sendFile({
                 scene: "p2p",
@@ -1472,11 +1474,12 @@
           from: that.userData.account
         });
         that.videoLastIndex = that.msgList.length - 1;
+        this.inputVideoFlag=false;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
-            // this.inputVideoFlag = false;
+
             that.scrollToBottom();
             that.videoProgress = {
               uploading: true,
@@ -1490,7 +1493,7 @@
           },
           done(error, file) {
             console.log("上传video" + (!error ? "成功" : "失败"));
-            // show file to the user
+            this.inputVideoFlag = false;
             console.log(file);
             if (!error) {
               let msg = that.nim.sendFile({
@@ -1548,7 +1551,8 @@
           type: "file",
           from: that.userData.account
         });
-        that.fileLastIndex = that.msgList.length - 1;
+        this.inputPdfFlag=false;
+        this.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
         reader.onload = oFREvent => {
@@ -1570,7 +1574,7 @@
             },
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
-              // show file to the user
+              that.inputPdfFlag=true;
               file = Object.assign(file, {
                 fileName: _file.name,
               });
@@ -1713,8 +1717,6 @@
                     api.getPara().caseId +
                     "&patientId=" +
                     api.getPara().patientId +
-                    "&patientCustomerId=" +
-                    api.getPara().patientCustomerId +
                     "&shuntCustomerId=" +
                     that.shuntCustomerId;
                   // that.nim.sendText({
@@ -1829,6 +1831,7 @@
         });
       },
       initScroll() {
+
         if (!this.$refs.wrapper) {
           return;
         }
@@ -1871,7 +1874,7 @@
           docId: api.getPara().doctorCustomerId,
           caseId: api.getPara().caseId,
           patientId: api.getPara().patientId,
-          patientCustomerId: api.getPara().patientCustomerId,
+          patientCustomerId: this.patientCustomerId,
           from: "imDoctor",
           payType: "pay"
         };
@@ -1895,7 +1898,7 @@
 
       //      this.resetLogoUrl();
       api.forbidShare();
-
+      store.commit("getToolbarConfig");
 
       if (api.getPara().from === "im") {
         return;
