@@ -1347,7 +1347,7 @@
           scene: "p2p",
           to: that.targetData.account,
           custom: JSON.stringify({
-            cType: "0",
+            cType: "1",
             cId: that.cId,
             mType: "38",
             conId: that.orderSourceId
@@ -1406,7 +1406,7 @@
                 scene: "p2p",
                 to: that.targetData.account,
                 custom: JSON.stringify({
-                  cType: "0",
+                  cType: "1",
                   cId: that.cId,
                   mType: "1",
                   conId: that.orderSourceId
@@ -1481,9 +1481,9 @@
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
-                  cType: "0",
+                  cType: "1",
                   cId: that.cId,
-                  mType: "1",
+                  mType: "3",
                   conId: that.orderSourceId
                 }),
                 to: that.targetData.account,
@@ -1566,9 +1566,9 @@
                 let msg = that.nim.sendFile({
                   scene: "p2p",
                   custom: JSON.stringify({
-                    cType: "0",
+                    cType: "1",
                     cId: that.cId,
-                    mType: "1",
+                    mType: "6",
                     conId: that.orderSourceId,
                     name: _file.name
                   }),
