@@ -564,7 +564,7 @@
           JSON.parse(msg.content).type === "deleteMsgTips"
         ) {
           flag = true;
-          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient||JSON.parse(msg.content).data.imMessage.idClient;
+          let idClient = (JSON.parse(msg.content).data.deleteMsg&&JSON.parse(msg.content).data.deleteMsg.idClient)||(JSON.parse(msg.content).data.imMessage&&JSON.parse(msg.content).data.imMessage.idClient);
           this.msgList.forEach((element, index) => {
             if (element.idClient === idClient) {
               this.msgList.removeByValue(element);
