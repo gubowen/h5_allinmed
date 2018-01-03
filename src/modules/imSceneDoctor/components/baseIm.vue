@@ -23,7 +23,7 @@
           </figure>
           <figcaption class="doctor-title-content">
             <h4 class="name">{{$store.state.targetMsg.nick}}</h4>
-            <span class="title" v-if="$store.state.targetMsg.title">{{$store.state.targetMsg.title.substring(2)}}</span>
+            <span class="title" v-if="$store.state.targetMsg.title">{{doctorTitleName}}</span>
             <span class="hospital">{{$store.state.targetMsg.hospital}}</span>
             <i class="icon-rightArrow"></i>
           </figcaption>
@@ -1853,6 +1853,13 @@
       }
     },
     computed: {
+      doctorTitleName(){
+        let result=[];
+        this.$store.state.targetMsg.title.split(",").forEach((element,index)=>{
+          result.push(element.substring(2));
+        });
+        return result.join(",");
+      },
       leaveFlag () {
         if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
           return true;
