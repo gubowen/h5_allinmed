@@ -174,9 +174,9 @@
         const that = this;
         let heightData = [],defaultHeight;
         if(that.$route.params.sex == 1){
-          defaultHeight = 170;
+          defaultHeight = 169;
         }else{
-          defaultHeight = 160;
+          defaultHeight = 159;
         }
         for(let i=1;i<=300;i++){
           heightData.push({
@@ -196,9 +196,9 @@
         const that = this;
         let weightData = [],defaultWeight;
         if(that.$route.params.sex == 1){
-          defaultWeight = 65;
+          defaultWeight = 64;
         }else{
-          defaultWeight = 50;
+          defaultWeight = 49;
         }
         for(let i=1;i<=200;i++){
           weightData.push({
