@@ -202,7 +202,9 @@
   import wxBind from 'common/js/auth/wxBinding';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import CheckLogin from 'common/js/auth/checkLogin';
+  import CheckSubscribe from 'common/js/auth/checkSubscribe';
   const checkLogin = new CheckLogin();
+  const checkSubscribe = new CheckSubscribe();
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
@@ -313,6 +315,7 @@
     },
     methods: {
       init(){
+        checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
         document.title="为谁问诊";
         if(!api.checkOpenId()){
           console.log("获取openId");

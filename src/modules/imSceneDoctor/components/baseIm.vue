@@ -23,7 +23,7 @@
           </figure>
           <figcaption class="doctor-title-content">
             <h4 class="name">{{$store.state.targetMsg.nick}}</h4>
-            <span class="title" v-if="$store.state.targetMsg.title">{{$store.state.targetMsg.title.substring(2)}}</span>
+            <span class="title" v-if="$store.state.targetMsg.title">{{doctorTitleName}}</span>
             <span class="hospital">{{$store.state.targetMsg.hospital}}</span>
             <i class="icon-rightArrow"></i>
           </figcaption>
@@ -84,7 +84,7 @@
             <!--文本消息-->
             <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
                          :targetData="targetData" @deleteMsgEvent="deleteMsgEvent(msg)"
-                         @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
+                         @longTouchEmitHandler="longTouchEmitHandler(index)" @clickLogo="goToDoctorHomePage">
             </ContentText>
             <!--图像消息-->
             <ImageContent
@@ -93,7 +93,7 @@
               :nim="nim"
               ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
               :deleteMsgIndex="deleteMsgIndex"
               :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
             </ImageContent>
@@ -103,7 +103,7 @@
               :imageMessage="msg"
               :userData="userData"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
               :targetData="targetData"
               :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
@@ -121,7 +121,7 @@
               :currentIndex="index"
               @clickLogo="goToDoctorHomePage"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
             ></VideoMessage>
             <!--文件消息-->
             <FileMessage
@@ -134,7 +134,7 @@
               :deleteMsgIndex="deleteMsgIndex"
               @clickLogo="goToDoctorHomePage"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
             >
             </FileMessage>
             <!--音频-->
@@ -206,7 +206,7 @@
 
           </section>
           <ul class="footer-box-bottom" v-if="footerBottomFlag">
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.image">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
                      height="234"/>
@@ -219,7 +219,7 @@
                      ref="imageSender" capture="camera"
                      accept="image/*">
             </li>
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
                      height="234"/>
@@ -232,7 +232,7 @@
                      ref="videoSender" capture="camera"
                      accept="video/*">
             </li>
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350"
                      height="234"/>
@@ -407,6 +407,11 @@
     methods: {
       goFeedback () {
         location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
+      longTouchEmitHandler(index){
+        if (this.$store.state.delete){
+          this.deleteMsgIndex=index;
+        }
       },
       setFooterPosition() {
         if (IS_IOS) {
@@ -1848,6 +1853,13 @@
       }
     },
     computed: {
+      doctorTitleName(){
+        let result=[];
+        this.$store.state.targetMsg.title.split(",").forEach((element,index)=>{
+          result.push(element.substring(2));
+        });
+        return result.join(",");
+      },
       leaveFlag () {
         if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
           return true;

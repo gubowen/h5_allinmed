@@ -317,14 +317,14 @@
       hrefToSuggest(opt) {
         siteSwitch.weChatJudge(() => {
           if (localStorage.getItem("userId") || api.getPara().customerId) {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=health&suggest=1'
           } else {
             window.location.href = '/dist/mLogin.html';
           }
         }, () => {
           if (this.isSubscribe) {
             if (localStorage.getItem("userId") || api.getPara().customerId) {
-              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=health&suggest=1'
             } else {
               window.location.href = '/dist/mLogin.html';
             }
@@ -353,13 +353,13 @@
           localStorage.setItem("doctorName", opt.fullName);
           localStorage.setItem("doctorLogo", docLogo);
           if (opt.caseType == 10 || opt.caseType == 11) {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=report';
           } else {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId;
           }
         } else {
           if (api.getPara().customerId || localStorage.getItem("userId")) {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientCustomerId=' + (api.getPara().customerId || localStorage.getItem("userId")) + '&patientId=' + opt.patientId
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientId=' + opt.patientId
           } else {
             window.location.href = '/dist/mLogin.html';
           }

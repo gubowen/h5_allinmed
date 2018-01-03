@@ -74,11 +74,9 @@
     //登录页
     loginUrl: "/dist/mLogin.html?from=index",
     //问诊
-    diagnose: `/dist/consult.html?customerId=${localStorage.getItem("userId")}`,
+    diagnose: `/dist/consult.html`,
     //问诊历史
-    historyUrl: `/dist/myConsult.html?customerId=${localStorage.getItem(
-      "userId"
-    )}`,
+    historyUrl: `/dist/myConsult.html`,
     getOrderHistoryLists: "/mcall/customer/case/consultation/v1/getMapList/", //咨询历史接口
     personalMessage: "/mcall/patient/customer/unite/v1/getPatientInfo/",
     adList: "/mcall/ad/position/profile/getMapList/"
