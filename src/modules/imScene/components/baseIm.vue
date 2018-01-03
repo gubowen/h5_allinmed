@@ -1980,6 +1980,7 @@
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);
       }
+      store.commit("getToolbarConfig");
       api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();
