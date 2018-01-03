@@ -50,7 +50,7 @@
             <div data-alcode-mod='717' :key="0">
               <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
                 <figcaption class="first-message">
-                  <p>{{msg.from==targetData.account?`${$store.state.targetMsg.customerName}医生`:"您"}}撤回了一条消息</p>
+                  <p>{{msg.from===targetData.account?`${$store.state.targetMsg.nick}医生`:"您"}}撤回了一条消息</p>
                 </figcaption>
               </section>
             </div>
