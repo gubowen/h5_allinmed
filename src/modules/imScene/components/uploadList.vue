@@ -191,7 +191,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     let that = this;
-    if (to.name === "showBigImg") {
+    if (to.name === "showBigImg" || to.name === "upLoadTip") {
       next(true);
       return;
     }
