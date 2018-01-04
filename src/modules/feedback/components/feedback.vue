@@ -47,7 +47,7 @@
     <section class="description">您的反馈我们已经收到<br>
       感谢对我们的支持理解</section>
     <section class="back" @click="goToHref">
-      <span class="back-timing" >{{backTimeout}}s后</span><em v-if="CheckFrom">{{FromText}}</em>
+      <span class="back-timing" >{{backTimeout}}s后</span><em>{{CheckFrom()?'自动返回':'返回首页'}}</em>
     </section>
   </section>
 </template>
@@ -64,9 +64,8 @@
   import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
-  import Loading from "components/loading";
+  import "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
-
   // const checkLogin = new CheckLogin();
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
@@ -90,7 +89,6 @@
     // },
     data() {
       return {
-        FromText:"返回首页",
         customerId:"",
         suggestionType:{
           service:false,
@@ -111,27 +109,31 @@
     watch:{
       //监听大量的文字输入情况，ex：复制粘贴。这样可以保持被撑大的text-area可以恢复到限定的高度
       "suggestionContent"(){
-        document.body.scrollTop= -99999;
         setTimeout(()=>{
-          document.body.scrollTop= -99999;
+          document.body.scrollTop = document.body.scrollHeight;
           autosize.update(this.$el.querySelector(".input-textArea"))
-        },10);
+        },500);
       }
     },
     mounted(){
       let _this = this;
       autosize(this.$el.querySelector(".input-textArea"));
+      this.CheckFrom();
     },
     methods:{
       //根据入口切换内容
       CheckFrom(){
         if(api.getPara().from==="im"){
-            this.FromText="自动返回";
+          return true;
+        }else{
+          return false;
         }
       },
       //检查后没有error后提交所有数据
       checkAllData(){
         const _this=this;
+        this.count=0;
+        this.count++;
         if (!this.suggestionType.service && !this.suggestionType.setting && !this.suggestionType.others) {
           this.validateToast("您还有问题未完善");
           document.body.scrollTop = this.$el.querySelector(
@@ -145,7 +147,11 @@
           }else{
             _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
           }
-          _this.submitAllData();
+          if(this.count=1){
+            _this.submitAllData();
+          }else{
+
+          }
           // siteSwitch.weChatJudge(ua =>{
           //   //微信
           //   _this.customerId = api.getPara().customerId;
