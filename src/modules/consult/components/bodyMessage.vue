@@ -433,7 +433,7 @@
           data: {
             caseId: this.responseCaseId,
             customerId: 0,
-            patientCustomerId: api.getPara().customerId,
+            patientCustomerId: localStorage.getItem("userId"),
             patientId: this.createParams.patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
