@@ -70,16 +70,16 @@
   import confirm from "components/confirm";
   import wxBind from 'common/js/auth/wxBinding';
   import CheckLogin from 'common/js/auth/checkLogin';
-  import CheckSubscribe from 'common/js/auth/checkSubscribe';
+  import GetPersonal from 'common/js/auth/getPersonal';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
 
-  const checkSubscribe = new CheckSubscribe();
+  const getPersonal = new GetPersonal();
   const XHRList = {
     getOrderHistoryLists: '/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
     getPicList: '/mcall/patient/recovery/advice/v1/getMapList/'//图片列表
-  }
+  };
   export default {
     data() {
       return {
@@ -92,12 +92,13 @@
         pageStart: 0,
         items: [],
         checkFinish: false,
-        isSubscribe: (api.getPara().isSubscribe && api.getPara().isSubscribe == 1)||localStorage.getItem("isSubscribe") ? true : false
+        isSubscribe: false
       }
     },
     mounted() {
       //微信中绑定微信
-      checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
+      // checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
+
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
           callBack: () => {
@@ -110,8 +111,17 @@
         let checkLogin = new CheckLogin();
         checkLogin.getStatus().then((res) => {
           if (res.data.responseObject.responseStatus) {
-
+            getPersonal.getMessage(localStorage.getItem("userId")).then((data) => {
+              if (data.responseObject.responseData) {
+                if (data.responseObject.responseData.uniteFlagWeixin == 1) {
+                  this.isSubscribe = true;
+                } else {
+                  this.isSubscribe = false;
+                }
+              }
+            });
             this.init();
+
           } else {
             localStorage.setItem("backUrl", window.location.href);
             window.location.href = '/dist/mLogin.html';
@@ -164,7 +174,7 @@
                 if (that.pageStart > 0) {
                   that.wxTips = false;
                 } else {
-                  if (!that.isSubscribe){
+                  if (!that.isSubscribe) {
                     that.wxTips = true;
                   }
                 }
@@ -317,14 +327,14 @@
       hrefToSuggest(opt) {
         siteSwitch.weChatJudge(() => {
           if (localStorage.getItem("userId") || api.getPara().customerId) {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
           } else {
             window.location.href = '/dist/mLogin.html';
           }
         }, () => {
           if (this.isSubscribe) {
             if (localStorage.getItem("userId") || api.getPara().customerId) {
-              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
             } else {
               window.location.href = '/dist/mLogin.html';
             }
@@ -353,9 +363,9 @@
           localStorage.setItem("doctorName", opt.fullName);
           localStorage.setItem("doctorLogo", docLogo);
           if (opt.caseType == 10 || opt.caseType == 11) {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId + '&from=report';
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=report';
           } else {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId  + '&patientId=' + opt.patientId;
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId;
           }
         } else {
           if (api.getPara().customerId || localStorage.getItem("userId")) {

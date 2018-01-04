@@ -368,7 +368,8 @@
               that.createParams.customerId;
           },
           () => {
-            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")==1){
+            debugger;
+            if (that.$store.state.isSubscribe){
               if(navigator.userAgent.toLowerCase().includes("iphone")){
                 that.backPopupShow = true;
               }
@@ -377,9 +378,7 @@
                 "/dist/imScene.html?caseId=" +
                 that.responseCaseId +
                 "&patientId=" +
-                that.createParams.patientId +
-                "&patientCustomerId=" +
-                that.createParams.customerId;
+                that.createParams.patientId ;
             }else{
               that.getUserBaseData();
             }

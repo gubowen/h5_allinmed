@@ -404,7 +404,7 @@
           progress: "0%",
           index: 0
         },
-        patientCustomerId: api.getPara().patientCustomerId,
+        patientCustomerId: localStorage.getItem("userId"),
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
         fileLastIndex: 0,//上传pdf 最后一个记录在数组中的位置
@@ -840,7 +840,7 @@
           data: {
             caseId: api.getPara().caseId,
             customerId: 0,
-            patientCustomerId: api.getPara().patientCustomerId,
+            patientCustomerId: that.patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
@@ -1646,7 +1646,7 @@
         //        that.sendConsultState(4);
         console.log("走支付方法");
         let data = {
-          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
+          patientCustomerId: that.patientCustomerId, //	string	是	患者所属用户id
           patientId: api.getPara().patientId, // 	string	是	患者id
           //          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
           doctorId: 0, //	string	是	医生id
@@ -1728,7 +1728,7 @@
             caseId: api.getPara().caseId,
             //            andConsultationId:that.orderSourceId,
             patientId: api.getPara().patientId,
-            patientCustomerId: api.getPara().patientCustomerId,
+            patientCustomerId: that.patientCustomerId,
             isShunt: 1 //是否分流0-否1-是
           },
           done(data) {
@@ -1824,8 +1824,6 @@
                 (that.$store.state.targetDoctor.customerId ||
                   JSON.parse(localStorage.getItem("mPayDoctorDetails"))
                     .customerId) +
-                "&patientCustomerId=" +
-                api.getPara().patientCustomerId +
                 "&patientId=" +
                 api.getPara().patientId;
             }
@@ -1965,7 +1963,7 @@
           JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId,
           caseId: api.getPara().caseId,
           patientId: api.getPara().patientId,
-          patientCustomerId: api.getPara().patientCustomerId,
+          patientCustomerId: this.patientCustomerId,
           from: "checkSuggest",
           payType:
           this.$store.state.targetDoctor.payType ||

@@ -52,93 +52,93 @@
         <!--</transition>-->
         <!--添加患者-->
         <!--<transition name="fadeUp">-->
-          <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
-            <section class="add-patient-content-form">
-              <article class="add-patient-content-item">
-                <figcaption>与患者关系</figcaption>
-                <figure class="add-patient-input">
+        <section class="add-patient-content" id="ev-add-patient" v-if="createNewPatient">
+          <section class="add-patient-content-form">
+            <article class="add-patient-content-item">
+              <figcaption>与患者关系</figcaption>
+              <figure class="add-patient-input">
                   <span class="patient-relation" :class="{'on':relationClick}"
                         @click="relationPicker.show()">{{relationShip.title}}</span>
-                  <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>患者姓名</figcaption>
-                <figure class="add-patient-input">
-                  <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')" @input="inputMaxLength('username',40)"
-                         v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username" v-model="username">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>{{credentialTitle}}</figcaption>
-                <figure class="add-patient-input">
+                <input type="hidden" name="relationInput" v-validate="'required'" v-model="relationInput">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>患者姓名</figcaption>
+              <figure class="add-patient-input">
+                <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')" @input="inputMaxLength('username',40)"
+                       v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username" v-model="username">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>{{credentialTitle}}</figcaption>
+              <figure class="add-patient-input">
                   <span class="patient-credential"
                         @click="credentialPicker.show()">{{credentialType.title}}</span>
-                  <input type="hidden" name="credentialInput" v-validate="'required'" v-model="credentialInput">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>证件号码</figcaption>
-                <figure class="add-patient-input">
-                  <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>性别</figcaption>
-                <figure class="add-patient-input" id="ev-patient-sex">
-                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="selectSex(1)">
-                    <i class="add-patient-selector"></i>
-                    <span>男</span>
-                  </section>
-                  <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="selectSex(2)">
-                    <i class="add-patient-selector"></i>
-                    <span>女</span>
-                  </section>
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>出生日期</figcaption>
-                <figure class="add-patient-input">
+                <input type="hidden" name="credentialInput" v-validate="'required'" v-model="credentialInput">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>证件号码</figcaption>
+              <figure class="add-patient-input">
+                <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)" :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>性别</figcaption>
+              <figure class="add-patient-input" id="ev-patient-sex">
+                <section class="add-patient-sex-selector" :class="{'on':sexSelect==1}" @click="selectSex(1)">
+                  <i class="add-patient-selector"></i>
+                  <span>男</span>
+                </section>
+                <section class="add-patient-sex-selector" :class="{'on':sexSelect==2}" @click="selectSex(2)">
+                  <i class="add-patient-selector"></i>
+                  <span>女</span>
+                </section>
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>出生日期</figcaption>
+              <figure class="add-patient-input">
                   <span class="patient-relation" :class="{'on':birthClick}"
                         @click="selectBirth">{{birthData.title}}</span>
-                  <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>所在地</figcaption>
-                <figure class="add-patient-input">
-                  <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
-                  <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
-                </figure>
-              </article>
-              <article class="add-patient-content-item">
-                <figcaption>手机号码</figcaption>
-                <figure class="add-patient-input">
-                  <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
-                </figure>
-              </article>
-              <!--<article class="add-patient-content-item">-->
-              <!--<figcaption>年龄</figcaption>-->
-              <!--<figure class="add-patient-input">-->
-              <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
-              <!--v-model="userage">-->
-              <!--</figure>-->
-              <!--</article>-->
-            </section>
+                <input type="hidden" name="birthInput" v-validate="'required'" v-model="birthInput">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>所在地</figcaption>
+              <figure class="add-patient-input">
+                <span @click="selectArea()" :class="{'on':areaClick}">{{areaParam.result}}</span>
+                <input type="hidden" name="areaInput" v-validate="'required'" v-model="areaParam.districtId">
+              </figure>
+            </article>
+            <article class="add-patient-content-item">
+              <figcaption>手机号码</figcaption>
+              <figure class="add-patient-input">
+                <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)" placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
+              </figure>
+            </article>
+            <!--<article class="add-patient-content-item">-->
+            <!--<figcaption>年龄</figcaption>-->
+            <!--<figure class="add-patient-input">-->
+            <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
+            <!--v-model="userage">-->
+            <!--</figure>-->
+            <!--</article>-->
           </section>
-          <section class="dutyTips"  v-if="createNewPatient">
-            <section class="dutyTips-bg"></section>
-            <p class="dutyTips-text">
-              提示：危重症、急诊患者不适合在线咨询服务，建议尽快到医院就诊。
-            </p>
-          </section>
-          <!--联系我们消息-->
-          <section class="info-error-tips" v-if="infoErrorShow">
-            <p class="tips-box" @click="phoneShow =true">
-              <span class="tips-describe">若确认信息填写无误仍无法提交,</span>
-              <span class="tips-contact">请联系我们</span>
-            </p>
-          </section>
+        </section>
+        <section class="dutyTips"  v-if="createNewPatient">
+          <section class="dutyTips-bg"></section>
+          <p class="dutyTips-text">
+            提示：危重症、急诊患者不适合在线咨询服务，建议尽快到医院就诊。
+          </p>
+        </section>
+        <!--联系我们消息-->
+        <section class="info-error-tips" v-if="infoErrorShow">
+          <p class="tips-box" @click="phoneShow =true">
+            <span class="tips-describe">若确认信息填写无误仍无法提交,</span>
+            <span class="tips-contact">请联系我们</span>
+          </p>
+        </section>
         <!--</transition>-->
         <!--无患者提示-->
         <!--<transition name="fade">-->
@@ -153,15 +153,15 @@
     </section>
     <loading :show="finish"></loading>
     <!--<transition name="fade">-->
-      <!--<section class="btnBox-tips maskers show" horizontal="" v-if="hasCase" @click="hasCase=false">-->
-        <!--<section class="horizontal-box" @click="hasCase=true">-->
-          <!--<a class="btnBox-btn btn-hollow" @click="toSelectPart(patientList[currentIndex])">新问诊</a>-->
-          <!--<a class="btnBox-btn btn-hollow" @click="openCasePage()">复诊</a>-->
-        <!--</section>-->
-      <!--</section>-->
+    <!--<section class="btnBox-tips maskers show" horizontal="" v-if="hasCase" @click="hasCase=false">-->
+    <!--<section class="horizontal-box" @click="hasCase=true">-->
+    <!--<a class="btnBox-btn btn-hollow" @click="toSelectPart(patientList[currentIndex])">新问诊</a>-->
+    <!--<a class="btnBox-btn btn-hollow" @click="openCasePage()">复诊</a>-->
+    <!--</section>-->
+    <!--</section>-->
     <!--</transition>-->
     <!--<transition name="fadeRight">-->
-      <!--<selectArea v-if="showSelectArea" :show.sync="showSelectArea" :level.sync="cityLevel" :areaParam.sync="areaParam" :listType="listType" class="child-view"></selectArea>-->
+    <!--<selectArea v-if="showSelectArea" :show.sync="showSelectArea" :level.sync="cityLevel" :areaParam.sync="areaParam" :listType="listType" class="child-view"></selectArea>-->
     <!--</transition>-->
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
@@ -192,7 +192,7 @@
   import api from 'common/js/util/util';
   import validatePlugins from 'common/js/util/validate_plugins';
   import getDate from 'common/js/util/getDate';
-//  import PickerDate from 'common/js/util/pickerDate';
+  //  import PickerDate from 'common/js/util/pickerDate';
   import loading from 'components/loading';
   import area from 'components/selectArea';
   import Picker from 'better-picker';
@@ -202,9 +202,9 @@
   import wxBind from 'common/js/auth/wxBinding';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import CheckLogin from 'common/js/auth/checkLogin';
-  import CheckSubscribe from 'common/js/auth/checkSubscribe';
+  import store from "../store/store";
   const checkLogin = new CheckLogin();
-  const checkSubscribe = new CheckSubscribe();
+
   const XHRList = {
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
@@ -285,8 +285,7 @@
     },
     mounted() {
       //微信中绑定微信
-      // this.init();
-      // return;
+      this.init();
       siteSwitch.weChatJudge(()=>{
         this.isWeChat = true;
         wxBind.isBind({
@@ -296,6 +295,7 @@
         });
       },()=>{
         console.log("无需绑定微信");
+        store.commit("getSubscribeStatus");
         this.isWeChat = false;
         this.init();
         checkLogin.getStatus().then((res)=>{
@@ -317,7 +317,6 @@
     },
     methods: {
       init(){
-        checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
         document.title="为谁问诊";
         if(!api.checkOpenId()){
           console.log("获取openId");
@@ -406,7 +405,7 @@
         that.credentialPlaceholder='请填写证件号码(选填)';//证件输入框提示的话术
         that.credentialType={
           title: "身份证(选填)",
-            id: "1"
+          id: "1"
         };//仿ios选择器确定出的证件类型
         that.IDCheckFlag=false;//校验证件号码信息是否通过
         that.credentialInput="身份证(选填)";//用来验证证件类型是否填写
