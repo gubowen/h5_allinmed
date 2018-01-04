@@ -208,9 +208,8 @@
         if (this.searchText.length === 0) {
           this.messageList=[];
           this.noResult=false;
-          console.log(5)
           return false;
-        } else if (api.getByteLen(this.searchText) >= 60) {
+        } else if (api.getByteLen(this.searchText) > 60) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
 
           this.getMessageList(this.searchText, 0);
