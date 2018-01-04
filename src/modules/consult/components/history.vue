@@ -574,7 +574,7 @@ export default {
         _fileLocalName = files.name;
       } else {
         _fileName = files.name.split(".")[2];
-        _fileLocalName = files.name.split(".")[0]+files.name.split(".")[1];
+        _fileLocalName = files.name.split(".")[0]+files.name.split(".")[1]+'.'+files.name.split(".")[2];
       }
       switch (type) {
         case 1:
