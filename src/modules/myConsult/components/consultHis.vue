@@ -112,7 +112,8 @@
           if (res.data.responseObject.responseStatus) {
             getPersonal.getMessage(res.data.responseObject.responsePk).then((data) => {
               if (data.responseObject.responseData) {
-                that.customerId=data.responseObject.responseData.responsePk;
+                that.customerId=data.responseObject.responseData.customerId;
+                that.checkFinish = true;
                 if (data.responseObject.responseData.uniteFlagWeixin == 1) {
                   this.isSubscribe = true;
                 } else {
@@ -121,7 +122,6 @@
               }
             });
             this.init();
-
           } else {
             localStorage.setItem("backUrl", window.location.href);
             window.location.href = '/dist/mLogin.html';
@@ -135,11 +135,6 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
-
-        this.$nextTick(() => {
-          this.checkFinish = true;
-          console.log(localStorage.getItem('userId'));
-        })
       },
       toWXchat() {
         this.wxTips = false;
