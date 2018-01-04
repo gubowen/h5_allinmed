@@ -161,10 +161,10 @@
             </article>
           </section>
           <!--继续问诊-->
-          <MiddleTips
+          <!-- <MiddleTips
             v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4"
             :tipsType="4"
-          >
+          > -->
 
           </MiddleTips>
           <!--问诊结束-->
@@ -180,11 +180,6 @@
             :tipsText="JSON.parse(msg.content).text"
           >
           </MiddleTips>
-          <!--分诊台发送问诊-->
-          <MiddleTips
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'consultFinishTip'"
-            :tipsType="7"
-          >
           </MiddleTips>
           <!--消息撤回提示-->
           <div :key="0">
@@ -574,7 +569,7 @@
       // 患者端收到拒绝问诊隐藏输入框
       hideInput(msg) {
         if (msg.type === "custom" && JSON.parse(msg.content).type === "refusePatient") {
-          this.inputBoxShow = false; //顶部时间取消
+          this.inputBoxShow = false; //输入框取消
           store.commit("setconsultationState", 7);
         }
       },
@@ -1179,7 +1174,10 @@
             JSON.parse(msg.content).type === "payFinishTips" ||
             JSON.parse(msg.content).type === "triagePatientTips" ||
             JSON.parse(msg.content).type === "reTriageTip" ||
-            JSON.parse(msg.content).type === "refusePatient"
+            JSON.parse(msg.content).type === "refusePatient" || 
+            JSON.parse(msg.content).type === "overtimeTip" || 
+            JSON.parse(msg.content).type === "chatOvertimeTip" || 
+            (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 3)
           ) {
             return false;
           } else {
