@@ -15,7 +15,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     bottomNavShow:false,
-    isSubscribe:false
+    isSubscribe:false,
   },
   mutations: {
     setbottomNav(state,name){
