@@ -126,7 +126,7 @@
         </section>
       </article>
     </section>
-    
+
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -384,7 +384,7 @@
       //去医生主页
       goDoctorHome(index){
         let that = this;
-        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + api.getPara().patientCustomerId;
+        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId;
       },
       // 查询是否可以咨询
       queryConsult(index,type){
@@ -502,7 +502,7 @@
       },
     },
     components:{
-      
+
     },
   }
 </script>

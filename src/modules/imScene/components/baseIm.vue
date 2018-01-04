@@ -1444,7 +1444,7 @@
             // show file to the user
             console.log(file);
             if (!error) {
-              file.name = _file.name;
+
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1814,7 +1814,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshState(-1);
+              that.refreshState(0);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +

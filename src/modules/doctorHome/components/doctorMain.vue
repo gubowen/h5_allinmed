@@ -189,7 +189,7 @@
           docId:api.getPara().doctorCustomerId,                //医生ID
           caseId:api.getPara().caseId,                         //病历ID
           patientId:api.getPara().patientId,                   //患者ID
-          patientCustomerId:api.getPara().patientCustomerId?api.getPara().patientCustomerId:localStorage.getItem("customerId"),   //患者所属用户ID(医生主页、医生名片)
+          patientCustomerId:localStorage.getItem("userId"),   //患者所属用户ID(医生主页、医生名片)
           from:'docMain',                       //来源医生主页
           payType:'',                           //是否免费
           logoUrl:'',           //头像
