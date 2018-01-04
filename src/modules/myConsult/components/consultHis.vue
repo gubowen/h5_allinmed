@@ -98,11 +98,28 @@
     },
     mounted() {
       const that=this;
+      this.errorShow=true;
+      this.errorMsg="您的微信账号已绑定其他手机号，请更换手机号登录";
+      setTimeout(()=>{
+        this.errorShow=false;
+        this.errorMsg="";
+        window.location.href="/dist/mLogin.html";
+      },3000)
+
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
           callBack: (id) => {
             this.customerId=id;
             this.init();
+          },
+          hasBindedFn:(id)=>{
+            this.errorShow=true;
+            this.errorMsg="您的微信账号已绑定其他手机号，请更换手机号登录";
+            setTimeout(()=>{
+              this.errorShow=false;
+              this.errorMsg="";
+              window.location.href="/dist/mLogin.html";
+            },3000)
           }
         });
       }, () => {
