@@ -378,7 +378,7 @@
       },
       IMEnsure(){
         localStorage.setItem("noMR",1);
-        window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+api.getPara().customerId +'&patientId='+this.patientId +'&from=report';
+        window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')) +'&patientId='+this.patientId +'&from=report';
       },
       //获取绑定的手机号
       getPatientPhone(){
@@ -738,7 +738,7 @@
               that.areaClick = true;//选择城市是否点击过
 //              that.relationClick=true;
               that.relationShip.title = "选择您与患者关系";
-              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
+              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId'))+'#!index'
 
             } else {
               that.errorMsg = data.responseObject.responseMessage;
