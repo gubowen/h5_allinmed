@@ -568,7 +568,7 @@ export default {
       let _localViewUrl = window.URL.createObjectURL(files);
       let _fileName = "",
         _rex = /\./g;
-      let _fileLocalName = "",
+      let _fileLocalName = "";
       if (files.name.match(_rex).length == 1) {
         _fileName = files.name.split(".")[1];
         _fileLocalName = files.name;
