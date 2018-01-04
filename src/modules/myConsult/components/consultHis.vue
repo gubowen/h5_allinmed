@@ -100,9 +100,9 @@
       const that=this;
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
-          callBack: () => {
+          callBack: (id) => {
+            this.customerId=id;
             this.init();
-            this.checkFinish = true;
           }
         });
       }, () => {
@@ -113,16 +113,15 @@
           if (res.data.responseObject.responseStatus) {
             getPersonal.getMessage(res.data.responseObject.responsePk).then((data) => {
               if (data.responseObject.responseData) {
-                that.customerId=data.responseObject.responseData.customerId;
-                that.checkFinish = true;
+                this.customerId=data.responseObject.responseData.customerId;
                 if (data.responseObject.responseData.uniteFlagWeixin == 1) {
                   this.isSubscribe = true;
                 } else {
                   this.isSubscribe = false;
                 }
               }
+              this.init();
             });
-            this.init();
           } else {
             localStorage.setItem("backUrl", window.location.href);
             window.location.href = '/dist/mLogin.html';
@@ -136,6 +135,10 @@
           api.wxGetOpenId(1);    //获取openId
         }
         api.forbidShare();
+
+        this.$nextTick(()=>{
+          this.checkFinish = true;
+        })
       },
       toWXchat() {
         this.wxTips = false;
