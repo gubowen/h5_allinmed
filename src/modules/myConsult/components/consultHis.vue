@@ -115,7 +115,7 @@
               setTimeout(() => {
                 this.errorShow = false;
                 this.errorMsg = "";
-                window.location.href = "/dist/personal.html";
+                window.location.href = "/dist/mLogin.html?from=weChat";
               }, 3000);
             });
           }

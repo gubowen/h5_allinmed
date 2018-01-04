@@ -299,6 +299,17 @@
           callBack: (id) => {
             this.customerId = id;
             this.init();
+          },
+          hasBindedFn: (id) => {
+            this.$nextTick(()=>{
+              this.errorShow = true;
+              this.errorMsg = "您的微信账号已绑定其他手机号，请更换手机号登录";
+              setTimeout(() => {
+                this.errorShow = false;
+                this.errorMsg = "";
+                window.location.href = "/dist/mLogin.html?from=weChat";
+              }, 3000);
+            });
           }
         });
       }, () => {
