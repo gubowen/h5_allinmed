@@ -173,7 +173,7 @@
       heightPickerInit(){
         const that = this;
         let heightData = [],defaultHeight;
-        if(that.$route.params.sex == 1){
+        if(that.$route.params.sex == "1"){
           defaultHeight = 169;
         }else{
           defaultHeight = 159;
@@ -195,7 +195,7 @@
       weightPickerInit(){
         const that = this;
         let weightData = [],defaultWeight;
-        if(that.$route.params.sex == 1){
+        if(that.$route.params.sex == "1"){
           defaultWeight = 64;
         }else{
           defaultWeight = 49;

@@ -287,8 +287,8 @@ export default {
       uploadIndex: 0,
       filesObjAll: [], //所有选择文件对象（不清空）
       base64ArrAll: [], //所有选选择完文件的压缩对象（不清空）
-      reload:false,
-      isReadyLoad:true,
+      reload: false,
+      isReadyLoad: true,
       netTipsNum: 0,
       cityLevel: 2,
       responseCaseId: "", //提交订单响应回来的caseId
@@ -430,13 +430,20 @@ export default {
       });
     },
     onFileChange(e, type, index) {
-      let files = e.target.files || e.dataTransfer.files;
+      let _files = e.target.files || e.dataTransfer.files;
+      let files = []
       let that = this;
       that.filesObj = [];
       that.base64Arr = [];
       that.uploadIndex = 0;
-      if (!files.length) {
+      _files = Array.from(_files);
+      if (!_files.length) {
         return;
+      } else if (_files.length > 9) {
+        files = _files.slice(0,9);
+        that.toastCommonTips("一次最多上传9张图片");
+      }else{
+        files = _files;
       }
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
@@ -612,7 +619,7 @@ export default {
               ".tc-upLoadItemList.ev-imgList .ev-loading"
             )[0].style.display =
               "none";
-            that.isExistUpLoadFail();  
+            that.isExistUpLoadFail();
             //上传下一张图片(重传跳过)
             if (!that.reload) {
               that.uploadIndex = parseInt(that.uploadIndex) + 1;
@@ -641,7 +648,7 @@ export default {
             }
           } else {
             //上传失败（网络正常情况）
-            that.isExistUpLoadFail();  
+            that.isExistUpLoadFail();
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
@@ -689,17 +696,17 @@ export default {
       });
     },
     //是否存在上传失败图片
-    isExistUpLoadFail(){
+    isExistUpLoadFail() {
       let _this = this,
-      _failNum = 0;
-      this.imageList1.forEach((item,index)=>{
+        _failNum = 0;
+      this.imageList1.forEach((item, index) => {
         if (item.fail) {
           _failNum++;
         }
-      })
-      if(_failNum>0){
+      });
+      if (_failNum > 0) {
         _this.isReadyLoad = false;
-      }else{
+      } else {
         _this.isReadyLoad = true;
       }
     },
@@ -787,6 +794,16 @@ export default {
         //   this.submitTip = true;
         // }
       }
+    },
+    //toast提示方法
+    toastCommonTips(content) {
+      let _this = this;
+      _this.errorShow = true;
+      _this.errorMsg = content;
+      setTimeout(() => {
+        _this.errorMsg = "";
+        _this.errorShow = false;
+      }, 3000);
     },
     //提交数据
     submitData() {
