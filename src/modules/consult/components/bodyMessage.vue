@@ -173,10 +173,10 @@
       heightPickerInit(){
         const that = this;
         let heightData = [],defaultHeight;
-        if(that.$route.params.sex == 1){
-          defaultHeight = 170;
+        if(that.$route.params.sex == "1"){
+          defaultHeight = 169;
         }else{
-          defaultHeight = 160;
+          defaultHeight = 159;
         }
         for(let i=1;i<=300;i++){
           heightData.push({
@@ -195,10 +195,10 @@
       weightPickerInit(){
         const that = this;
         let weightData = [],defaultWeight;
-        if(that.$route.params.sex == 1){
-          defaultWeight = 65;
+        if(that.$route.params.sex == "1"){
+          defaultWeight = 64;
         }else{
-          defaultWeight = 50;
+          defaultWeight = 49;
         }
         for(let i=1;i<=200;i++){
           weightData.push({
@@ -368,7 +368,7 @@
               that.createParams.customerId;
           },
           () => {
-            if (api.getPara().isSubscribe==1||localStorage.getItem("isSubscribe")){
+            if (that.$store.state.isSubscribe){
               if(navigator.userAgent.toLowerCase().includes("iphone")){
                 that.backPopupShow = true;
               }
@@ -377,9 +377,7 @@
                 "/dist/imScene.html?caseId=" +
                 that.responseCaseId +
                 "&patientId=" +
-                that.createParams.patientId +
-                "&patientCustomerId=" +
-                that.createParams.customerId;
+                that.createParams.patientId ;
             }else{
               that.getUserBaseData();
             }
@@ -435,7 +433,7 @@
           data: {
             caseId: this.responseCaseId,
             customerId: 0,
-            patientCustomerId: api.getPara().customerId,
+            patientCustomerId: localStorage.getItem("userId"),
             patientId: this.createParams.patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放

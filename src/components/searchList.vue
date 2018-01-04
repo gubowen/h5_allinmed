@@ -205,13 +205,14 @@
         }
       },
       searchEvent(){
-
         if (this.searchText.length === 0) {
           this.messageList=[];
           this.noResult=false;
           return false;
-        } else if (api.getByteLen(this.searchText) >= 30) {
+        } else if (api.getByteLen(this.searchText) > 60) {
           this.searchText = api.getStrByteLen(this.searchText, 60);
+
+          this.getMessageList(this.searchText, 0);
         } else {
           clearTimeout(this.searchTimeout);
           this.searchTimeout = setTimeout(() => {
@@ -556,6 +557,7 @@
         width: 100%;
         height: rem(100px);
         padding-left: rem(30px);
+        padding-right: rem(100px);
         margin: 0 auto;
         outline: none;
         border-style: none;

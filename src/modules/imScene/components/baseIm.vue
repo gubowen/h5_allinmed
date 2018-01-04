@@ -161,10 +161,10 @@
             </article>
           </section>
           <!--继续问诊-->
-          <MiddleTips
+          <!-- <MiddleTips
             v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 4"
             :tipsType="4"
-          >
+          > -->
 
           </MiddleTips>
           <!--问诊结束-->
@@ -180,11 +180,6 @@
             :tipsText="JSON.parse(msg.content).text"
           >
           </MiddleTips>
-          <!--分诊台发送问诊-->
-          <MiddleTips
-            v-if="msg.type==='custom' && JSON.parse(msg.content).type === 'consultFinishTip'"
-            :tipsType="7"
-          >
           </MiddleTips>
           <!--消息撤回提示-->
           <div :key="0">
@@ -242,7 +237,7 @@
           </figure>
         </section>
         <ul class="footer-box-bottom" v-if="footerBottomFlag">
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.image">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
                    height="234"/>
@@ -255,7 +250,7 @@
                    ref="imageSender" capture="camera"
                    accept="image/*">
           </li>
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
                    height="234"/>
@@ -270,7 +265,7 @@
                    multiple
                    accept="video/*">
           </li>
-          <li class="bottom-item">
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
@@ -404,7 +399,7 @@
           progress: "0%",
           index: 0
         },
-        patientCustomerId: api.getPara().patientCustomerId,
+        patientCustomerId: localStorage.getItem("userId"),
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
         fileLastIndex: 0,//上传pdf 最后一个记录在数组中的位置
@@ -574,7 +569,7 @@
       // 患者端收到拒绝问诊隐藏输入框
       hideInput(msg) {
         if (msg.type === "custom" && JSON.parse(msg.content).type === "refusePatient") {
-          this.inputBoxShow = false; //顶部时间取消
+          this.inputBoxShow = false; //输入框取消
           store.commit("setconsultationState", 7);
         }
       },
@@ -840,7 +835,7 @@
           data: {
             caseId: api.getPara().caseId,
             customerId: 0,
-            patientCustomerId: api.getPara().patientCustomerId,
+            patientCustomerId: that.patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
@@ -1170,13 +1165,19 @@
       },
       //聊天记录里时间戳是否显示
       getTimeStampShowFlag(msg, index) {
+        if (!msg.time) {
+          return false;
+        }
         if (msg.type === "custom") {
           if (
             JSON.parse(msg.content).type.includes("new-") ||
             JSON.parse(msg.content).type === "payFinishTips" ||
             JSON.parse(msg.content).type === "triagePatientTips" ||
             JSON.parse(msg.content).type === "reTriageTip" ||
-            JSON.parse(msg.content).type === "refusePatient"
+            JSON.parse(msg.content).type === "refusePatient" ||
+            JSON.parse(msg.content).type === "overtimeTip" ||
+            JSON.parse(msg.content).type === "chatOvertimeTip" ||
+            (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 3)
           ) {
             return false;
           } else {
@@ -1189,6 +1190,17 @@
             return true;
           }
         }
+      },
+      // 替换的索引
+      replaceIndex (type) {
+        let indexTemp
+        this.msgList.map( (item,index) => {
+          if (item.replace && item.replace == type) {
+            indexTemp = index;
+            return;
+          }
+        });
+        return indexTemp;
       },
       //上传文件
       sendImage(e) {
@@ -1231,8 +1243,10 @@
             }
           }),
           loading: true,
-          from: this.userData.account
+          from: this.userData.account,
+          replace:"multiple",
         });
+        that.scrollToBottom();
         that.mulitpleLastIndex = that.msgList.length - 1;
         that.inputImageFlag = false;
         Array.from(list).forEach((element, index) => {
@@ -1245,7 +1259,6 @@
                   type: "image",
                   dataURL: oFREvent.target.result,
                   uploadprogress(obj) {
-                    that.scrollToBottom();
                     console.log("文件总大小: " + obj.total + "bytes");
                     console.log("已经上传的大小: " + obj.loaded + "bytes");
                     console.log("上传进度: " + obj.percentage);
@@ -1293,7 +1306,14 @@
             that.inputImageFlag = true;
             if (!error) {
               console.log(msg);
-              that.msgList[that.mulitpleLastIndex] = msg;
+              // that.msgList.map( (item,index) => {
+              //   if (item.replace && item.replace == 'multiple') {
+              //     that.mulitpleLastIndex = index;
+              //     return;
+              //   }
+              // });
+              console.log(that.replaceIndex('multiple'));
+              that.msgList[that.replaceIndex('multiple')] = msg;
             }
           }
         });
@@ -1306,7 +1326,9 @@
             url: window.URL.createObjectURL(_file)
           },
           type: "image",
-          from: that.userData.account
+          from: that.userData.account,
+          replace:'image',
+          loading: true,
         });
         this.$nextTick(() => {
           that.scrollToBottom();
@@ -1318,7 +1340,7 @@
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
             // that.inputImageFlag = false;
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1347,7 +1369,9 @@
                 type: "image",
                 done(error, msg) {
                   // debugger;
-                  that.msgList[that.imageLastIndex] = msg;
+                  // that.msgList[that.imageLastIndex] = msg;
+                  that.msgList[that.replaceIndex('image')] = msg;
+                  that.scrollToBottom();
                   // 老版本的imageList push
                   // that.imageList.push(
                   //   that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
@@ -1393,15 +1417,18 @@
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
-          from: that.userData.account
+          loading: true,
+          from: that.userData.account,
+          replace:'video',
         });
+        that.scrollToBottom();
         that.videoLastIndex = that.msgList.length - 1;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
             // this.inputVideoFlag = false;
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.videoProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1417,6 +1444,7 @@
             // show file to the user
             console.log(file);
             if (!error) {
+              file.name = _file.name;
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1429,7 +1457,15 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.msgList[that.videoLastIndex] = msg;
+                  // that.msgList[that.videoLastIndex] = msg;
+                  // that.msgList.map( (item,index) => {
+                    //   if (item.replace && item.replace == 'video') {
+                      //     that.videoLastIndex = index;
+                  //     return;
+                  //   }
+                  // });
+                  that.msgList[that.replaceIndex('video')] = msg;
+                  that.scrollToBottom();
                   that.videoProgress = {
                     uploading: false,
                     progress: "0%",
@@ -1470,8 +1506,11 @@
             name: _file.name
           }),
           type: "file",
-          from: that.userData.account
+          from: that.userData.account,
+          replace:"pdf",
+          loading:true,
         });
+        that.scrollToBottom();
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
@@ -1481,7 +1520,7 @@
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
               // this.inputPdfFlag = false;
-              that.scrollToBottom();
+              // that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
                 progress: obj.percentageText,
@@ -1514,7 +1553,9 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
-                    that.msgList[that.fileLastIndex] = msg;
+                    // that.msgList[that.fileLastIndex] = msg;
+                    that.msgList[that.replaceIndex('pdf')] = msg;
+                    that.scrollToBottom();
                     that.fileProgress = {
                       uploading: false,
                       progress: "0%",
@@ -1604,7 +1645,7 @@
         //        that.sendConsultState(4);
         console.log("走支付方法");
         let data = {
-          patientCustomerId: api.getPara().patientCustomerId, //	string	是	患者所属用户id
+          patientCustomerId: that.patientCustomerId, //	string	是	患者所属用户id
           patientId: api.getPara().patientId, // 	string	是	患者id
           //          doctorId: api.getPara().shuntCustomerId,          //	string	是	医生id
           doctorId: 0, //	string	是	医生id
@@ -1686,7 +1727,7 @@
             caseId: api.getPara().caseId,
             //            andConsultationId:that.orderSourceId,
             patientId: api.getPara().patientId,
-            patientCustomerId: api.getPara().patientCustomerId,
+            patientCustomerId: that.patientCustomerId,
             isShunt: 1 //是否分流0-否1-是
           },
           done(data) {
@@ -1773,7 +1814,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshState(9);
+              that.refreshState(-1);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +
@@ -1782,8 +1823,6 @@
                 (that.$store.state.targetDoctor.customerId ||
                   JSON.parse(localStorage.getItem("mPayDoctorDetails"))
                     .customerId) +
-                "&patientCustomerId=" +
-                api.getPara().patientCustomerId +
                 "&patientId=" +
                 api.getPara().patientId;
             }
@@ -1923,7 +1962,7 @@
           JSON.parse(localStorage.getItem("mPayDoctorDetails")).customerId,
           caseId: api.getPara().caseId,
           patientId: api.getPara().patientId,
-          patientCustomerId: api.getPara().patientCustomerId,
+          patientCustomerId: this.patientCustomerId,
           from: "checkSuggest",
           payType:
           this.$store.state.targetDoctor.payType ||
@@ -1943,6 +1982,7 @@
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);
       }
+      store.commit("getToolbarConfig");
       api.forbidShare();
       that.getUserBaseData();
       that.triageDoctorAssign();

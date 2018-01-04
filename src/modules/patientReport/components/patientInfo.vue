@@ -208,6 +208,7 @@
   export default{
     data(){
       return {
+        customerId:0,//用户id
         phoneShow: false,//拨打电话confirm框
         patientList: [],//患者列表
         currentIndex: -1,//第几个患者
@@ -307,6 +308,7 @@
       init () {
         document.title = "诊后报到";
         localStorage.removeItem('APPIMLinks');
+        this.customerId = this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId'))
         this.getPatientList();
         this.relationPickerInit();//患者关系选择器初始化
         this.credentialPickerInit();//患者关系选择器初始化
@@ -378,7 +380,7 @@
       },
       IMEnsure(){
         localStorage.setItem("noMR",1);
-        window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+api.getPara().customerId +'&patientId='+this.patientId +'&from=report';
+        window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
       },
       //获取绑定的手机号
       getPatientPhone(){
@@ -390,7 +392,7 @@
             isValid: 1,                           // string 是   1
             firstResult: 0,                       // string 是  分页参数
             maxResult: 99999,                     //  string 是  分页参数
-            customerId: api.getPara().customerId,                       //  string 是  用户id
+            customerId: that.customerId,                       //  string 是  用户id
           },
           beforeSend(config) {
 
@@ -462,7 +464,7 @@
           url: XHRList.patientList,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId?this.$route.query.customerId:(api.getPara().customerId||localStorage.getItem('userId')),
+            customerId: that.customerId,
             isValid: "1",
             firstResult: "0",
             maxResult: "9999"
@@ -650,7 +652,7 @@
           data: {
             certificateId: that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
             certificateCode: that.IDNumber,//	string	是	证件号码
-            customerId: that.$route.query.customerId?that.$route.query.customerId:api.getPara().customerId,
+            customerId: that.customerId,
             firstResult: "0",	//string	是	分页参数
             maxResult: "999",	//string	是	分页参数
           },
@@ -698,7 +700,7 @@
           url: XHRList.addPatient,
           method: "POST",
           data: {
-            customerId: this.$route.query.customerId ? this.$route.query.customerId : api.getPara().customerId,//用户id
+            customerId: that.customerId,//用户id
             patientName: this.username,//患者姓名
 //            patientAge: this.userage,
             patientSex: this.sexSelect,
@@ -738,7 +740,7 @@
               that.areaClick = true;//选择城市是否点击过
 //              that.relationClick=true;
               that.relationShip.title = "选择您与患者关系";
-              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index'
+              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ that.customerId +'#!index'
 
             } else {
               that.errorMsg = data.responseObject.responseMessage;
@@ -939,7 +941,7 @@
       },
       openCasePage(){
         let that = this;
-        window.location.href = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId
+        window.location.href = "/pages/patientConsult/case_list.html?customerId=" + this.customerId + "&patientId=" + this.patientList[this.currentIndex].patientId
       },
       //判断是否有报道病例
       caseReportFlag() {
@@ -964,10 +966,10 @@
                 _this.caseIdData =res.responseObject.responseData.dataList[0].caseId;
                 _this.IMEnsureShow = true;
               }else{
-                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
+                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
               }
             }else{
-              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+api.getPara().customerId+'#!index';
+              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
             }
           },
           fail(err) {

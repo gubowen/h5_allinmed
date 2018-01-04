@@ -323,6 +323,9 @@ export default {
       if (!files.length) {
         return;
       }
+      console.log('触发上传');
+      console.log('files');
+      console.log(files);
       this.loading = true; //关闭上传权限
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {

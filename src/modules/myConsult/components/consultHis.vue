@@ -31,12 +31,12 @@
           <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
         </div>
         <div class="orderHistoryItemBottom"
-             v-if="(item.consultationType==0&&item.consultationState==0&&item.state==3) || (item.consultationType==0&&(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1)">
-          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==0&&item.state==3"
+             v-if="(item.consultationType==0&&(item.consultationState==0 || item.consultationState == 9)&&item.state==3) || (item.consultationType==0&&item.isRecommend==1)">
+          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==9&&item.state==3"
                   @click.stop="goToUploadPic(item)">补全检查资料
           </button>
           <button data-alcode='e137' class="hrefBtn"
-                  v-if="(item.consultationState==0||item.consultationState==1)&&item.isRecommend==1"
+                  v-if="item.isRecommend==1"
                   @click.stop="hrefToSuggest(item)">查看推荐专家
           </button>
         </div>
@@ -70,16 +70,16 @@
   import confirm from "components/confirm";
   import wxBind from 'common/js/auth/wxBinding';
   import CheckLogin from 'common/js/auth/checkLogin';
-  import CheckSubscribe from 'common/js/auth/checkSubscribe';
+  import GetPersonal from 'common/js/auth/getPersonal';
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import InfiniteLoading from 'vue-infinite-loading';
   import "babel-polyfill";
 
-  const checkSubscribe = new CheckSubscribe();
+  const getPersonal = new GetPersonal();
   const XHRList = {
     getOrderHistoryLists: '/mcall/customer/case/consultation/v1/getMapList/', //咨询历史接口
     getPicList: '/mcall/patient/recovery/advice/v1/getMapList/'//图片列表
-  }
+  };
   export default {
     data() {
       return {
@@ -92,15 +92,16 @@
         pageStart: 0,
         items: [],
         checkFinish: false,
-        isSubscribe: (api.getPara().isSubscribe && api.getPara().isSubscribe == 1)||localStorage.getItem("isSubscribe") ? true : false
+        isSubscribe: false,
+        customerId:""
       }
     },
     mounted() {
-      //微信中绑定微信
-      checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
+      const that=this;
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
-          callBack: () => {
+          callBack: (id) => {
+            this.customerId=id;
             this.init();
           }
         });
@@ -110,8 +111,17 @@
         let checkLogin = new CheckLogin();
         checkLogin.getStatus().then((res) => {
           if (res.data.responseObject.responseStatus) {
-
-            this.init();
+            getPersonal.getMessage(res.data.responseObject.responsePk).then((data) => {
+              if (data.responseObject.responseData) {
+                this.customerId=data.responseObject.responseData.customerId;
+                if (data.responseObject.responseData.uniteFlagWeixin == 1) {
+                  this.isSubscribe = true;
+                } else {
+                  this.isSubscribe = false;
+                }
+              }
+              this.init();
+            });
           } else {
             localStorage.setItem("backUrl", window.location.href);
             window.location.href = '/dist/mLogin.html';
@@ -126,9 +136,8 @@
         }
         api.forbidShare();
 
-        this.$nextTick(() => {
+        this.$nextTick(()=>{
           this.checkFinish = true;
-          console.log(localStorage.getItem('userId'));
         })
       },
       toWXchat() {
@@ -143,7 +152,7 @@
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: localStorage.getItem("userId") || api.getPara().customerId,
+            patientCustomerId: this.customerId,
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,
@@ -164,7 +173,7 @@
                 if (that.pageStart > 0) {
                   that.wxTips = false;
                 } else {
-                  if (!that.isSubscribe){
+                  if (!that.isSubscribe) {
                     that.wxTips = true;
                   }
                 }
@@ -317,14 +326,14 @@
       hrefToSuggest(opt) {
         siteSwitch.weChatJudge(() => {
           if (localStorage.getItem("userId") || api.getPara().customerId) {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
           } else {
             window.location.href = '/dist/mLogin.html';
           }
         }, () => {
           if (this.isSubscribe) {
             if (localStorage.getItem("userId") || api.getPara().customerId) {
-              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientCustomerId=' + (localStorage.getItem("userId") || api.getPara().customerId) + '&patientId=' + opt.patientId + '&from=health&suggest=1'
+              window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
             } else {
               window.location.href = '/dist/mLogin.html';
             }
@@ -353,13 +362,13 @@
           localStorage.setItem("doctorName", opt.fullName);
           localStorage.setItem("doctorLogo", docLogo);
           if (opt.caseType == 10 || opt.caseType == 11) {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId + '&from=report';
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=report';
           } else {
-            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientCustomerId=' + api.getPara().customerId + '&patientId=' + opt.patientId;
+            window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId;
           }
         } else {
           if (api.getPara().customerId || localStorage.getItem("userId")) {
-            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientCustomerId=' + (api.getPara().customerId || localStorage.getItem("userId")) + '&patientId=' + opt.patientId
+            window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientId=' + opt.patientId
           } else {
             window.location.href = '/dist/mLogin.html';
           }

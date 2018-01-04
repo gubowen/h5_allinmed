@@ -34,6 +34,7 @@ export default class checkSession {
           localStorage.removeItem("mobile");
           localStorage.removeItem("logoUrl");
         }else{
+          console.log(res.data.responseObject.responsePk);
           localStorage.setItem("userId",res.data.responseObject.responsePk)
         }
         resolve(res);

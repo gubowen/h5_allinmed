@@ -329,12 +329,13 @@
                   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   return false;
                 }else{
-                  if (api.getPara().from==="index"){
-                    _this.validLoginData();
-                  }else{
-                    _this.toastComm("该账号已绑定其他微信，请更换手机号！");
-                    return false;
-                  }
+                  _this.validLoginData();
+                  // if (api.getPara().from==="index"){
+                  //   _this.validLoginData();
+                  // }else{
+                  //   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+                  //   return false;
+                  // }
                 }
               }else{
                 _this.validLoginData();

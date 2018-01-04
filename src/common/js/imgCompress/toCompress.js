@@ -18,12 +18,12 @@ export default function ImageCompress(param, compressFn) {
     let finalBase64 = "";
 
     let compressParam=getRatioSize(image,param);
-    if(navigator.userAgent.toLowerCase().includes("iphone")){
+    // if(navigator.userAgent.toLowerCase().includes("iphone")){
       changeDirection(canvas,ctx,param,compressParam,image,()=>{
         finalBase64 = canvas.toDataURL("image/jpeg",0.9);
         compressFn && compressFn(finalBase64);
       }) 
-    }
+    // }
   }
 }
 

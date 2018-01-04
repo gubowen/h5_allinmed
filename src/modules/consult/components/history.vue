@@ -36,22 +36,24 @@
                     <!-- <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p> -->
                   </figure>
                   <ul class="qu-upLoadItemBox qu-upLoadItemBox-s docInt">
-                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1">
+                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="index<9">
                       <img alt="" @click="showBigImg(item,index,1)" :src="item.blob">
                       <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(item,index,1)"
                             v-show="item.finish"></span>
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
+                         <div class="ev-upLoadInput" 
+                               @click="upLoadReload(index)"  ref="uploader"></div>
+                        <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
                         <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"    ref="uploader">
                         <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)"    ref="uploader">
+                               @change="onFileChange($event,1,index)"    ref="uploader"> -->
                       </figure>
                     </li>
-                    <li class="ev-upLoadAdd" v-show="imageList1.length<50">
+                    <li class="ev-upLoadAdd" v-show="isReadyLoad&&imageList1.length<50">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50"
                              @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
@@ -258,7 +260,7 @@ export default {
       },
       cameraType: _cameraType,
       patientParams: {
-        customerId: localStorage.getItem('userId'),
+        customerId: localStorage.getItem("userId"),
         doctorId: api.getPara().doctorId
       },
       isIos: navigator.userAgent.toLowerCase().includes("iphone"),
@@ -280,9 +282,14 @@ export default {
       imageList2: [],
       uploadContalNum: 0, //已上传数量
       upLoadGuideTip: 1, //上传指导路径 （1-问号提示 2-去上传按钮）
-      filesObj: [],
-      base64Arr: [],
+      filesObj: [], //每次选择文件的对象（下次清空）
+      base64Arr: [], //每次选择完文件的压缩对象（下次清空）
       uploadIndex: 0,
+      filesObjAll: [], //所有选择文件对象（不清空）
+      base64ArrAll: [], //所有选选择完文件的压缩对象（不清空）
+      reload: false,
+      isReadyLoad: true, //是否有上传失败图片
+      isLoadReady: true, //是否有上传失败图片
       netTipsNum: 0,
       cityLevel: 2,
       responseCaseId: "", //提交订单响应回来的caseId
@@ -317,7 +324,7 @@ export default {
         takeMedicine: "",
         complication: "",
         optionList: [],
-        customerId: localStorage.getItem('userId'),
+        customerId: localStorage.getItem("userId"),
         patientId: ""
       }
     };
@@ -336,11 +343,14 @@ export default {
       this.clearPageData();
       localStorage.removeItem("isSubmit");
     }
-    siteSwitch.weChatJudge(()=>{
-      store.commit("setbottomNav",false);
-    },()=>{
-      store.commit("setbottomNav",true);
-    });
+    siteSwitch.weChatJudge(
+      () => {
+        store.commit("setbottomNav", false);
+      },
+      () => {
+        store.commit("setbottomNav", true);
+      }
+    );
     if (this.upLoadGuideTip == "2") {
       //展示上传按钮
       this.uploadEvent();
@@ -421,13 +431,20 @@ export default {
       });
     },
     onFileChange(e, type, index) {
-      let files = e.target.files || e.dataTransfer.files;
+      let _files = e.target.files || e.dataTransfer.files;
+      let files = []
       let that = this;
       that.filesObj = [];
       that.base64Arr = [];
       that.uploadIndex = 0;
-      if (!files.length) {
+      _files = Array.from(_files);
+      if (!_files.length) {
         return;
+      } else if (_files.length > 9) {
+        files = _files.slice(0,9);
+        that.toastCommonTips("一次最多上传9张图片");
+      }else{
+        files = _files;
       }
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
@@ -443,7 +460,8 @@ export default {
             }
           }, 3000);
         } else {
-          that.filesObj.push(files[i]);
+          that.filesObj.push(files[i]); //保存文件对象
+          that.filesObjAll.unshift(files[i]); //保存文件对象（不清空）
           //图片压缩处理
           let reader = new FileReader();
           reader.readAsDataURL(files[i]);
@@ -456,11 +474,12 @@ export default {
               },
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
+                that.base64ArrAll.unshift(base64); //保存压缩图片
                 if (i == files.length - 1) {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
                     type,
-                    index, 
+                    index,
                     that.base64Arr[that.uploadIndex]
                   );
                 }
@@ -469,18 +488,18 @@ export default {
           };
         }
       }
-      console.log(this.filesObj);
-      console.log(this.base64Arr);
     },
     //去上传按钮
     uploadBtnFn() {
       let _this = this;
       _this.upLoadGuideTip = "2";
-      let _customerId = localStorage.getItem('customerId')?localStorage.getItem('customerId'):localStorage.getItem('userId');
-      if (localStorage.getItem('customerId')) {
-        _customerId = localStorage.getItem('customerId');
-      } else if (localStorage.getItem('userId')) {
-        _customerId = localStorage.getItem('userId');
+      let _customerId = localStorage.getItem("customerId")
+        ? localStorage.getItem("customerId")
+        : localStorage.getItem("userId");
+      if (localStorage.getItem("customerId")) {
+        _customerId = localStorage.getItem("customerId");
+      } else if (localStorage.getItem("userId")) {
+        _customerId = localStorage.getItem("userId");
       } else {
         _customerId = api.getPara().customerId;
       }
@@ -489,12 +508,17 @@ export default {
       } else {
         //是否上传过检测
         checkUpLoadStatus
-          .getDataInit({patientCustomerId:_customerId})
+          .getDataInit({ patientCustomerId: _customerId })
           .then(res => {
-            if(res&&res.responseObject&&res.responseObject.responseData&&res.responseObject.responseData.dataList){
-            // 上传过
+            if (
+              res &&
+              res.responseObject &&
+              res.responseObject.responseData &&
+              res.responseObject.responseData.dataList
+            ) {
+              // 上传过
               _this.uploadEvent();
-            }else{
+            } else {
               //未上传过
               _this.upLoadTips();
             }
@@ -513,6 +537,15 @@ export default {
       if (netType !== 1) {
         this.levelShow = true;
       }
+    },
+    //失败重传图片
+    upLoadReload(index) {
+      let _this = this,
+        _type = 1,
+        _files = _this.filesObjAll[index],
+        _base64 = _this.base64ArrAll[index];
+      _this.reload = true;
+      _this.upLoadPic(_files, _type, index, _base64);
     },
     //多图上传
     upLoadPic(files, type, index, base64) {
@@ -582,31 +615,36 @@ export default {
               ".tc-upLoadItemList.ev-imgList .ev-loading"
             )[0].style.display =
               "none";
-            //上传下一张图片
-            that.uploadIndex = parseInt(that.uploadIndex) + 1;
-            let totalUpNum = that["imageList" + type].length;
-            if (
-              that.filesObj[that.uploadIndex] !== "undefined" &&
-              that.uploadIndex < that.base64Arr.length &&
-              totalUpNum < 50
-            ) {
-              that.upLoadPic(
-                that.filesObj[that.uploadIndex],
-                type,
-                index,
-                that.base64Arr[that.uploadIndex]
-              );
-            } else {
-              if (that.filesObj[that.uploadIndex]) {
-                that.errorShow = true;
-                that.errorMsg = "图片最多上传50张！";
-                setTimeout(() => {
-                  that.errorShow = false;
-                  that.errorMsg = "";
-                }, 3000);
+            that.isExistUpLoadFail();
+            //上传下一张图片(重传跳过)
+            if (!that.reload) {
+              that.uploadIndex = parseInt(that.uploadIndex) + 1;
+              let totalUpNum = that["imageList" + type].length;
+              if (
+                that.filesObj[that.uploadIndex] !== "undefined" &&
+                that.uploadIndex < that.base64Arr.length &&
+                totalUpNum < 50
+              ) {
+                that.upLoadPic(
+                  that.filesObj[that.uploadIndex],
+                  type,
+                  index,
+                  that.base64Arr[that.uploadIndex]
+                );
+              } else {
+                if (that.filesObj[that.uploadIndex]) {
+                  that.errorShow = true;
+                  that.errorMsg = "图片最多上传50张！";
+                  setTimeout(() => {
+                    that.errorShow = false;
+                    that.errorMsg = "";
+                  }, 3000);
+                }
               }
             }
           } else {
+            //上传失败（网络正常情况）
+            that.isExistUpLoadFail();
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
@@ -641,7 +679,9 @@ export default {
           }
         },
         fail(res) {
-          let num = index ? index : that["imageList" + type].length - 1;
+          //上传失败（网络异常）
+          that.isReadyLoad = false;
+          let num = index ? index : 0;
           that["imageList" + type][num].uploading = false;
           that["imageList" + type][num].fail = true;
           that["imageList" + type][num].finish = false;
@@ -650,6 +690,36 @@ export default {
           that.uploading2 = false;
         }
       });
+    },
+    //是否存在上传失败图片
+    isExistUpLoadFail() {
+      let _this = this,
+        _failNum = 0;
+      this.imageList1.forEach((item, index) => {
+        if (item.fail) {
+          _failNum++;
+        }
+      });
+      if (_failNum > 0) {
+        _this.isReadyLoad = false;
+      } else {
+        _this.isReadyLoad = true;
+      }
+    },
+    //是否正在上传图片ing
+     isExistUpLoading() {
+      let _this = this,
+        _failNum = 0;
+      this.imageList1.forEach((item, index) => {
+        if (item.uploading) {
+          _failNum++;
+        }
+      });
+      if (_failNum > 0) {
+        _this.isLoadReady = false;
+      } else {
+        _this.isLoadReady = true;
+      }
     },
     textAreaFocus() {
       this.$el.querySelector(".medicineBox").focus();
@@ -669,11 +739,13 @@ export default {
     ensureDeletePic() {
       let _deletePic = this.deletePic;
       this["imageList" + _deletePic.type].splice(_deletePic.index, 1);
+      this.filesObjAll.splice(_deletePic.index, 1);
+      this.base64ArrAll.splice(_deletePic.index, 1);
       this.deletePicTip = false;
     },
     //上传指导页
     upLoadTips() {
-      store.commit("setbottomNav",false);
+      store.commit("setbottomNav", false);
       this.$router.push({
         name: "upLoadTip"
       });
@@ -696,7 +768,7 @@ export default {
         imgBlob: this["imageList" + type],
         indexNum: index
       };
-      store.commit("setbottomNav",false);
+      store.commit("setbottomNav", false);
       this.$router.push({
         name: "showBigImg",
         params: _params
@@ -713,11 +785,11 @@ export default {
       } else if (this.uploading1 || this.uploading1) {
         //图片上传中
         this.errorShow = true;
-        this.errorMsg = "图片上传中...";
+        this.errorMsg = "尚有图片未上传完成，请稍后";
         setTimeout(() => {
           this.errorMsg = "";
           this.errorShow = false;
-        }, 1000);
+        }, 2000);
       } else {
         this.submitData();
         //跳转第四部分
@@ -733,6 +805,16 @@ export default {
         //   this.submitTip = true;
         // }
       }
+    },
+    //toast提示方法
+    toastCommonTips(content) {
+      let _this = this;
+      _this.errorShow = true;
+      _this.errorMsg = content;
+      setTimeout(() => {
+        _this.errorMsg = "";
+        _this.errorShow = false;
+      }, 3000);
     },
     //提交数据
     submitData() {
@@ -780,8 +862,8 @@ export default {
         name: "bodyMessage",
         params: {
           pageParam: this.allParams,
-          height:this.$route.params.height,
-          weight:this.$route.params.weight,
+          height: this.$route.params.height,
+          weight: this.$route.params.weight,
           sex: this.$route.params.sex
         }
       });
@@ -832,12 +914,12 @@ export default {
       }
       //是否存在上传失败的图片
       let _failNum = 0;
-      for(let item of this.imageList1){
+      for (let item of this.imageList1) {
         if (item.fail) {
           _failNum++;
         }
       }
-      if (_failNum>0) {
+      if (_failNum > 0) {
         this.validateToast("请完成未上传成功的图片");
         return false;
       }
@@ -852,14 +934,14 @@ export default {
     },
     contentLimit() {
       if (this.medicalMessage.length > 500) {
-        this.medicalMessage = this.medicalMessage.substring(0,500);
+        this.medicalMessage = this.medicalMessage.substring(0, 500);
         this.validateToast("最多只能输入500字");
       }
     },
     getByteLen(len) {
-      if(500 - len <= 0){
-        return 0
-      }else{
+      if (500 - len <= 0) {
+        return 0;
+      } else {
         return 500 - len;
       }
     },

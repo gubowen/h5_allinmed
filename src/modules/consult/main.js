@@ -19,16 +19,15 @@ import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
 import followWechat from 'components/followWechat';
 import BodyMessage from "./components/bodyMessage";
-// import vueg from 'vueg'
-// import 'vueg/css/transition-min.css';
+
 import "static/css/base.css";
 import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
 import searchList from 'components/searchList';
+import store from "./store/store";
 import fastclick from 'fastclick';
 import ustb from 'common/styles/_ustbPicker.css';
 import valiadteMethods from '../../common/js/util/validate_methods';
-// fastclick.attach(document.body);
 
 class Consult {
   constructor() {
@@ -48,6 +47,7 @@ class Consult {
     this.goToRouter();
     //Vue实例启动
     const app = new Vue({
+      store,
       router: this.router,
       render: h => h(App)
     }).$mount("#patientConfult");

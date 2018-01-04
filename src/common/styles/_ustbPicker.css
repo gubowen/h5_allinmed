@@ -92,7 +92,7 @@ html [data-dpr="3"] .picker .picker-panel .picker-choose .picker-title {
 
 html .picker .picker-panel .picker-choose .confirm, .picker .picker-panel .picker-choose .cancel {
   position: absolute;
-  padding: 0.4rem;
+  padding: 0.4rem !important;
   font-size: 16px;
 }
 

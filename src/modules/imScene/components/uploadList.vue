@@ -182,7 +182,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (from.name === "showBigImg") {
+    if (from.name === "showBigImg" || from.name === "upLoadTip") {
       refreshFlag = false;
     } else {
       refreshFlag = true;

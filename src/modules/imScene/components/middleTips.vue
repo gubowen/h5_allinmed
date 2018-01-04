@@ -6,7 +6,7 @@
       </figcaption>
     </section>
     <p v-if="tipsType !==4" class="receive-treatment"><span>问诊已结束</span></p>
-    <section v-if="tipsType ===7" class="main-message-box grey-tips">
+    <section v-if="tipsType ===5" class="main-message-box grey-tips">
       <figcaption class="first-message">
         <p>在线咨询不能代替面诊，医生建议仅供参考</p>
       </figcaption>
@@ -35,14 +35,14 @@
           this.tipsContent = "您已重新购买分诊医生的问诊，可重新提问";
           break;
         case 5:
-          this.tipsContent = "分诊医生的职责是为您完善就诊病历信息，诊疗意见请在分诊后与主诊专家详细沟通。";
+          this.tipsContent = "为您推荐的医生已接诊，请尽快进行详细沟通";
           break;
         case 6:
           this.tipsContent = this.tipsText;
           break;
-        case 7:
-          this.tipsContent = "为您推荐的医生已接诊，请尽快进行详细沟通";
-          break;
+        // case 7:
+        //   this.tipsContent = "为您推荐的医生已接诊，请尽快进行详细沟通";
+        //   break;
       }
     },
     methods: {},

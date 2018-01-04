@@ -23,7 +23,7 @@
           </figure>
           <figcaption class="doctor-title-content">
             <h4 class="name">{{$store.state.targetMsg.nick}}</h4>
-            <span class="title" v-if="$store.state.targetMsg.title">{{$store.state.targetMsg.title.substring(2)}}</span>
+            <span class="title" v-if="$store.state.targetMsg.title">{{doctorTitleName}}</span>
             <span class="hospital">{{$store.state.targetMsg.hospital}}</span>
             <i class="icon-rightArrow"></i>
           </figcaption>
@@ -50,7 +50,7 @@
             <div data-alcode-mod='717' :key="0">
               <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
                 <figcaption class="first-message">
-                  <p>{{msg.from==="1_doctor00001"?"分诊医生":"您"}}撤回了一条消息</p>
+                  <p>{{msg.from===targetData.account?`${$store.state.targetMsg.nick}医生`:"您"}}撤回了一条消息</p>
                 </figcaption>
               </section>
             </div>
@@ -84,7 +84,7 @@
             <!--文本消息-->
             <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
                          :targetData="targetData" @deleteMsgEvent="deleteMsgEvent(msg)"
-                         @longTouchEmitHandler="deleteMsgIndex=index" @clickLogo="goToDoctorHomePage">
+                         @longTouchEmitHandler="longTouchEmitHandler(index)" @clickLogo="goToDoctorHomePage">
             </ContentText>
             <!--图像消息-->
             <ImageContent
@@ -93,7 +93,7 @@
               :nim="nim"
               ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
               :deleteMsgIndex="deleteMsgIndex"
               :userData="userData" :targetData="targetData" @clickLogo="goToDoctorHomePage">
             </ImageContent>
@@ -103,7 +103,7 @@
               :imageMessage="msg"
               :userData="userData"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
               :targetData="targetData"
               :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
@@ -116,12 +116,12 @@
               :videoMessage="msg"
               :userData="userData"
               :targetData="targetData"
-              :videoProgress="videoProgress"
+              :videoProgress="videoProgress[index]"
               :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
               @clickLogo="goToDoctorHomePage"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
             ></VideoMessage>
             <!--文件消息-->
             <FileMessage
@@ -134,7 +134,7 @@
               :deleteMsgIndex="deleteMsgIndex"
               @clickLogo="goToDoctorHomePage"
               @deleteMsgEvent="deleteMsgEvent(msg)"
-              @longTouchEmitHandler="deleteMsgIndex=index"
+              @longTouchEmitHandler="longTouchEmitHandler(index)"
             >
             </FileMessage>
             <!--音频-->
@@ -185,7 +185,7 @@
               </div>
             </section>
             <section class="main-input-box-plus"
-                     @click='footerBottomFlag = footerBottomFlag?false:true;$refs.inputTextarea.focus()'>
+                     @click='footerBottomFlag = footerBottomFlag?false:true'>
               <i class="icon-im-plus"></i>
             </section>
             <figure class="main-input-box-textarea-inner">
@@ -206,7 +206,7 @@
 
           </section>
           <ul class="footer-box-bottom" v-if="footerBottomFlag">
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.image">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
                      height="234"/>
@@ -219,20 +219,20 @@
                      ref="imageSender" capture="camera"
                      accept="image/*">
             </li>
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="isIos" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender"
                      accept="video/*">
-              <input type="file" v-if="!isIos&&inputVideoFlag" multiple id="ev-file-send" @change="sendVideo($event)"
+              <input type="file" v-if="!isIos" multiple id="ev-file-send" @change="sendVideo($event)"
                      ref="videoSender" capture="camera"
                      accept="video/*">
             </li>
-            <li class="bottom-item">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350"
                      height="234"/>
@@ -349,9 +349,7 @@
         },
         // 视频发送进度
         videoProgress: {
-          uploading: false,
-          progress: "0%",
-          index: 0
+
         },
         // 文件pdf发送进度
         fileProgress: {
@@ -407,6 +405,11 @@
     methods: {
       goFeedback () {
         location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      },
+      longTouchEmitHandler(index){
+        if (this.$store.state.delete){
+          this.deleteMsgIndex=index;
+        }
       },
       setFooterPosition() {
         if (IS_IOS) {
@@ -545,6 +548,7 @@
                 that.getTimeStampShowList(msg);
                 that.minusLastCount(msg);
                 that.getFirstTargetMsg(msg);
+                that.setMediaProgress(msg,that.msgList.length-1);
                 if (msg.type === "image") {
                   let qualityUrl = that.nim.viewImageQuality({
                     url: msg.file.url,
@@ -557,6 +561,29 @@
           });
         });
       },
+      setMediaProgress(msg,index){
+        switch (msg.type){
+          case "image":
+
+            this.imageProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "file":
+            this.fileProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "video":
+            this.videoProgress[index]={
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+        }
+      },
       showFlagDeleteTips(msg) {
         let flag = false;
         if (
@@ -564,7 +591,7 @@
           JSON.parse(msg.content).type === "deleteMsgTips"
         ) {
           flag = true;
-          let idClient = JSON.parse(msg.content).data.deleteMsg.idClient||JSON.parse(msg.content).data.imMessage.idClient;
+          let idClient = (JSON.parse(msg.content).data.deleteMsg&&JSON.parse(msg.content).data.deleteMsg.idClient)||(JSON.parse(msg.content).data.imMessage&&JSON.parse(msg.content).data.imMessage.idClient)||(JSON.parse(msg.content).data.deleteMsg&&JSON.parse(msg.content).data.deleteMsg.messageId);
           this.msgList.forEach((element, index) => {
             if (element.idClient === idClient) {
               this.msgList.removeByValue(element);
@@ -746,14 +773,9 @@
               that.msgList.forEach((element, index) => {
                 that.getTargetMessage(element);
                 that.getTimeStampShowList(element);
+                that.setMediaProgress(element,index);
               });
               that.$nextTick(() => {
-                //        通过动画结束判断
-                //                  that.$refs.outpatientInvite[that.$refs.outpatientInvite.length-1].$el.addEventListener("transitionend",()=>{
-                //
-                //                    console.log(that.$refs.outpatientInvite)
-                //                  });
-
                 setTimeout(() => {
                   if (
                     api.getPara().position === "push" &&
@@ -1328,7 +1350,7 @@
                   type: "image",
                   dataURL: oFREvent.target.result,
                   uploadprogress(obj) {
-                    that.scrollToBottom();
+                    // that.scrollToBottom();
                     console.log("文件总大小: " + obj.total + "bytes");
                     console.log("已经上传的大小: " + obj.loaded + "bytes");
                     console.log("上传进度: " + obj.percentage);
@@ -1402,7 +1424,7 @@
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
 
-            that.scrollToBottom();
+            // that.scrollToBottom();
             that.imageProgress = {
               uploading: true,
               progress: obj.percentageText,
@@ -1466,25 +1488,27 @@
       sendVideoFile(_file) {
         const that = this;
         console.log(_file);
+
         this.msgList.push({
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
-          from: that.userData.account
+          from: this.userData.account
         });
-        that.videoLastIndex = that.msgList.length - 1;
+        const videoLastIndex=this.msgList.length-1;
+
         this.inputVideoFlag=false;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
 
-            that.scrollToBottom();
-            that.videoProgress = {
+            // that.scrollToBottom();
+            that.videoProgress[videoLastIndex] = {
               uploading: true,
               progress: obj.percentageText,
-              index: that.videoLastIndex
+              index: videoLastIndex
             };
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1496,6 +1520,7 @@
             this.inputVideoFlag = false;
             console.log(file);
             if (!error) {
+              file.name = _file.name;
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1508,8 +1533,8 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.msgList[that.videoLastIndex] = msg;
-                  that.videoProgress = {
+                  that.msgList[videoLastIndex] = msg;
+                  that.videoProgress[videoLastIndex] = {
                     uploading: false,
                     progress: "0%",
                     index: 0
@@ -1561,7 +1586,7 @@
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
               // this.inputPdfFlag = false;
-              that.scrollToBottom();
+              // that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
                 progress: obj.percentageText,
@@ -1848,6 +1873,13 @@
       }
     },
     computed: {
+      doctorTitleName(){
+        let result=[];
+        this.$store.state.targetMsg.title.split(",").forEach((element,index)=>{
+          result.push(element.substring(2));
+        });
+        return result.join(",");
+      },
       leaveFlag () {
         if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
           return true;
