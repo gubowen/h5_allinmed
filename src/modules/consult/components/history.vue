@@ -42,7 +42,8 @@
                             v-show="item.finish"></span>
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
-                        <p>重新上传</p>
+                        <p class="upLoad-failText">上传失败</p>
+                        <p class="upLoad-reloadText">点击重试</p>
                          <div class="ev-upLoadInput" 
                                @click="upLoadReload(index)"  ref="uploader"></div>
                         <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
@@ -162,6 +163,14 @@
           @ensureClickEvent="submitData()"></confirm>
       </transition> -->
       <transition name="fade">
+        <ensure
+          :ensureParams="{
+          'ensure':'确定',
+          'content':'尚有图片未上传完成，请稍后'
+          }" v-if="ensureClickUpLoad" :showFlag.sync="ensureClickUpLoad"
+          @ensureClickEvent="ensureClickEventFn"></ensure>
+      </transition>
+      <transition name="fade">
         <confirm
           :confirmParams="{
           'ensure':'取消',
@@ -209,6 +218,7 @@ import toast from "components/toast";
 import autosize from "autosize";
 import axios from "axios";
 import confirm from "components/confirm";
+import ensure from "components/ensure";
 import backPopup from "components/backToastForConsult";
 import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
@@ -272,6 +282,7 @@ export default {
       noWXPayShow: false,
       upLoadTip: false,
       levelShow: false,
+      ensureClickUpLoad: false,
       progerssBarShow: true, //进度条（显示）
       // progerssNum:'3',
       backPopupShow: false,
@@ -432,7 +443,7 @@ export default {
     },
     onFileChange(e, type, index) {
       let _files = e.target.files || e.dataTransfer.files;
-      let files = []
+      let files = [];
       let that = this;
       that.filesObj = [];
       that.base64Arr = [];
@@ -441,9 +452,9 @@ export default {
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
-        files = _files.slice(0,9);
+        files = _files.slice(0, 9);
         that.toastCommonTips("一次最多上传9张图片");
-      }else{
+      } else {
         files = _files;
       }
       for (let i = 0; i < files.length; i++) {
@@ -644,7 +655,8 @@ export default {
             }
           } else {
             //上传失败（网络正常情况）
-            that.isExistUpLoadFail();
+            // that.isExistUpLoadFail();
+            that.isReadyLoad = false;
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
@@ -653,27 +665,29 @@ export default {
             that.uploading1 = false;
             that.uploading2 = false;
             //上传下一张图片
-            that.uploadIndex = parseInt(that.uploadIndex) + 1;
-            let totalUpNum = that["imageList" + type].length;
-            if (
-              that.filesObj[that.uploadIndex] !== "undefined" &&
-              that.uploadIndex < that.base64Arr.length &&
-              totalUpNum < 50
-            ) {
-              that.upLoadPic(
-                that.filesObj[that.uploadIndex],
-                type,
-                index,
-                that.base64Arr[that.uploadIndex]
-              );
-            } else {
-              if (that.filesObj[that.uploadIndex]) {
-                that.errorShow = true;
-                that.errorMsg = "图片最多上传50张！";
-                setTimeout(() => {
-                  that.errorShow = false;
-                  that.errorMsg = "";
-                }, 3000);
+            if (!that.reload) {
+              that.uploadIndex = parseInt(that.uploadIndex) + 1;
+              let totalUpNum = that["imageList" + type].length;
+              if (
+                that.filesObj[that.uploadIndex] !== "undefined" &&
+                that.uploadIndex < that.base64Arr.length &&
+                totalUpNum < 50
+              ) {
+                that.upLoadPic(
+                  that.filesObj[that.uploadIndex],
+                  type,
+                  index,
+                  that.base64Arr[that.uploadIndex]
+                );
+              } else {
+                if (that.filesObj[that.uploadIndex]) {
+                  that.errorShow = true;
+                  that.errorMsg = "图片最多上传50张！";
+                  setTimeout(() => {
+                    that.errorShow = false;
+                    that.errorMsg = "";
+                  }, 3000);
+                }
               }
             }
           }
@@ -707,7 +721,7 @@ export default {
       }
     },
     //是否正在上传图片ing
-     isExistUpLoading() {
+    isExistUpLoading() {
       let _this = this,
         _failNum = 0;
       this.imageList1.forEach((item, index) => {
@@ -762,6 +776,9 @@ export default {
     ensureEvent() {
       this.levelShow = false;
     },
+    ensureClickEventFn() {
+      this.ensureClickUpLoad = false;
+    },
     //查看大图
     showBigImg(item, index, type) {
       let _params = {
@@ -784,12 +801,13 @@ export default {
         return false;
       } else if (this.uploading1 || this.uploading1) {
         //图片上传中
-        this.errorShow = true;
-        this.errorMsg = "尚有图片未上传完成，请稍后";
-        setTimeout(() => {
-          this.errorMsg = "";
-          this.errorShow = false;
-        }, 2000);
+        // this.errorShow = true;
+        // this.errorMsg = "尚有图片未上传完成，请稍后";
+        // setTimeout(() => {
+        //   this.errorMsg = "";
+        //   this.errorShow = false;
+        // }, 2000);
+        this.ensureClickUpLoad = true;
       } else {
         this.submitData();
         //跳转第四部分
@@ -967,7 +985,8 @@ export default {
     toast,
     confirm,
     backPopup,
-    progerssBar
+    progerssBar,
+    ensure
   }
 };
 </script>
@@ -1376,12 +1395,22 @@ body {
               width: 100%;
               height: 100%;
             }
-            & > p {
+            .upLoad-failText {
               @include font-dpr(12px);
               color: #ffffff !important;
               text-align: center;
               position: absolute;
-              top: 50%;
+              top: 35%;
+              width: 100%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+            .upLoad-reloadText {
+              @include font-dpr(12px);
+              color: #ffffff !important;
+              text-align: center;
+              position: absolute;
+              top: 62%;
               width: 100%;
               left: 50%;
               transform: translate(-50%, -50%);

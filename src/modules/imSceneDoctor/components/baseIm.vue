@@ -466,7 +466,7 @@
                   to: that.targetData.account,
                   custom: JSON.stringify({
                     cType: "0",
-                    cId: that.cId,
+                    cId: api.getPara().doctorCustomerId,
                     mType: "37",
                     conId: that.orderSourceId,
                     patientName: that.$store.state.patientName,
@@ -1385,7 +1385,7 @@
           to: that.targetData.account,
           custom: JSON.stringify({
             cType: "1",
-            cId: that.cId,
+            cId: api.getPara().doctorCustomerId,
             mType: "38",
             conId: that.orderSourceId
           }),
@@ -1446,7 +1446,7 @@
                 to: that.targetData.account,
                 custom: JSON.stringify({
                   cType: "1",
-                  cId: that.cId,
+                  cId: api.getPara().doctorCustomerId,
                   mType: "1",
                   conId: that.orderSourceId
                 }),
@@ -1525,7 +1525,7 @@
                 scene: "p2p",
                 custom: JSON.stringify({
                   cType: "1",
-                  cId: that.cId,
+                  cId:api.getPara().doctorCustomerId,
                   mType: "3",
                   conId: that.orderSourceId
                 }),
@@ -1611,7 +1611,7 @@
                   scene: "p2p",
                   custom: JSON.stringify({
                     cType: "1",
-                    cId: that.cId,
+                    cId: api.getPara().doctorCustomerId,
                     mType: "6",
                     conId: that.orderSourceId,
                     name: _file.name
