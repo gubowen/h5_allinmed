@@ -42,7 +42,6 @@ class Wxbinding {
                   let url = `${window.location.origin}${window.location.pathname}`;
                   if (api.getPara().wxState == 1) {
                     obj.hasBindedFn && obj.hasBindedFn(data);
-                    window.location.href = "/";
                   } else {
                     this.wxBind(url);
                   }
