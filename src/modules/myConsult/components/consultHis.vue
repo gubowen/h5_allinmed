@@ -102,6 +102,7 @@
         wxBind.isBind({
           callBack: () => {
             this.init();
+            this.checkFinish = true;
           }
         });
       }, () => {
