@@ -157,9 +157,7 @@
 
   .image-message {
     background-color: #fff !important;
-    .im-image {
-      margin: rem(36px);
-    }
+
     .disclaimer-content {
       color: #97A8BA;
       background: #fafafb;

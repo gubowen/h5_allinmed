@@ -407,7 +407,7 @@
         location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
       },
       longTouchEmitHandler(index){
-        if (this.$store.state.delete){
+        if (this.$store.state.toolbarConfig.delete){
           this.deleteMsgIndex=index;
         }
       },
@@ -1473,6 +1473,13 @@
       },
       // 选择视频
       sendVideo(e) {
+        if (e.target.files.length>1){
+          this.toastTips = `每次只能上传一个视频`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
         let _file = e.target.files[0];
         if (_file.type.includes("video")) {
           this.sendVideoFile(_file);
