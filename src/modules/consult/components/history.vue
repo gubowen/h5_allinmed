@@ -568,10 +568,13 @@ export default {
       let _localViewUrl = window.URL.createObjectURL(files);
       let _fileName = "",
         _rex = /\./g;
+      let _fileLocalName = "",
       if (files.name.match(_rex).length == 1) {
         _fileName = files.name.split(".")[1];
+        _fileLocalName = files.name;
       } else {
         _fileName = files.name.split(".")[2];
+        _fileLocalName = files.name.split(".")[0]+files.name.split(".")[1];
       }
       switch (type) {
         case 1:
@@ -604,7 +607,7 @@ export default {
             .split(",")[1]
             .replace(/\+/g, "%2B")
             .replace(/\n/g, ""),
-          fileName: files.name,
+          fileName: _fileLocalName,
           extName: _fileName,
           caseId: "",
           imageType: _imageType,
