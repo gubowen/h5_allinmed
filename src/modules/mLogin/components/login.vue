@@ -412,12 +412,12 @@
                   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   return false;
                 }else{
-                  if (api.getPara().from==="index"){
-                    _this.accountLoginData();
-                  }else{
-                    _this.toastComm("该账号已绑定其他微信，请更换手机号！");
-                    return false;
-                  }
+                  // if (api.getPara().from==="index"){
+                  _this.accountLoginData();
+                  // }else{
+                  //   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
+                  //   return false;
+                  // }
                 }
               }else{
                 _this.accountLoginData();
