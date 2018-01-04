@@ -288,7 +288,8 @@ export default {
       filesObjAll: [], //所有选择文件对象（不清空）
       base64ArrAll: [], //所有选选择完文件的压缩对象（不清空）
       reload: false,
-      isReadyLoad: true,
+      isReadyLoad: true, //是否有上传失败图片
+      isLoadReady: true, //是否有上传失败图片
       netTipsNum: 0,
       cityLevel: 2,
       responseCaseId: "", //提交订单响应回来的caseId
@@ -445,7 +446,6 @@ export default {
       }else{
         files = _files;
       }
-       console.log("获取图片");
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
@@ -460,7 +460,6 @@ export default {
             }
           }, 3000);
         } else {
-           console.log("保存图片");
           that.filesObj.push(files[i]); //保存文件对象
           that.filesObjAll.unshift(files[i]); //保存文件对象（不清空）
           //图片压缩处理
@@ -476,7 +475,6 @@ export default {
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
                 that.base64ArrAll.unshift(base64); //保存压缩图片
-                console.log("去上传");
                 if (i == files.length - 1) {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
@@ -490,11 +488,6 @@ export default {
           };
         }
       }
-      console.log(this.filesObj);
-      console.log(this.base64Arr);
-      console.log(this.filesObjAll);
-      console.log(this.base64ArrAll);
-      console.log("=================");
     },
     //去上传按钮
     uploadBtnFn() {
@@ -713,6 +706,21 @@ export default {
         _this.isReadyLoad = true;
       }
     },
+    //是否正在上传图片ing
+     isExistUpLoading() {
+      let _this = this,
+        _failNum = 0;
+      this.imageList1.forEach((item, index) => {
+        if (item.uploading) {
+          _failNum++;
+        }
+      });
+      if (_failNum > 0) {
+        _this.isLoadReady = false;
+      } else {
+        _this.isLoadReady = true;
+      }
+    },
     textAreaFocus() {
       this.$el.querySelector(".medicineBox").focus();
     },
@@ -777,11 +785,11 @@ export default {
       } else if (this.uploading1 || this.uploading1) {
         //图片上传中
         this.errorShow = true;
-        this.errorMsg = "图片上传中...";
+        this.errorMsg = "尚有图片未上传完成，请稍后";
         setTimeout(() => {
           this.errorMsg = "";
           this.errorShow = false;
-        }, 1000);
+        }, 2000);
       } else {
         this.submitData();
         //跳转第四部分
