@@ -42,7 +42,8 @@
                             v-show="item.finish"></span>
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
-                        <p>重新上传</p>
+                        <p class="upLoad-failText">上传失败</p>
+                        <p class="upLoad-reloadText">点击重试</p>
                          <div class="ev-upLoadInput" 
                                @click="upLoadReload(index)"  ref="uploader"></div>
                         <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
@@ -442,7 +443,7 @@ export default {
     },
     onFileChange(e, type, index) {
       let _files = e.target.files || e.dataTransfer.files;
-      let files = []
+      let files = [];
       let that = this;
       that.filesObj = [];
       that.base64Arr = [];
@@ -451,9 +452,9 @@ export default {
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
-        files = _files.slice(0,9);
+        files = _files.slice(0, 9);
         that.toastCommonTips("一次最多上传9张图片");
-      }else{
+      } else {
         files = _files;
       }
       for (let i = 0; i < files.length; i++) {
@@ -664,27 +665,29 @@ export default {
             that.uploading1 = false;
             that.uploading2 = false;
             //上传下一张图片
-            that.uploadIndex = parseInt(that.uploadIndex) + 1;
-            let totalUpNum = that["imageList" + type].length;
-            if (
-              that.filesObj[that.uploadIndex] !== "undefined" &&
-              that.uploadIndex < that.base64Arr.length &&
-              totalUpNum < 50
-            ) {
-              that.upLoadPic(
-                that.filesObj[that.uploadIndex],
-                type,
-                index,
-                that.base64Arr[that.uploadIndex]
-              );
-            } else {
-              if (that.filesObj[that.uploadIndex]) {
-                that.errorShow = true;
-                that.errorMsg = "图片最多上传50张！";
-                setTimeout(() => {
-                  that.errorShow = false;
-                  that.errorMsg = "";
-                }, 3000);
+            if (!that.reload) {
+              that.uploadIndex = parseInt(that.uploadIndex) + 1;
+              let totalUpNum = that["imageList" + type].length;
+              if (
+                that.filesObj[that.uploadIndex] !== "undefined" &&
+                that.uploadIndex < that.base64Arr.length &&
+                totalUpNum < 50
+              ) {
+                that.upLoadPic(
+                  that.filesObj[that.uploadIndex],
+                  type,
+                  index,
+                  that.base64Arr[that.uploadIndex]
+                );
+              } else {
+                if (that.filesObj[that.uploadIndex]) {
+                  that.errorShow = true;
+                  that.errorMsg = "图片最多上传50张！";
+                  setTimeout(() => {
+                    that.errorShow = false;
+                    that.errorMsg = "";
+                  }, 3000);
+                }
               }
             }
           }
@@ -718,7 +721,7 @@ export default {
       }
     },
     //是否正在上传图片ing
-     isExistUpLoading() {
+    isExistUpLoading() {
       let _this = this,
         _failNum = 0;
       this.imageList1.forEach((item, index) => {
@@ -773,7 +776,7 @@ export default {
     ensureEvent() {
       this.levelShow = false;
     },
-    ensureClickEventFn(){
+    ensureClickEventFn() {
       this.ensureClickUpLoad = false;
     },
     //查看大图
@@ -1392,12 +1395,22 @@ body {
               width: 100%;
               height: 100%;
             }
-            & > p {
+            .upLoad-failText {
               @include font-dpr(12px);
               color: #ffffff !important;
               text-align: center;
               position: absolute;
-              top: 50%;
+              top: 35%;
+              width: 100%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+            .upLoad-reloadText {
+              @include font-dpr(12px);
+              color: #ffffff !important;
+              text-align: center;
+              position: absolute;
+              top: 62%;
               width: 100%;
               left: 50%;
               transform: translate(-50%, -50%);
