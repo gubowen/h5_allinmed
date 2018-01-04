@@ -227,17 +227,17 @@
          {
           imgId:1,
           adAdditionalUrl:'www.baidu.com',
-          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+          adAttUrl:require('../../../common/image/img00/index/bullet.png')
         },
         {
           imgId:2,
           adAdditionalUrl:'www.baidu.com',
-          adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+          adAttUrl:require('../../../common/image/img00/index/bullet.png')
         },
           {
           imgId:3,
           adAdditionalUrl:'www.baidu.com',
-            adAttUrl:require('../../../common/image/img00/index/banner_default.png')
+            adAttUrl:require('../../../common/image/img00/index/bullet.png')
           }
         ];
        api.ajax({
@@ -316,12 +316,13 @@
         display: block;
         height: 100%;
         width: 100%;
-        border-radius: rem(26px);
+        vertical-align: middle;
         > img {
           padding:rem(10px);
           width: 100%;
           height: 100%;
           vertical-align: top;
+          border-radius: rem(30px);
           box-sizing: border-box;
         }
       }
@@ -395,6 +396,7 @@
         &:after{
           content:'';
           background: url("../../../common/image/img00/index/arrow.png") no-repeat;
+          background-size: contain;
           display: inline-block;
           vertical-align: middle;
           width: rem(25px);
