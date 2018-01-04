@@ -445,6 +445,7 @@ export default {
       }else{
         files = _files;
       }
+       console.log("获取图片");
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
@@ -459,6 +460,7 @@ export default {
             }
           }, 3000);
         } else {
+           console.log("保存图片");
           that.filesObj.push(files[i]); //保存文件对象
           that.filesObjAll.unshift(files[i]); //保存文件对象（不清空）
           //图片压缩处理
@@ -474,6 +476,7 @@ export default {
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
                 that.base64ArrAll.unshift(base64); //保存压缩图片
+                console.log("去上传");
                 if (i == files.length - 1) {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
