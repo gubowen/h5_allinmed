@@ -225,12 +225,12 @@
           }()),
           indexNum: index
         };
-        if(that.imageList1.length>9&&index == 8){
-          that.showMoreImg = false;
-          that.imageList1.forEach((value)=>{
-            value.isShow = true;
-          })
-        }
+        // if(that.imageList1.length>9&&index == 8){
+        //   that.showMoreImg = false;
+        //   that.imageList1.forEach((value)=>{
+        //     value.isShow = true;
+        //   })
+        // }
         this.$router.push({
           name: "showBigImg",
           params: _params
