@@ -392,7 +392,7 @@
             isValid: 1,                           // string 是   1
             firstResult: 0,                       // string 是  分页参数
             maxResult: 99999,                     //  string 是  分页参数
-            customerId: api.getPara().customerId,                       //  string 是  用户id
+            customerId: that.customerId,                       //  string 是  用户id
           },
           beforeSend(config) {
 
@@ -464,7 +464,7 @@
           url: XHRList.patientList,
           method: "POST",
           data: {
-            customerId: this.customerId,
+            customerId: that.customerId,
             isValid: "1",
             firstResult: "0",
             maxResult: "9999"
@@ -652,7 +652,7 @@
           data: {
             certificateId: that.credentialType.id,	//string	是	证件类型1-身份证2-军官证
             certificateCode: that.IDNumber,//	string	是	证件号码
-            customerId: this.customerId,
+            customerId: that.customerId,
             firstResult: "0",	//string	是	分页参数
             maxResult: "999",	//string	是	分页参数
           },
@@ -700,7 +700,7 @@
           url: XHRList.addPatient,
           method: "POST",
           data: {
-            customerId: this.customerId,//用户id
+            customerId: that.customerId,//用户id
             patientName: this.username,//患者姓名
 //            patientAge: this.userage,
             patientSex: this.sexSelect,
@@ -740,7 +740,7 @@
               that.areaClick = true;//选择城市是否点击过
 //              that.relationClick=true;
               that.relationShip.title = "选择您与患者关系";
-              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ this.customerId +'#!index'
+              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ that.customerId +'#!index'
 
             } else {
               that.errorMsg = data.responseObject.responseMessage;
@@ -966,10 +966,10 @@
                 _this.caseIdData =res.responseObject.responseData.dataList[0].caseId;
                 _this.IMEnsureShow = true;
               }else{
-                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ this.customerId +'#!index';
+                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
               }
             }else{
-              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ this.customerId +'#!index';
+              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
             }
           },
           fail(err) {
