@@ -49,7 +49,7 @@ export default {
   },
   methods:{
     longTouchHandler() {
-      if (this.$store.state.delete) {
+      if (this.$store.state.toolbarConfig.delete) {
         this.showDeleteMsg = true;
         this.$emit("longTouchEmitHandler");
       }

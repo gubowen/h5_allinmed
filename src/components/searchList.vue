@@ -205,13 +205,15 @@
         }
       },
       searchEvent(){
-
+        console.log(api.getByteLen(this.searchText))
         if (this.searchText.length === 0) {
           this.messageList=[];
           this.noResult=false;
+          console.log(5)
           return false;
         } else if (api.getByteLen(this.searchText) >= 30) {
-          this.searchText = api.getStrByteLen(this.searchText, 60);
+          this.searchText = api.getStrByteLen(this.searchText, 30);
+          console.log(5)
           this.getMessageList(this.searchText, 0);
         } else {
           clearTimeout(this.searchTimeout);
@@ -219,6 +221,7 @@
             if (this.searchText.trim().length > 0) {
               this.over = false;
               this.getMessageList(this.searchText, 0);
+              console.log(5)
             }
           }, 300);
         }

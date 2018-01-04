@@ -368,7 +368,6 @@
               that.createParams.customerId;
           },
           () => {
-            debugger;
             if (that.$store.state.isSubscribe){
               if(navigator.userAgent.toLowerCase().includes("iphone")){
                 that.backPopupShow = true;
