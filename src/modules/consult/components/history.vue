@@ -162,6 +162,14 @@
           @ensureClickEvent="submitData()"></confirm>
       </transition> -->
       <transition name="fade">
+        <ensure
+          :ensureParams="{
+          'ensure':'确定',
+          'content':'尚有图片未上传完成，请稍后'
+          }" v-if="ensureClickUpLoad" :showFlag.sync="ensureClickUpLoad"
+          @ensureClickEvent="ensureClickEventFn"></ensure>
+      </transition>
+      <transition name="fade">
         <confirm
           :confirmParams="{
           'ensure':'取消',
@@ -209,6 +217,7 @@ import toast from "components/toast";
 import autosize from "autosize";
 import axios from "axios";
 import confirm from "components/confirm";
+import ensure from "components/ensure";
 import backPopup from "components/backToastForConsult";
 import WxPayCommon from "common/js/wxPay/wxComm"; //微信支付的方法
 import siteSwitch from "common/js/siteSwitch/siteSwitch";
@@ -272,6 +281,7 @@ export default {
       noWXPayShow: false,
       upLoadTip: false,
       levelShow: false,
+      ensureClickUpLoad: false,
       progerssBarShow: true, //进度条（显示）
       // progerssNum:'3',
       backPopupShow: false,
@@ -644,7 +654,8 @@ export default {
             }
           } else {
             //上传失败（网络正常情况）
-            that.isExistUpLoadFail();
+            // that.isExistUpLoadFail();
+            that.isReadyLoad = false;
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = true;
@@ -762,6 +773,9 @@ export default {
     ensureEvent() {
       this.levelShow = false;
     },
+    ensureClickEventFn(){
+      this.ensureClickUpLoad = false;
+    },
     //查看大图
     showBigImg(item, index, type) {
       let _params = {
@@ -784,12 +798,13 @@ export default {
         return false;
       } else if (this.uploading1 || this.uploading1) {
         //图片上传中
-        this.errorShow = true;
-        this.errorMsg = "尚有图片未上传完成，请稍后";
-        setTimeout(() => {
-          this.errorMsg = "";
-          this.errorShow = false;
-        }, 2000);
+        // this.errorShow = true;
+        // this.errorMsg = "尚有图片未上传完成，请稍后";
+        // setTimeout(() => {
+        //   this.errorMsg = "";
+        //   this.errorShow = false;
+        // }, 2000);
+        this.ensureClickUpLoad = true;
       } else {
         this.submitData();
         //跳转第四部分
@@ -967,7 +982,8 @@ export default {
     toast,
     confirm,
     backPopup,
-    progerssBar
+    progerssBar,
+    ensure
   }
 };
 </script>
