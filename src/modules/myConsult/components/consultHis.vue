@@ -92,13 +92,12 @@
         pageStart: 0,
         items: [],
         checkFinish: false,
-        isSubscribe: false
+        isSubscribe: false,
+        customerId:""
       }
     },
     mounted() {
-      //微信中绑定微信
-      // checkSubscribe.check(`${window.location.origin}${window.location.pathname}?query=place}`);
-
+      const that=this;
       siteSwitch.weChatJudge(() => {
         wxBind.isBind({
           callBack: () => {
@@ -111,8 +110,9 @@
         let checkLogin = new CheckLogin();
         checkLogin.getStatus().then((res) => {
           if (res.data.responseObject.responseStatus) {
-            getPersonal.getMessage(localStorage.getItem("userId")).then((data) => {
+            getPersonal.getMessage(res.data.responseObject.responsePk).then((data) => {
               if (data.responseObject.responseData) {
+                that.customerId=data.responseObject.responseData.responsePk;
                 if (data.responseObject.responseData.uniteFlagWeixin == 1) {
                   this.isSubscribe = true;
                 } else {
@@ -153,7 +153,7 @@
           url: XHRList.getOrderHistoryLists,
           method: "post",
           data: {
-            patientCustomerId: localStorage.getItem("userId") || api.getPara().customerId,
+            patientCustomerId: this.customerId,
             isValid: 1,
             firstResult: that.pageStart,
             maxResult: that.pageNum,
