@@ -1520,6 +1520,7 @@
             this.inputVideoFlag = false;
             console.log(file);
             if (!error) {
+              file.name = _file.name;
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({

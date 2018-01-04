@@ -1174,9 +1174,9 @@
             JSON.parse(msg.content).type === "payFinishTips" ||
             JSON.parse(msg.content).type === "triagePatientTips" ||
             JSON.parse(msg.content).type === "reTriageTip" ||
-            JSON.parse(msg.content).type === "refusePatient" || 
-            JSON.parse(msg.content).type === "overtimeTip" || 
-            JSON.parse(msg.content).type === "chatOvertimeTip" || 
+            JSON.parse(msg.content).type === "refusePatient" ||
+            JSON.parse(msg.content).type === "overtimeTip" ||
+            JSON.parse(msg.content).type === "chatOvertimeTip" ||
             (JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 3)
           ) {
             return false;
@@ -1444,6 +1444,7 @@
             // show file to the user
             console.log(file);
             if (!error) {
+              file.name = _file.name;
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
