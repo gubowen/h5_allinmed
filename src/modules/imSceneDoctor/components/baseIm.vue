@@ -1477,13 +1477,16 @@
           }, 2000);
         }
         let _file = e.target.files[0];
-        if (_file.type.includes("video")) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else {
-          this.toastTips = `请选择视频文件`;
+          if (_file.type.includes("video")) {
+            this.toastTips = `请选择mp4或者mov文件`;
+          } else {
+            this.toastTips = `请选择视频文件`;
+          }
           this.toastShow = true;
           setTimeout(() => {
-
             this.toastShow = false;
           }, 2000);
         }
