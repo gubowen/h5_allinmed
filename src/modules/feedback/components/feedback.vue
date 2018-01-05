@@ -40,6 +40,7 @@
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
     </transition>
+    <loading v-if="finish"></loading>
   </section>
   <section class="get-back" v-else-if="submitSuccess">
     <section class="icon"></section>
@@ -64,7 +65,7 @@
   import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
-  import "components/loading";
+  import Loading from "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
   // const checkLogin = new CheckLogin();
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
@@ -101,10 +102,11 @@
         errorMsg:"",
         submitSuccess:false,
         backTimeout:3,
+        finish:false
       }
     },
     components: {
-      toast
+      toast,Loading
     },
     watch:{
       //监听大量的文字输入情况，ex：复制粘贴。这样可以保持被撑大的text-area可以恢复到限定的高度
@@ -131,9 +133,7 @@
       },
       //检查后没有error后提交所有数据
       checkAllData(){
-        const _this=this;
-        this.count=0;
-        this.count++;
+        const _this=this
         if (!this.suggestionType.service && !this.suggestionType.setting && !this.suggestionType.others) {
           this.validateToast("您还有问题未完善");
           document.body.scrollTop = this.$el.querySelector(
@@ -147,11 +147,7 @@
           }else{
             _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
           }
-          if(this.count=1){
             _this.submitAllData();
-          }else{
-
-          }
           // siteSwitch.weChatJudge(ua =>{
           //   //微信
           //   _this.customerId = api.getPara().customerId;
@@ -194,6 +190,7 @@
             equipmentVersion:api.getConnectType(),
           },
           done(data) {
+            this.finish=true;
             if (data.responseObject.responseStatus){
               _this.submitSuccess=true;
               _this.backToPast();
@@ -201,6 +198,8 @@
               _this.submitSuccess=false;
               _this.validateToast("提交失败，请检查您的网络");
             }
+          },
+          fail(err) {
           }
         });
       },
