@@ -1398,6 +1398,9 @@
       },
       // 选择视频
       sendVideo(e) {
+        if (e.target.files.length > 1) {
+          this.toastControl("每次只能上传一个视频");
+        }
         let _file = e.target.files[0];
         console.log(_file.type);
         if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
