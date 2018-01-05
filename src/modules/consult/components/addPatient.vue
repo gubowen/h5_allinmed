@@ -292,7 +292,6 @@
     },
     mounted() {
       //微信中绑定微信
-      this.init();
       siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
         wxBind.isBind({
@@ -316,7 +315,6 @@
         console.log("无需绑定微信");
         store.commit("getSubscribeStatus");
         this.isWeChat = false;
-        this.init();
         checkLogin.getStatus().then((res) => {
           if (res.data.responseObject.responseStatus) {
             this.customerId = res.data.responseObject.responsePk;
