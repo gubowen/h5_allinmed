@@ -31,7 +31,7 @@
       </transition>
       <section class="main-message" ref="wrapper"
                :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}"
-               @scroll="deleteMsgIndex=-1">
+               @touchmove="deleteMsgIndex=-1">
 
 
         <transition-group name="fadeDown" tag="section">
