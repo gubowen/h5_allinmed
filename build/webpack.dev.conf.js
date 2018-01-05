@@ -50,6 +50,7 @@ let pages = ((globalPath)=>{
 })(utils.resolve('src')+'/modules/**/*.html');
 
 for (let entryName in pages) {
+
   let conf = {
     // 生成出来的html文件名
     filename: entryName + '.html',
@@ -57,8 +58,13 @@ for (let entryName in pages) {
     template: pages[entryName]['path'],
     // 自动将引用插入html
     inject: true,
+    hash: false,
     // 每个html引用的js模块，也可以在这里加上vendor等公用模块
-    chunks: ['vendor','manifest',pages[entryName]['chunk']]
+    chunks: ['vendor','manifest',pages[entryName]['chunk']],
+    minify: { //压缩HTML文件
+      removeComments: true, //移除HTML中的注释
+      collapseWhitespace: false //删除空白符与换行符
+    }
   };
   /*入口文件对应html文件（配置多个，一个页面对应一个入口，通过chunks对应）*/
   devConfig.plugins.push(new HtmlWebpackPlugin(conf));

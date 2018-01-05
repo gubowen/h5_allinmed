@@ -338,8 +338,6 @@
                 that.responseCaseId +
                 "&doctorCustomerId=" +
                 api.getPara().doctorId +
-                "&patientCustomerId=" +
-                that.createParams.customerId +
                 "&patientId=" +
                 that.createParams.patientId;
             }
@@ -363,9 +361,7 @@
               "/dist/imScene.html?caseId=" +
               that.responseCaseId +
               "&patientId=" +
-              that.createParams.patientId +
-              "&patientCustomerId=" +
-              that.createParams.customerId;
+              that.createParams.patientId ;
           },
           () => {
             if (that.$store.state.isSubscribe){
