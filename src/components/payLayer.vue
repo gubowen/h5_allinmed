@@ -503,8 +503,7 @@
               data: {
                 caseId: payDate.caseId,
                 customerId: payDate.docId,
-                consultationType: 1,
-                siteId: 17
+                consultationType: 1
               },
               done (data) {
                 if (data.responseObject.responseMessage == "NO DATA"){
@@ -518,8 +517,7 @@
                       patientId: payDate.patientId,
                       consultationType: 1,
                       consultationState: -1,
-                      consultationLevel: 1,
-                      siteId: 17,
+                      consultationLevel: 1
                       caseType: 0
                     },
                     done (d) {

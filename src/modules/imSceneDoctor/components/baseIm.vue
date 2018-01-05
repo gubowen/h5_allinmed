@@ -1062,8 +1062,7 @@
             patientCustomerId: this.patientCustomerId,
             patientId: api.getPara().patientId,
             consultationType: 1,
-            consultationState: -1,
-            siteId: 17
+            consultationState: -1
           },
           done(data) {
             if (data.responseObject.responseStatus) {
