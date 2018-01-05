@@ -533,7 +533,7 @@
               console.log(msg);
               if (msg.from === that.targetData.account) {
                 that.msgList.push(msg);
-
+                that.recoverCount(msg);
                 that.scrollToBottom();
                 that.receiveSpecialMessage(msg);
                 that.getTimeStampShowList(msg);
@@ -551,6 +551,11 @@
             }
           });
         });
+      },
+      recoverCount(msg){
+        if (msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips"){
+          store.commit("lastCountPlus");
+        }
       },
       setMediaProgress(msg, index) {
         switch (msg.type) {

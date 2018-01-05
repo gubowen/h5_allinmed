@@ -77,6 +77,9 @@ export default new Vuex.Store({
     lastCountMinus(state) {
       state.lastCount = state.lastCount - 1;
     },
+    lastCountPlus(data){
+      state.lastCount=state.lastCount+1;
+    },
     getToolbarConfig(state) {
       getToolbarConfig().then((data) => {
         console.log(data)
