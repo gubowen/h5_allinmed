@@ -517,7 +517,7 @@
                       patientId: payDate.patientId,
                       consultationType: 1,
                       consultationState: -1,
-                      consultationLevel: 1
+                      consultationLevel: 1,
                       caseType: 0
                     },
                     done (d) {
