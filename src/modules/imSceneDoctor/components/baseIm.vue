@@ -30,7 +30,9 @@
         </article>
       </transition>
       <section class="main-message" ref="wrapper"
-               :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}">
+               :class="{'padding-top':lastTimeShow&&receiveTreatmentStatus,'bottom-tips-padding':bottomTipsShow}"
+               @scroll="deleteMsgIndex=-1">
+
 
         <transition-group name="fadeDown" tag="section">
           <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index"
@@ -46,6 +48,7 @@
             <MiddleTips v-if="receivedTreatment(msg)" :tipsType="4">
 
             </MiddleTips>
+
             <!--消息撤回提示-->
             <div data-alcode-mod='717' :key="0">
               <section class="main-message-box grey-tips" v-if="showFlagDeleteTips(msg)" :key="0">
@@ -348,17 +351,15 @@
           index: 0
         },
         // 视频发送进度
-        videoProgress: {
-
-        },
+        videoProgress: {},
         // 文件pdf发送进度
         fileProgress: {
           uploading: false,
           progress: "0%",
           index: 0
         },
-        isLeave:false,
-        patientCustomerId: localStorage.getItem("userId")||api.getPara().patientCustomerId,
+        isLeave: false,
+        patientCustomerId: localStorage.getItem("userId") || api.getPara().patientCustomerId,
         onFocus: false,
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
@@ -403,12 +404,12 @@
     },
 
     methods: {
-      goFeedback () {
+      goFeedback() {
         location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
       },
-      longTouchEmitHandler(index){
-        if (this.$store.state.toolbarConfig.delete){
-          this.deleteMsgIndex=index;
+      longTouchEmitHandler(index) {
+        if (this.$store.state.toolbarConfig.delete) {
+          this.deleteMsgIndex = index;
         }
       },
       setFooterPosition() {
@@ -426,11 +427,6 @@
             document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 100);
         }
-        setTimeout(() => {
-          $(".main-message-time").css({
-            top: document.body.scrollTop
-          });
-        }, 500);
         this.onFocus = true;
 
       },
@@ -443,11 +439,6 @@
             document.body.scrollTop = this.bfscrolltop;
           }, 20);
         }
-
-        $(".main-message-time").css({
-          top: 0
-        })
-
         this.onFocus = false;
 
       },
@@ -548,7 +539,7 @@
                 that.getTimeStampShowList(msg);
                 that.minusLastCount(msg);
                 that.getFirstTargetMsg(msg);
-                that.setMediaProgress(msg,that.msgList.length-1);
+                that.setMediaProgress(msg, that.msgList.length - 1);
                 if (msg.type === "image") {
                   let qualityUrl = that.nim.viewImageQuality({
                     url: msg.file.url,
@@ -561,23 +552,23 @@
           });
         });
       },
-      setMediaProgress(msg,index){
-        switch (msg.type){
+      setMediaProgress(msg, index) {
+        switch (msg.type) {
           case "image":
 
-            this.imageProgress[index]={
+            this.imageProgress[index] = {
               uploading: false,
               progress: "0%",
               index: 0
             }
           case "file":
-            this.fileProgress[index]={
+            this.fileProgress[index] = {
               uploading: false,
               progress: "0%",
               index: 0
             }
           case "video":
-            this.videoProgress[index]={
+            this.videoProgress[index] = {
               uploading: false,
               progress: "0%",
               index: 0
@@ -591,14 +582,13 @@
           JSON.parse(msg.content).type === "deleteMsgTips"
         ) {
           flag = true;
-          let idClient = (JSON.parse(msg.content).data.deleteMsg&&JSON.parse(msg.content).data.deleteMsg.idClient)||(JSON.parse(msg.content).data.imMessage&&JSON.parse(msg.content).data.imMessage.idClient)||(JSON.parse(msg.content).data.deleteMsg&&JSON.parse(msg.content).data.deleteMsg.messageId);
+          let idClient = (JSON.parse(msg.content).data.deleteMsg && JSON.parse(msg.content).data.deleteMsg.idClient) || (JSON.parse(msg.content).data.imMessage && JSON.parse(msg.content).data.imMessage.idClient) || (JSON.parse(msg.content).data.deleteMsg && JSON.parse(msg.content).data.deleteMsg.messageId);
           this.msgList.forEach((element, index) => {
             if (element.idClient === idClient) {
               this.msgList.removeByValue(element);
               return;
             }
           });
-          // this.msgList.removeByValue(JSON.parse(msg.content).data.deleteMsg)
         }
         return flag;
       },
@@ -773,7 +763,7 @@
               that.msgList.forEach((element, index) => {
                 that.getTargetMessage(element);
                 that.getTimeStampShowList(element);
-                that.setMediaProgress(element,index);
+                that.setMediaProgress(element, index);
               });
               that.$nextTick(() => {
                 setTimeout(() => {
@@ -1379,7 +1369,7 @@
       // 发送多图文件
       sendMulitpleImage(list, nowNum) {
         const that = this;
-        this.inputImageFlag=false;
+        this.inputImageFlag = false;
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -1398,7 +1388,7 @@
           done(error, msg) {
             if (!error) {
               console.log(msg);
-              that.inputImageFlag=true;
+              that.inputImageFlag = true;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(nowNum, 1, msg);
               // that.sendMessageSuccess(error, msg);
@@ -1418,7 +1408,7 @@
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(_file));
-        this.inputImageFlag=false;
+        this.inputImageFlag = false;
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
@@ -1463,6 +1453,7 @@
                     progress: "0%",
                     index: 0
                   };
+                  that.scrollToBottom();
                 }
               });
             } else {
@@ -1473,7 +1464,7 @@
       },
       // 选择视频
       sendVideo(e) {
-        if (e.target.files.length>1){
+        if (e.target.files.length > 1) {
           this.toastTips = `每次只能上传一个视频`;
           this.toastShow = true;
           setTimeout(() => {
@@ -1487,6 +1478,7 @@
           this.toastTips = `请选择视频文件`;
           this.toastShow = true;
           setTimeout(() => {
+
             this.toastShow = false;
           }, 2000);
         }
@@ -1503,9 +1495,9 @@
           type: "video",
           from: this.userData.account
         });
-        const videoLastIndex=this.msgList.length-1;
+        const videoLastIndex = this.msgList.length - 1;
 
-        this.inputVideoFlag=false;
+        this.inputVideoFlag = false;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
@@ -1525,6 +1517,8 @@
           done(error, file) {
             console.log("上传video" + (!error ? "成功" : "失败"));
             this.inputVideoFlag = false;
+
+
             console.log(file);
             if (!error) {
               file.name = _file.name;
@@ -1532,7 +1526,7 @@
                 scene: "p2p",
                 custom: JSON.stringify({
                   cType: "1",
-                  cId:api.getPara().doctorCustomerId,
+                  cId: api.getPara().doctorCustomerId,
                   mType: "3",
                   conId: that.orderSourceId
                 }),
@@ -1546,7 +1540,7 @@
                     progress: "0%",
                     index: 0
                   };
-                  // that.imageList.push(msg.file.url);
+                  that.scrollToBottom();
                 }
               });
             } else {
@@ -1583,7 +1577,7 @@
           type: "file",
           from: that.userData.account
         });
-        this.inputPdfFlag=false;
+        this.inputPdfFlag = false;
         this.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
@@ -1606,7 +1600,7 @@
             },
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
-              that.inputPdfFlag=true;
+              that.inputPdfFlag = true;
               file = Object.assign(file, {
                 fileName: _file.name,
               });
@@ -1633,6 +1627,7 @@
                       progress: "0%",
                       index: 0
                     };
+                    that.scrollToBottom();
                   }
                 });
               } else {
@@ -1880,14 +1875,14 @@
       }
     },
     computed: {
-      doctorTitleName(){
-        let result=[];
-        this.$store.state.targetMsg.title.split(",").forEach((element,index)=>{
+      doctorTitleName() {
+        let result = [];
+        this.$store.state.targetMsg.title.split(",").forEach((element, index) => {
           result.push(element.substring(2));
         });
         return result.join(",");
       },
-      leaveFlag () {
+      leaveFlag() {
         if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
           return true;
         } else {
