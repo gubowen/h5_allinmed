@@ -19,7 +19,7 @@ class Wxbinding {
   isBind(obj) {
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
-    if (!api.getPara().openId) {
+    // if (!api.getPara().openId) {
       new Promise((resolve, reject) => {
         let cId = "";
         checkLogin.getStatus().then((res) => {
@@ -76,9 +76,9 @@ class Wxbinding {
           }
         }
       })
-    } else {
-      obj.callBack && obj.callBack();
-    }
+    // } else {
+    //   obj.callBack && obj.callBack();
+    // }
   }
 
   wxBind(url) {
@@ -104,11 +104,11 @@ class Wxbinding {
     let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     // alert(encodeUrl);
-    if (api.getPara().code || api.getPara().openId) {
-      console.log("正在支付重定向");
-    } else {
+    // if (api.getPara().code || api.getPara().openId) {
+    //   console.log("正在支付重定向");
+    // } else {
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
-    }
+    // }
   }
 
 

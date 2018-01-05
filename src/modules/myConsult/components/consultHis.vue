@@ -146,9 +146,9 @@
     },
     methods: {
       init() {
-        if (!api.checkOpenId()) {
-          api.wxGetOpenId(1);    //获取openId
-        }
+//        if (!api.checkOpenId()) {
+//          api.wxGetOpenId(1);    //获取openId
+//        }
         api.forbidShare();
 
         this.$nextTick(() => {
