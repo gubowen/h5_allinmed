@@ -973,6 +973,11 @@
             customerId: api.getPara().doctorCustomerId
           },
           done(data) {
+            console.log("!!!!!")
+            console.log(data);
+            console.log(data);
+            console.log(data);
+            console.log("!!!!!")
             if (data.responseObject.responseMessage === "NO DATA") {
               that.createTriageMessage();
             } else {
