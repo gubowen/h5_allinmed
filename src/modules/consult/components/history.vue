@@ -449,6 +449,8 @@ export default {
       that.base64Arr = [];
       that.uploadIndex = 0;
       _files = Array.from(_files);
+      console.log("打印文件信息===============================");
+      console.log(_files);
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
@@ -486,6 +488,8 @@ export default {
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
                 that.base64ArrAll.unshift(base64); //保存压缩图片
+                console.log("打印压缩64==============================================");
+                console.log(base64);
                 if (i == files.length - 1) {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
@@ -599,6 +603,10 @@ export default {
           fail: false
         });
       }
+      console.log("请求参数=========================================================")
+      console.log(base64.split(",")[1].replace(/\+/g, "%2B").replace(/\n/g, ""));
+      console.log(_fileLocalName);
+      console.log(_fileName);
       api.ajax({
         url: XHRList.upload,
         method: "POST",
