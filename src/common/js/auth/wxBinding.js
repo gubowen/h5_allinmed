@@ -103,7 +103,7 @@ class Wxbinding {
 
     let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
-    alert(encodeUrl);
+    // alert(encodeUrl);
     if (api.getPara().code || api.getPara().openId) {
       console.log("正在支付重定向");
     } else {
