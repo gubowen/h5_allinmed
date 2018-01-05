@@ -19,7 +19,7 @@ class Wxbinding {
   isBind(obj) {
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
-    if (!api.getPara().openId) {
+    // if (!api.getPara().openId) {
       new Promise((resolve, reject) => {
         let cId = "";
         checkLogin.getStatus().then((res) => {
@@ -77,9 +77,9 @@ class Wxbinding {
           }
         }
       })
-    } else {
-      obj.callBack && obj.callBack();
-    }
+    // } else {
+    //   obj.callBack && obj.callBack();
+    // }
   }
 
   wxBind(url) {
