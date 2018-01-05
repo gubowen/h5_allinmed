@@ -789,9 +789,6 @@
   @import "../../../../scss/library/_common-modules";
 
   body {
-    div{
-      height: 100%;
-    }
     .doctorContent{
       background-color: #F2F2F2;
       .doctorContent-box{

@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="footerBottom">
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
-    <!--<router-view ></router-view>-->
+    <bottomNav v-if="bottomNavShow"></bottomNav>
   </div>
 
 </template>
@@ -20,14 +20,30 @@
    */
   import doctorMain from "./components/doctorMain";
   import fb from "common/js/third-party/flexible";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import bottomNav from "components/tabbar"
   export default{
     data() {
-      return {}
+      return {
+        bottomNavShow:false
+      }
     },
-    components: {}
+    mounted(){
+      siteSwitch.weChatJudge(()=>{
+        this.bottomNavShow = false;
+      },()=>{
+        this.bottomNavShow = true;
+      });
+    },
+    components: {
+      bottomNav
+    }
   }
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-
+  @import "../../../scss/library/_common-modules";
+  .footerBottom{
+    margin-bottom:rem(100px);
+  }
 </style>
