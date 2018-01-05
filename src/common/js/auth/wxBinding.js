@@ -19,7 +19,7 @@ class Wxbinding {
   isBind(obj) {
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
-    if (!api.getPara().openId) {
+    // if (!api.getPara().openId) {
       new Promise((resolve, reject) => {
         let cId = "";
         checkLogin.getStatus().then((res) => {
@@ -42,7 +42,6 @@ class Wxbinding {
                   let url = `${window.location.origin}${window.location.pathname}`;
                   if (api.getPara().wxState == 1) {
                     obj.hasBindedFn && obj.hasBindedFn(data);
-                    window.location.href = "/";
                   } else {
                     this.wxBind(url);
                   }
@@ -68,7 +67,6 @@ class Wxbinding {
             obj.callBack && obj.callBack(data);
           } else if (api.getPara().wxState == 1) {
             console.log("您已绑定其他用户");
-
           } else if (api.getPara().wxState == 2) {
             console.log("绑定失败");
             obj.failCallBack && obj.failCallBack();
@@ -78,9 +76,9 @@ class Wxbinding {
           }
         }
       })
-    } else {
-      obj.callBack && obj.callBack();
-    }
+    // } else {
+    //   obj.callBack && obj.callBack();
+    // }
   }
 
   wxBind(url) {
@@ -106,11 +104,11 @@ class Wxbinding {
     let encodeUrl = XHRUrl + "?ref=" + url + "&response_type=code&scope=snsapi_base&state=bundingWx#wechat_redirect";
 
     // alert(encodeUrl);
-    if (api.getPara().code || api.getPara().openId) {
-      console.log("正在支付重定向");
-    } else {
+    // if (api.getPara().code || api.getPara().openId) {
+    //   console.log("正在支付重定向");
+    // } else {
       window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + encodeUrl;
-    }
+    // }
   }
 
 

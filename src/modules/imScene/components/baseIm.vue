@@ -10,7 +10,7 @@
         <p class="new-service-time">服务时间：08:00-21:00</p>
       </article>
     </transition>
-    <section class="main-message" ref="wrapper"
+    <section @click="deleteMsgIndex = -1" @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
              :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
@@ -1444,7 +1444,7 @@
             // show file to the user
             console.log(file);
             if (!error) {
-              file.name = _file.name;
+
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1814,7 +1814,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshState(-1);
+              that.refreshState(0);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +
