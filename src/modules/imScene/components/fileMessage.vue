@@ -158,4 +158,21 @@
   .main-message-box-item.others-message > .main-message-content{
     padding-bottom: 0;
   }
+  .my-message{
+    .file-message-box{
+      background: #FFFFFF;
+      border: 1px solid #B5DAE0;
+      padding: rem(14px) rem(18px);
+      .file-content{
+        background: #FFFFFF;
+        width: rem(404px);
+        .file-name{
+          width: rem(270px);
+        }       
+      }
+    }
+  }
+  .delete-msg-btn{
+    margin-left: -2rem;
+  }
 </style>
