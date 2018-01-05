@@ -1,5 +1,5 @@
 <template>
-  <div class="footerBottom">
+  <div>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
     </keep-alive>
@@ -40,10 +40,3 @@
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  @import "../../../scss/library/_common-modules";
-  .footerBottom{
-    margin-bottom:rem(100px);
-  }
-</style>

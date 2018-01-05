@@ -121,6 +121,7 @@
       }
     }
     .individual-main-inner{
+      margin-bottom:rem(100px);
       padding: rem(32px) rem(30px) rem(40px);
       background-color: #F2F2F2;
       .individual-content{

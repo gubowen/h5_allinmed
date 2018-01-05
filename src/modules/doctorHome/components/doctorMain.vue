@@ -1,5 +1,5 @@
 <template>
-  <div data-alcode-mod='719'>
+  <div data-alcode-mod='719' class="tarBottom">
     <section class="doctorContent" >
     <section class="doctorContent-box">
       <section class="doctor-personalInfo">
@@ -309,7 +309,7 @@
           this.getPersonalProDate();
           this.getDocInfo();
           this.questionStatus({callBack:(data)=>{
-            _this.checkPatientState(data);
+            this.checkPatientState(data);
           }});
           this.getGoodsInfo();
           api.forbidShare();
@@ -454,40 +454,6 @@
               }
             },
             fail(){
-              _this.finish = false;
-//              _this.toastComm("网络信号差，建议您稍后再试");
-//              _this.imgUrl = _this.toastImg.wifi;
-            }
-          })
-        },
-        //是否创建过免费聊天
-        isCreateChatForFree(isfc) {
-          let _this = this;
-          api.ajax({
-            url: XHRList.getOrderDetails,
-            method: "POST",
-            data: _this.params.isCreateChatParams,
-            beforeSend: function () {
-              _this.finish = true;
-            },
-            timeout: 20000,
-            done(data) {
-              _this.finish = false;
-              if (data&&data.responseObject.responseData && data.responseObject.responseData.dataList) {
-                let  _orderAmount = data.responseObject.responseData.dataList[0].orderAmount;
-                if (!parseInt(_orderAmount) > 0) {
-                  //未使用免费问诊
-                  _this.isUseCureForFree=false;
-                } else {
-                  //已使用免费问诊
-                  _this.isUseCureForFree=true;
-                }
-              }else{
-                //无数据时   展示未使用免费问诊
-                _this.isUseCureForFree=false;
-              }
-            },
-            fail(err){
               _this.finish = false;
 //              _this.toastComm("网络信号差，建议您稍后再试");
 //              _this.imgUrl = _this.toastImg.wifi;
@@ -789,6 +755,10 @@
   @import "../../../../scss/library/_common-modules";
 
   body {
+    .tarBottom{
+      height:auto;
+      margin-bottom:rem(100px);
+    }
     .doctorContent{
       background-color: #F2F2F2;
       .doctorContent-box{

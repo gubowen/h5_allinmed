@@ -169,6 +169,7 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   .consult-main-inner{
+    margin-bottom:rem(100px);
     .loginRuleCommon{
       padding-bottom: rem(200px);
       .rule-titleTop{

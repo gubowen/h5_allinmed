@@ -258,6 +258,7 @@
     min-height: 100%;
     height:auto;
     padding-bottom:rem(100px);
+    margin-bottom:rem(100px);
     box-sizing: border-box;
     background:url("../../../common/image/background_wave.png") no-repeat bottom center #F2F2F2;
     background-size:100% rem(272px);
