@@ -283,6 +283,11 @@
         if(api.getPara().doctorCustomerId){//医生主页
           localStorage.setItem("bindDocId",api.getPara().doctorCustomerId);
         }
+
+        if(localStorage.getItem("payOk") == 1){
+          this.payPopupShow = true;
+        }
+
         if(api.getPara().from&&api.getPara().from=='report'){
           this.isDoctorID = true;
           if(!api.getPara().doctorCustomerId&&typeof Number(api.getPara().wxState) == 'number'){
