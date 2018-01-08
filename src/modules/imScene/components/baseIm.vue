@@ -710,6 +710,9 @@
         //如果没有初诊建议，直接定位到底部
         that.$store.state.previewSuggestionNum || that.scrollToBottom();
         if (medicalFlag) {
+          if (that.msgList.length) {
+            that.refreshState(-1);
+          }
           that.getMedicalMessage();
         } else {
           //判断消息列表里面是否有结束问诊，没有的话发送一条

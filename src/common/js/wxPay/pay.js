@@ -238,8 +238,7 @@ export default function pay(Obj) {
         data: {
           caseId: api.getPara().caseId,
           customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId"),
-          consultationType: 1,
-          siteId: 17
+          consultationType: 1
         },
         done (data) {
           if (data.responseObject.responseMessage == "NO DATA"){
@@ -249,12 +248,11 @@ export default function pay(Obj) {
               data: {
                 caseId: api.getPara().caseId,
                 customerId: api.getPara().doctorCustomerId || localStorage.getItem("docId") ,
-                patientCustomerId: api.getPara().patientCustomerId,
+                patientCustomerId: localStorage.getItem("userId"),
                 patientId: api.getPara().patientId,
                 consultationType: 1,
                 consultationState: -1,
                 consultationLevel: localStorage.getItem("orderPayType"),
-                siteId: 17,
                 caseType: 0
               },
               done (d) {
