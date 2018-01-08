@@ -529,7 +529,6 @@
             display: inline-block;
             color: #555555;
             letter-spacing: 0;
-            width: rem(100px);
           }
           .detail {
             vertical-align: bottom;

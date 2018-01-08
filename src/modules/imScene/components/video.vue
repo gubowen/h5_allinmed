@@ -181,6 +181,7 @@ export default {
     padding-bottom: rem(24px);
     border-bottom: 1px solid #d8d8d8;
     @include font-dpr(17px);
+    margin-bottom: rem(24px);
     color: #222222;
   }
   .main-message-box-item.my-message > .main-message-content.video-message-box{

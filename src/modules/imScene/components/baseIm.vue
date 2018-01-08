@@ -473,11 +473,7 @@
             document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 100);
         }
-        setTimeout(() => {
-          $(".main-message-time").css({
-            top: document.body.scrollTop
-          });
-        }, 500);
+
 
         this.onFocus = true;
       },
@@ -490,9 +486,7 @@
             document.body.scrollTop = this.bfscrolltop;
           }, 20);
         }
-        $(".main-message-time").css({
-          top: 0
-        });
+
         this.onFocus = false;
       },
       //用户连接IM聊天
@@ -1213,9 +1207,9 @@
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             this.toastControl("您最多只能选择9张图片");
-            e.target.files = e.target.files.slice(0, 10);
+            // e.target.files = Array.from(e.target.files).slice(0, 10);
+            this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
           }
-          this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
           console.log(_file);

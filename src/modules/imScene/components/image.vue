@@ -98,6 +98,13 @@ export default {
     showBigImg(item, index) {
       let that = this;
       this.showDeleteMsg = false;
+      let num = 0;
+      that.imageList.map( (item, index) => {
+        if (that.imageMessage.file.url.includes(item)) {
+          num = index;
+          return;
+        }
+      })
       let _params = {
         imgBlob: (function() {
           let result = [];
@@ -106,7 +113,7 @@ export default {
           });
           return result;
         })(),
-        indexNum: this.imageList.indexOf(this.imageNum)
+        indexNum: num
       };
       this.$router.push({
         name: "showBigImg",

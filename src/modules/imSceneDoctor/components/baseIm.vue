@@ -269,7 +269,7 @@
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></Suggestion>
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave" :doctorCustomerId="targetData.account.substring(2)"></Suggestion>
       </transition>
     </section>
   </div>
@@ -973,11 +973,6 @@
             customerId: api.getPara().doctorCustomerId
           },
           done(data) {
-            console.log("!!!!!")
-            console.log(data);
-            console.log(data);
-            console.log(data);
-            console.log("!!!!!")
             if (data.responseObject.responseMessage === "NO DATA") {
               that.createTriageMessage();
             } else {
@@ -1304,9 +1299,8 @@
             setTimeout(() => {
               that.toastShow = false;
             }, 2000);
-            e.target.files = e.target.files.slice(0, 10);
           }
-          this.getMulitpleImage(e.target.files);
+          this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
         } else {
           let _file = e.target.files[0];
           console.log(_file);
@@ -1325,9 +1319,9 @@
       getMulitpleImage(list) {
         let mList = [];
         const that = this;
-
+        const _holderId=Math.random();
         let promises = [];
-        this.msgList.push({
+        let _ele={
           type: "custom",
           content: JSON.stringify({
             type: "multipleImage",
@@ -1336,7 +1330,12 @@
             }
           }),
           loading: true,
-          from: this.userData.account
+          from: this.userData.account,
+          idClient:_holderId
+        }
+        this.msgList.push(_ele);
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         let nowNum = this.msgList.length - 1;
         Array.from(list).forEach((element, index) => {
@@ -1372,13 +1371,15 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result, nowNum);
+          this.sendMulitpleImage(result, _ele);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list, nowNum) {
+      sendMulitpleImage(list, _ele) {
         const that = this;
         this.inputImageFlag = false;
+        const _nowNum=this.msgList.indexOf(_ele);
+        console.log(_nowNum)
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -1399,8 +1400,10 @@
               console.log(msg);
               that.inputImageFlag = true;
               // that.msgList[that.msgList.length-1] = msg;
-              that.msgList.splice(nowNum, 1, msg);
-              // that.sendMessageSuccess(error, msg);
+              that.msgList.splice(_nowNum, 1, msg);
+              that.$nextTick(()=>{
+                that.scrollToBottom();
+              });
             }
           }
         });
@@ -1414,6 +1417,9 @@
           },
           type: "image",
           from: that.userData.account
+        });
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(_file));
@@ -1462,7 +1468,9 @@
                     progress: "0%",
                     index: 0
                   };
-                  that.scrollToBottom();
+                  that.$nextTick(()=>{
+                    that.scrollToBottom();
+                  });
                 }
               });
             } else {
@@ -1498,16 +1506,20 @@
       // 上传视频文件
       sendVideoFile(_file) {
         const that = this;
-        console.log(_file);
-
-        this.msgList.push({
+        let _ele={
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
           from: this.userData.account
+        }
+        this.msgList.push(_ele);
+        this.$nextTick(()=>{
+          setTimeout(()=>{
+            this.scrollToBottom();
+          },300);
         });
-        const videoLastIndex = this.msgList.length - 1;
+        let videoLastIndex = this.msgList.length-1;
 
         this.inputVideoFlag = false;
         this.nim.previewFile({
@@ -1534,6 +1546,7 @@
             console.log(file);
             if (!error) {
               file.name = _file.name;
+              videoLastIndex=that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1552,7 +1565,9 @@
                     progress: "0%",
                     index: 0
                   };
-                  that.scrollToBottom();
+                  that.$nextTick(()=>{
+                    that.scrollToBottom();
+                  });
                 }
               });
             } else {
@@ -1588,6 +1603,9 @@
           }),
           type: "file",
           from: that.userData.account
+        });
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         this.inputPdfFlag = false;
         this.fileLastIndex = that.msgList.length - 1;
@@ -1639,7 +1657,9 @@
                       progress: "0%",
                       index: 0
                     };
-                    that.scrollToBottom();
+                    that.$nextTick(()=>{
+                      that.scrollToBottom();
+                    });
                   }
                 });
               } else {
