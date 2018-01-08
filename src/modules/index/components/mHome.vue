@@ -34,7 +34,7 @@
         </section>
       </section>
       <!--有问诊历史-->
-      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList">
+      <section class="history-info"  v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList" @click="loginEvent">
         <div class="doctor">
           <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
           <div class="doctor-info">
