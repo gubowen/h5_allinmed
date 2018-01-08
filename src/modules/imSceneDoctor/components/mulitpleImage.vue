@@ -128,7 +128,9 @@
       .mulitple-image-box {
 
         & > .mulitple-image {
-
+          width: rem(132px);
+          height: rem(132px);
+          /*margin-right: 0;*/
           & > img {
             width: 100%;
             height: 100%;

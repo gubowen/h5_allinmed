@@ -16,7 +16,7 @@
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent"
                 v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</span>
         </transition>
-        <section class="middle-tip-box" v-if="progress.uploading">
+        <section class="middle-tip-box" v-if="progress&&progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
                  alt="loading...">
@@ -146,7 +146,7 @@
     .mulit-title {
       padding-bottom: rem(24px);
       border-bottom: 1px solid #d8d8d8;
-      margin-bottom: rem(24px);
+
       @include font-dpr(17px);
       color: #222222;
     }
@@ -155,6 +155,11 @@
 
     }
 
+  }
+  .others-message{
+    .mulitple-image-box{
+      margin-top: rem(24px);
+    }
   }
   .mulitple-image-box {
     text-align: left;
