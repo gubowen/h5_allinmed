@@ -638,6 +638,7 @@ export default {
             )[0].style.display =
               "none";
             that.isExistUpLoadFail();
+            that.fileOverfellow();       //暂存文件删除
             //上传下一张图片(重传跳过)
             if (!that.reload) {
               that.uploadIndex = parseInt(that.uploadIndex) + 1;
@@ -667,6 +668,7 @@ export default {
           } else {
             //上传失败（网络正常情况）
             // that.isExistUpLoadFail();
+            that.fileOverfellow();       //暂存文件删除
             that.isReadyLoad = false;
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
@@ -746,6 +748,14 @@ export default {
         _this.isLoadReady = true;
       }
     },
+    //暂存文件溢出处理（只保存9个文件）
+    fileOverfellow(){
+      let _this = this;
+      if (_this.imageList1.length>9) {
+        _this.base64ArrAll = _this.base64ArrAll.splice(0,9);
+        _this.filesObjAll = _this.filesObjAll.splice(0,9);
+      }
+    },
     textAreaFocus() {
       this.$el.querySelector(".medicineBox").focus();
     },
@@ -764,8 +774,8 @@ export default {
     ensureDeletePic() {
       let _deletePic = this.deletePic;
       this["imageList" + _deletePic.type].splice(_deletePic.index, 1);
-      this.filesObjAll.splice(_deletePic.index, 1);
-      this.base64ArrAll.splice(_deletePic.index, 1);
+      this.filesObjAll.splice(_deletePic.index, 1);   //暂存文件中删除处理
+      this.base64ArrAll.splice(_deletePic.index, 1);  //暂存文件中删除处理
       this.deletePicTip = false;
     },
     //上传指导页
