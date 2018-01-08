@@ -1404,7 +1404,7 @@
         }
         let _file = e.target.files[0];
         console.log(_file.type);
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
           this.toastControl("请选择mp4或者mov文件");
