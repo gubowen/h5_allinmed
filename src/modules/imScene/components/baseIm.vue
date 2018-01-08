@@ -536,7 +536,7 @@
               if (msg.from === that.targetData.account) {
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 // that.pauseTime(msg); //收到检查检验隐藏顶部框；
-                that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框
+                that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框或者分诊完成；
                 that.msgList.push(msg);
                 that.$nextTick(function () {
                   that.scrollToBottom();
@@ -565,6 +565,10 @@
         if (msg.type === "custom" && JSON.parse(msg.content).type === "refusePatient") {
           this.inputBoxShow = false; //输入框取消
           store.commit("setconsultationState", 7);
+        }
+        if (msg.type === "custom" && JSON.parse(msg.content).type === 'notification' && JSON.parse(msg.content).data.actionType == 5) {
+          this.inputBoxShow = false; //输入框取消
+          store.commit("setconsultationState", 8);
         }
       },
 
@@ -1400,7 +1404,7 @@
         }
         let _file = e.target.files[0];
         console.log(_file.type);
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
           this.toastControl("请选择mp4或者mov文件");

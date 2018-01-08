@@ -14,7 +14,7 @@
                   :class="{'my-video':videoMessage.from===userData.account}">
         <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent"
-                v-if="progress&&!progress.uploading&&currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</span>
+                v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</span>
         </transition>
         <section class="middle-tip-box" v-if="progress&&progress.uploading">
           <figure class="middle-tip-box-text">
