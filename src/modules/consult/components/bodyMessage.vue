@@ -196,7 +196,7 @@
         const that = this;
         let weightData = [],defaultWeight;
         if(Number(that.$route.params.sex) == 1){
-          defaultWeight = 66;
+          defaultWeight = 64;
         }else{
           defaultWeight = 49;
         }
