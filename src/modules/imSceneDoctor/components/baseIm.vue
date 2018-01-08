@@ -1489,11 +1489,11 @@
           }, 2000);
         }
         let _file = e.target.files[0];
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else {
           if (_file.type.includes("video")) {
-            this.toastTips = `请选择mp4或者mov文件`;
+            this.toastTips = `请选择mp4文件`;
           } else {
             this.toastTips = `请选择视频文件`;
           }
@@ -1528,11 +1528,11 @@
           uploadprogress(obj) {
 
             // that.scrollToBottom();
-            that.videoProgress[that.msgList.indexOf(_ele)] = {
+            that.$set(that.videoProgress,that.msgList.indexOf(_ele),{
               uploading: true,
               progress: obj.percentageText,
               index: that.msgList.indexOf(_ele)
-            };
+            });
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
             console.log("上传进度: " + obj.percentage);
@@ -1560,11 +1560,11 @@
                 type: "video",
                 done(error, msg) {
                   that.msgList[videoLastIndex] = msg;
-                  that.videoProgress[videoLastIndex] = {
+                  that.$set(that.videoProgress,videoLastIndex,{
                     uploading: false,
                     progress: "0%",
                     index: 0
-                  };
+                  });
                   that.$nextTick(()=>{
                     that.scrollToBottom();
                   });
