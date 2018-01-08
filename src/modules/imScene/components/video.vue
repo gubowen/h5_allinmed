@@ -119,7 +119,15 @@ export default {
     }
   },
   mounted() {
-    console.log(this.videoMessage);
+    const that=this;
+    $(document).on(
+      'fullscreenchange webkitfullscreenchange mozfullscreenchange', // webkitfullscreenchange/mozfullscreenchange
+      function (evt) {
+        let flag=document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen;
+        if (!flag){
+          that.$refs.videoHtml.pause()
+        }
+      });
   }
 };
 </script>

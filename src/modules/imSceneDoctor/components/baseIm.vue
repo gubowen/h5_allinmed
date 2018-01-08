@@ -1489,7 +1489,7 @@
           }, 2000);
         }
         let _file = e.target.files[0];
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type && _file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else {
           if (_file.type.includes("video")) {

@@ -24,7 +24,7 @@
           </figure>
         </section>
         <header class="mulit-title" v-if="videoMessage.from===targetData.account">视频</header>
-        <section class="mulitple-image-box" >
+        <section class="mulitple-image-box">
           <figure class="mulitple-image">
             <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
             <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/video_play@76.png" alt=""
@@ -62,9 +62,9 @@
         this.$emit("deleteMsgEvent");
       },
       videoPlay() {
-        if (navigator.userAgent.toLowerCase().includes("iphone")){
+        if (navigator.userAgent.toLowerCase().includes("iphone")) {
           this.$refs.videoHtml.play();
-        }else{
+        } else {
           this.$refs.videoHtml.play();
           if (this.$refs.videoHtml.requestFullscreen) {
             this.$refs.videoHtml.requestFullscreen();
@@ -129,7 +129,15 @@
       }
     },
     mounted() {
-      console.log(this.videoMessage);
+      const that=this;
+      $(document).on(
+        'fullscreenchange webkitfullscreenchange mozfullscreenchange', // webkitfullscreenchange/mozfullscreenchange
+        function (evt) {
+          let flag=document.fullscreen || document.webkitIsFullScreen || document.mozFullScreen;
+            if (!flag){
+              that.$refs.videoHtml.pause()
+            }
+        });
     }
   };
 </script>
@@ -161,17 +169,19 @@
       @include font-dpr(17px);
       color: #222222;
     }
-    .multiple-box{
+    .multiple-box {
       min-width: 6.8rem;
 
     }
 
   }
-  .others-message{
-    .mulitple-image-box{
+
+  .others-message {
+    .mulitple-image-box {
       margin-top: rem(24px);
     }
   }
+
   .mulitple-image-box {
     text-align: left;
     & > .mulitple-image {
@@ -202,7 +212,8 @@
       }
     }
   }
-  .im-video{
+
+  .im-video {
     width: 0;
     height: 0;
     opacity: 0;
