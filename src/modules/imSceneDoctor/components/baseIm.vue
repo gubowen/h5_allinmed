@@ -215,12 +215,9 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">图片</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
-                     ref="imageSender"
-                     accept="image/*">
-              <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendImage($event)"
-                     ref="imageSender" capture="camera"
-                     accept="image/*">
+              <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+              <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+              <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
             </li>
             <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
               <figure class="bottom-item-content">
@@ -228,12 +225,9 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos" multiple id="ev-file-send" @change="sendVideo($event)"
-                     ref="videoSender"
-                     accept="video/*">
-              <input type="file" v-if="!isIos" multiple id="ev-file-send" @change="sendVideo($event)"
-                     ref="videoSender" capture="camera"
-                     accept="video/*">
+              <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+              <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+              <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
             </li>
             <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
               <figure class="bottom-item-content">
@@ -241,12 +235,8 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">文件</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
-                     ref="pdfSender"
-                     accept="application/pdf">
-              <input type="file" v-if="!isIos&&inputPdfFlag" multiple id="ev-file-send" @change="sendPdf($event)"
-                     ref="pdfSender"
-                     accept="application/pdf">
+              <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+              <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
             </li>
           </ul>
         </footer>
@@ -321,11 +311,20 @@
   import nimEnv from "common/js/nimEnv/nimEnv";
   import scrollPosition from "../api/scrollPosition";
   import BScroll from "better-scroll";
+  import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
 
   import $ from "jquery";
 
   let nim;
+
+  let _weChat = false;
+  siteSwitch.weChatJudge(() => {
+    _weChat=true;
+  }, () => {
+    _weChat=false;
+  });
+
   const XHRList = {
     getToken: "/mcall/im/interact/v1/refreshToken/",
     getMedicalList: "/mcall/customer/patient/case/v1/getMapById/",
@@ -344,6 +343,7 @@
     data() {
       return {
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
+        isWeChat:_weChat,
         nim: {},
         imageProgress: {
           uploading: false,

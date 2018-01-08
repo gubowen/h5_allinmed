@@ -7,18 +7,15 @@
           <span class="tc-upLoadTitleName  uploadTips-title">医学影像拍摄过程</span>
           <span class="tc-upLoadRightIcon  uploadTips-icon"></span>
         </figure>
-      </section>  
+      </section>
       <section class="tc-upLoadBox" v-for="(item,index) in uploadList">
         <figure class="tc-upLoadTitle ev-upLoadList">
-          <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId"
-                :data-advicetype="item.adviceType">{{item.adviceName}}</span>
+          <span class="tc-upLoadTitleName" :data-treatmentid="item.adviceId" :data-advicetype="item.adviceType">{{item.adviceName}}</span>
           <span class="tc-upLoadRightIcon"></span>
           <span class="tc-upLoadRightCover"></span>
-          <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                 @change="onFileChange($event, item)" v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
-           <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                 capture="camera"
-                 @change="onFileChange($event, item)" v-if="!isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event, item)" v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event, item)" v-if="!isIos&&!isWeChat&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
+          <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event, item)" v-if="!isIos&&isWeChat&&imageList[item.adviceId]&&imageList[item.adviceId].length===0&&!loading">
         </figure>
         <ul class="tc-upLoadItemBox docInt" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0">
           <li class="tc-upLoadItemList ev-imgList success" v-for="(img,imgIndex) in imageList[item.adviceId]">
@@ -34,34 +31,17 @@
             </div>
             <figure class="upload-fail" v-if="img.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                     @change="onFileChange($event, item, imgIndex)"
-                  
-                     v-if="isIos"
-                     v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
-             <input class="ev-upLoadInput" accept="image/*" type="file" multiple
-                     @change="onFileChange($event, item, imgIndex)"
-                     capture="camera"
-                     v-if="!isIos"
-                     v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event, item, imgIndex)" v-if="isIos" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple @change="onFileChange($event, item, imgIndex)" v-if="!isIos&&!isWeChat" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" @change="onFileChange($event, item, imgIndex)" v-if="!isIos&&isWeChat" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0 && img.finish">
             </figure>
           </li>
           <li class="tc-upLoadAdd" style="display: list-item;" v-show="imageList[item.adviceId]&&imageList[item.adviceId].length>0&&imageList[item.adviceId].length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore">
-                <input class="ev-upLoadInput"
-                       accept="image/*"
-                       type="file"
-                       multiple
-                       v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
-                       @change="onFileChange($event, item)"/>
-                       <input class="ev-upLoadInput"
-                       accept="image/*"
-                       type="file"
-                       multiple
-                       capture="camera"
-                       v-if="!isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9"
-                       @change="onFileChange($event, item)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="isIos&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9" @change="onFileChange($event, item)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="!isIos&&!isWeChat&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9" @change="onFileChange($event, item)"/>
+                <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" v-if="!isIos&&isWeChat&&imageList[item.adviceId]&&imageList[item.adviceId].length>0&&!loading&&imageList[item.adviceId].length<9" @change="onFileChange($event, item)"/>
               </span>
             </a>
           </li>
@@ -114,6 +94,7 @@ import store from "../store/store";
 import confirm from "components/confirm";
 import Loading from "components/loading";
 import Toast from "components/toast";
+import siteSwitch from "common/js/siteSwitch/siteSwitch";
 import imageCompress from "common/js/imgCompress/toCompress";
 let _cameraType = "";
 
@@ -122,6 +103,14 @@ if (navigator.userAgent.toLowerCase().includes("iphone")) {
 } else {
   _cameraType = "camera";
 }
+
+let _weChat = false;
+siteSwitch.weChatJudge(() => {
+  _weChat=true;
+}, () => {
+  _weChat=false;
+});
+
 const XHRList = {
   imgCreate: "/mcall/customer/patient/case/attachment/v1/create/",
   imgDelete: "/mcall/customer/patient/case/attachment/v1/update/",
@@ -135,6 +124,7 @@ export default {
     return {
       cameraType:_cameraType,
       isIos:navigator.userAgent.toLowerCase().includes("iphone"),
+      isWeChat:_weChat,
       leaveConfirm: false,
       leaveConfirmParams: {}, //离开confirm的参数
       pageLeaveEnsure: false, //是否离开页面
