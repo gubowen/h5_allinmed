@@ -25,7 +25,8 @@ export default new Vuex.Store({
       image: false,
       video: false,
       file: false,
-      delete: false
+      delete: false,
+      deleteTime:""
     }
   },
   mutations: {
@@ -94,6 +95,7 @@ export default new Vuex.Store({
                     break;
                   case 4://撤回
                     state.toolbarConfig.delete = true;
+                    state.toolbarConfig.deleteTime=element.toolConfig;
                     break;
                   case 5://视频
                     state.toolbarConfig.video = true;

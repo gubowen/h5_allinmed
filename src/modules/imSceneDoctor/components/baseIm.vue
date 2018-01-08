@@ -444,7 +444,7 @@
       },
       deleteMsgEvent(msg) {
 
-        const _DeleteTimeLimit = "2分钟";
+        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime)/60}分钟`;
         const that = this;
         this.nim.deleteMsg({
           msg: msg,
@@ -1519,7 +1519,7 @@
             this.scrollToBottom();
           },300);
         });
-        let videoLastIndex = this.msgList.length-1;
+        let videoLastIndex = this.msgList.indexOf(_ele);
 
         this.inputVideoFlag = false;
         this.nim.previewFile({
@@ -1528,10 +1528,10 @@
           uploadprogress(obj) {
 
             // that.scrollToBottom();
-            that.videoProgress[videoLastIndex] = {
+            that.videoProgress[that.msgList.indexOf(_ele)] = {
               uploading: true,
               progress: obj.percentageText,
-              index: videoLastIndex
+              index: that.msgList.indexOf(_ele)
             };
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
