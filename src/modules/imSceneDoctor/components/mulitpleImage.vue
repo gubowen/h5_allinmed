@@ -7,7 +7,7 @@
       <i class="fail-button" style="display:none">
         <img src="../../../common/image/imScene/error_tips.png" alt="">
       </i>
-      <figcaption class="main-message-content multiple-box">
+      <figcaption class="main-message-content multiple-box image-type">
          <transition name="fade">
           <span class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&imageMessage.from===userData.account">撤回</span>
         </transition>
@@ -124,6 +124,27 @@
   .multiple-box {
     min-width: 6.8rem;
     position: relative;
+    &.image-type{
+      .mulitple-image-box {
+
+        & > .mulitple-image {
+
+          & > img {
+            width: 100%;
+            height: 100%;
+            position: static;
+            margin-top: 0;
+            margin-left: 0;
+          }
+          &:nth-child(1) {
+            // margin: 0;
+          }
+          &:nth-last-child(1) {
+            margin-right: 0;
+          }
+        }
+      }
+    }
     .mulitple-image-box {
       text-align: left;
       padding-top: rem(24px);
