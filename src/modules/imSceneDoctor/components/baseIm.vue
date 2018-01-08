@@ -1304,9 +1304,8 @@
             setTimeout(() => {
               that.toastShow = false;
             }, 2000);
-            e.target.files = e.target.files.slice(0, 10);
           }
-          this.getMulitpleImage(e.target.files);
+          this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
         } else {
           let _file = e.target.files[0];
           console.log(_file);
@@ -1337,6 +1336,9 @@
           }),
           loading: true,
           from: this.userData.account
+        });
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         let nowNum = this.msgList.length - 1;
         Array.from(list).forEach((element, index) => {
@@ -1400,7 +1402,9 @@
               that.inputImageFlag = true;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(nowNum, 1, msg);
-              // that.sendMessageSuccess(error, msg);
+              that.$nextTick(()=>{
+                that.scrollToBottom();
+              });
             }
           }
         });
@@ -1414,6 +1418,9 @@
           },
           type: "image",
           from: that.userData.account
+        });
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         that.imageLastIndex = that.msgList.length - 1;
         console.log(window.URL.createObjectURL(_file));
@@ -1462,7 +1469,9 @@
                     progress: "0%",
                     index: 0
                   };
-                  that.scrollToBottom();
+                  that.$nextTick(()=>{
+                    that.scrollToBottom();
+                  });
                 }
               });
             } else {
@@ -1506,6 +1515,11 @@
           },
           type: "video",
           from: this.userData.account
+        });
+        this.$nextTick(()=>{
+          setTimeout(()=>{
+            this.scrollToBottom();
+          },300);
         });
         const videoLastIndex = this.msgList.length - 1;
 
@@ -1552,7 +1566,9 @@
                     progress: "0%",
                     index: 0
                   };
-                  that.scrollToBottom();
+                  that.$nextTick(()=>{
+                    that.scrollToBottom();
+                  });
                 }
               });
             } else {
@@ -1588,6 +1604,9 @@
           }),
           type: "file",
           from: that.userData.account
+        });
+        this.$nextTick(()=>{
+          this.scrollToBottom();
         });
         this.inputPdfFlag = false;
         this.fileLastIndex = that.msgList.length - 1;
@@ -1639,7 +1658,9 @@
                       progress: "0%",
                       index: 0
                     };
-                    that.scrollToBottom();
+                    that.$nextTick(()=>{
+                      that.scrollToBottom();
+                    });
                   }
                 });
               } else {

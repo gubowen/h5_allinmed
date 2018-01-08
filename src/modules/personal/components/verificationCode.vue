@@ -9,10 +9,11 @@
           <input type="text" name="validCode" id="validCode" v-model="codeId" @blur="checkNum">
         </figure>
       </form>
-      <article class="al-changeMobileContent sended ev-sended" style="display: block;"  v-if="timeOnOff">
+      <article class="al-changeMobileContent sended ev-sended" style="display: block;" v-if="timeOnOff">
         已发送<span class="second">{{timeNum}}s</span>后重新发送
       </article>
-      <article class="al-changeMobileContent sended ev-reSend" style="color: rgb(53, 152, 219);"  v-if="!timeOnOff" @click="sendCode">
+      <article class="al-changeMobileContent sended ev-reSend" style="color: rgb(53, 152, 219);" v-if="!timeOnOff"
+               @click="sendCode">
         重新发送
       </article>
       <article class="al-changeMobileContent sended">
@@ -26,6 +27,7 @@
 </template>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules.scss";
+
   .al-changeMobileBox {
     background-color: #fff;
     width: rem(638px);
@@ -37,104 +39,106 @@
     padding-bottom: rem(100px);
     border-radius: rem(16px);
     height: auto;
-  .al-changeMobileContent {
-  @include font-dpr(15px);
-    color: #808080;
-    line-height: 1.5;
-  }
-  .al-validateInput {
-    margin-top: rem(200px);
-    margin-bottom: rem(90px);
-    padding-bottom: rem(20px);
-    position: relative;
-    overflow: hidden;
-  input {
-    width: 100%;
-    height: rem(60px);
-    border: none;
-    background: none;
-    outline: none;
-    font-family: "microsoft yahei";
-    letter-spacing: rem(160px);
-    padding-left: rem(35px);
-    box-sizing: border-box;
-    font-size: rem(32px);
-  }
-  &:after {
-     content: "";
-     width: 100%;
-     height: rem(4px);
-     display: block;
-     background: transparent url('../../../../src/common/image/img00/personal/validate_bottom.png') center center no-repeat;
-     background-size: cover;
-     position: absolute;
-     bottom: 0;
-     left: 0;
-   }
-  }
-  .al-changeMobileContent.sended {
-    text-align: center;
-  span {
-    padding: 0 rem(10px);
-  }
-  }
+    .al-changeMobileContent {
+      @include font-dpr(15px);
+      color: #808080;
+      line-height: 1.5;
+    }
+    .al-validateInput {
+      margin-top: rem(200px);
+      margin-bottom: rem(90px);
+      padding-bottom: rem(20px);
+      position: relative;
+      overflow: hidden;
+      input {
+        width: 100%;
+        height: rem(60px);
+        border: none;
+        background: none;
+        outline: none;
+        font-family: "microsoft yahei";
+        letter-spacing: rem(160px);
+        padding-left: rem(35px);
+        box-sizing: border-box;
+        font-size: rem(32px);
+      }
+      &:after {
+        content: "";
+        width: 100%;
+        height: rem(4px);
+        display: block;
+        background: transparent url('../../../../src/common/image/img00/personal/validate_bottom.png') center center no-repeat;
+        background-size: cover;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    }
+    .al-changeMobileContent.sended {
+      text-align: center;
+      span {
+        padding: 0 rem(10px);
+      }
+
+    }
   }
 </style>
 <script>
   import api from 'common/js/util/util';
   import toast from "components/toast";
-  import {mapGetters,mapActions} from "vuex";
+  import {mapGetters, mapActions} from "vuex";
+
   let xhrUrl = {
-    sendCode:'/mcall/patient/customer/unite/v1/updateMobile/'
+    sendCode: '/mcall/patient/customer/unite/v1/updateMobile/'
   }
   export default {
-    data(){
+    data() {
       return {
-        codeId:"",
+        codeId: "",
         // setTime:3,
-        setTimeNum:60,
-        timeNum:0,
-        timeOnOff:false,
-        errorShow:false
+        setTimeNum: 60,
+        timeNum: 0,
+        timeOnOff: false,
+        errorShow: false
 
       }
     },
-    watch:{
-      codeId(newStr,oldStr){
-        if(newStr.length>4){
+    watch: {
+      codeId(newStr, oldStr) {
+        if (newStr.length > 4) {
           this.codeId = oldStr;
           this.postCodeNum();
         }
-        if(newStr.length==4){
+        if (newStr.length == 4) {
           this.codeId = newStr;
           this.postCodeNum();
         }
       },
-      codeNum(newStr){
-        if(newStr>=0){
+      codeNum(newStr) {
+        if (newStr >= 0) {
           this.timeBegin();
-        }else{
+        } else {
           this.toast("一天只能发十次");
         }
       }
     },
-    computed:{
-      ...mapGetters(["codeNum",'customerId','codeNumId','codeState','phoneNum'])
+    computed: {
+      ...mapGetters(["codeNum", 'customerId', 'codeNumId', 'codeState', 'phoneNum'])
     },
-    methods:{
-      ...mapActions(['getValidCode','changeCodeState']),
-      postCodeNum(){
+    methods: {
+      ...mapActions(['getValidCode', 'changeCodeState']),
+      postCodeNum() {
         let t = this;
         let param = {
-          customerId:t.customerId,//	string	是	用户id
-          mobile:t.phoneNum,//	string	是	手机号
-          typeId:2,//	string	是	1-手机号找回密码 2-账号验证(绑定手机、手机号注册) 3-手机验证码快捷登录
-          optType:1,//	string	是	操作类型		默认：1
-          codeId:t.codeNumId,//	string	是	验证码主键
-          validCode:t.codeId,//	string	是	验证码CODE
+          customerId: t.customerId,//	string	是	用户id
+          mobile: t.phoneNum,//	string	是	手机号
+          typeId: 2,//	string	是	1-手机号找回密码 2-账号验证(绑定手机、手机号注册) 3-手机验证码快捷登录
+          optType: 1,//	string	是	操作类型		默认：1
+          codeId: t.codeNumId,//	string	是	验证码主键
+          validCode: t.codeId,//	string	是	验证码CODE
         }
         document.getElementById("validCode").blur();
-        let codeNum = ()=>{
+        let codeNum = () => {
           api.ajax({
             url: xhrUrl.sendCode,
             method: "POST",
@@ -144,87 +148,88 @@
             },
             timeout: 20000,
             done(data) {
-              if(data&&data.responseObject&&data.responseObject.responseStatus){
-                if (!isNaN(t.$store.state.customerName)){
-                  t.$store.state.customerName=t.$store.state.phoneNum;
+              if (data && data.responseObject && data.responseObject.responseStatus) {
+                if (!isNaN(t.$store.state.customerName)) {
+                  t.$store.state.customerName = t.$store.state.phoneNum;
                 }
                 t.$store.state.customerPhoneNum = t.$store.state.phoneNum;
                 t.$router.push({
                   path: "/bindAccount"
                 });
-              }else{
+                localStorage.setItem("mobile", t.$store.state.phoneNum);
+              } else {
                 t.toast(data.responseObject.responseMessage);
               }
             },
-            fail(err){
+            fail(err) {
 
             }
           })
         }
         codeNum();
       },
-      sendCode(){
-        let t= this;
-        if(t.codeNum<=0){
+      sendCode() {
+        let t = this;
+        if (t.codeNum <= 0) {
           this.toast("一天只能发十次");
           return false;
-        }else{
+        } else {
           t.getValidCode();
         }
       },
-      checkNum(){
+      checkNum() {
         let t = this;
-        if(t.codeId.length===0){
+        if (t.codeId.length === 0) {
           t.toast("请输入验证码");
         }
       },
-      toast(msg){
+      toast(msg) {
         let t = this;
         this.errorMsg = msg;
         t.errorShow = true;
-        setTimeout(function(){
+        setTimeout(function () {
           t.errorShow = false;
-        },2000);
+        }, 2000);
         return false;
       },
-      timeBegin(onOff){
+      timeBegin(onOff) {
         let t = this;
-        let timer = ()=>{
-          t.timeNum =t.setTimeNum;
+        let timer = () => {
+          t.timeNum = t.setTimeNum;
           t.timeOnOff = true;
           clearInterval(nowTimer);
-          let nowTimer = setInterval(function(){
+          let nowTimer = setInterval(function () {
             t.timeNum--;
-            if(t.timeNum===0){
+            if (t.timeNum === 0) {
               t.timeOnOff = false;
               clearInterval(nowTimer);
             }
-          },1000);
+          }, 1000);
         }
-        if(this.codeNum>=0){
+        if (this.codeNum >= 0) {
           timer();
-        }else{
-            t.toast("一天只能发十次");
+        } else {
+          t.toast("一天只能发十次");
         }
       }
     },
-    mounted(){
+    mounted() {
       let t = this;
       api.forbidShare();
-      if(t.codeNum===10){
+      if (t.codeNum === 10) {
         t.$router.push({
           path: "/personalIndex"
         });
-      }else{
-        if(t.codeState){
+      } else {
+        if (t.codeState) {
           t.changeCodeState(false);
           t.timeBegin();
-        }else{
+        } else {
           t.sendCode();
         }
       }
     },
-    components:{
+    components: {
       toast
     }
   }
