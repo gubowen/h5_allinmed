@@ -168,13 +168,13 @@
           if (this.suggestionType[i]){
             switch (i){
               case "service":
-                _arr.push(1);
+                _arr.push(3);
                 break;
               case "setting":
-                _arr.push(2);
+                _arr.push(4);
                 break;
               case "others":
-                _arr.push(3);
+                _arr.push(5);
                 break;
             }
           }
