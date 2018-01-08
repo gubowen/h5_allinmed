@@ -4,10 +4,9 @@
   "description": "Simple Multiple-page CLI for scaffolding Vue.js projects",
   "author": "qiangkailaing khallmader@gmail.com",
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "start": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
+    "dev2":"node build/dev-server.js",
+    "build": "node build/build.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
