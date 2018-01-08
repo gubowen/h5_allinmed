@@ -473,11 +473,7 @@
             document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 100);
         }
-        setTimeout(() => {
-          $(".main-message-time").css({
-            top: document.body.scrollTop
-          });
-        }, 500);
+
 
         this.onFocus = true;
       },
@@ -490,9 +486,7 @@
             document.body.scrollTop = this.bfscrolltop;
           }, 20);
         }
-        $(".main-message-time").css({
-          top: 0
-        });
+
         this.onFocus = false;
       },
       //用户连接IM聊天

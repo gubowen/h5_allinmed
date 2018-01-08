@@ -269,7 +269,7 @@
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></Suggestion>
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave" :doctorCustomerId="targetData.account.substring(2)"></Suggestion>
       </transition>
     </section>
   </div>
@@ -973,11 +973,6 @@
             customerId: api.getPara().doctorCustomerId
           },
           done(data) {
-            console.log("!!!!!")
-            console.log(data);
-            console.log(data);
-            console.log(data);
-            console.log("!!!!!")
             if (data.responseObject.responseMessage === "NO DATA") {
               that.createTriageMessage();
             } else {
@@ -1324,9 +1319,9 @@
       getMulitpleImage(list) {
         let mList = [];
         const that = this;
-
+        const _holderId=Math.random();
         let promises = [];
-        this.msgList.push({
+        let _ele={
           type: "custom",
           content: JSON.stringify({
             type: "multipleImage",
@@ -1335,8 +1330,10 @@
             }
           }),
           loading: true,
-          from: this.userData.account
-        });
+          from: this.userData.account,
+          idClient:_holderId
+        }
+        this.msgList.push(_ele);
         this.$nextTick(()=>{
           this.scrollToBottom();
         });
@@ -1374,13 +1371,15 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result, nowNum);
+          this.sendMulitpleImage(result, _ele);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list, nowNum) {
+      sendMulitpleImage(list, _ele) {
         const that = this;
         this.inputImageFlag = false;
+        const _nowNum=this.msgList.indexOf(_ele);
+        console.log(_nowNum)
         this.nim.sendCustomMsg({
           scene: "p2p",
           to: that.targetData.account,
@@ -1401,7 +1400,7 @@
               console.log(msg);
               that.inputImageFlag = true;
               // that.msgList[that.msgList.length-1] = msg;
-              that.msgList.splice(nowNum, 1, msg);
+              that.msgList.splice(_nowNum, 1, msg);
               that.$nextTick(()=>{
                 that.scrollToBottom();
               });
@@ -1507,21 +1506,20 @@
       // 上传视频文件
       sendVideoFile(_file) {
         const that = this;
-        console.log(_file);
-
-        this.msgList.push({
+        let _ele={
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
           from: this.userData.account
-        });
+        }
+        this.msgList.push(_ele);
         this.$nextTick(()=>{
           setTimeout(()=>{
             this.scrollToBottom();
           },300);
         });
-        const videoLastIndex = this.msgList.length - 1;
+        let videoLastIndex = this.msgList.length-1;
 
         this.inputVideoFlag = false;
         this.nim.previewFile({
@@ -1548,6 +1546,7 @@
             console.log(file);
             if (!error) {
               file.name = _file.name;
+              videoLastIndex=that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({

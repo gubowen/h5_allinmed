@@ -24,6 +24,9 @@
       goFeedback () {
         if (this.leaveFlag) {
           location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}`;
+          if (this.doctorCustomerId){
+            location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}&doctorCustomerId=${this.doctorCustomerId}`;
+          }
         } else {
           // debugger;
           this.$emit('update:isLeave',true);
@@ -38,6 +41,9 @@
     },
     props:{
       customerId:{
+        type:String
+      },
+      doctorCustomerId:{
         type:String
       },
       isLeave:{
