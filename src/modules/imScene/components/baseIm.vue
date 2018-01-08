@@ -861,7 +861,7 @@
           }
         });
       },
-      //
+      // 更新状态
       refreshState(state) {
         const that = this;
         api.ajax({
@@ -869,6 +869,25 @@
           method: "POST",
           data: {
             consultationId: that.orderSourceId,
+            consultationState: state //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
+          },
+          done(data) {
+            if (data.responseObject.responseStatus) {
+              console.log("状态更新成功" + state);
+            } else {
+              console.log("状态更新失败" + data);
+            }
+          }
+        });
+      },
+      // 另个一个更新状态
+      refreshStateOther(state) {
+        const that = this;
+        api.ajax({
+          url: XHRList.refresh,
+          method: "POST",
+          data: {
+            consultationIds: that.orderSourceId,
             consultationState: state //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
           },
           done(data) {
@@ -1869,7 +1888,7 @@
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshState(0);
+              that.refreshStateOther(-1);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +
@@ -2103,7 +2122,7 @@
         that.updateMedical();
         // 如果会话消息不是结束，则更新状态；
         if (this.$store.state.consultationState != 7 && this.$store.state.consultationState != 1 && this.$store.state.consultationState != 8) {
-          that.refreshState(6);
+          that.refreshStateOther(6);
         }
         that.nim.sendCustomMsg({
           scene: "p2p",

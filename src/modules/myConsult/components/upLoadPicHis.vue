@@ -93,6 +93,7 @@ siteSwitch.weChatJudge(() => {
   _weChat=false;
 });
 const XHRList = {
+  refresh: "/mcall/customer/case/consultation/v1/update/",
   getToken: "/mcall/im/interact/v1/refreshToken/", //获取token
   imgCreate: "/mcall/customer/patient/case/attachment/v1/create/", //上传图片
   imgDelete: "/mcall/customer/patient/case/attachment/v1/update/", //历史图片删除
@@ -387,6 +388,7 @@ export default {
         },
         done(data) {
           if (data.responseObject.responseStatus) {
+            that.refreshStateOther(6);
             that.getUserBaseData(
               that.$route.params.caseId,
               that.$route.params.consultationId
@@ -437,6 +439,25 @@ export default {
             console.log("链接已中断...");
           }
         });
+      });
+    },
+    // 另个一个更新状态
+    refreshStateOther(state) {
+      const that = this;
+      api.ajax({
+        url: XHRList.refresh,
+        method: "POST",
+        data: {
+          consultationIds: that.$route.params.consultationId,
+          consultationState: state //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
+        },
+        done(data) {
+          if (data.responseObject.responseStatus) {
+            console.log("状态更新成功" + state);
+          } else {
+            console.log("状态更新失败" + data);
+          }
+        }
       });
     },
     nimSendSuccess(cd) {
