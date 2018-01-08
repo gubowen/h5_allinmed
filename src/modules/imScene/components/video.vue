@@ -14,7 +14,7 @@
         <transition name="fade">
           <button class="delete-msg-btn" @click.stop="deleteMsgEvent" v-if="currentIndex===deleteMsgIndex&&showDeleteMsg&&videoMessage.from===userData.account">撤回</button>
         </transition>
-        <section class="middle-tip-box" v-if="progress&&progress.uploading">
+        <section class="middle-tip-box" v-if="videoMessage.loading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
                  alt="loading...">
@@ -51,25 +51,23 @@ export default {
       return this.$store.state.logoUrl;
     },
     progress() {
-      if (this.videoProgress) {
-        if (this.currentIndex === this.videoProgress.index) {
-          if (this.videoProgress.progress.includes(".")) {
-            let returnObj = Object.assign(this.videoProgress, {
-              progress: `${this.videoProgress.progress.split(".")[0]}%`
-            });
-            return returnObj;
-          } else {
-            return this.videoProgress;
-          }
+      // if (this.currentIndex === this.videoProgress.index) {
+        // return this.imageProgress;
+        if (this.videoProgress.progress.includes(".")) {
+          let returnObj = Object.assign(this.videoProgress, {
+            progress: `${this.videoProgress.progress.split(".")[0]}%`
+          });
+          return returnObj;
         } else {
-          return {
-            uploading: false,
-            progress: "0",
-            index: 0
-          };
+          return this.videoProgress;
         }
-      }
-
+      // } else {
+        // return {
+        //   uploading: false,
+        //   progress: "0",
+        //   index: 0
+        // };
+      // }
     }
   },
   props: {
@@ -95,13 +93,18 @@ export default {
   methods : {
     // 播放视频路由
     videoPlay () {
-      this.$refs.videoHtml.play();
-      // this.$router.push({
-      //   name: "videoPlay",
-      //   params: {
-      //     url: this.videoMessage.file.url
-      //   }
-      // });
+      if (navigator.userAgent.toLowerCase().includes("iphone")){
+        this.$refs.videoHtml.play();
+      }else{
+        this.$refs.videoHtml.play();
+        if (this.$refs.videoHtml.requestFullscreen) {
+          this.$refs.videoHtml.requestFullscreen();
+        } else if (this.$refs.videoHtml.mozRequestFullScreen) {
+          this.$refs.videoHtml.mozRequestFullScreen();
+        } else if (this.$refs.videoHtml.webkitRequestFullScreen) {
+          this.$refs.videoHtml.webkitRequestFullScreen();
+        }
+      }
     },
     longTouchHandler() {
       if (this.$store.state.toolbarConfig.delete) {

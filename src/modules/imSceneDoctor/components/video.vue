@@ -24,7 +24,7 @@
           </figure>
         </section>
         <header class="mulit-title" v-if="videoMessage.from===targetData.account">视频</header>
-        <section class="mulitple-image-box">
+        <section class="mulitple-image-box" >
           <figure class="mulitple-image">
             <video class="im-video" ref="videoHtml" controls="controls" :src="videoMessage.file.url"></video>
             <img class="im-image" @click="videoPlay()" src="../../../common/image/imScene/video_play@76.png" alt=""
@@ -60,7 +60,21 @@
       deleteMsgEvent() {
         this.showDeleteMsg = false;
         this.$emit("deleteMsgEvent");
-      }
+      },
+      videoPlay() {
+        if (navigator.userAgent.toLowerCase().includes("iphone")){
+          this.$refs.videoHtml.play();
+        }else{
+          this.$refs.videoHtml.play();
+          if (this.$refs.videoHtml.requestFullscreen) {
+            this.$refs.videoHtml.requestFullscreen();
+          } else if (this.$refs.videoHtml.mozRequestFullScreen) {
+            this.$refs.videoHtml.mozRequestFullScreen();
+          } else if (this.$refs.videoHtml.webkitRequestFullScreen) {
+            this.$refs.videoHtml.webkitRequestFullScreen();
+          }
+        }
+      },
     },
     computed: {
       logoUrl() {
@@ -71,10 +85,7 @@
           ? "/src/common/image/imScene/default.png"
           : this.$store.state.targetMsg.avatar;
       },
-      videoPlay() {
-        this.$refs.videoHtml.play();
 
-      },
       progress() {
         if (this.videoProgress) {
           if (this.currentIndex === this.videoProgress.index) {
