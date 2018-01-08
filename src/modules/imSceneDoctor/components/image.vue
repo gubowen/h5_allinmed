@@ -108,6 +108,13 @@
       },
       showBigImg(item, index) {
         let that = this;
+        let num = 0;
+        that.imageList.map( (item, index) => {
+          if (that.imageMessage.file.url.includes(item)) {
+            num = index;
+            return;
+          }
+        })
         let _params = {
           imgBlob: (function () {
             let result = [];
@@ -116,7 +123,7 @@
             });
             return result;
           }()),
-          indexNum: this.imageList.indexOf(this.imageMessage.file.url)
+          indexNum: num,
         };
         this.$router.push({
           name: "showBigImg",
