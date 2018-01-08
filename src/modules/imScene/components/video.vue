@@ -51,26 +51,26 @@ export default {
       return this.$store.state.logoUrl;
     },
     progress() {
-        if (this.videoProgress) {
-          if (this.currentIndex === this.videoProgress.index) {
-            if (this.videoProgress.progress.includes(".")) {
-              let returnObj = Object.assign(this.videoProgress, {
-                progress: `${this.videoProgress.progress.split(".")[0]}%`
-              });
-              return returnObj;
-            } else {
-              return this.videoProgress;
-            }
+      if (this.videoProgress) {
+        if (this.currentIndex === this.videoProgress.index) {
+          if (this.videoProgress.progress.includes(".")) {
+            let returnObj = Object.assign(this.videoProgress, {
+              progress: `${this.videoProgress.progress.split(".")[0]}%`
+            });
+            return returnObj;
           } else {
-            return {
-              uploading: false,
-              progress: "0",
-              index: 0
-            };
+            return this.videoProgress;
           }
+        } else {
+          return {
+            uploading: false,
+            progress: "0",
+            index: 0
+          };
         }
-
       }
+
+    }
   },
   props: {
     videoMessage: {

@@ -73,7 +73,7 @@
             :userData="userData"
             :targetData="targetData"
             :imageList="imageList"
-            :imageProgress="imageProgress"
+            :imageProgress="imageProgress[index]"
             @deleteMsgEvent="deleteMsgEvent(msg)"
             @longTouchEmitHandler="deleteMsgIndex=index"
             :currentIndex="index"
@@ -87,7 +87,7 @@
             :fileMessage="msg"
             :userData="userData"
             :targetData="targetData"
-            :fileProgress="fileProgress"
+            :fileProgress="fileProgress[index]"
             @deleteMsgEvent="deleteMsgEvent(msg)"
             @longTouchEmitHandler="deleteMsgIndex=index"
             :currentIndex="index"
@@ -243,9 +243,9 @@
                    height="234"/>
               <figcaption class="bottom-item-description">图片</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
+            <input type="file" v-if="isIos" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&!isWeChat" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&isWeChat" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
             <figure class="bottom-item-content">
@@ -253,17 +253,17 @@
                    height="234"/>
               <figcaption class="bottom-item-description">视频</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-            <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-            <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
+            <input type="file" v-if="isIos" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+            <input type="file" v-if="!isIos&&!isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+            <input type="file" v-if="!isIos&&isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
-            <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+            <input type="file" v-if="isIos" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+            <input type="file" v-if="!isIos" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -1334,7 +1334,7 @@
       // 上传图片文件
       sendImageFile(_file) {
         const that = this;
-        this.msgList.push({
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file)
           },
@@ -1342,7 +1342,8 @@
           from: that.userData.account,
           replace:'image',
           loading: true,
-        });
+        }
+        this.msgList.push(_ele);
         this.$nextTick(() => {
           that.scrollToBottom();
         })
@@ -1354,11 +1355,17 @@
           uploadprogress(obj) {
             // that.inputImageFlag = false;
             // that.scrollToBottom();
-            that.imageProgress = {
+            // that.imageProgress = {
+            //   uploading: true,
+            //   progress: obj.percentageText,
+            //   index: that.imageLastIndex
+            // };
+            let indexflag = that.msgList.indexOf(_ele);
+            that.$set(that.imageProgress,indexflag,{
               uploading: true,
               progress: obj.percentageText,
-              index: that.imageLastIndex
-            };
+              index: indexflag
+            })
 
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1383,7 +1390,12 @@
                 done(error, msg) {
                   // debugger;
                   // that.msgList[that.imageLastIndex] = msg;
-                  that.msgList[that.replaceIndex('image')] = msg;
+                  // that.msgList[that.replaceIndex('image')] = msg;
+                  that.$set(that.imageProgress,that.msgList.indexOf(_ele),{
+                    uploading: false,
+                    progress: "0%",
+                    index: 0,
+                  })
                   that.scrollToBottom();
                   // 老版本的imageList push
                   // that.imageList.push(
@@ -1393,11 +1405,11 @@
                   // 新版本的imageList push
                   that.imageList.push(msg.file.url);
 
-                  that.imageProgress = {
-                    uploading: false,
-                    progress: "0%",
-                    index: 0
-                  };
+                  // that.imageProgress = {
+                  //   uploading: false,
+                  //   progress: "0%",
+                  //   index: 0
+                  // };
                 }
               });
             } else {
@@ -1415,6 +1427,10 @@
           this.toastControl("每次只能上传一个视频");
         }
         let _file = e.target.files[0];
+        if (_file.size >= 104857600) {
+          this.toastControl("视频最大为100M");
+          return;
+        }
         console.log(_file.type);
         if (_file.type && _file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
@@ -1523,7 +1539,7 @@
       // 发送pdf
       sendPdfFile(_file) {
         const that = this;
-        this.msgList.push({
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file),
             ext: "pdf",
@@ -1536,7 +1552,8 @@
           from: that.userData.account,
           replace:"pdf",
           loading:true,
-        });
+        }
+        this.msgList.push(_ele);
         that.scrollToBottom();
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
@@ -1548,11 +1565,17 @@
             uploadprogress(obj) {
               // this.inputPdfFlag = false;
               // that.scrollToBottom();
-              that.fileProgress = {
+              let indexflag = that.msgList.indexOf(_ele)
+              that.$set(that.fileProgress,indexflag,{
                 uploading: true,
                 progress: obj.percentageText,
-                index: that.fileLastIndex
-              };
+                index: indexflag
+              })
+              // that.fileProgress = {
+              //   uploading: true,
+              //   progress: obj.percentageText,
+              //   index: that.fileLastIndex
+              // };
               console.log("文件总大小: " + obj.total + "bytes");
               console.log("已经上传的大小: " + obj.loaded + "bytes");
               console.log("上传进度: " + obj.percentage);
@@ -1580,14 +1603,19 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
+                    that.$set(that.fileProgress,that.msgList.indexOf(_ele),{
+                      uploading: false,
+                      progress: "0%",
+                      index: 0,
+                    })
                     // that.msgList[that.fileLastIndex] = msg;
                     that.msgList[that.replaceIndex('pdf')] = msg;
                     that.scrollToBottom();
-                    that.fileProgress = {
-                      uploading: false,
-                      progress: "0%",
-                      index: 0
-                    };
+                    // that.fileProgress = {
+                    //   uploading: false,
+                    //   progress: "0%",
+                    //   index: 0
+                    // };
                   }
                 });
               } else {
