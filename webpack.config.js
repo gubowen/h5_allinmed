@@ -122,7 +122,7 @@ const config = {
     extractCSS
   ],
   devServer: {
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 8080,
     historyApiFallback: false,
     noInfo: true,
