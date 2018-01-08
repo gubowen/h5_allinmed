@@ -265,7 +265,7 @@
             createConsultationIdParams:{
               caseId: api.getPara().caseId,
               customerId: api.getPara().doctorCustomerId,
-              patientCustomerId: api.getPara().patientCustomerId?api.getPara().patientCustomerId:localStorage.getItem("customerId"),
+              patientCustomerId: api.getPara().patientCustomerId?api.getPara().patientCustomerId:localStorage.getItem("userId"),
               patientId: api.getPara().patientId,
               consultationType: 1,
               consultationState: -1,
