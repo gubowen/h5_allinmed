@@ -918,20 +918,7 @@
         return flag;
       },
       deleteMsgEvent(msg) {
-        // const deleteMsg = new DeleteMsg(this.nim, msg);
-        // const deleteMsgTips = new DeleteMsgTips(
-        //   this.nim,
-        //   this.targetData.account,
-        //   {
-        //     cType: "0",
-        //     cId: this.cId,
-        //     mType: "36",
-        //     conId: this.orderSourceId,
-        //     patientName: this.$store.state.patientName,
-        //     deleteMsg: msg
-        //   }
-        // );
-        const _DeleteTimeLimit = "2分钟";
+        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime)/60}分钟`;
         const that = this;
         this.nim.deleteMsg({
           msg: msg,
