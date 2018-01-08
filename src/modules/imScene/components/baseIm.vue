@@ -113,7 +113,7 @@
             :videoMessage="msg"
             :userData="userData"
             :targetData="targetData"
-            :videoProgress="videoProgress"
+            :videoProgress="videoProgress[index]"
             @deleteMsgEvent="deleteMsgEvent(msg)"
             @longTouchEmitHandler="deleteMsgIndex=index"
             :currentIndex="index"
@@ -382,23 +382,11 @@
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         nim: {},
         // 图片发送进度
-        imageProgress: {
-          uploading: false,
-          progress: "0%",
-          index: 0
-        },
+        imageProgress: {},
         // 视频发送进度
-        videoProgress: {
-          uploading: false,
-          progress: "0%",
-          index: 0
-        },
+        videoProgress: {},
         // 文件pdf发送进度
-        fileProgress: {
-          uploading: false,
-          progress: "0%",
-          index: 0
-        },
+        fileProgress: {},
         patientCustomerId: localStorage.getItem("userId"),
         imageLastIndex: 0, //上传图片最后一张记录在数组中的位置
         videoLastIndex: 0, //上传视频最后一个记录在数组中的位置
@@ -715,6 +703,30 @@
         } else {
           //判断消息列表里面是否有结束问诊，没有的话发送一条
           // that.hasMiddleTips();
+        }
+      },
+      // 设置多媒体进度
+      setMediaProgress(msg, index) {
+        switch (msg.type) {
+          case "image":
+
+            this.imageProgress[index] = {
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "file":
+            this.fileProgress[index] = {
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
+          case "video":
+            this.videoProgress[index] = {
+              uploading: false,
+              progress: "0%",
+              index: 0
+            }
         }
       },
       //获取患者问诊单
@@ -1211,9 +1223,9 @@
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             this.toastControl("您最多只能选择9张图片");
-            // e.target.files = Array.from(e.target.files).slice(0, 10);
-            this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
+            e.target.files = Array.from(e.target.files).slice(0, 9);
           }
+          this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
           console.log(_file);
@@ -1235,7 +1247,7 @@
         const that = this;
         console.log(list);
         let promises = [];
-        this.msgList.push({
+        let _ele = {
           type: "custom",
           content: JSON.stringify({
             type: "multipleImage",
@@ -1246,7 +1258,8 @@
           loading: true,
           from: this.userData.account,
           replace:"multiple",
-        });
+        }
+        that.msgList.push(_ele);
         that.scrollToBottom();
         that.mulitpleLastIndex = that.msgList.length - 1;
         that.inputImageFlag = false;
@@ -1282,11 +1295,11 @@
         console.log(promises);
         Promise.all(promises).then(result => {
           console.log(result);
-          this.sendMulitpleImage(result);
+          this.sendMulitpleImage(result, _ele);
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list) {
+      sendMulitpleImage(list,_ele) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: "p2p",
@@ -1313,8 +1326,10 @@
               //     return;
               //   }
               // });
-              console.log(that.replaceIndex('multiple'));
-              that.msgList[that.replaceIndex('multiple')] = msg;
+              // console.log(that.replaceIndex('multiple'));
+              // that.msgList[that.replaceIndex('multiple')] = msg;
+              that.msgList[that.msgList.indexOf(_ele)]=msg;
+              that.scrollToBottom();
             }
           }
         });
@@ -1404,10 +1419,10 @@
         }
         let _file = e.target.files[0];
         console.log(_file.type);
-        if (_file.type.includes("video") && (/mp4/.test(_file.type))) {
+        if (_file.type && _file.type.includes("video") && (/mp4/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
-          this.toastControl("请选择mp4或者mov文件");
+          this.toastControl("请选择mp4文件");
         } else {
           this.toastControl("请选择视频文件");
         }
@@ -1416,7 +1431,7 @@
       sendVideoFile(_file) {
         const that = this;
         console.log(_file);
-        this.msgList.push({
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file)
           },
@@ -1424,20 +1439,26 @@
           loading: true,
           from: that.userData.account,
           replace:'video',
-        });
+        }
+        this.msgList.push(_ele);
         that.scrollToBottom();
-        that.videoLastIndex = that.msgList.length - 1;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
             // this.inputVideoFlag = false;
             // that.scrollToBottom();
-            that.videoProgress = {
+            // that.videoProgress[that.msgList.indexOf(_ele)] = {
+            //   uploading: true,
+            //   progress: obj.percentageText,
+            //   index: that.videoLastIndex
+            // };
+            let indexflag = that.msgList.indexOf(_ele)
+            that.$set(that.videoProgress,indexflag,{
               uploading: true,
               progress: obj.percentageText,
-              index: that.videoLastIndex
-            };
+              index: indexflag
+            })
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
             console.log("上传进度: " + obj.percentage);
@@ -1461,6 +1482,11 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
+                  that.$set(that.videoProgress,that.msgList.indexOf(_ele),{
+                    uploading: false,
+                    progress: "0%",
+                    index: 0,
+                  })
                   // that.msgList[that.videoLastIndex] = msg;
                   // that.msgList.map( (item,index) => {
                     //   if (item.replace && item.replace == 'video') {
@@ -1468,13 +1494,13 @@
                   //     return;
                   //   }
                   // });
-                  that.msgList[that.replaceIndex('video')] = msg;
+                  // that.msgList[that.replaceIndex('video')] = msg;
                   that.scrollToBottom();
-                  that.videoProgress = {
-                    uploading: false,
-                    progress: "0%",
-                    index: 0
-                  };
+                  // that.videoProgress = {
+                  //   uploading: false,
+                  //   progress: "0%",
+                  //   index: 0
+                  // };
                   // that.imageList.push(msg.file.url);
                 }
               });
