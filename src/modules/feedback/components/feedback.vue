@@ -187,7 +187,7 @@
             suggestionContent:this.suggestionContent,
             suggestionNumbers:this.suggestionNumbers,
             customerId:_this.customerId||0,
-            doctorId:api.getPara().doctorCustomerId,
+            doctorId:api.getPara().doctorCustomerId||"",
             visitSiteId: api.getSiteId(),
             equipmentVersion:api.getConnectType(),
           },
