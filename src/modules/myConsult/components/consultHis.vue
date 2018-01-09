@@ -30,15 +30,9 @@
           </p>
           <p>主诉<span class="patientComplaint">{{item.mainContent.caseMain}}</span></p>
         </div>
-        <div class="orderHistoryItemBottom"
-             v-if="(item.consultationType==0&&(item.consultationState==0 || item.consultationState == 9)&&item.state==3) || (item.consultationType==0&&item.isRecommend==1)">
-          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==9&&item.state==3"
-                  @click.stop="goToUploadPic(item)">补全检查资料
-          </button>
-          <button data-alcode='e137' class="hrefBtn"
-                  v-if="item.isRecommend==1"
-                  @click.stop="hrefToSuggest(item)">查看推荐专家
-          </button>
+        <div class="orderHistoryItemBottom" v-if="(item.consultationType==0&&(item.consultationState==0 || item.consultationState == 9)&&item.state==3) || (item.consultationType==0&&item.isRecommend==1)">
+          <button data-alcode='e136' class="hrefBtn" v-if="item.consultationState==9&&item.state==3" @click.stop="goToUploadPic(item)">补全检查资料</button>
+          <button data-alcode='e137' class="hrefBtn" v-if="item.isRecommend==1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
         </div>
       </section>
       <infinite-loading @infinite="onInfinite" v-if="checkFinish">
@@ -255,12 +249,9 @@
               statusName = '问诊中';
               break;
             case 1:
+            case 7:
             case 8:
               statusName = '已结束';
-              fontGray = 'font-gray';
-              break;
-            case 7:
-              statusName = '已拒绝';
               fontGray = 'font-gray';
               break;
           }
