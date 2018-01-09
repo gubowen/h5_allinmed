@@ -632,8 +632,7 @@
               case 1: //患者购买 不处理
                 break;
               case 2: //医生赠送次数
-                this.lastTimeShow = true;
-                this.getLastTime(0);
+                this.getLastTime(0,"send");
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
@@ -1082,7 +1081,7 @@
           }
         });
       },
-      getLastTime(status) {
+      getLastTime(status,type) {
         const that = this;
         api.ajax({
           url: XHRList.time,
@@ -1757,6 +1756,7 @@
         this.remainTimeCount = setInterval(() => {
           if (this.receiveTime <= 0) {
             this.bottomTipsType(-1);
+            this.footerBottomFlag=false;
             clearInterval(this.remainTimeCount);
           } else {
             this.receiveTime = this.receiveTime - 1000;
@@ -1942,6 +1942,7 @@
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg);
+                that.payPopupShow=false;
                 //                localStorage.removeItem("sendTips");
               }
             }
