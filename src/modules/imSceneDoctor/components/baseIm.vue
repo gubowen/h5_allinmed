@@ -1480,10 +1480,7 @@
                 type: "image",
                 done(error, msg) {
                   that.msgList[that.imageLastIndex] = msg;
-                  that.imageList.push(
-                    that.$refs.bigImg[that.$refs.bigImg.length - 1].imageMessage
-                      .file.url
-                  );
+                  that.imageList.push(msg.file.url);
                   that.imageProgress = {
                     uploading: false,
                     progress: "0%",
