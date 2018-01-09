@@ -830,7 +830,7 @@
       birthPickerInit(){
         let that = this;
         //年月份数组
-        let yearArr = getDate.getYear(1900, 2017).reverse(),
+        let yearArr = getDate.getYear(1900, 2018).reverse(),
           monthArr = getDate.getMonth(),
           dayArr = getDate.getDay();
         //年月份数据

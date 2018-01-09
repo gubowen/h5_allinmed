@@ -253,7 +253,7 @@
                    height="234"/>
               <figcaption class="bottom-item-description">视频</figcaption>
             </figure>
-            <input type="file" v-if="isIos" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+            <input type="file" v-if="isIos" @change="sendVideo($event)" ref="videoSender"  accept="video/*">
             <input type="file" v-if="!isIos&&!isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
             <input type="file" v-if="!isIos&&isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
           </li>
@@ -1438,10 +1438,10 @@
           return;
         }
         console.log(_file.type);
-        if (_file.type && _file.type.includes("video") && (/mp4/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
-          this.toastControl("请选择mp4文件");
+          this.toastControl("请选择mp4或mov文件");
         } else {
           this.toastControl("请选择视频文件");
         }
