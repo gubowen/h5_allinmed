@@ -10,7 +10,7 @@
         <p class="new-service-time">服务时间：08:00-21:00</p>
       </article>
     </transition>
-    <section @click="deleteMsgIndex = -1" @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
+    <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
              :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
