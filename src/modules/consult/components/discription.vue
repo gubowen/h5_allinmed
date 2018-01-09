@@ -30,6 +30,8 @@
                             @input="otherReason(pIndex,index,$event)"
                             v-model="questionList[pIndex].optionList[index].optionDesc"
                             ref="otherEle"
+                            @focus="hideBar()"
+                            @blur="showBar()"
                   >
                   </textarea>
                     <p class="text-num-tips"
@@ -194,6 +196,8 @@
   import backPopup from "components/backToastForConsult";
   import progerssBar from "../components/progressBar";
   import Picker from "better-picker";
+  import store from "../store/store";
+
 
   import * as dateData from "../api/datePickerData";
 
@@ -366,6 +370,14 @@
       next(this.pageLeaveEnsure);
     },
     methods: {
+      // 隐藏底部
+      hideBar () {
+        store.commit("setbottomNav",false);
+      },
+      // 显示底部
+      showBar () {
+        store.commit("setbottomNav",true);
+      },
       createTimePicker() {
         const dataType = [{
           text: "天",

@@ -116,6 +116,8 @@
             </section>
             <section class="questionHiddenCommon qu-setMedicineBox" @click="textAreaFocus" v-show="medical.has">
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
+                      @focus="hideBar()"
+                      @blur="showBar()"
                       @input="contentLimit"></textarea>
               <span class="qu-underline"></span>
               <p class="limit" v-show="getByteLen(medicalMessage.length)<=50">{{getByteLen(medicalMessage.length)}}</p>
@@ -392,6 +394,14 @@ export default {
     next(true);
   },
   methods: {
+    // 隐藏底部
+    hideBar () {
+      store.commit("setbottomNav",false);
+    },
+    // 显示底部
+    showBar () {
+      store.commit("setbottomNav",true);
+    },
     initData() {
       if (this.$route.params.optionList) {
         let params;
