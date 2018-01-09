@@ -215,9 +215,12 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">图片</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-              <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-              <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
+              <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                     accept="image/*" multiple>
+              <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                     accept="image/*" multiple>
+              <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                     accept="image/*" multiple capture="camera">
             </li>
             <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
               <figure class="bottom-item-content">
@@ -225,9 +228,12 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">视频</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-              <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-              <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
+              <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                     accept="video/*">
+              <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                     multiple accept="video/*">
+              <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                     multiple accept="video/*" capture="camcorder">
             </li>
             <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
               <figure class="bottom-item-content">
@@ -235,8 +241,10 @@
                      height="234"/>
                 <figcaption class="bottom-item-description">文件</figcaption>
               </figure>
-              <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
-              <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+              <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                     accept="application/pdf">
+              <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                     accept="application/pdf">
             </li>
           </ul>
         </footer>
@@ -259,7 +267,8 @@
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave" :doctorCustomerId="targetData.account.substring(2)"></Suggestion>
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"
+                    :doctorCustomerId="targetData.account.substring(2)"></Suggestion>
       </transition>
     </section>
   </div>
@@ -320,9 +329,9 @@
 
   let _weChat = false;
   siteSwitch.weChatJudge(() => {
-    _weChat=true;
+    _weChat = true;
   }, () => {
-    _weChat=false;
+    _weChat = false;
   });
 
   const XHRList = {
@@ -343,7 +352,7 @@
     data() {
       return {
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
-        isWeChat:_weChat,
+        isWeChat: _weChat,
         nim: {},
         imageProgress: {
           uploading: false,
@@ -444,7 +453,7 @@
       },
       deleteMsgEvent(msg) {
 
-        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime)/60}分钟`;
+        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime) / 60}分钟`;
         const that = this;
         this.nim.deleteMsg({
           msg: msg,
@@ -552,8 +561,8 @@
           });
         });
       },
-      recoverCount(msg){
-        if (msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips"){
+      recoverCount(msg) {
+        if (msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips") {
           store.commit("lastCountPlus");
         }
       },
@@ -1319,9 +1328,9 @@
       getMulitpleImage(list) {
         let mList = [];
         const that = this;
-        const _holderId=Math.random();
+        const _holderId = Math.random();
         let promises = [];
-        let _ele={
+        let _ele = {
           type: "custom",
           content: JSON.stringify({
             type: "multipleImage",
@@ -1331,10 +1340,10 @@
           }),
           loading: true,
           from: this.userData.account,
-          idClient:_holderId
+          idClient: _holderId
         }
         this.msgList.push(_ele);
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.scrollToBottom();
         });
         let nowNum = this.msgList.length - 1;
@@ -1378,7 +1387,7 @@
       sendMulitpleImage(list, _ele) {
         const that = this;
         this.inputImageFlag = false;
-        const _nowNum=this.msgList.indexOf(_ele);
+        const _nowNum = this.msgList.indexOf(_ele);
         console.log(_nowNum)
         this.nim.sendCustomMsg({
           scene: "p2p",
@@ -1388,6 +1397,12 @@
             cId: api.getPara().doctorCustomerId,
             mType: "38",
             conId: that.orderSourceId
+          }),
+          needPushNick: false,
+          pushContent: `患者<${that.userData.nick ? that.userData.nick : ""}>向您发送了一条图集，点击查看详情`,
+          pushPayload: JSON.stringify({
+            account: "0_" + api.getPara().caseId,
+            type: "1"
           }),
           content: JSON.stringify({
             type: "multipleImage",
@@ -1401,7 +1416,7 @@
               that.inputImageFlag = true;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(_nowNum, 1, msg);
-              that.$nextTick(()=>{
+              that.$nextTick(() => {
                 that.scrollToBottom();
               });
             }
@@ -1418,7 +1433,7 @@
           type: "image",
           from: that.userData.account
         });
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.scrollToBottom();
         });
         that.imageLastIndex = that.msgList.length - 1;
@@ -1455,6 +1470,12 @@
                   mType: "1",
                   conId: that.orderSourceId
                 }),
+                needPushNick: false,
+                pushContent: `患者<${that.userData.nick ? that.userData.nick : ""}>向您发送了一张图片，点击查看详情`,
+                pushPayload: JSON.stringify({
+                  account: "0_" + api.getPara().caseId,
+                  type: "1"
+                }),
                 file: file,
                 type: "image",
                 done(error, msg) {
@@ -1465,7 +1486,7 @@
                     progress: "0%",
                     index: 0
                   };
-                  that.$nextTick(()=>{
+                  that.$nextTick(() => {
                     that.scrollToBottom();
                   });
                 }
@@ -1478,19 +1499,29 @@
       },
       // 选择视频
       sendVideo(e) {
+        let _file = e.target.files[0];
         if (e.target.files.length > 1) {
           this.toastTips = `每次只能上传一个视频`;
           this.toastShow = true;
           setTimeout(() => {
             this.toastShow = false;
           }, 2000);
+          return;
         }
-        let _file = e.target.files[0];
-        if (_file.type && _file.type.includes("video") && (/mp4/.test(_file.type))) {
+        if (_file.size >= 104857600) {
+          this.toastTips = `视频最大为100M`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+          return;
+        }
+
+        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else {
           if (_file.type.includes("video")) {
-            this.toastTips = `请选择mp4文件`;
+            this.toastTips = `请选择mp4或mov文件`;
           } else {
             this.toastTips = `请选择视频文件`;
           }
@@ -1503,18 +1534,18 @@
       // 上传视频文件
       sendVideoFile(_file) {
         const that = this;
-        let _ele={
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "video",
           from: this.userData.account
-        }
+        };
         this.msgList.push(_ele);
-        this.$nextTick(()=>{
-          setTimeout(()=>{
+        this.$nextTick(() => {
+          setTimeout(() => {
             this.scrollToBottom();
-          },300);
+          }, 300);
         });
         let videoLastIndex = this.msgList.indexOf(_ele);
 
@@ -1525,7 +1556,7 @@
           uploadprogress(obj) {
 
             // that.scrollToBottom();
-            that.$set(that.videoProgress,that.msgList.indexOf(_ele),{
+            that.$set(that.videoProgress, that.msgList.indexOf(_ele), {
               uploading: true,
               progress: obj.percentageText,
               index: that.msgList.indexOf(_ele)
@@ -1537,13 +1568,13 @@
           },
           done(error, file) {
             console.log("上传video" + (!error ? "成功" : "失败"));
-            this.inputVideoFlag = false;
+            that.inputVideoFlag = true;
 
 
             console.log(file);
             if (!error) {
               file.name = _file.name;
-              videoLastIndex=that.msgList.indexOf(_ele);
+              videoLastIndex = that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 custom: JSON.stringify({
@@ -1552,17 +1583,23 @@
                   mType: "3",
                   conId: that.orderSourceId
                 }),
+                needPushNick: false,
+                pushContent: `患者<${that.userData.nick ? that.userData.nick : ""}>向您发送了一条视频，点击查看详情`,
+                pushPayload: JSON.stringify({
+                  account: "0_" + api.getPara().caseId,
+                  type: "1"
+                }),
                 to: that.targetData.account,
                 file: file,
                 type: "video",
                 done(error, msg) {
                   that.msgList[videoLastIndex] = msg;
-                  that.$set(that.videoProgress,videoLastIndex,{
+                  that.$set(that.videoProgress, videoLastIndex, {
                     uploading: false,
                     progress: "0%",
                     index: 0
                   });
-                  that.$nextTick(()=>{
+                  that.$nextTick(() => {
                     that.scrollToBottom();
                   });
                 }
@@ -1582,7 +1619,12 @@
           } else if (_file.type.length === 0 && flag) {
             this.sendPdfFile(_file);
           } else {
-            this.toastControl("请选择pdf文件");
+            this.toastTips = `请选择pdf文件`;
+            this.toastShow = true;
+            setTimeout(() => {
+              this.toastShow = false;
+            }, 2000);
+            return;
           }
         });
       },
@@ -1601,7 +1643,7 @@
           type: "file",
           from: that.userData.account
         });
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.scrollToBottom();
         });
         this.inputPdfFlag = false;
@@ -1644,6 +1686,12 @@
                     conId: that.orderSourceId,
                     name: _file.name
                   }),
+                  needPushNick: false,
+                  pushContent: `患者<${that.userData.nick ? that.userData.nick : ""}>向您发送了一条PDF文件，点击查看详情`,
+                  pushPayload: JSON.stringify({
+                    account: "0_" + api.getPara().caseId,
+                    type: "1"
+                  }),
                   to: that.targetData.account,
                   file: file,
                   type: "file",
@@ -1654,7 +1702,7 @@
                       progress: "0%",
                       index: 0
                     };
-                    that.$nextTick(()=>{
+                    that.$nextTick(() => {
                       that.scrollToBottom();
                     });
                   }
@@ -1734,7 +1782,7 @@
                   that.receiveTreatmentStatus = true;
                 }, 200);
               }
-              that.footerBottomFlag=true;
+              that.footerBottomFlag = true;
             }
           }
         });
