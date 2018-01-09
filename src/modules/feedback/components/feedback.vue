@@ -144,11 +144,11 @@
         }else {
           //登陆检测
           if(api.getPara().customerId===!null && localStorage.getItem("userId")===!null){
-            _this.customerId=api.getPara().customerId;
-          }else if(api.getPara().customerId="undefined"){
+              _this.customerId = api.getPara().customerId;
+          }else if(api.getPara().customerId === "undefined"){
             _this.customerId=0;
           }
-          else{
+          else {
             _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
           }
             _this.submitAllData();
@@ -192,7 +192,8 @@
             customerId:_this.customerId||0,
             doctorId:api.getPara().doctorCustomerId||"",
             visitSiteId: api.getSiteId(),
-            equipmentVersion:api.getConnectType(),
+            equipmentVersion:api.getDeviceType(),
+            networkEnvironment:'待定',
           },
           done(data) {
             this.finish=true;
