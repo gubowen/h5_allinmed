@@ -139,7 +139,7 @@ class Api {
     if (typeof(connection.type) == "number") {
       connection.type_text = type_text[connection.type||connection.effectiveType];
     } else {
-      connection.type_text = connection.type||connection.effectiveType;
+      connection.type_text = connection.effectiveType;
     }
     if (typeof(connection.bandwidth) == "number") {
       if (connection.bandwidth > 10) {
