@@ -49,7 +49,7 @@ Validator.extend('mobile', {
     }
   },
   validate: value => {
-    return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/).test(value)
+    return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/).test(value)
   }
 });
 new Personal();

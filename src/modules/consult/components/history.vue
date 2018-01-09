@@ -450,6 +450,7 @@ export default {
       that.base64Arr = [];
       that.uploadIndex = 0;
       _files = Array.from(_files);
+      console.log(_files);
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
@@ -624,9 +625,9 @@ export default {
             that["imageList" + type][num].fail = false;
             that["imageList" + type][num].finish = true;
             //            that["uploading" + type] = false;
-            if(that.checkSystemVersion()<10){
-              that["imageList" + type][num].blob = res.responseObject.responseData.logoUrl;
-            }
+            // if(that.checkSystemVersion()<10){
+            //   that["imageList" + type][num].blob = res.responseObject.responseData.logoUrl;
+            // }
             that.uploading1 = false;
             that.uploading2 = false;
             that.$el.querySelectorAll(
