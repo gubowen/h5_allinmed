@@ -1089,7 +1089,9 @@
         console.log(
           `发送${msg.scene}${msg.type}消息${!error ? "成功" : "失败"}id=${msg.idClient}`
         );
-        this.sendTextContent = "";
+        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+          this.sendTextContent = "";
+        }
         if ((msg.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
           this.beginTimestamp = msg.time;
           this.timeStampShowList.push(1);
@@ -1503,12 +1505,13 @@
                 type: "video",
                 done(error, msg) {
                   that.progressNum  --;
-                  that.$set(that.videoProgress,that.msgList.indexOf(_ele),{
+                  let numFlag = that.msgList.indexOf(_ele);
+                  that.$set(that.videoProgress,numFlag,{
                     uploading: false,
                     progress: "0%",
                     index: 0,
                   })
-                  // that.msgList[that.videoLastIndex] = msg;
+                  that.msgList[numFlag] = msg;
                   // that.msgList.map( (item,index) => {
                     //   if (item.replace && item.replace == 'video') {
                       //     that.videoLastIndex = index;
@@ -1618,13 +1621,14 @@
                   type: "file",
                   done(error, msg) {
                     that.progressNum  --;
-                    that.$set(that.fileProgress,that.msgList.indexOf(_ele),{
+                    let numFlag = that.msgList.indexOf(_ele);
+                    that.$set(that.fileProgress,numFlag,{
                       uploading: false,
                       progress: "0%",
                       index: 0,
                     })
-                    // that.msgList[that.fileLastIndex] = msg;
-                    that.msgList[that.replaceIndex('pdf')] = msg;
+                    that.msgList[numFlag] = msg;
+                    // that.msgList[that.replaceIndex('pdf')] = msg;
                     that.scrollToBottom();
                     // that.fileProgress = {
                     //   uploading: false,

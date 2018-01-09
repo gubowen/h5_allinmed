@@ -1,31 +1,32 @@
 <template>
-  <section v-if="payPopupShow">
+  <section v-show="payPopupShow">
     <transition name="fadeIn">
       <div class="mask_layer" v-if="payOrderShow">
         <div data-alcode-mod='721'>
-            <div class="onlineVisit_mask">
-              <section class="docNameBox">
-                  <span class="docName">{{getDocName()}}</span>提供的服务<i class="icon_close_mask" @click="closePopup"></i>
-              </section>
-              <section class="inquiryTypeBox">
-                <h2 class="imgInquiry">
-                  <span>图文问诊</span>
-                  <span class="inquiryMoney">{{priceMessage.generalPrice}}元</span>
-                </h2>
-                <dl class="docAdvantage">
-                  <dt>服务保障</dt>
-                  <dd>本人回复</dd>
-                  <dd>超时退款</dd>
-                  <dd>权威认证医生</dd>
-                </dl>
-                  <ul class="doxCando">
-                  <li>可获得{{priceMessage.generalTimes}}次医生答复</li>
-                  <li>医生48小时内未接诊全额退款</li>
-                  <li>问诊5天有效</li>
-                </ul>
-                <a data-alcode='e135' class="goPayment" @click="goToPay({type:1,orderAmount:priceMessage.generalPrice,orderFrequency:priceMessage.generalTimes})">购买</a>
-              </section>
-            </div>
+          <div class="onlineVisit_mask">
+            <section class="docNameBox">
+              <span class="docName">{{getDocName()}}</span>提供的服务<i class="icon_close_mask" @click="closePopup"></i>
+            </section>
+            <section class="inquiryTypeBox">
+              <h2 class="imgInquiry">
+                <span>图文问诊</span>
+                <span class="inquiryMoney">{{priceMessage.generalPrice}}元</span>
+              </h2>
+              <dl class="docAdvantage">
+                <dt>服务保障</dt>
+                <dd>本人回复</dd>
+                <dd>超时退款</dd>
+                <dd>权威认证医生</dd>
+              </dl>
+              <ul class="doxCando">
+                <li>可获得{{priceMessage.generalTimes}}次医生答复</li>
+                <li>医生48小时内未接诊全额退款</li>
+                <li>问诊5天有效</li>
+              </ul>
+              <a data-alcode='e135' class="goPayment"
+                 @click="goToPay({type:1,orderAmount:priceMessage.generalPrice,orderFrequency:priceMessage.generalTimes})">购买</a>
+            </section>
+          </div>
         </div>
       </div>
     </transition>
@@ -88,99 +89,106 @@
     getOrderDetails: "/mcall/cms/pay/order/v1/getMapById/",//获取订单详情
     getCurrentState: "/mcall/customer/advice/setting/v1/getCurrentByCustomerId/",//获取剩余人数和状态
   };
-  export default{
+  export default {
     data() {
       return {
         repeatOrderTitle: "图文问诊",
         repeatOrderId: "",
         repeatConsultationId: "",
         repeatOrderAmount: "",
-        repeatOrderType:"",
-        repeatOrderFrequency:"",
+        repeatOrderType: "",
+        repeatOrderFrequency: "",
         mOrderAmount: "",
-        mOrderType:"",
-        mOrderFrequency:"",
-        payOrderShow:false,
+        mOrderType: "",
+        mOrderFrequency: "",
+        payOrderShow: false,
         noWXPayShow: false,
-        noStateShow:false,
-        noMoreShow:false,
-        hasCommunShow:false,
-        finish:false,
+        noStateShow: false,
+        noMoreShow: false,
+        hasCommunShow: false,
+        finish: false,
         priceMessage: {}
       }
     },
-    mounted(){
-      siteSwitch.weChatJudge(()=>{
-        console.log("这是微信呦")
-      },()=>{
-        localStorage.setItem("payDate",JSON.stringify(this.payPopupParams))
-      });
+    watch: {
+      payPopupShow(flag) {
+        if (flag) {
+          siteSwitch.weChatJudge(() => {
+            console.log("这是微信呦")
+          }, () => {
+            localStorage.setItem("payDate", JSON.stringify(this.payPopupParams))
+          });
 
-      if(localStorage.getItem("payOk") == 1){
-        this.noWXPayShow = true;
-      }else{
-        this.noWXPayShow = false;
-        this.toJudge({
-          type:0
-        });
+          if (localStorage.getItem("payOk") == 1) {
+            this.noWXPayShow = true;
+          } else {
+            this.noWXPayShow = false;
+            this.toJudge({
+              type: 0
+            });
+          }
+        }
       }
+    },
+    mounted() {
+
     },
     methods: {
       //关闭支付弹层
-      closePopup(){
+      closePopup() {
         localStorage.removeItem("mOrder");
         localStorage.removeItem("payOk");
         this.$emit('update:payPopupShow', false);
       },
       //判断是否还有剩余名额
-      toJudge(opt){
+      toJudge(opt) {
         const that = this;
         api.ajax({
           url: XHRList.getCurrentState,
           method: "POST",
           data: {
             customerId: that.payPopupParams.docId,
-            caseId:that.payPopupParams.caseId
+            caseId: that.payPopupParams.caseId
           },
-          done (data) {
-            if (data &&data.responseObject.responseData.dataList) {
+          done(data) {
+            if (data && data.responseObject.responseData.dataList) {
               that.finish = false;
               const items = data.responseObject.responseData.dataList;
-              if(items.state == 0){
+              if (items.state == 0) {
                 that.noStateShow = true;
-              }else if(items.remainNum<=0 &&items.remainNum != -1){
+              } else if (items.remainNum <= 0 && items.remainNum != -1) {
                 that.noMoreShow = true;
-              }else if(items.conState ==1 && that.payPopupParams.from != "imDoctor"){
+              } else if (items.conState == 1 && that.payPopupParams.from != "imDoctor") {
                 that.hasCommunShow = true;
-              }else{
-                if(that.payPopupParams.payType=="free"){
+              } else {
+                if (that.payPopupParams.payType == "free") {
                   that.freeToPay();
-                }else{
-                  if(opt.type == 0){
+                } else {
+                  if (opt.type == 0) {
                     that.payOrderShow = true;
                     that.getPrice();
-                  }else{
+                  } else {
                     that.noOrder(opt);
                   }
                 }
               }
             }
           },
-          fail(){
+          fail() {
             that.finish = false;
           }
         });
       },
       //获取医生名字
-      getDocName(){
-          if(this.payPopupParams.docName.length>6){
-            return this.payPopupParams.docName.substring(0,6) + "..."
-          }else{
-            return this.payPopupParams.docName
-          }
+      getDocName() {
+        if (this.payPopupParams.docName.length > 6) {
+          return this.payPopupParams.docName.substring(0, 6) + "..."
+        } else {
+          return this.payPopupParams.docName
+        }
       },
       //获取问诊价格
-      getPrice(){
+      getPrice() {
         const that = this;
         api.ajax({
           url: XHRList.getVisitDetails,
@@ -188,7 +196,7 @@
           data: {
             customerId: that.payPopupParams.docId
           },
-          done (data) {
+          done(data) {
             if (data.responseObject.responseData.dataList) {
               const dataList = data.responseObject.responseData.dataList[0];
               that.priceMessage = dataList;
@@ -197,10 +205,10 @@
         });
       },
       //去支付
-      goToPay(opt){
+      goToPay(opt) {
         const that = this;
         let isClick = 0;
-        if(isClick == 0){
+        if (isClick == 0) {
           isClick = 1;
           that.repeatOrderFrequency = opt.orderFrequency;
           let orderSourceTitle = "图文问诊",
@@ -217,10 +225,10 @@
               firstResult: 0,
               maxResult: 999
             },
-            beforeSend(){
+            beforeSend() {
               that.finish = true;
             },
-            done (data) {
+            done(data) {
               that.finish = false;
               if (data.responseObject.responseData.dataList) {
                 let consultationId = data.responseObject.responseData.dataList.consultationId;
@@ -231,19 +239,19 @@
                   orderSourceType: opt.type,
                   orderSourceTitle: orderSourceTitle,
                   orderAmount: orderAmount,
-                  orderFrequency:opt.orderFrequency
+                  orderFrequency: opt.orderFrequency
                 });
                 isClick = 0;
               }
             },
-            fail(){
+            fail() {
               that.finish = false;
             }
           });
         }
       },
       //是否有重复订单
-      isHasOrder(opt){
+      isHasOrder(opt) {
         const that = this;
         api.ajax({
           url: XHRList.getOrderDetails,
@@ -258,7 +266,7 @@
             firstResult: 0,
             maxResult: 1
           },
-          done(data){
+          done(data) {
             if (data.responseObject.responseData.dataList) {
               let items = data.responseObject.responseData.dataList[0];
               if (items.orderSourceId && items.orderSourceId != 0 && opt.orderSourceType == items.orderSourceType) {//有重复订单
@@ -274,7 +282,7 @@
                   oType: opt.orderSourceType,
                   oTitle: opt.orderSourceTitle,
                   orderAmount: opt.orderAmount,
-                  orderFrequency:opt.orderFrequency
+                  orderFrequency: opt.orderFrequency
                 })
 
               }
@@ -284,7 +292,7 @@
                 oType: opt.orderSourceType,
                 oTitle: opt.orderSourceTitle,
                 orderAmount: opt.orderAmount,
-                orderFrequency:opt.orderFrequency
+                orderFrequency: opt.orderFrequency
               })
             }
           }
@@ -292,16 +300,16 @@
         })
       },
       //无重复订单去支付
-      noOrder(opt){
+      noOrder(opt) {
         const that = this;
-        localStorage.setItem("docId",that.payPopupParams.docId);
-        localStorage.setItem("mOrder",JSON.stringify({
-          "mOrderType":opt.orderSourceType,
-          "mOrderAmount":opt.orderAmount,
-          "mOrderFrequency":opt.orderFrequency
+        localStorage.setItem("docId", that.payPopupParams.docId);
+        localStorage.setItem("mOrder", JSON.stringify({
+          "mOrderType": opt.orderSourceType,
+          "mOrderAmount": opt.orderAmount,
+          "mOrderFrequency": opt.orderFrequency
         }));
         wxCommon.wxCreateOrder({
-          isTest:0,
+          isTest: 0,
           data: {
             caseId: that.payPopupParams.caseId,                //  string  是  caseId
             patientCustomerId: that.payPopupParams.patientCustomerId, //	string	是	患者所属用户id
@@ -326,7 +334,7 @@
             that.$emit("paySuccess", {
               orderType: opt.orderSourceType,//0免费，其他不是
               orderAmount: opt.orderAmount, //价钱
-              orderFrequency:opt.orderFrequency//聊天次数
+              orderFrequency: opt.orderFrequency//聊天次数
             });
             that.closePopup();
           },
@@ -337,16 +345,16 @@
         });
       },
       //提示弹层关闭执行
-      cancelEvent(_type){
+      cancelEvent(_type) {
         this.noStateShow = false;
         this.noMoreShow = false;
         this.hasCommunShow = false;
         this.closePopup();
-        if(this.payPopupParams.from=="docMain"){
-          this.$emit('docCallBack',_type);
+        if (this.payPopupParams.from == "docMain") {
+          this.$emit('docCallBack', _type);
         }
       },
-      ensureEvent(){
+      ensureEvent() {
         const that = this;
         wxCommon.wxPay({
           isTest: 0,                                               //  是否跳过支付
@@ -360,18 +368,18 @@
               that.$emit("paySuccess", {
                 orderType: that.repeatOrderType,//0免费，其他不是
                 orderAmount: that.repeatOrderAmount, //价钱
-                orderFrequency:that.repeatOrderFrequency//聊天次数
+                orderFrequency: that.repeatOrderFrequency//聊天次数
               });
               that.closePopup();
             }
           }
         });
       },
-      ensureCommunEvent(){
-          window.location.href = `/dist/imSceneDoctor.html?caseId=${this.payPopupParams.caseId}&doctorCustomerId=${this.payPopupParams.docId}&patientCustomerId=${this.payPopupParams.patientCustomerId}&patientId=${this.payPopupParams.patientId}`
+      ensureCommunEvent() {
+        window.location.href = `/dist/imSceneDoctor.html?caseId=${this.payPopupParams.caseId}&doctorCustomerId=${this.payPopupParams.docId}&patientCustomerId=${this.payPopupParams.patientCustomerId}&patientId=${this.payPopupParams.patientId}`
       },
       //免费直接支付
-      freeToPay(){
+      freeToPay() {
         const that = this;
         api.ajax({
           url: XHRList.getConsultationId,
@@ -385,13 +393,13 @@
             firstResult: 0,
             maxResult: 999
           },
-          done (data) {
+          done(data) {
             if (data.responseObject.responseData.dataList) {
               let consultationId = data.responseObject.responseData.dataList.consultationId;
-              localStorage.setItem("docId",that.payPopupParams.docId);
+              localStorage.setItem("docId", that.payPopupParams.docId);
               sessionStorage.setItem("orderSourceId", consultationId);
               wxCommon.wxCreateOrder({
-                isTest:0,
+                isTest: 0,
                 data: {
                   caseId: that.payPopupParams.caseId,                //  string  是  caseId
                   patientCustomerId: that.payPopupParams.patientCustomerId, //	string	是	患者所属用户id
@@ -424,11 +432,11 @@
         })
       },
       //免费咨询支付成功后创建问诊id
-      creatInquiryId (orderId) {
+      creatInquiryId(orderId) {
         let that = this;
         //获取是否已经存在问诊id
         api.ajax({
-          url:  "/mcall/customer/case/consultation/v1/getMapById/",
+          url: "/mcall/customer/case/consultation/v1/getMapById/",
           method: "POST",
           data: {
             caseId: that.payPopupParams.caseId,
@@ -436,14 +444,14 @@
             consultationType: 1,
             siteId: 17
           },
-          done (data) {
-            if (data.responseObject.responseMessage == "NO DATA"){
+          done(data) {
+            if (data.responseObject.responseMessage == "NO DATA") {
               api.ajax({
-                url:  "/mcall/customer/case/consultation/v1/create/",
+                url: "/mcall/customer/case/consultation/v1/create/",
                 method: "POST",
                 data: {
                   caseId: that.payPopupParams.caseId,
-                  customerId: that.payPopupParams.docId ,
+                  customerId: that.payPopupParams.docId,
                   patientCustomerId: that.payPopupParams.patientCustomerId,
                   patientId: that.payPopupParams.patientId,
                   consultationType: 1,
@@ -452,13 +460,13 @@
                   siteId: 17,
                   caseType: 0
                 },
-                done (d) {
+                done(d) {
                   if (d.responseObject.responseStatus) {
                     let orderSourceId = d.responseObject.responsePk;
                     localStorage.removeItem("docId");
                     sessionStorage.setItem("orderSourceId", orderSourceId);
                     wxCommon.wxUpOrder({
-                      operationType:"2",
+                      operationType: "2",
                       orderId: orderId,
                       orderType: "1",
                       orderSourceId: orderSourceId,
@@ -469,50 +477,50 @@
                         that.$emit("paySuccess", {
                           orderType: 0,
                           orderAmount: 0,
-                          orderFrequency:3
+                          orderFrequency: 3
                         });
                       }
                     });
                   }
                 }
               });
-            }else{
+            } else {
               that.$emit("paySuccess", {
                 orderType: 0,
                 orderAmount: 0,
-                orderFrequency:3
+                orderFrequency: 3
               });
             }
           }
         });
       },
       //查看m站支付结果
-      viewPayResult(){
+      viewPayResult() {
         let that = this;
         wxCommon.PayResult({
-          outTradeNo:localStorage.getItem("orderNumber")       //微信订单号
+          outTradeNo: localStorage.getItem("orderNumber")       //微信订单号
         }).then(function (data) {
-          console.log("查看回调",data);
+          console.log("查看回调", data);
           let payDate = JSON.parse(localStorage.getItem("payDate")),
-              mOrder = JSON.parse(localStorage.getItem("mOrder"));
+            mOrder = JSON.parse(localStorage.getItem("mOrder"));
 
-          if(data.resultCode == "SUCCESS"){
+          if (data.resultCode == "SUCCESS") {
             api.ajax({
-              url:  "/mcall/customer/case/consultation/v1/getMapById/",
+              url: "/mcall/customer/case/consultation/v1/getMapById/",
               method: "POST",
               data: {
                 caseId: payDate.caseId,
                 customerId: payDate.docId,
                 consultationType: 1
               },
-              done (data) {
-                if (data.responseObject.responseMessage == "NO DATA"){
+              done(data) {
+                if (data.responseObject.responseMessage == "NO DATA") {
                   api.ajax({
-                    url:  "/mcall/customer/case/consultation/v1/create/",
+                    url: "/mcall/customer/case/consultation/v1/create/",
                     method: "POST",
                     data: {
                       caseId: payDate.caseId,
-                      customerId: payDate.docId ,
+                      customerId: payDate.docId,
                       patientCustomerId: payDate.patientCustomerId,
                       patientId: payDate.patientId,
                       consultationType: 1,
@@ -520,29 +528,29 @@
                       consultationLevel: 1,
                       caseType: 0
                     },
-                    done (d) {
+                    done(d) {
                       if (d.responseObject.responseStatus) {
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
                         that.$emit("paySuccess", {
                           orderType: mOrder.mOrderType,//0免费，其他不是
                           orderAmount: mOrder.mOrderAmount, //价钱
-                          orderFrequency:mOrder.mOrderFrequency//聊天次数
+                          orderFrequency: mOrder.mOrderFrequency//聊天次数
                         });
                         that.closePopup();
                       }
                     }
                   });
-                }else{
+                } else {
                   that.$emit("paySuccess", {
                     orderType: mOrder.mOrderType,//0免费，其他不是
                     orderAmount: mOrder.mOrderAmount, //价钱
-                    orderFrequency:mOrder.mOrderFrequency//聊天次数
+                    orderFrequency: mOrder.mOrderFrequency//聊天次数
                   });
                   that.closePopup();
                 }
               }
             });
-          }else{
+          } else {
             console.log("未支付成功");
           }
         }).catch(function (err) {
@@ -554,8 +562,8 @@
       payPopupShow: {
         type: Boolean
       },
-      payPopupParams:{
-        type:Object
+      payPopupParams: {
+        type: Object
       }
     },
     components: {
@@ -578,58 +586,58 @@
     z-index: 4;
     .onlineVisit_mask {
       width: 100%;
-      height:auto;
+      height: auto;
       background: #ffffff;
       position: absolute;
       bottom: 0;
       left: 0;
       z-index: 5;
-      .docNameBox{
+      .docNameBox {
         @include clearfix();
-        padding:0 rem(40px) 0 rem(60px);
-        line-height:rem(80px);
+        padding: 0 rem(40px) 0 rem(60px);
+        line-height: rem(80px);
         background: #70859F;
         color: #C1D0E0;
         @include font-dpr(12px);
-        .docName{
-          margin-right:rem(16px);
-          font-weight:bold;
+        .docName {
+          margin-right: rem(16px);
+          font-weight: bold;
           opacity: 0.8;
           @include font-dpr(16px);
         }
         .icon_close_mask {
           float: right;
-          margin-top:rem(20px);
+          margin-top: rem(20px);
           width: rem(36px);
           height: rem(36px);
           background: url("../common/image/img00/doctorMain/pay_close@2x.png") no-repeat center;
-          background-size:100% 100%;
+          background-size: 100% 100%;
         }
       }
-      .inquiryTypeBox{
-        padding:rem(40px) rem(60px) rem(50px);
-        .imgInquiry{
+      .inquiryTypeBox {
+        padding: rem(40px) rem(60px) rem(50px);
+        .imgInquiry {
           @include font-dpr(20px);
           color: #525252;
-          .inquiryMoney{
+          .inquiryMoney {
             @include font-dpr(18px);
-            margin-left:rem(26px);
+            margin-left: rem(26px);
           }
         }
-        .docAdvantage{
-          padding-top:rem(24px);
+        .docAdvantage {
+          padding-top: rem(24px);
           @include font-dpr(14px);
           color: #FA787A;
-          dt{
+          dt {
             display: inline-block;
             vertical-align: middle;
           }
-          dd{
+          dd {
             display: inline-block;
             position: relative;
-            margin-left:rem(15px);
+            margin-left: rem(15px);
             vertical-align: middle;
-            &:before{
+            &:before {
               background: #828282;
               display: inline-block;
               position: absolute;
@@ -644,9 +652,9 @@
           }
         }
         .doxCando {
-          padding-top:rem(20px);
+          padding-top: rem(20px);
           li {
-            margin-top:rem(20px);
+            margin-top: rem(20px);
             color: #555555;
             @include font-dpr(16px);
             opacity: 0.8;
@@ -676,7 +684,7 @@
           text-align: center;
           background: #2FC5BD;
           border-radius: 100px;
-          margin: rem(50px)auto 0;
+          margin: rem(50px) auto 0;
         }
       }
     }
@@ -686,7 +694,7 @@
     transition: all 0.5s ease-in-out;
   }
 
-  .fadeUp-enter, .fadeUp-leave-to{
+  .fadeUp-enter, .fadeUp-leave-to {
     opacity: 0;
     transform: translateY(50%);
   }
@@ -695,7 +703,7 @@
     transition: all 0.5s ease-in-out;
   }
 
-  .fadeIn-enter, .fadeIn-leave-to{
+  .fadeIn-enter, .fadeIn-leave-to {
     opacity: 0;
   }
 </style>
