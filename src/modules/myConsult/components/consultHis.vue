@@ -251,11 +251,11 @@
             case 6:
             case 9:
             case 10:
+            case 11:
               statusName = '问诊中';
               break;
             case 1:
             case 8:
-            case 11:
               statusName = '已结束';
               fontGray = 'font-gray';
               break;

@@ -16,19 +16,17 @@
             </div>
             <figure class="upload-fail" v-if="item.fail">
               <p>重新上传</p>
-              <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="isIos"
-                     @change="onFileChange($event,item,index)" v-show="item.finish">
-                 <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="!isIos"
-                     @change="onFileChange($event,item,index)" v-show="item.finish" capture="camera">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="isIos" @change="onFileChange($event,item,index)" v-show="item.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple v-if="!isIos&&!isWeChat" @change="onFileChange($event,item,index)" v-show="item.finish">
+              <input class="ev-upLoadInput" accept="image/*" type="file" multiple capture="camera" v-if="!isIos&&isWeChat" @change="onFileChange($event,item,index)" v-show="item.finish">
             </figure>
           </li>
           <li class="tc-imageUpLoadAdd" v-show="imageList.length<9">
             <a href="javascript:;">
               <span class="tc-upLoadAddMore"></span>
-              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="isIos&&!loading&&imageList.length<9"
-                     @change="onFileChange($event)">
-              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="!isIos&&!loading&&imageList.length<9"
-                     @change="onFileChange($event)" capture="camera">
+              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="isIos&&!loading&&imageList.length<9" @change="onFileChange($event)">
+              <input class="tc-upLoadInput" type="file" accept="image/*" multiple v-if="!isIos&&!isWeChat&&!loading&&imageList.length<9" @change="onFileChange($event)">
+              <input class="tc-upLoadInput" type="file" accept="image/*" multiple capture="camera" v-if="!isIos&&isWeChat&&!loading&&imageList.length<9" @change="onFileChange($event)">
             </a>
           </li>
         </ul>
@@ -47,14 +45,6 @@
           <li class="he-videoAddBtn he-loadSuccessTextBox">
             <a href="javascript:;" class="he-reLoadText" id="reloadBtn" @click="againUpload()">重新上传</a>
           </li>
-          <!--<li class="he-videoAddBtn he-loadSuccessTextBoxBtn" id="container1" style="display: none;"><a-->
-          <!--href="javascript:;" id="videoUpBtn" class="he-reLoadText">重新上传</a>-->
-          <!--<div id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17_container" class="moxie-shim moxie-shim-html5"-->
-          <!--style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden;"><input-->
-          <!--id="html5_1bo9j4hlh15o6vqacnv1qmj1j4j17" type="file"-->
-          <!--style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"-->
-          <!--accept="video/mp4,video/quicktime,video/avi,video/x-ms-wmv,video/x-flv"></div>-->
-          <!--</li>-->
         </ul>
         <section class="he-videosSubmit ev-submitUpData" v-show="baseMessage.type==2">
           <button class="usable downBtn" v-show="imageList.length && !uploading" @click="submitImage"
@@ -152,6 +142,14 @@
   import confirm from "components/confirm";
   import store from "../store/store";
   import imageCompress from "common/js/imgCompress/toCompress";
+  import siteSwitch from "common/js/siteSwitch/siteSwitch";
+
+  let _weChat = false;
+  siteSwitch.weChatJudge(() => {
+    _weChat=true;
+  }, () => {
+    _weChat=false;
+  });
 
   const XHRList = {
     imgCreate: "/mcall/customer/patient/case/attachment/v1/create/", //上传图片
@@ -173,6 +171,7 @@
         baseMessage: {},
         imageList: [],
         isIos:navigator.userAgent.toLowerCase().includes("iphone"),
+        isWeChat:_weChat,
         filesObj: {}, //多图file对象存储，用于获取每张图的信息
         base64Arr: [], //base64压缩后的图片
         uploadIndex: "", //多图上传递增索引
@@ -565,7 +564,7 @@
         setTimeout(()=>{
           if (!that.isIos){
             $(".moxie-shim-html5 input").attr("capture","camera")
-            $(".moxie-shim-html5 input").attr("accept","video/*") 
+            $(".moxie-shim-html5 input").attr("accept","video/*")
             $(".moxie-shim-html5 input").attr("multiple","")
           }
         },300)

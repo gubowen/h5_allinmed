@@ -6,7 +6,9 @@
 *
 * Created by qiangkailiang on 2017/3/1
 */
-
+*{
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
 .main-inner{
   overflow: hidden;
 }
