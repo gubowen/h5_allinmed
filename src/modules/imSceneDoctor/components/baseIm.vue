@@ -94,7 +94,9 @@
               v-if="(msg.type==='file'||msg.type==='image') && msg.file &&msg.file.ext!=='pdf'"
               :imageMessage="msg"
               :nim="nim"
-              ref="bigImg" :imageList="imageList" :imageProgress="imageProgress" :currentIndex="index"
+              ref="bigImg" :imageList="imageList"
+              :imageProgress="imageProgress[index]"
+              :currentIndex="index"
               @deleteMsgEvent="deleteMsgEvent(msg)"
               @longTouchEmitHandler="longTouchEmitHandler(index)"
               :deleteMsgIndex="deleteMsgIndex"
@@ -111,7 +113,6 @@
               :deleteMsgIndex="deleteMsgIndex"
               :currentIndex="index"
             >
-
             </MulitpleImage>
             <!-- 视频消息 -->
             <VideoMessage
@@ -250,8 +251,8 @@
         </footer>
       </transition>
       <!--支付弹层-->
-      <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"
-                v-if="payPopupShow"></payPopup>
+      <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow"
+                :payPopupParams="payPopupDate"></payPopup>
       <confirm :confirmParams="{
       'ensure':'取消',
       'cancel':'离开',
@@ -355,9 +356,7 @@
         isWeChat: _weChat,
         nim: {},
         imageProgress: {
-          uploading: false,
-          progress: 0,
-          index: 0
+
         },
         // 视频发送进度
         videoProgress: {},
@@ -373,7 +372,7 @@
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
         inputPdfFlag: true,//上传pdf文件控制
-        progressNum:0,// 正在上传的个数
+        progressNum: 0,// 正在上传的个数
         loading: true,
         payPopupShow: false,
         shuntCustomerId: "",
@@ -1192,7 +1191,9 @@
           ", id=" +
           msg.idClient
         );
-        this.sendTextContent = "";
+        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+          this.sendTextContent = "";
+        }
         if (!error) {
           this.msgList.push(msg);
         } else {
@@ -1299,9 +1300,9 @@
         const that = this;
         console.log(e.target.files);
         that.inputImageFlag = false;
-        this.$nextTick(  () => {
+        this.$nextTick(() => {
           that.inputImageFlag = true;
-        })
+        });
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             that.toastTips = `您最多只能选择9张图片`;
@@ -1344,7 +1345,7 @@
           idClient: _holderId
         }
         this.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
@@ -1415,7 +1416,7 @@
           done(error, msg) {
             if (!error) {
               console.log(msg);
-              that.progressNum  --;
+              that.progressNum--;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(_nowNum, 1, msg);
               that.$nextTick(() => {
@@ -1428,32 +1429,30 @@
       // 上传图片文件
       sendImageFile(_file) {
         const that = this;
-        this.msgList.push({
+        let _ele={
           file: {
             url: window.URL.createObjectURL(_file)
           },
           type: "image",
           from: that.userData.account
-        });
-        that.progressNum  ++;
+        };
+        this.msgList.push(_ele);
+        this.progressNum++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
-        that.imageLastIndex = that.msgList.length - 1;
-        console.log(window.URL.createObjectURL(_file));
+        let imageLastIndex = this.msgList.indexOf(_ele);
         this.inputImageFlag = false;
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
 
-            // that.scrollToBottom();
-            that.imageProgress = {
+            that.$set(that.imageProgress, that.msgList.indexOf(_ele), {
               uploading: true,
               progress: obj.percentageText,
-              index: that.imageLastIndex
-            };
-
+              index:  that.msgList.indexOf(_ele)
+            });
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
             console.log("上传进度: " + obj.percentage);
@@ -1464,6 +1463,7 @@
             // show file to the user
             that.inputImageFlag = true;
             if (!error) {
+              imageLastIndex = that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
                 scene: "p2p",
                 to: that.targetData.account,
@@ -1482,14 +1482,15 @@
                 file: file,
                 type: "image",
                 done(error, msg) {
-                  that.progressNum  --;
-                  that.msgList[that.imageLastIndex] = msg;
+                  that.progressNum--;
+                  that.msgList[imageLastIndex] = msg;
                   that.imageList.push(msg.file.url);
-                  that.imageProgress = {
+
+                  that.$set(that.imageProgress, imageLastIndex, {
                     uploading: false,
                     progress: "0%",
                     index: 0
-                  };
+                  });
                   that.$nextTick(() => {
                     that.scrollToBottom();
                   });
@@ -1505,7 +1506,7 @@
       sendVideo(e) {
         let _file = e.target.files[0];
         this.inputVideoFlag = false;
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           this.inputVideoFlag = true;
         })
         if (e.target.files.length > 1) {
@@ -1525,7 +1526,7 @@
           return;
         }
 
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else {
           if (_file.type.includes("video")) {
@@ -1550,7 +1551,7 @@
           from: this.userData.account
         };
         this.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         this.$nextTick(() => {
           setTimeout(() => {
             this.scrollToBottom();
@@ -1600,7 +1601,7 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.progressNum  --;
+                  that.progressNum--;
                   that.msgList[videoLastIndex] = msg;
                   that.$set(that.videoProgress, videoLastIndex, {
                     uploading: false,
@@ -1623,7 +1624,7 @@
         let _file = e.target.files[0];
 
         this.inputPdfFlag = false;
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           this.inputPdfFlag = true;
         })
 
@@ -1657,7 +1658,7 @@
           type: "file",
           from: that.userData.account
         });
-        that.progressNum  ++;
+        that.progressNum++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
@@ -1709,7 +1710,7 @@
                   type: "file",
                   done(error, msg) {
                     that.msgList[that.fileLastIndex] = msg;
-                    that.progressNum  --;
+                    that.progressNum--;
                     that.fileProgress = {
                       uploading: false,
                       progress: "0%",
@@ -1967,7 +1968,7 @@
         return result.join(",");
       },
       // 是否可以离开，传给suggest 的参数
-      leaveFlag () {
+      leaveFlag() {
         if (this.progressNum != 0) {
           return true;
         } else {

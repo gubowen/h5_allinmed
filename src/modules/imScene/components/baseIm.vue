@@ -1089,7 +1089,9 @@
         console.log(
           `发送${msg.scene}${msg.type}消息${!error ? "成功" : "失败"}id=${msg.idClient}`
         );
-        this.sendTextContent = "";
+        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+          this.sendTextContent = "";
+        }
         if ((msg.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
           this.beginTimestamp = msg.time;
           this.timeStampShowList.push(1);

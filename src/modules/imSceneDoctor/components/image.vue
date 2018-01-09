@@ -11,7 +11,7 @@
         <img src="/image/imScene/error_tips.png" alt="">
       </i>
       <figcaption class="main-message-content image-message">
-        <section class="middle-tip-box" v-if="progress.uploading">
+        <section class="middle-tip-box" v-if="progress&&progress.uploading">
           <figure class="middle-tip-box-text">
             <img class="notShow" src="//m.allinmed.cn/image/img00/patientConsult/symptom_photo_loading@2x.png"
                  alt="loading..."
@@ -52,21 +52,23 @@
     },
     computed: {
       progress() {
-        if (this.currentIndex === this.imageProgress.index) {
-          // return this.imageProgress;
-          if (this.imageProgress.progress.includes(".")) {
-            let returnObj = Object.assign(this.imageProgress, {
-              progress: `${this.imageProgress.progress.split(".")[0]}%`
-            })
-            return returnObj;
+        if (this.imageProgress) {
+          if (this.currentIndex === this.imageProgress.index) {
+            // return this.imageProgress;
+            if (this.imageProgress.progress.includes(".")) {
+              let returnObj = Object.assign(this.imageProgress, {
+                progress: `${this.imageProgress.progress.split(".")[0]}%`
+              })
+              return returnObj;
+            } else {
+              return this.imageProgress;
+            }
           } else {
-            return this.imageProgress;
-          }
-        } else {
-          return {
-            uploading: false,
-            progress: "0",
-            index: 0
+            return {
+              uploading: false,
+              progress: "0",
+              index: 0
+            }
           }
         }
       },
@@ -109,7 +111,7 @@
       showBigImg(item, index) {
         let that = this;
         let num = 0;
-        that.imageList.map( (item, index) => {
+        that.imageList.map((item, index) => {
           if (that.imageMessage.file.url.includes(item)) {
             num = index;
             return;
