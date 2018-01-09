@@ -631,7 +631,6 @@
                 store.commit("setLastCount", 3);
                 store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
                 store.commit("lastTimeCount");
-                this.payPopupShow = false;
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
