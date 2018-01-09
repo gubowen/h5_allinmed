@@ -52,6 +52,12 @@
         let that = this;
         let _indexNum = 0;
         this.showDeleteMsg = false;
+        that.imageList.map( (item, index) => {
+          if (that.imageMessage.file.url.includes(item)) {
+            _indexNum = index;
+            return;
+          }
+        })
         let _params = {
           imgBlob: (function () {
             let result = [];
@@ -60,7 +66,7 @@
             });
             return result;
           })(),
-          indexNum: 0
+          indexNum: _indexNum
         };
 
         this.$router.push({
