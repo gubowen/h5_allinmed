@@ -154,14 +154,14 @@
           background-size:100% 100%;
         }
         h3{
-          margin-top:5%;
+          padding-top:3%;
           color: #000000;
           font-size: 0.48rem;
           text-align: center;
         }
         figcaption{
           line-height:rem(50px);
-          padding:7% rem(110px) 0;
+          padding:5% rem(110px) 0;
           color: #4A4A4A;
           font-size: 0.42rem;
           text-align: center;
@@ -189,26 +189,26 @@
         }
         .stepTwoImgComputer{
           width:100%;
-          height:21.7%;
-          margin-top:1.3%;
+          height:21%;
+          margin-top:1%;
           background:url("../common/image/img00/shootTips/backgroud-computer@2x.png") no-repeat center;
           background-size:rem(450px) 100%;
         }
         .stepTwoImgWindow{
           width:100%;
-          height:19.8%;
-          margin-top:2.4%;
+          height:19%;
+          margin-top:2%;
           background:url("../common/image/img00/shootTips/shooting-window@2x.png") no-repeat center;
           background-size:rem(375px) 100%;
         }
         h3{
-          margin-top:3.5%;
+          margin-top:3%;
           color: #000000;
           font-size: 0.48rem;
           text-align: center;
         }
         article{
-          padding:3.5% rem(110px);
+          padding:2% rem(110px);
           color: #555555;
           font-size: 0.42rem;
           text-align: center;
@@ -236,32 +236,32 @@
         }
         .stepThreeImgComputer{
           width:100%;
-          height:21.7%;
-          margin-top:1.3%;
+          height:21%;
+          margin-top:1%;
           background:url("../common/image/img00/shootTips/RL@2x.png") no-repeat center;
           background-size:rem(375px) 100%;
         }
         .stepThreeImgWindow{
           width:100%;
-          height:19.8%;
-          margin-top:1.8%;
+          height:19%;
+          margin-top:1%;
           background:url("../common/image/img00/shootTips/text@2x.png") no-repeat center;
           background-size:rem(375px) 100%;
         }
         h3{
-          margin-top:3.5%;
+          margin-top:3%;
           color: #000000;
           font-size: 0.48rem;
           text-align: center;
         }
         article{
-          padding:3.5% rem(160px);
+          padding:3% rem(160px);
           color: #555555;
           font-size: 0.42rem;
           text-align: center;
         }
         .stepThreeInfo{
-          padding:3.5% rem(110px);
+          padding:2% rem(110px);
         }
       }
     }
@@ -286,26 +286,26 @@
         }
         .stepFourImgComputer{
           width:100%;
-          height:22.6%;
-          margin-top:1.3%;
+          height:21%;
+          margin-top:1%;
           background:url("../common/image/img00/shootTips/shooting-x@2x.png") no-repeat center;
           background-size:rem(450px) 100%;
         }
         .stepFourImgWindow{
           width:100%;
-          height:23.2%;
-          margin-top:2.7%;
+          height:23%;
+          margin-top:2%;
           background:url("../common/image/img00/shootTips/shooting-CT@2x.png") no-repeat center;
           background-size:rem(470px) 100%;
         }
         h3{
-          margin-top:1.5%;
+          margin-top:1%;
           color: #000000;
           font-size: 0.48rem;
           text-align: center;
         }
         article{
-          padding:1.5% rem(110px) 2.5%;
+          padding:1% rem(110px);
           color: #555555;
           font-size: 0.42rem;
           text-align: center;
@@ -321,7 +321,7 @@
           display:block;
           width:rem(490px);
           height:8%;
-          margin:1.7% auto 0;
+          margin:1% auto 0;
           line-height:8%;
           text-align: center;
           color: #fff;
