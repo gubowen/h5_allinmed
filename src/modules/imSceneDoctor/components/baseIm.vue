@@ -432,9 +432,9 @@
         if (navigator.userAgent.toLowerCase().includes("11")) {
           this.scrollToBottom();
         } else {
-          this.interval = setInterval(function () {
-            document.body.scrollTop = document.body.scrollHeight - 200; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 100);
+          this.interval = setTimeout(function () {
+            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+          }, 200);
         }
         this.onFocus = true;
 
@@ -628,9 +628,7 @@
                 break;
               case 2: //医生赠送次数
                 this.lastTimeShow = true;
-                store.commit("setLastCount", 3);
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
+                this.getLastTime(0);
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
@@ -1508,7 +1506,7 @@
         let _file = e.target.files[0];
         this.inputVideoFlag = false;
         this.$nextTick( () => {
-          this.inputVideoFlag = true;        
+          this.inputVideoFlag = true;
         })
         if (e.target.files.length > 1) {
           this.toastTips = `每次只能上传一个视频`;
@@ -1626,7 +1624,7 @@
 
         this.inputPdfFlag = false;
         this.$nextTick( () => {
-          this.inputPdfFlag = true;        
+          this.inputPdfFlag = true;
         })
 
         getFileType(_file).then((flag) => {
@@ -1782,15 +1780,10 @@
           done(data) {
             if (data.responseObject.responseData) {
               if (state === -1) {
-                that.receiveTime = 2 * 60 * 60 * 1000;
-                that.remainTimeOut();
-                that.lastTimeShow = true;
-                that.bottomTipsShow = false;
+                that.getLastTime(-1);
                 that.sendPayFinish(count);
               } else {
-                store.commit("setLastCount", parseInt(count.orderFrequency));
-                store.commit("setLastTime", 5 * 24 * 60 * 60 * 1000);
-                store.commit("lastTimeCount");
+                that.getLastTime(0);
                 that.sendPayFinish(count);
                 setTimeout(() => {
                   that.lastTimeShow = true;

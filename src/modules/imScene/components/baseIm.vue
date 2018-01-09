@@ -450,9 +450,9 @@
         if (navigator.userAgent.toLowerCase().includes("11")) {
           this.scrollToBottom();
         } else {
-          this.interval = setInterval(function () {
+          this.interval = setTimeout(function () {
             document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 100);
+          }, 200);
         }
 
 
@@ -1431,7 +1431,7 @@
         }
         this.inputVideoFlag = false;
         this.$nextTick( () => {
-          this.inputVideoFlag = true;        
+          this.inputVideoFlag = true;
         })
         let _file = e.target.files[0];
         if (_file.size >= 104857600) {
@@ -1536,7 +1536,7 @@
 
         this.inputPdfFlag = false;
         this.$nextTick( () => {
-          this.inputPdfFlag = true;        
+          this.inputPdfFlag = true;
         })
 
         let _file = e.target.files[0];
