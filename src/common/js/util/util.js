@@ -133,9 +133,44 @@ class Api {
     }
     return newStr;
   }
-  getNetWork(){
+  getNetWork() {
     let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {type: 'unknown'};
-    let type_text = ['unknown', 'wifi', '2g', '3g', '4g', 'none'];
+    let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'none'];
+    let _browseType = this.isWXBrowse(),
+      userAgentInfo = navigator.userAgent;
+    let checkKey = '';
+    if (typeof(connection.type) == "number") {
+      connection.type_text = type_text[connection.type];
+    } else {
+      if (_browseType === "androidWX") {
+        //Android通过返回type判断
+        if (connection.type !== "WIFI" || connection.type !== "wifi") {
+          if (userAgentInfo.indexOf("WIFI") > 0) {
+            connection.type_text = 'wifi';
+          } else {
+            connection.type_text = 'other';
+          }
+        } else {
+          connection.type_text = connection.type;
+        }
+      } else if (_browseType === "iphoneWX") {
+        //ios没有返回type 通过设备类型里的NetType判断联网类型（尝试中 需测试）
+        if (userAgentInfo.indexOf("WIFI") > 0) {
+          connection.type_text = 'wifi';
+        } else {
+          connection.type_text = 'other';
+        }
+      } else {
+        //除Android、ios微信浏览器之外的其他浏览器
+        if (connection.type !== "undefined") {
+          connection.type_text = connection.type;
+        } else {
+          //不识别网络或不兼容
+          connection.type_text = 'other';
+        }
+      }
+    }
+    //通过Bandwidth判断网络类型（多数浏览器没有返回改字段）
     if (typeof(connection.bandwidth) == "number") {
       if (connection.bandwidth > 10) {
         connection.type = 'wifi';
@@ -149,7 +184,17 @@ class Api {
         connection.type = 'unknown';
       }
     }
-    return connection.type
+    //返回类型 (1-wifi、0-other)
+    if (connection.type_text == 'wifi') {
+      checkKey = 1;
+    } else {
+      siteSwitch.weChatJudge(()=>{
+        checkKey = 0;  //微信浏览器
+      },()=>{
+        checkKey = 1;  //非微信浏览器
+      })
+    }
+    return checkKey;
   }
   getDeviceType(){
     let connection ="";
