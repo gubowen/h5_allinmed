@@ -36,7 +36,7 @@ export default new Vuex.Store({
       image: false,
       video: false,
       file: false,
-      delete: false,
+      delete: true,
       deleteTime:""
     }
   },
