@@ -1394,7 +1394,6 @@
       // 发送多图文件
       sendMulitpleImage(list, _ele) {
         const that = this;
-        this.inputImageFlag = false;
         const _nowNum = this.msgList.indexOf(_ele);
         console.log(_nowNum)
         this.nim.sendCustomMsg({
@@ -1447,7 +1446,6 @@
           this.scrollToBottom();
         });
         let imageLastIndex = this.msgList.indexOf(_ele);
-        this.inputImageFlag = false;
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
@@ -1466,7 +1464,6 @@
           done(error, file) {
             console.log("上传image" + (!error ? "成功" : "失败"));
             // show file to the user
-            that.inputImageFlag = true;
             if (!error) {
               imageLastIndex = that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
