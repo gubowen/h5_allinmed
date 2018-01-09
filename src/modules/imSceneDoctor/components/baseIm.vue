@@ -1111,6 +1111,7 @@
                   that.receiveTime = receiveTime;
                   that.bottomTipsShow=false;
                   that.lastTimeShow = false;
+                  that.bottomTipsType="";
                   that.remainTimeOut();
                 }
               } else if (status === 0) {
