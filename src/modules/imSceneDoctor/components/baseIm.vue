@@ -373,7 +373,7 @@
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
         inputPdfFlag: true,//上传pdf文件控制
-        inputFlag: true, //上传图片input控制
+        progressNum:0,// 正在上传的个数
         loading: true,
         payPopupShow: false,
         shuntCustomerId: "",
@@ -1300,6 +1300,10 @@
       sendImage(e) {
         const that = this;
         console.log(e.target.files);
+        that.inputImageFlag = false;
+        this.$nextTick(  () => {
+          that.inputImageFlag = true;
+        })
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             that.toastTips = `您最多只能选择9张图片`;
@@ -1342,6 +1346,7 @@
           idClient: _holderId
         }
         this.msgList.push(_ele);
+        that.progressNum  ++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
@@ -1412,7 +1417,7 @@
           done(error, msg) {
             if (!error) {
               console.log(msg);
-              that.inputImageFlag = true;
+              that.progressNum  --;
               // that.msgList[that.msgList.length-1] = msg;
               that.msgList.splice(_nowNum, 1, msg);
               that.$nextTick(() => {
@@ -1432,6 +1437,7 @@
           type: "image",
           from: that.userData.account
         });
+        that.progressNum  ++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
@@ -1478,6 +1484,7 @@
                 file: file,
                 type: "image",
                 done(error, msg) {
+                  that.progressNum  --;
                   that.msgList[that.imageLastIndex] = msg;
                   that.imageList.push(msg.file.url);
                   that.imageProgress = {
@@ -1499,6 +1506,10 @@
       // 选择视频
       sendVideo(e) {
         let _file = e.target.files[0];
+        this.inputVideoFlag = false;
+        this.$nextTick( () => {
+          this.inputVideoFlag = true;        
+        })
         if (e.target.files.length > 1) {
           this.toastTips = `每次只能上传一个视频`;
           this.toastShow = true;
@@ -1541,6 +1552,7 @@
           from: this.userData.account
         };
         this.msgList.push(_ele);
+        that.progressNum  ++;
         this.$nextTick(() => {
           setTimeout(() => {
             this.scrollToBottom();
@@ -1548,7 +1560,6 @@
         });
         let videoLastIndex = this.msgList.indexOf(_ele);
 
-        this.inputVideoFlag = false;
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
@@ -1567,7 +1578,6 @@
           },
           done(error, file) {
             console.log("上传video" + (!error ? "成功" : "失败"));
-            that.inputVideoFlag = true;
 
 
             console.log(file);
@@ -1592,6 +1602,7 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
+                  that.progressNum  --;
                   that.msgList[videoLastIndex] = msg;
                   that.$set(that.videoProgress, videoLastIndex, {
                     uploading: false,
@@ -1612,6 +1623,12 @@
       // 选择pdf
       sendPdf(e) {
         let _file = e.target.files[0];
+
+        this.inputPdfFlag = false;
+        this.$nextTick( () => {
+          this.inputPdfFlag = true;        
+        })
+
         getFileType(_file).then((flag) => {
           if (_file.type.includes("pdf")) {
             this.sendPdfFile(_file);
@@ -1642,10 +1659,10 @@
           type: "file",
           from: that.userData.account
         });
+        that.progressNum  ++;
         this.$nextTick(() => {
           this.scrollToBottom();
         });
-        this.inputPdfFlag = false;
         this.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
         reader.readAsDataURL(_file);
@@ -1654,7 +1671,6 @@
             type: "file",
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
-              // this.inputPdfFlag = false;
               // that.scrollToBottom();
               that.fileProgress = {
                 uploading: true,
@@ -1668,7 +1684,6 @@
             },
             done(error, file) {
               console.log("上传文件" + (!error ? "成功" : "失败"));
-              that.inputPdfFlag = true;
               file = Object.assign(file, {
                 fileName: _file.name,
               });
@@ -1696,6 +1711,7 @@
                   type: "file",
                   done(error, msg) {
                     that.msgList[that.fileLastIndex] = msg;
+                    that.progressNum  --;
                     that.fileProgress = {
                       uploading: false,
                       progress: "0%",
@@ -1957,16 +1973,13 @@
         });
         return result.join(",");
       },
-      leaveFlag() {
-        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+      // 是否可以离开，传给suggest 的参数
+      leaveFlag () {
+        if (this.progressNum != 0) {
           return true;
         } else {
           return false;
         }
-      },
-      //配合watch图片上传进度使用
-      progess() {
-        return this.imageProgress.progress;
       },
       lastTime() {
         return this.$store.state.lastTime;
@@ -2038,12 +2051,6 @@
           }, 20);
         },
         deep: true
-      },
-      //监听上传完成，可以继续上传；
-      progess(newVal, oldVal) {
-        if (newVal == "0%" || newVal == "100%") {
-          this.inputFlag = true;
-        }
       },
       lastTime(time) {
         if (time <= 0) {

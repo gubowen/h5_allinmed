@@ -213,10 +213,6 @@
         <section class="footer-box-top">
           <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
-            <!-- <input type="file" v-if="isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="image/*">
-            <input type="file" v-if="!isIos&&inputImageFlag" multiple id="ev-file-send" @change="sendFile($event)" ref="imageSender"
-                  accept="image/*"> -->
           </section>
           <figure class="main-input-box-textarea-inner">
             <section class="area-content">
@@ -243,9 +239,9 @@
                    height="234"/>
               <figcaption class="bottom-item-description">图片</figcaption>
             </figure>
-            <input type="file" v-if="isIos" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&!isWeChat" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&isWeChat" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
+            <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
             <figure class="bottom-item-content">
@@ -253,17 +249,17 @@
                    height="234"/>
               <figcaption class="bottom-item-description">视频</figcaption>
             </figure>
-            <input type="file" v-if="isIos" @change="sendVideo($event)" ref="videoSender"  accept="video/*">
-            <input type="file" v-if="!isIos&&!isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-            <input type="file" v-if="!isIos&&isWeChat" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
+            <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"  accept="video/*">
+            <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
+            <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
-            <input type="file" v-if="!isIos" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+            <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+            <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -395,7 +391,7 @@
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
         inputPdfFlag: true,//上传pdf文件控制
-        //        firstIn:true,//是否是第一次进来，MutationObserver需要判断，不然每次都执行
+        progressNum:0,// 正在上传的个数
         imageList: [], //页面图片数组
         consultationId: "",
         timeStampShowList: [], //时间戳数组
@@ -1222,7 +1218,10 @@
       sendImage(e) {
         const that = this;
         console.log(e.target.files);
-
+        that.inputImageFlag = false;
+        this.$nextTick(  () => {
+          that.inputImageFlag = true;
+        })
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             this.toastControl("您最多只能选择9张图片");
@@ -1263,9 +1262,9 @@
           replace:"multiple",
         }
         that.msgList.push(_ele);
+        that.progressNum  ++;
         that.scrollToBottom();
         that.mulitpleLastIndex = that.msgList.length - 1;
-        that.inputImageFlag = false;
         Array.from(list).forEach((element, index) => {
           promises.push(
             new Promise((resolve, reject) => {
@@ -1320,9 +1319,9 @@
             }
           }),
           done(error, msg) {
-            that.inputImageFlag = true;
             if (!error) {
               console.log(msg);
+              that.progressNum  --;
               // that.msgList.map( (item,index) => {
               //   if (item.replace && item.replace == 'multiple') {
               //     that.mulitpleLastIndex = index;
@@ -1350,6 +1349,7 @@
           loading: true,
         }
         this.msgList.push(_ele);
+        that.progressNum  ++;
         this.$nextTick(() => {
           that.scrollToBottom();
         })
@@ -1359,7 +1359,6 @@
           type: "image",
           fileInput: this.$refs.imageSender,
           uploadprogress(obj) {
-            // that.inputImageFlag = false;
             // that.scrollToBottom();
             // that.imageProgress = {
             //   uploading: true,
@@ -1397,6 +1396,7 @@
                   // debugger;
                   // that.msgList[that.imageLastIndex] = msg;
                   // that.msgList[that.replaceIndex('image')] = msg;
+                  that.progressNum  --;
                   that.$set(that.imageProgress,that.msgList.indexOf(_ele),{
                     uploading: false,
                     progress: "0%",
@@ -1424,14 +1424,15 @@
           }
         });
       },
-      test() {
-        alert(4134)
-      },
       // 选择视频
       sendVideo(e) {
         if (e.target.files.length > 1) {
           this.toastControl("每次只能上传一个视频");
         }
+        this.inputVideoFlag = false;
+        this.$nextTick( () => {
+          this.inputVideoFlag = true;        
+        })
         let _file = e.target.files[0];
         if (_file.size >= 104857600) {
           this.toastControl("视频最大为100M");
@@ -1460,12 +1461,12 @@
           replace:'video',
         }
         this.msgList.push(_ele);
+        that.progressNum  ++;
         that.scrollToBottom();
         this.nim.previewFile({
           type: "video",
           fileInput: this.$refs.videoSender,
           uploadprogress(obj) {
-            // this.inputVideoFlag = false;
             // that.scrollToBottom();
             // that.videoProgress[that.msgList.indexOf(_ele)] = {
             //   uploading: true,
@@ -1501,6 +1502,7 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
+                  that.progressNum  --;
                   that.$set(that.videoProgress,that.msgList.indexOf(_ele),{
                     uploading: false,
                     progress: "0%",
@@ -1531,6 +1533,12 @@
       },
       // 选择pdf
       sendPdf(e) {
+
+        this.inputPdfFlag = false;
+        this.$nextTick( () => {
+          this.inputPdfFlag = true;        
+        })
+
         let _file = e.target.files[0];
         getFileType(_file).then((flag)=>{
           if (_file.type.includes("pdf")) {
@@ -1560,6 +1568,7 @@
           loading:true,
         }
         this.msgList.push(_ele);
+        that.progressNum  ++;
         that.scrollToBottom();
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
@@ -1569,7 +1578,6 @@
             type: "file",
             dataURL: oFREvent.target.result,
             uploadprogress(obj) {
-              // this.inputPdfFlag = false;
               // that.scrollToBottom();
               let indexflag = that.msgList.indexOf(_ele)
               that.$set(that.fileProgress,indexflag,{
@@ -1609,6 +1617,7 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
+                    that.progressNum  --;
                     that.$set(that.fileProgress,that.msgList.indexOf(_ele),{
                       uploading: false,
                       progress: "0%",
@@ -1972,7 +1981,7 @@
     computed: {
       // 是否可以离开，传给suggest 的参数
       leaveFlag () {
-        if (this.inputImageFlag && this.inputVideoFlag && this.inputPdfFlag) {
+        if (this.progressNum != 0) {
           return true;
         } else {
           return false;
@@ -1989,18 +1998,18 @@
       ensureShow() {
         return this.$store.state.ensureShow;
       },
-      //配合watch图片上传进度使用
-      progressImage() {
-        return this.imageProgress.progress;
-      },
-      // 配合watch视频上传进度使用
-      progressVideo() {
-        return this.videoProgress.progress;
-      },
-      // 配合watchpdf上传进度使用
-      progressFile() {
-        return this.fileProgress.progress;
-      },
+      // //配合watch图片上传进度使用
+      // progressImage() {
+      //   return this.imageProgress.progress;
+      // },
+      // // 配合watch视频上传进度使用
+      // progressVideo() {
+      //   return this.videoProgress.progress;
+      // },
+      // // 配合watchpdf上传进度使用
+      // progressFile() {
+      //   return this.fileProgress.progress;
+      // },
       lastTime() {
         return this.$store.state.lastTime;
       },
@@ -2147,30 +2156,30 @@
         },
         deep: true
       },
-      //监听图片上传完成，可以继续上传；
-      progressImage(newVal, oldVal) {
-        if (newVal == "0%" || newVal == "100%") {
-          this.inputImageFlag = true;
-        } else {
-          this.inputImageFlag = false;
-        }
-      },
-      //监听视频上传完成，可以继续上传；
-      progressVideo(newVal, oldVal) {
-        if (newVal == "0%" || newVal == "100%") {
-          this.inputVideoFlag = true;
-        } else {
-          this.inputVideoFlag = false;
-        }
-      },
-      // 监听pdf上传完成，可以继续上传；
-      progressFile(newVal, oldVal) {
-        if (newVal == "0%" || newVal == "100%") {
-          this.inputPdfFlag = true;
-        } else {
-          this.inputPdfFlag = false;
-        }
-      },
+      // //监听图片上传完成，可以继续上传；
+      // progressImage(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputImageFlag = true;
+      //   } else {
+      //     this.inputImageFlag = false;
+      //   }
+      // },
+      // //监听视频上传完成，可以继续上传；
+      // progressVideo(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputVideoFlag = true;
+      //   } else {
+      //     this.inputVideoFlag = false;
+      //   }
+      // },
+      // // 监听pdf上传完成，可以继续上传；
+      // progressFile(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputPdfFlag = true;
+      //   } else {
+      //     this.inputPdfFlag = false;
+      //   }
+      // },
       // lastTime: function (time) {
       //   if (time <= 0) {
       //     if (this.inputBoxShow) {
