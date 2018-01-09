@@ -21,7 +21,7 @@
       <!--</figcaption>-->
     <!--</article>-->
     <article class="check-suggest-box">
-      <header class="check-suggest-title">为确保分诊准确和专家问诊的效率，建议您进行以下检查并上传检查资料，分诊计时已停止，有关检查疑问您可继续向分诊医生询问，资料上传后分诊医生将继续为您服务。</header>
+      <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
       <section class="check-suggest-bg"></section>
       <section class="check-suggest-content">
         <ul class="check-suggest-list">
