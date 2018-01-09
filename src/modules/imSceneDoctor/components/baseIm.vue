@@ -1797,7 +1797,7 @@
                   that.receiveTreatmentStatus = true;
                 }, 200);
               }
-              that.footerBottomFlag = true;
+              that.footerBottomFlag = false;
             }
           }
         });
