@@ -267,7 +267,7 @@
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>
       <transition name="fade">
-        <Suggestion :customerId="patientCustomerId||0" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"
+        <Suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"
                     :doctorCustomerId="targetData.account.substring(2)"></Suggestion>
       </transition>
     </section>
