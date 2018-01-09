@@ -145,7 +145,10 @@
           //登陆检测
           if(api.getPara().customerId===!null && localStorage.getItem("userId")===!null){
             _this.customerId=api.getPara().customerId;
-          }else{
+          }else if(api.getPara().customerId="undefined"){
+            _this.customerId=0;
+          }
+          else{
             _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
           }
             _this.submitAllData();
@@ -183,7 +186,7 @@
           url:feedbackUrl,
           method: "POST",
           data: {
-            suggestionType:_arr.join(","),
+            suggestionType:_arr.join(""),
             suggestionContent:this.suggestionContent,
             suggestionNumbers:this.suggestionNumbers,
             customerId:_this.customerId||0,
