@@ -193,7 +193,8 @@
             doctorId:api.getPara().doctorCustomerId||"",
             visitSiteId: api.getSiteId(),
             equipmentVersion:api.getDeviceType(),
-            networkEnvironment:'待定',
+            networkEnvironment: api.getNetWork(),
+            // systemVersion: '待定'
           },
           done(data) {
             this.finish=true;
