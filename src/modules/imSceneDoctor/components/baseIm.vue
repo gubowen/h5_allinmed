@@ -85,9 +85,15 @@
                             :hoispitalMessage="JSON.parse(msg.content)">
             </HospitalNotice>
             <!--文本消息-->
-            <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg" :userData="userData"
-                         :targetData="targetData" @deleteMsgEvent="deleteMsgEvent(msg)"
-                         @longTouchEmitHandler="longTouchEmitHandler(index)" @clickLogo="goToDoctorHomePage">
+            <ContentText v-if="msg.type==='text' && msg.text" :contentMessage="msg"
+                         :userData="userData"
+                         :targetData="targetData"
+                         @deleteMsgEvent="deleteMsgEvent(msg)"
+                         @longTouchEmitHandler="longTouchEmitHandler(index)"
+                         :currentIndex="index"
+                         :deleteMsgIndex="deleteMsgIndex"
+                         @clickLogo="goToDoctorHomePage">
+
             </ContentText>
             <!--图像消息-->
             <ImageContent
