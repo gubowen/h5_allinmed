@@ -1393,11 +1393,11 @@
                 file: file,
                 type: "image",
                 done(error, msg) {
-                  // debugger;
                   // that.msgList[that.imageLastIndex] = msg;
-                  // that.msgList[that.replaceIndex('image')] = msg;
+                  let numFlag = that.msgList.indexOf(_ele);
+                  that.msgList[numFlag] = msg;
                   that.progressNum  --;
-                  that.$set(that.imageProgress,that.msgList.indexOf(_ele),{
+                  that.$set(that.imageProgress,numFlag,{
                     uploading: false,
                     progress: "0%",
                     index: 0,
