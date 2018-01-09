@@ -76,7 +76,6 @@ export default {
     this.listType = this.$route.params.listType;
     this.returnRouter = this.$route.params.from;
     // this.$refs.searchInput.focus();
-    // this.focusState = true;
     document.body.scrollTop = 0;
 
     window.addEventListener("scroll", () => {
