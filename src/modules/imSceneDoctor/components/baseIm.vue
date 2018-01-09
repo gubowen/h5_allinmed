@@ -361,9 +361,7 @@
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         isWeChat: _weChat,
         nim: {},
-        imageProgress: {
-
-        },
+        imageProgress: {},
         // 视频发送进度
         videoProgress: {},
         // 文件pdf发送进度
@@ -632,7 +630,7 @@
               case 1: //患者购买 不处理
                 break;
               case 2: //医生赠送次数
-                this.getLastTime(0,"send");
+                this.getLastTime(0, "send");
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
@@ -1081,7 +1079,7 @@
           }
         });
       },
-      getLastTime(status,type) {
+      getLastTime(status, type) {
         const that = this;
         api.ajax({
           url: XHRList.time,
@@ -1111,6 +1109,8 @@
                   that.showBottomTips(-1);
                 } else {
                   that.receiveTime = receiveTime;
+                  that.bottomTipsShow=false;
+                  that.lastTimeShow = true;
                   that.remainTimeOut();
                 }
               } else if (status === 0) {
@@ -1196,7 +1196,7 @@
           ", id=" +
           msg.idClient
         );
-        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+        if (!(msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips")) {
           this.sendTextContent = "";
         }
         if (!error) {
@@ -1434,7 +1434,7 @@
       // 上传图片文件
       sendImageFile(_file) {
         const that = this;
-        let _ele={
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file)
           },
@@ -1456,7 +1456,7 @@
             that.$set(that.imageProgress, that.msgList.indexOf(_ele), {
               uploading: true,
               progress: obj.percentageText,
-              index:  that.msgList.indexOf(_ele)
+              index: that.msgList.indexOf(_ele)
             });
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1756,7 +1756,7 @@
         this.remainTimeCount = setInterval(() => {
           if (this.receiveTime <= 0) {
             this.bottomTipsType(-1);
-            this.footerBottomFlag=false;
+            this.footerBottomFlag = false;
             clearInterval(this.remainTimeCount);
           } else {
             this.receiveTime = this.receiveTime - 1000;
@@ -1942,7 +1942,7 @@
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg);
-                that.payPopupShow=false;
+                that.payPopupShow = false;
                 //                localStorage.removeItem("sendTips");
               }
             }
