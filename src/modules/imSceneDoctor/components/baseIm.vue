@@ -1110,7 +1110,7 @@
                 } else {
                   that.receiveTime = receiveTime;
                   that.bottomTipsShow=false;
-                  that.lastTimeShow = true;
+                  that.lastTimeShow = false;
                   that.remainTimeOut();
                 }
               } else if (status === 0) {
