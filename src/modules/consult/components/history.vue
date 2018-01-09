@@ -380,6 +380,7 @@ export default {
       this.backPopupShow = false;
     }
     api.forbidShare();
+    console.log(navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0);
   },
   beforeRouteEnter(to, from, next) {
     if (from.name === "discription") {
@@ -449,8 +450,6 @@ export default {
       that.base64Arr = [];
       that.uploadIndex = 0;
       _files = Array.from(_files);
-      console.log("打印文件信息===============================");
-      console.log(_files);
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
@@ -488,8 +487,6 @@ export default {
               base64 => {
                 that.base64Arr.push(base64); //保存压缩图片
                 that.base64ArrAll.unshift(base64); //保存压缩图片
-                console.log("打印压缩64==============================================");
-                console.log(base64);
                 if (i == files.length - 1) {
                   this.upLoadPic(
                     that.filesObj[that.uploadIndex],
@@ -603,10 +600,6 @@ export default {
           fail: false
         });
       }
-      console.log("请求参数=========================================================")
-      console.log(base64.split(",")[1].replace(/\+/g, "%2B").replace(/\n/g, ""));
-      console.log(_fileLocalName);
-      console.log(_fileName);
       api.ajax({
         url: XHRList.upload,
         method: "POST",
@@ -631,6 +624,9 @@ export default {
             that["imageList" + type][num].fail = false;
             that["imageList" + type][num].finish = true;
             //            that["uploading" + type] = false;
+            if(that.checkSystemVersion()<10){
+              that["imageList" + type][num].blob = res.responseObject.responseData.logoUrl;
+            }
             that.uploading1 = false;
             that.uploading2 = false;
             that.$el.querySelectorAll(
@@ -717,6 +713,10 @@ export default {
           that.uploading2 = false;
         }
       });
+    },
+    //系统版本检测
+    checkSystemVersion(){
+      return navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0;
     },
     //是否存在上传失败图片
     isExistUpLoadFail() {
