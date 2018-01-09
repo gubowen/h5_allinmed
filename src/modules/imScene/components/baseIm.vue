@@ -10,7 +10,7 @@
         <p class="new-service-time">服务时间：08:00-21:00</p>
       </article>
     </transition>
-    <section @click="deleteMsgIndex = -1" @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
+    <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
              :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
       <transition-group name="fadeDown" tag="section" style="z-index: 0;">
         <section class="main-message-wrapper" v-for="(msg,index) in msgList" :key="index">
@@ -1023,13 +1023,13 @@
               console.log(that.inputBoxShow);
               switch (dataList.consultationState) {//	会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
                 case 1:
-                case 3:
                 case 7:
                 case 8:
                   break;
                 case -1:
                 case 0:
                 case 2:
+                case 3:
                 case 4:
                 case 5:
                 case 6:
