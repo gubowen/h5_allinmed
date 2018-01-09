@@ -1441,7 +1441,7 @@
         if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
         } else if (_file.type.includes("video")){
-          this.toastControl("请选择mp4文件");
+          this.toastControl("请选择mp4或mov文件");
         } else {
           this.toastControl("请选择视频文件");
         }
