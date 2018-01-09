@@ -137,9 +137,9 @@ class Api {
     let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {tyep: 'unknown'};
     let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'none'];
     if (typeof(connection.type) == "number") {
-      connection.type_text = type_text[connection.type];
+      connection.type_text = type_text[connection.type||connection.effectiveType];
     } else {
-      connection.type_text = connection.type;
+      connection.type_text = connection.type||connection.effectiveType;
     }
     if (typeof(connection.bandwidth) == "number") {
       if (connection.bandwidth > 10) {
