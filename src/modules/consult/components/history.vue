@@ -399,7 +399,11 @@ export default {
     },
     // 显示底部
     showBar () {
-      store.commit("setbottomNav",true);
+      siteSwitch.weChatJudge(()=>{
+        // store.commit("setbottomNav",false);
+      },()=>{
+        store.commit("setbottomNav",true);
+      });
     },
     initData() {
       if (this.$route.params.optionList) {

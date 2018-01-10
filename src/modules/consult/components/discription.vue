@@ -194,6 +194,7 @@
   import vueSlider from "vue-slider-component";
   import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
   import Picker from "better-picker";
   import store from "../store/store";
@@ -376,7 +377,11 @@
       },
       // 显示底部
       showBar () {
-        store.commit("setbottomNav",true);
+        siteSwitch.weChatJudge(()=>{
+          // store.commit("setbottomNav",false);
+        },()=>{
+          store.commit("setbottomNav",true);
+        });
       },
       createTimePicker() {
         const dataType = [{

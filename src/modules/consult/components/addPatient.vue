@@ -338,7 +338,11 @@
       },
       // 显示底部
       showBar () {
-        store.commit("setbottomNav",true);
+        siteSwitch.weChatJudge(()=>{
+          // store.commit("setbottomNav",false);
+        },()=>{
+          store.commit("setbottomNav",true);
+        });
       },
       init() {
         document.title = "为谁问诊";
