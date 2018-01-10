@@ -1882,13 +1882,13 @@
             consultationId: sessionStorage.getItem("orderSourceId"),
             frequency: opt.orderFrequency,
             frequencyType: 2,
-            consultationState: -1,
+            consultationState: 0,
             consultationLevel: opt.orderType
           },
           done(data) {
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
-              that.refreshStateOther(-1);
+              that.refreshStateOther(0);
               that.payPopupShow = false;
               window.location.href =
                 "/dist/imSceneDoctor.html?from=im&caseId=" +

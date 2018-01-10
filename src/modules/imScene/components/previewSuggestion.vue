@@ -395,7 +395,7 @@
           data: {
             diagnosisId:that.message.diagnosisId,
             recommendId:that.doctorObj.allData[index].customerId,
-            isValid:1,
+            isValid:1
           },
           beforeSend(){
 

@@ -268,7 +268,7 @@
               patientCustomerId: api.getPara().patientCustomerId?api.getPara().patientCustomerId:localStorage.getItem("userId"),
               patientId: api.getPara().patientId,
               consultationType: 1,
-              consultationState: -1,
+              consultationState: 0,
               consultationLevel: '',
               siteId: 17,
               caseType: 0
@@ -534,7 +534,7 @@
               frequency: count.data.orderFrequency,
               frequencyType: "2",
               consultationLevel: count.data.orderType,
-              consultationState: -1
+              consultationState: 0
             },
             beforeSend: function () {
               _this.finish = true;
