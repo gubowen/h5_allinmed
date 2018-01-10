@@ -1227,9 +1227,10 @@
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             this.toastControl("您最多只能选择9张图片");
-            e.target.files = Array.from(e.target.files).slice(0, 9);
+            this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
+          } else {
+            this.getMulitpleImage(e.target.files);
           }
-          this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
           console.log(_file);
