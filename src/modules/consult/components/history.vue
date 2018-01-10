@@ -382,7 +382,6 @@ export default {
       this.backPopupShow = false;
     }
     api.forbidShare();
-    console.log(navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0);
   },
   beforeRouteEnter(to, from, next) {
     if (from.name === "discription") {
