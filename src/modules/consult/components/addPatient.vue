@@ -67,6 +67,8 @@
               <figure class="add-patient-input">
                 <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')"
                        @input="inputMaxLength('username',40)"
+                       @focus="hideBar()"
+                       @blur="showBar()" 
                        v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username"
                        v-model="username">
               </figure>
@@ -83,6 +85,8 @@
               <figcaption>证件号码</figcaption>
               <figure class="add-patient-input">
                 <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)"
+                        @focus="hideBar()"
+                        @blur="showBar()" 
                        :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
               </figure>
             </article>
@@ -117,7 +121,10 @@
             <article class="add-patient-content-item">
               <figcaption>手机号码</figcaption>
               <figure class="add-patient-input">
-                <input type="number" @blur="validateBlur('phone')" @input="inputMaxLength('phone',11)"
+                <input type="number" @blur="validateBlur('phone')"
+                        @focus="hideBar()"
+                        @blur="showBar()" 
+                       @input="inputMaxLength('phone',11)"
                        placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
               </figure>
             </article>
@@ -335,6 +342,14 @@
     },
     filters: {},
     methods: {
+      // 隐藏底部
+      hideBar () {
+        store.commit("setbottomNav",false);
+      },
+      // 显示底部
+      showBar () {
+        store.commit("setbottomNav",true);
+      },
       init() {
         document.title = "为谁问诊";
         if (!api.checkOpenId()) {
