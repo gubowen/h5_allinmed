@@ -68,7 +68,6 @@
                 <input type="text" placeholder="填写真实姓名" id="patientName" @blur="validateBlur('username')"
                        @input="inputMaxLength('username',40)"
                        @focus="hideBar()"
-                       @blur="showBar()" 
                        v-validate="'required|noNumber|isEmoji|special|max_length:40'" name="username"
                        v-model="username">
               </figure>
@@ -86,7 +85,6 @@
               <figure class="add-patient-input">
                 <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)"
                         @focus="hideBar()"
-                        @blur="showBar()" 
                        :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
               </figure>
             </article>
@@ -123,18 +121,10 @@
               <figure class="add-patient-input">
                 <input type="number" @blur="validateBlur('phone')"
                         @focus="hideBar()"
-                        @blur="showBar()" 
                        @input="inputMaxLength('phone',11)"
                        placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
               </figure>
             </article>
-            <!--<article class="add-patient-content-item">-->
-            <!--<figcaption>年龄</figcaption>-->
-            <!--<figure class="add-patient-input">-->
-            <!--<input type="number" @blur="validateBlur('age')" placeholder="填写患者年龄" v-validate="'required|max_value:150|min_value:0|special'" name="age"-->
-            <!--v-model="userage">-->
-            <!--</figure>-->
-            <!--</article>-->
           </section>
         </section>
         <section class="dutyTips" v-if="createNewPatient">
@@ -673,6 +663,7 @@
       },
       //失焦事件
       validateBlur(name) {
+        this.showBar();
         this.$validator.validateAll();
 //        console.log(this.errors.first(name));
 //        console.log(this.errors.all());
@@ -704,6 +695,7 @@
         console.log("失焦验证")
         let flag = true;
         let that = this;
+        this.showBar();
         this.$validator.validateAll();
         console.log(this.errors)
         if (this.errors.has("IDNumber")) {

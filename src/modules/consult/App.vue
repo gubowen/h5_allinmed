@@ -5,7 +5,7 @@
     </keep-alive>
 
     <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
-    <bottomNav :selected="1" v-if="bottomShow"></bottomNav>
+    <bottomNav v-if="bottomShow"></bottomNav>
   </div>
 
 
