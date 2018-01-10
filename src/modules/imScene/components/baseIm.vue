@@ -1102,7 +1102,7 @@
           this.msgList.push(msg);
           setTimeout(() => {
             this.scrollToBottom();
-            // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+              document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 20);
 
           // this.refreshScroll();
@@ -2160,45 +2160,7 @@
         },
         deep: true
       },
-      // //监听图片上传完成，可以继续上传；
-      // progressImage(newVal, oldVal) {
-      //   if (newVal == "0%" || newVal == "100%") {
-      //     this.inputImageFlag = true;
-      //   } else {
-      //     this.inputImageFlag = false;
-      //   }
-      // },
-      // //监听视频上传完成，可以继续上传；
-      // progressVideo(newVal, oldVal) {
-      //   if (newVal == "0%" || newVal == "100%") {
-      //     this.inputVideoFlag = true;
-      //   } else {
-      //     this.inputVideoFlag = false;
-      //   }
-      // },
-      // // 监听pdf上传完成，可以继续上传；
-      // progressFile(newVal, oldVal) {
-      //   if (newVal == "0%" || newVal == "100%") {
-      //     this.inputPdfFlag = true;
-      //   } else {
-      //     this.inputPdfFlag = false;
-      //   }
-      // },
-      // lastTime: function (time) {
-      //   if (time <= 0) {
-      //     if (this.inputBoxShow) {
-      //       this.sendConsultState(5);
-      //       this.refreshState();
-      //     }
-      //     this.lastTimeShow = false;
-      //     this.inputBoxShow = false;
-      //     this.consultTipsShow = true;
-      //   } else {
-      //     this.lastTimeShow = true;
-      //     this.inputBoxShow = true;
-      //     this.consultTipsShow = false;
-      //   }
-      // }
+
     },
     components: {
       MedicalReport,

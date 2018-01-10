@@ -1202,10 +1202,14 @@
         }
         if (!error) {
           this.msgList.push(msg);
+          setTimeout(() => {
+            this.scrollToBottom();
+            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+          }, 20);
         } else {
           //          this.sendErrorTips(msg);
         }
-        this.scrollToBottom();
+
       },
 
       transformTimeStamp(time) {
