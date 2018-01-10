@@ -7,7 +7,7 @@
       </header>
         <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
         <section class="body-picture body-picture-f" :class="pointClassObject">
-          <figure class="body-picture-content">
+          <figure class="body-picture-content" :class="{'isIosWeChat':isWeChat}">
             <img class="body-picture-img" :src="patientBody" alt="">
             <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
             <img v-for="item in imgArray" :src="item">
@@ -1481,7 +1481,10 @@
   @include iphoneX(){
     .body-picture .body-picture-content{
       position: relative;
-      top: -3rem;
+      top: -1rem;
+      &.isIosWeChat{
+        top: -2rem;
+      }
     }
   }
 </style>

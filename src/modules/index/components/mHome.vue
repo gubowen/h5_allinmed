@@ -359,7 +359,7 @@
     .btn-diagnose {
       width: rem(474px);
       height: rem(108px);
-      background-image: linear-gradient(90deg, #31cfb3 42%, #2fb9b6 84%);
+      background: linear-gradient(90deg, #31cfb3 42%, #2fb9b6 84%);
       border-radius: rem(200px);
       display: inline-block;
       vertical-align: middle;
