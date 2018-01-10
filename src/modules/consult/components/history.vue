@@ -110,9 +110,9 @@
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
                  :class="{'selected':medical.none}">
-                暂无服用</p>
+                暂无</p>
               <p class="questionSelectBtn selected-right" @click="medical.none=false;medical.has=true"
-                 :class="{'selected':medical.has}">有服用</p>
+                 :class="{'selected':medical.has}">有</p>
             </section>
             <section class="questionHiddenCommon qu-setMedicineBox" @click="textAreaFocus" v-show="medical.has">
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
