@@ -3,7 +3,7 @@
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper" style="width:90%">
-        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider">
+        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider" :class="{'swiper-no-swiping':adList.length<=1}">
           <a :href="item.adAdditionalUrl" @click="bannerHref(item)">
             <img :src="item.adAttUrl" />
           </a>
@@ -112,6 +112,11 @@
       attention,
       // slider,
       tabbar
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      }
     },
     methods: {
       init() {
@@ -253,9 +258,6 @@
             if (data.responseObject.responseStatus) {
               that.adList =
                 data.responseObject.responseData.data_list[0].ad_profile_attachment;
-              // setTimeout(() => {
-              //   that.$refs.slider && that.$refs.slider.refresh();
-              // }, 20);
             }
             that.$store.commit("setLoadingState", false);
           }
