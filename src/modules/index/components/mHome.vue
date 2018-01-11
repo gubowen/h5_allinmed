@@ -2,10 +2,11 @@
   <section class="mHome">
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
-      <swiper :options="swiperOption" ref="mySwiper" style="width:90%">
-        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider" :class="{'swiper-no-swiping':adList.length<=1}">
+      <swiper :options="swiperOption" ref="mySwiper" style="width:90%" v-if="adList.length>0">
+        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider"
+                      :class="{'swiper-no-swiping':adList.length<=1}">
           <a :href="item.adAdditionalUrl" @click="bannerHref(item)">
-            <img :src="item.adAttUrl" />
+            <img :src="item.adAttUrl"/>
           </a>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
@@ -34,7 +35,8 @@
         </section>
       </section>
       <!--有问诊历史-->
-      <section class="history-info"  v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList" @click="moreEvent">
+      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList"
+               @click="moreEvent">
         <div class="doctor">
           <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
           <div class="doctor-info">
@@ -70,6 +72,7 @@
   import VueAwesomeSwiper from "vue-awesome-swiper";
   import "swiper";
   import "swiper/dist/css/swiper.css";
+
   let XHRList = {
     //登录页
     loginUrl: "/dist/mLogin.html?from=index",
@@ -228,23 +231,7 @@
       },
       getAdList() {
         const that = this;
-        that.adList =[
-          {
-            imgId:1,
-            adAdditionalUrl:'www.baidu.com',
-            adAttUrl:require('../../../common/image/img00/index/bullet.png')
-          },
-          {
-            imgId:2,
-            adAdditionalUrl:'www.baidu.com',
-            adAttUrl:require('../../../common/image/img00/index/bullet.png')
-          },
-          {
-            imgId:3,
-            adAdditionalUrl:'www.baidu.com',
-            adAttUrl:require('../../../common/image/img00/index/bullet.png')
-          }
-        ];
+
         api.ajax({
           url: XHRList.adList,
           method: "post",
@@ -256,9 +243,13 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              that.adList =
-                data.responseObject.responseData.data_list[0].ad_profile_attachment;
+              that.adList = data.responseObject.responseData.data_list[0].ad_profile_attachment;
+              if (that.adList <= 1) {
+                that.swiper.loop = false;
+                that.swiper.destory();
+              }
             }
+
             that.$store.commit("setLoadingState", false);
           }
         });
@@ -288,26 +279,28 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
+
   .mHome {
     padding: 0 0 rem(100px) 0;
   }
+
   .banner {
     padding: 0 0 rem(70px) 0;
     position: relative;
     overflow: hidden;
-    .swiper-container{
-      overflow:visible;
+    .swiper-container {
+      overflow: visible;
       padding-bottom: rem(60px);
     }
     .swiper-pagination-bullet {
       width: rem(12px);
       height: rem(12px);
-      background-color:#7f7c7c;
+      background-color: #7f7c7c;
     }
     .swiper-pagination-bullet-active {
       width: rem(12px);
       height: rem(12px);
-      background-color:#00D6C6;
+      background-color: #00D6C6;
     }
     .banner-slider {
       width: 86%;
@@ -320,7 +313,7 @@
         width: 100%;
         vertical-align: middle;
         > img {
-          padding:rem(10px);
+          padding: rem(10px);
           width: 100%;
           height: 100%;
           vertical-align: top;
@@ -329,8 +322,8 @@
         }
       }
     }
-    .swiper-slide-active{
-      opacity:1;
+    .swiper-slide-active {
+      opacity: 1;
       height: 3.8666rem;
     }
   }
@@ -371,8 +364,8 @@
       letter-spacing: 0;
       line-height: rem(108px);
       text-shadow: 0 rem(7px) rem(15px) rgba(0, 183, 175, 0.68);
-      margin-top:rem(-50px);
-      box-shadow:0 8px 16px #B3B3B3
+      margin-top: rem(-50px);
+      box-shadow: 0 8px 16px #B3B3B3
     }
   }
 
@@ -395,15 +388,15 @@
         color: #909090;
         letter-spacing: 0;
         line-height: rem(44px);
-        &:after{
-          content:'';
+        &:after {
+          content: '';
           background: url("../../../common/image/img00/index/arrow.png") no-repeat;
           background-size: contain;
           display: inline-block;
           vertical-align: middle;
           width: rem(25px);
           height: rem(25px);
-          margin-left:rem(10px);
+          margin-left: rem(10px);
         }
       }
     }

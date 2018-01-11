@@ -1972,7 +1972,9 @@
       doctorTitleName() {
         let result = [];
         this.$store.state.targetMsg.title.split(",").forEach((element, index) => {
-          result.push(element.substring(2));
+          if (element.length.trim()>0){
+            result.push(element.substring(2));
+          }
         });
         return result.join(",");
       },
