@@ -1829,7 +1829,7 @@
           consultationId: this.orderSourceId,
           frequency: "0",
           frequencyType: typeStr,
-          consultationLevel: "1"
+          consultationLevel: "0"
         };
         !!type &&
         Object.assign(data, {customerId: "0", consultationState: "4"}); //付款回调参数传customerId
