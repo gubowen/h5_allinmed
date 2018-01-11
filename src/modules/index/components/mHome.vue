@@ -243,11 +243,12 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              that.adList = data.responseObject.responseData.data_list[0].ad_profile_attachment;
-              if (that.adList <= 1) {
+              if (data.responseObject.responseData.data_list[0].ad_profile_attachment<= 1) {
                 that.swiper.loop = false;
                 that.swiper.destory();
               }
+              that.adList = data.responseObject.responseData.data_list[0].ad_profile_attachment;
+
             }
 
             that.$store.commit("setLoadingState", false);
