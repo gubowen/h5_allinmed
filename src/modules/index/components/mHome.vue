@@ -93,10 +93,22 @@
         diagnoseList: [],
         dataGetFinish: false,
         adList: [],
-        swiperOption: {
+
+      };
+    },
+    components: {
+      attention,
+      // slider,
+      tabbar
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      },
+      swiperOption() {
+        return {
           notNextTick: true,
-          loop: true,
-//          autoplay: 3000,
+          loop: this.adList.length>1?true:false,
           direction: "horizontal",
           grabCursor: true,
           setWrapperSize: true,
@@ -109,16 +121,6 @@
           observeParents: true,
           debugger: true
         }
-      };
-    },
-    components: {
-      attention,
-      // slider,
-      tabbar
-    },
-    computed: {
-      swiper() {
-        return this.$refs.mySwiper.swiper
       }
     },
     methods: {
@@ -243,14 +245,8 @@
           },
           done(data) {
             if (data.responseObject.responseStatus) {
-              if (data.responseObject.responseData.data_list[0].ad_profile_attachment<= 1) {
-                that.swiper.loop = false;
-                that.swiper.destory();
-              }
               that.adList = data.responseObject.responseData.data_list[0].ad_profile_attachment;
-
             }
-
             that.$store.commit("setLoadingState", false);
           }
         });
