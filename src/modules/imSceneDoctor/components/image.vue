@@ -180,4 +180,8 @@
       border-top: 2px solid #d8d8d8;
     }
   }
+
+  .main-message-box-item.others-message > .main-message-content > img{
+    margin: rem(30px);
+  }
 </style>
