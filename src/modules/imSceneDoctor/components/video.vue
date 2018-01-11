@@ -64,8 +64,7 @@
       videoPlay() {
         if (navigator.userAgent.toLowerCase().includes("iphone")) {
           this.$refs.videoHtml.play();
-        } else {
-          this.$refs.videoHtml.play();
+        } else { 
           if (this.$refs.videoHtml.requestFullscreen) {
             this.$refs.videoHtml.requestFullscreen();
           } else if (this.$refs.videoHtml.mozRequestFullScreen) {
@@ -73,6 +72,7 @@
           } else if (this.$refs.videoHtml.webkitRequestFullScreen) {
             this.$refs.videoHtml.webkitRequestFullScreen();
           }
+          this.$refs.videoHtml.play();
         }
       },
     },
