@@ -259,16 +259,20 @@
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/library/_common-modules";
   span.question-feedback:before {
+    position: absolute;
     width: rem(6px);
     height: rem(24px);
     background: #43CBC3;
     display: inline-block;
     background-size: contain;
     content: "";
-    margin: 0px;
-    margin-left: rem(-40px);
-    margin-top: rem(31px);
-    margin-right: rem(11px);
+    left: rem(-14px);
+    top: 50%;
+    margin-top: rem(-12px);
+    // margin: 0px;
+    // margin-left: rem(-44px);
+    // margin-top: rem(31px);
+    // margin-right: rem(11px);
   }
   html, body {
     width: 100%;
@@ -276,9 +280,10 @@
   }
   .question-feedback {
     padding-left: rem(30px);
-    padding-top: rem(27px);
+    margin-top: rem(27px);
     @include font-dpr(20px);
     color: #333333;
+    position: relative;
   }
   .main-inner {
     width: 100%;
@@ -387,8 +392,9 @@
     box-sizing: border-box;
     max-height: rem(175px);
     @include placeholder() {
-      @include font-dpr(18px);
+      @include font-dpr(14px);
       color: #aaaaaa;
+      line-height: 1.2;
     }
   }
   .go-next {
