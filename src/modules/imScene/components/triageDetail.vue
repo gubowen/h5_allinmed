@@ -561,13 +561,13 @@
             }
           }
         });
-        setTimeout(()=>{
-          if (!that.isIos){
-            $(".moxie-shim-html5 input").attr("capture","camera")
-            $(".moxie-shim-html5 input").attr("accept","video/*")
-            $(".moxie-shim-html5 input").attr("multiple","")
-          }
-        },300)
+        // setTimeout(()=>{
+        //   if (!that.isIos){
+        //     $(".moxie-shim-html5 input").attr("capture","camera")
+        //     $(".moxie-shim-html5 input").attr("accept","video/*")
+        //     $(".moxie-shim-html5 input").attr("multiple","")
+        //   }
+        // },300)
 
       },
       //图片提交
