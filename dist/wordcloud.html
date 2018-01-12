@@ -1,50 +1,38 @@
 <html><head><meta charset=UTF-8><style>body{
       margin: 0;
     }
-    #html-canvas{
-      width: 1415px;
-      height: 796px;
+    #canvas{
+      width: 1500px;
+      height: 800px;
       background-color: rgb(240, 240, 240);
       position: relative;
-    }</style></head><body><div id=html-canvas></div><script type=text/javascript src=/dist/static/js/manifest.95f8b7e8ae4e4966dd04.js></script><script type=text/javascript src=/dist/static/js/vendor.c5327eb3faee256ec7f9.js></script></body><script>//获取中心点坐标
-  function getCenterPoint(DOMElement){
-    var rect = DOMElement.getBoundingClientRect();
+    }</style></head><body><div id=canvas></div><canvas id=data></canvas><script type=text/javascript src=/dist/static/js/manifest.fb16ecc8e6b6a0299352.js></script><script type=text/javascript src=/dist/static/js/vendor.71ec44be97f78c69d178.js></script></body><script>// 获取中心点坐标
+  function getCenterPoint(HTMLCanvasElement){
+    var rect = HTMLCanvasElement.getBoundingClientRect();
     var rectTop = rect.top;
-    var rectLeft = rect.left;
+    var rectLeft = rect.left-50;
     var ngx = Math.ceil(rectLeft + rect.width);
     var ngy = Math.ceil(rectTop + rect.height);
     var center = [(ngx / 2) + rectLeft, (ngy / 2) + rectTop];
     console.log('rect', rect);
     return center;
   }
-
-
   // 获取最大半径
-  function getMaxRadius(DOMElement, cellSpace){
+  function getMaxRadius(HTMLCanvasElement, cellSpace) {
     var cellSpace = cellSpace || 1;
-    var rect = DOMElement.getBoundingClientRect();
+    var rect = HTMLCanvasElement.getBoundingClientRect();
     var ngx = Math.ceil(rect.width / cellSpace);
     var ngy = Math.ceil(rect.height / cellSpace);
     var maxRadius = Math.floor(Math.sqrt(ngx * ngx + ngy * ngy));
-
     return maxRadius;
   }
-
-  /**
-   * 获取圆上每个点的坐标
-   @method getCenterPoint
-   @param {int} radius 半径
-   @param {array} center 类似[11,22]中心点
-   @param {int} offsetY y坐标的偏移位置，默认为1
-   @return {array} [x, y] 圆上坐标的数组
-   */
-  function getPointsAtRadius(radius, center ,offsetY, multiple){
+  // 获取圆上每个点的坐标
+  function getPointsAtRadius(radius, center, offsetY, multiple){
     var T = radius * 8;
     var t = T;
     var points = [];
-    var offsetY = offsetY || 1;
+    var offsetY = offsetY || 5;
     var multiple = multiple || 30;
-
     if (radius === 0) {
       points.push([center[0], center[1]]);
     }
@@ -55,32 +43,24 @@
           center[1] + (radius*multiple) * Math.sin( (t * 2 * Math.PI )/ T ) * offsetY,
         ]
       );
-
       t = t - 1;
     }
-
     return points;
   }
-
-  //获取文本的宽高
-
+  // 获取文本的款和高
   function getTextInfo(word, userCSS){
     var fontSize = getRandomFontSize();
     if(userCSS){
       fontSize = userCSS.fontSize;
     }
-
     // 通过canvas的API来获取文本的各种信息
     var fcanvas = document.createElement('canvas');
     var fctx = fcanvas.getContext('2d');
-
-    fctx.font = 'normal ' + fontSize + 'px PingFangSC-Medium, serif';
-
+    fctx.font = 'normal ' + fontSize + 'px PingFangSC-Medium';
     // 通过canvas的measureText方法获取文本 像素级别的宽度
     var fw = fctx.measureText(word).width;
     // 通过字体大小获取高度
     var fh = fontSize;
-
     return {
       width: Math.ceil(fw),
       height: fh,
@@ -88,9 +68,7 @@
       fontSize: fontSize
     }
   }
-
   // 判断两个矩形是否相交
-
   function isCorssRect(array1, array2){
     var Xa1 = array1[0][0];
     var Ya1 = array1[0][1];
@@ -109,9 +87,21 @@
 
     return (Xc1 <= Xc2 && Yc1 <= Yc2);
   }
+  //判断是否触及边框
+    function isOutBorder(array1){
+      var Xa1 = array1[0][0];
+      var Ya1 = array1[0][1];
+      var Xa2 = array1[1][0];
+      var Ya2 = array1[1][1];
 
+      var Xc1 = Math.max(Xa1,[0,0]);
+      var Yc1 = Math.max(Ya1,[800,0]);
+      var Xc2 = Math.max(Xa2,[0,1400]);
+      var Yc2 = Math.max(Ya2,[800,1400]);
 
-  //获取随机颜色的值
+      return (Xc1 <= Xc2 && Yc1 <= Yc2);
+    }
+  // 获取随机颜色的值
   function getRandomOpacity(){
     let arr = [0.5,0.15,0.19,0.28,0.3];
     let res = [];
@@ -122,10 +112,9 @@
     }
     return res[0];
   }
-
   // 获取随机文字的大小
   function getRandomFontSize(){
-    var arr = [28,30,34,40];
+    var arr = [56,60,68,80];
     var res = [];
     for (var i = 0, len = arr.length; i < len; i++) {
       var j = Math.floor(Math.random() * arr.length);
@@ -134,18 +123,18 @@
     }
     return res[0];
   }
-
+  // fuck the word
   function drawText(position, textInfo, canvas ){
     var span = document.createElement('span');
     var styleRules = {
       'position': 'absolute',
       'display': 'block',
-      'font': 'normal' + ' '+textInfo.fontSize+'px ' + 'Hiragino Mincho Pro, serif',
+      'font': 'normal' + ' '+textInfo.fontSize+'px ' + 'PingFangSC-Medium',
       'left': position[0] + 'px',
       'top': position[1] + 'px',
       'width': textInfo.width + 'px',
       'height': textInfo.height + 'px',
-      'lineHeight': 1,
+      'lineHeight':1,
       'opacity': getRandomOpacity(),
     };
     span.textContent = textInfo.word;
@@ -154,36 +143,32 @@
     }
     canvas.appendChild(span);
   }
-
   // 获取文本的左上右下坐标，
-
   function getTopLeft(topLeft, textInfo){
     var left1 = topLeft[0];
     var top1 = topLeft[1];
-
     return [
       [left1, top1],
       [left1+ textInfo[0], top1 + textInfo[1]]
     ];
   }
-
-
   // 获取可安置的坐标
   function getDrawPosition(textInfo, maxRadius, center, cellSpace ,drawArray){
-    var textInfo_width = textInfo.width;
-    var textInfo_height = textInfo.height;
+    var textInfo_width = textInfo.width+30;
+    var textInfo_height = textInfo.height+10;
     var cellSpace = cellSpace || 10;
     for(var i=0; i<maxRadius; i++){
       var points = getPointsAtRadius(i, center, 0.64, cellSpace);
       pointsLoop:
         for(var j=0; j<points.length; j++){
           var topLeft = getTopLeft(points[j], [textInfo_width, textInfo_height]);
-          // 是否和已存的文字碰撞
+          // 是否和已存的文字和边框碰撞
           for(var z =0 ; z< drawArray.length; z++){
             if(isCorssRect(topLeft, drawArray[z])){
               continue pointsLoop;
+            }else if(isOutBorder(topLeft, drawArray[z])){
+              continue pointsLoop;
             }
-
           }
           drawArray.push(topLeft);
           return points[j];
@@ -191,27 +176,36 @@
     }
     return null;
   }
-
-
   function start(){
-    var tagCanvas = document.getElementById('html-canvas');
+    var tagCanvas = document.getElementById('canvas');
+    var CanvasData = document.getElementById('data');
     var center = getCenterPoint(tagCanvas);
     var cellSpace = 20;
     var maxRadius = getMaxRadius(tagCanvas, cellSpace);
-    let data = ["格罗姆·地狱咆哮","阿尔萨斯·米奈希尔","伊利丹·怒风","泰兰德·语风","沃金","陈·风暴烈酒","达利乌斯·克罗雷","吉安娜·普罗德摩尔","达里安·莫格莱尼","布莱恩·铜须","萨尔","凯恩·血蹄","希尔瓦娜斯·风行者"];
+    var data = ["格罗姆·地狱咆哮","阿尔萨斯·米奈希尔","陈·风暴烈酒","达利乌斯·克罗雷","吉安娜·普罗德摩尔","达里安·莫莱尼","布莱恩·铜须","萨尔","凯恩·血蹄","伊利丹·怒风","泰兰德·语风","沃金","沃金","沃金","沃金","沃金","沃金","沃金","沃金","沃金","沃金"];
+    var storage = window.localStorage;
+    storage["ImgData"] = CanvasData.toDataURL();
+    storage["TextData"] = data;
     var drawArray = [];
     var tempDrawPositionArray = [];
-
+    // for(var j = 0; j<data.length/2;j++){
+    //   var data1=[];
+    //   data1[j]=data[j];
+    // }
+    // for (var z=0;z<data.length/2;z++){
+    //   var data2=[];
+    //   data2[z]=data[z+data.length/2]
+    // }
     for(var i =0; i< data.length; i++){
       var dataItem = data[i];
       var textInfo = getTextInfo(dataItem);
       var drawPosition = null;
-
       if(i != 0){
         drawPosition = getDrawPosition(textInfo, maxRadius, center, cellSpace, drawArray);
       }
       else{
-        textInfo = getTextInfo(dataItem, {fontSize:60});
+        //canvas中心文字样式以及定位
+        textInfo = getTextInfo(dataItem, {fontSize:90});
         drawPosition = getDrawPosition(
           textInfo,
           maxRadius,
@@ -220,11 +214,9 @@
           drawArray
         );
       }
-
       if(drawPosition){
         tempDrawPositionArray.push([drawPosition, textInfo, tagCanvas]);
       }
-
     }
     var timer = setInterval(function(){
       var textItem = tempDrawPositionArray.shift();
@@ -237,4 +229,4 @@
     }, 0);
 
   }
-  start();</script></html>
+  window.onload = start();</script></html>

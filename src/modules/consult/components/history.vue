@@ -230,6 +230,7 @@ import progerssBar from "../components/progressBar";
 import GetUploadLimit from "../api/getUploadLimit";
 import CheckUpLoadStatus from "../api/checkUpLoadStatus";
 import store from "../store/store";
+import UpLoadMultImg from "common/js/upLoadFiles/upLoadImg"; //图片上传
 
 const getUploadLimit = new GetUploadLimit();
 const checkUpLoadStatus = new CheckUpLoadStatus();
@@ -394,16 +395,19 @@ export default {
   },
   methods: {
     // 隐藏底部
-    hideBar () {
-      store.commit("setbottomNav",false);
+    hideBar() {
+      store.commit("setbottomNav", false);
     },
     // 显示底部
-    showBar () {
-      siteSwitch.weChatJudge(()=>{
-        // store.commit("setbottomNav",false);
-      },()=>{
-        store.commit("setbottomNav",true);
-      });
+    showBar() {
+      siteSwitch.weChatJudge(
+        () => {
+          // store.commit("setbottomNav",false);
+        },
+        () => {
+          store.commit("setbottomNav", true);
+        }
+      );
     },
     initData() {
       if (this.$route.params.optionList) {
@@ -463,7 +467,6 @@ export default {
       that.base64Arr = [];
       that.uploadIndex = 0;
       _files = Array.from(_files);
-      console.log(_files);
       if (!_files.length) {
         return;
       } else if (_files.length > 9) {
@@ -472,6 +475,10 @@ export default {
       } else {
         files = _files;
       }
+      // 上传方法封装测试start
+      // that.upLoadImgFn(files,type,index);
+      // 上传方法封装测试end
+      // return;
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > 1024 * 1024 * 10) {
           this.errorShow = true;
@@ -514,6 +521,31 @@ export default {
           };
         }
       }
+    },
+    //上传文件（方法封装）
+    upLoadImgFn(files,type,index) {
+      let _this = this;
+      UpLoadMultImg(
+        {
+          files: files,
+          filesObj:_this.filesObj,
+          filesObjAll:_this.filesObjAll,
+          type:type,
+          index:index
+        },
+        (num) => {
+          _this.errorShow = true;
+          _this.errorMsg = "图片不能超过10M";
+          _this["uploading" + [type]] = true; //重置input file 对象
+          setTimeout(() => {
+            _this.errorMsg = "";
+            _this.errorShow = false;
+            if (num == files.length - 1) {
+              _this["uploading" + [type]] = false;
+            }
+          }, 3000);
+        }
+      );
     },
     //去上传按钮
     uploadBtnFn() {
@@ -582,14 +614,22 @@ export default {
       that.uploading2 = true;
       let _localViewUrl = window.URL.createObjectURL(files);
       let _fileName = "",
-        _rex = /\./g;
+        _rex = /\./g,
+        _rex2 = /\&/g;
       let _fileLocalName = "";
       if (files.name.match(_rex).length == 1) {
         _fileName = files.name.split(".")[1];
         _fileLocalName = files.name;
       } else {
         _fileName = files.name.split(".")[2];
-        _fileLocalName = files.name.split(".")[0]+files.name.split(".")[1]+'.'+files.name.split(".")[2];
+        _fileLocalName =
+          files.name.split(".")[0] +
+          files.name.split(".")[1] +
+          "." +
+          files.name.split(".")[2];
+      }
+      if(_fileLocalName.indexOf("&")>0){
+        _fileLocalName = _fileLocalName.replace(_rex2,"");
       }
       switch (type) {
         case 1:
@@ -634,6 +674,7 @@ export default {
             // let num = index ? index : that["imageList" + type].length - 1;
             let num = index ? index : 0;
             that["imageList" + type][num].imgId = res.responseObject.responsePk;
+
             that["imageList" + type][num].uploading = false;
             that["imageList" + type][num].fail = false;
             that["imageList" + type][num].finish = true;
@@ -648,7 +689,7 @@ export default {
             )[0].style.display =
               "none";
             that.isExistUpLoadFail();
-            that.fileOverfellow();       //暂存文件删除
+            that.fileOverfellow(); //暂存文件删除
             //上传下一张图片(重传跳过)
             if (!that.reload) {
               that.uploadIndex = parseInt(that.uploadIndex) + 1;
@@ -678,7 +719,7 @@ export default {
           } else {
             //上传失败（网络正常情况）
             // that.isExistUpLoadFail();
-            that.fileOverfellow();       //暂存文件删除
+            that.fileOverfellow(); //暂存文件删除
             that.isReadyLoad = false;
             let num = index ? index : 0;
             that["imageList" + type][num].uploading = false;
@@ -729,7 +770,7 @@ export default {
       });
     },
     //系统版本检测
-    checkSystemVersion(){
+    checkSystemVersion() {
       return navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0;
     },
     //是否存在上传失败图片
@@ -763,11 +804,11 @@ export default {
       }
     },
     //暂存文件溢出处理（只保存9个文件）
-    fileOverfellow(){
+    fileOverfellow() {
       let _this = this;
-      if (_this.imageList1.length>9) {
-        _this.base64ArrAll = _this.base64ArrAll.splice(0,9);
-        _this.filesObjAll = _this.filesObjAll.splice(0,9);
+      if (_this.imageList1.length > 9) {
+        _this.base64ArrAll = _this.base64ArrAll.splice(0, 9);
+        _this.filesObjAll = _this.filesObjAll.splice(0, 9);
       }
     },
     textAreaFocus() {
@@ -788,8 +829,8 @@ export default {
     ensureDeletePic() {
       let _deletePic = this.deletePic;
       this["imageList" + _deletePic.type].splice(_deletePic.index, 1);
-      this.filesObjAll.splice(_deletePic.index, 1);   //暂存文件中删除处理
-      this.base64ArrAll.splice(_deletePic.index, 1);  //暂存文件中删除处理
+      this.filesObjAll.splice(_deletePic.index, 1); //暂存文件中删除处理
+      this.base64ArrAll.splice(_deletePic.index, 1); //暂存文件中删除处理
       this.deletePicTip = false;
     },
     //上传指导页
