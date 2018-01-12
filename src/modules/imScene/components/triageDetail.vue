@@ -466,7 +466,7 @@
               //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
               // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
             ],
-            prevent_duplicates: true //不允许选取重复文件
+            prevent_duplicates: false //不允许选取重复文件
           },
           auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
           init: {
