@@ -383,6 +383,7 @@
           color: #444444;
           @include font-dpr(18px);
           margin-left:rem(98px);
+          word-break:break-all;
         }
       }
       .tc-module {
