@@ -1196,6 +1196,7 @@ body {
         .selected-cureBtn {
           position: relative;
           padding: rem(38px) 0;
+          word-break:break-all;
           &:after {
             position: absolute;
             display: block;
