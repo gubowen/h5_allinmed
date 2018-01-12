@@ -197,7 +197,7 @@
             systemVersion: '1.1.2'
           },
           done(data) {
-            this.finish=true;
+            _this.finish=true;
             if (data.responseObject.responseStatus){
               _this.submitSuccess=true;
               _this.backToPast();

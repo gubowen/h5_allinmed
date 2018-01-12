@@ -50,23 +50,17 @@
     methods: {
       showBigImg() {
         let that = this;
-        let _indexNum = 0;
+        let _indexNum =0;
         this.showDeleteMsg = false;
-        that.imageList.map( (item, index) => {
-          if (that.imageMessage.file.url.includes(item)) {
-            _indexNum = index;
-            return;
-          }
-        })
         let _params = {
-          imgBlob: (function () {
+          imgBlob: (function() {
             let result = [];
             that.imageList.forEach((element, index) => {
-              result.push({blob: element.url});
+              result.push({ blob: element.url });
             });
             return result;
           })(),
-          indexNum: _indexNum
+          indexNum: 0
         };
 
         this.$router.push({

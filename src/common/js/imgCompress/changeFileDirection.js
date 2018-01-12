@@ -16,6 +16,7 @@ export default function changeDirection(canvas, ctx, param, sizeParam, image, fn
     console.log(orientation)
     switch (orientation) {
       case 1:
+      case 0:
       case undefined:
         canvas.width = sizeParam.width;
         canvas.height = sizeParam.height;
@@ -31,7 +32,7 @@ export default function changeDirection(canvas, ctx, param, sizeParam, image, fn
         break;
       case 3:
         console.log('需要180度旋转');
-        rotateImg(sizeParam, image, 'right', canvas, ctx); //转两次  
+        rotateImg(sizeParam, image, 'right', canvas, ctx); //转两次
         rotateImg(sizeParam, image, 'right', canvas, ctx);
         break;
     }
@@ -57,7 +58,7 @@ function rotateImg(sizeParam, img, direction, canvas, ctx) {
   }
   if (direction == 'right') {
     step++;
-    //旋转到原位置，即超过最大值    
+    //旋转到原位置，即超过最大值
     step > max_step && (step = min_step);
   } else {
     step--;

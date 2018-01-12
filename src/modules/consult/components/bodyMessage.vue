@@ -14,7 +14,10 @@
               </header>
 
               <figure class="input-area disIllness">
-                <textarea class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent" @input="contentLimit('disContent',1000)"></textarea>
+                <textarea
+                @focus="hideBar()"
+                @blur="showBar()" 
+                class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent" @input="contentLimit('disContent',1000)"></textarea>
                 <p class="text-num-tips">{{disContent.length}}/1000</p>
               </figure>
             </section>
@@ -27,7 +30,8 @@
               </header>
 
               <figure class="input-area helpIllness">
-                <textarea class="input-textarea" placeholder="请输入至少6个字" v-model.trim="helpContent" @input="contentLimit('helpContent',1000)"></textarea>
+                <textarea @focus="hideBar()"
+                          @blur="showBar()" class="input-textarea" placeholder="请输入至少6个字" v-model.trim="helpContent" @input="contentLimit('helpContent',1000)"></textarea>
                 <p class="text-num-tips">{{helpContent.length}}/1000</p>
               </figure>
             </section>
@@ -76,6 +80,7 @@
   import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
   import Picker from 'better-picker';
+  import store from "../store/store";
   import 'common/styles/_ustbPicker.css';
   import "babel-polyfill";
 
@@ -136,6 +141,18 @@
       }
     },
     methods: {
+      // 隐藏底部
+      hideBar () {
+        store.commit("setbottomNav",false);
+      },
+      // 显示底部
+      showBar () {
+        siteSwitch.weChatJudge(()=>{
+          // store.commit("setbottomNav",false);
+        },()=>{
+          store.commit("setbottomNav",true);
+        });
+      },
       initCaseParams(){
         let params = this.$route.params.pageParam;
         this.heightContent = this.$route.params.height || "";

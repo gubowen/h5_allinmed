@@ -28,7 +28,7 @@ import store from "./store/store";
 import touch from "common/js/customDirective/vTouch";
 import "babel-polyfill";
 
-fastclick.attach(document.body);
+// fastclick.attach(document.body);
 
 class ImScene {
   constructor() {

@@ -52,7 +52,7 @@
               <li>②拍完后确保片子上的文字能够看清</li>
               <li>③确保片子上没有反光或人影</li>
             </ul>
-            <button class="btn-goShoot" @click="skipCallBack">去拍摄</button>
+            <button class="btn-goShoot" @click="skipCallBack">关闭</button>
           </figure>
         </article>
       </swiper-slide>

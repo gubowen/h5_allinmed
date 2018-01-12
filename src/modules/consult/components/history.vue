@@ -110,12 +110,14 @@
             <section class="questionContain-center">
               <p class="questionSelectBtn" @click="medical.none=true;medical.has=false"
                  :class="{'selected':medical.none}">
-                暂无服用</p>
+                暂无</p>
               <p class="questionSelectBtn selected-right" @click="medical.none=false;medical.has=true"
-                 :class="{'selected':medical.has}">有服用</p>
+                 :class="{'selected':medical.has}">有</p>
             </section>
             <section class="questionHiddenCommon qu-setMedicineBox" @click="textAreaFocus" v-show="medical.has">
             <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
+                      @focus="hideBar()"
+                      @blur="showBar()"
                       @input="contentLimit"></textarea>
               <span class="qu-underline"></span>
               <p class="limit" v-show="getByteLen(medicalMessage.length)<=50">{{getByteLen(medicalMessage.length)}}</p>
@@ -380,7 +382,6 @@ export default {
       this.backPopupShow = false;
     }
     api.forbidShare();
-    console.log(navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0);
   },
   beforeRouteEnter(to, from, next) {
     if (from.name === "discription") {
@@ -392,6 +393,18 @@ export default {
     next(true);
   },
   methods: {
+    // 隐藏底部
+    hideBar () {
+      store.commit("setbottomNav",false);
+    },
+    // 显示底部
+    showBar () {
+      siteSwitch.weChatJudge(()=>{
+        // store.commit("setbottomNav",false);
+      },()=>{
+        store.commit("setbottomNav",true);
+      });
+    },
     initData() {
       if (this.$route.params.optionList) {
         let params;

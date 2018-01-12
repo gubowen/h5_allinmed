@@ -3,7 +3,7 @@
     <section class="consult-main-inner" @click="showSymptomDetail=false">
       <progerssBar :progerssBarParams="{progerssParams:'2'}"></progerssBar>
       <transition name="fade">
-        <section class="consult-wrapper" v-show="finish">
+        <section class="consult-wrapper">
           <section class="consult-inner">
             <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
               <header class="consult-inner-title" :class="{'consolt-specialOne':pIndex==0}">
@@ -30,6 +30,8 @@
                             @input="otherReason(pIndex,index,$event)"
                             v-model="questionList[pIndex].optionList[index].optionDesc"
                             ref="otherEle"
+                            @focus="hideBar()"
+                            @blur="showBar()"
                   >
                   </textarea>
                     <p class="text-num-tips"
@@ -105,46 +107,6 @@
                 </transition>
               </section>
             </section>
-            <!--<section class="consult-total">-->
-              <!--<header class="consult-inner-title">-->
-                <!--<h2>-->
-                  <!--<span>这种情况多久了？</span>-->
-                <!--</h2>-->
-              <!--</header>-->
-              <!--<section class="consult-question-inner select-item">-->
-                <!--<article class="consult-question-item dark" @click.stop="delayTimePicker.show()">-->
-                  <!--<p>{{delayTimeContent}}</p>-->
-                  <!--<i class="icon-select"></i>-->
-                <!--</article>-->
-              <!--</section>-->
-            <!--</section>-->
-            <!--<section class="consult-total">-->
-              <!--<header class="consult-inner-title">-->
-                <!--<h2>-->
-                  <!--<span>最近一次加重是什么时候？</span>-->
-                <!--</h2>-->
-              <!--</header>-->
-              <!--<section class="consult-question-inner select-item">-->
-                <!--<article class="consult-question-item dark" @click.stop="heavyTimePicker.show()">-->
-                  <!--<p>{{heavyTimeContent}}</p>-->
-                  <!--<i class="icon-select"></i>-->
-                <!--</article>-->
-              <!--</section>-->
-            <!--</section>-->
-            <!--<section class="consult-total">-->
-              <!--<header class="consult-inner-title">-->
-                <!--<h2>-->
-                  <!--<span>您还有其他补充吗？</span>-->
-                <!--</h2>-->
-              <!--</header>-->
-
-              <!--<figure class="input-area">-->
-              <!--<textarea class="input-textarea" placeholder="可补充其他伴随症状或疾病相关情况" v-model="complication"-->
-                        <!--@input="complicationLimit"></textarea>-->
-                <!--<p class="text-num-tips" v-show="getByteLen(complication)<=100">-->
-                  <!--{{getByteLen(complication)}}</p>-->
-              <!--</figure>-->
-            <!--</section>-->
             <transition name="fade">
               <section class="welcome-tips" v-if="firstConsult" @click="firstConsult=false">
                 <figure @click.stop="firstConsult=true">
@@ -192,8 +154,11 @@
   import vueSlider from "vue-slider-component";
   import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
   import Picker from "better-picker";
+  import store from "../store/store";
+
 
   import * as dateData from "../api/datePickerData";
 
@@ -366,6 +331,18 @@
       next(this.pageLeaveEnsure);
     },
     methods: {
+      // 隐藏底部
+      hideBar () {
+        store.commit("setbottomNav",false);
+      },
+      // 显示底部
+      showBar () {
+        siteSwitch.weChatJudge(()=>{
+          // store.commit("setbottomNav",false);
+        },()=>{
+          store.commit("setbottomNav",true);
+        });
+      },
       createTimePicker() {
         const dataType = [{
           text: "天",
@@ -1388,7 +1365,7 @@
       .consult-inner-title h2 {
         @include font-dpr(16px);
         color: #333333;
-        
+
       }
       .consult-question-item {
         @include font-dpr(16px);

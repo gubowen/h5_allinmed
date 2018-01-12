@@ -1,5 +1,5 @@
 <template>
-  <section v-show="payPopupShow">
+  <section v-if="payPopupShow">
     <transition name="fadeIn">
       <div class="mask_layer" v-if="payOrderShow">
         <div data-alcode-mod='721'>
@@ -110,28 +110,21 @@
         priceMessage: {}
       }
     },
-    watch: {
-      payPopupShow(flag) {
-        if (flag) {
-          siteSwitch.weChatJudge(() => {
-            console.log("这是微信呦")
-          }, () => {
-            localStorage.setItem("payDate", JSON.stringify(this.payPopupParams))
-          });
-
-          if (localStorage.getItem("payOk") == 1) {
-            this.noWXPayShow = true;
-          } else {
-            this.noWXPayShow = false;
-            this.toJudge({
-              type: 0
-            });
-          }
-        }
-      }
-    },
     mounted() {
+      siteSwitch.weChatJudge(() => {
+        console.log("这是微信呦")
+      }, () => {
+        localStorage.setItem("payDate", JSON.stringify(this.payPopupParams))
+      });
 
+      if (localStorage.getItem("payOk") == 1) {
+        this.noWXPayShow = true;
+      } else {
+        this.noWXPayShow = false;
+        this.toJudge({
+          type: 0
+        });
+      }
     },
     methods: {
       //关闭支付弹层

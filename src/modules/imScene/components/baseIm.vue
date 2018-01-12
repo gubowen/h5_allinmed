@@ -475,7 +475,7 @@
         const that = this;
         nimEnv().then(nimEnv => {
           this.nim = NIM.getInstance({
-            //          debug: true,
+                     debug: true,
             appKey: nimEnv,
             account: this.userData.account,
             token: this.userData.token,
@@ -1102,8 +1102,11 @@
           this.msgList.push(msg);
           setTimeout(() => {
             this.scrollToBottom();
+           setTimeout(function () {
+              document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+            }, 200);
             // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 20);
+          }, 200);
 
           // this.refreshScroll();
         } else {
@@ -1227,9 +1230,10 @@
         if (e.target.files.length > 1) {
           if (e.target.files.length > 9) {
             this.toastControl("您最多只能选择9张图片");
-            e.target.files = Array.from(e.target.files).slice(0, 9);
+            this.getMulitpleImage(Array.from(e.target.files).slice(0, 9));
+          } else {
+            this.getMulitpleImage(e.target.files);
           }
-          this.getMulitpleImage(e.target.files);
         } else {
           let _file = e.target.files[0];
           console.log(_file);
@@ -1825,7 +1829,7 @@
           consultationId: this.orderSourceId,
           frequency: "0",
           frequencyType: typeStr,
-          consultationLevel: "1"
+          consultationLevel: "0"
         };
         !!type &&
         Object.assign(data, {customerId: "0", consultationState: "4"}); //付款回调参数传customerId

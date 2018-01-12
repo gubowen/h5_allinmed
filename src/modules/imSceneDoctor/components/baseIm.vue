@@ -361,9 +361,7 @@
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         isWeChat: _weChat,
         nim: {},
-        imageProgress: {
-
-        },
+        imageProgress: {},
         // 视频发送进度
         videoProgress: {},
         // 文件pdf发送进度
@@ -632,8 +630,7 @@
               case 1: //患者购买 不处理
                 break;
               case 2: //医生赠送次数
-                this.lastTimeShow = true;
-                this.getLastTime(0);
+                this.getLastTime(0, "send");
                 break;
               case 3: //医生主动拒绝
                 this.lastTimeShow = false;
@@ -1082,7 +1079,7 @@
           }
         });
       },
-      getLastTime(status) {
+      getLastTime(status, type) {
         const that = this;
         api.ajax({
           url: XHRList.time,
@@ -1112,6 +1109,9 @@
                   that.showBottomTips(-1);
                 } else {
                   that.receiveTime = receiveTime;
+                  that.bottomTipsShow=false;
+                  that.lastTimeShow = false;
+                  that.bottomTipsType="";
                   that.remainTimeOut();
                 }
               } else if (status === 0) {
@@ -1197,15 +1197,19 @@
           ", id=" +
           msg.idClient
         );
-        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+        if (!(msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips")) {
           this.sendTextContent = "";
         }
         if (!error) {
           this.msgList.push(msg);
+          setTimeout(() => {
+            this.scrollToBottom();
+            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+          }, 20);
         } else {
           //          this.sendErrorTips(msg);
         }
-        this.scrollToBottom();
+
       },
 
       transformTimeStamp(time) {
@@ -1395,7 +1399,6 @@
       // 发送多图文件
       sendMulitpleImage(list, _ele) {
         const that = this;
-        this.inputImageFlag = false;
         const _nowNum = this.msgList.indexOf(_ele);
         console.log(_nowNum)
         this.nim.sendCustomMsg({
@@ -1435,7 +1438,7 @@
       // 上传图片文件
       sendImageFile(_file) {
         const that = this;
-        let _ele={
+        let _ele = {
           file: {
             url: window.URL.createObjectURL(_file)
           },
@@ -1448,7 +1451,6 @@
           this.scrollToBottom();
         });
         let imageLastIndex = this.msgList.indexOf(_ele);
-        this.inputImageFlag = false;
         this.nim.previewFile({
           type: "image",
           fileInput: this.$refs.imageSender,
@@ -1457,7 +1459,7 @@
             that.$set(that.imageProgress, that.msgList.indexOf(_ele), {
               uploading: true,
               progress: obj.percentageText,
-              index:  that.msgList.indexOf(_ele)
+              index: that.msgList.indexOf(_ele)
             });
             console.log("文件总大小: " + obj.total + "bytes");
             console.log("已经上传的大小: " + obj.loaded + "bytes");
@@ -1467,7 +1469,6 @@
           done(error, file) {
             console.log("上传image" + (!error ? "成功" : "失败"));
             // show file to the user
-            that.inputImageFlag = true;
             if (!error) {
               imageLastIndex = that.msgList.indexOf(_ele);
               let msg = that.nim.sendFile({
@@ -1757,6 +1758,7 @@
         this.remainTimeCount = setInterval(() => {
           if (this.receiveTime <= 0) {
             this.bottomTipsType(-1);
+            this.footerBottomFlag = false;
             clearInterval(this.remainTimeCount);
           } else {
             this.receiveTime = this.receiveTime - 1000;
@@ -1797,7 +1799,7 @@
                   that.receiveTreatmentStatus = true;
                 }, 200);
               }
-              that.footerBottomFlag = true;
+              that.footerBottomFlag = false;
             }
           }
         });
@@ -1942,6 +1944,7 @@
             if (!error) {
               if (that.msgList.length !== 0) {
                 that.sendMessageSuccess(error, msg);
+                that.payPopupShow = false;
                 //                localStorage.removeItem("sendTips");
               }
             }
@@ -1969,7 +1972,9 @@
       doctorTitleName() {
         let result = [];
         this.$store.state.targetMsg.title.split(",").forEach((element, index) => {
-          result.push(element.substring(2));
+          if (element.length>0){
+            result.push(element.substring(2));
+          }
         });
         return result.join(",");
       },

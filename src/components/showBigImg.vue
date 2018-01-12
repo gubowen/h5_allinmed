@@ -11,9 +11,9 @@
         </div>
         <div class="swiper-pagination" slot="pagination"></div>
       </div>
-      
+
       <!-- Optional controls -->
-      
+
       <!--<div class="swiper-button-prev" slot="button-prev"></div>-->
       <!--<div class="swiper-button-next" slot="button-next"></div>-->
       <!--<div class="swiper-scrollbar"   slot="scrollbar"></div>-->
@@ -51,25 +51,13 @@ export default {
       imageListBox: [],
     };
   },
-  // you can find current swiper instance object like this, while the notNextTick property value must be true
-  // 如果你需要得到当前的swiper对象来做一些事情，你可以像下面这样定义一个方法属性来获取当前的swiper对象，同时notNextTick必须为true
+
   computed: {
-    // swiper() {
-    //   return this.$refs.mySwiper.swiper;
-    // }
+
   },
   mounted() {
-    //      this.imageListBox = this.$route.params.imgBlob;
-    //      let _imgNum = this.$route.params.indexNum;
-    //      console.log("nnn"+_imgNum);
-    //      // you can use current swiper instance object to do something(swiper methods)
-    //      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-    ////      console.log('this is current swiper instance object', this.swiper)
-    //      this.swiper.slideTo(_imgNum, 1000, false)
-    // window.scrollTo(0,0);
+
     this.imageListBox = this.$route.params.imgBlob;
-    // let _imgNum = this.$route.params.indexNum;
-    // this.swiper.slideTo(_imgNum, 0, false);
   },
   activated() {
 
