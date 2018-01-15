@@ -1,5 +1,6 @@
 <template>
-  <section class="mHome">
+
+  <section class="mHome"  data-alcode-mod='740'>
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper" style="width:90%" v-if="adList.length>0">
@@ -14,7 +15,7 @@
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
     <figure class="diagnose">
-      <section class="btn-diagnose" @click="diagnoseEvent">点击问诊</section>
+      <section class="btn-diagnose" @click="diagnoseEvent" data-alcode='e144'>点击问诊</section>
     </figure>
     <figure class="history" v-show="dataGetFinish">
       <header><h3>问诊历史</h3>
@@ -31,7 +32,7 @@
       <section class="content" v-if="loginFlag&&diagnoseList.length==0">
         <section class="login">
           <p>您还没有问诊记录</p>
-          <div class="btn-login" @click="diagnoseEvent">点击看病</div>
+          <section class="btn-login" @click="diagnoseEvent" data-alcode='e144'>点击看病</section>
         </section>
       </section>
       <!--有问诊历史-->
