@@ -14,6 +14,9 @@ class ValidateVerifiPolicy {
 
   verifiPolicy(){
     Validator.extend('password', {
+      getMessage(){
+
+      },
       messages: {
         en: (field, args) => {
           return "密码长度应在6-20位之间"
@@ -30,6 +33,9 @@ class ValidateVerifiPolicy {
       }
     });
     Validator.extend('mobile', {
+      getMessage(){
+
+      },
       messages: {
         en: (field, args) => {
           return "请填写真实手机号码"
@@ -44,6 +50,9 @@ class ValidateVerifiPolicy {
     });
 
     Validator.extend('special', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请填写真实姓名，不能输入数字及特殊符号',
       },
@@ -53,6 +62,9 @@ class ValidateVerifiPolicy {
     });
 
     Validator.extend('max_length', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请填写真实姓名',
       },
@@ -71,6 +83,9 @@ class ValidateVerifiPolicy {
     });
 
     Validator.extend('min_length', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请填写真实姓名',
       },
@@ -89,6 +104,9 @@ class ValidateVerifiPolicy {
     });
 
     Validator.extend('isEmoji', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请填写真实姓名，不能输入数字及特殊符号',
       },
@@ -97,6 +115,9 @@ class ValidateVerifiPolicy {
       }
     });
     Validator.extend('noNumber', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请填写真实姓名，不能输入数字及特殊符号',
       },
@@ -105,6 +126,9 @@ class ValidateVerifiPolicy {
       }
     });
     Validator.extend('identityCard', {
+      getMessage(){
+
+      },
       messages: {
         en: field => '请输入有效证件号码',
       },

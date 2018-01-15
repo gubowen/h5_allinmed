@@ -40,6 +40,9 @@ class Personal {
 
 
 Validator.extend('mobile', {
+  getMessage(){
+
+  },
   messages: {
     en: (field, args) => {
       return "请填写真实手机号码"

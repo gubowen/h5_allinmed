@@ -141,6 +141,9 @@ class MLogin {
 // });
 
 Validator.extend('special', {
+  getMessage(){
+
+  },
   messages: {
     en: field => '请填写真实姓名，不能输入数字及特殊符号',
   },
@@ -150,6 +153,9 @@ Validator.extend('special', {
 });
 
 Validator.extend('max_length', {
+  getMessage(){
+
+  },
   messages: {
     en: field => '请填写真实姓名',
   },
@@ -168,6 +174,9 @@ Validator.extend('max_length', {
 });
 
 Validator.extend('isEmoji', {
+  getMessage(){
+
+  },
   messages: {
     en: field => '请填写真实姓名，不能输入数字及特殊符号',
   },
@@ -176,6 +185,9 @@ Validator.extend('isEmoji', {
   }
 });
 Validator.extend('noNumber', {
+  getMessage(){
+
+  },
   messages: {
     en: field => '请填写真实姓名，不能输入数字及特殊符号',
   },
