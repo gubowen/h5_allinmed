@@ -15,6 +15,8 @@ import forbidShare from "./wxForbidShare";
 import siteSwitch from "../siteSwitch/siteSwitch";
 import "babel-polyfill";
 import net from "./net";
+import fundebug from "common/js/errorWatch/fundebug";
+
 
 class Api {
   constructor() {
@@ -318,4 +320,8 @@ class Api {
 
 let api = new Api();
 prototype();
+
+
+fundebug();
+
 export default api;

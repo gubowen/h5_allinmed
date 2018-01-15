@@ -475,7 +475,7 @@
         const that = this;
         nimEnv().then(nimEnv => {
           this.nim = NIM.getInstance({
-                     debug: true,
+            debug: !!localStorage.getItem("imDebugOpen"),
             appKey: nimEnv,
             account: this.userData.account,
             token: this.userData.token,
