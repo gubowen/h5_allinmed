@@ -143,13 +143,10 @@
           return false;
         }else {
           //登陆检测
-          if(api.getPara().customerId===!null && localStorage.getItem("userId")===!null){
-              _this.customerId = api.getPara().customerId;
-          }else if(api.getPara().customerId === "undefined"){
+          if(api.getPara().customerId === "undefined"){
             _this.customerId=0;
-          }
-          else {
-            _this.customerId=api.getPara().customerId|| localStorage.getItem("userId");
+          }else{
+            _this.customerId = localStorage.getItem("userId");
           }
             _this.submitAllData();
           // siteSwitch.weChatJudge(ua =>{
