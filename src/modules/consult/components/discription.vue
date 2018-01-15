@@ -25,6 +25,7 @@
                   <figure class="input-area"
                           v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                           @click.stop="">
+                    <pre><span>{{questionList[pIndex].optionList[index].optionDesc}}</span></pre>
                   <textarea class="input-textarea"
                             placeholder="填写其他情况"
                             @input="otherReason(pIndex,index,$event)"

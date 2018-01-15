@@ -1102,10 +1102,7 @@
           this.msgList.push(msg);
           setTimeout(() => {
             this.scrollToBottom();
-           setTimeout(function () {
               document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-            }, 200);
-            // document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }, 200);
 
           // this.refreshScroll();
