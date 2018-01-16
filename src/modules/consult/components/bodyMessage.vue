@@ -16,7 +16,7 @@
               <figure class="input-area disIllness">
                 <textarea
                 @focus="hideBar()"
-                @blur="showBar()" 
+                @blur="showBar()"
                 class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent" @input="contentLimit('disContent',1000)"></textarea>
                 <p class="text-num-tips">{{disContent.length}}/1000</p>
               </figure>
@@ -113,7 +113,7 @@
           doctorId: api.getPara().doctorId
         },
         createParams:{
-          visitSiteId: 17,
+          visitSiteId: api.getSiteId(),
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
           customerId: "",
@@ -313,7 +313,7 @@
             consultationType: 1,
             consultationState: -1,
             consultationLevel: 6, //咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
-            siteId: 17,
+            siteId: api.getSiteId(),
             caseType: 11 //从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
           },
           done(res) {
@@ -453,7 +453,7 @@
             patientId: this.createParams.patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: 21,
+            siteId: api.getSiteId(),
             caseType: 0
           },
           done(data) {

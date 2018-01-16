@@ -143,7 +143,7 @@
         selectList: [],
         resultParam: {
           caseId: "",
-          visitSiteId: 13,
+          visitSiteId: api.getSiteId(),
           optionList: [],
           patientId: "",
           optionDesc: "",

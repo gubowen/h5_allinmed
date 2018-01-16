@@ -845,7 +845,7 @@
             patientId: api.getPara().patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: 17,
+            siteId: api.getSiteId(),
             caseType: 0
           },
           done(data) {
@@ -1696,7 +1696,7 @@
           url: XHRList.getPrice,
           method: "POST",
           data: {
-            visitSiteId: 17, //string	是	站点
+            visitSiteId: api.getSiteId(), //string	是	站点
             maxResult: 999,
             id: 0
           },

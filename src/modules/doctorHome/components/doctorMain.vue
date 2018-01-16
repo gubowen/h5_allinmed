@@ -270,7 +270,7 @@
               consultationType: 1,
               consultationState: -1,
               consultationLevel: '',
-              siteId: 17,
+              siteId: api.getSiteId(),
               caseType: 0
             },
             getGoodsInfoParams:{

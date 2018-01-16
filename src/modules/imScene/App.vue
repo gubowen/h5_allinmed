@@ -1,13 +1,13 @@
 <template>
 
-  <!--<transition name="fadeRight">-->
-  <div style="width: 100%;height: 100%">
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
-  </div>
-  <!--</transition>-->
+  <transition name="fadeRight">
+    <div style="width: 100%;height: 100%">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive" style="min-height:100%"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive" style="min-height:100%"></router-view>
+    </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -21,7 +21,8 @@
    */
 
   import fb from "common/js/third-party/flexible";
-  export default{
+
+  export default {
     data() {
       return {}
     },
@@ -29,9 +30,10 @@
   }
 </script>
 <style lang="scss" scoped="">
-*{
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
   .child-view {
     position: absolute;
     width: 100%;

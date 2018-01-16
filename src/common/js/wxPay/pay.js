@@ -276,7 +276,7 @@ export default function pay(Obj) {
           caseId: Obj.caseId,
           customerId: 0,
           consultationType: 0,
-          siteId: 17
+          siteId: api.getSiteId()
         },
         done(data) {
           if (data.responseObject.responseMessage == "NO DATA") {
@@ -290,7 +290,7 @@ export default function pay(Obj) {
                 patientId: Obj.patientId,
                 consultationType: 0,
                 consultationState: 4,
-                siteId: 17,
+                siteId: api.getSiteId(),
                 caseType: 0
               },
               done(d) {
