@@ -39,7 +39,6 @@ class MLogin {
 
     Vue.use(VueRouter);
     Vue.use(VeeValidator);//vue使用验证插件
-
     this.routerStart();
     this.registerRouter();
     //vue路由
@@ -141,7 +140,7 @@ class MLogin {
 // });
 
 Validator.extend('special', {
-  getMessage(){
+  getMessage(field, args) {
 
   },
   messages: {
@@ -198,6 +197,3 @@ Validator.extend('noNumber', {
 
 
 new MLogin();
-if (module.hot) {
-  module.hot.accept();
-}

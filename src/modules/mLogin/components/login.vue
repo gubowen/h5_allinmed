@@ -506,31 +506,7 @@
         }
       );
       api.forbidShare();
-      this.$validator.updateDictionary({
-        en: {
-          custom: {
-            //手机号的验证
-            phone: {
-              required: "请输入手机号码",
-              mobile: "请输入正确的手机号码"
-            },
-            account: {
-              required: "请输入手机号码",
-              mobile: "请输入正确的手机号码"
-            },
-            //患者关系的验证规则
-            codeInput: {
-              required: "请输入短信验证码",
-              digits: "验证码错误"
-            },
-            //账号登录密码
-            password: {
-              required: "请输入密码",
-              digits: "密码错误"
-            }
-          }
-        }
-      });
+
     },
     activated() {
       let _this = this;
@@ -553,7 +529,7 @@
         }
       );
       api.forbidShare();
-      this.$validator.updateDictionary({
+      this.$validator.localize({
         en: {
           custom: {
             //手机号的验证
