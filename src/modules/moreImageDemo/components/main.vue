@@ -22,7 +22,10 @@
 <script type="text/ecmascript-6">
   import api from "common/js/util/util";
   import "common/js/third-party/flexible";
-
+  let script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "/static/js/third-party/jweixin-1.0.0.js";
+  document.getElementsByTagName("body")[0].appendChild(script);
   export default {
     data() {
       return {
@@ -129,8 +132,16 @@
     @include font-dpr(20px);
   }
 
-  .record button{
-     font-size: rem(18px);
+  .record {
+    text-align: center;
+    font-size: 0;
+    margin-top: rem(50px);
+    button{
+      margin: 0 rem(20px);
+      font-size: rem(36px);
+    }
+
    }
+
 </style>
 
