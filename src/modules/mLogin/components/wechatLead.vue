@@ -1,7 +1,7 @@
 <template>
-  <figure class="WXlogin">
+  <figure class="WXlogin" data-alcode-mod='744'>
     <figcaption>关注官方微信，即刻开启问诊服务</figcaption>
-    <img @click='goWechat()' src="../../../common/image/img00/login/wechat_shape.png" alt="关注微信" class="WXimage">
+    <img @click='goWechat()' data-alcode='e160' src="../../../common/image/img00/login/wechat_shape.png" alt="关注微信" class="WXimage">
  </figure>
 </template>
 <script type="text/ecmascript-6">

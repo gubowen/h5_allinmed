@@ -1,6 +1,6 @@
 <template>
 <div>
-  <section class="forgetPassword">
+  <section class="forgetPassword"  data-alcode-mod='747'>
     <h2 v-if="finishMobile">设置新密码</h2>
     <h2 v-if="!finishMobile">忘记密码？</h2>
     <p v-if="finishMobile">已向手机号<span>{{phoneMessage}}</span>发送短信验证码</p>
@@ -48,7 +48,7 @@
         </p>
       </li>
     </ul>
-    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()">发送验证码</button>
+    <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()" data-alcode='e157'>发送验证码</button>
     <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword()">提交</button>
 
   </section>
