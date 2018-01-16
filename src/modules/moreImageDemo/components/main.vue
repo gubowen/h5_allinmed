@@ -80,9 +80,11 @@
         });
       },
       startRecord() {
+        console.log("start")
         wx.startRecord();
       },
       stopRecord() {
+        console.log("stop")
         const that=this;
         wx.onVoiceRecordEnd({
           complete (res) {
@@ -91,8 +93,10 @@
         });
       },
       playRecord() {
+
+        console.log("play")
         wx.playVoice({
-          localId: that.musicId
+          localId: this.musicId
         });
       }
     }
@@ -125,7 +129,7 @@
     @include font-dpr(20px);
   }
 
-  ,record button{
+  .record button{
      font-size: rem(18px);
    }
 </style>
