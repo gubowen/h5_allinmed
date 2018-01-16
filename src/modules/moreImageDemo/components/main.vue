@@ -89,7 +89,7 @@
       stopRecord() {
         console.log("stop")
         const that=this;
-        wx.onVoiceRecordEnd({
+        wx.stopRecord({
           complete (res) {
             that.musicId= res.localId;
           }
