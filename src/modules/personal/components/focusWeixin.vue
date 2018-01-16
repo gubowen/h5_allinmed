@@ -1,5 +1,5 @@
 <template>
-  <router-link tag='section'  class="allinmed-personal-weixin" to='/followWechat'>
+  <router-link tag='section' data-alcode='e159' class="allinmed-personal-weixin" to='/followWechat'>
 
   </router-link>
 </template>

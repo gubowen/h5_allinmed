@@ -1,7 +1,7 @@
 <template>
-  <section class="header" v-show="!showFlag">
+  <section class="header" v-show="!showFlag" data-alcode-mod='742'>
         <div class="btn-close" @click="close()"></div>
-        <div class="btn-attention" @click="attentionEvent">点击关注</div>
+        <div class="btn-attention" data-alcode='e143' @click="attentionEvent">点击关注</div>
   </section>
 </template>
 <script>

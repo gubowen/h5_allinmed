@@ -1,20 +1,22 @@
 <template>
   <section class="allinmed-mainIndex">
-    <userLogo v-show="loginOnOff"></userLogo>
-    <noLogin v-show="!loginOnOff"></noLogin>
-    <focusWeixin v-show='!weixinState'></focusWeixin>
-    <accountSafe   v-show='customerName.length>0' ></accountSafe>
-    <linkUs></linkUs>
-    <button class="allinmed-personal-logout" v-show='customerName.length>0' @click='returnBack'>退出登录</button>
-    <transition name="fade">
-      <confirm
-        :confirmParams="{
-          'ensure':'确定',
-          'cancel':'取消',
-          'title':'确定退出登录吗？'
-          }" v-if="backShow" :showFlag.sync="backShow" @cancelClickEvent="loginBackCancelEvent"
-        @ensureClickEvent="loginEnsureEventWait"></confirm>
-    </transition>
+    <div data-alcode-mod='748'>
+      <userLogo v-show="loginOnOff"></userLogo>
+      <noLogin v-show="!loginOnOff"></noLogin>
+      <focusWeixin v-show='!weixinState'></focusWeixin>
+      <accountSafe   v-show='customerName.length>0' ></accountSafe>
+      <linkUs></linkUs>
+      <button class="allinmed-personal-logout" v-show='customerName.length>0' @click='returnBack'>退出登录</button>
+      <transition name="fade">
+        <confirm
+          :confirmParams="{
+            'ensure':'确定',
+            'cancel':'取消',
+            'title':'确定退出登录吗？'
+            }" v-if="backShow" :showFlag.sync="backShow" @cancelClickEvent="loginBackCancelEvent"
+          @ensureClickEvent="loginEnsureEventWait"></confirm>
+      </transition>
+    </div>
   </section>
 </template>
 <script  type="text/ecmascript-6">

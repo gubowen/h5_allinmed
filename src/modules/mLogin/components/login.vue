@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section class="loginRegisterBox">
+    <section class="loginRegisterBox" data-alcode-mod='745'>
       <ul class="loginRegisterTitle">
         <li class="fl on">{{loginStyle == "phone"?'手机验证登录':'账号密码登录'}}</li>
-        <li class="fr" @click="goReginster">注册</li>
+        <li class="fr" @click="goReginster" data-alcode='e150'>注册</li>
       </ul>
 
       <ul class="loginRegisterContent">
@@ -34,12 +34,12 @@
                      :class="{'hasContent':codeMessage.length>0}"
               >
               <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = "",isClick=false,allPass=false'></i>
-              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
+              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()" data-alcode='e147'>获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()" data-alcode='e148'>登录</button>
             <article class="changeAndForget">
-              <span class="changeLoginWay fl" @click="toggleLogin">账号密码登录</span>
+              <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e149'>账号密码登录</span>
             </article>
           </form>
         </li>
@@ -57,10 +57,10 @@
                  @click="pwHide=!pwHide"
                  :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()" data-alcode='e153'>登录</button>
             <article class="changeAndForget">
-              <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
-              <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
+              <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e152'>手机验证登录</span>
+              <span class="forgetPass fr" @click="goForgetPass()" data-alcode='e151'>忘记密码？</span>
             </article>
           </form>
         </li>
