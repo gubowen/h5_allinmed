@@ -78,7 +78,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     ]),
     //vConsole webPack plugin
     new vConsolePlugin({
-      enable: false // 发布代码前记得改回 false
+      enable: true // 发布代码前记得改回 false
     }),
   ]
 })
