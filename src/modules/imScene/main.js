@@ -71,7 +71,7 @@ class ImScene {
     this.router = new VueRouter({
       routes: this.routes,
     });
-    // Vue.use(vueg, this.router, options);
+    Vue.use(vueg, this.router, options);
   }
 
   routerStart() {

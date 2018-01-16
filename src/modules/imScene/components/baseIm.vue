@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner ev-fileUpHide" style="overflow:auto">
+  <section class="main-inner ev-fileUpHide" >
     <transition name="fadeDown">
       <article class="main-message-time">
         <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
