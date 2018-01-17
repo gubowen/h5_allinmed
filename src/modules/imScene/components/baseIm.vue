@@ -209,7 +209,7 @@
               v-if="payPopupShow">
     </payPopup>
     <transition name="fadeUp">
-      <footer v-show="inputBoxShow" :class="footerPosition">
+      <footer v-if="inputBoxShow" :class="footerPosition">
         <section class="footer-box-top">
           <section class="main-input-box-plus" @click='footerBottomFlag = footerBottomFlag?false:true'>
             <i class="icon-im-plus"></i>
@@ -232,7 +232,7 @@
             <p class="main-input-box-send" :class="{'on':textLength.length}" @click="sendMessage()">发送</p>
           </figure>
         </section>
-        <ul class="footer-box-bottom" v-show="footerBottomFlag">
+        <ul class="footer-box-bottom" v-if="footerBottomFlag">
           <li class="bottom-item" v-if="$store.state.toolbarConfig.image">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/picture@2x.png" width="350"
@@ -246,21 +246,18 @@
             <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
                    accept="image/*" multiple capture="camera">
           </li>
-          <li class="bottom-item" v-show="$store.state.toolbarConfig.video" ref="videoSendBox">
-            <a href="javascript:;" class="he-videoFirstLoadBtn" id="fuckface" ref="uploadBtn"></a>
-            <!--<figure class="bottom-item-content">-->
-            <!--<img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"-->
-            <!--height="234"/>-->
-            <!--<figcaption class="bottom-item-description">视频</figcaption>-->
-            <!--</figure>-->
-
-
-            <!--<input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"-->
-            <!--accept="video/*">-->
-            <!--<input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"-->
-            <!--multiple accept="video/*">-->
-            <!--<input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"-->
-            <!--multiple accept="video/*" capture="camcorder">-->
+          <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
+            <figure class="bottom-item-content">
+              <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
+                   height="234"/>
+              <figcaption class="bottom-item-description">视频</figcaption>
+            </figure>
+            <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   accept="video/*">
+            <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   multiple accept="video/*">
+            <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   multiple accept="video/*" capture="camcorder">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
@@ -354,7 +351,6 @@
   import getFileType from "common/js/util/getFileType.js";
 
   import "babel-polyfill";
-  import Qiniu from "common/js/third-party/qiniu/qiniu";
 
   let nim;
 
@@ -390,7 +386,7 @@
         imageProgress: {},
         // 视频发送进度
         videoProgress: {},
-        allMsgsGot: false,
+        allMsgsGot:false,
         // 文件pdf发送进度
         fileProgress: {},
         patientCustomerId: localStorage.getItem("userId"),
@@ -626,8 +622,8 @@
           done(error, obj) {
             if (type === "scroll" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
-              that.allMsgsGot = true;
-            } else if (type === "history" && obj.msgs.length === 0) {
+              that.allMsgsGot=true;
+            } else if (type === "history"&&obj.msgs.length===0) {
               that.getMedicalMessage();
             } else {
               obj.msgs.forEach((element, index) => {
@@ -712,7 +708,7 @@
           that.$store.state.previewSuggestionNum || that.scrollToBottom();
         }
 
-        if (medicalFlag && type === "history") {
+        if (medicalFlag&&type==="history") {
           if (that.msgList.length) {
             that.refreshState(-1);
           }
@@ -1190,8 +1186,8 @@
       },
       //聊天记录时间处理压入是0还是1
       getTimeStampShowList() {
-        this.beginTimestamp = 0;
-        this.timeStampShowList = [];
+        this.beginTimestamp=0;
+        this.timeStampShowList=[];
         this.msgList.forEach((element, index) => {
           if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
             this.beginTimestamp = element.time;
@@ -1453,26 +1449,26 @@
       },
       // 选择视频
       sendVideo(e) {
-        /*        if (e.target.files.length > 1) {
-                  this.toastControl("每次只能上传一个视频");
-                }
-                this.inputVideoFlag = false;
-                this.$nextTick(() => {
-                  this.inputVideoFlag = true;
-                })
-                let _file = e.target.files[0];
-                if (_file.size >= 104857600) {
-                  this.toastControl("视频最大为100M");
-                  return;
-                }
-                console.log(_file.type);
-                if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
-                  this.sendVideoFile(_file);
-                } else if (_file.type.includes("video")) {
-                  this.toastControl("请选择mp4或mov文件");
-                } else {
-                  this.toastControl("请选择视频文件");
-                }*/
+        if (e.target.files.length > 1) {
+          this.toastControl("每次只能上传一个视频");
+        }
+        this.inputVideoFlag = false;
+        this.$nextTick(() => {
+          this.inputVideoFlag = true;
+        })
+        let _file = e.target.files[0];
+        if (_file.size >= 104857600) {
+          this.toastControl("视频最大为100M");
+          return;
+        }
+        console.log(_file.type);
+        if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
+          this.sendVideoFile(_file);
+        } else if (_file.type.includes("video")) {
+          this.toastControl("请选择mp4或mov文件");
+        } else {
+          this.toastControl("请选择视频文件");
+        }
       },
       // 上传视频文件
       sendVideoFile(_file) {
@@ -1996,7 +1992,7 @@
           clearTimeout(this._scrollTips);
           this._scrollTips = setTimeout(() => {
             if (document.querySelector(".main-message").scrollTop < 200) {
-              if (!this.allMsgsGot) {
+              if (!this.allMsgsGot){
                 this.getMessageList("scrollInit");
               }
             }
@@ -2092,8 +2088,6 @@
         this.initScroll();
       }, 20);
       that.isShowPaySuccess(); //支付弹层
-
-
     },
     //组件更新之前的生命钩子
     beforeUpdate() {
@@ -2179,59 +2173,53 @@
       });
     },
     watch: {
-      "inputBoxShow"(flag) {
-        if (flag) {
-          this.$nextTick(() => {
-            this.uploader = Qiniu.uploader({
-              runtimes: "html5,flash,html4", // 上传模式，依次退化
-              browse_button: "fuckface", // 上传选择的点选按钮，必需
-              multi_selection: false,
-              uptoken_url: "/mcall/qiniu/storage/v1/getRealToken/", // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-              get_new_uptoken: true, // 设置上传文件的时候是否每次都重新获取新的uptoken
-              domain: "allinmed", // bucket域名，下载资源时用到，必需
-              container: this.$refs.videoSendBox, // 上传区域DOM ID，默认是browser_button的父元素
-              max_file_size: "60mb", // 最大文件体积限制
-              flash_swf_url: "path/of/plupload/Moxie.swf", //引入flash，相对路径
-              dragdrop: true, // 开启可拖曳上传
-              drop_element: "container", // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-              chunk_size: "4mb", // 分块上传时，每块的体积
-              filters: {
-                mime_types: [
-                  //只允许上传video  为兼容移动端上传视频文件，不传接收类型参数，
-                  //{title: "video", extensions: "mp4,mov,avi,wmv,flv"},
-                  // {title : "Video files", extensions : "flv,mpg,mpeg,avi,wmv,mov,3gp,asf,rm,rmvb,mkv,m4v,mp4"}
-                ],
-                prevent_duplicates: false //不允许选取重复文件
-              },
-              auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-              init: {
-                FilesAdded: function (up, files) {
-
-                },
-                BeforeUpload: function (up, file) {
-
-                },
-                UploadProgress: function (up, file) {
-
-                },
-                FileUploaded: function (up, file, info) {
-                  console.log(up);
-                  console.log(file);
-                  console.log(info);
-                },
-                Error: function (up, err, errTip) {
-
-                },
-                UploadComplete: function () {
-                  //队列文件处理完毕后，处理相关的事情
-                },
-                Key: function (up, file) {
-                }
-              }
-            });
-          })
-        }
-      }
+      msgList: {
+        handler(newValue, oldValue) {
+          setTimeout(() => {
+            this.refreshScroll();
+          }, 20);
+        },
+        deep: true
+      },
+      // //监听图片上传完成，可以继续上传；
+      // progressImage(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputImageFlag = true;
+      //   } else {
+      //     this.inputImageFlag = false;
+      //   }
+      // },
+      // //监听视频上传完成，可以继续上传；
+      // progressVideo(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputVideoFlag = true;
+      //   } else {
+      //     this.inputVideoFlag = false;
+      //   }
+      // },
+      // // 监听pdf上传完成，可以继续上传；
+      // progressFile(newVal, oldVal) {
+      //   if (newVal == "0%" || newVal == "100%") {
+      //     this.inputPdfFlag = true;
+      //   } else {
+      //     this.inputPdfFlag = false;
+      //   }
+      // },
+      // lastTime: function (time) {
+      //   if (time <= 0) {
+      //     if (this.inputBoxShow) {
+      //       this.sendConsultState(5);
+      //       this.refreshState();
+      //     }
+      //     this.lastTimeShow = false;
+      //     this.inputBoxShow = false;
+      //     this.consultTipsShow = true;
+      //   } else {
+      //     this.lastTimeShow = true;
+      //     this.inputBoxShow = true;
+      //     this.consultTipsShow = false;
+      //   }
+      // }
     },
     components: {
       MedicalReport,
@@ -2487,14 +2475,6 @@
   .fadeUp-leave-to {
     opacity: 0;
     transform: translateY(50%);
-  }
-
-  .he-videoFirstLoadBtn {
-    display: block;
-    width: rem(152px);
-    height: rem(152px);
-    background: url("/image/img00/patientConsult/upload_photo_default@2x.png");
-    background-size: 100% 100%;
   }
 </style>
 
