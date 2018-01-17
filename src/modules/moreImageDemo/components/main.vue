@@ -12,11 +12,11 @@
       <!--</ul>-->
     <!--</section>-->
 
-    <section class="record">
-      <button class="record-start" @click="startRecord">录音开始</button>
-      <button class="record-end" @click="stopRecord">录音结束</button>
-      <button class="play" @click="playRecord">播放</button>
-    </section>
+    <!--<section class="record">-->
+      <!--<button class="record-start" @click="startRecord">录音开始</button>-->
+      <!--<button class="record-end" @click="stopRecord">录音结束</button>-->
+      <!--<button class="play" @click="playRecord">播放</button>-->
+    <!--</section>-->
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -25,7 +25,9 @@
   export default{
       data(){
         return {
-          localIdList:[],
+          localIdList:[
+            require("../../../common/image/arrow_back.png")
+          ],
           serverIdList:[],
           lazyImageList:[
             require("../../../common/image/arrow_back.png"),
@@ -51,9 +53,9 @@
               sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
               success: function (res) {
                 console.log(res.localIds);
-                that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                that.localIdList = that.localIdList.concat(res.localIds); // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                 console.log("选择图片成功");
-                that.localIdList.forEach(function (value) {
+                res.localIds.forEach(function (value) {
                   that.uploadImages(value);
                 })
               }
@@ -66,7 +68,7 @@
             isShowProgressTips: 1, // 默认为1，显示进度提示
             success: function (data) {
               console.log(data.serverId);
-              that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
+//              that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
               api.ajax({
                 url: "/mcall/customer/patient/case/attachment/v1/createWx/",
                 method: "post",
