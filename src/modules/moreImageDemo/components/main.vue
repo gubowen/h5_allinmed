@@ -54,6 +54,11 @@
           hls.on(Hls.Events.MANIFEST_PARSED,()=> {
             video.play();
           });
+        }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = 'https://vpro.allinmed.cn/1516166833789?avvod/m3u8/s/600x900';
+          video.addEventListener('canplay',function() {
+            video.play();
+          });
         }
       },
       methods:{
