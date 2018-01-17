@@ -108,7 +108,8 @@
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/", //更新问诊次数
     getToken: "/mcall/im/interact/v1/refreshToken/",
     triageAssign: "/mcall/customer/case/consultation/v1/create/",
-    getMedicalList: "/mcall/customer/patient/case/v1/getMapById/"
+    getMedicalList: "/mcall/customer/patient/case/v1/getMapById/",
+    uploadWX:"/mcall/customer/patient/case/attachment/v1/createWx/"  //微信上传图片
   }
 
   export default {
@@ -131,7 +132,7 @@
           doctorId: api.getPara().doctorId
         },
         createParams:{
-          visitSiteId: 17,
+          visitSiteId: api.getSiteId(),
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
           customerId: "",
@@ -291,6 +292,35 @@
           this.submitTip = true;
         }
       },
+      //微信上传图片
+      wxUploadImg(imageUrl,caseId){
+        wx.uploadImage({
+          localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function (data) {
+            console.log(data.serverId);
+            api.ajax({
+              url: XHRList.uploadWX,
+              method: "post",
+              data: {
+                caseCategoryId: "1",
+                imageType: "1",
+                mediaId: data.serverId,
+                caseId: caseId
+              },
+              done(res) {
+                if (res.responseObject.responseStatus) {
+                  console.log("上传成功");
+                }
+              }
+            })
+          },
+          fail:function (err) {
+            console.log("上传失败");
+            console.log(err);
+          }
+        });
+      },
       //创建问诊单
       createCaseData(){
         let that = this;
@@ -308,6 +338,9 @@
           done(data) {
             if (data.responseObject.responsePk !== 0) {
               that.responseCaseId = data.responseObject.responsePk;
+              that.allParams.wxImgLists.forEach(function (value) {
+                that.wxUploadImg(value,data.responseObject.responsePk);
+              })
               localStorage.setItem("payCaseId", that.responseCaseId);
               //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
               api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
@@ -331,7 +364,7 @@
             consultationType: 1,
             consultationState: -1,
             consultationLevel: 6, //咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
-            siteId: 17,
+            siteId: api.getSiteId(),
             caseType: 11 //从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
           },
           done(res) {
@@ -471,7 +504,7 @@
             patientId: this.createParams.patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: 21,
+            siteId: api.getSiteId(),
             caseType: 0
           },
           done(data) {
@@ -584,14 +617,6 @@
       this.initCaseParams();
       this.heightPickerInit();
       this.weightPickerInit();
-      this.$nextTick(() => {
-        setTimeout(() => {
-          Array.from(this.$el.querySelectorAll("textarea")).forEach((element, index) => {
-            autosize(element);
-            autosize.update(element);
-          });
-        }, 1000);
-      });
       api.forbidShare();
     },
     components: {
