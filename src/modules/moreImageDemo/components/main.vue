@@ -25,9 +25,7 @@
   export default{
       data(){
         return {
-          localIdList:[
-            require("../../../common/image/arrow_back.png")
-          ],
+          localIdList:[],
           serverIdList:[],
           lazyImageList:[
             require("../../../common/image/arrow_back.png"),
@@ -47,15 +45,12 @@
       methods:{
         chooseImages(){
           let that = this;
-//          that.$router.push({
-//            name:'followWX',
-//            query: that.$route.query
-//          })
           wx.chooseImage({
-              count: 9, // 默认9
+              count: 1, // 默认9
               sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
               sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
               success: function (res) {
+                console.log(res.localIds);
                 that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                 console.log("选择图片成功");
                 that.localIdList.forEach(function (value) {
@@ -70,8 +65,24 @@
             localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
             isShowProgressTips: 1, // 默认为1，显示进度提示
             success: function (data) {
+              console.log(data.serverId);
               that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
-              console.log(that.serverIdList);
+              api.ajax({
+                url: "/mcall/customer/patient/case/attachment/v1/createWx/",
+                method: "post",
+                data: {
+                  customerId: "1508466840782",
+                  imageType: "image",
+                  mediaId: data.serverId,
+                  fileName: "image",
+                  extName: "png"
+                },
+                done(res) {
+                  if (res.responseObject.responseStatus) {
+                    console.log("上传成功");
+                  }
+                }
+              })
             },
             fail:function (err) {
               console.log("上传失败");
