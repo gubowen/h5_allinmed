@@ -609,7 +609,7 @@
           endTime: that.historyBeginTime,
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
-            if (type === "scroll" && obj.msgs.length === 0) {
+            if (type === "scrollInit" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
               that.allMsgsGot=true;
             } else if (type === "history"&&obj.msgs.length===0) {
@@ -683,10 +683,6 @@
         let that = this;
         let medicalFlag = true; //是否有问诊单；
         for (let i = 0; i < that.msgList.length; i++) {
-          //判断消息列表里面是否有问诊单，没有的话发送一条
-          if (that.msgList[i].type === "custom" && JSON.parse(that.msgList[i].content).type === "medicalReport") {
-            medicalFlag = false;
-          }
           //判断消息列表里面有几条初诊建议，记录在vuex中
           if (that.msgList[i].type === "custom" && JSON.parse(that.msgList[i].content).type === "previewSuggestion") {
             store.commit("addPreviewSuggestionNum");
@@ -695,12 +691,6 @@
         //如果没有初诊建议，直接定位到底部
         if (type === "history") {
           that.$store.state.previewSuggestionNum || that.scrollToBottom();
-        }
-
-        if (medicalFlag&&type==="history") {
-          if (that.msgList.length) {
-            that.refreshState(-1);
-          }
         }
       },
       // 设置多媒体进度
