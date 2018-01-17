@@ -5,6 +5,7 @@
 
 function QiniuJsSDK() {
     var qiniuUploadUrl;
+    debugger;
     if (window.location.protocol === 'https:') {
         qiniuUploadUrl = 'https://up-z1.qbox.me';
         // qiniuUploadUrl = 'https://up.qbox.me';

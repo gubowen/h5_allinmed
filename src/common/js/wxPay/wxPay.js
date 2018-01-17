@@ -653,7 +653,7 @@ modules.wxPay = function (Obj) {
             caseId: common.getpara().caseId,
             customerId: common.getpara().customerId,
             consultationType: 1,
-            siteId: 17
+            siteId: api.getSiteId()
           })
         },
         success: function (data) {
@@ -674,7 +674,7 @@ modules.wxPay = function (Obj) {
                   consultationType: 1,
                   consultationState: -1,
                   consultationLevel: $(".swiper-slide-active .go_payment").attr("data-type"),
-                  siteId: 17,
+                  siteId: api.getSiteId(),
                   caseType: common.getpara().caseType
                 })
               },

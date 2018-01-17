@@ -1,6 +1,6 @@
 <template>
 
-  <section class="mHome"  data-alcode-mod='740'>
+  <section class="mHome">
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper" style="width:90%" v-if="adList.length>0">
@@ -14,49 +14,51 @@
       </swiper>
     </figure>
     <figure class="advertising">12万权威专家在线出诊</figure>
-    <figure class="diagnose">
-      <section class="btn-diagnose" @click="diagnoseEvent" data-alcode='e144'>点击问诊</section>
-    </figure>
-    <figure class="history" v-show="dataGetFinish">
-      <header><h3>问诊历史</h3>
-        <p class="btn-more" @click="moreEvent">更多</p></header>
-      <!--未登录-->
-      <section class="content" v-if="!loginFlag">
-        <section class="login">
-          <p>您还没有登录</p>
-          <div class="btn-login" @click="loginEvent">点击登录</div>
+    <div data-alcode-mod='740'>
+      <figure class="diagnose">
+        <section class="btn-diagnose" @click="diagnoseEvent" data-alcode='e144'>点击问诊</section>
+      </figure>
+      <figure class="history" v-show="dataGetFinish">
+        <header><h3>问诊历史</h3>
+          <p class="btn-more" @click="moreEvent" data-alcode='e145'>更多</p></header>
+        <!--未登录-->
+        <section class="content" v-if="!loginFlag">
+          <section class="login">
+            <p>您还没有登录</p>
+            <div class="btn-login" @click="loginEvent">点击登录</div>
+          </section>
         </section>
-      </section>
-      <!--已登录-->
-      <!--无问诊历史-->
-      <section class="content" v-if="loginFlag&&diagnoseList.length==0">
-        <section class="login">
-          <p>您还没有问诊记录</p>
-          <section class="btn-login" @click="diagnoseEvent" data-alcode='e144'>点击看病</section>
+        <!--已登录-->
+        <!--无问诊历史-->
+        <section class="content" v-if="loginFlag&&diagnoseList.length==0">
+          <section class="login">
+            <p>您还没有问诊记录</p>
+            <section class="btn-login" @click="diagnoseEvent" data-alcode='e146'>点击看病</section>
+          </section>
         </section>
-      </section>
-      <!--有问诊历史-->
-      <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList"
-               @click="moreEvent">
-        <div class="doctor">
-          <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
-          <div class="doctor-info">
-            <p class="doctor-type"><span
-              class="name">{{item.consultationType == 0 ? '唯医门诊医生' : getFullName(item)}}</span><span class="career">{{item.medicalTitle}}</span>
-            </p>
-            <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime.substring(0,item.createTime.length-2)}}</span>
-            </p>
+        <!--有问诊历史-->
+        <section class="history-info" v-if="loginFlag&&diagnoseList.length>0" v-for="item in diagnoseList"
+                @click="moreEvent" data-alcode='e146'>
+          <div class="doctor">
+            <div class="doctor-img"><img :src="getImgUrl(item)"/></div>
+            <div class="doctor-info">
+              <p class="doctor-type"><span
+                class="name">{{item.consultationType == 0 ? '唯医门诊医生' : getFullName(item)}}</span><span class="career">{{item.medicalTitle}}</span>
+              </p>
+              <p class="doctor-time"><span>{{getInquiryType(item)}}</span> <span>{{item.createTime.substring(0,item.createTime.length-2)}}</span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="patient">
-          <div class="patient-info"><p class="title">患者</p>
-            <p class="detail">{{item.patientName && item.patientName.length > 5 ? item.patientName.substring(0, 5) +
-              "..." : item.patientName}}</p></div>
-          <div class="patient-info"><p class="title">主诉</p>
-            <p class="detail">{{item.mainContent.caseMain}}</p></div>
-        </div>
-      </section>
-    </figure>
+          <div class="patient">
+            <div class="patient-info"><p class="title">患者</p>
+              <p class="detail">{{item.patientName && item.patientName.length > 5 ? item.patientName.substring(0, 5) +
+                "..." : item.patientName}}</p></div>
+            <div class="patient-info"><p class="title">主诉</p>
+              <p class="detail">{{item.mainContent.caseMain}}</p></div>
+          </div>
+        </section>
+      </figure>
+    </div>
     <tabbar :selected="1"></tabbar>
   </section>
 </template>

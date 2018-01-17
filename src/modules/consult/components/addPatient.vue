@@ -356,7 +356,8 @@
         this.credentialPickerInit();//证件类型选择器初始化
         this.birthPickerInit();//出生日期选择器初始化
         this.getPatientPhone();//获取绑定的手机号
-        this.$validator.updateDictionary({
+        console.log(this.$validator)
+        this.$validator.localize({
           en: {
             custom: {
               //用户姓名的验证

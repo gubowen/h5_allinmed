@@ -1,6 +1,6 @@
 <template>
   <section class="allinmed-personal-login">
-    <a class="login" :href="loginUrl" @click.stop="local">登录/注册</a>
+    <a class="login" data-alcode='e158' :href="loginUrl" @click.stop="local">登录/注册</a>
   </section>
 </template>
 <style scoped lang="scss" rel="stylesheet/scss">

@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner ev-fileUpHide" style="overflow:auto">
+  <section class="main-inner ev-fileUpHide">
     <transition name="fadeDown">
       <article class="main-message-time">
         <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
@@ -7,7 +7,7 @@
           <span class="service-time-top">服务时间</span>
           <span class="service-time-bottom">09: 00-22: 00</span>
         </p> -->
-        <p class="new-service-time">服务时间：08:00-21:00</p>
+        <p class="new-service-time">服务时间：09:00-22:00</p>
       </article>
     </transition>
     <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
@@ -239,9 +239,12 @@
                    height="234"/>
               <figcaption class="bottom-item-description">图片</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple>
-            <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender" accept="image/*" multiple capture="camera">
+            <input type="file" v-if="isIos&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                   accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&!isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                   accept="image/*" multiple>
+            <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
+                   accept="image/*" multiple capture="camera">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
             <figure class="bottom-item-content">
@@ -249,17 +252,22 @@
                    height="234"/>
               <figcaption class="bottom-item-description">视频</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"  accept="video/*">
-            <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*">
-            <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender" multiple accept="video/*" capture="camcorder">
+            <input type="file" v-if="isIos&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   accept="video/*">
+            <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   multiple accept="video/*">
+            <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
+                   multiple accept="video/*" capture="camcorder">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
               <img class="bottom-item-image" src="../../../common/image/imScene/file@2x.png" width="350" height="234"/>
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
-            <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
-            <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender" accept="application/pdf">
+            <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                   accept="application/pdf">
+            <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                   accept="application/pdf">
           </li>
         </ul>
       </footer>
@@ -277,8 +285,8 @@
       'title':'您的信息正在发送中',
       'content':'现在离开还需重新发送',
       }" v-if="isLeave"
-        @cancelClickEvent="goFeedback()"
-        @ensureClickEvent="isLeave =false;"
+             @cancelClickEvent="goFeedback()"
+             @ensureClickEvent="isLeave =false;"
     >
     </confirm>
     <loading :show="finish"></loading>
@@ -348,9 +356,9 @@
 
   let _weChat = false;
   siteSwitch.weChatJudge(() => {
-    _weChat=true;
+    _weChat = true;
   }, () => {
-    _weChat=false;
+    _weChat = false;
   });
 
   const XHRList = {
@@ -372,12 +380,13 @@
     data() {
       return {
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
-        isWeChat:_weChat,
+        isWeChat: _weChat,
         nim: {},
         // 图片发送进度
         imageProgress: {},
         // 视频发送进度
         videoProgress: {},
+        allMsgsGot:false,
         // 文件pdf发送进度
         fileProgress: {},
         patientCustomerId: localStorage.getItem("userId"),
@@ -391,12 +400,13 @@
         inputImageFlag: true, //上传图片input控制
         inputVideoFlag: true, //上传视频input控制
         inputPdfFlag: true,//上传pdf文件控制
-        progressNum:0,// 正在上传的个数
+        progressNum: 0,// 正在上传的个数
         imageList: [], //页面图片数组
         consultationId: "",
         timeStampShowList: [], //时间戳数组
         orderSourceId: "",
         beginTimestamp: 0,
+        historyBeginTime: 0,
         finish: true,
         lastTimeShow: false, //顶部时间的提示和输入框是否展示
         inputBoxShow: false, //底部是否显示
@@ -427,7 +437,7 @@
 
     methods: {
       // 去意见反馈；
-      goFeedback () {
+      goFeedback() {
         location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
       },
       // 控制 vuex toast控制
@@ -485,7 +495,7 @@
             },
             //同步登录用户名片的回调, 会传入用户名片
             onmyinfo(userData) {
-              that.getMessageList();
+              that.getMessageList("history");
             },
             onwillreconnect(obj) {
               console.log(
@@ -553,17 +563,6 @@
         }
       },
 
-      //收到检查检验隐藏顶部框；
-      // pauseTime(msg) {
-      //   let that = this;
-      //   if (
-      //     msg.type === "custom" &&
-      //     JSON.parse(msg.content).type === "checkSuggestion"
-      //   ) {
-      //     that.lastTimeShow = false; //顶部时间取消
-      //     store.commit("stopLastTimeCount"); //时间计时取消
-      //   }
-      // },
       //获取页面图片消息存到数组里
       getImageList() {
         if (this.$refs.bigImg) {
@@ -601,28 +600,42 @@
         });
       },
       //获取消息列表
-      getMessageList() {
+      getMessageList(type) {
         let that = this;
         //获取云端历史记录
-        document.body.scrollTop = 0;
         this.nim.getHistoryMsgs({
           scene: "p2p",
+          beginTime: 0,
+          endTime: that.historyBeginTime,
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
-            that.msgList = obj.msgs.reverse();
-            console.log("dom更新前");
-            that.getTimeStampShowList();
-            // 判断是否需要发送推荐医生
-            that.sendSuggestDoctor();
-            //需要更改的定位
-            that.$nextTick(function () {
-              //循环消息列表，处理需求
-              that.loopMessage();
-              that.getImageList();
-              //渲染完毕
-            });
+            if (type === "scrollInit" && obj.msgs.length === 0) {
+              that.toastControl(`没有更多消息了`);
+              that.allMsgsGot=true;
+            } else if (type === "history"&&obj.msgs.length===0) {
+              that.getMedicalMessage();
+            } else {
+              obj.msgs.forEach((element, index) => {
+                if (index == obj.msgs.length - 1) {
+                  that.historyBeginTime = element.time
+                }
+                that.msgList.unshift(element);
+              });
+              console.log("dom更新前");
+              that.getTimeStampShowList();
+              // 判断是否需要发送推荐医生
+              that.sendSuggestDoctor();
+              //需要更改的定位
+              that.$nextTick(() => {
+                //循环消息列表，处理需求
+                that.loopMessage(type);
+                that.getImageList();
+                //渲染完毕
+              });
+            }
+
           },
-          limit: 100 //本次查询的消息数量限制, 最多100条, 默认100条
+          limit: 20 //本次查询的消息数量限制, 最多100条, 默认100条
         });
       },
       // 判断是否需要发送推荐医生
@@ -666,36 +679,18 @@
         }
       },
       //循环消息列表，处理需求
-      loopMessage() {
+      loopMessage(type) {
         let that = this;
         let medicalFlag = true; //是否有问诊单；
         for (let i = 0; i < that.msgList.length; i++) {
-          //判断消息列表里面是否有问诊单，没有的话发送一条
-          if (
-            that.msgList[i].type === "custom" &&
-            JSON.parse(that.msgList[i].content).type === "medicalReport"
-          ) {
-            medicalFlag = false;
-          }
           //判断消息列表里面有几条初诊建议，记录在vuex中
-          if (
-            that.msgList[i].type === "custom" &&
-            JSON.parse(that.msgList[i].content).type === "previewSuggestion"
-          ) {
+          if (that.msgList[i].type === "custom" && JSON.parse(that.msgList[i].content).type === "previewSuggestion") {
             store.commit("addPreviewSuggestionNum");
           }
         }
-        // debugger;
         //如果没有初诊建议，直接定位到底部
-        that.$store.state.previewSuggestionNum || that.scrollToBottom();
-        if (medicalFlag) {
-          if (that.msgList.length) {
-            that.refreshState(-1);
-          }
-          that.getMedicalMessage();
-        } else {
-          //判断消息列表里面是否有结束问诊，没有的话发送一条
-          // that.hasMiddleTips();
+        if (type === "history") {
+          that.$store.state.previewSuggestionNum || that.scrollToBottom();
         }
       },
       // 设置多媒体进度
@@ -796,7 +791,6 @@
             data: Object.assign({}, data.data, {
               patientId: api.getPara().patientId,
               consultationid: this.orderSourceId
-              //              shuntCustomerId: api.getPara().shuntCustomerId
             })
           }),
           done(error, msg) {
@@ -845,7 +839,7 @@
             patientId: api.getPara().patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: 17,
+            siteId: api.getSiteId(),
             caseType: 0
           },
           done(data) {
@@ -914,7 +908,7 @@
         return flag;
       },
       deleteMsgEvent(msg) {
-        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime)/60}分钟`;
+        const _DeleteTimeLimit = `${parseInt(this.$store.state.toolbarConfig.deleteTime) / 60}分钟`;
         const that = this;
         this.nim.deleteMsg({
           msg: msg,
@@ -1089,7 +1083,7 @@
         console.log(
           `发送${msg.scene}${msg.type}消息${!error ? "成功" : "失败"}id=${msg.idClient}`
         );
-        if (!(msg.type==="custom"&&JSON.parse(msg.content).type==="deleteMsgTips")){
+        if (!(msg.type === "custom" && JSON.parse(msg.content).type === "deleteMsgTips")) {
           this.sendTextContent = "";
         }
         if ((msg.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
@@ -1100,10 +1094,13 @@
         }
         if (!error) {
           this.msgList.push(msg);
-          setTimeout(() => {
+          if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
+          } else {
+            setTimeout(function () {
               document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 200);
+            }, 20);
+          }
 
           // this.refreshScroll();
         } else {
@@ -1168,6 +1165,8 @@
       },
       //聊天记录时间处理压入是0还是1
       getTimeStampShowList() {
+        this.beginTimestamp=0;
+        this.timeStampShowList=[];
         this.msgList.forEach((element, index) => {
           if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
             this.beginTimestamp = element.time;
@@ -1206,9 +1205,9 @@
         }
       },
       // 替换的索引
-      replaceIndex (type) {
+      replaceIndex(type) {
         let indexTemp
-        this.msgList.map( (item,index) => {
+        this.msgList.map((item, index) => {
           if (item.replace && item.replace == type) {
             indexTemp = index;
             return;
@@ -1221,7 +1220,7 @@
         const that = this;
         console.log(e.target.files);
         that.inputImageFlag = false;
-        this.$nextTick(  () => {
+        this.$nextTick(() => {
           that.inputImageFlag = true;
         })
         if (e.target.files.length > 1) {
@@ -1262,10 +1261,10 @@
           }),
           loading: true,
           from: this.userData.account,
-          replace:"multiple",
+          replace: "multiple",
         }
         that.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         that.scrollToBottom();
         that.mulitpleLastIndex = that.msgList.length - 1;
         Array.from(list).forEach((element, index) => {
@@ -1304,7 +1303,7 @@
         });
       },
       // 发送多图文件
-      sendMulitpleImage(list,_ele) {
+      sendMulitpleImage(list, _ele) {
         const that = this;
         this.nim.sendCustomMsg({
           scene: "p2p",
@@ -1324,7 +1323,7 @@
           done(error, msg) {
             if (!error) {
               console.log(msg);
-              that.progressNum  --;
+              that.progressNum--;
               // that.msgList.map( (item,index) => {
               //   if (item.replace && item.replace == 'multiple') {
               //     that.mulitpleLastIndex = index;
@@ -1333,7 +1332,7 @@
               // });
               // console.log(that.replaceIndex('multiple'));
               // that.msgList[that.replaceIndex('multiple')] = msg;
-              that.msgList[that.msgList.indexOf(_ele)]=msg;
+              that.msgList[that.msgList.indexOf(_ele)] = msg;
               that.scrollToBottom();
             }
           }
@@ -1348,11 +1347,11 @@
           },
           type: "image",
           from: that.userData.account,
-          replace:'image',
+          replace: 'image',
           loading: true,
         }
         this.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         this.$nextTick(() => {
           that.scrollToBottom();
         })
@@ -1369,7 +1368,7 @@
             //   index: that.imageLastIndex
             // };
             let indexflag = that.msgList.indexOf(_ele);
-            that.$set(that.imageProgress,indexflag,{
+            that.$set(that.imageProgress, indexflag, {
               uploading: true,
               progress: obj.percentageText,
               index: indexflag
@@ -1399,8 +1398,8 @@
                   // that.msgList[that.imageLastIndex] = msg;
                   let numFlag = that.msgList.indexOf(_ele);
                   that.msgList[numFlag] = msg;
-                  that.progressNum  --;
-                  that.$set(that.imageProgress,numFlag,{
+                  that.progressNum--;
+                  that.$set(that.imageProgress, numFlag, {
                     uploading: false,
                     progress: "0%",
                     index: 0,
@@ -1433,7 +1432,7 @@
           this.toastControl("每次只能上传一个视频");
         }
         this.inputVideoFlag = false;
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           this.inputVideoFlag = true;
         })
         let _file = e.target.files[0];
@@ -1442,9 +1441,9 @@
           return;
         }
         console.log(_file.type);
-        if (_file.type.includes("video") && (/mp4/.test(_file.type)||/mov/.test(_file.type)||/quicktime/.test(_file.type))) {
+        if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
           this.sendVideoFile(_file);
-        } else if (_file.type.includes("video")){
+        } else if (_file.type.includes("video")) {
           this.toastControl("请选择mp4或mov文件");
         } else {
           this.toastControl("请选择视频文件");
@@ -1461,10 +1460,10 @@
           type: "video",
           loading: true,
           from: that.userData.account,
-          replace:'video',
+          replace: 'video',
         }
         this.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         that.scrollToBottom();
         this.nim.previewFile({
           type: "video",
@@ -1477,7 +1476,7 @@
             //   index: that.videoLastIndex
             // };
             let indexflag = that.msgList.indexOf(_ele)
-            that.$set(that.videoProgress,indexflag,{
+            that.$set(that.videoProgress, indexflag, {
               uploading: true,
               progress: obj.percentageText,
               index: indexflag
@@ -1505,17 +1504,17 @@
                 file: file,
                 type: "video",
                 done(error, msg) {
-                  that.progressNum  --;
+                  that.progressNum--;
                   let numFlag = that.msgList.indexOf(_ele);
-                  that.$set(that.videoProgress,numFlag,{
+                  that.$set(that.videoProgress, numFlag, {
                     uploading: false,
                     progress: "0%",
                     index: 0,
                   })
                   that.msgList[numFlag] = msg;
                   // that.msgList.map( (item,index) => {
-                    //   if (item.replace && item.replace == 'video') {
-                      //     that.videoLastIndex = index;
+                  //   if (item.replace && item.replace == 'video') {
+                  //     that.videoLastIndex = index;
                   //     return;
                   //   }
                   // });
@@ -1539,17 +1538,17 @@
       sendPdf(e) {
 
         this.inputPdfFlag = false;
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           this.inputPdfFlag = true;
         })
 
         let _file = e.target.files[0];
-        getFileType(_file).then((flag)=>{
+        getFileType(_file).then((flag) => {
           if (_file.type.includes("pdf")) {
             this.sendPdfFile(_file);
-          } else if (_file.type.length===0&&flag){
+          } else if (_file.type.length === 0 && flag) {
             this.sendPdfFile(_file);
-          }else{
+          } else {
             this.toastControl("请选择pdf文件");
           }
         });
@@ -1568,11 +1567,11 @@
           }),
           type: "file",
           from: that.userData.account,
-          replace:"pdf",
-          loading:true,
+          replace: "pdf",
+          loading: true,
         }
         this.msgList.push(_ele);
-        that.progressNum  ++;
+        that.progressNum++;
         that.scrollToBottom();
         that.fileLastIndex = that.msgList.length - 1;
         const reader = new FileReader();
@@ -1584,7 +1583,7 @@
             uploadprogress(obj) {
               // that.scrollToBottom();
               let indexflag = that.msgList.indexOf(_ele)
-              that.$set(that.fileProgress,indexflag,{
+              that.$set(that.fileProgress, indexflag, {
                 uploading: true,
                 progress: obj.percentageText,
                 index: indexflag
@@ -1604,7 +1603,7 @@
               // show file to the user
               file = Object.assign(file, {
                 name: _file.name,
-                ext:"pdf"
+                ext: "pdf"
               });
               console.log(file);
               if (!error) {
@@ -1621,9 +1620,9 @@
                   file: file,
                   type: "file",
                   done(error, msg) {
-                    that.progressNum  --;
+                    that.progressNum--;
                     let numFlag = that.msgList.indexOf(_ele);
-                    that.$set(that.fileProgress,numFlag,{
+                    that.$set(that.fileProgress, numFlag, {
                       uploading: false,
                       progress: "0%",
                       index: 0,
@@ -1693,7 +1692,7 @@
           url: XHRList.getPrice,
           method: "POST",
           data: {
-            visitSiteId: 17, //string	是	站点
+            visitSiteId: api.getSiteId(), //string	是	站点
             maxResult: 999,
             id: 0
           },
@@ -1968,16 +1967,16 @@
         }
       },
       initScroll() {
-        if (!this.$refs.wrapper) {
-          return;
-        }
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          probeType: 3,
-          click: true,
-          // swipeTime:1500,
-          momentum: true,
-          deceleration: 0.01
-        });
+        document.querySelector(".main-message").addEventListener("scroll", () => {
+          clearTimeout(this._scrollTips);
+          this._scrollTips = setTimeout(() => {
+            if (document.querySelector(".main-message").scrollTop < 200) {
+              if (!this.allMsgsGot){
+                this.getMessageList("scrollInit");
+              }
+            }
+          }, 200);
+        })
       },
       refreshScroll() {
         this.scroll && this.scroll.refresh();
@@ -1985,7 +1984,7 @@
     },
     computed: {
       // 是否可以离开，传给suggest 的参数
-      leaveFlag () {
+      leaveFlag() {
         if (this.progressNum != 0) {
           return true;
         } else {
@@ -2065,7 +2064,7 @@
       localStorage.setItem("PCIMLinks", location.href);
       this.setFooterPosition();
       setTimeout(() => {
-        // this.initScroll();
+        this.initScroll();
       }, 20);
       that.isShowPaySuccess(); //支付弹层
     },
@@ -2289,7 +2288,7 @@
     line-height: rem(70px);
     text-align: center;
     display: block;
-    transform:translateY(-50%);
+    transform: translateY(-50%);
     width: rem(136px);
     height: rem(70px);
     background: url("../../../../src/common/image/imScene/bullet_withdraw.png");
@@ -2318,7 +2317,7 @@
       margin-left: rem(15px);
       max-height: 2.5rem;
       overflow: auto;
-      .area-content{
+      .area-content {
         position: relative;
         pre {
           display: block;

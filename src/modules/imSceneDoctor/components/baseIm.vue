@@ -229,7 +229,7 @@
               <input type="file" v-if="!isIos&&isWeChat&&inputImageFlag" @change="sendImage($event)" ref="imageSender"
                      accept="image/*" multiple capture="camera">
             </li>
-            <li class="bottom-item" v-if="$store.state.toolbarConfig.video">
+            <li class="bottom-item" v-if="$store.state.toolbarConfig.video" ref="videoSendBox">
               <figure class="bottom-item-content">
                 <img class="bottom-item-image" src="../../../common/image/imScene/pictures@2x.png" width="350"
                      height="234"/>
@@ -329,7 +329,7 @@
   import BScroll from "better-scroll";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
 
-
+  import GetQiniuToken from "common/js/IM_BaseMethod/getQiniuToken";
   import $ from "jquery";
 
   let nim;
@@ -355,6 +355,9 @@
   };
   const IS_IOS = net.browser().ios;
   const IS_Android = net.browser().android;
+
+
+  const getQiniuToken=new GetQiniuToken();
   export default {
     data() {
       return {
@@ -370,6 +373,8 @@
           progress: "0%",
           index: 0
         },
+        allMsgsGot: false,
+        historyBeginTime: 0,
         isLeave: false,
         patientCustomerId: localStorage.getItem("userId") || api.getPara().patientCustomerId,
         onFocus: false,
@@ -510,7 +515,7 @@
         const that = this;
         nimEnv().then(nimEnv => {
           this.nim = NIM.getInstance({
-            debug:  !!localStorage.getItem("imDebugOpen"),
+            debug: !!localStorage.getItem("imDebugOpen"),
             appKey: nimEnv,
             account: this.userData.account,
             token: this.userData.token,
@@ -520,7 +525,7 @@
               that.getPatientBase();
             },
             onmyinfo(userData) {
-              that.getMessageList();
+              that.getMessageList("history");
               //            that.userData = userData;
             },
             onwillreconnect(obj) {
@@ -765,39 +770,54 @@
         }
         return flag;
       },
-      getMessageList() {
+      getMessageList(type) {
         let that = this;
         this.nim.getHistoryMsgs({
           scene: "p2p",
+          beginTime: 0,
+          endTime: that.historyBeginTime,
           to: this.targetData.account,
           done(error, obj) {
             that.getDoctorMsg(() => {
-              that.msgList = obj.msgs.reverse();
-              that.msgList.forEach((element, index) => {
-                that.getTargetMessage(element);
-                that.getTimeStampShowList(element);
-                that.setMediaProgress(element, index);
-              });
-              that.$nextTick(() => {
+
+              if (type === "scrollInit" && obj.msgs.length === 0) {
+                that.toastTips = `没有更多消息了`;
+                that.toastShow = true;
                 setTimeout(() => {
-                  if (
-                    api.getPara().position === "push" &&
-                    that.$refs.outpatientInvite
-                  ) {
-                    that.scroll.scrollToElement(
-                      that.$refs.outpatientInvite[0].$el,
-                      1000
-                    );
-                  } else {
-                    that.scrollToBottom();
+                  that.toastShow = false;
+                }, 2000);
+                that.allMsgsGot = true;
+              } else if (type === "history" && obj.msgs.length === 0) {
+                that.firstMessageType();
+              } else {
+                obj.msgs.forEach((element, index) => {
+                  if (index == obj.msgs.length - 1) {
+                    that.historyBeginTime = element.time
                   }
-                  that.getImageList();
-                  that.loading = false;
-                }, 700);
-              });
+                  that.msgList.unshift(element);
+                });
+                that.msgList.forEach((element, index) => {
+                  that.getTimeStampShowList(element);
+                  that.setMediaProgress(element, index);
+                });
+                that.$nextTick(() => {
+                  setTimeout(() => {
+                    if (type==="history"){
+                      if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
+                        // document.scrollTop=that.$refs.outpatientInvite[0].$el.
+                      } else {
+                        that.scrollToBottom();
+                      }
+                    }
+                    that.getImageList();
+                    that.loading = false;
+                  }, 400);
+                });
+              }
             });
+
           },
-          limit: 100
+          limit: 20
         });
         that.checkFirstBuy();
       },
@@ -990,7 +1010,6 @@
               that.getLastTime(parseInt(dataList[0].consultationState));
               //未接诊则发送：
 
-              that.firstMessageType(parseInt(dataList[0].consultationState));
             }
           }
         });
@@ -1007,19 +1026,16 @@
            * query：from=report则为扫码问诊与扫码报道
            * 此时正常发送问诊单，但被拒状态不同
            * */
-        if (state < 0) {
-          setTimeout(() => {
-            if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
-              if (!this.$refs.reportTip) {
-                this.getPatientBase(this.sendReportTipMessage);
-              }
-            } else {
-              if (!this.$refs.medicalReport) {
-                this.getPatientBase(this.getMedicalMessage);
-              }
-            }
-          }, 1000);
+        if (api.getPara().from === "report" && localStorage.getItem("noMR")) {
+          if (!this.$refs.reportTip) {
+            this.getPatientBase(this.sendReportTipMessage);
+          }
+        } else {
+          if (!this.$refs.medicalReport) {
+            this.getPatientBase(this.getMedicalMessage);
+          }
         }
+
       },
       //扫码报道提示语
       sendReportTipMessage(userData) {
@@ -1073,8 +1089,8 @@
               that.orderSourceId = data.responseObject.responsePk;
               //              that.shuntCustomerId = data.responseObject.responseData.dataList[0].customerId;
               that.getLastTime(-1);
-              //初次创建分流发送问诊单
-              that.firstMessageType(-1);
+              // //初次创建分流发送问诊单
+              // that.firstMessageType(-1);
             }
           }
         });
@@ -1109,9 +1125,9 @@
                   that.showBottomTips(-1);
                 } else {
                   that.receiveTime = receiveTime;
-                  that.bottomTipsShow=false;
+                  that.bottomTipsShow = false;
                   that.lastTimeShow = false;
-                  that.bottomTipsType="";
+                  that.bottomTipsType = "";
                   that.remainTimeOut();
                 }
               } else if (status === 0) {
@@ -1202,10 +1218,13 @@
         }
         if (!error) {
           this.msgList.push(msg);
-          setTimeout(() => {
+          if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
-            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 20);
+          } else {
+            setTimeout(function () {
+              document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
+            }, 20);
+          }
         }
 
       },
@@ -1509,7 +1528,7 @@
       },
       // 选择视频
       sendVideo(e) {
-        let _file = e.target.files[0];
+/*        let _file = e.target.files[0];
         this.inputVideoFlag = false;
         this.$nextTick(() => {
           this.inputVideoFlag = true;
@@ -1543,7 +1562,7 @@
           setTimeout(() => {
             this.toastShow = false;
           }, 2000);
-        }
+        }*/
       },
       // 上传视频文件
       sendVideoFile(_file) {
@@ -1950,27 +1969,23 @@
         });
       },
       initScroll() {
-
-        if (!this.$refs.wrapper) {
-          return;
-        }
-        this.scroll = new BScroll(this.$refs.wrapper, {
-          probeType: 1,
-          click: true,
-          // swipeTime:1500,
-          momentum: true,
-          deceleration: 0.01
-        });
-      },
-      refreshScroll() {
-        this.scroll && this.scroll.refresh();
+        document.querySelector(".main-message").addEventListener("scroll", () => {
+          clearTimeout(this._scrollTips);
+          this._scrollTips = setTimeout(() => {
+            if (document.querySelector(".main-message").scrollTop < 200) {
+              if (!this.allMsgsGot) {
+                this.getMessageList("scrollInit");
+              }
+            }
+          }, 200);
+        })
       }
     },
     computed: {
       doctorTitleName() {
         let result = [];
         this.$store.state.targetMsg.title.split(",").forEach((element, index) => {
-          if (element.length>0){
+          if (element.length > 0) {
             result.push(element.substring(2));
           }
         });
@@ -2011,7 +2026,9 @@
     },
     mounted() {
       this.setFooterPosition();
-      // this.initScroll();
+      setTimeout(() => {
+        this.initScroll();
+      }, 20);
       this.getUserBaseData();
       //以下M站支付使用
       localStorage.removeItem("mPayDoctorId");
@@ -2021,7 +2038,6 @@
         this.payPopupShow = false;
       }
 
-      //      this.resetLogoUrl();
       api.forbidShare();
       store.commit("getToolbarConfig");
 
@@ -2031,6 +2047,9 @@
         localStorage.setItem("APPIMLinks", location.href);
         localStorage.setItem("PCIMLinks", location.href);
       }
+
+
+
     },
     beforeRouteLeave(to, from, next) {
       if (to.name === 'showBigImg') {
@@ -2047,14 +2066,7 @@
       }
     },
     watch: {
-      msgList: {
-        handler(newValue, oldValue) {
-          setTimeout(() => {
-            this.refreshScroll();
-          }, 20);
-        },
-        deep: true
-      },
+
       lastTime(time) {
         if (time <= 0) {
           this.lastTimeShow = false;

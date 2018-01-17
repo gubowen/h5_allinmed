@@ -48,7 +48,10 @@ class forbidShare {
               "uploadImage",
               "getLocalImgData",
               "scanQRCode",
-              "hideMenuItems"
+              "hideMenuItems",
+              "startRecord",
+              "stopRecord",
+              "playVoice"
             ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
           wx.ready(function(){

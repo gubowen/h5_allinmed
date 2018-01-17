@@ -39,7 +39,6 @@ class MLogin {
 
     Vue.use(VueRouter);
     Vue.use(VeeValidator);//vue使用验证插件
-
     this.routerStart();
     this.registerRouter();
     //vue路由
@@ -72,6 +71,7 @@ class MLogin {
       disable: false,               //禁用转场动画，默认为false，嵌套路由默认为true
     };
     this.router = new VueRouter({
+      mode:"hash",
       routes: this.routes,
       scrollBehavior (to, from, savedPosition) {
         return {x: 0, y: 0}
@@ -141,7 +141,7 @@ class MLogin {
 // });
 
 Validator.extend('special', {
-  getMessage(){
+  getMessage(field, args) {
 
   },
   messages: {
@@ -198,6 +198,3 @@ Validator.extend('noNumber', {
 
 
 new MLogin();
-if (module.hot) {
-  module.hot.accept();
-}

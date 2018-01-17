@@ -1,7 +1,7 @@
 <template>
   <section class="ev-showBigImg" >
     <!-- 大图模式 -->
-    <div class="gallery-top" @click="imageClickFn">
+    <div class="gallery-top" @click="imageClickFn" :class="{'isAbleDelete':isDelete}">
       <!-- slides -->
       <div class="swiper-container topSwiper">
         <div class="swiper-wrapper">
@@ -19,7 +19,7 @@
       <!--<div class="swiper-scrollbar"   slot="scrollbar"></div>-->
     </div>
     <!-- 预览模式 -->
-     <div class="gallery-thumbs" v-show="imageListBox.length>1">
+     <div class="gallery-thumbs" v-show="imageListBox.length>1" :class="{'isAbleDelete':isDelete}">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="item in imageListBox" :key="item.imgId">
@@ -30,6 +30,10 @@
           <!-- <div class="swiper-button-next" slot="button-next" v-show="imageListBox.length>6"></div> -->
           <!-- <div class="swiper-pagination swiper-pagination-white"></div> -->
         </div>
+      </div>
+      <!-- 删除处理 -->
+      <div class="gallery-delet" v-if="isDelete">
+        <span class="gallery-deletBtn" @click="imageDeletFn">删除</span>
       </div>
   </section>
 </template>
@@ -43,35 +47,52 @@ import "swiper/dist/css/swiper.css";
 
 // mount with global
 Vue.use(VueAwesomeSwiper);
-
+let topSwiper = "";
+let thumbSwiper = "";
 export default {
   name: "carrousel",
   data() {
     return {
       imageListBox: [],
+      isDelete: false,
+      base64ArrAll: [],
+      filesObjAll: [],
+      deletArr: [],
+      activeStats: false,
+      activeIndex: 0
     };
   },
-
-  computed: {
-
-  },
+  computed: {},
   mounted() {
-
     this.imageListBox = this.$route.params.imgBlob;
+    if (this.$route.params.type == "1") {
+      this.base64ArrAll = this.$route.params.base64ArrAll;
+      this.filesObjAll = this.$route.params.filesObjAll;
+      this.isDelete = true;
+    }
   },
-  activated() {
-
-  },
+  activated() {},
   updated() {
-    let index = this.$route.params.indexNum ? this.$route.params.indexNum : 0;
-    let topSwiper = new Swiper(".topSwiper", {
+    let _this = this,
+      index = "";
+    if (_this.activeStats) {
+      index = _this.activeIndex;
+    } else {
+      index = this.$route.params.indexNum ? this.$route.params.indexNum : 0;
+    }
+    // 大图
+    topSwiper = new Swiper(".topSwiper", {
       direction: "horizontal",
       zoom: true,
       initialSlide: index,
-      pagination : '.swiper-pagination',
-      paginationType : 'fraction',
+      pagination: ".swiper-pagination",
+      paginationType: "fraction",
+      onDestroy: function(swiper) {
+        // alert("你销毁了Swiper;");
+      },
       onInit: function(swiper) {
         // console.log(swiper.activeIndex + "当前索引");
+        _this.activeIndex = swiper.activeIndex;
         // console.log("sipwer初始化完成!,回调函数，初始化后执行。");
         //  setTimeout(function(){
         // $.openPhotoGallery($(".swiper-slide-active").eq(0));
@@ -85,29 +106,39 @@ export default {
         // setTimeout(function(){
         // $.openPhotoGallery($(".swiper-slide-active").eq(0));
         // },500);
+      },
+      onSlideChangeEnd(swiper) {
+        // setTimeout(function(){
+        // $.openPhotoGallery($(".swiper-slide-active").eq(0));
+        // },500);
+        _this.activeIndex = swiper.activeIndex;
       }
     });
-
-    let thumbSwiper = new Swiper(".thumbSwiper", {
+    // 小图
+    thumbSwiper = new Swiper(".thumbSwiper", {
       initialSlide: index,
       spaceBetween: 10,
       direction: "horizontal",
       centeredSlides: true,
       slidesPerView: "auto",
       // touchRatio: 1,
-      speed:600,
-      // slideToClickedSlide: true,
+      speed: 600,
+      slideToClickedSlide: true,
       observer: true,
       // prevButton: ".swiper-button-prev",
       // nextButton: ".swiper-button-next", //前进按钮的css选择器或HTML元素。
       loopedSlides: 5,
       // pagination: ".swiper-pagination",
       // paginationType: "fraction",
+      onDestroy: function(swiper) {
+        // alert("你销毁了Swiper;");
+      },
       imgElementCallBack: function() {
         // console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
       },
       onTap: function(swiper, event) {
         swiper.slideTo(swiper.activeIndex);
+        _this.activeIndex = swiper.activeIndex;
       }
     });
     topSwiper.params.control = thumbSwiper; //需要在Swiper2初始化后，Swiper1控制Swiper2
@@ -116,6 +147,110 @@ export default {
   methods: {
     imageClickFn() {
       this.$router.go(-1);
+    },
+    imageDeletFn() {
+      let _this = this,
+        _index = "";
+      _this.activeStats = true;
+      _this.imageListBox.splice(_this.activeIndex, 1);
+      if (_this.isDelete) {
+        _this.base64ArrAll.splice(_this.activeIndex, 1);
+        _this.filesObjAll.splice(_this.activeIndex, 1);
+      }
+      _this.imageListBox = this.$route.params.imgBlob;
+      if (_this.activeIndex > 0) {
+        if (_this.activeIndex < _this.imageListBox.length - 1) {
+          _this.activeIndex = _this.activeIndex;
+        } else {
+          _this.activeIndex = _this.imageListBox.length - 1;
+        }
+      } else {
+        _this.activeIndex = 0;
+      }
+      topSwiper.destroy(false);
+      thumbSwiper.destroy(false);
+      topSwiper = "";
+      thumbSwiper = "";
+      if (_this.imageListBox.length == 0) {
+        _this.$router.go(-1);
+      }
+    },
+    viewImgInit(imgIndex) {
+      let _this = this,
+        index = "";
+      if (imgIndex) {
+        index = imgIndex;
+      } else {
+        index = this.$route.params.indexNum ? this.$route.params.indexNum : 0;
+      }
+      // 大图
+      topSwiper = new Swiper(".topSwiper", {
+        direction: "horizontal",
+        zoom: true,
+        initialSlide: index,
+        pagination: ".swiper-pagination",
+        paginationType: "fraction",
+        onDestroy: function(swiper) {
+          alert("你销毁了Swiper;");
+        },
+        onInit: function(swiper) {
+          console.log(swiper.activeIndex + "当前索引");
+          _this.activeIndex = swiper.activeIndex;
+          // console.log("sipwer初始化完成!,回调函数，初始化后执行。");
+          //  setTimeout(function(){
+          // $.openPhotoGallery($(".swiper-slide-active").eq(0));
+          //  },500);
+        },
+        onTap: function(swiper, event) {
+          // console.log(swiper.activeIndex); //swiper当前的活动块的索引
+          // _this.activeIndex = swiper.activeIndex;
+        },
+        onSlideChangeStart(swiper) {
+          // console.log(swiper.activeIndex + "当前索引");
+          // setTimeout(function(){
+          // $.openPhotoGallery($(".swiper-slide-active").eq(0));
+          // },500);
+        },
+        onSlideChangeEnd(swiper) {
+          // console.log(swiper.activeIndex + "当前索引");
+          // setTimeout(function(){
+          // $.openPhotoGallery($(".swiper-slide-active").eq(0));
+          // },500);
+          console.log(swiper.activeIndex); //swiper当前的活动块的索引
+          _this.activeIndex = swiper.activeIndex;
+        }
+      });
+      // 小图
+      thumbSwiper = new Swiper(".thumbSwiper", {
+        initialSlide: index,
+        spaceBetween: 10,
+        direction: "horizontal",
+        centeredSlides: true,
+        slidesPerView: "auto",
+        // touchRatio: 1,
+        speed: 600,
+        slideToClickedSlide: true,
+        observer: true,
+        // prevButton: ".swiper-button-prev",
+        // nextButton: ".swiper-button-next", //前进按钮的css选择器或HTML元素。
+        loopedSlides: 5,
+        // pagination: ".swiper-pagination",
+        // paginationType: "fraction",
+        onDestroy: function(swiper) {
+          alert("你销毁了Swiper;");
+        },
+        imgElementCallBack: function() {
+          // console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+        },
+        onTap: function(swiper, event) {
+          console.log(event);
+          swiper.slideTo(swiper.activeIndex);
+          console.log(swiper.activeIndex); //swiper当前的活动块的索引
+          _this.activeIndex = swiper.activeIndex;
+        }
+      });
+      topSwiper.params.control = thumbSwiper; //需要在Swiper2初始化后，Swiper1控制Swiper2
+      thumbSwiper.params.control = topSwiper; //需要在Swiper1初始化后，Swiper2控制Swiper1
     }
   }
 };
@@ -143,12 +278,17 @@ html {
         }
       }
     }
+    &.isAbleDelete{
+      height: 83%;
+    }
   }
   .gallery-thumbs {
+    display: block !important;
     height: 13%;
     padding: rem(24px) 0;
     opacity: 0.96;
     background: #555555;
+    box-sizing: border-box;
     .swiper-slide {
       width: rem(108px);
       height: rem(108px);
@@ -161,6 +301,29 @@ html {
         width: rem(100px);
         height: rem(100px);
       }
+    }
+    &.isAbleDelete{
+      height: 12%;
+      padding: rem(20px) 0;
+      border-bottom: rem(2px) solid #000000;
+    }
+  }
+  .gallery-delet {
+    height: 5%;
+    position: relative;
+    opacity: 0.96;
+    background: #555555;
+    .gallery-deletBtn {
+      color: #ffffff;
+      @include font-dpr(16px);
+      width: rem(80px);
+      height: rem(32px);
+      // padding: rem(16px) rem(30px);
+      position: absolute;
+      top: 50%;
+      // bottom: rem(16px);
+      left: rem(30px);
+      margin-top: rem(-22px);
     }
   }
   .swiper-container {

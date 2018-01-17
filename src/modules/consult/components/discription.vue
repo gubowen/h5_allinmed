@@ -5,7 +5,7 @@
       <transition name="fade">
         <section class="consult-wrapper">
           <section class="consult-inner">
-            <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId">
+            <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId" v-show="pIndex==0">
               <header class="consult-inner-title" :class="{'consolt-specialOne':pIndex==0}">
                 <h2>
                   <span>{{question.questionName}}</span>
@@ -111,6 +111,32 @@
                 </transition>
               </section>
             </section>
+            <section class="consult-total">
+              <header class="consult-inner-title">
+                <h2>
+                  <span>这种情况多久了？</span>
+                </h2>
+              </header>
+              <section class="consult-question-inner select-item">
+                <article class="consult-question-item dark" @click.stop="delayTimePicker.show()">
+                  <p>{{delayTimeContent}}</p>
+                  <i class="icon-select"></i>
+                </article>
+              </section>
+            </section>
+            <section class="consult-total">
+              <header class="consult-inner-title">
+                <h2>
+                  <span>最近一次加重是什么时候？</span>
+                </h2>
+              </header>
+              <section class="consult-question-inner select-item">
+                <article class="consult-question-item dark" @click.stop="heavyTimePicker.show()">
+                  <p>{{heavyTimeContent}}</p>
+                  <i class="icon-select"></i>
+                </article>
+              </section>
+            </section>
             <transition name="fade">
               <section class="welcome-tips" v-if="firstConsult" @click="firstConsult=false">
                 <figure @click.stop="firstConsult=true">
@@ -206,7 +232,7 @@
         selectList: [],
         resultParam: {
           caseId: "",
-          visitSiteId: 17,
+          visitSiteId: api.getSiteId(),
           optionList: [],
           patientId: "",
           optionDesc: "",
@@ -223,9 +249,9 @@
         pageLeaveEnsure: false,
         backPopupShow: false,
         heavyTimePicker: null,
-        heavyTimeContent: "最近几天开始",
+        heavyTimeContent: "请选择加重时间",
         delayTimePicker: null,
-        delayTimeContent: "最近几天开始",
+        delayTimeContent: "请选择持续时间",
       };
     },
     mounted() {
@@ -234,8 +260,6 @@
       this.getQuestionList();
       this.finish = false;
       this.customerId = localStorage.getItem('userId');
-
-      this.createTimePicker();
 
       setTimeout(() => {
         document.body.scrollTop = 20;
@@ -348,72 +372,37 @@
         });
       },
       createTimePicker() {
-        const dataType = [{
-          text: "天",
-          value: "1",
-        }, {
-          text: "周",
-          value: "2",
-        }, {
-          text: "月",
-          value: "3",
-        }, {
-          text: "年",
-          value: "4",
-        }];
-        this.heavyTimePicker = new Picker({
-          data: [dateData.dataDay, dataType],
-          selectedIndex: [0, 0]
-        });
+        let heavyTimeData = [],delayTimeData=[];
+        this.renderList[1].optionList1.forEach((value)=>{
+          delayTimeData.push({
+            text:value.optionName,
+            value:value.optionId
+          })
+        })
+        this.renderList[2].optionList1.forEach((value)=>{
+          heavyTimeData.push({
+            text:value.optionName,
+            value:value.optionId
+          })
+        })
+
         this.delayTimePicker = new Picker({
-          data: [dateData.dataWeek, dataType.slice(1,4)],
-          selectedIndex: [0, 0]
-        });
-        this.heavyTimePicker.on('picker.select', (selectedValue, selectedIndex) => {
-          this.heavyTimeContent = `${selectedValue[0]}${dataType[selectedIndex[1]].text}`
+          data: [delayTimeData],
+          selectedIndex: [0]
         });
         this.delayTimePicker.on('picker.select', (selectedValue, selectedIndex) => {
-          this.delayTimeContent = `${selectedValue[0]}${dataType[selectedIndex[1]].text}`
+          this.delayTimeContent = `${delayTimeData[selectedIndex].text}`;
+          this.selectList[1].optionIdList[0] = delayTimeData[selectedIndex].value;
         });
-        this.heavyTimePicker.on("picker.change", (index, selectedIndex) => {
-          console.log(index, selectedIndex);
-          if (index === 1) {
-            switch (selectedIndex) {
-              case 0:
-                this.heavyTimePicker.refillColumn(0, dateData.dataDay);
-                break;
-              case 1:
-                this.heavyTimePicker.refillColumn(0, dateData.getList(4));
-                break;
-              case 2:
-                this.heavyTimePicker.refillColumn(0, dateData.getList(12));
-                break;
-              case 3:
-                this.heavyTimePicker.refillColumn(0, dateData.getList(50));
-                break;
-              default:
-                break;
-            }
-          }
+
+        this.heavyTimePicker = new Picker({
+          data: [heavyTimeData],
+          selectedIndex: [0]
         });
-        this.delayTimePicker.on("picker.change", (index, selectedIndex) => {
-          console.log(index, selectedIndex);
-          if (index === 1) {
-            switch (selectedIndex) {
-              case 0:
-                this.delayTimePicker.refillColumn(0, dateData.getList(4));
-                break;
-              case 1:
-                this.delayTimePicker.refillColumn(0, dateData.getList(12));
-                break;
-              case 2:
-                this.delayTimePicker.refillColumn(0, dateData.getList(50));
-                break;
-              default:
-                break;
-            }
-          }
-        })
+        this.heavyTimePicker.on('picker.select', (selectedValue, selectedIndex) => {
+          this.heavyTimeContent = `${heavyTimeData[selectedIndex].text}`;
+          this.selectList[2].optionIdList[0] = heavyTimeData[selectedIndex].value;
+        });
       },
       secondClickEvent(type, scIndex, scoIndex, index, pIndex) {
         if(Object.keys(this.secondQuestionList).length == 0 && this.painValue == -1){
@@ -498,6 +487,7 @@
                 that.renderList = dataList;
                 that.hasSecondQuestionId = dataList[0].optionList1[0].optionId;
                 that.getBaseIdList(dataList);
+                that.createTimePicker();
               }
             }
             that.finish = true;
@@ -603,18 +593,6 @@
           );
           api.removeDub(this.selectList[pIndex].optionIdList);
         }
-
-//        if (this.renderList[pIndex].optionList1[index].questionList2 && this.renderList[pIndex].optionList1[index].questionList2.length !== 0) {
-//          let secondList = this.renderList[pIndex].optionList1[index].questionList2;
-//          secondList.forEach(element => {
-//            if (parseInt(element.questionType) === 3 && this.questionList[pIndex].optionList[index].isSelected) {
-//              if (!this.hasSelectedLevel) {
-//                this.showPainProgress = true;
-//                this.hasSelectedLevel = true;
-//              }
-//            }
-//          });
-//        }
 
         if (item.isAttachment == 2) {
           if ($event.currentTarget.className.indexOf("selected") < 0) {
@@ -788,10 +766,7 @@
         let errorMsg = ["您还有问题未完善", "您还有问题未完善", "您还有问题未完善"];
         let flag = false;
         for (let index = 0; index < this.selectList.length; index++) {
-          if (
-            this.selectList[index].optionIdList.length ===
-            0 /*|| this.selectList[index].optionDesc.length === 0*/
-          ) {
+          if (this.selectList[index].optionIdList.length === 0 ) {
             this.errorShow = true;
             setTimeout(() => {
               this.errorShow = false;
