@@ -1,7 +1,7 @@
 <template>
   <section class="ev-showBigImg" >
     <!-- 大图模式 -->
-    <div class="gallery-top" @click="imageClickFn">
+    <div class="gallery-top" @click="imageClickFn" :class="{'isAbleDelete':isDelete}">
       <!-- slides -->
       <div class="swiper-container topSwiper">
         <div class="swiper-wrapper">
@@ -19,7 +19,7 @@
       <!--<div class="swiper-scrollbar"   slot="scrollbar"></div>-->
     </div>
     <!-- 预览模式 -->
-     <div class="gallery-thumbs" v-show="imageListBox.length>1">
+     <div class="gallery-thumbs" v-show="imageListBox.length>1" :class="{'isAbleDelete':isDelete}">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="item in imageListBox" :key="item.imgId">
@@ -32,7 +32,7 @@
         </div>
       </div>
       <!-- 删除处理 -->
-      <div class="gallery-delet">
+      <div class="gallery-delet" v-if="isDelete">
         <span class="gallery-deletBtn" @click="imageDeletFn">删除</span>
       </div>
   </section>
@@ -266,7 +266,7 @@ html {
   height: 100%;
   background-color: #222222;
   .gallery-top {
-    height: 83%;
+    height: 87%;
     .swiper-container {
       height: 100%;
       .swiper-wrapper {
@@ -278,15 +278,17 @@ html {
         }
       }
     }
+    &.isAbleDelete{
+      height: 83%;
+    }
   }
   .gallery-thumbs {
     display: block !important;
-    height: 12%;
-    padding: rem(20px) 0;
+    height: 13%;
+    padding: rem(24px) 0;
     opacity: 0.96;
     background: #555555;
     box-sizing: border-box;
-    border-bottom: rem(2px) solid #000000;
     .swiper-slide {
       width: rem(108px);
       height: rem(108px);
@@ -299,6 +301,11 @@ html {
         width: rem(100px);
         height: rem(100px);
       }
+    }
+    &.isAbleDelete{
+      height: 12%;
+      padding: rem(20px) 0;
+      border-bottom: rem(2px) solid #000000;
     }
   }
   .gallery-delet {
