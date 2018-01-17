@@ -57,7 +57,7 @@ class ImScene {
       firstEntryDisable: false,     //值为true时禁用首次进入应用时的渐现动画，默认为false
       firstEntryDuration: '.6',     //首次进入应用时的渐现动画时长，默认为.6
       forwardAnim: 'fadeInRight',   //前进动画，默认为fadeInRight
-      backAnim: 'fadeInLeft',       //后退动画，默认为fadeInLeft
+      backAnim: 'fadeInRight',       //后退动画，默认为fadeInLeft
       sameDepthDisable: false,      //url深度相同时禁用动画，默认为false
       tabs: [{
         name: 'BaseIm'
