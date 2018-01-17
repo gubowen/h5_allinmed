@@ -1,11 +1,11 @@
 <template>
   <div>
     <ul class="uploadImgBox">
-      <li v-for="item in localIdList"><img :src="item"></li>
+      <li v-for="(item,index) in localIdList"><img :src="item"><i class="icon-delImg" @click="deleteImages(index)"></i></li>
     </ul>
     <button class="uploadImgBtn" @click="chooseImages">点击我上传图片</button>
 
-    <section style="height:100%;"></section>
+    <!--<section style="height:100%;"></section>-->
     <!--<section class="imageLazyBox">-->
       <!--<ul class="uploadImgBox">-->
         <!--<li v-for="item in lazyImageList"><img v-lazy="item" alt=""></li>-->
@@ -21,114 +21,102 @@
 </template>
 <script type="text/ecmascript-6">
   import api from "common/js/util/util";
-  import "common/js/third-party/flexible";
-  let script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = "/static/js/third-party/jweixin-1.0.0.js";
-  document.getElementsByTagName("body")[0].appendChild(script);
-  export default {
-    data() {
-      return {
-        localIdList: [],
-        serverIdList: [],
-        musicId: "",
-        lazyImageList: [
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-          require("../../../common/image/arrow_back.png"),
-        ]
+  import  "common/js/third-party/flexible";
+  export default{
+      data(){
+        return {
+          localIdList:[
+            require("../../../common/image/arrow_back.png")
+          ],
+          serverIdList:[],
+          lazyImageList:[
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+            require("../../../common/image/arrow_back.png"),
+          ]
+        }
+      },
+      mounted(){
+        api.forbidShare();
+      },
+      methods:{
+        chooseImages(){
+          let that = this;
+//          that.$router.push({
+//            name:'followWX',
+//            query: that.$route.query
+//          })
+          wx.chooseImage({
+              count: 9, // 默认9
+              sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+              sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+              success: function (res) {
+                that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                console.log("选择图片成功");
+                that.localIdList.forEach(function (value) {
+                  that.uploadImages(value);
+                })
+              }
+            })
+        },
+        uploadImages(imageUrl){
+          let that = this;
+          wx.uploadImage({
+            localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (data) {
+              that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
+              console.log(that.serverIdList);
+            },
+            fail:function (err) {
+              console.log("上传失败");
+              console.log(err);
+            }
+          });
+        },
+        deleteImages(index){
+          this.localIdList.splice(index,1);
+        }
       }
-    },
-    mounted() {
-      api.forbidShare();
-    },
-    methods: {
-      chooseImages() {
-        let that = this;
-        that.$router.push({
-          name: 'followWX',
-          query: that.$route.query
-        })
-//          wx.chooseImage({
-//              count: 9, // 默认9
-//              sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-//              sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-//              success: function (res) {
-//                that.localIdList = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-//                console.log("选择图片成功");
-//                that.localIdList.forEach(function (value) {
-//                  that.uploadImages(value);
-//                })
-//              }
-//            })
-      },
-      uploadImages(imageUrl) {
-        let that = this;
-        wx.uploadImage({
-          localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
-          isShowProgressTips: 1, // 默认为1，显示进度提示
-          success: function (data) {
-            that.serverIdList.push(data.serverId); // 返回图片的服务器端ID
-            console.log(that.serverIdList);
-          },
-          fail: function (err) {
-            console.log("上传失败");
-            console.log(err);
-          }
-        });
-      },
-      startRecord() {
-        console.log("start")
-        wx.startRecord();
-      },
-      stopRecord() {
-        console.log("stop")
-        const that=this;
-        wx.stopRecord({
-          complete (res) {
-            that.musicId= res.localId;
-          }
-        });
-      },
-      playRecord() {
-
-        console.log("play")
-        wx.playVoice({
-          localId: this.musicId
-        });
-      }
-    }
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../../../../scss/base";
-
-  .uploadImgBox {
-    li {
-      float: left;
-      width: 30%;
-      height: rem(250px);
+  .uploadImgBox{
+    li{
+      float:left;
+      width:30%;
+      height:rem(250px);
       margin: rem(20px) 1.5%;
-      img {
-        width: 100%;
-        height: 100%;
-        display: block;
+      position:relative;
+      img{
+        width:100%;
+        height:100%;
+        display:block;
+      }
+      .icon-delImg{
+        width:rem(50px);
+        height:rem(50px);
+        background:url("../../../common/image/img00/consult_V1.2/delete@2x.png") no-repeat;
+        background-size: 100% 100%;
+        position:absolute;
+        top:0;
+        right:0;
       }
     }
   }
-
-  .uploadImgBtn {
-    margin-top: rem(100px);
-    width: 100%;
-    height: rem(250px);
-    display: block;
-    background: #ccc;
-    text-align: center;
+  .uploadImgBtn{
+    margin-top:rem(100px);
+    width:100%;
+    height:rem(250px);
+    display:block;
+    background:#ccc;
+    text-align:center;
     @include font-dpr(20px);
   }
 
