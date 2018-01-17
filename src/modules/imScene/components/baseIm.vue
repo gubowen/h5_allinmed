@@ -7,7 +7,7 @@
           <span class="service-time-top">服务时间</span>
           <span class="service-time-bottom">09: 00-22: 00</span>
         </p> -->
-        <p class="new-service-time">服务时间：08:00-21:00</p>
+        <p class="new-service-time">服务时间：09:00-22:00</p>
       </article>
     </transition>
     <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
