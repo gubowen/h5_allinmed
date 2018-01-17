@@ -36,34 +36,22 @@
                     <!-- <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p> -->
                   </figure>
                   <ul class="qu-upLoadItemBox qu-upLoadItemBox-s docInt">
-                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="index<9">
+                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="index<9&&!isWeChat">
                       <img alt="" @click="showBigImg(item,index,1)" :src="item.blob">
-                      <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(item,index,1)"
-                            v-show="item.finish"></span>
+                      <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(item,index,1)" v-show="item.finish"></span>
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p class="upLoad-failText">上传失败</p>
                         <p class="upLoad-reloadText">点击重试</p>
-                         <div class="ev-upLoadInput"
-                               @click="upLoadReload(index)"  ref="uploader"></div>
-                        <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
-                        <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)"    ref="uploader">
-                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,1,index)"    ref="uploader"> -->
+                        <div class="ev-upLoadInput" @click="upLoadReload(index)" ref="uploader"></div>
                       </figure>
                     </li>
+                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="isWeChat"><img :src="item"></li>
                     <li class="ev-upLoadAdd" v-show="isReadyLoad&&imageList1.length<50">
-                      <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50"
-                             @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
-                      <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50"
-                             @change="onFileChange($event,1)" multiple ref="uploader">
-                      <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="isIos&&uploading1===false&&imageList1.length<50"
-                             @change="onFileChange($event,1)" multiple ref="uploader">
+                      <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">-->
+                      <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">-->
+                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">
+                      <input class="ev-upLoadInput" type="button" v-if="isWeChat&&imageList1.length<50" @click="onFileChange()">
                     </li>
                   </ul>
                 </form>
@@ -81,24 +69,15 @@
                       <loading v-if="item.uploading"></loading>
                       <figure class="upload-fail" v-if="item.fail">
                         <p>重新上传</p>
-                        <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple capture="camera" ref="uploader">
-                        <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple   ref="uploader">
-                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file"
-                               @change="onFileChange($event,2,index)" multiple   ref="uploader">
+                        <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange($event,2,index)" multiple capture="camera" ref="uploader">
+                        <input v-if="!isIos&&!isWeChat" class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange($event,2,index)" multiple   ref="uploader">
+                        <input v-if="isIos" class="ev-upLoadInput" accept="image/*" type="file" @change="onFileChange($event,2,index)" multiple   ref="uploader">
                       </figure>
                     </li>
                     <li class="ev-upLoadAdd" v-show="imageList2.length<9">
-                      <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&isWeChat&&uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple   capture="camera" ref="uploader">
-                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="!isIos&&!isWeChat&&uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple ref="uploader">
-                       <input class="ev-upLoadInput" accept="image/*" type="file"
-                             v-if="isIos&&uploading2===false&&imageList2.length<9"
-                             @change="onFileChange($event,2)" multiple ref="uploader">
+                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&isWeChat&&uploading2===false&&imageList2.length<9" @change="onFileChange($event,2)" multiple   capture="camera" ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&!isWeChat&&uploading2===false&&imageList2.length<9" @change="onFileChange($event,2)" multiple ref="uploader">
+                       <input class="ev-upLoadInput" accept="image/*" type="file" v-if="isIos&&uploading2===false&&imageList2.length<9" @change="onFileChange($event,2)" multiple ref="uploader">
                     </li>
                   </ul>
                 </form>
@@ -246,10 +225,10 @@ siteSwitch.weChatJudge(
 
 const XHRList = {
   upload: "/mcall/customer/patient/case/attachment/v1/create/",
+  uploadWX:"/mcall/customer/patient/case/attachment/v1/createWx/",
   create: "/mcall/customer/patient/case/v2/create/",
   triage: "/mcall/customer/case/consultation/v1/createConsultation/",
-  createProfessionalConsultation:
-    "/mcall/customer/case/consultation/v1/create/", //创建专业医生问诊
+  createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/", //创建专业医生问诊
   updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/", //更新问诊次数
   getPrice: "/mcall/customer/traige/v1/getMapById/", //获取分诊医生价格
   triageAssign: "/mcall/customer/case/consultation/v1/create/",
@@ -460,65 +439,69 @@ export default {
       });
     },
     onFileChange(e, type, index) {
-      let _files = e.target.files || e.dataTransfer.files;
-      let files = [];
       let that = this;
-      that.filesObj = [];
-      that.base64Arr = [];
-      that.uploadIndex = 0;
-      _files = Array.from(_files);
-      if (!_files.length) {
-        return;
-      } else if (_files.length > 9) {
-        files = _files.slice(0, 9);
-        that.toastCommonTips("一次最多上传9张图片");
-      } else {
-        files = _files;
-      }
-      // 上传方法封装测试start
-      // that.upLoadImgFn(files,type,index);
-      // 上传方法封装测试end
-      // return;
-      for (let i = 0; i < files.length; i++) {
-        if (files[i].size > 1024 * 1024 * 10) {
-          this.errorShow = true;
-          this.errorMsg = "图片不能超过10M";
-          this["uploading" + [type]] = true; //重置input file 对象
-          setTimeout(() => {
-            this.errorMsg = "";
-            this.errorShow = false;
-            if (i == files.length - 1) {
-              // this.loading = false;   //开启上传权限
-              this["uploading" + [type]] = false;
-            }
-          }, 3000);
+      if(that.isWeChat){
+        that.wxChoosePic();
+      }else{
+        let _files = e.target.files || e.dataTransfer.files;
+        let files = [];
+        that.filesObj = [];
+        that.base64Arr = [];
+        that.uploadIndex = 0;
+        _files = Array.from(_files);
+        if (!_files.length) {
+          return;
+        } else if (_files.length > 9) {
+          files = _files.slice(0, 9);
+          that.toastCommonTips("一次最多上传9张图片");
         } else {
-          that.filesObj.push(files[i]); //保存文件对象
-          that.filesObjAll.unshift(files[i]); //保存文件对象（不清空）
-          //图片压缩处理
-          let reader = new FileReader();
-          reader.readAsDataURL(files[i]);
-          reader.onload = oFREvent => {
-            imageCompress(
-              {
-                imgSrc: oFREvent.target.result,
-                quality: 0.8,
-                file: files[i]
-              },
-              base64 => {
-                that.base64Arr.push(base64); //保存压缩图片
-                that.base64ArrAll.unshift(base64); //保存压缩图片
-                if (i == files.length - 1) {
-                  this.upLoadPic(
-                    that.filesObj[that.uploadIndex],
-                    type,
-                    index,
-                    that.base64Arr[that.uploadIndex]
-                  );
-                }
+          files = _files;
+        }
+        // 上传方法封装测试start
+        // that.upLoadImgFn(files,type,index);
+        // 上传方法封装测试end
+        // return;
+        for (let i = 0; i < files.length; i++) {
+          if (files[i].size > 1024 * 1024 * 10) {
+            this.errorShow = true;
+            this.errorMsg = "图片不能超过10M";
+            this["uploading" + [type]] = true; //重置input file 对象
+            setTimeout(() => {
+              this.errorMsg = "";
+              this.errorShow = false;
+              if (i == files.length - 1) {
+                // this.loading = false;   //开启上传权限
+                this["uploading" + [type]] = false;
               }
-            );
-          };
+            }, 3000);
+          } else {
+            that.filesObj.push(files[i]); //保存文件对象
+            that.filesObjAll.unshift(files[i]); //保存文件对象（不清空）
+            //图片压缩处理
+            let reader = new FileReader();
+            reader.readAsDataURL(files[i]);
+            reader.onload = oFREvent => {
+              imageCompress(
+                {
+                  imgSrc: oFREvent.target.result,
+                  quality: 0.8,
+                  file: files[i]
+                },
+                base64 => {
+                  that.base64Arr.push(base64); //保存压缩图片
+                  that.base64ArrAll.unshift(base64); //保存压缩图片
+                  if (i == files.length - 1) {
+                    this.upLoadPic(
+                      that.filesObj[that.uploadIndex],
+                      type,
+                      index,
+                      that.base64Arr[that.uploadIndex]
+                    );
+                  }
+                }
+              );
+            };
+          }
         }
       }
     },
@@ -769,6 +752,50 @@ export default {
         }
       });
     },
+
+    wxChoosePic(){
+      let that = this;
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+          console.log(res.localIds,"选择图片成功");
+          that.imageList1 = that.imageList1.concat(res.localIds);
+        }
+      })
+    },
+    wxUploadPic(){
+      let that = this;
+      wx.uploadImage({
+        localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (data) {
+          console.log(data.serverId);
+          api.ajax({
+            url: "/mcall/customer/patient/case/attachment/v1/createWx/",
+            method: "post",
+            data: {
+              customerId: "1508466840782",
+              imageType: "image",
+              mediaId: data.serverId,
+              fileName: "image",
+              extName: "png"
+            },
+            done(res) {
+              if (res.responseObject.responseStatus) {
+                console.log("上传成功");
+              }
+            }
+          })
+        },
+        fail:function (err) {
+          console.log("上传失败");
+          console.log(err);
+        }
+      });
+    },
+
     //系统版本检测
     checkSystemVersion() {
       return navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0;
