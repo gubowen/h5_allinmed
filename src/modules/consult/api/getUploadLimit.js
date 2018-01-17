@@ -24,7 +24,7 @@ export default class GetUploadLimit {
         data: {
             deviceType: "WEB",
             sortType: 1,
-            visitSiteId: 21,
+            visitSiteId: api.getSiteId(),
         },
         timeout: 10000,
         done(res) {

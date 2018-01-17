@@ -1,8 +1,8 @@
 <template>
   <div>
-    <section class="loginRegisterBox" v-if="!codeBoxFlag">
+    <section class="loginRegisterBox" v-if="!codeBoxFlag"  data-alcode-mod='746'>
       <ul class="loginRegisterTitle">
-        <li class="fl" @click="goLogin()">手机验证登录</li>
+        <li class="fl" @click="goLogin()" data-alcode='e154'>手机验证登录</li>
         <li class="fr on">注册</li>
       </ul>
 
@@ -18,8 +18,8 @@
             <i class="icon-clear" v-if='password.length' @click='password = ""'></i>
             <i class="icon-eyesStatus" :class="{'hide':passwordHide}" @click='toggleHide()' ></i>
           </p>
-          <button class="stipulation">注册代表您已同意<i @click="goLoginRule()">《唯医互联网骨科医院服务协议》</i></button>
-          <button class="loginButton" :disabled='isRegister' :class="{'on':password.length && phone.length}" @click="validate()">注册</button>
+          <button class="stipulation">注册代表您已同意<i @click="goLoginRule()" data-alcode='e156'>《唯医互联网骨科医院服务协议》</i></button>
+          <button class="loginButton" :disabled='isRegister' :class="{'on':password.length && phone.length}" @click="validate()" data-alcode='e155'>注册</button>
         </li>
       </ul>
 

@@ -800,7 +800,7 @@
           patientId: this.$route.query.patientId,
           caseType: 1,
           customerId: this.$route.query.customerId,
-          visitSiteId: 17,
+          visitSiteId:api.getSiteId(),
           mobile: this.phone,
           optionList: JSON.stringify(this.selectList2),
           patientName: this.patientCasemap.patientName,

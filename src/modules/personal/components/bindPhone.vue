@@ -108,7 +108,7 @@
     mounted() {
       api.forbidShare();
       this.phoneNum = this.$store.state.phoneNum;
-      this.$validator.updateDictionary({
+      this.$validator.localize({
         en: {
           custom: {
             //手机号的验证

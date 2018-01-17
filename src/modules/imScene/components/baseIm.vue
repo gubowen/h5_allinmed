@@ -1,5 +1,5 @@
 <template>
-  <section class="main-inner ev-fileUpHide" style="overflow:auto">
+  <section class="main-inner ev-fileUpHide" >
     <transition name="fadeDown">
       <article class="main-message-time">
         <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
@@ -845,7 +845,7 @@
             patientId: api.getPara().patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: 17,
+            siteId: api.getSiteId(),
             caseType: 0
           },
           done(data) {
@@ -1100,10 +1100,13 @@
         }
         if (!error) {
           this.msgList.push(msg);
-          setTimeout(() => {
+          if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
+          } else {
+           setTimeout(function () {
               document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-          }, 200);
+            }, 20);
+          }
 
           // this.refreshScroll();
         } else {
@@ -1693,7 +1696,7 @@
           url: XHRList.getPrice,
           method: "POST",
           data: {
-            visitSiteId: 17, //string	是	站点
+            visitSiteId: api.getSiteId(), //string	是	站点
             maxResult: 999,
             id: 0
           },

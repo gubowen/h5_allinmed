@@ -44,7 +44,7 @@
                       <figure class="upload-fail" v-if="item.fail">
                         <p class="upLoad-failText">上传失败</p>
                         <p class="upLoad-reloadText">点击重试</p>
-                         <div class="ev-upLoadInput" 
+                         <div class="ev-upLoadInput"
                                @click="upLoadReload(index)"  ref="uploader"></div>
                         <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
@@ -334,7 +334,7 @@ export default {
         caseType: api.getPara().doctorId ? 11 : 0, // 类型0-咨询1-复诊2-手术直约3-首诊4-手术犹豫5-待通知入院6-已通知入院7-住院中8-已出院9-术后复诊10-老患者报到(诊后报道)11-立即问诊
         affectedAttId: "",
         inspectionAttId: "",
-        visitSiteId: 17,
+        visitSiteId: api.getSiteId(),
         takeMedicine: "",
         complication: "",
         optionList: [],

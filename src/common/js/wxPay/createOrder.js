@@ -66,7 +66,7 @@ export default function createOrders(Obj){
         orderType:Obj.data.orderType,                 //	string	是	订单类型  1-咨询2-手术3-门诊预约
         orderSourceId:Obj.data.orderSourceId,         //	string	是	来源id，  对应咨询id,手术单id，门诊预约id
         orderSourceType:Obj.data.orderSourceType,     //	string	是	来源类型  1-普通2-加急3-特需 | 手术：1-互联网2-公立 | 门诊1-普通2-专家3-特需
-        visitSiteId:'17'                              //	string	是	站点
+        visitSiteId:api.getSiteId()                              //	string	是	站点
       };
       if(Obj.data.isCharge=="true"){
         this.createOrderData.orderAmount=Obj.data.orderAmount;   //	string	是	订单金额

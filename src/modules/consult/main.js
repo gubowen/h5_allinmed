@@ -19,7 +19,8 @@ import conGuide from './components/consultGuide';
 import showBigImg from 'components/showBigImg';
 import followWechat from 'components/followWechat';
 import BodyMessage from "./components/bodyMessage";
-
+import vueg from 'vueg';
+import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import api from 'common/js/util/util';
 import selectArea from 'components/selectArea';
@@ -91,7 +92,7 @@ class Consult {
     // this.router.afterEach((to,from)=>{
     //   $(window).trigger("hashchange");
     // })
-    // Vue.use(vueg, this.router,options);
+    Vue.use(vueg, this.router,options);
   }
 
   //路由注册

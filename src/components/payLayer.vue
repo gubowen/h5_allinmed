@@ -435,7 +435,7 @@
             caseId: that.payPopupParams.caseId,
             customerId: that.payPopupParams.docId,
             consultationType: 1,
-            siteId: 17
+            siteId: api.getSiteId()
           },
           done(data) {
             if (data.responseObject.responseMessage == "NO DATA") {
@@ -450,7 +450,7 @@
                   consultationType: 1,
                   consultationState: -1,
                   consultationLevel: 0,
-                  siteId: 17,
+                  siteId: api.getSiteId(),
                   caseType: 0
                 },
                 done(d) {

@@ -93,7 +93,7 @@ export default {
         data: {
           account: "18810289689",
           password:"111111",
-          siteId:"17"
+          siteId:api.getSiteId()
         },
         done(data) {}
       });

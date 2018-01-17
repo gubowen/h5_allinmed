@@ -1,5 +1,5 @@
 <template>
-  <footer class="tabbar-box">
+  <footer class="tabbar-box" data-alcode-mod='743' data-alcode-item-selector=".tabbar-list">
     <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(1)">
       <dl class="tabbar-item" :class="{'selected':selected == 1}">
           <dt class="tabbar-icon home"></dt>
