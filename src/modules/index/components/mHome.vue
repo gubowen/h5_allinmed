@@ -205,6 +205,7 @@
         return consultationLevel;
       },
       attentionHandle() {
+        $(window).trigger("hashchange");
         this.$router.push({
           name: "followWeChat"
         });
