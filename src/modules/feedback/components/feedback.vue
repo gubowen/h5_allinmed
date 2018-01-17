@@ -17,19 +17,28 @@
         <section class="question">
           <span class="question-feedback">请简要描述你的问题?</span>
           <em class="question-em">(选填)</em>
-          <section  @click="textAreaFocus">
-          <textarea class="input-textArea" name="question" placeholder="请输入问题" v-model.trim="suggestionContent"
-                    @input="contentLimit" autofocus="autofocus">
-          </textarea>
-          </section>
+          <figure class="main-input-box-textarea-inner">
+            <section class="area-content">
+                <section  @click="textAreaFocus">
+                <pre><span>{{suggestionContent}}</span></pre>
+                <textarea class="input-textArea"
+                          name="question"
+                          placeholder="请输入问题"
+                          v-model.trim="suggestionContent"
+                          @input="contentLimit"
+                          autofocus="autofocus">
+                </textarea>
+              </section>
+            </section>
+          </figure>
           <span class="qu-underline"></span>
           <p class="text-num-tips">
-            {{(suggestionContent).length}}/500</p>
+            {{suggestionContent.length}}/500</p>
         </section>
         <section class="question">
           <span class="question-feedback">我们通过何种方式联系您?</span>
           <em class="question-em">(选填)</em>
-          <textarea class="input-textArea" placeholder="请填写QQ号/电话/邮箱" v-model="suggestionNumbers"
+          <textarea class="input-textArea2" placeholder="请填写QQ号/电话/邮箱" v-model="suggestionNumbers"
                     @input="Limit">
             </textarea>
           <span class="qu-underline"></span>
@@ -62,7 +71,7 @@
    *
    * Created by YuxiYang on 2017/12/25.
    */
-  import autosize from "autosize";
+  // import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
   import Loading from "components/loading";
@@ -111,16 +120,16 @@
     },
     watch:{
       //监听大量的文字输入情况，ex：复制粘贴。这样可以保持被撑大的text-area可以恢复到限定的高度
-      "suggestionContent"(){
-        setTimeout(()=>{
-          document.body.scrollTop = document.body.scrollHeight;
-          autosize.update(this.$el.querySelector(".input-textArea"))
-        },500);
-      }
+      // "suggestionContent"(){
+      //   setTimeout(()=>{
+      //     document.body.scrollTop = document.body.scrollHeight;
+      //     autosize.update(this.$el.querySelector(".input-textArea"))
+      //   },500);
+      // }
     },
     mounted(){
       let _this = this;
-      autosize(this.$el.querySelector(".input-textArea"));
+      // autosize(this.$el.querySelector(".input-textArea"));
       this.CheckFrom();
     },
     methods:{
@@ -266,10 +275,6 @@
     left: rem(-14px);
     top: 50%;
     margin-top: rem(-12px);
-    // margin: 0px;
-    // margin-left: rem(-44px);
-    // margin-top: rem(31px);
-    // margin-right: rem(11px);
   }
   html, body {
     width: 100%;
@@ -379,7 +384,42 @@
     color: #666666;
     font-style: normal;
   }
-  .input-textArea {
+  .main-input-box-textarea-inner {
+    box-sizing: border-box;
+    margin-left: rem(15px);
+    max-height: 2.5rem;
+    overflow: auto;
+    .area-content{
+      position: relative;
+      pre {
+        display: block;
+        visibility: hidden;
+        @include font-dpr(14px);
+        width: 100%;
+        padding-left: rem(20px);
+        padding-right: rem(20px);
+        padding-top: rem(15px);
+        box-sizing: border-box;
+        min-height: rem(72px);
+      }
+      .input-textArea {
+        width: 100%;
+        padding-left: rem(20px);
+        padding-right: rem(20px);
+        padding-top: rem(15px);
+        @include font-dpr(14px);
+        border: 0 solid #e8ecef;
+        box-sizing: border-box;
+        min-height: rem(60px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+      }
+    }
+
+  }
+  .input-textArea2 {
     width: 100%;
     padding-top: rem(24px);
     padding-left: rem(45px);

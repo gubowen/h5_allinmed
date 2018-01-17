@@ -13,14 +13,23 @@
                 <p>有什么要对医生说的，如：诱因，症状，身体现状，病情加重或缓解情况</p>
               </header>
 
-              <figure class="input-area disIllness">
-                <textarea
-                @focus="hideBar()"
-                @blur="showBar()"
-                class="input-textarea" placeholder="请输入至少10个字" v-model.trim="disContent" @input="contentLimit('disContent',1000)"></textarea>
-                <p class="text-num-tips">{{disContent.length}}/1000</p>
-              </figure>
+              <section class="input-area disIllness">
+                <figure class="main-input-box-textarea-inner">
+                  <section class="area-content">
+                    <pre><span>{{disContent}}<br></span></pre>
+                    <textarea
+                      @focus="hideBar()"
+                      @blur="showBar()"
+                      class="main-input-box-textarea"
+                      placeholder="请输入至少10个字"
+                      v-model.trim="disContent"
+                      @input="contentLimit('disContent',1000)">
+                      </textarea>
+                  </section>
+                </figure>
+              </section>
             </section>
+            <span class="text-num-tips">{{disContent.length}}/1000</span>
             <section class="consult-total">
               <header class="consult-inner-title">
                 <h2>
@@ -30,10 +39,19 @@
               </header>
 
               <figure class="input-area helpIllness">
-                <textarea @focus="hideBar()"
-                          @blur="showBar()" class="input-textarea" placeholder="请输入至少6个字" v-model.trim="helpContent" @input="contentLimit('helpContent',1000)"></textarea>
-                <p class="text-num-tips">{{helpContent.length}}/1000</p>
+                  <section class="area-content">
+                    <pre><span>{{helpContent}}<br></span></pre>
+                    <textarea @focus="hideBar()"
+                              @blur="showBar()"
+                              class="main-input-box-textarea"
+                              placeholder="请输入至少6个字"
+                              v-model.trim="helpContent"
+                              rows="1"
+                              @input="contentLimit('helpContent',1000)">
+                </textarea>
+                  </section>
               </figure>
+              <span class="text-num-tips">{{helpContent.length}}/1000</span>
             </section>
             <section class="consult-total">
               <header class="consult-inner-title">
@@ -77,7 +95,7 @@
   import progerssBar from "../components/progressBar";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import nimEnv from "common/js/nimEnv/nimEnv";
-  import autosize from "autosize";
+  // import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
   import Picker from 'better-picker';
   import store from "../store/store";
@@ -113,7 +131,7 @@
           doctorId: api.getPara().doctorId
         },
         createParams:{
-          visitSiteId: api.getSiteId(),
+          visitSiteId: 17,
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
           customerId: "",
@@ -267,10 +285,10 @@
         }
         //提示用户提交后不可修改提交内容
         if (localStorage.getItem("PCIMLinks") !== null) {
-           this.backPopupShow = true;
+          this.backPopupShow = true;
         } else {
-           this.backPopupShow = false;
-           this.submitTip = true;
+          this.backPopupShow = false;
+          this.submitTip = true;
         }
       },
       //创建问诊单
@@ -313,7 +331,7 @@
             consultationType: 1,
             consultationState: -1,
             consultationLevel: 6, //咨询级别0-免费1-普通2-加急3-特需4-医生赠送5-老患者报到(诊后报道)6-立即问诊
-            siteId: api.getSiteId(),
+            siteId: 17,
             caseType: 11 //从医生主页进来的立即问诊caseType 为11；10-老患者报到(诊后报道)11-立即问诊
           },
           done(res) {
@@ -453,7 +471,7 @@
             patientId: this.createParams.patientId,
             consultationType: 0, //会诊类型0：患者-分诊平台1：患者-医生
             consultationState: 4, //会诊状态-1-待就诊0-沟通中1-已结束2-被退回3-超时接诊退回4-新用户5-释放
-            siteId: api.getSiteId(),
+            siteId: 21,
             caseType: 0
           },
           done(data) {
@@ -592,7 +610,12 @@
   .isMB {
     padding-bottom: rem(100px);
   }
-
+  .text-num-tips{
+    padding-right: rem(20px);
+    float: right;
+    front-size: rem(13px);
+    color: #AFAFAF;
+  }
   .conditionSubmit{
     display:block;
     width: rem(560px);
@@ -617,38 +640,43 @@
     .consult-wrapper {
       padding: rem(30px);
     }
-
     .consult-total {
-      .input-area {
-        background-color: #e5e5e5;
-        position: relative;
-        padding: rem(64px) rem(64px);
-        padding-bottom: rem(80px);
-        margin:0;
-        .text-num-tips {
-          position: absolute;
-          right: rem(30px);
-          bottom: rem(36px);
-          color: #aaaaaa;
-          @include font-dpr(15px);
-        }
-        & > textarea {
-          outline: medium;
-          resize: none;
-          width: 100%;
-          height: 0.6rem;
-          max-height: 1.7rem;
-          padding-bottom: rem(20px);
-          border:none;
-          border-bottom: 1px solid #D5D5D5;
-          background: none;
-          @include font-dpr(16px);
-          color: #333333;
-          @include placeholder() {
-            @include font-dpr(16px);
-            color: #AAAAAA;
+        .input-area{
+          background-color: #e5e5e5;
+          position: relative;
+          padding: rem(64px) rem(64px);
+          padding-bottom: rem(80px);
+          margin: 0;
+          box-sizing: border-box;
+          max-height:4rem;
+          overflow: auto;
+            .area-content {
+              pre {
+                display: block;
+                visibility: hidden;
+                @include font-dpr(14px);
+                width: 100%;
+                box-sizing: border-box;
+                min-height: rem(72px);
+              }
+              .main-input-box-textarea {
+                background-color: #e5e5e5;
+                width: 100%;
+                @include font-dpr(14px);
+                border: 0 solid #e8ecef;
+                box-sizing: border-box;
+                min-height: rem(60px);
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+              }
           }
-        }
+      }
+      .text-num-tips{
+        padding-right: rem(20px);
+        front-size: rem(13px);
+        color: #AFAFAF;
       }
       .hwBox{
         padding:0 rem(60px);
