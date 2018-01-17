@@ -157,6 +157,7 @@
         },
         responseCaseId:"",
         orderSourceId: "", //进入分诊im需要orderSourceId
+        wxImgLists:[]
       }
     },
     methods: {
@@ -187,7 +188,7 @@
         this.createParams.takeMedicine = params.takeMedicine;
         this.createParams.complication = params.complication;
         this.createParams.optionList = params.optionList;
-        this.createParams.wxImgLists = params.wxImgLists;
+        this.wxImgLists = params.wxImgLists;
       },
       contentLimit(element,limit){
         let ranges = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi;
@@ -339,7 +340,7 @@
           done(data) {
             if (data.responseObject.responsePk !== 0) {
               that.responseCaseId = data.responseObject.responsePk;
-              that.createParams.wxImgLists.forEach(function (value) {
+              that.wxImgLists.forEach(function (value) {
                 that.wxUploadImg(value,data.responseObject.responsePk);
               })
               localStorage.setItem("payCaseId", that.responseCaseId);
