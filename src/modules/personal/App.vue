@@ -1,7 +1,7 @@
 <template>
   <section class="allinmed-mainInner">
     <Loading :show="loadingOnOff"></Loading>
-    <router-view  :class="{'have-padding':paddingOnOff}"></router-view>
+    <router-view  :class="{'have-padding':paddingOnOff}" v-transition></router-view>
     <tab :selected=3></tab>
   </section>
 </template>
@@ -17,6 +17,7 @@
         msg: 'hello'
       }
     },
+
     computed:{
       ...mapGetters(["loadingOnOff"]),
       paddingOnOff(){
