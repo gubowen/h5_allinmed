@@ -563,17 +563,6 @@
         }
       },
 
-      //收到检查检验隐藏顶部框；
-      // pauseTime(msg) {
-      //   let that = this;
-      //   if (
-      //     msg.type === "custom" &&
-      //     JSON.parse(msg.content).type === "checkSuggestion"
-      //   ) {
-      //     that.lastTimeShow = false; //顶部时间取消
-      //     store.commit("stopLastTimeCount"); //时间计时取消
-      //   }
-      // },
       //获取页面图片消息存到数组里
       getImageList() {
         if (this.$refs.bigImg) {
