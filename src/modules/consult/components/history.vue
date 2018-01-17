@@ -858,7 +858,10 @@ export default {
     //查看大图
     showBigImg(item, index, type) {
       let _params = {
+        type:1,
         imgBlob: this["imageList" + type],
+        base64ArrAll:this.base64ArrAll,
+        filesObjAll:this.filesObjAll,
         indexNum: index
       };
       store.commit("setbottomNav", false);
