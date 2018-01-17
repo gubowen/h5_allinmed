@@ -25,8 +25,10 @@
                   <figure class="input-area"
                           v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                           @click.stop="">
-                    <pre><span>{{questionList[pIndex].optionList[index].optionDesc}}</span></pre>
+                    <section class="area-content">
+                    <pre><span>{{questionList[pIndex].optionList[index].optionDesc}}<br></span></pre>
                   <textarea class="input-textarea"
+                            :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
                             placeholder="填写其他情况"
                             @input="otherReason(pIndex,index,$event)"
                             v-model="questionList[pIndex].optionList[index].optionDesc"
@@ -35,6 +37,7 @@
                             @blur="showBar()"
                   >
                   </textarea>
+                    </section>
                     <p class="text-num-tips"
                        v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50"
                     >
@@ -153,7 +156,7 @@
   import toast from "components/toast";
   import confirm from "components/confirm";
   import vueSlider from "vue-slider-component";
-  import autosize from "autosize";
+  // import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
@@ -248,16 +251,16 @@
         }
       }
 
-      this.$nextTick(() => {
-        setTimeout(() => {
-          Array.from(
-            this.$el.querySelectorAll("textarea")
-          ).forEach((element, index) => {
-            autosize(element);
-            autosize.update(element);
-          });
-        }, 1000);
-      });
+      // this.$nextTick(() => {
+      //   setTimeout(() => {
+      //     Array.from(
+      //       this.$el.querySelectorAll("textarea")
+      //     ).forEach((element, index) => {
+      //       autosize(element);
+      //       autosize.update(element);
+      //     });
+      //   }, 1000);
+      // });
 
       if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
@@ -625,9 +628,9 @@
           }
         }
 
-        setTimeout(() => {
-          autosize(this.$el.querySelector("textarea"));
-        }, 100);
+        // setTimeout(() => {
+        //   autosize(this.$el.querySelector("textarea"));
+        // }, 100);
       },
       showQueryDetail(id) {
         let that = this;
@@ -914,34 +917,39 @@
       margin-top: rem(20px);
       margin-bottom: rem(-40px);
       padding: 0.333rem 0.8rem;
-      .text-num-tips {
-        right: rem(60px);
-      }
     }
     .input-area {
-      background-color: #fff;
-      position: relative;
-      padding: rem(25px) 0;
-      .text-num-tips {
-        position: absolute;
-        right: rem(0px);
-        bottom: 0;
-        color: #0ab375;
-        @include font-dpr(12px);
-      }
-      & > textarea {
-        outline: medium;
-        resize: none;
-        width: 100%;
-        height: 0.6rem;
-        max-height: 1.7rem;
-        border: none;
-        background: none;
-        @include font-dpr(18px);
-        color: #333333;
-        @include placeholder() {
-          @include font-dpr(16px);
-          color: #909090;
+      box-sizing: border-box;
+      margin-left: rem(15px);
+      max-height: 2.5rem;
+      overflow: auto;
+      .area-content{
+        position: relative;
+        pre {
+          display: block;
+          visibility: hidden;
+          @include font-dpr(14px);
+          width: 100%;
+          padding-left: rem(20px);
+          padding-right: rem(20px);
+          padding-top: rem(15px);
+          box-sizing: border-box;
+          min-height: rem(72px);
+        }
+        & > Textarea {
+          width:100%;
+          @include font-dpr(14px);
+          padding-bottom:rem(15px);
+          border: none;
+          box-sizing: border-box;
+          min-height: rem(70px);
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          &.dark {
+            background-color: rgba(239, 239, 239, 0.15);
+          }
         }
       }
     }

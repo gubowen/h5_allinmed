@@ -44,7 +44,7 @@
                       <figure class="upload-fail" v-if="item.fail">
                         <p class="upLoad-failText">上传失败</p>
                         <p class="upLoad-reloadText">点击重试</p>
-                         <div class="ev-upLoadInput" 
+                         <div class="ev-upLoadInput"
                                @click="upLoadReload(index)"  ref="uploader"></div>
                         <!-- <input v-if="!isIos&&isWeChat" class="ev-upLoadInput" accept="image/*" type="file"
                                @change="onFileChange($event,1,index)"  ref="uploader" capture="camera">
@@ -115,10 +115,19 @@
                  :class="{'selected':medical.has}">有</p>
             </section>
             <section class="questionHiddenCommon qu-setMedicineBox" @click="textAreaFocus" v-show="medical.has">
-            <textarea class="medicineBox" name="medicine" placeholder="填写药物名称" v-model="medicalMessage"
-                      @focus="hideBar()"
-                      @blur="showBar()"
-                      @input="contentLimit"></textarea>
+              <figure class="main-input-box-textarea-inner">
+                <section class="area-content">
+                  <pre><span>{{medicalMessage}}</span></pre>
+                    <textarea class="medicineBox"
+                          name="medicine"
+                          placeholder="填写药物名称"
+                          v-model="medicalMessage"
+                          @focus="hideBar()"
+                          @blur="showBar()"
+                          @input="contentLimit">
+                    </textarea>
+                </section>
+              </figure>
               <span class="qu-underline"></span>
               <p class="limit" v-show="getByteLen(medicalMessage.length)<=50">{{getByteLen(medicalMessage.length)}}</p>
               <p class="qu-setMedicineTipText">填写示例:双氯芬酸钠缓释片、盐酸乙哌立松</p>
@@ -217,7 +226,7 @@ if (navigator.userAgent.toLowerCase().includes("iphone")) {
 import api from "common/js/util/util";
 import loading from "components/loading";
 import toast from "components/toast";
-import autosize from "autosize";
+// import autosize from "autosize";
 import axios from "axios";
 import confirm from "components/confirm";
 import ensure from "components/ensure";
@@ -375,7 +384,7 @@ export default {
     this.initData();
     // this.isShowPaySuccess(); //支付弹层
     // document.body.scrollTop = 0;
-    autosize(this.$el.querySelector(".medicineBox"));
+    // autosize(this.$el.querySelector(".medicineBox"));
     localStorage.setItem("hasCome", 0);
     if (localStorage.getItem("PCIMLinks") !== null) {
       this.backPopupShow = true;
@@ -1212,7 +1221,41 @@ body {
           }
         }
         //输入框
-        .medicineBox {
+        .main-input-box-textarea-inner {
+          box-sizing: border-box;
+          max-height: 2.5rem;
+          overflow: auto;
+          .area-content{
+            position: relative;
+            pre {
+              display: block;
+              visibility: hidden;
+              @include font-dpr(14px);
+              width: 100%;
+              padding-left: rem(20px);
+              padding-right: rem(20px);
+              padding-top: rem(15px);
+              box-sizing: border-box;
+              min-height: rem(72px);
+            }
+            .medicineBox {
+              width: 100%;
+              padding-right: rem(20px);
+              padding-top: rem(15px);
+              @include font-dpr(14px);
+              background: #e5e5e5;
+              border: 0 solid #e8ecef;
+              box-sizing: border-box;
+              min-height: rem(60px);
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+            }
+          }
+
+        }
+ /*       .medicineBox {
           @include font-dpr(16px);
           width: 100%;
           padding-bottom: rem(16px);
@@ -1221,11 +1264,10 @@ body {
           outline: medium;
           background: #e5e5e5;
           border: none;
-          border: none;
           @include placeholder() {
             color: #aaaaaa;
           }
-        }
+        }*/
         .qu-underline {
           display: block;
           height: rem(2px);
