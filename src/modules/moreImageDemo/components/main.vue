@@ -17,11 +17,14 @@
       <!--<button class="record-end" @click="stopRecord">录音结束</button>-->
       <!--<button class="play" @click="playRecord">播放</button>-->
     <!--</section>-->
+    <video id="video" style="width: 100%;"></video>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import api from "common/js/util/util";
   import  "common/js/third-party/flexible";
+
+  import Hls from "hls.js";
   export default{
       data(){
         return {
@@ -43,6 +46,15 @@
       },
       mounted(){
         api.forbidShare();
+        if(Hls.isSupported()) {
+          const video = document.getElementById('video');
+          const hls = new Hls();
+          hls.loadSource('https://vpro.allinmed.cn/1516166833789?avvod/m3u8/s/600x900');
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED,()=> {
+            video.play();
+          });
+        }
       },
       methods:{
         chooseImages(){
