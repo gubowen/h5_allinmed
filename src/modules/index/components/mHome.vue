@@ -208,7 +208,6 @@
         this.$router.push({
           name: "followWeChat"
         });
-        $(window).trigger("hashchange");
       },
       //问诊
       diagnoseEvent() {
