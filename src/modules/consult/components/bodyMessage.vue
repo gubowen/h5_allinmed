@@ -301,21 +301,7 @@
           isShowProgressTips: 1, // 默认为1，显示进度提示
           success: function (data) {
             console.log(data.serverId);
-            api.ajax({
-              url: XHRList.uploadWX,
-              method: "post",
-              data: {
-                caseCategoryId: "1",
-                imageType: "1",
-                mediaId: data.serverId,
-                caseId: caseId
-              },
-              done(res) {
-                if (res.responseObject.responseStatus) {
-                  console.log("上传成功");
-                }
-              }
-            })
+
           },
           fail:function (err) {
             console.log("上传失败");
@@ -340,12 +326,29 @@
           done(data) {
             if (data.responseObject.responsePk !== 0) {
               that.responseCaseId = data.responseObject.responsePk;
-              that.wxImgLists.forEach(function (value) {
-                that.wxUploadImg(value,data.responseObject.responsePk);
-              })
               localStorage.setItem("payCaseId", that.responseCaseId);
-              //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
-              api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
+              //微信上传图片
+              if(that.wxImgLists.length>0){
+                api.ajax({
+                  url: XHRList.uploadWX,
+                  method: "post",
+                  data: {
+                    caseCategoryId: "1",
+                    imageType: "1",
+                    mediaId: that.wxImgLists.join(),
+                    caseId: data.responseObject.responsePk
+                  },
+                  done(res) {
+                    if (res.responseObject.responseStatus) {
+                      console.log("上传成功");
+                      api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
+                    }
+                  }
+                })
+              }else{
+                //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
+                api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
+              }
             } else {
               that.finish = false;
             }
