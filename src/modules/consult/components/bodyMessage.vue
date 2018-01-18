@@ -596,6 +596,7 @@
     },
     mounted() {
       document.title = "描述病情";
+      window.scrollTo(0,0);
       if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
       } else {
