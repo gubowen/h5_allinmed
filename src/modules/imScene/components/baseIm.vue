@@ -603,17 +603,20 @@
       getMessageList(type) {
         let that = this;
         //获取云端历史记录
+        this.finish=true;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
           endTime: that.historyBeginTime,
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
+            that.finish=false;
             if (type === "scrollInit" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
               that.allMsgsGot=true;
             } else if (type === "history"&&obj.msgs.length===0) {
               that.getMedicalMessage();
+
             } else {
               obj.msgs.forEach((element, index) => {
                 if (index == obj.msgs.length - 1) {

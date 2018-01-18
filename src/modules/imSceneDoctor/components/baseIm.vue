@@ -772,6 +772,7 @@
       },
       getMessageList(type) {
         let that = this;
+        this.finish=true;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
@@ -814,7 +815,7 @@
                 });
               }
             };
-
+            that.finish=false;
             if (type === "history") {
               that.getDoctorMsg(() => {
                 _FN();
