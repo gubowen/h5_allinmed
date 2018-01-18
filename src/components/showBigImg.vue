@@ -33,8 +33,19 @@
       </div>
       <!-- 删除处理 -->
       <div class="gallery-delet" v-if="isDelete">
-        <span class="gallery-deletBtn" @click="imageDeletFn">删除</span>
+        <span class="gallery-deletBtn" @click="imageDelete()">删除</span>
+        <span class="gallery-computedBtn" @click="imageComputed">完成</span>
       </div>
+      <transition name="fade">
+        <confirm
+          :confirmParams="{
+          'ensure':'取消',
+          'cancel':'确定',
+//          'content':'',
+          'title':'确定删除该张图片吗？'
+          }" v-if="deletePicTip" :showFlag.sync="deletePicTip" @cancelClickEvent="ensureDeletePic()"
+          @ensureClickEvent="cancelDeletePic"></confirm>
+      </transition>
   </section>
 </template>
 
@@ -44,6 +55,7 @@ import Vue from "vue";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 import Swiper from "swiper";
 import "swiper/dist/css/swiper.css";
+import confirm from "./confirm";
 
 // mount with global
 Vue.use(VueAwesomeSwiper);
@@ -59,7 +71,8 @@ export default {
       filesObjAll: [],
       deletArr: [],
       activeStats: false,
-      activeIndex: 0
+      activeIndex: 0,
+      deletePicTip:false
     };
   },
   computed: {},
@@ -75,6 +88,10 @@ export default {
   updated() {
     let _this = this,
       index = "";
+      console.log("视图更新中");
+    if(_this.deletePicTip){
+      return false;
+    }  
     if (_this.activeStats) {
       index = _this.activeIndex;
     } else {
@@ -93,19 +110,12 @@ export default {
       onInit: function(swiper) {
         // console.log(swiper.activeIndex + "当前索引");
         _this.activeIndex = swiper.activeIndex;
-        // console.log("sipwer初始化完成!,回调函数，初始化后执行。");
-        //  setTimeout(function(){
-        // $.openPhotoGallery($(".swiper-slide-active").eq(0));
-        //  },500);
       },
       onTap: function(swiper, event) {
         // console.log(swiper.activeIndex); //swiper当前的活动块的索引
       },
       onSlideChangeStart(swiper) {
         // console.log(swiper.activeIndex + "当前索引");
-        // setTimeout(function(){
-        // $.openPhotoGallery($(".swiper-slide-active").eq(0));
-        // },500);
       },
       onSlideChangeEnd(swiper) {
         // setTimeout(function(){
@@ -148,6 +158,27 @@ export default {
     imageClickFn() {
       this.$router.go(-1);
     },
+    imageComputed(){
+      this.$router.go(-1);
+    },
+    imageDelete(){
+      let _this = this;
+      _this.deletePicTip = true;
+       // 销毁swiper
+      topSwiper.destroy(false);
+      thumbSwiper.destroy(false);
+      topSwiper = "";
+      thumbSwiper = "";
+    },
+    ensureDeletePic(){
+      let _this = this;
+      _this.deletePicTip = false;
+      _this.imageDeletFn();
+    },
+    cancelDeletePic(){
+      let _this = this;
+      _this.deletePicTip = false;
+    },
     imageDeletFn() {
       let _this = this,
         _index = "";
@@ -158,6 +189,7 @@ export default {
         _this.filesObjAll.splice(_this.activeIndex, 1);
       }
       _this.imageListBox = this.$route.params.imgBlob;
+      //计算激活图片索引
       if (_this.activeIndex > 0) {
         if (_this.activeIndex < _this.imageListBox.length - 1) {
           _this.activeIndex = _this.activeIndex;
@@ -167,10 +199,12 @@ export default {
       } else {
         _this.activeIndex = 0;
       }
-      topSwiper.destroy(false);
-      thumbSwiper.destroy(false);
-      topSwiper = "";
-      thumbSwiper = "";
+      // 销毁swiper
+      // topSwiper.destroy(false);
+      // thumbSwiper.destroy(false);
+      // topSwiper = "";
+      // thumbSwiper = "";
+
       if (_this.imageListBox.length == 0) {
         _this.$router.go(-1);
       }
@@ -252,6 +286,9 @@ export default {
       topSwiper.params.control = thumbSwiper; //需要在Swiper2初始化后，Swiper1控制Swiper2
       thumbSwiper.params.control = topSwiper; //需要在Swiper1初始化后，Swiper2控制Swiper1
     }
+  },
+  components:{
+    confirm
   }
 };
 </script>
@@ -279,7 +316,7 @@ html {
       }
     }
     &.isAbleDelete{
-      height: 83%;
+      height: 80%;
     }
   }
   .gallery-thumbs {
@@ -289,27 +326,32 @@ html {
     opacity: 0.96;
     background: #555555;
     box-sizing: border-box;
+    .swiper-container.thumbSwiper.swiper-container-horizontal{
+      height: 100%;
+    }
     .swiper-slide {
       width: rem(108px);
-      height: rem(108px);
+      // height: rem(108px);
+      height: 94%;
       img {
         width: 100%;
         height: 100%;
       }
       &.swiper-slide-active {
+        box-sizing: border-box;
         border: rem(4px) solid #2fc5bd;
         width: rem(100px);
-        height: rem(100px);
+        height: 94%;
       }
     }
     &.isAbleDelete{
       height: 12%;
-      padding: rem(20px) 0;
+      padding: 3% 0;
       border-bottom: rem(2px) solid #000000;
     }
   }
   .gallery-delet {
-    height: 5%;
+    height: 8%;
     position: relative;
     opacity: 0.96;
     background: #555555;
@@ -324,6 +366,21 @@ html {
       // bottom: rem(16px);
       left: rem(30px);
       margin-top: rem(-22px);
+    }
+    .gallery-computedBtn{
+      color: #ffffff;
+      @include font-dpr(16px);
+      width: rem(120px);
+      height: rem(62px);
+      background-color: #2FC5BD;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      // bottom: rem(16px);
+      right: rem(30px);
+      margin-top: rem(-32px);
+      border-radius: rem(4px);
+      line-height: rem(62px);
     }
   }
   .swiper-container {
