@@ -765,12 +765,28 @@ export default {
     wxChoosePic(){
       let that = this;
       wx.chooseImage({
-        count: 1, // 默认9
+        count: 9, // 默认9
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
           console.log(res.localIds,"选择图片成功");
           that.imageList1 = that.imageList1.concat(res.localIds);
+          res.localIds.forEach((value)=>{
+            wx.uploadImage({
+              localId: value, // 需要上传的图片的本地ID，由chooseImage接口获得
+              isShowProgressTips: 1, // 默认为1，显示进度提示
+              success: function (data) {
+                console.log(data.serverId);
+                that.allParams.wxImgLists.push(data.serverId);
+              },
+              fail:function () {
+                console.log("上传失败");
+              }
+            });
+          })
+        },
+        fail:function () {
+          console.log("本地图片获取失败");
         }
       })
     },
@@ -947,7 +963,6 @@ export default {
       }
       if (this.upload.has) {
         if(this.isWeChat){
-          this.allParams.wxImgLists = this.imageList1;
           this.allParams.inspectionAttId = "";
         }else{
           this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
