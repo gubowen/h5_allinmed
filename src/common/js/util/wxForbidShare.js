@@ -16,7 +16,7 @@ class forbidShare {
   wxforbidShare(){
     let script = document.createElement("script");
     script.type = "text/javascript";
-    script.src = "/static/js/third-party/jweixin-1.0.0.js";
+    script.src = "https://res.wx.qq.com/open/js/jweixin-1.2.0.js";
     document.getElementsByTagName("body")[0].appendChild(script);
     ajax({
       url: "/mcall/wx/api/v1/getJSConfig/",

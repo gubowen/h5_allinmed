@@ -334,7 +334,7 @@
                   method: "post",
                   data: {
                     caseCategoryId: "1",
-                    imageType: "1",
+                    imageType: "0",
                     mediaId: that.wxImgLists.join(),
                     caseId: data.responseObject.responsePk
                   },

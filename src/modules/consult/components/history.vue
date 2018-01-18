@@ -46,7 +46,10 @@
                         <div class="ev-upLoadInput" @click="upLoadReload(index)" ref="uploader"></div>
                       </figure>
                     </li>
-                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="isWeChat"><img :src="item"></li>
+                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="isWeChat">
+                      <img :src="item">
+                      <span class="tc-upLoadDel" @click="wxImgDelete(index)"></span>
+                    </li>
                     <li class="ev-upLoadAdd" v-show="isReadyLoad&&imageList1.length<50">
                       <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">-->
                       <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">-->
@@ -761,7 +764,7 @@ export default {
         }
       });
     },
-
+    //微信预览本地图片
     wxChoosePic(){
       let that = this;
       wx.chooseImage({
@@ -790,7 +793,11 @@ export default {
         }
       })
     },
-
+    //微信删除本地图片
+    wxImgDelete(index){
+      this.imageList1.splice(index,1);
+      this.allParams.wxImgLists.splice(index,1);
+    },
     //系统版本检测
     checkSystemVersion() {
       return navigator.userAgent.match(/os\s+(\d+)/i)[1] - 0;
