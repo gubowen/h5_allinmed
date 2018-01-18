@@ -809,10 +809,6 @@
                       } else {
                         that.scrollToBottom();
                       }
-                    } else {
-                      $(".main-message").animate({
-                        scrollTop: 2000
-                      }, 300);
                     }
                     that.getImageList();
                     that.loading = false;

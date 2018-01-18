@@ -26,19 +26,25 @@
         <!--患者列表-->
         <!--<transition name="fadeDown" mode="out-in">-->
         <div data-alcode-mod='708' data-alcode-item-selector=".patient-list-item">
-          <section class="patient-list" v-if="!createNewPatient">
+          <transition-group
+            class="patient-list"
+            v-if="!createNewPatient"
+
+            tag="section"
+            name="fade">
             <section
               @click="toSelectPart(index)"
               :class="{'on':createNewPatient===false && currentIndex==index}"
               class="patient-list-item"
               v-for="(item, index) in patientList"
+              v-show="gotPatient"
               :key="index"
             >
               <figcaption>
                 {{item.patientName}}
               </figcaption>
             </section>
-          </section>
+          </transition-group>
           <section class="dutyTips" v-if="!createNewPatient">
             <section class="dutyTips-bg"></section>
             <p class="dutyTips-text">
@@ -84,7 +90,7 @@
               <figcaption>证件号码</figcaption>
               <figure class="add-patient-input">
                 <input type="text" @blur="IDBlur()" @input="inputMaxLength('IDNumber',18)"
-                        @focus="hideBar()"
+                       @focus="hideBar()"
                        :placeholder="credentialPlaceholder" name="IDNumber" v-model="IDNumber">
               </figure>
             </article>
@@ -120,7 +126,7 @@
               <figcaption>手机号码</figcaption>
               <figure class="add-patient-input">
                 <input type="number" @blur="validateBlur('phone')"
-                        @focus="hideBar()"
+                       @focus="hideBar()"
                        @input="inputMaxLength('phone',11)"
                        placeholder="便于接收必要通知" v-validate="'required|mobile'" name="phone" v-model="phone">
               </figure>
@@ -231,6 +237,7 @@
         createNewPatient: false,//添加新患者
         showSelectArea: false,//选择部位
         customerId: "",
+        gotPatient: false,
         areaParam: {
           provinceId: "",
           province: "",
@@ -297,7 +304,7 @@
             this.init();
           },
           hasBindedFn: (id) => {
-            this.$nextTick(()=>{
+            this.$nextTick(() => {
               this.errorShow = true;
               this.errorMsg = "您的微信账号已绑定其他手机号，请更换手机号登录";
               setTimeout(() => {
@@ -333,15 +340,15 @@
     filters: {},
     methods: {
       // 隐藏底部
-      hideBar () {
-        store.commit("setbottomNav",false);
+      hideBar() {
+        store.commit("setbottomNav", false);
       },
       // 显示底部
-      showBar () {
-        siteSwitch.weChatJudge(()=>{
+      showBar() {
+        siteSwitch.weChatJudge(() => {
           // store.commit("setbottomNav",false);
-        },()=>{
-          store.commit("setbottomNav",true);
+        }, () => {
+          store.commit("setbottomNav", true);
         });
       },
       init() {
@@ -550,6 +557,7 @@
       //获取患者列表
       getPatientList() {
         const that = this;
+        this.gotPatient = false;
         api.ajax({
           url: XHRList.patientList,
           method: "POST",
@@ -564,6 +572,7 @@
           },
           done(param) {
             that.finish = false;
+            that.gotPatient = true;
             that.count = param.responseObject.responseData.totalCount;
             if (param.responseObject.responseMessage == "NO DATA") {
               that.createNewPatient = true;
@@ -798,7 +807,7 @@
           url: XHRList.addPatient,
           method: "POST",
           data: {
-            customerId:this.customerId,//用户id
+            customerId: this.customerId,//用户id
             patientName: this.username,//患者姓名
 //            patientAge: this.userage,
             patientSex: this.sexSelect,

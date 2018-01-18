@@ -1057,7 +1057,7 @@
         max-width: 80%;
         @include ellipsis();
         vertical-align: middle;
-        transition: all .15s cubic-bezier(.71,-.46,.88,.6) .05s;
+        transition: all .15s linear;
       }
     }
   }

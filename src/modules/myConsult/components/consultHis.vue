@@ -10,9 +10,9 @@
         <a @click="hrefToConsult()" data-alcode='e162'>去问诊&gt;</a>
       </section>
     </template>
-    <div class="orderHistoryBox" data-alcode-mod='722' data-alcode-item-selector=".orderHistoryItem" v-else>
+    <div class="orderHistoryBox" data-alcode-mod='722'  data-alcode-item-selector=".orderHistoryItem" v-else >
       <section class="orderHistoryItem" @click="getThisItem(item)" v-for="item in items"
-               v-if="item.patientId&&item.patientId.length>0">
+               v-if="item.patientId&&item.patientId.length>0" >
         <article class="orderHisItemTop">
           <figure class="doctorInfo left">
             <figcaption class="docLogo left"><img :src="getImgUrl(item)"></figcaption>
@@ -35,7 +35,7 @@
           <button data-alcode='e137' class="hrefBtn" v-if="item.isRecommend==1" @click.stop="hrefToSuggest(item)">查看推荐专家</button>
         </div>
       </section>
-      <infinite-loading @infinite="onInfinite" v-if="checkFinish">
+      <infinite-loading @infinite="onInfinite" v-if="checkFinish" >
         <span slot="no-more" class="no-more">没有更多了</span>
         <span slot="spinner"></span>
       </infinite-loading>
@@ -87,6 +87,7 @@
         pageNum: 20,
         pageStart: 0,
         items: [],
+        allReady:false,
         checkFinish: false,
         isSubscribe: false,
         customerId: ""
@@ -157,6 +158,7 @@
       },
       onInfinite($state) {
         const that = this;
+        this.allReady=false;
         api.ajax({
           url: XHRList.getOrderHistoryLists,
           method: "post",
@@ -199,6 +201,7 @@
               }
             }
             that.finish = false;
+            that.allReady=true;
           }
         })
       },
@@ -615,7 +618,15 @@
       }
     }
   }
+  /*vue组件自定义动画开始*/
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
 
+  .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+    opacity: 0;
+  }
   .no-more {
     display: block;
     line-height: rem(50px);

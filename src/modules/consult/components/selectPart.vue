@@ -5,28 +5,30 @@
       <header class="part-select-title">
         <h3 v-if="!secondShow">点选最不适位置</h3>
       </header>
-        <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}">
-        <section class="body-picture body-picture-f" :class="pointClassObject">
-          <figure class="body-picture-content" :class="{'isIosWeChat':isWeChat}">
-            <img class="body-picture-img" :src="patientBody" alt="">
-            <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
-            <img v-for="item in imgArray" :src="item">
-            <section class="pain-point-box">
-              <div class="pain-point"
-                   v-for="(item , pIndex) in pointList.front"
-                   @click="selectPartToSecond(pIndex,'show')">
-              </div>
-            </section>
-            <!--<section class="hide-point-box">-->
-            <!--<div class="hide-point"-->
-            <!--v-for="(item,hIndex) in hidePoint.front"-->
-            <!--@click="selectPartToSecond(hIndex,'hide')"-->
-            <!--:class="{on:currentHindex===hIndex}">-->
-            <!--</div>-->
-            <!--</section>-->
-          </figure>
+      <transition name="fade">
+        <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}" v-show="allReady">
+          <section class="body-picture body-picture-f" :class="pointClassObject">
+            <figure class="body-picture-content" :class="{'isIosWeChat':isWeChat}">
+              <img class="body-picture-img" :src="patientBody" alt="">
+              <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
+              <img v-for="item in imgArray" :src="item">
+              <section class="pain-point-box">
+                <div class="pain-point"
+                     v-for="(item , pIndex) in pointList.front"
+                     @click="selectPartToSecond(pIndex,'show')">
+                </div>
+              </section>
+              <!--<section class="hide-point-box">-->
+              <!--<div class="hide-point"-->
+              <!--v-for="(item,hIndex) in hidePoint.front"-->
+              <!--@click="selectPartToSecond(hIndex,'hide')"-->
+              <!--:class="{on:currentHindex===hIndex}">-->
+              <!--</div>-->
+              <!--</section>-->
+            </figure>
+          </section>
         </section>
-      </section>
+      </transition>
       <button class="body-picture-overturn" @click="turnDirection" data-alcode='e125'></button>
 
       <loading v-show="finish"></loading>
@@ -60,6 +62,7 @@
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
+
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -73,6 +76,7 @@
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId,
         },
+        allReady:false,
         dpr: window.devicePixelRatio,
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         backPopupShow: '',
@@ -165,6 +169,7 @@
 
     mounted() {  //渲染启动...接收上一页携带路由参数体
       // 检测是否是微信
+      this.allReady=true;
       siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
       }, () => {
@@ -355,9 +360,9 @@
         localStorage.removeItem("questionList");
         this.$router.push({
           name: "discription",
-          params:{
-            height:this.$route.params.height,
-            weight:this.$route.params.weight
+          params: {
+            height: this.$route.params.height,
+            weight: this.$route.params.weight
           },
           query: {
             userId: this.patientMessage.userId,
@@ -1478,11 +1483,11 @@
     }
   }
 
-  @include iphoneX(){
-    .body-picture .body-picture-content{
+  @include iphoneX() {
+    .body-picture .body-picture-content {
       position: relative;
       top: -1rem;
-      &.isIosWeChat{
+      &.isIosWeChat {
         top: -2rem;
       }
     }

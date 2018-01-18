@@ -1203,6 +1203,7 @@ body {
           float: left;
           border: 1px solid #ececec;
           border-radius: 100px;
+          transition:all 0.2s linear;
           &.selected-right {
             float: right;
           }
