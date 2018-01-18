@@ -269,7 +269,7 @@
                @ensureClickEvent="isLeave =false;"
       >
       </confirm>
-      <Loading v-if="loading"></Loading>
+      <Loading v-show="loading"></Loading>
       <transition name="fade">
         <Toast :content="toastTips" v-if="toastShow"></Toast>
       </transition>

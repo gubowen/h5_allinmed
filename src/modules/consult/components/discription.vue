@@ -275,23 +275,18 @@
         }
       }
 
-      // this.$nextTick(() => {
-      //   setTimeout(() => {
-      //     Array.from(
-      //       this.$el.querySelectorAll("textarea")
-      //     ).forEach((element, index) => {
-      //       autosize(element);
-      //       autosize.update(element);
-      //     });
-      //   }, 1000);
-      // });
-
       if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
       } else {
         this.backPopupShow = false;
       }
       api.forbidShare();
+    },
+    beforeDestroy(){
+      this.painProgress={};
+      this.questionList=[];
+      this.renderList=[];
+      this.selectList=[];
     },
     computed: {
       dotSize() {
