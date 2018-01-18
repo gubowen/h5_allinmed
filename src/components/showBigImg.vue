@@ -205,7 +205,7 @@ export default {
       // topSwiper = "";
       // thumbSwiper = "";
 
-      if (_this.imageListBox.length == 0) {
+      if (_this.imageListBox.length == 1) {
         _this.$router.go(-1);
       }
     },
