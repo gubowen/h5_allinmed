@@ -36,7 +36,7 @@
                     <!-- <p class="qu-upLoadTips" @click="upLoadTips()">如何清晰拍摄影像资料？查看教程</p> -->
                   </figure>
                   <ul class="qu-upLoadItemBox qu-upLoadItemBox-s docInt">
-                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="index<9&&!isWeChat">
+                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="index<9">
                       <img alt="" @click="showBigImg(item,index,1)" :src="item.blob">
                       <span class="tc-upLoadDel" style="cursor: pointer" @click="imgDelete(item,index,1)" v-show="item.finish"></span>
                       <loading v-if="item.uploading"></loading>
@@ -46,15 +46,15 @@
                         <div class="ev-upLoadInput" @click="upLoadReload(index)" ref="uploader"></div>
                       </figure>
                     </li>
-                    <li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="isWeChat">
-                      <img :src="item">
-                      <span class="tc-upLoadDel" @click="wxImgDelete(index)"></span>
-                    </li>
+                    <!--<li class="tc-upLoadItemList ev-imgList success" v-for="(item,index) in imageList1" v-if="isWeChat">-->
+                      <!--<img :src="item">-->
+                      <!--<span class="tc-upLoadDel" @click="wxImgDelete(index)"></span>-->
+                    <!--</li>-->
                     <li class="ev-upLoadAdd" v-show="isReadyLoad&&imageList1.length<50">
-                      <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">-->
-                      <!--<input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">-->
-                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">
-                      <input class="ev-upLoadInput" type="button" v-if="isWeChat&&imageList1.length<50" @click="onFileChange()">
+                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple   capture="camera" ref="uploader">
+                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">
+                      <input class="ev-upLoadInput" accept="image/*" type="file" v-if="isIos&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)" multiple ref="uploader">
+                      <!--<input class="ev-upLoadInput" type="button" v-if="isWeChat&&imageList1.length<50" @click="onFileChange()">-->
                     </li>
                   </ul>
                 </form>
@@ -452,9 +452,9 @@ export default {
     },
     onFileChange(e, type, index) {
       let that = this;
-      if(that.isWeChat){
-        that.wxChoosePic();
-      }else{
+//      if(that.isWeChat){
+//        that.wxChoosePic();
+//      }else{
         let _files = e.target.files || e.dataTransfer.files;
         let files = [];
         that.filesObj = [];
@@ -515,7 +515,7 @@ export default {
             };
           }
         }
-      }
+//      }
     },
     //上传文件（方法封装）
     upLoadImgFn(files,type,index) {
@@ -969,11 +969,12 @@ export default {
         this.allParams.illnessHistory = "";
       }
       if (this.upload.has) {
-        if(this.isWeChat){
-          this.allParams.inspectionAttId = "";
-        }else{
-          this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
-        }
+//        if(this.isWeChat){
+//          this.allParams.inspectionAttId = "";
+//        }else{
+
+//        }
+        this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
         this.allParams.affectedAttId = "";
       } else {
         this.allParams.inspectionAttId = "";

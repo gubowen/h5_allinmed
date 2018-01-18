@@ -157,7 +157,7 @@
         },
         responseCaseId:"",
         orderSourceId: "", //进入分诊im需要orderSourceId
-        wxImgLists:[]
+//        wxImgLists:[]
       }
     },
     methods: {
@@ -188,7 +188,7 @@
         this.createParams.takeMedicine = params.takeMedicine;
         this.createParams.complication = params.complication;
         this.createParams.optionList = params.optionList;
-        this.wxImgLists = params.wxImgLists;
+//        this.wxImgLists = params.wxImgLists;
       },
       contentLimit(element,limit){
         let ranges = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi;
@@ -294,21 +294,6 @@
           this.submitTip = true;
         }
       },
-      //微信上传图片
-      wxUploadImg(imageUrl,caseId){
-        wx.uploadImage({
-          localId: imageUrl, // 需要上传的图片的本地ID，由chooseImage接口获得
-          isShowProgressTips: 1, // 默认为1，显示进度提示
-          success: function (data) {
-            console.log(data.serverId);
-
-          },
-          fail:function (err) {
-            console.log("上传失败");
-            console.log(err);
-          }
-        });
-      },
       //创建问诊单
       createCaseData(){
         let that = this;
@@ -327,28 +312,30 @@
             if (data.responseObject.responsePk !== 0) {
               that.responseCaseId = data.responseObject.responsePk;
               localStorage.setItem("payCaseId", that.responseCaseId);
+              //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
+              api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
               //微信上传图片
-              if(that.wxImgLists.length>0){
-                api.ajax({
-                  url: XHRList.uploadWX,
-                  method: "post",
-                  data: {
-                    caseCategoryId: "1",
-                    imageType: "0",
-                    mediaId: that.wxImgLists.join(),
-                    caseId: data.responseObject.responsePk
-                  },
-                  done(res) {
-                    if (res.responseObject.responseStatus) {
-                      console.log("上传成功");
-                      api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
-                    }
-                  }
-                })
-              }else{
-                //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
-                api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
-              }
+//              if(that.wxImgLists.length>0){
+//                api.ajax({
+//                  url: XHRList.uploadWX,
+//                  method: "post",
+//                  data: {
+//                    caseCategoryId: "1",
+//                    imageType: "0",
+//                    mediaId: that.wxImgLists.join(),
+//                    caseId: data.responseObject.responsePk
+//                  },
+//                  done(res) {
+//                    if (res.responseObject.responseStatus) {
+//                      console.log("上传成功");
+//                      api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
+//                    }
+//                  }
+//                })
+//              }else{
+//                //判断url里面是不是有doctorId，有则创建专业医生会话，无则分流分诊医生
+//                api.getPara().doctorId ? that.getProfessionalDoctor() : that.getTriageDoctorId();
+//              }
             } else {
               that.finish = false;
             }
