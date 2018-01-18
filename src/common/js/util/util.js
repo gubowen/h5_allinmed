@@ -25,9 +25,9 @@ class Api {
   //禁止分享
   forbidShare(){
     siteSwitch.weChatJudge(()=>{
-      // if(!(window.location.href.includes("m9") || window.location.href.includes("10.1") || window.location.href.includes("localhost"))){
+      if(!(window.location.href.includes("m9") || window.location.href.includes("10.1") || window.location.href.includes("localhost"))){
         forbidShare.wxforbidShare();
-      // }
+      }
     },()=>{
       console.log("不需要禁止");
     })
