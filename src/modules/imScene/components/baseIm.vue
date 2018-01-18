@@ -351,6 +351,7 @@
   import getFileType from "common/js/util/getFileType.js";
 
   import "babel-polyfill";
+  import TouchmoveDirection from "common/js/touchmoveDirection/touchmoveDirection"
 
   let nim;
 
@@ -696,10 +697,6 @@
         //如果没有初诊建议，直接定位到底部
         if (type === "history") {
           that.$store.state.previewSuggestionNum || that.scrollToBottom();
-        } else {
-          $(".main-message").animate({
-            scrollTop: 2000
-          }, 300);
         }
       },
       // 设置多媒体进度
@@ -1976,17 +1973,24 @@
         }
       },
       initScroll() {
-        document.querySelector(".main-message").addEventListener("scroll", () => {
-          clearTimeout(this._scrollTips);
-          this._scrollTips = setTimeout(() => {
-            if (document.querySelector(".main-message").scrollTop < 200) {
-              if (!this.allMsgsGot) {
-                store.commit("setHistoryStatus", "scrollInit");
-                this.getMessageList("scrollInit");
+        this.touchmoveDirection = "";
+        new TouchmoveDirection((dir) => {
+          this.touchmoveDirection = dir;
+        });
+        setTimeout(() => {
+          document.querySelector(".main-message").addEventListener("scroll", () => {
+            clearTimeout(this._scrollTips);
+            this._scrollTips = setTimeout(() => {
+              if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
+                if (!this.allMsgsGot) {
+                  store.commit("setHistoryStatus", "scrollInit");
+                  this.getMessageList("scrollInit");
+                }
               }
-            }
-          }, 200);
-        })
+            }, 200);
+          })
+        }, 20);
+
       },
       refreshScroll() {
         this.scroll && this.scroll.refresh();

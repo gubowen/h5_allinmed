@@ -331,6 +331,7 @@
 
   import GetQiniuToken from "common/js/IM_BaseMethod/getQiniuToken";
   import $ from "jquery";
+  import TouchmoveDirection from "common/js/touchmoveDirection/touchmoveDirection"
 
   let nim;
 
@@ -772,7 +773,7 @@
       },
       getMessageList(type) {
         let that = this;
-        this.finish=true;
+        this.finish = true;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
@@ -808,7 +809,7 @@
                       } else {
                         that.scrollToBottom();
                       }
-                    }else{
+                    } else {
                       $(".main-message").animate({
                         scrollTop: 2000
                       }, 300);
@@ -819,7 +820,7 @@
                 });
               }
             };
-            that.finish=false;
+            that.finish = false;
             if (type === "history") {
               that.getDoctorMsg(() => {
                 _FN();
@@ -1232,7 +1233,7 @@
           if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
           } else {
-            setTimeout(()=>{
+            setTimeout(() => {
               this.scrollToBottom();
               document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
             }, 20);
@@ -1981,16 +1982,23 @@
         });
       },
       initScroll() {
-        document.querySelector(".main-message").addEventListener("scroll", () => {
-          clearTimeout(this._scrollTips);
-          this._scrollTips = setTimeout(() => {
-            if (document.querySelector(".main-message").scrollTop < 200) {
-              if (!this.allMsgsGot) {
-                this.getMessageList("scrollInit");
+        this.touchmoveDirection = "";
+        new TouchmoveDirection((dir) => {
+          this.touchmoveDirection = dir;
+        });
+        setTimeout(() => {
+          document.querySelector(".main-message").addEventListener("scroll", () => {
+            clearTimeout(this._scrollTips);
+            this._scrollTips = setTimeout(() => {
+              if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
+                if (!this.allMsgsGot) {
+                  this.getMessageList("scrollInit");
+                }
               }
-            }
-          }, 200);
-        })
+            }, 200);
+          })
+        }, 200);
+
       }
     },
     computed: {

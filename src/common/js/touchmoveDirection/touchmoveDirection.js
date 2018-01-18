@@ -1,5 +1,5 @@
 /**
- * @Desc：
+ * @Desc：判断手指滑动方向
  * @Usage:
  * @Notify：
  * @Depend：
@@ -7,11 +7,11 @@
  * Created by Qiangkailiang on 2018/1/18.
  */
 export default class TouchmoveDirection {
-  constructor() {
+  constructor(fn) {
     this.startx = 0;
-    this.starty = 0
+    this.starty = 0;
     this.touchScreen();
-    this.leaveScreen();
+    this.leaveScreen(fn);
   }
 
   getAngle(angx, angy) {
@@ -49,26 +49,26 @@ export default class TouchmoveDirection {
     }, false);
   }
 
-  leaveScreen() {
-    document.addEventListener("touchend", (e) => {
+  leaveScreen(fn) {
+    document.addEventListener("touchmove", (e) => {
       let endx = e.changedTouches[0].pageX;
       let endy = e.changedTouches[0].pageY;
       const direction = this.getDirection(this.startx, this.starty, endx, endy);
       switch (direction) {
         case 0:
-          alert("未滑动！");
+          fn(0);
           break;
         case 1:
-          alert("向上！")
+          fn("up");
           break;
         case 2:
-          alert("向下！")
+          fn("down");
           break;
         case 3:
-          alert("向左！")
+          fn("left");
           break;
         case 4:
-          alert("向右！")
+          fn("right");
           break;
         default:
       }
