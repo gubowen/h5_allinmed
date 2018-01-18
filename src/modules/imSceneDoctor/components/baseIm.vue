@@ -357,7 +357,7 @@
   const IS_Android = net.browser().android;
 
 
-  const getQiniuToken=new GetQiniuToken();
+  const getQiniuToken = new GetQiniuToken();
   export default {
     data() {
       return {
@@ -778,8 +778,7 @@
           endTime: that.historyBeginTime,
           to: this.targetData.account,
           done(error, obj) {
-            that.getDoctorMsg(() => {
-
+            let _FN = function () {
               if (type === "scrollInit" && obj.msgs.length === 0) {
                 that.toastTips = `没有更多消息了`;
                 that.toastShow = true;
@@ -802,7 +801,7 @@
                 });
                 that.$nextTick(() => {
                   setTimeout(() => {
-                    if (type==="history"){
+                    if (type === "history") {
                       if (api.getPara().position === "push" && that.$refs.outpatientInvite) {
                         // document.scrollTop=that.$refs.outpatientInvite[0].$el.
                       } else {
@@ -814,8 +813,15 @@
                   }, 400);
                 });
               }
-            });
+            };
 
+            if (type === "history") {
+              that.getDoctorMsg(() => {
+                _FN();
+              });
+            } else {
+              _FN();
+            }
           },
           limit: 20
         });
@@ -1222,6 +1228,7 @@
             this.scrollToBottom();
           } else {
             setTimeout(function () {
+              this.scrollToBottom();
               document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
             }, 20);
           }
@@ -1528,41 +1535,41 @@
       },
       // 选择视频
       sendVideo(e) {
-/*        let _file = e.target.files[0];
-        this.inputVideoFlag = false;
-        this.$nextTick(() => {
-          this.inputVideoFlag = true;
-        })
-        if (e.target.files.length > 1) {
-          this.toastTips = `每次只能上传一个视频`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
-          return;
-        }
-        if (_file.size >= 104857600) {
-          this.toastTips = `视频最大为100M`;
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
-          return;
-        }
+        /*        let _file = e.target.files[0];
+                this.inputVideoFlag = false;
+                this.$nextTick(() => {
+                  this.inputVideoFlag = true;
+                })
+                if (e.target.files.length > 1) {
+                  this.toastTips = `每次只能上传一个视频`;
+                  this.toastShow = true;
+                  setTimeout(() => {
+                    this.toastShow = false;
+                  }, 2000);
+                  return;
+                }
+                if (_file.size >= 104857600) {
+                  this.toastTips = `视频最大为100M`;
+                  this.toastShow = true;
+                  setTimeout(() => {
+                    this.toastShow = false;
+                  }, 2000);
+                  return;
+                }
 
-        if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
-          this.sendVideoFile(_file);
-        } else {
-          if (_file.type.includes("video")) {
-            this.toastTips = `请选择mp4或mov文件`;
-          } else {
-            this.toastTips = `请选择视频文件`;
-          }
-          this.toastShow = true;
-          setTimeout(() => {
-            this.toastShow = false;
-          }, 2000);
-        }*/
+                if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
+                  this.sendVideoFile(_file);
+                } else {
+                  if (_file.type.includes("video")) {
+                    this.toastTips = `请选择mp4或mov文件`;
+                  } else {
+                    this.toastTips = `请选择视频文件`;
+                  }
+                  this.toastShow = true;
+                  setTimeout(() => {
+                    this.toastShow = false;
+                  }, 2000);
+                }*/
       },
       // 上传视频文件
       sendVideoFile(_file) {
@@ -2047,7 +2054,6 @@
         localStorage.setItem("APPIMLinks", location.href);
         localStorage.setItem("PCIMLinks", location.href);
       }
-
 
 
     },
