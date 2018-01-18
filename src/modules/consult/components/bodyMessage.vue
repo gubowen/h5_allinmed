@@ -14,7 +14,6 @@
               </header>
 
               <section class="input-area disIllness">
-                <figure class="main-input-box-textarea-inner">
                   <section class="area-content">
                     <pre><span>{{disContent}}<br></span></pre>
                     <textarea
@@ -26,10 +25,10 @@
                       @input="contentLimit('disContent',1000)">
                       </textarea>
                   </section>
-                </figure>
+                <span class="qu-underline"></span>
+                <span class="text-num-tips">{{disContent.length}}/1000</span>
               </section>
             </section>
-            <span class="text-num-tips">{{disContent.length}}/1000</span>
             <section class="consult-total">
               <header class="consult-inner-title">
                 <h2>
@@ -50,8 +49,9 @@
                               @input="contentLimit('helpContent',1000)">
                 </textarea>
                   </section>
+                <span class="text-num-tips">{{helpContent.length}}/1000</span>
+                <span class="qu-underline"></span>
               </figure>
-              <span class="text-num-tips">{{helpContent.length}}/1000</span>
             </section>
             <section class="consult-total">
               <header class="consult-inner-title">
@@ -668,6 +668,13 @@
       padding: rem(30px);
     }
     .consult-total {
+      .qu-underline {
+        display: block;
+        height: rem(2px);
+        width: 100%;
+        background-color: #d5d5d5;
+        margin-bottom: rem(16px);
+      }
         .input-area{
           background-color: #e5e5e5;
           position: relative;
@@ -687,7 +694,10 @@
                 min-height: rem(72px);
               }
               .main-input-box-textarea {
+                max-height: 2rem;
                 background-color: #e5e5e5;
+                padding-top: rem(15px);
+                padding-bottom: rem(15px);
                 width: 100%;
                 @include font-dpr(14px);
                 border: 0 solid #e8ecef;
