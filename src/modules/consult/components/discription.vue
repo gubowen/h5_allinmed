@@ -1048,6 +1048,7 @@
         width: rem(48px);
         height: rem(48px);
         float: right;
+        transition: all .15s linear;
       }
       & > p {
         @include font-dpr(18px);
@@ -1056,6 +1057,7 @@
         max-width: 80%;
         @include ellipsis();
         vertical-align: middle;
+        transition: all .15s cubic-bezier(.71,-.46,.88,.6) .05s;
       }
     }
   }

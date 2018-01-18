@@ -386,7 +386,7 @@
         imageProgress: {},
         // 视频发送进度
         videoProgress: {},
-        allMsgsGot:false,
+        allMsgsGot: false,
         // 文件pdf发送进度
         fileProgress: {},
         patientCustomerId: localStorage.getItem("userId"),
@@ -495,7 +495,7 @@
             },
             //同步登录用户名片的回调, 会传入用户名片
             onmyinfo(userData) {
-              store.commit("setHistoryStatus","history");
+              store.commit("setHistoryStatus", "history");
               that.getMessageList("history");
             },
             onwillreconnect(obj) {
@@ -526,7 +526,7 @@
             onmsg(msg) {
               console.log(msg);
               if (msg.from === that.targetData.account) {
-                store.commit("setHistoryStatus","history");
+                store.commit("setHistoryStatus", "history");
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 // that.pauseTime(msg); //收到检查检验隐藏顶部框；
                 that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框或者分诊完成；
@@ -605,18 +605,18 @@
       getMessageList(type) {
         let that = this;
         //获取云端历史记录
-        this.finish=true;
+        this.finish = true;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
           endTime: that.historyBeginTime,
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
-            that.finish=false;
+            that.finish = false;
             if (type === "scrollInit" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
-              that.allMsgsGot=true;
-            } else if (type === "history"&&obj.msgs.length===0) {
+              that.allMsgsGot = true;
+            } else if (type === "history" && obj.msgs.length === 0) {
               that.getMedicalMessage();
 
             } else {
@@ -696,6 +696,10 @@
         //如果没有初诊建议，直接定位到底部
         if (type === "history") {
           that.$store.state.previewSuggestionNum || that.scrollToBottom();
+        } else {
+          $(".main-message").animate({
+            scrollTop: 2000
+          }, 300);
         }
       },
       // 设置多媒体进度
@@ -1170,8 +1174,8 @@
       },
       //聊天记录时间处理压入是0还是1
       getTimeStampShowList() {
-        this.beginTimestamp=0;
-        this.timeStampShowList=[];
+        this.beginTimestamp = 0;
+        this.timeStampShowList = [];
         this.msgList.forEach((element, index) => {
           if ((element.time - this.beginTimestamp) / (5 * 60 * 1000) > 1) {
             this.beginTimestamp = element.time;
@@ -1976,8 +1980,8 @@
           clearTimeout(this._scrollTips);
           this._scrollTips = setTimeout(() => {
             if (document.querySelector(".main-message").scrollTop < 200) {
-              if (!this.allMsgsGot){
-                store.commit("setHistoryStatus","scrollInit");
+              if (!this.allMsgsGot) {
+                store.commit("setHistoryStatus", "scrollInit");
                 this.getMessageList("scrollInit");
               }
             }
