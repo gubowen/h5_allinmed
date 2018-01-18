@@ -495,6 +495,7 @@
             },
             //同步登录用户名片的回调, 会传入用户名片
             onmyinfo(userData) {
+              store.commit("setHistoryStatus","history");
               that.getMessageList("history");
             },
             onwillreconnect(obj) {
@@ -525,6 +526,7 @@
             onmsg(msg) {
               console.log(msg);
               if (msg.from === that.targetData.account) {
+                store.commit("setHistoryStatus","history");
                 console.log("收到回复消息：" + JSON.stringify(msg));
                 // that.pauseTime(msg); //收到检查检验隐藏顶部框；
                 that.hideInput(msg); // 患者端收到拒绝问诊隐藏输入框或者分诊完成；
@@ -1975,6 +1977,7 @@
           this._scrollTips = setTimeout(() => {
             if (document.querySelector(".main-message").scrollTop < 200) {
               if (!this.allMsgsGot){
+                store.commit("setHistoryStatus","scrollInit");
                 this.getMessageList("scrollInit");
               }
             }

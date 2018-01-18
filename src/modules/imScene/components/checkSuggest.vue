@@ -1,25 +1,6 @@
 <template>
   <div data-alcode-mod='715'>
     <section class="main-message-box">
-    <!--<article class="main-message-box-item others-message">-->
-      <!--<figure class="main-message-img">-->
-        <!--<img src="//m.allinmed.cn/image/imScene/chatting_portrait_system@2x.png" alt="">-->
-      <!--</figure>-->
-      <!--<figcaption class="check-suggestion message-result ev-upLoadBtn" data-role="checkSuggestion" @click="goToUpload">-->
-        <!--<article class="message-result-item">-->
-          <!--<header class="message-result-item-title">检查/检验建议</header>-->
-          <!--<section class="message-result-item-message">-->
-            <!--<p class="check-suggestion-item"-->
-               <!--:data-adviceid="item.adviceId"-->
-               <!--:data-advicetype="item.adviceType"-->
-               <!--v-for="item in checkSuggestMessage.data"-->
-            <!--&gt;-->
-              <!--<span>{{item.adviceName}}</span>-->
-            <!--</p>-->
-          <!--</section>-->
-        <!--</article>-->
-      <!--</figcaption>-->
-    <!--</article>-->
     <article class="check-suggest-box">
       <header class="check-suggest-title">建议您进行以下检查，并上传检查资料，分诊将继续为您解答，并推荐对症专家</header>
       <section class="check-suggest-bg"></section>
