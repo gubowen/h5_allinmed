@@ -6,13 +6,14 @@
  *
  * Created by Qiangkailiang on 17/7/14.
  */
-
+// import appVersion from "common/js/versionCode/versionCode";
 import ajax from "./ajax";
 import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
 import forbidShare from "./wxForbidShare";
 import siteSwitch from "../siteSwitch/siteSwitch";
+
 import "babel-polyfill";
 import net from "./net";
 import fb from "common/js/errorWatch/fundebug";
@@ -321,7 +322,7 @@ class Api {
 let api = new Api();
 prototype();
 
-
+// appVersion();
 
 
 export default api;

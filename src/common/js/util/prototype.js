@@ -18,4 +18,6 @@ export default function prototype() {
       }
     }
   };
+
+  window.version = "1.1.3";
 };

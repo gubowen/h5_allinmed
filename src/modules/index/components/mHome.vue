@@ -179,7 +179,7 @@
         return logoImg;
       },
       bannerHref(item) {
-        // window.location.href = item.adAdditionalUrl;
+        // g_sps.jump()item.adAdditionalUrl;
       },
       getFullName(opt) {
         if (opt.fullName.length > 6) {
@@ -210,29 +210,30 @@
         });
       },
       //问诊
-      diagnoseEvent() {
+      diagnoseEvent(e) {
+        console.log(e.target)
         if (this.loginFlag) {
-          window.location.href = XHRList.diagnose;
+          g_sps.jump(e.target,XHRList.diagnose);
         } else {
           //跳到登录注册页.
           localStorage.setItem("backUrl", window.location.href);
-          window.location.href = XHRList.loginUrl;
+          g_sps.jump(e.target,XHRList.loginUrl);
         }
       },
       //更多
-      moreEvent() {
+      moreEvent(e) {
         if (this.loginFlag) {
-          window.location.href = XHRList.historyUrl;
+          g_sps.jump(e.target,XHRList.historyUrl);
         } else {
           //跳到登录注册页.
           localStorage.setItem("backUrl", window.location.href);
-          window.location.href = XHRList.loginUrl;
+          g_sps.jump(e.target,XHRList.loginUrl);
         }
       },
       //登录
       loginEvent() {
         localStorage.setItem("backUrl", window.location.href);
-        window.location.href = XHRList.loginUrl;
+        g_sps.jump(e.target,XHRList.loginUrl);
       },
       getAdList() {
         const that = this;
