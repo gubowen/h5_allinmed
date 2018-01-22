@@ -7,7 +7,7 @@
         <p>添加关心的人，在线咨询预约，唯医骨科为您开启全新的就医体验</p>
       </section>
       <section class="noFriendHref" data-alcode-mod='750'>
-        <a @click="hrefToConsult()" data-alcode='e162'>去问诊&gt;</a>
+        <a @click="hrefToConsult" data-alcode='e162'>去问诊&gt;</a>
       </section>
     </template>
     <div class="orderHistoryBox" data-alcode-mod='722'  data-alcode-item-selector=".orderHistoryItem" v-else >

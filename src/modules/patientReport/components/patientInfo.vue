@@ -383,7 +383,7 @@
         localStorage.setItem("noMR",1);
         // window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
         let urlTemp = '/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
-        g_sps.jump(e.target,urlTemp); 
+        g_sps.jump(null,urlTemp); 
       },
       //获取绑定的手机号
       getPatientPhone(){

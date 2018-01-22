@@ -7,7 +7,7 @@
       </p>
       <span class="jump"></span>
     </router-link>
-    <section class="allinmed-personal-link" @click="goSuggestFn()">
+    <section class="allinmed-personal-link" @click="goSuggestFn">
       <p class='allinmed-personal-des'>
         <span class="icon suggesstion"></span>
         <span class="title">建议反馈</span>

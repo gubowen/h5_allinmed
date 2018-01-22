@@ -33,7 +33,7 @@
         <span class="getCode" v-if="codeTime<=0" @click="sendCode('again')">重新发送</span>
         <span class="codeCountdown" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
       </section>
-      <button class="submitButton" :class="{'on':validCode.length>0}" @click="validateCode()">提交</button>
+      <button class="submitButton" :class="{'on':validCode.length>0}" @click="validateCode">提交</button>
     </section>
     <transition name="fade">
       <vConfirm v-if="confirmFlag" :confirmParams="{

@@ -53,15 +53,20 @@
             let _this=this;
             this.backPopupShow=false;
             if(_this.backPopupParams.patientParams.doctorId){
-              window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}&doctorId=${_this.backPopupParams.patientParams.doctorId}`;
+              // window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}&doctorId=${_this.backPopupParams.patientParams.doctorId}`;
+              let urlTemp = `/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}&doctorId=${_this.backPopupParams.patientParams.doctorId}`
+              g_sps.jump(null,urlTemp); 
             }else{
-              window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}`;
+              // window.location.href=`/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}`;
+              let urlTemp = `/dist/consult.html?customerId=${_this.backPopupParams.patientParams.customerId}`
+              g_sps.jump(null,urlTemp); 
             }
           },
           //继续沟通
           ensureIMEvent(){
             this.backPopupShow=false;
-            window.location.href = localStorage.getItem("PCIMLinks");
+            // window.location.href = ;
+            g_sps.jump(null,localStorage.getItem("PCIMLinks")); 
           }
         },
         props: {

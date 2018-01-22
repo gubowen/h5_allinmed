@@ -37,7 +37,7 @@
               <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()" data-alcode='e147'>获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()" data-alcode='e148'>登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin" data-alcode='e148'>登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e149'>账号密码登录</span>
             </article>

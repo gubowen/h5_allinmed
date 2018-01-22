@@ -49,7 +49,7 @@
       </li>
     </ul>
     <button class="submitButton" v-if="!finishMobile" :class="{'on':phonePass}" @click="phonePass&&sendCode()" data-alcode='e157'>发送验证码</button>
-    <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword()">提交</button>
+    <button class="submitButton" v-if="finishMobile" :class="{'on':allPass}" @click="resetPassword">提交</button>
 
   </section>
           <transition name="fade">

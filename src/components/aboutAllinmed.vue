@@ -8,7 +8,7 @@
         唯医互联网骨科医院隶属于唯医网，是中国首家骨科专科互联网医院，经国家卫计委批准，于2017年获得医疗机构执业许可证。 为全国骨科患者提供“线上问诊-线下手术-术后康复”的标准化流程服务。通过融合线上与线下，连接骨科患者、骨科医生、医院和药械厂商， 打造全新的骨科疾病诊疗模式。最大程度地帮助患者提升治疗效果、降低治疗成本、提升就医体验。
         唯医实体医院将于明年开始在全国各大城市落地，旨在提升中国骨科诊疗水平。
       </p>
-      <button class="main-btn" @click='goConsult()'>点击看病</button>
+      <button class="main-btn" @click='goConsult'>点击看病</button>
     </section>
   </section>
 </template>
@@ -33,11 +33,13 @@
       focusAllinmed(){
         this.$router.push({path: '/followWechat'});
       },
-      goConsult () {
+      goConsult (e) {
         if (localStorage.getItem("userId")){
-          location.href = this.consultUrl;
+          // location.href = this.consultUrl;
+          g_sps.jump(e.target,this.consultUrl); 
         }else{
-          window.location.href="/dist/mLogin.html";
+          // window.location.href="/dist/mLogin.html";
+          g_sps.jump(e.target,"/dist/mLogin.html"); 
         }
 
       }

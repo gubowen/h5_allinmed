@@ -422,10 +422,10 @@
     },
 
     methods: {
-      goFeedback(e) {
+      goFeedback() {
         // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
         let urlTemp = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
-        g_sps.jump(e.target,urlTemp); 
+        g_sps.jump(null,urlTemp); 
       },
       longTouchEmitHandler(index) {
         if (this.$store.state.toolbarConfig.delete) {
@@ -659,10 +659,10 @@
           });
         }
       },
-      goToDoctorHomePage(e) {
+      goToDoctorHomePage() {
         // window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
         let urlTemp = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
-        g_sps.jump(e.target,urlTemp); 
+        g_sps.jump(null,urlTemp); 
       },
       getUserBaseData() {
         const that = this;

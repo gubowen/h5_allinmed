@@ -438,9 +438,9 @@
 
     methods: {
       // 去意见反馈；
-      goFeedback(e) {
+      goFeedback() {
         // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
-        g_sps.jump(e.target,`/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`); 
+        g_sps.jump(null,`/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`); 
       },
       // 控制 vuex toast控制
       toastControl(message) {
@@ -1915,7 +1915,7 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
-              g_sps.jump(e.target,urlTemp); 
+              g_sps.jump(null,urlTemp); 
             }
           }
         });
