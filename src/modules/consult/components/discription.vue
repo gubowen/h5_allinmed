@@ -676,7 +676,7 @@
           this.errorMsg = "最多只能输入500字";
           return false;
         }
-        this.selectList[pIndex].optionDesc = content;
+        this.selectList[pIndex].optionDesc = encodeURIComponent(content);
       },
       getPainLevelData(item, value) {
         this.showPainProgress = false;
@@ -720,7 +720,7 @@
           userId: this.$route.query.userId,
           optionList: this.selectList,
           patientId: this.patientMessage.patientId,
-          complication: this.complication,
+          complication: encodeURIComponent(this.complication),
           count: this.$route.query.count,
           height:this.$route.params.height,
           weight:this.$route.params.weight,

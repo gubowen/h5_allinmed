@@ -981,7 +981,7 @@ export default {
         this.allParams.affectedAttId = "";
       }
       if (this.medical.has) {
-        this.allParams.takeMedicine = this.medicalMessage || "";
+        this.allParams.takeMedicine = encodeURIComponent(this.medicalMessage) || "";
       } else {
         this.allParams.takeMedicine = "";
       }
