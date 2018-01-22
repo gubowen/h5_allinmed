@@ -305,8 +305,8 @@
         this.finish = true;
         this.createParams.height = this.heightContent;
         this.createParams.weight = this.weightContent;
-        this.createParams.descriptionDisease = this.disContent;
-        this.createParams.needHelp = this.helpContent;
+        this.createParams.descriptionDisease =encodeURIComponent(this.disContent);
+        this.createParams.needHelp = encodeURIComponent(this.helpContent);
         api.ajax({
           url: XHRList.createCase,
           method: "POST",
