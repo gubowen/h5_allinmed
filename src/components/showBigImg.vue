@@ -91,7 +91,7 @@ export default {
       console.log("视图更新中");
     if(_this.deletePicTip){
       return false;
-    }  
+    }
     if (_this.activeStats) {
       index = _this.activeIndex;
     } else {
@@ -307,6 +307,7 @@ html {
     .swiper-container {
       height: 100%;
       .swiper-wrapper {
+        will-change: transform;
         height: 100%;
         .swiper-slide {
           img {
