@@ -894,11 +894,12 @@
       margin: 0;
       box-sizing: border-box;
       max-height:4rem;
-      overflow: auto;
+      overflow: hidden;
       .box{
         max-height: 2rem;
       .area-content{
         position: relative;
+
         pre {
           display: block;
           visibility: hidden;
