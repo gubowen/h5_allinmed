@@ -32,7 +32,7 @@ export default new Vuex.Store({
     renderSuggestionNum:0,//渲染出诊建议次数
     patientName:"",
     deleteBtnShow:false,
-    historyStatus:"history",
+    historyStatus:"",
     toolbarConfig: {
       image: false,
       video: false,

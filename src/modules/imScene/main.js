@@ -10,6 +10,7 @@ import Vue from 'vue';
 import App from './App';
 import VueRouter from 'vue-router';
 import vueg from 'vueg';
+import VueScroller from "vue-scroller";
 import Vuex from 'vuex';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";
@@ -40,6 +41,7 @@ class ImScene {
     //路由系统注册
     Vue.use(VueRouter);
     Vue.use(touch);
+    Vue.use(VueScroller);
     this.routerStart();
     this.registerRouter();
     //Vue实例启动
