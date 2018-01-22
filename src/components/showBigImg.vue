@@ -4,7 +4,7 @@
     <div class="gallery-top" @click="imageClickFn" :class="{'isAbleDelete':isDelete}">
       <!-- slides -->
       <div class="swiper-container topSwiper">
-        <div class="swiper-wrapper">
+        <div class="swiper-wrapper" :class="{'noTransition':!isIos}">
           <div class="swiper-slide swiper-zoom-container"  v-for="(item,index) in imageListBox" :key="item.imgId">
             <img :src="item.blob" alt="" >
           </div>
@@ -21,7 +21,7 @@
     <!-- 预览模式 -->
      <div class="gallery-thumbs" v-show="imageListBox.length>1" :class="{'isAbleDelete':isDelete}">
         <div class="swiper-container thumbSwiper">
-          <div class="swiper-wrapper">
+          <div class="swiper-wrapper" :class="{'noTransition':!isIos}">
             <div class="swiper-slide" v-for="item in imageListBox" :key="item.imgId">
               <img :src="item.blob"/>
             </div>
@@ -72,7 +72,8 @@ export default {
       deletArr: [],
       activeStats: false,
       activeIndex: 0,
-      deletePicTip:false
+      deletePicTip:false,
+      isIos: navigator.userAgent.toLowerCase().includes("iphone")
     };
   },
   computed: {},
@@ -205,7 +206,7 @@ export default {
       // topSwiper = "";
       // thumbSwiper = "";
 
-      if (_this.imageListBox.length == 1) {
+      if (_this.imageListBox.length <= 0) {
         _this.$router.go(-1);
       }
     },
@@ -307,7 +308,9 @@ html {
     .swiper-container {
       height: 100%;
       .swiper-wrapper {
-        will-change: transform;
+        &.noTransition{
+          transition: none !important;
+        }
         height: 100%;
         .swiper-slide {
           img {
