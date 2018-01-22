@@ -202,7 +202,7 @@ export default {
         }
       }, 1000);
     },
-    resetPassword() {
+    resetPassword(e) {
       this.$store.commit("setLoadingState",true);
       this.$validator.validateAll();
         if (this.errors.has("codeInput")) {
@@ -230,9 +230,13 @@ export default {
                 api.getPara().customerId &&
                 api.getPara().customerId.length > 0
               ) {
-                window.location.href=`/dist/mLogin.html?from=${from}&customerId=${api.getPara().customerId}`;
+                // window.location.href=`/dist/mLogin.html?from=${from}&customerId=${api.getPara().customerId}`;
+                let urlTemp = `/dist/mLogin.html?from=${from}&customerId=${api.getPara().customerId}`;
+                g_sps.jump(e.target,urlTemp); 
               }else{
-                window.location.href=`/dist/mLogin.html?from=${from}`;
+                // window.location.href=`/dist/mLogin.html?from=${from}`;
+                let urlTemp = `/dist/mLogin.html?from=${from}`;
+                g_sps.jump(e.target,urlTemp); 
               }
             }, 3000);
             this.$store.commit("setLoadingState",false);

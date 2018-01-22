@@ -17,7 +17,7 @@
       </transition>
       <transition name="fadeDown">
         <article class="main-message-time doctor-title-message" v-if="getTargetMsgFinish&&!lastTimeShow"
-                 @click.stop="goToDoctorHomePage">
+                 @click.stop="goToDoctorHomePage($event)">
           <figure class="doctor-title-img">
             <img :src="$store.state.targetMsg.avatar" alt="">
           </figure>
@@ -170,13 +170,13 @@
               </BottomTips>
             </transition>
             <!--医生拒绝-->
-            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick(2)">
+            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==2" @click="retryClick($event,2)">
               <div>
                 <span>重新推荐</span>
               </div>
             </section>
             <!--超时未接诊-->
-            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick(-1)">
+            <section class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==-1" @click="retryClick($event,-1)">
               <div>
                 <span>重新支付</span>
               </div>
@@ -189,7 +189,7 @@
             </section>
             <!--继续沟通-->
             <section data-alcode='e134' class="prohibit-input" v-if="!lastTimeShow&&bottomTipsType==1"
-                     @click="retryClick(1)">
+                     @click="retryClick($event,1)">
               <div>
                 <span>继续沟通</span>
               </div>
@@ -422,8 +422,10 @@
     },
 
     methods: {
-      goFeedback() {
-        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      goFeedback(e) {
+        // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+        let urlTemp = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+        g_sps.jump(e.target,urlTemp); 
       },
       longTouchEmitHandler(index) {
         if (this.$store.state.toolbarConfig.delete) {
@@ -657,8 +659,10 @@
           });
         }
       },
-      goToDoctorHomePage() {
-        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
+      goToDoctorHomePage(e) {
+        // window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
+        let urlTemp = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
+        g_sps.jump(e.target,urlTemp); 
       },
       getUserBaseData() {
         const that = this;
@@ -1830,7 +1834,7 @@
           }
         });
       },
-      retryClick(type) {
+      retryClick(e,type) {
         const that = this;
         switch (type) {
           case -1:
@@ -1858,28 +1862,21 @@
                     that.$store.state.targetMsg.nick
                   );
 
-                  window.location.href =
-                    "/dist/imScene.html?&caseId=" +
+                  // window.location.href =
+                  //   "/dist/imScene.html?&caseId=" +
+                  //   api.getPara().caseId +
+                  //   "&patientId=" +
+                  //   api.getPara().patientId +
+                  //   "&shuntCustomerId=" +
+                  //   that.shuntCustomerId;
+
+                  let urlTemp = "/dist/imScene.html?&caseId=" +
                     api.getPara().caseId +
                     "&patientId=" +
                     api.getPara().patientId +
                     "&shuntCustomerId=" +
                     that.shuntCustomerId;
-                  // that.nim.sendText({
-                  //   scene: "p2p",
-                  //   to: "1_doctor00001",
-                  //   custom: JSON.stringify({
-                  //     cType: "1",
-                  //     cId: api.getPara().doctorCustomerId,
-                  //     mType: "0",
-                  //     conId: that.orderSourceId
-                  //   }),
-                  //   text: `${that.$store.state.targetMsg
-                  //     .nick}拒绝了我的咨询，请重新为我匹配对症医生`,
-                  //   done(error, obj) {
-
-                  //   }
-                  // });
+                  g_sps.jump(e.target,urlTemp); 
                 }
               }
             });

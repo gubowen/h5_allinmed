@@ -168,7 +168,6 @@
                   t.changeIsExistPwd();
                   clearTimeout(callBackTimer);
                   let callBackTimer = setTimeout(function () {
-                    //window.location.href = t.loginUrl;
                     t.$router.push({
                       path: "/personalIndex"
                     });

@@ -179,7 +179,6 @@
                   t.toast("修改密码成功");
                   clearTimeout(callBackTimer);
                   let callBackTimer = setTimeout(function () {
-                    //window.location.href = t.loginUrl;
                     t.$router.push({
                       path: "/personalIndex"
                     });

@@ -64,7 +64,8 @@
       'customerName'(newStr){
         let t = this;
           if(newStr.length===0){
-            window.location.href = t.loginUrl;
+            // window.location.href = t.loginUrl;
+            g_sps.jump(null,t.loginUrl); 
           }
       }
     },

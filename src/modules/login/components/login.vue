@@ -267,7 +267,7 @@
         }, 1000);
       },
       //click submit btn
-      loginSubmit(){
+      loginSubmit(e){
         let _this = this;
         if (!this.RuleIcon) {
           //未同意条款
@@ -287,12 +287,12 @@
             _this.params.codeCheck.account = _this.phoneMessage;
             _this.params.codeCheck.mobile=_this.phoneMessage;
             _this.params.codeCheck.customerId=api.getPara().customerId;
-            _this.codeCheckApi();
+            _this.codeCheckApi(e);
           }
         }
       },
       //验证码验证
-      codeCheckApi() {
+      codeCheckApi(e) {
         let _this = this;
         api.ajax({
           url: XHRList.codeCheck,
@@ -309,7 +309,8 @@
                 _this.params.codeCheck.codeId = data.responseObject.responsePk;
                 _this.toastComm("绑定成功");
                 setTimeout(()=>{
-                  window.location.href = sessionStorage.getItem("loginBack");
+                  // window.location.href = sessionStorage.getItem("loginBack");
+                  g_sps.jump(e.target,sessionStorage.getItem("loginBack")); 
                 },2000);
               } else {
                 _this.toastComm(data.responseObject.responseMessage);
@@ -407,7 +408,8 @@
               let _loginBackUrl = _this.urlReplace(sessionStorage.getItem("loginBack"),_key,data.responseObject.responseData.customerId);
 //                console.log(_loginBackUrl);
               setTimeout(()=>{
-                window.location.href = _loginBackUrl;
+                // window.location.href = _loginBackUrl;
+                g_sps.jump(null,_loginBackUrl); 
               },2000);
             }else{
               //绑定失败

@@ -142,7 +142,7 @@
         }
       },
       //检查后没有error后提交所有数据
-      checkAllData(){
+      checkAllData(e){
         const _this=this
         if (!this.suggestionType.service && !this.suggestionType.setting && !this.suggestionType.others) {
           this.validateToast("您还有问题未完善");
@@ -157,7 +157,7 @@
           }else{
             _this.customerId = localStorage.getItem("userId");
           }
-            _this.submitAllData();
+            _this.submitAllData(e);
           // siteSwitch.weChatJudge(ua =>{
           //   //微信
           //   _this.customerId = api.getPara().customerId;
@@ -169,7 +169,7 @@
           // })
         }
       },
-      submitAllData(){
+      submitAllData(e){
         let _this =this,
           _arr=[];
         console.log(_this.customerId);
@@ -206,7 +206,7 @@
             _this.finish=true;
             if (data.responseObject.responseStatus){
               _this.submitSuccess=true;
-              _this.backToPast();
+              _this.backToPast(e);
             }else{
               _this.submitSuccess=false;
               _this.validateToast("提交失败，请检查您的网络");
@@ -216,21 +216,23 @@
           }
         });
       },
-      backToPast(){
+      backToPast(e){
         let _interval;
         _interval=setInterval(()=>{
           this.backTimeout=this.backTimeout-1;
           if (this.backTimeout===0){
             clearInterval(_interval);
-            this.goToHref();
+            this.goToHref(e);
           }
         },1000);
       },
-      goToHref(){
+      goToHref(e){
         if (api.getPara().from==="im"){
-          window.location.href=document.referrer;
+          // window.location.href=document.referrer;
+          g_sps.jump(e.target,document.referrer); 
         }else{
-          window.location.href="/";
+          // window.location.href="/";
+          g_sps.jump(e.target,"/"); 
         }
       },
       validateToast(content) {

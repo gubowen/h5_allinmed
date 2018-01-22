@@ -438,8 +438,9 @@
 
     methods: {
       // 去意见反馈；
-      goFeedback() {
-        location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+      goFeedback(e) {
+        // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
+        g_sps.jump(e.target,`/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`); 
       },
       // 控制 vuex toast控制
       toastControl(message) {
@@ -1896,8 +1897,17 @@
               localStorage.setItem("sendTips", JSON.stringify(opt));
               that.refreshStateOther(-1);
               that.payPopupShow = false;
-              window.location.href =
-                "/dist/imSceneDoctor.html?from=im&caseId=" +
+              // window.location.href =
+              //   "/dist/imSceneDoctor.html?from=im&caseId=" +
+              //   api.getPara().caseId +
+              //   "&doctorCustomerId=" +
+              //   (that.$store.state.targetDoctor.customerId ||
+              //     JSON.parse(localStorage.getItem("mPayDoctorDetails"))
+              //       .customerId) +
+              //   "&patientId=" +
+              //   api.getPara().patientId;
+              
+              let urlTemp = "/dist/imSceneDoctor.html?from=im&caseId=" +
                 api.getPara().caseId +
                 "&doctorCustomerId=" +
                 (that.$store.state.targetDoctor.customerId ||
@@ -1905,6 +1915,7 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
+              g_sps.jump(e.target,urlTemp); 
             }
           }
         });

@@ -310,7 +310,8 @@
               setTimeout(() => {
                 this.errorShow = false;
                 this.errorMsg = "";
-                window.location.href = "/dist/mLogin.html?from=weChat";
+                // window.location.href = "/dist/mLogin.html?from=weChat";
+                g_sps.jump(null,"/dist/mLogin.html?from=weChat");
               }, 3000);
             });
           }
@@ -325,7 +326,8 @@
             this.init();
           } else {
             localStorage.setItem("backUrl", window.location.href);
-            window.location.href = '/dist/mLogin.html';
+            // window.location.href = '/dist/mLogin.html';
+            g_sps.jump(null,'/dist/mLogin.html');
           }
         })
       });
@@ -1048,9 +1050,11 @@
 //        this.relationClick=true;//选择患者是否点击,
         window.scrollTo(0, 0);
       },
-      openCasePage() {
+      openCasePage(e) {
         let that = this;
-        window.location.href = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId
+        let urlTemp = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId;
+        // window.location.href = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId
+        g_sps.jump(e.target,urlTemp);
       }
     },
     components: {

@@ -400,13 +400,21 @@
                 that.backPopupShow = true;
               }
               that.finish = false;
-              window.location.href =
-                "/dist/imSceneDoctor.html?from=report&caseId=" +
+              let urlTemp = "/dist/imSceneDoctor.html?from=report&caseId=" +
                 that.responseCaseId +
                 "&doctorCustomerId=" +
                 api.getPara().doctorId +
                 "&patientId=" +
                 that.createParams.patientId;
+              // window.location.href =
+              //   "/dist/imSceneDoctor.html?from=report&caseId=" +
+              //   that.responseCaseId +
+              //   "&doctorCustomerId=" +
+              //   api.getPara().doctorId +
+              //   "&patientId=" +
+              //   that.createParams.patientId;
+
+              g_sps.jump(null,urlTemp);
             }
           }
         });
@@ -424,11 +432,17 @@
               that.backPopupShow = true;
             }
             that.finish = false;
-            window.location.href =
-              "/dist/imScene.html?caseId=" +
+            let urlTemp = "/dist/imScene.html?caseId=" +
               that.responseCaseId +
               "&patientId=" +
               that.createParams.patientId ;
+            // window.location.href =
+            //   "/dist/imScene.html?caseId=" +
+            //   that.responseCaseId +
+            //   "&patientId=" +
+            //   that.createParams.patientId ;
+
+            g_sps.jump(null,urlTemp);  
           },
           () => {
             if (that.$store.state.isSubscribe){
@@ -436,11 +450,16 @@
                 that.backPopupShow = true;
               }
               that.finish = false;
-              window.location.href =
-                "/dist/imScene.html?caseId=" +
+              let urlTemp = "/dist/imScene.html?caseId=" +
                 that.responseCaseId +
                 "&patientId=" +
                 that.createParams.patientId ;
+              // window.location.href =
+              //   "/dist/imScene.html?caseId=" +
+              //   that.responseCaseId +
+              //   "&patientId=" +
+              //   that.createParams.patientId ;
+              g_sps.jump(null,urlTemp);  
             }else{
               that.getUserBaseData();
             }

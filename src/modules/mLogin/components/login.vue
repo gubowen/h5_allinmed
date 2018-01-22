@@ -319,7 +319,7 @@
         }, 1000);
       },
       //验证登录
-      validLogin() {
+      validLogin(e) {
         let _this = this;
         siteSwitch.weChatJudge(
           ua => {
@@ -329,7 +329,7 @@
                   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   return false;
                 }else{
-                  _this.validLoginData();
+                  _this.validLoginData(e);
                   // if (api.getPara().from==="index"){
                   //   _this.validLoginData();
                   // }else{
@@ -338,7 +338,7 @@
                   // }
                 }
               }else{
-                _this.validLoginData();
+                _this.validLoginData(e);
               }
             }).catch(err=>{
               _this.toastComm("用户不存在");
@@ -346,11 +346,11 @@
             });
           },
           ua => {
-            _this.validLoginData();
+            _this.validLoginData(e);
           }
         );
       },
-      validLoginData(){
+      validLoginData(e){
         let _this = this;
         if (this.allPass) {
           this.$store.commit("setLoadingState", true);
@@ -372,7 +372,8 @@
                     localStorage.setItem("logoUrl", _obj.headUrl);
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
-                      window.location.href = localStorage.getItem("backUrl");
+                      // window.location.href = localStorage.getItem("backUrl");
+                      g_sps.jump(e.target,localStorage.getItem("backUrl")); 
                     });
                   } else {
                     this.toastComm("该手机已注册，请更换其他手机！");
@@ -384,7 +385,8 @@
                   localStorage.setItem("logoUrl", _obj.headUrl);
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
-                    window.location.href = localStorage.getItem("backUrl");
+                    // window.location.href = localStorage.getItem("backUrl");
+                    g_sps.jump(e.target,localStorage.getItem("backUrl")); 
                   });
                 }
               } else {
@@ -402,7 +404,7 @@
         }
       },
       // 帐密登录
-      accountLoginFn() {
+      accountLoginFn(e) {
         let _this = this;
         siteSwitch.weChatJudge(
           ua => {
@@ -413,14 +415,14 @@
                   return false;
                 }else{
                   // if (api.getPara().from==="index"){
-                  _this.accountLoginData();
+                  _this.accountLoginData(e);
                   // }else{
                   //   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   //   return false;
                   // }
                 }
               }else{
-                _this.accountLoginData();
+                _this.accountLoginData(e);
               }
             }).catch(err=>{
               _this.toastComm("用户不存在");
@@ -428,11 +430,11 @@
             });
           },
           ua => {
-            _this.accountLoginData();
+            _this.accountLoginData(e);
           }
         );
       },
-      accountLoginData(){
+      accountLoginData(e){
         let _this = this;
         if (this.allPass) {
           _this.submitDisable = false;
@@ -453,7 +455,8 @@
                     localStorage.setItem("logoUrl", _obj.headUrl);
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
-                      window.location.href = localStorage.getItem("backUrl");
+                      // window.location.href = localStorage.getItem("backUrl");
+                      g_sps.jump(e.target,localStorage.getItem("backUrl")); 
                     });
                   } else {
                     _this.toastComm("该手机已注册，请更换其他手机！");
@@ -465,7 +468,8 @@
                   localStorage.setItem("logoUrl", _obj.headUrl);
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
-                    window.location.href = localStorage.getItem("backUrl");
+                    // window.location.href = localStorage.getItem("backUrl");
+                    g_sps.jump(e.target,localStorage.getItem("backUrl")); 
                   });
                 }
               } else {

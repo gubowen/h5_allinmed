@@ -296,7 +296,8 @@
             this.init();
           }else{
             localStorage.setItem("backUrl",window.location.href);
-            window.location.href = '/dist/mLogin.html';
+            // window.location.href = '/dist/mLogin.html';
+            g_sps.jump(null,'/dist/mLogin.html'); 
           }
         })
       });
@@ -378,9 +379,11 @@
         this.phoneShow = false;
         window.location.href = "tel:010-59007006";
       },
-      IMEnsure(){
+      IMEnsure(e){
         localStorage.setItem("noMR",1);
-        window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
+        // window.location.href='/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
+        let urlTemp = '/dist/imSceneDoctor.html?caseId='+this.caseIdData +'&doctorCustomerId='+api.getPara().doctorId +'&patientCustomerId='+ this.customerId +'&patientId='+this.patientId +'&from=report';
+        g_sps.jump(e.target,urlTemp); 
       },
       //获取绑定的手机号
       getPatientPhone(){
@@ -521,13 +524,13 @@
         })
       },
       //点击下一步验证
-      validate() {
+      validate(e) {
         this.$validator.validateAll().then(result => {
           console.log(result);
           if (result) {
 //            this.messageSubmit();
             this.errorShow = false;
-            this.validateOther();//验证其他特殊的字段
+            this.validateOther(e);//验证其他特殊的字段
           } else {
             console.log(this.$validator.errors);
             this.formCheck = false;
@@ -541,7 +544,7 @@
         });
       },
       //验证其他特殊的字段
-      validateOther (){
+      validateOther (e){
         let that = this;
         if(!that.IDCheckFlag && this.IDNumber){
           that.errorMsg = "请输入有效证件号码";
@@ -569,7 +572,7 @@
         that.formCheck = true;
         if (that.formCheck) {
           //验证完成，提交
-          that.messageSubmit();
+          that.messageSubmit(e);
         }
       },
       //失焦事件
@@ -691,7 +694,7 @@
           //是女则执行代码 ...
         }
       },
-      messageSubmit() {
+      messageSubmit(e) {
         const that = this;
         let dData = new Date();
         dData.getFullYear();
@@ -740,8 +743,9 @@
               that.areaClick = true;//选择城市是否点击过
 //              that.relationClick=true;
               that.relationShip.title = "选择您与患者关系";
-              window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ that.customerId +'#!index'
-
+              // window.location.href = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ that.customerId +'#!index'
+              let urlTemp = '/pages/patientReport/medical_info.html?patientId='+data.responseObject.responsePk+'&doctorId='+api.getPara().doctorId+'&customerId='+ that.customerId +'#!index'
+              g_sps.jump(e.target,urlTemp); 
             } else {
               that.errorMsg = data.responseObject.responseMessage;
               that.errorShow = true;
@@ -939,9 +943,11 @@
 //        this.relationClick=true;//选择患者是否点击,
         window.scrollTo(0, 0);
       },
-      openCasePage(){
+      openCasePage(e){
         let that = this;
-        window.location.href = "/pages/patientConsult/case_list.html?customerId=" + this.customerId + "&patientId=" + this.patientList[this.currentIndex].patientId
+        // window.location.href = "/pages/patientConsult/case_list.html?customerId=" + this.customerId + "&patientId=" + this.patientList[this.currentIndex].patientId;
+        let urlTemp = "/pages/patientConsult/case_list.html?customerId=" + this.customerId + "&patientId=" + this.patientList[this.currentIndex].patientId;
+        g_sps.jump(e.target,urlTemp); 
       },
       //判断是否有报道病例
       caseReportFlag() {
@@ -966,10 +972,14 @@
                 _this.caseIdData =res.responseObject.responseData.dataList[0].caseId;
                 _this.IMEnsureShow = true;
               }else{
-                window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+                // window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+                let urlTemp = '/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+                g_sps.jump(null,urlTemp); 
               }
             }else{
-              window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+              // window.location.href ='/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+              let urlTemp = '/pages/patientReport/medical_info.html?patientId='+_this.patientId + '&doctorId='+api.getPara().doctorId+'&customerId='+ _this.customerId +'#!index';
+              g_sps.jump(null,urlTemp); 
             }
           },
           fail(err) {
