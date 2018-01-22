@@ -14,6 +14,7 @@
               </header>
 
               <section class="input-area disIllness">
+                <section class="box">
                   <section class="area-content">
                     <pre><span>{{disContent}}<br></span></pre>
                     <textarea
@@ -25,6 +26,7 @@
                       @input="contentLimit('disContent',1000)">
                       </textarea>
                   </section>
+                </section>
                 <span class="qu-underline"></span>
                 <span class="text-num-tips">{{disContent.length}}/1000</span>
               </section>
@@ -38,6 +40,7 @@
               </header>
 
               <figure class="input-area helpIllness">
+                <section class="box">
                   <section class="area-content">
                     <pre><span>{{helpContent}}<br></span></pre>
                     <textarea @focus="hideBar()"
@@ -49,6 +52,7 @@
                               @input="contentLimit('helpContent',1000)">
                 </textarea>
                   </section>
+                </section>
                 <span class="text-num-tips">{{helpContent.length}}/1000</span>
                 <span class="qu-underline"></span>
               </figure>
@@ -675,6 +679,8 @@
           box-sizing: border-box;
           max-height:4rem;
           overflow: auto;
+          .box {
+            max-height:2rem;
             .area-content {
               pre {
                 display: block;
@@ -685,6 +691,7 @@
                 min-height: rem(72px);
               }
               .main-input-box-textarea {
+                display: block;
                 max-height: 2rem;
                 background-color: #e5e5e5;
                 padding-top: rem(15px);
@@ -699,12 +706,14 @@
                 left: 0;
                 height: 100%;
               }
+            }
           }
       }
       .text-num-tips{
         padding-right: rem(20px);
         front-size: rem(13px);
         color: #AFAFAF;
+        display: block;
       }
       .hwBox{
         padding:0 rem(60px);

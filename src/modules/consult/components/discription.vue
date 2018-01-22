@@ -25,6 +25,7 @@
                   <figure class="input-area"
                           v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                           @click.stop="">
+                    <section class="box">
                     <section class="area-content">
                     <pre><span>{{questionList[pIndex].optionList[index].optionDesc}}<br></span></pre>
                   <textarea class="input-textarea"
@@ -38,11 +39,11 @@
                   >
                   </textarea>
                     </section>
-                    <p class="text-num-tips"
-                       v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50"
-                    >
-                      {{getByteLen(questionList[pIndex].optionList[index].optionDesc.length)}}/50</p>
+                    </section>
                   </figure>
+                  <p class="text-num-tips"
+                     v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50">
+                    {{getByteLen(questionList[pIndex].optionList[index].optionDesc.length)}}/50</p>
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
                       <section class="pain-level-box">
@@ -889,10 +890,13 @@
       padding: 0.333rem 0.8rem;
     }
     .input-area {
+      position: relative;
+      margin: 0;
       box-sizing: border-box;
-      margin-left: rem(15px);
-      max-height: 2.5rem;
+      max-height:4rem;
       overflow: auto;
+      .box{
+        max-height: 2rem;
       .area-content{
         position: relative;
         pre {
@@ -907,6 +911,8 @@
           min-height: rem(72px);
         }
         & > Textarea {
+          display: block;
+          max-height: 1.7rem;
           width:100%;
           @include font-dpr(14px);
           padding-bottom:rem(15px);
@@ -921,6 +927,7 @@
             background-color: rgba(239, 239, 239, 0.15);
           }
         }
+      }
       }
     }
   }
