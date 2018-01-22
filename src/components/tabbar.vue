@@ -1,18 +1,18 @@
 <template>
   <footer class="tabbar-box" data-alcode-mod='743' data-alcode-item-selector=".tabbar-list">
-    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(1)">
+    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl($event,1)">
       <dl class="tabbar-item" :class="{'selected':selected == 1}">
           <dt class="tabbar-icon home"></dt>
           <dd class="tabbar-des">首页</dd>
       </dl>
     </a>
-    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(2)">
+    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl($event,2)">
       <dl class="tabbar-item" :class="{'selected':selected == 2}">
           <dt class="tabbar-icon history"></dt>
           <dd class="tabbar-des">{{selected == 2?'去问诊':'问诊历史'}}</dd>
       </dl>
     </a>
-    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl(3)">
+    <a href="javascript:void(0);" class="tabbar-list" @click="toUrl($event,3)">
       <dl class="tabbar-item" :class="{'selected':selected == 3}">
           <dt class="tabbar-icon my"></dt>
           <dd class="tabbar-des">我的</dd>
@@ -55,20 +55,23 @@ export default {
       }
       this.myUrl = `/dist/personal.html`;
     },
-    toUrl(num) {
+    toUrl(e,num) {
       //        if (this.selected == num) return false;
       switch (num) {
         case 1:
           if (this.selected == 1) return false;
-          location.href = this.homeUrl;
+          // location.href = this.homeUrl;
+          g_sps.jump(e.target,this.homeUrl); 
           break;
         case 2:
           if (!this.isClick) return false;
-          location.href = this.historyUrl;
+          // location.href = this.historyUrl;
+          g_sps.jump(e.target,this.historyUrl); 
           break;
         case 3:
           if (this.selected == 3) return false;
-          location.href = this.myUrl;
+          // location.href = this.myUrl;
+          g_sps.jump(e.target,this.myUrl); 
           break;
         default:
           break;
