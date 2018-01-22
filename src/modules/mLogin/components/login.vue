@@ -57,7 +57,7 @@
                  @click="pwHide=!pwHide"
                  :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()" data-alcode='e153'>登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn($event)" data-alcode='e153'>登录</button>
             <article class="changeAndForget">
               <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e152'>手机验证登录</span>
               <span class="forgetPass fr" @click="goForgetPass()" data-alcode='e151'>忘记密码？</span>
@@ -406,6 +406,7 @@
       // 帐密登录
       accountLoginFn(e) {
         let _this = this;
+        console.log(e);
         siteSwitch.weChatJudge(
           ua => {
             checkbinding.getMessage(_this.phoneMessage).then((res) => {
