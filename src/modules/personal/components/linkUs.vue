@@ -26,8 +26,9 @@
 <script>
   export default{
     methods: {
-      goSuggestFn() {
-        window.location.href=`/dist/feedback.html`;
+      goSuggestFn(e) {
+        // window.location.href = '/dist/feedback.html';
+        g_sps.jump(e.target,'/dist/feedback.html'); 
       }
     }
   }

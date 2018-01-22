@@ -115,8 +115,10 @@
           return (content.length > limit ? (content.substring(0, limit) + "...") : content);
         }
       },
-      goToDocMain(){
-        window.location.href = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
+      goToDocMain(e){
+        // window.location.href = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
+        let urlTemp = `/pages/myServices/doc_main.html?caseId=${api.getPara().caseId}&customerId=${api.getPara().doctorCustomerId}&type=1&patientId=${api.getPara().patientId}&patientCustomerId=${api.getPara().patientCustomerId}`
+        g_sps.jump(e.target,urlTemp); 
       },
       formatNumber(num){
         if (num) {

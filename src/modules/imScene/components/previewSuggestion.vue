@@ -19,7 +19,7 @@
             <section class="doctor-item"
                      v-for="(item , index) in doctorObj.tempData"
             >
-              <section class="doctor-item-top" @click="goDoctorHome(index)">
+              <section class="doctor-item-top" @click="goDoctorHome($event,index)">
                 <figure class="doctor-item-img">
                   <img :src="item.logoUrl" alt="">
                 </figure>
@@ -226,13 +226,20 @@
       getSpsData(opt) {
         return `push_massage_id:${opt.customerId};keyword:${opt.fullName}`
       },
-      goToHref() {
-        window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
+      goToHref(e) {
+        // window.location.href = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
+        //   "&diagnosisId=" + this.message.diagnosisId +
+        //   "&patientCustomerId=" + api.getPara().patientCustomerId +
+        //   "&patientId=" + api.getPara().patientId +
+        //   '&caseType=0' +
+        //   '&shuntCustomerId=' + api.getPara().shuntCustomerId;
+        let urlTemp = "/pages/myServices/check_suggestion.html?caseId=" + this.message.caseId +
           "&diagnosisId=" + this.message.diagnosisId +
           "&patientCustomerId=" + api.getPara().patientCustomerId +
           "&patientId=" + api.getPara().patientId +
           '&caseType=0' +
           '&shuntCustomerId=' + api.getPara().shuntCustomerId;
+        g_sps.jump(e.target,urlTemp); 
 
       },
       goKnowledgeDetail(index) {
@@ -394,9 +401,11 @@
         // })
       },
       //去医生主页
-      goDoctorHome(index) {
+      goDoctorHome(e,index) {
         let that = this;
-        window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId;
+        // window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId;
+        let urlTemp = '/dist/doctorHome.html?doctorCustomerId=' + that.doctorObj.allData[index].customerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId;
+        g_sps.jump(e.target,urlTemp); 
       },
       // 查询是否可以咨询
       queryConsult(index, type) {

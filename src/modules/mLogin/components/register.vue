@@ -264,7 +264,7 @@ export default {
       }, 1000);
     },
     // 验证验证码
-    validateCode() {
+    validateCode(e) {
       this.$validator.validateAll().then(() => {
         if (this.errors.has("validCode")) {
           this.errorMsg = this.errors.first("validCode");
@@ -273,12 +273,12 @@ export default {
             this.errorShow = false;
           }, 2000);
         } else {
-          this.mobileRegisterFun();
+          this.mobileRegisterFun(e);
         }
       });
     },
     // 手机号注册
-    mobileRegisterFun() {
+    mobileRegisterFun(e) {
       let _this = this;
       let _sendPrams = {
         account: this.phone,
@@ -296,7 +296,7 @@ export default {
           console.log(res);
           let _obj = res.responseObject;
           if (_obj && _obj.responseStatus && _obj.responseCode == "success") {
-            this.accountLoginFn();
+            this.accountLoginFn(e);
           } else {
             this.errorShow = true;
             this.errorMsg = _obj.responseMessage;
@@ -313,7 +313,7 @@ export default {
         });
     },
     // 帐密登录
-    accountLoginFn() {
+    accountLoginFn(e) {
       let _this = this;
       this.$store.commit("setLoadingState", true);
       passwordLogin
@@ -329,7 +329,8 @@ export default {
             localStorage.setItem("mobile", _obj.mobile);
             localStorage.setItem("logoUrl", _obj.headUrl);
             console.log("登录成功");
-            window.location.href = localStorage.getItem("backUrl");
+            // window.location.href = localStorage.getItem("backUrl");
+            g_sps.jump(e.target,localStorage.getItem("backUrl")); 
           } else {
             console.log("登录失败");
           }

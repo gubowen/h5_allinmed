@@ -822,7 +822,7 @@
         }
         console.log(this.finalSubmitParams)
       },
-      submitAllParams(){
+      submitAllParams(e){
         const that = this;
         this.paramsInstall();
         api.ajax({
@@ -837,7 +837,9 @@
             if (data.responseObject.responsePk != 0) {
               let shuntCustomerId = data.responseObject.responseData.shuntCustomerId;
               debugger;
-             window.location.href = 'http://m.allinmed.cn/pages/imScene/im_main_scene.html?caseId=' + data.responseObject.responsePk + '&from=further&shuntCustomerId=' + shuntCustomerId + '&customerId=' + that.$route.query.customerId + '&patientId=' + that.$route.query.patientId;
+            //  window.location.href = 'http://m.allinmed.cn/pages/imScene/im_main_scene.html?caseId=' + data.responseObject.responsePk + '&from=further&shuntCustomerId=' + shuntCustomerId + '&customerId=' + that.$route.query.customerId + '&patientId=' + that.$route.query.patientId;
+             let urlTemp = 'http://m.allinmed.cn/pages/imScene/im_main_scene.html?caseId=' + data.responseObject.responsePk + '&from=further&shuntCustomerId=' + shuntCustomerId + '&customerId=' + that.$route.query.customerId + '&patientId=' + that.$route.query.patientId;
+             g_sps.jump(e.target,'/dist/feedback.html');
             }
           },
           fail(err) {
