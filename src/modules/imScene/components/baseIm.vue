@@ -7,7 +7,7 @@
           <span class="service-time-top">服务时间</span>
           <span class="service-time-bottom">09: 00-22: 00</span>
         </p> -->
-        <p class="new-service-time">服务时间：09:00-22:00</p>
+        <p class="new-service-time">服务时间：{{serviceTime}}</p>
       </article>
     </transition>
     <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
@@ -380,6 +380,7 @@
   export default {
     data() {
       return {
+        serviceTime:"", // 服务时间
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         isWeChat: _weChat,
         nim: {},
@@ -1686,15 +1687,10 @@
           this.sendTextContent = api.getStrByteLen(content, 1000);
         }
       },
-      //获取咨询价格
+      //获取服务时间
       getConsultPrice() {
         const that = this;
-        if (that.isClick) {
-          return false;
-        }
-        that.isClick = true;
-        that.finish = false;
-        console.log("获取价格");
+        console.log("获取服务时间");
         api.ajax({
           url: XHRList.getPrice,
           method: "POST",
@@ -1704,15 +1700,28 @@
             id: 0
           },
           done(data) {
-            if (
-              data.responseObject.responseStatus &&
-              data.responseObject.responseData
-            ) {
-              let price = data.responseObject.responseData.dataList.adviceAmount;
-              console.log("获取分诊医生价格成功" + price);
-              that.buyTime(price);
+            console.log(data);
+            let {responseObject:{responseStatus,responseData}} = data;
+            if (responseStatus && !!responseData) {
+              let {dataList:{serviceEndTime,serviceStartTime}} = responseData;
+              // serviceStartTime = "14:00";
+              // serviceEndTime = "14:30";
+              let startTimeArray = serviceStartTime.split(":"),
+                endTimeArray = serviceEndTime.split(":");
+              // startTimeArray[0].length === 1 && (startTimeArray[0] = "0" + startTimeArray[0]);
+              if (startTimeArray[0].length === 1) {
+                startTimeArray[0] = "0" + startTimeArray[0];
+                serviceStartTime = startTimeArray.join(':');
+              }
+              let myDate = new Date();
+              let currentHours = myDate.getHours(); //获取当前小时数(0-23)
+              let currentMinutes = myDate.getMinutes(); //获取当前分钟数(0-59)
+              that.serviceTime = `${serviceStartTime}-${serviceEndTime}`;
+              if ((currentHours < parseInt(startTimeArray[0]) || (currentHours == parseInt(startTimeArray[0]) && currentMinutes< parseInt(startTimeArray[1]))) || (currentHours > parseInt(endTimeArray[0]) || (currentHours == parseInt(endTimeArray[0]) && currentMinutes > parseInt(endTimeArray[1])))) {
+                that.serviceTime = that.serviceTime + " 休息中";
+              }
             } else {
-              console.log("获取分诊医生价格失败");
+              console.log("获取分诊医生服务时间失败");
             }
           }
         });
@@ -2076,6 +2085,8 @@
     },
     mounted() {
       let that = this;
+
+      that.getConsultPrice();
 
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);
