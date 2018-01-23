@@ -17,10 +17,10 @@
             </div>
           </li>
         </ul>
-        <ul class="basicData" v-if="patientCasemap.height&&patientCasemap.weight&&patientCasemap.bmi">
-          <li v-if="patientCasemap.height"><span class="basicDataName">身高</span><span class="basicDataInfo"><i>{{patientCasemap.height}}</i>cm</span></li>
-          <li v-if="patientCasemap.weight"><span class="basicDataName">体重</span><span class="basicDataInfo"><i>{{patientCasemap.weight}}</i>kg</span></li>
-          <li v-if="patientCasemap.bmi"><span class="basicDataName">BMI</span><span class="basicDataInfo">{{patientCasemap.bmi}}</span></li>
+        <ul class="basicData">
+          <li><span class="basicDataName">身高</span><span class="basicDataInfo"><i>{{patientCasemap.height?patientCasemap.height:0}}</i>cm</span></li>
+          <li><span class="basicDataName">体重</span><span class="basicDataInfo"><i>{{patientCasemap.weight?patientCasemap.weight:0}}</i>kg</span></li>
+          <li><span class="basicDataName">BMI</span><span class="basicDataInfo">{{patientCasemap.bmi?patientCasemap.bmi:0}}</span></li>
         </ul>
         <section class="recommendUserMainBox">
           <div class="recommendUserMainLeft">主诉</div>
