@@ -101,8 +101,12 @@
         wxBind.isBind({
           callBack: (id) => {
             this.customerId = id;
-            localStorage.removeItem("_amChannel");
-            this.init();
+            if(localStorage.getItem("_amChannel") && !api.getPara()._amChannel){
+              window.location.href = `${window.location.href}?_amChannel=${localStorage.getItem("_amChannel")}`;
+            }else{
+              localStorage.removeItem("_amChannel");
+              this.init();
+            }
           },
           hasBindedFn: (id) => {
             this.$nextTick(()=>{

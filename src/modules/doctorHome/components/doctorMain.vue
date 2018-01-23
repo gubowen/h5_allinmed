@@ -297,7 +297,6 @@
             //微信中绑定微信
             wxBind.isBind({
               callBack:()=>{
-                localStorage.removeItem("_amChannel");
                 this.init();
               }
             });
