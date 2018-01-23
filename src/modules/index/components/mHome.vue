@@ -231,7 +231,7 @@
         }
       },
       //登录
-      loginEvent() {
+      loginEvent(e) {
         localStorage.setItem("backUrl", window.location.href);
         g_sps.jump(e.target,XHRList.loginUrl);
       },

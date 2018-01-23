@@ -120,7 +120,10 @@ class MLogin {
           keepAlive: true
         },
         component: register
-      }
+      },{
+        path: "*",
+        redirect: "/login",
+      },
     ];
   }
 }
