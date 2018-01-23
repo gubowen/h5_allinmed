@@ -78,6 +78,9 @@ class Myconsult {
           keepAlive: false
         },
         component: wechat
+      },{
+        path: "*",
+        redirect: "/consultHis"
       }
     ];
   }
