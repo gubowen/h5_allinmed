@@ -292,11 +292,12 @@
           this.isDoctorID = true;
           if(!api.getPara().doctorCustomerId&&typeof Number(api.getPara().wxState) == 'number'){
             // window.location.href=`${window.location.href.split("#")[0]}&doctorCustomerId=${localStorage.getItem("bindDocId")}`;
-            g_sps.jump(null,`${window.location.href.split("#")[0]}&doctorCustomerId=${localStorage.getItem("bindDocId")}`); 
+            g_sps.jump(null,`${window.location.href.split("#")[0]}&doctorCustomerId=${localStorage.getItem("bindDocId")}`);
           }else{
             //微信中绑定微信
             wxBind.isBind({
               callBack:()=>{
+                localStorage.removeItem("_amChannel");
                 this.init();
               }
             });
@@ -478,7 +479,7 @@
 //                    console.log("免费--跳页");
                     let urlTemp = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                     // window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
-                    g_sps.jump(null,urlTemp); 
+                    g_sps.jump(null,urlTemp);
                   }
                 });
               }});
@@ -493,7 +494,7 @@
 //                    console.log("收费--跳页");
                       let urlTemp = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
                       // window.location.href = '/dist/imSceneDoctor.html?caseId=' + _this.caseId + '&doctorCustomerId=' + _this.docId + '&patientCustomerId=' + _this.patientCustomerId + '&patientId=' + _this.patientId;
-                      g_sps.jump(null,urlTemp); 
+                      g_sps.jump(null,urlTemp);
                   }
                 });
               }});
@@ -731,14 +732,14 @@
           let _patientCustomerId=api.getPara().customerId;
           // window.location.href=`/dist/consult.html?doctorId=${this.docId}`;
           let urlTemp = `/dist/consult.html?doctorId=${this.docId}`;
-          g_sps.jump(e.target,urlTemp); 
+          g_sps.jump(e.target,urlTemp);
         },
         //诊后报道
         oldCurePatient(e){
           let _patientCustomerId=api.getPara().customerId;
           // window.location.href=`/dist/patientReport.html?doctorId=${this.docId}`;
           let urlTemp = `/dist/patientReport.html?doctorId=${this.docId}`;
-          g_sps.jump(e.target,urlTemp); 
+          g_sps.jump(e.target,urlTemp);
         },
         //toast提示
         toastComm(text){

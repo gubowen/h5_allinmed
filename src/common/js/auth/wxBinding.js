@@ -17,6 +17,9 @@ class Wxbinding {
   }
 
   isBind(obj) {
+    if(api.getPara()._amChannel){
+      localStorage.setItem("_amChannel", api.getPara()._amChannel);
+    }
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
     // if (!api.getPara().openId) {
@@ -37,7 +40,15 @@ class Wxbinding {
               if (result.mobile && result.mobile.length > 0) {
                 if (result.uniteFlagWeixin == 1) {
                   console.log("该用户已绑定手机号（微信）");
-                  obj.callBack && obj.callBack(data);
+                  if(api.getPara()._amChannel){
+                    obj.callBack && obj.callBack(data);
+                  }else{
+                    if(window.location.href.includes("?")){
+                      window.location.href = `${window.location.href}&_amChannel=${localStorage.getItem("_amChannel")}`
+                    }else{
+                      window.location.href = `${window.location.href}?_amChannel=${localStorage.getItem("_amChannel")}`
+                    }
+                  }
                 } else {
                   let url = `${window.location.origin}${window.location.pathname}?customerId=${data}`;
                   if (api.getPara().wxState == 1) {
@@ -64,7 +75,15 @@ class Wxbinding {
         } else {
           if (api.getPara().wxState == 0) {
             console.log("绑定微信成功");
-            obj.callBack && obj.callBack(data);
+            if(api.getPara()._amChannel){
+              obj.callBack && obj.callBack(data);
+            }else{
+              if(window.location.href.includes("?")){
+                window.location.href = `${window.location.href}&_amChannel=${localStorage.getItem("_amChannel")}`
+              }else{
+                window.location.href = `${window.location.href}?_amChannel=${localStorage.getItem("_amChannel")}`
+              }
+            }
           } else if (api.getPara().wxState == 1) {
             console.log("您已绑定其他用户");
           } else if (api.getPara().wxState == 2) {
@@ -76,9 +95,6 @@ class Wxbinding {
           }
         }
       })
-    // } else {
-    //   obj.callBack && obj.callBack();
-    // }
   }
 
   wxBind(url) {

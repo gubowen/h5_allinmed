@@ -301,6 +301,7 @@
         wxBind.isBind({
           callBack: (id) => {
             this.customerId = id;
+            localStorage.removeItem("_amChannel");
             this.init();
           },
           hasBindedFn: (id) => {
@@ -329,7 +330,7 @@
             // window.location.href = '/dist/mLogin.html';
             // g_sps 有时加载不出来，用个延时；
             setTimeout(() => {
-              g_sps.jump(null,'/dist/mLogin.html'); 
+              g_sps.jump(null,'/dist/mLogin.html');
             },100);
           }
         })
