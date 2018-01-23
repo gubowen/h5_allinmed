@@ -2001,7 +2001,6 @@
             }, 200);
           })
         }, 200);
-
       },
       refreshScroll() {
         this.scroll && this.scroll.refresh();

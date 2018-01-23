@@ -62,6 +62,7 @@
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
+  import {mapState} from 'vuex'
 
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
@@ -76,28 +77,22 @@
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId,
         },
-        allReady:false,
+        allReady: false,
         dpr: window.devicePixelRatio,
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         backPopupShow: '',
         clickDirection: "right",//用户点击的方向
         bodyImg: { //人体图像集合
           man: {
-//            front: require('../../../common/image/img00/patientConsult/body_man_front.png'),
             front: require('../../../common/image/img00/patientConsult/man_front.png'),
-//            back: require('../../../common/image/img00/patientConsult/body_man_back.png'),
             back: require('../../../common/image/img00/patientConsult/man_back.png'),
           },
           woman: {
-//            front: require('../../../common/image/img00/patientConsult/body_woman_front.png'),
             front: require('../../../common/image/img00/patientConsult/woman_front.png'),
-//            back: require('../../../common/image/img00/patientConsult/body_woman_back.png'),
             back: require('../../../common/image/img00/patientConsult/woman_back.png'),
           },
           kid: {
-//            front: require('../../../common/image/img00/patientConsult/body_kid_front.png'),
             front: require('../../../common/image/img00/patientConsult/child_front.png'),
-//            back: require('../../../common/image/img00/patientConsult/body_kid_back.png'),
             back: require('../../../common/image/img00/patientConsult/child_back.png'),
           }
         },
@@ -154,14 +149,12 @@
           ],
         },
         imgArray: [],//选择部位热点图片数组
-        patientMessage: {},  //患者基本信息...由Router.params传递
         direction: "back", //人体朝向...驱动点位切换
         finish: false,  //加载态
         currentType: "",//当前患者类型
         currentTwoLevel: -1,//当前二级部位
         currentThreeLevel: 0,//当前三级部位
         currentPindex: -1,//当前显示热区点
-//        currentHindex: -1,//当前隐藏热区点
         secondShow: false,//二级问题显示状态钩子
         secondList: [] //二级问题数据集合
       }
@@ -169,13 +162,12 @@
 
     mounted() {  //渲染启动...接收上一页携带路由参数体
       // 检测是否是微信
-      this.allReady=true;
+      this.allReady = true;
       siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
       }, () => {
         this.isWeChat = false;
       });
-      this.patientMessage = this.$route.query;
       document.title = "选择部位";
       this.currentType = this.patientType();
       localStorage.removeItem("hasCome");
@@ -187,9 +179,12 @@
       api.forbidShare();
     },
     computed: {
+      ...mapState([
+        "patientBaseMessage"
+      ]),
       patientBody() {   //反应数据驱动...获取人体性别年龄
-        const age = parseInt(this.patientMessage.age);
-        const sex = parseInt(this.patientMessage.sex);
+        const age = parseInt(this.patientBaseMessage.age);
+        const sex = parseInt(this.patientBaseMessage.sex);
         if (age <= 12) {
           return this.bodyImg["kid"][this.direction];
         } else {
@@ -223,8 +218,8 @@
     },
     methods: {
       patientType() { //患者基本类型
-        const age = parseInt(this.patientMessage.age);
-        const sex = parseInt(this.patientMessage.sex);
+        const age = parseInt(this.patientBaseMessage.age);
+        const sex = parseInt(this.patientBaseMessage.sex);
         if (age <= 12) {
           return "kid";
         } else {
@@ -341,18 +336,7 @@
         let that = this;
         that.currentThreeLevel = index;
         that.imgArray = [require('../../../common/image/img00/patientConsult/' + that.currentType + '/' + that.direction + '/' + that.secondList[index].partId + ".png")];
-//        this.$router.push({
-//          name: "discription",
-//          query: {
-//            userId: this.patientMessage.userId,
-//            sex: this.patientMessage.sex,
-//            age: this.patientMessage.age,
-//            patientId: this.patientMessage.patientId,
-//            partId: this.secondList[index].partId,
-//            count: this.$route.query.count,
-//            from:this.$route.name
-//          },
-//        })
+
       },
       surePart() {
         localStorage.removeItem("selectList");
@@ -360,19 +344,16 @@
         localStorage.removeItem("questionList");
         this.$router.push({
           name: "discription",
-          params: {
-            height: this.$route.params.height,
-            weight: this.$route.params.weight
-          },
-          query: {
-            userId: this.patientMessage.userId,
-            sex: this.patientMessage.sex,
-            age: this.patientMessage.age,
-            patientId: this.patientMessage.patientId,
-            partId: this.secondList[this.currentThreeLevel].partId,
-            count: this.$route.query.count,
-            from: this.$route.name
-          },
+        });
+        this.$store.commit("setPatientMessage",{
+          userId: this.patientBaseMessage.userId,
+          sex: this.patientBaseMessage.sex,
+          age: this.patientBaseMessage.age,
+          patientId: this.patientBaseMessage.patientId,
+          partId: this.secondList[this.currentThreeLevel].partId,
+          count: this.patientBaseMessage.count,
+          height: this.patientBaseMessage.height,
+          weight: this.patientBaseMessage.weight
         })
       },
     },

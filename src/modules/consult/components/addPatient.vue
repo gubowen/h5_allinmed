@@ -1020,18 +1020,17 @@
         localStorage.setItem("payPatientId", this.patientList[index].patientId);
         this.$router.push({
           name: "selectPart",
-          params: {
-            height: this.patientList[index].height,
-            weight: this.patientList[index].weight
-          },
-          query: {
-            userId: this.customerId,
-            sex: this.patientList[index].patientSex,
-            age: this.patientList[index].patientAge,
-            patientId: this.patientList[index].patientId,
-            count: this.count
-          }
         });
+        this.$store.commit("setPatientMessage", {
+          userId: this.customerId,
+          sex: parseInt(this.patientList[index].patientSex),
+          age: this.patientList[index].patientAge,
+          patientId: this.patientList[index].patientId,
+          count: this.count,
+          height: this.patientList[index].height,
+          weight: this.patientList[index].weight,
+          userId:this.customerId
+        })
       },
       //添加患者按钮
       addFun() {

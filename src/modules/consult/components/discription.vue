@@ -183,13 +183,12 @@
   import toast from "components/toast";
   import confirm from "components/confirm";
   import vueSlider from "vue-slider-component";
-  // import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
   import Picker from "better-picker";
   import store from "../store/store";
-
+  import {mapState} from "vuex";
 
   import * as dateData from "../api/datePickerData";
 
@@ -212,7 +211,7 @@
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
         },
-        patientMessage: {},
+
         customerId: "",
         finish: false,
         complication: "",
@@ -257,7 +256,6 @@
     },
     mounted() {
       document.title = "描述病情";
-      this.patientMessage = this.$route.query;
       this.getQuestionList();
       this.finish = false;
       this.customerId = localStorage.getItem('userId');
@@ -266,7 +264,7 @@
         document.body.scrollTop = 20;
       }, 300);
       if (!api.getPara().doctorId) {
-        if (this.$route.query.count == 0) {
+        if (this.patientBaseMessage.count == 0) {
           if (
             !localStorage.getItem("hasCome") ||
             localStorage.getItem("hasCome") != 0
@@ -290,6 +288,9 @@
       this.selectList=[];
     },
     computed: {
+      ...mapState(
+        ["patientBaseMessage"]
+      ),
       dotSize() {
         let dpr = document.documentElement.getAttribute("data-dpr");
         let result = "";
@@ -427,7 +428,7 @@
                 refOptionId: refOptionId,
                 questionId: questionId,
                 optionIdList: [],
-                partId: this.patientMessage.partId
+                partId: this.patientBaseMessage.partId
               };
             }
             this.secondQuestionList[slutParam].optionIdList.push(optionId);
@@ -455,7 +456,7 @@
               refOptionId: refOptionId,
               questionId: questionId,
               optionIdList: [],
-              partId: this.patientMessage.partId
+              partId: this.patientBaseMessage.partId
             };
           }
           this.secondQuestionList[slutParam].optionIdList[0] = optionId;
@@ -468,7 +469,7 @@
           url: XHRList.query,
           method: "POST",
           data: {
-            partId: this.patientMessage.partId,
+            partId: this.patientBaseMessage.partId,
             isValid: "1",
             firstResult: "0",
             maxResult: "9999",
@@ -545,7 +546,7 @@
           this.selectList.push({
             questionId: element.questionId,
             optionIdList: [],
-            partId: this.patientMessage.partId,
+            partId: this.patientBaseMessage.partId,
             optionDesc: ""
           });
         });
@@ -569,7 +570,6 @@
             }
             api.removeDub(this.selectList[pIndex].optionIdList);
           } else {
-            // debugger;
             this.selectList[pIndex].optionIdList.removeByValue(
               this.questionList[pIndex].optionList[index].optionId
             );
@@ -601,10 +601,6 @@
             }, 100);
           }
         }
-
-        // setTimeout(() => {
-        //   autosize(this.$el.querySelector("textarea"));
-        // }, 100);
       },
       showQueryDetail(id) {
         let that = this;
@@ -683,7 +679,7 @@
         this.secondQuestionList[item.optionId] = {
           optionDesc: "",
           optionIdList: [],
-          partId: this.patientMessage.partId,
+          partId: this.patientBaseMessage.partId,
           questionId: this.painQuestion,
           refOptionId: item.optionId
         };
@@ -717,23 +713,17 @@
         localStorage.setItem("painValue", this.painValue);
         localStorage.setItem("complication", this.complication);
         let finalSubmitParam = {
-          userId: this.$route.query.userId,
+          userId: this.patientBaseMessage.userId,
           optionList: this.selectList,
-          patientId: this.patientMessage.patientId,
+          patientId: this.patientBaseMessage.patientId,
           complication: encodeURIComponent(this.complication),
-          count: this.$route.query.count,
-          height:this.$route.params.height,
-          weight:this.$route.params.weight,
-          sex: this.$route.query.sex
+          count: this.patientBaseMessage.count,
+          height:this.patientBaseMessage.height,
+          weight:this.patientBaseMessage.weight,
+          sex: this.patientBaseMessage.sex
         };
         for (let i in this.secondQuestionList) {
-          if (
-            this.$el.querySelectorAll(
-              "[data-oid='" +
-              this.secondQuestionList[i].refOptionId +
-              "'] .pain-level-secondList"
-            ).length !== 0
-          ) {
+          if (this.$el.querySelectorAll(`"[data-oid='${this.secondQuestionList[i].refOptionId}'] .pain-level-secondList"`).length !== 0) {
             finalSubmitParam.optionList.push(this.secondQuestionList[i]);
           }
         }
@@ -742,11 +732,7 @@
           if (finalSubmitParam.optionList[j].optionIdList.length === 0) {
             break;
           } else {
-            finalSubmitParam.optionList[
-              j
-              ].optionIdList = finalSubmitParam.optionList[j].optionIdList.join(
-              ","
-            );
+            finalSubmitParam.optionList[j].optionIdList = finalSubmitParam.optionList[j].optionIdList.join(",");
           }
         }
         this.pageLeaveEnsure = true;
@@ -755,8 +741,9 @@
 
         this.$router.push({
           name: "history",
-          params: finalSubmitParam
         });
+
+        this.$store.commit("setPatientMessage",Object.assign(this.patientBaseMessage,finalSubmitParam))
       },
       answerValidator() {
         let errorMsg = ["您还有问题未完善", "您还有问题未完善", "您还有问题未完善"];

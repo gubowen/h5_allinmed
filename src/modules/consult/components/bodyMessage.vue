@@ -86,7 +86,8 @@
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
     </transition>
-    <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow" :backPopupParams="{patientParams:patientParams}"></backPopup>
+    <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
+               :backPopupParams="{patientParams:patientParams}"></backPopup>
     <loading v-if="finish"></loading>
   </div>
 </template>
@@ -99,21 +100,21 @@
   import progerssBar from "../components/progressBar";
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import nimEnv from "common/js/nimEnv/nimEnv";
-  // import autosize from "autosize";
   import backPopup from "components/backToastForConsult";
   import Picker from 'better-picker';
   import store from "../store/store";
   import 'common/styles/_ustbPicker.css';
+  import {mapState} from "vuex";
   import "babel-polyfill";
 
   const XHRList = {
     createCase: "/mcall/customer/patient/case/v2/create/",
-    createProfessionalConsultation:"/mcall/customer/case/consultation/v1/create/", //创建专业医生问诊
+    createProfessionalConsultation: "/mcall/customer/case/consultation/v1/create/", //创建专业医生问诊
     updateCount: "/mcall/customer/case/consultation/v1/updateFrequency/", //更新问诊次数
     getToken: "/mcall/im/interact/v1/refreshToken/",
     triageAssign: "/mcall/customer/case/consultation/v1/create/",
     getMedicalList: "/mcall/customer/patient/case/v1/getMapById/",
-    uploadWX:"/mcall/customer/patient/case/attachment/v1/createWx/"  //微信上传图片
+    uploadWX: "/mcall/customer/patient/case/attachment/v1/createWx/"  //微信上传图片
   }
 
   export default {
@@ -125,17 +126,17 @@
         disContent: "",
         helpContent: "",
         isWeChat: true,
-        heightPicker:null,
-        heightContent:"",
-        weightPicker:null,
-        weightContent:"",
+        heightPicker: null,
+        heightContent: "",
+        weightPicker: null,
+        weightContent: "",
         submitTip: false,
         backPopupShow: false,
         patientParams: {
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
         },
-        createParams:{
+        createParams: {
           visitSiteId: api.getSiteId(),
           operatorType: 0,
           caseType: api.getPara().doctorId ? 11 : 0,
@@ -149,38 +150,43 @@
           inspectionAttId: "",
           takeMedicine: "",
           complication: "",
-          height:"",
-          weight:"",
-          descriptionDisease:"",
-          needHelp:"",
+          height: "",
+          weight: "",
+          descriptionDisease: "",
+          needHelp: "",
           optionList: []
         },
         userData: {
           account: "",
           token: ""
         },
-        responseCaseId:"",
+        responseCaseId: "",
         orderSourceId: "", //进入分诊im需要orderSourceId
 //        wxImgLists:[]
       }
     },
+    computed: {
+      ...mapState([
+        "patientBaseMessage"
+      ])
+    },
     methods: {
       // 隐藏底部
-      hideBar () {
-        store.commit("setbottomNav",false);
+      hideBar() {
+        store.commit("setbottomNav", false);
       },
       // 显示底部
-      showBar () {
-        siteSwitch.weChatJudge(()=>{
+      showBar() {
+        siteSwitch.weChatJudge(() => {
           // store.commit("setbottomNav",false);
-        },()=>{
-          store.commit("setbottomNav",true);
+        }, () => {
+          store.commit("setbottomNav", true);
         });
       },
-      initCaseParams(){
-        let params = this.$route.params.pageParam;
-        this.heightContent = this.$route.params.height || "";
-        this.weightContent = this.$route.params.weight || "";
+      initCaseParams() {
+        let params = this.patientBaseMessage;
+        this.heightContent = params.height;
+        this.weightContent = params.weight;
         this.createParams.patientId = params.patientId;
         this.createParams.customerId = params.customerId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
@@ -192,18 +198,17 @@
         this.createParams.takeMedicine = params.takeMedicine;
         this.createParams.complication = params.complication;
         this.createParams.optionList = params.optionList;
-//        this.wxImgLists = params.wxImgLists;
       },
-      contentLimit(element,limit){
+      contentLimit(element, limit) {
         let ranges = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi;
 
         if (ranges.test(this[element])) {
           this[element] = this[element].replace(ranges, "");
         }
         let content = this[element];
-        if (content.length > limit ) {
+        if (content.length > limit) {
           // this[element] = api.getStrByteLen(content, limit );
-          this[element] = content.substring(0,1000);
+          this[element] = content.substring(0, 1000);
           this.errorShow = true;
           this.errorMsg = `最多只能输入${limit}字`;
           setTimeout(() => {
@@ -212,59 +217,59 @@
           return false;
         }
       },
-      heightPickerInit(){
+      heightPickerInit() {
         const that = this;
-        let heightData = [],defaultHeight;
+        let heightData = [], defaultHeight;
         console.log(that.$route.params.sex);
-        if(Number(that.$route.params.sex) == 1){
+        if (Number(that.$route.params.sex) == 1) {
           console.log("这是男的");
           defaultHeight = 169;
-        }else{
+        } else {
           console.log("这是女的");
           defaultHeight = 159;
         }
-        for(let i=1;i<=300;i++){
+        for (let i = 1; i <= 300; i++) {
           heightData.push({
-            text:i,
-            value:""
+            text: i,
+            value: ""
           })
         }
         that.heightPicker = new Picker({
           data: [heightData],//初始化的数据
-          selectedIndex:[defaultHeight],//默认哪个选中
+          selectedIndex: [defaultHeight],//默认哪个选中
         });
-        that.heightPicker.on('picker.select',(selectedVal, selectedIndex) => {
+        that.heightPicker.on('picker.select', (selectedVal, selectedIndex) => {
           that.heightContent = `${heightData[selectedIndex].text}`
         })
       },
-      weightPickerInit(){
+      weightPickerInit() {
         const that = this;
-        let weightData = [],defaultWeight;
-        if(Number(that.$route.params.sex) == 1){
+        let weightData = [], defaultWeight;
+        if (Number(that.$route.params.sex) == 1) {
           defaultWeight = 64;
-        }else{
+        } else {
           defaultWeight = 49;
         }
-        for(let i=1;i<=200;i++){
+        for (let i = 1; i <= 200; i++) {
           weightData.push({
-            text:i,
-            value:""
+            text: i,
+            value: ""
           })
         }
         that.weightPicker = new Picker({
           data: [weightData],//初始化的数据
-          selectedIndex:[defaultWeight],//默认哪个选中
+          selectedIndex: [defaultWeight],//默认哪个选中
         });
-        that.weightPicker.on('picker.select',(selectedVal, selectedIndex) => {
+        that.weightPicker.on('picker.select', (selectedVal, selectedIndex) => {
           that.weightContent = `${weightData[selectedIndex].text}`
         })
       },
       //验证填写规则
-      conditionSubmit(){
+      conditionSubmit() {
         //验证最小字数限制
-        if(this.disContent.length<10){
+        if (this.disContent.length < 10) {
           let disHeight = document.querySelector(".disIllness").offsetTop;
-          window.scrollTo(0,disHeight);
+          window.scrollTo(0, disHeight);
           this.errorShow = true;
           this.errorMsg = `请详细描述病情，至少10个字`;
           setTimeout(() => {
@@ -272,9 +277,9 @@
           }, 2000);
           return false;
         }
-        if(this.helpContent.length<6){
+        if (this.helpContent.length < 6) {
           let helpHeight = document.querySelector(".helpIllness").offsetTop;
-          window.scrollTo(0,helpHeight);
+          window.scrollTo(0, helpHeight);
           this.errorShow = true;
           this.errorMsg = `请详细描述所需帮助，至少6个字`;
           setTimeout(() => {
@@ -282,7 +287,7 @@
           }, 2000);
           return false;
         }
-        if(this.heightContent.length == 0 || this.weightContent.length == 0){
+        if (this.heightContent.length == 0 || this.weightContent.length == 0) {
           this.errorShow = true;
           this.errorMsg = `请补全身高体重`;
           setTimeout(() => {
@@ -299,13 +304,13 @@
         }
       },
       //创建问诊单
-      createCaseData(){
+      createCaseData() {
         let that = this;
         this.submitTip = false;
         this.finish = true;
         this.createParams.height = this.heightContent;
         this.createParams.weight = this.weightContent;
-        this.createParams.descriptionDisease =encodeURIComponent(this.disContent);
+        this.createParams.descriptionDisease = encodeURIComponent(this.disContent);
         this.createParams.needHelp = encodeURIComponent(this.helpContent);
         api.ajax({
           url: XHRList.createCase,
@@ -390,13 +395,13 @@
                 orderAmount: 0,
                 orderFrequency: 3
               };
-              localStorage.setItem("sendTips",JSON.stringify(arg));
+              localStorage.setItem("sendTips", JSON.stringify(arg));
               localStorage.removeItem("selectList");
               localStorage.removeItem("secondList");
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
               localStorage.removeItem("noMR");
-              if(navigator.userAgent.toLowerCase().includes("iphone")){
+              if (navigator.userAgent.toLowerCase().includes("iphone")) {
                 that.backPopupShow = true;
               }
               that.finish = false;
@@ -414,7 +419,7 @@
               //   "&patientId=" +
               //   that.createParams.patientId;
 
-              g_sps.jump(null,urlTemp);
+              g_sps.jump(null, urlTemp);
             }
           }
         });
@@ -428,39 +433,39 @@
         localStorage.removeItem("complication");
         siteSwitch.weChatJudge(
           () => {
-            if(navigator.userAgent.toLowerCase().includes("iphone")){
+            if (navigator.userAgent.toLowerCase().includes("iphone")) {
               that.backPopupShow = true;
             }
             that.finish = false;
             let urlTemp = "/dist/imScene.html?caseId=" +
               that.responseCaseId +
               "&patientId=" +
-              that.createParams.patientId ;
+              that.createParams.patientId;
             // window.location.href =
             //   "/dist/imScene.html?caseId=" +
             //   that.responseCaseId +
             //   "&patientId=" +
             //   that.createParams.patientId ;
 
-            g_sps.jump(null,urlTemp);  
+            g_sps.jump(null, urlTemp);
           },
           () => {
-            if (that.$store.state.isSubscribe){
-              if(navigator.userAgent.toLowerCase().includes("iphone")){
+            if (that.$store.state.isSubscribe) {
+              if (navigator.userAgent.toLowerCase().includes("iphone")) {
                 that.backPopupShow = true;
               }
               that.finish = false;
               let urlTemp = "/dist/imScene.html?caseId=" +
                 that.responseCaseId +
                 "&patientId=" +
-                that.createParams.patientId ;
+                that.createParams.patientId;
               // window.location.href =
               //   "/dist/imScene.html?caseId=" +
               //   that.responseCaseId +
               //   "&patientId=" +
               //   that.createParams.patientId ;
-              g_sps.jump(null,urlTemp);  
-            }else{
+              g_sps.jump(null, urlTemp);
+            } else {
               that.getUserBaseData();
             }
           }
@@ -606,7 +611,7 @@
           }),
           done(error, msg) {
             console.log("新用户提醒发送...");
-            if(navigator.userAgent.toLowerCase().includes("iphone")){
+            if (navigator.userAgent.toLowerCase().includes("iphone")) {
               that.backPopupShow = true;
             }
             that.finish = false;
@@ -619,7 +624,7 @@
     },
     mounted() {
       document.title = "描述病情";
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
       } else {
@@ -651,14 +656,16 @@
   .isMB {
     padding-bottom: rem(100px);
   }
-  .text-num-tips{
+
+  .text-num-tips {
     padding-right: rem(20px);
     float: right;
     front-size: rem(13px);
     color: #AFAFAF;
   }
-  .conditionSubmit{
-    display:block;
+
+  .conditionSubmit {
+    display: block;
     width: rem(560px);
     height: rem(100px);
     margin: rem(76px) auto rem(100px);
@@ -677,7 +684,7 @@
     box-sizing: border-box;
   }
 
-  .dis-four{
+  .dis-four {
     .consult-wrapper {
       padding: rem(30px);
     }
@@ -689,70 +696,70 @@
         background-color: #d5d5d5;
         margin-bottom: rem(16px);
       }
-        .input-area{
-          background-color: #e5e5e5;
-          position: relative;
-          padding: rem(64px) rem(64px);
-          padding-bottom: rem(80px);
-          margin: 0;
-          box-sizing: border-box;
-          max-height:4rem;
-          overflow:hidden;
-          .box {
-            max-height:2rem;
-            .area-content {
-              pre {
-                display: block;
-                visibility: hidden;
-                @include font-dpr(14px);
-                width: 100%;
-                box-sizing: border-box;
-                min-height: rem(72px);
-              }
-              .main-input-box-textarea {
-                display: block;
-                max-height: 2rem;
-                background-color: #e5e5e5;
-                padding-top: rem(15px);
-                padding-bottom: rem(15px);
-                width: 100%;
-                @include font-dpr(14px);
-                border: 0 solid #e8ecef;
-                box-sizing: border-box;
-                min-height: rem(60px);
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-              }
+      .input-area {
+        background-color: #e5e5e5;
+        position: relative;
+        padding: rem(64px) rem(64px);
+        padding-bottom: rem(80px);
+        margin: 0;
+        box-sizing: border-box;
+        max-height: 4rem;
+        overflow: hidden;
+        .box {
+          max-height: 2rem;
+          .area-content {
+            pre {
+              display: block;
+              visibility: hidden;
+              @include font-dpr(14px);
+              width: 100%;
+              box-sizing: border-box;
+              min-height: rem(72px);
+            }
+            .main-input-box-textarea {
+              display: block;
+              max-height: 2rem;
+              background-color: #e5e5e5;
+              padding-top: rem(15px);
+              padding-bottom: rem(15px);
+              width: 100%;
+              @include font-dpr(14px);
+              border: 0 solid #e8ecef;
+              box-sizing: border-box;
+              min-height: rem(60px);
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
             }
           }
+        }
       }
-      .text-num-tips{
+      .text-num-tips {
         padding-right: rem(20px);
         front-size: rem(13px);
         color: #AFAFAF;
         display: block;
       }
-      .hwBox{
-        padding:0 rem(60px);
+      .hwBox {
+        padding: 0 rem(60px);
         @include font-dpr(16px);
         color: #333333;
-        li{
-          span{
-            display:inline-block;
-            margin-left:rem(16px);
-            padding-bottom:rem(12px);
-            border-bottom:1px solid #D5D5D5;
+        li {
+          span {
+            display: inline-block;
+            margin-left: rem(16px);
+            padding-bottom: rem(12px);
+            border-bottom: 1px solid #D5D5D5;
           }
-          i{
-            display:inline-block;
-            width:rem(200px);
-            height:rem(32px);
+          i {
+            display: inline-block;
+            width: rem(200px);
+            height: rem(32px);
           }
         }
-        .wBox{
-          margin-top:rem(20px);
+        .wBox {
+          margin-top: rem(20px);
         }
       }
     }
