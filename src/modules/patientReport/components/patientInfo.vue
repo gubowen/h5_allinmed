@@ -297,7 +297,9 @@
           }else{
             localStorage.setItem("backUrl",window.location.href);
             // window.location.href = '/dist/mLogin.html';
-            g_sps.jump(null,'/dist/mLogin.html'); 
+            setTimeout( () => {
+              g_sps.jump(null,'/dist/mLogin.html'); 
+            },100)
           }
         })
       });
@@ -315,7 +317,7 @@
         this.credentialPickerInit();//患者关系选择器初始化
         this.birthPickerInit();//患者关系选择器初始化
         this.getPatientPhone();//获取绑定的手机号
-        this.$validator.updateDictionary({
+        this.$validator.localize({
           en: {
             custom: {
               //用户姓名的验证
