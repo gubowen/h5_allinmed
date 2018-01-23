@@ -136,7 +136,7 @@ export default {
     },
     // 添加验证提示
     addValidateTips() {
-      this.$validator.updateDictionary({
+      this.$validator.localize({
         en: {
           custom: {
             //手机号的验证
