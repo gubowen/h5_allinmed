@@ -136,6 +136,9 @@
           } else {
             localStorage.setItem("backUrl", window.location.href);
             // window.location.href = '/dist/mLogin.html';
+            debugger;
+            console.log(g_sps);
+            debugger;
             g_sps.jump(null,'/dist/mLogin.html'); 
           }
         })
