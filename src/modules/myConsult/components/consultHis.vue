@@ -136,7 +136,10 @@
           } else {
             localStorage.setItem("backUrl", window.location.href);
             // window.location.href = '/dist/mLogin.html';
-            g_sps.jump(null,'/dist/mLogin.html'); 
+            // g_sps 有时加载不出来，用个延时；
+            setTimeout(() => {
+              g_sps.jump(null,'/dist/mLogin.html'); 
+            },100);
           }
         })
       });
