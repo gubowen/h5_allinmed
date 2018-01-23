@@ -17,9 +17,6 @@ class Wxbinding {
   }
 
   isBind(obj) {
-    if(api.getPara()._amChannel){
-      localStorage.setItem("_amChannel", api.getPara()._amChannel);
-    }
     let personalInfo = new PersonalInfo();
     let checkLogin = new CheckLogin();
     // if (!api.getPara().openId) {
@@ -55,7 +52,11 @@ class Wxbinding {
                   obj.failCallBack && obj.failCallBack();
                 } else {
                   localStorage.setItem("backUrl", window.location.href);
-                  window.location.href = `/dist/mLogin.html?from=weChat&customerId=${data}`;
+                  if(api.getPara()._amChannel){
+                    window.location.href = `/dist/mLogin.html?from=weChat&_amChannel=${api.getPara()._amChannel}&customerId=${data}`;
+                  }else{
+                    window.location.href = `/dist/mLogin.html?from=weChat&customerId=${data}`;
+                  }
                 }
               }
             } else {
@@ -75,7 +76,11 @@ class Wxbinding {
             obj.failCallBack && obj.failCallBack();
           } else {
             localStorage.setItem("backUrl", window.location.href);
-            window.location.href = `/dist/mLogin.html?from=weChat`;
+            if(api.getPara()._amChannel){
+              window.location.href = `/dist/mLogin.html?from=weChat&_amChannel=${api.getPara()._amChannel}`;
+            }else{
+              window.location.href = `/dist/mLogin.html?from=weChat`;
+            }
           }
         }
       })

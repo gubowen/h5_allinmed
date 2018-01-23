@@ -101,16 +101,17 @@
         wxBind.isBind({
           callBack: (id) => {
             this.customerId = id;
-            if(localStorage.getItem("_amChannel") && !api.getPara()._amChannel){
-              if(window.location.href.includes("?")){
-                window.location.href = `${window.location.href.split("#")[0]}&_amChannel=${localStorage.getItem("_amChannel")}`;
-              }else{
-                window.location.href = `${window.location.href.split("#")[0]}?_amChannel=${localStorage.getItem("_amChannel")}`;
-              }
-            }else{
-              localStorage.removeItem("_amChannel");
-              this.init();
-            }
+            this.init();
+//            if(localStorage.getItem("_amChannel") && !api.getPara()._amChannel){
+//              if(window.location.href.includes("?")){
+//                window.location.href = `${window.location.href.split("#")[0]}&_amChannel=${localStorage.getItem("_amChannel")}`;
+//              }else{
+//                window.location.href = `${window.location.href.split("#")[0]}?_amChannel=${localStorage.getItem("_amChannel")}`;
+//              }
+//            }else{
+//              localStorage.removeItem("_amChannel");
+//              this.init();
+//            }
           },
           hasBindedFn: (id) => {
             this.$nextTick(()=>{
