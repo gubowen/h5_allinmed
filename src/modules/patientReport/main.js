@@ -104,6 +104,9 @@ class Consult {
         meta: {
           keepAlive: true
         },
+      },{
+        path:"*",
+        redirect:"/patientInfo"
       },
     ];
   }

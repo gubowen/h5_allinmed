@@ -103,7 +103,10 @@ class Consult {
         meta: {
           keepAlive: true
         },
-      }
+      },{
+        path:"*",
+        redirect:"/doctorMain"
+      },
     ];
   }
 
