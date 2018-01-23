@@ -99,6 +99,9 @@ class ImScene {
         keepAlive: true,
       },
       component: MedicalReportDetail
+    },{
+      path: "*",
+      redirect: "/BaseIm",
     }]
   }
 }
