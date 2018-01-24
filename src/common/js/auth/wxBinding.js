@@ -52,11 +52,7 @@ class Wxbinding {
                   obj.failCallBack && obj.failCallBack();
                 } else {
                   localStorage.setItem("backUrl", window.location.href);
-                  if(api.getPara()._amChannel){
-                    window.location.href = `/dist/mLogin.html?from=weChat&_amChannel=${api.getPara()._amChannel}&customerId=${data}`;
-                  }else{
-                    window.location.href = `/dist/mLogin.html?from=weChat&customerId=${data}`;
-                  }
+                  window.location.href = `/dist/mLogin.html?from=weChat&customerId=${data}`;
                 }
               }
             } else {
@@ -76,11 +72,7 @@ class Wxbinding {
             obj.failCallBack && obj.failCallBack();
           } else {
             localStorage.setItem("backUrl", window.location.href);
-            if(api.getPara()._amChannel){
-              window.location.href = `/dist/mLogin.html?from=weChat&_amChannel=${api.getPara()._amChannel}`;
-            }else{
-              window.location.href = `/dist/mLogin.html?from=weChat`;
-            }
+            window.location.href = `/dist/mLogin.html?from=weChat`;
           }
         }
       })

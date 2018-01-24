@@ -373,7 +373,7 @@
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
                       // window.location.href = localStorage.getItem("backUrl");
-                      g_sps.jump(e.target,localStorage.getItem("backUrl")); 
+                      g_sps.jump(e.target,localStorage.getItem("backUrl"));
                     });
                   } else {
                     this.toastComm("该手机已注册，请更换其他手机！");
@@ -386,7 +386,7 @@
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
                     // window.location.href = localStorage.getItem("backUrl");
-                    g_sps.jump(e.target,localStorage.getItem("backUrl")); 
+                    g_sps.jump(e.target,localStorage.getItem("backUrl"));
                   });
                 }
               } else {
@@ -457,7 +457,7 @@
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
                       // window.location.href = localStorage.getItem("backUrl");
-                      g_sps.jump(e.target,localStorage.getItem("backUrl")); 
+                      g_sps.jump(e.target,localStorage.getItem("backUrl"));
                     });
                   } else {
                     _this.toastComm("该手机已注册，请更换其他手机！");
@@ -470,7 +470,7 @@
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
                     // window.location.href = localStorage.getItem("backUrl");
-                    g_sps.jump(e.target,localStorage.getItem("backUrl")); 
+                    g_sps.jump(e.target,localStorage.getItem("backUrl"));
                   });
                 }
               } else {
@@ -492,10 +492,13 @@
     },
     mounted() {
       let _this = this;
-
+      if(api.getPara()._amChannel){
+        localStorage.setItem("_amChannel",api.getPara()._amChannel);
+      }
       siteSwitch.weChatJudge(
         ua => {
           _this.isBroswer = false;
+
           if (!api.getPara().customerId&&!api.getPara().isSubscribe){
             checkSubscribe.check(`${window.location.origin}${window.location.pathname}${window.location.search}`);
           }else if (api.getPara().isSubscribe==0){
@@ -504,6 +507,8 @@
                 path:"/wechat"
               })
             });
+          }else if(api.getPara().isSubscribe&&localStorage.getItem("_amChannel")&&!api.getPara()._amChannel){
+            window.location.href = `${window.location.href.split("#")[0]}&_amChannel=${localStorage.getItem("_amChannel")}`;
           }
         },
         ua => {
