@@ -1032,9 +1032,8 @@
           age: this.patientList[index].patientAge,
           patientId: this.patientList[index].patientId,
           count: this.count,
-          height: this.patientList[index].height,
-          weight: this.patientList[index].weight,
-          userId:this.customerId
+          height: this.patientList[index].height?this.patientList[index].height:"",
+          weight: this.patientList[index].weight?this.patientList[index].weight:""
         })
       },
       //添加患者按钮

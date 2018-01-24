@@ -25,12 +25,12 @@ export default new Vuex.Store({
     },
     setPatientMessage(state, param) {
       state.patientBaseMessage = param;
-      if (!state.patientBaseMessage.weight) {
-        state.patientBaseMessage.weight = state.patientBaseMessage.sex === 1 ? 65 : 50;
-      }
-      if (!state.patientBaseMessage.height) {
-        state.patientBaseMessage.height = state.patientBaseMessage.sex === 1 ? 170 : 160;
-      }
+      // if (!state.patientBaseMessage.weight) {
+      //   state.patientBaseMessage.weight = state.patientBaseMessage.sex === 1 ? 65 : 50;
+      // }
+      // if (!state.patientBaseMessage.height) {
+      //   state.patientBaseMessage.height = state.patientBaseMessage.sex === 1 ? 170 : 160;
+      // }
     },
     getSubscribeStatus(state, name) {
       getPersonal.getMessage(localStorage.getItem("userId")).then((data) => {

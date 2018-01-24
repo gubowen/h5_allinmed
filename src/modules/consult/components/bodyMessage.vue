@@ -220,12 +220,9 @@
       heightPickerInit() {
         const that = this;
         let heightData = [], defaultHeight;
-        console.log(that.$route.params.sex);
-        if (Number(that.$route.params.sex) == 1) {
-          console.log("这是男的");
+        if (this.patientBaseMessage.sex == 1) {
           defaultHeight = 169;
         } else {
-          console.log("这是女的");
           defaultHeight = 159;
         }
         for (let i = 1; i <= 300; i++) {
@@ -245,7 +242,7 @@
       weightPickerInit() {
         const that = this;
         let weightData = [], defaultWeight;
-        if (Number(that.$route.params.sex) == 1) {
+        if (this.patientBaseMessage.sex == 1) {
           defaultWeight = 64;
         } else {
           defaultWeight = 49;
