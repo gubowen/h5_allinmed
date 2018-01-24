@@ -147,7 +147,10 @@ class ImScene {
         keepAlive: true
       },
       component: videoPlay
-      }
+    },{
+      path: "*",
+      redirect: "/BaseIm",
+    }
     ]
   }
 }

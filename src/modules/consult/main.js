@@ -189,6 +189,9 @@ class Consult {
         meta: {
           keepAlive: false
         }
+      },{
+        path: "*",
+        redirect: "/addPatient",
       }
     ];
   }

@@ -93,7 +93,7 @@ export default {
   },
   mounted() {
     api.forbidShare();
-    this.$validator.updateDictionary({
+    this.$validator.localize({
       en: {
         custom: {
           //手机号的验证

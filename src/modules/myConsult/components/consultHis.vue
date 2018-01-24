@@ -102,6 +102,16 @@
           callBack: (id) => {
             this.customerId = id;
             this.init();
+//            if(localStorage.getItem("_amChannel") && !api.getPara()._amChannel){
+//              if(window.location.href.includes("?")){
+//                window.location.href = `${window.location.href.split("#")[0]}&_amChannel=${localStorage.getItem("_amChannel")}`;
+//              }else{
+//                window.location.href = `${window.location.href.split("#")[0]}?_amChannel=${localStorage.getItem("_amChannel")}`;
+//              }
+//            }else{
+//              localStorage.removeItem("_amChannel");
+//              this.init();
+//            }
           },
           hasBindedFn: (id) => {
             this.$nextTick(()=>{
@@ -111,7 +121,7 @@
                 this.errorShow = false;
                 this.errorMsg = "";
                 // window.location.href = "/dist/mLogin.html?from=weChat";
-                g_sps.jump(null,"/dist/mLogin.html?from=weChat"); 
+                g_sps.jump(null,"/dist/mLogin.html?from=weChat");
               }, 3000);
             });
           }
@@ -138,7 +148,7 @@
             // window.location.href = '/dist/mLogin.html';
             // g_sps 有时加载不出来，用个延时；
             setTimeout(() => {
-              g_sps.jump(null,'/dist/mLogin.html'); 
+              g_sps.jump(null,'/dist/mLogin.html');
             },100);
           }
         })
@@ -339,27 +349,27 @@
       hrefToConsult(e) {
         // window.location.href = `/dist/consult.html?customerId=${api.getPara().customerId || localStorage.getItem("userId")}`;
         let urlTemp = `/dist/consult.html?customerId=${api.getPara().customerId || localStorage.getItem("userId")}`;
-        g_sps.jump(e.target,urlTemp); 
+        g_sps.jump(e.target,urlTemp);
       },
       hrefToSuggest(e,opt) {
         siteSwitch.weChatJudge(() => {
           if (localStorage.getItem("userId") || api.getPara().customerId) {
             // window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
             let urlTemp = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
-            g_sps.jump(e.target,urlTemp); 
+            g_sps.jump(e.target,urlTemp);
           } else {
             // window.location.href = '/dist/mLogin.html';
-            g_sps.jump(e.target,'/dist/mLogin.html'); 
+            g_sps.jump(e.target,'/dist/mLogin.html');
           }
         }, () => {
           if (this.isSubscribe) {
             if (localStorage.getItem("userId") || api.getPara().customerId) {
               // window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
               let urlTemp = '/dist/imScene.html?caseId=' + opt.caseId + '&shuntCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=health&suggest=1'
-              g_sps.jump(e.target,urlTemp); 
+              g_sps.jump(e.target,urlTemp);
             } else {
               // window.location.href = '/dist/mLogin.html';
-              g_sps.jump(e.target,'/dist/mLogin.html'); 
+              g_sps.jump(e.target,'/dist/mLogin.html');
             }
           } else {
             this.wxTips = true;
@@ -388,20 +398,20 @@
           if (opt.caseType == 10 || opt.caseType == 11) {
             // window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=report';
             let urlTemp = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId + '&from=report';
-            g_sps.jump(e.target,urlTemp); 
+            g_sps.jump(e.target,urlTemp);
           } else {
             // window.location.href = '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId;
             let urlTemp =  '/dist/imSceneDoctor.html?caseId=' + opt.caseId + '&doctorCustomerId=' + opt.customerId + '&patientId=' + opt.patientId;
-            g_sps.jump(e.target,urlTemp); 
+            g_sps.jump(e.target,urlTemp);
           }
         } else {
           if (api.getPara().customerId || localStorage.getItem("userId")) {
             // window.location.href = '/dist/imScene.html?caseId=' + opt.caseId + '&patientId=' + opt.patientId
             let urlTemp = '/dist/imScene.html?caseId=' + opt.caseId + '&patientId=' + opt.patientId;
-            g_sps.jump(e.target,urlTemp); 
+            g_sps.jump(e.target,urlTemp);
           } else {
             // window.location.href = '/dist/mLogin.html';
-            g_sps.jump(e.target,'/dist/mLogin.html'); 
+            g_sps.jump(e.target,'/dist/mLogin.html');
           }
         }
       },

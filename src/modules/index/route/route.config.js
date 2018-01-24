@@ -18,4 +18,7 @@ export default [{
     meta: {
       keepAlive: true
     },
-}]
+},{
+  path: "*",
+  redirect: "/home"
+}, ]

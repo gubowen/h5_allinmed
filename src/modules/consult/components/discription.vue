@@ -722,8 +722,9 @@
           weight:this.patientBaseMessage.weight,
           sex: this.patientBaseMessage.sex
         };
+        // debugger;
         for (let i in this.secondQuestionList) {
-          if (this.$el.querySelectorAll(`"[data-oid='${this.secondQuestionList[i].refOptionId}'] .pain-level-secondList"`).length !== 0) {
+          if (this.$el.querySelectorAll(`[data-oid='${this.secondQuestionList[i].refOptionId}'] .pain-level-secondList`).length !== 0) {
             finalSubmitParam.optionList.push(this.secondQuestionList[i]);
           }
         }
