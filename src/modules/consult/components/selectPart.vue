@@ -1,5 +1,6 @@
 <template>
   <div data-alcode-mod='710' style="height:100%" :class="{'isMB':!isWeChat}">
+    <SelectPartTips :tipsShow.sync="tipShow"></SelectPartTips>
     <progerssBar :progerssBarParams="{progerssParams:'1'}"></progerssBar>
     <section class="main-inner select-part" @click="secondShow=false;currentThreeLevel=0;imgArray=[]">
       <header class="part-select-title">
@@ -8,7 +9,7 @@
       <transition name="fade">
         <section class="main-inner-content" :class="{'androidScale':!isIos&&!isWeChat&&dpr<=3}" v-show="allReady">
           <section class="body-picture body-picture-f" :class="pointClassObject">
-            <figure class="body-picture-content" :class="{'isIosWeChat':isWeChat}">
+            <figure class="body-picture-content" :class="{'isIosWeChat':isWeChat}" v-show="!tipShow">
               <img class="body-picture-img" :src="patientBody" alt="">
               <!--<img class="body-picture-img" src="../../../common/image/img00/patientConsult/shoulders.png" alt="">-->
               <img v-for="item in imgArray" :src="item">
@@ -63,7 +64,7 @@
   import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
   import progerssBar from "../components/progressBar";
   import {mapState} from 'vuex'
-
+  import SelectPartTips from"./selectPartTip";
   const XHRList = {
     partList: "/mcall/comm/data/part/v1/getMapSearchList/"
   };
@@ -77,6 +78,8 @@
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId,
         },
+        tipShow:false,
+        watchedTips:!!localStorage.getItem("watchedTips"),
         allReady: false,
         dpr: window.devicePixelRatio,
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
@@ -177,6 +180,15 @@
         this.backPopupShow = false;
       }
       api.forbidShare();
+    },
+    watch:{
+      "tipShow"(flag){
+        if (flag){
+          $("body").css("overflow","hidden");
+        }else{
+          $("body").css("overflow","visible");
+        }
+      }
     },
     computed: {
       ...mapState([
@@ -358,9 +370,10 @@
       },
     },
     components: {
-      'loading': loading,
+      loading,
       backPopup,
-      progerssBar
+      progerssBar,
+      SelectPartTips
     }
 
   }
@@ -453,6 +466,7 @@
     background: #ebebeb;
     border-top-right-radius: rem(9999px);
     border-bottom-right-radius: rem(9999px);
+    z-index: 9;
     h3 {
       line-height: 1;
       padding: rem(20px) rem(30px);

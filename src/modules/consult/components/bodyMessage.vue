@@ -418,6 +418,7 @@
               //   api.getPara().doctorId +
               //   "&patientId=" +
               //   that.createParams.patientId;
+              localStorage.removeItem("watchedTips");
 
               g_sps.jump(null, urlTemp);
             }
@@ -446,7 +447,7 @@
             //   that.responseCaseId +
             //   "&patientId=" +
             //   that.createParams.patientId ;
-
+            localStorage.removeItem("watchedTips");
             g_sps.jump(null, urlTemp);
           },
           () => {
@@ -464,6 +465,7 @@
               //   that.responseCaseId +
               //   "&patientId=" +
               //   that.createParams.patientId ;
+              localStorage.removeItem("watchedTips");
               g_sps.jump(null, urlTemp);
             } else {
               that.getUserBaseData();
