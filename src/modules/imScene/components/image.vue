@@ -85,8 +85,7 @@ export default {
     },
   },
   mounted() {
-    // debugger;
-    if (!this.imageMessage.file.url.includes("blob:")) {
+    if (!this.imageMessage.file.url.includes("blob:")&&!this.imageMessage.file.url.includes("quality")) {
       let qualityUrl = this.nim.viewImageQuality({
         url: this.imageMessage.file.url,
         quality: 40

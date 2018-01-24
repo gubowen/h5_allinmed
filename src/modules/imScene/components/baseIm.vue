@@ -380,7 +380,7 @@
   export default {
     data() {
       return {
-        serviceTime:"", // 服务时间
+        serviceTime: "", // 服务时间
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         isWeChat: _weChat,
         nim: {},
@@ -441,7 +441,7 @@
       // 去意见反馈；
       goFeedback() {
         // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
-        g_sps.jump(null,`/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`);
+        g_sps.jump(null, `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`);
       },
       // 控制 vuex toast控制
       toastControl(message) {
@@ -539,7 +539,7 @@
                 });
                 that.getCId(msg);//每次收到消息更新cId(分诊台医生id);
                 // 判断如果是图片，则把加入到图片数组中
-                if (msg.type == "image") {
+                if (msg.type == "image" &&that.imageList.indexOf(msg.file.url)==-1) {
                   that.imageList.push(msg.file.url);
                 }
               }
@@ -572,7 +572,9 @@
       getImageList() {
         if (this.$refs.bigImg) {
           this.$refs.bigImg.forEach((element, index) => {
-            this.imageList.push(element.imageMessage.file.url);
+            if (this.imageList.indexOf(element.imageMessage.file.url)==-1){
+              this.imageList.push(element.imageMessage.file.url);
+            }
           });
         }
       },
@@ -1701,9 +1703,9 @@
           },
           done(data) {
             console.log(data);
-            let {responseObject:{responseStatus,responseData}} = data;
+            let {responseObject: {responseStatus, responseData}} = data;
             if (responseStatus && !!responseData) {
-              let {dataList:{serviceEndTime,serviceStartTime}} = responseData;
+              let {dataList: {serviceEndTime, serviceStartTime}} = responseData;
               // serviceStartTime = "14:00";
               // serviceEndTime = "14:30";
               let startTimeArray = serviceStartTime.split(":"),
@@ -1717,7 +1719,7 @@
               let currentHours = myDate.getHours(); //获取当前小时数(0-23)
               let currentMinutes = myDate.getMinutes(); //获取当前分钟数(0-59)
               that.serviceTime = `${serviceStartTime}-${serviceEndTime}`;
-              if ((currentHours < parseInt(startTimeArray[0]) || (currentHours == parseInt(startTimeArray[0]) && currentMinutes< parseInt(startTimeArray[1]))) || (currentHours > parseInt(endTimeArray[0]) || (currentHours == parseInt(endTimeArray[0]) && currentMinutes > parseInt(endTimeArray[1])))) {
+              if ((currentHours < parseInt(startTimeArray[0]) || (currentHours == parseInt(startTimeArray[0]) && currentMinutes < parseInt(startTimeArray[1]))) || (currentHours > parseInt(endTimeArray[0]) || (currentHours == parseInt(endTimeArray[0]) && currentMinutes > parseInt(endTimeArray[1])))) {
                 that.serviceTime = that.serviceTime + " 休息中";
               }
             } else {
@@ -1924,7 +1926,7 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
-              g_sps.jump(null,urlTemp);
+              g_sps.jump(null, urlTemp);
             }
           }
         });
@@ -1997,19 +1999,18 @@
         new TouchmoveDirection((dir) => {
           this.touchmoveDirection = dir;
         });
-        setTimeout(() => {
-          document.querySelector(".main-message").addEventListener("scroll", () => {
-            clearTimeout(this._scrollTips);
-            this._scrollTips = setTimeout(() => {
-              if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
-                if (!this.allMsgsGot) {
-                  store.commit("setHistoryStatus", "scrollInit");
-                  this.getMessageList("scrollInit");
-                }
+
+        document.querySelector(".main-message").addEventListener("scroll", () => {
+          clearTimeout(this._scrollTips);
+          this._scrollTips = setTimeout(() => {
+            if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
+              if (!this.allMsgsGot) {
+                store.commit("setHistoryStatus", "scrollInit");
+                this.getMessageList("scrollInit");
               }
-            }, 200);
-          })
-        }, 200);
+            }
+          }, 200);
+        })
       },
       refreshScroll() {
         this.scroll && this.scroll.refresh();
@@ -2035,18 +2036,7 @@
       ensureShow() {
         return this.$store.state.ensureShow;
       },
-      // //配合watch图片上传进度使用
-      // progressImage() {
-      //   return this.imageProgress.progress;
-      // },
-      // // 配合watch视频上传进度使用
-      // progressVideo() {
-      //   return this.videoProgress.progress;
-      // },
-      // // 配合watchpdf上传进度使用
-      // progressFile() {
-      //   return this.fileProgress.progress;
-      // },
+
       lastTime() {
         return this.$store.state.lastTime;
       },
@@ -2056,9 +2046,7 @@
       logoUrl() {
         return this.$store.state.logoUrl;
       },
-      //      payPopupShow(){
-      //        return this.$store.state.payPopupShow;
-      //      }
+
       payPopupDate() {
         return {
           docName:
