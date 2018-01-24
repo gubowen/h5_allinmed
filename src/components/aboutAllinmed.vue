@@ -36,10 +36,10 @@
       goConsult (e) {
         if (localStorage.getItem("userId")){
           // location.href = this.consultUrl;
-          g_sps.jump(e.target,this.consultUrl); 
+          g_sps.jump(e.target,this.consultUrl);
         }else{
           // window.location.href="/dist/mLogin.html";
-          g_sps.jump(e.target,"/dist/mLogin.html"); 
+          g_sps.jump(e.target,"/dist/mLogin.html?from=index");
         }
 
       }
