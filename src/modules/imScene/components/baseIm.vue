@@ -539,8 +539,14 @@
                 });
                 that.getCId(msg);//每次收到消息更新cId(分诊台医生id);
                 // 判断如果是图片，则把加入到图片数组中
-                if (msg.type == "image" &&that.imageList.indexOf(msg.file.url)==-1) {
-                  that.imageList.push(msg.file.url);
+                if (msg.type == "image") {
+                  let qualityUrl = that.nim.viewImageQuality({
+                    url: msg.file.url,
+                    quality: 40
+                  });
+                  if (that.imageList.indexOf(qualityUrl) == -1) {
+                    that.imageList.push(qualityUrl);
+                  }
                 }
               }
             }
@@ -618,13 +624,8 @@
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
             that.finish = false;
-            if (type === "scrollInit" && obj.msgs.length === 0) {
-              that.toastControl(`没有更多消息了`);
-              that.allMsgsGot = true;
-            } else if (type === "history" && obj.msgs.length === 0) {
-              that.getMedicalMessage();
 
-            } else {
+            let _FN=function () {
               obj.msgs.forEach((element, index) => {
                 if (index == obj.msgs.length - 1) {
                   that.historyBeginTime = element.time
@@ -642,7 +643,19 @@
                 that.getImageList();
                 //渲染完毕
               });
+            };
+            if (type === "scrollInit" && obj.msgs.length === 0) {
+              that.toastControl(`没有更多消息了`);
+              that.allMsgsGot = true;
+            } else if (type === "history") {
+              if (obj.msgs.length === 0){
+                that.getMedicalMessage();
+              }
+              _FN();
+            } else{
+              _FN();
             }
+
 
           },
           limit: 20 //本次查询的消息数量限制, 最多100条, 默认100条
@@ -2001,6 +2014,9 @@
         });
 
         document.querySelector(".main-message").addEventListener("scroll", () => {
+          if (this.msgList.length<20){
+            return false;
+          }
           clearTimeout(this._scrollTips);
           this._scrollTips = setTimeout(() => {
             if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
