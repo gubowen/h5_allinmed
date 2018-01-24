@@ -425,7 +425,7 @@
       goFeedback() {
         // location.href = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
         let urlTemp = `/dist/feedback.html?from=im&customerId=${this.patientCustomerId}`;
-        g_sps.jump(null,urlTemp);
+        g_sps.jump(null, urlTemp);
       },
       longTouchEmitHandler(index) {
         if (this.$store.state.toolbarConfig.delete) {
@@ -565,7 +565,7 @@
                     url: msg.file.url,
                     quality: 40
                   });
-                  if (that.imageList.indexOf(qualityUrl)==-1){
+                  if (that.imageList.indexOf(qualityUrl) == -1) {
                     that.imageList.push(qualityUrl);
                   }
                 }
@@ -657,7 +657,7 @@
       getImageList() {
         if (this.$refs.bigImg) {
           this.$refs.bigImg.forEach((element, index) => {
-            if (this.imageList.indexOf(element.imageMessage.file.url)==-1){
+            if (this.imageList.indexOf(element.imageMessage.file.url) == -1) {
               this.imageList.push(element.imageMessage.file.url);
             }
           });
@@ -666,7 +666,7 @@
       goToDoctorHomePage() {
         // window.location.href = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
         let urlTemp = '/dist/doctorHome.html?doctorCustomerId=' + api.getPara().doctorCustomerId + '&patientId=' + api.getPara().patientId + '&caseId=' + api.getPara().caseId + '&patientCustomerId=' + this.patientCustomerId;
-        g_sps.jump(null,urlTemp);
+        g_sps.jump(null, urlTemp);
       },
       getUserBaseData() {
         const that = this;
@@ -1545,41 +1545,41 @@
       },
       // 选择视频
       sendVideo(e) {
-        /*        let _file = e.target.files[0];
-                this.inputVideoFlag = false;
-                this.$nextTick(() => {
-                  this.inputVideoFlag = true;
-                })
-                if (e.target.files.length > 1) {
-                  this.toastTips = `每次只能上传一个视频`;
-                  this.toastShow = true;
-                  setTimeout(() => {
-                    this.toastShow = false;
-                  }, 2000);
-                  return;
-                }
-                if (_file.size >= 104857600) {
-                  this.toastTips = `视频最大为100M`;
-                  this.toastShow = true;
-                  setTimeout(() => {
-                    this.toastShow = false;
-                  }, 2000);
-                  return;
-                }
+        let _file = e.target.files[0];
+        this.inputVideoFlag = false;
+        this.$nextTick(() => {
+          this.inputVideoFlag = true;
+        })
+        if (e.target.files.length > 1) {
+          this.toastTips = `每次只能上传一个视频`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+          return;
+        }
+        if (_file.size >= 104857600) {
+          this.toastTips = `视频最大为100M`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+          return;
+        }
 
-                if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
-                  this.sendVideoFile(_file);
-                } else {
-                  if (_file.type.includes("video")) {
-                    this.toastTips = `请选择mp4或mov文件`;
-                  } else {
-                    this.toastTips = `请选择视频文件`;
-                  }
-                  this.toastShow = true;
-                  setTimeout(() => {
-                    this.toastShow = false;
-                  }, 2000);
-                }*/
+        if (_file.type.includes("video") && (/mp4/.test(_file.type) || /mov/.test(_file.type) || /quicktime/.test(_file.type))) {
+          this.sendVideoFile(_file);
+        } else {
+          if (_file.type.includes("video")) {
+            this.toastTips = `请选择mp4或mov文件`;
+          } else {
+            this.toastTips = `请选择视频文件`;
+          }
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
       },
       // 上传视频文件
       sendVideoFile(_file) {
@@ -1838,7 +1838,7 @@
           }
         });
       },
-      retryClick(e,type) {
+      retryClick(e, type) {
         const that = this;
         switch (type) {
           case -1:
@@ -1880,7 +1880,7 @@
                     api.getPara().patientId +
                     "&shuntCustomerId=" +
                     that.shuntCustomerId;
-                  g_sps.jump(e.target,urlTemp);
+                  g_sps.jump(e.target, urlTemp);
                 }
               }
             });
