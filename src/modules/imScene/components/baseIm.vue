@@ -617,6 +617,7 @@
         let that = this;
         //获取云端历史记录
         this.finish = true;
+
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
@@ -624,8 +625,12 @@
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
             that.finish = false;
-
-            let _FN=function () {
+            if (type === "scrollInit" && obj.msgs.length === 0) {
+              that.toastControl(`没有更多消息了`);
+              that.allMsgsGot = true;
+            } else if (type === "history" && obj.msgs.length === 0) {
+                that.getMedicalMessage();
+            }else{
               obj.msgs.forEach((element, index) => {
                 if (index == obj.msgs.length - 1) {
                   that.historyBeginTime = element.time
@@ -643,20 +648,7 @@
                 that.getImageList();
                 //渲染完毕
               });
-            };
-            if (type === "scrollInit" && obj.msgs.length === 0) {
-              that.toastControl(`没有更多消息了`);
-              that.allMsgsGot = true;
-            } else if (type === "history") {
-              if (obj.msgs.length === 0){
-                that.getMedicalMessage();
-              }
-              _FN();
-            } else{
-              _FN();
             }
-
-
           },
           limit: 20 //本次查询的消息数量限制, 最多100条, 默认100条
         });
@@ -2008,21 +2000,24 @@
         }
       },
       initScroll() {
+
         this.touchmoveDirection = "";
         new TouchmoveDirection((dir) => {
           this.touchmoveDirection = dir;
         });
-
         document.querySelector(".main-message").addEventListener("scroll", () => {
-          if (this.msgList.length<20){
-            return false;
-          }
           clearTimeout(this._scrollTips);
           this._scrollTips = setTimeout(() => {
             if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
               if (!this.allMsgsGot) {
-                store.commit("setHistoryStatus", "scrollInit");
-                this.getMessageList("scrollInit");
+                if (this.historyBeginTime==0){
+                  this.toastControl(`没有更多消息了`);
+                  this.allMsgsGot = true;
+                }else{
+                  store.commit("setHistoryStatus", "scrollInit");
+                  this.getMessageList("scrollInit");
+                }
+
               }
             }
           }, 200);
