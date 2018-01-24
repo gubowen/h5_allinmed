@@ -858,7 +858,8 @@
 //              debugger;
               //去咨询成功后，需要清除表单数据
               that.resetForm();
-              setTimeout(function () {
+              localStorage.removeItem("watchedTips");
+              setTimeout(() => {
                 that.toSelectPart(0);
               }, 500);
             } else {
@@ -1066,7 +1067,7 @@
         let that = this;
         let urlTemp = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId;
         // window.location.href = "/pages/patientConsult/case_list.html?customerId=" + (that.$route.query.customerId ? that.$route.query.customerId : api.getPara().customerId) + "&patientId=" + this.patientList[this.currentIndex].patientId
-        g_sps.jump(e.target,urlTemp);
+        g_sps.jump(e.target, urlTemp);
       }
     },
     components: {
