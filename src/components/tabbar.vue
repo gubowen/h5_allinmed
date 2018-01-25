@@ -30,6 +30,7 @@
    * Created by lichenyang on 2017/12/25.
    */
 import api from "common/js/util/util";
+import CheckLogin from 'common/js/auth/checkLogin';
 export default {
   data() {
     return {
@@ -66,7 +67,8 @@ export default {
         case 2:
           if (!this.isClick) return false;
           // location.href = this.historyUrl;
-          g_sps.jump(e.target,this.historyUrl); 
+          // g_sps.jump(e.target,this.historyUrl); 
+          this.toMyConsult(e);
           break;
         case 3:
           if (this.selected == 3) return false;
@@ -76,6 +78,18 @@ export default {
         default:
           break;
       }
+    },
+
+    toMyConsult (e) {
+      let checkLogin = new CheckLogin();
+      checkLogin.getStatus().then((res) => {
+        if (res.data.responseObject.responseStatus) {
+          g_sps.jump(e.target,this.historyUrl); 
+        } else {
+          localStorage.setItem("backUrl", this.historyUrl);
+          g_sps.jump(e.target,'/dist/mLogin.html');
+        }
+      })
     }
   },
   props: {
