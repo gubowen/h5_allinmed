@@ -265,9 +265,9 @@
               <figcaption class="bottom-item-description">文件</figcaption>
             </figure>
             <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
-                   accept="application/pdf">
+                   accept="application/*">
             <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
-                   accept="application/pdf">
+                   accept="application/*">
           </li>
         </ul>
       </footer>
@@ -578,7 +578,7 @@
       getImageList() {
         if (this.$refs.bigImg) {
           this.$refs.bigImg.forEach((element, index) => {
-            if (this.imageList.indexOf(element.imageMessage.file.url)==-1){
+            if (this.imageList.indexOf(element.imageMessage.file.url) == -1) {
               this.imageList.push(element.imageMessage.file.url);
             }
           });
@@ -629,8 +629,8 @@
               that.toastControl(`没有更多消息了`);
               that.allMsgsGot = true;
             } else if (type === "history" && obj.msgs.length === 0) {
-                that.getMedicalMessage();
-            }else{
+              that.getMedicalMessage();
+            } else {
               obj.msgs.forEach((element, index) => {
                 if (index == obj.msgs.length - 1) {
                   that.historyBeginTime = element.time
@@ -1112,12 +1112,9 @@
           if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
           } else {
-            setTimeout(function () {
-              document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-            }, 20);
+            this.scrollToBottom();
+            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }
-
-          // this.refreshScroll();
         } else {
           //消息发送失败的处理
           that.sendErrorTips(msg);
@@ -1551,22 +1548,24 @@
       },
       // 选择pdf
       sendPdf(e) {
-
         this.inputPdfFlag = false;
         this.$nextTick(() => {
           this.inputPdfFlag = true;
-        })
-
-        let _file = e.target.files[0];
-        getFileType(_file).then((flag) => {
-          if (_file.type.includes("pdf")) {
-            this.sendPdfFile(_file);
-          } else if (_file.type.length === 0 && flag) {
-            this.sendPdfFile(_file);
-          } else {
-            this.toastControl("请选择pdf文件");
-          }
         });
+        let _file = e.target.files[0];
+        if (_file.type.length === 0) {
+          getFileType(_file).then((flag) => {
+            if (flag) {
+              this.sendPdfFile(_file);
+            } else {
+              this.toastControl("请选择pdf文件");
+            }
+          });
+        } else if (_file.type.includes("pdf")) {
+          this.sendPdfFile(_file);
+        } else if (!_file.type.includes("pdf")) {
+          this.toastControl("请选择pdf文件");
+        }
       },
       // 发送pdf
       sendPdfFile(_file) {
@@ -1664,12 +1663,9 @@
       scrollToBottom(element) {
         let that = this;
         that.$nextTick(() => {
-          $(".main-message").animate(
-            {
+          $(".main-message").animate({
               scrollTop: $(".main-message>section").height() + 1000
-            },
-            300
-          );
+            }, 30);
         });
       },
       //滑动到某个元素
@@ -2010,10 +2006,10 @@
           this._scrollTips = setTimeout(() => {
             if (this.touchmoveDirection === "down" && document.querySelector(".main-message").scrollTop < 200) {
               if (!this.allMsgsGot) {
-                if (this.historyBeginTime==0){
+                if (this.historyBeginTime == 0) {
                   this.toastControl(`没有更多消息了`);
                   this.allMsgsGot = true;
-                }else{
+                } else {
                   store.commit("setHistoryStatus", "scrollInit");
                   this.getMessageList("scrollInit");
                 }

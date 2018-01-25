@@ -1237,10 +1237,8 @@
           if (navigator.userAgent.toLowerCase().includes("11")) {
             this.scrollToBottom();
           } else {
-            setTimeout(() => {
-              this.scrollToBottom();
-              document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
-            }, 20);
+            this.scrollToBottom();
+            document.body.scrollTop = document.body.scrollHeight; //获取焦点后将浏览器内所有内容高度赋给浏览器滚动部分高度
           }
         }
 
@@ -1667,22 +1665,28 @@
         this.inputPdfFlag = false;
         this.$nextTick(() => {
           this.inputPdfFlag = true;
-        })
-
-        getFileType(_file).then((flag) => {
-          if (_file.type.includes("pdf")) {
-            this.sendPdfFile(_file);
-          } else if (_file.type.length === 0 && flag) {
-            this.sendPdfFile(_file);
-          } else {
-            this.toastTips = `请选择pdf文件`;
-            this.toastShow = true;
-            setTimeout(() => {
-              this.toastShow = false;
-            }, 2000);
-            return;
-          }
         });
+        if (_file.type.length === 0) {
+          getFileType(_file).then((flag) => {
+            if (flag) {
+              this.sendPdfFile(_file);
+            } else {
+              this.toastTips = `请选择pdf文件`;
+              this.toastShow = true;
+              setTimeout(() => {
+                this.toastShow = false;
+              }, 2000);
+            }
+          });
+        } else if (_file.type.includes("pdf")) {
+          this.sendPdfFile(_file);
+        } else if (!_file.type.includes("pdf")) {
+          this.toastTips = `请选择pdf文件`;
+          this.toastShow = true;
+          setTimeout(() => {
+            this.toastShow = false;
+          }, 2000);
+        }
       },
       // 发送pdf
       sendPdfFile(_file) {
