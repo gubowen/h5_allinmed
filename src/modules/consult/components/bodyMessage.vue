@@ -86,9 +86,9 @@
     <transition name="fade">
       <toast :content="errorMsg" v-if="errorShow"></toast>
     </transition>
-    <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
-               :backPopupParams="{patientParams:patientParams}"></backPopup>
+    <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow" :backPopupParams="{patientParams:patientParams}"></backPopup>
     <loading v-if="finish"></loading>
+    <iframe src="/favicon.ico" v-if="isIos" @load="iosBackFlush" style="visibility: hidden;width:0;height:0;"></iframe>
   </div>
 </template>
 
@@ -132,6 +132,7 @@
         weightContent: "",
         submitTip: false,
         backPopupShow: false,
+        isIos:navigator.userAgent.toLowerCase().includes("iphone"),
         patientParams: {
           customerId: localStorage.getItem('userId'),
           doctorId: api.getPara().doctorId
@@ -398,9 +399,9 @@
               localStorage.removeItem("questionList");
               localStorage.removeItem("complication");
               localStorage.removeItem("noMR");
-              if (navigator.userAgent.toLowerCase().includes("iphone")) {
-                that.backPopupShow = true;
-              }
+//              if (navigator.userAgent.toLowerCase().includes("iphone")) {
+//                that.backPopupShow = true;
+//              }
               that.finish = false;
               let urlTemp = "/dist/imSceneDoctor.html?from=report&caseId=" +
                 that.responseCaseId +
@@ -431,9 +432,9 @@
         localStorage.removeItem("complication");
         siteSwitch.weChatJudge(
           () => {
-            if (navigator.userAgent.toLowerCase().includes("iphone")) {
-              that.backPopupShow = true;
-            }
+//            if (navigator.userAgent.toLowerCase().includes("iphone")) {
+//              that.backPopupShow = true;
+//            }
             that.finish = false;
             let urlTemp = "/dist/imScene.html?caseId=" +
               that.responseCaseId +
@@ -449,9 +450,9 @@
           },
           () => {
             if (that.$store.state.isSubscribe) {
-              if (navigator.userAgent.toLowerCase().includes("iphone")) {
-                that.backPopupShow = true;
-              }
+//              if (navigator.userAgent.toLowerCase().includes("iphone")) {
+//                that.backPopupShow = true;
+//              }
               that.finish = false;
               let urlTemp = "/dist/imScene.html?caseId=" +
                 that.responseCaseId +
@@ -610,19 +611,27 @@
           }),
           done(error, msg) {
             console.log("新用户提醒发送...");
-            if (navigator.userAgent.toLowerCase().includes("iphone")) {
-              that.backPopupShow = true;
-            }
+//            if (navigator.userAgent.toLowerCase().includes("iphone")) {
+//              that.backPopupShow = true;
+//            }
             that.finish = false;
             that.$router.push({
               name: "conGuide"
             });
           }
         });
+      },
+      //ios手机返回刷新页面
+      iosBackFlush(){
+        document.title= "描述病情";
+        setTimeout(()=>{
+          this.isIos = false;
+        }, 0)
       }
     },
     mounted() {
       document.title = "描述病情";
+      this.iosBackFlush("描述病情");
       window.scrollTo(0, 0);
       if (localStorage.getItem("PCIMLinks") !== null) {
         this.backPopupShow = true;
