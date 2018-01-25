@@ -234,13 +234,13 @@
   import nimEnv from "common/js/nimEnv/nimEnv";
   import imageCompress from "common/js/imgCompress/toCompress";
   import progerssBar from "../components/progressBar";
-  // import GetUploadLimit from "../api/getUploadLimit";
+  import GetUploadLimit from "../api/getUploadLimit";
   import CheckUpLoadStatus from "../api/checkUpLoadStatus";
   import store from "../store/store";
   import UpLoadMultImg from "common/js/upLoadFiles/upLoadImg"; //图片上传
   import {mapState} from "vuex";
 
-  // const getUploadLimit = new GetUploadLimit();
+  const getUploadLimit = new GetUploadLimit();
   const checkUpLoadStatus = new CheckUpLoadStatus();
 
   siteSwitch.weChatJudge(
@@ -458,11 +458,14 @@
             level: 2,
             from: this.$route.name
           },
+
         });
       },
       onFileChange(e, type, index) {
         let that = this;
-
+//      if(that.isWeChat){
+//        that.wxChoosePic();
+//      }else{
         let _files = e.target.files || e.dataTransfer.files;
         let files = [];
         that.filesObj = [];
@@ -490,6 +493,7 @@
               this.errorMsg = "";
               this.errorShow = false;
               if (i == files.length - 1) {
+                // this.loading = false;   //开启上传权限
                 this["uploading" + [type]] = false;
               }
             }, 3000);
@@ -1004,7 +1008,9 @@
             sex: this.$route.params.sex
           }
         });
-        this.$store.commit("setPatientMessage", Object.assign(this.patientBaseMessage, this.allParams))
+        this.$store.commit("setPatientMessage", Object.assign(this.patientBaseMessage, {
+          pageParam: this.allParams
+        }))
       },
       // 填写情况验证
       validateParamsFull() {

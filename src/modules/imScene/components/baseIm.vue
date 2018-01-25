@@ -266,7 +266,9 @@
             </figure>
             <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
                    accept="application/*">
-            <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+            <input type="file" v-if="!isIos&&isWeChat&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                   accept="">
+            <input type="file" v-if="!isIos&& !isWeChat&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
                    accept="application/*">
           </li>
         </ul>
