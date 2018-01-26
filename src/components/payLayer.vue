@@ -243,55 +243,6 @@
           });
         }
       },
-      //是否有重复订单
-      isHasOrder(opt) {
-        const that = this;
-        api.ajax({
-          url: XHRList.getOrderDetails,
-          method: "POST",
-          data: {
-            patientId: that.payPopupParams.patientId,
-            doctorId: that.payPopupParams.docId,
-            orderType: 1,
-            orderSourceId: opt.consultationId,
-            status: 1,
-            sortType: 1,
-            firstResult: 0,
-            maxResult: 1
-          },
-          done(data) {
-            if (data.responseObject.responseData.dataList) {
-              let items = data.responseObject.responseData.dataList[0];
-              if (items.orderSourceId && items.orderSourceId != 0 && opt.orderSourceType == items.orderSourceType) {//有重复订单
-                //支付弹层removeClass
-                that.closePopup();
-                that.repeatOrderId = items.orderId;
-                that.repeatConsultationId = items.orderSourceId;
-                that.repeatOrderAmount = items.orderAmount;
-                that.repeatOrderType = items.orderSourceType;
-              } else {//没有重复订单
-                that.noOrder({
-                  cId: opt.consultationId,
-                  oType: opt.orderSourceType,
-                  oTitle: opt.orderSourceTitle,
-                  orderAmount: opt.orderAmount,
-                  orderFrequency: opt.orderFrequency
-                })
-
-              }
-            } else {//没有重复订单
-              that.noOrder({
-                cId: opt.consultationId,
-                oType: opt.orderSourceType,
-                oTitle: opt.orderSourceTitle,
-                orderAmount: opt.orderAmount,
-                orderFrequency: opt.orderFrequency
-              })
-            }
-          }
-
-        })
-      },
       //无重复订单去支付
       noOrder(opt) {
         const that = this;

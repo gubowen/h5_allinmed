@@ -257,8 +257,7 @@
         </footer>
       </transition>
       <!--支付弹层-->
-      <payPopup @paySuccess="refreashOrderTime" :payPopupShow.sync="payPopupShow"
-                :payPopupParams="payPopupDate"></payPopup>
+      <payPopup @paySuccess="refreashOrderTime" v-if="payPopupShow" :payPopupShow.sync="payPopupShow" :payPopupParams="payPopupDate"></payPopup>
       <confirm :confirmParams="{
       'ensure':'取消',
       'cancel':'离开',
@@ -1806,6 +1805,7 @@
       //支付成功...刷新页面并重置时间
       refreashOrderTime(count) {
         const that = this;
+        that.payPopupShow = false;
         let state = "";
         if (this.bottomTipsType == -1) {
           state = -1;
