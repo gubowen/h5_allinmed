@@ -14,6 +14,7 @@
 <script type="text/ecmascript-6">
   import api from "common/js/util/util";
   import buttons from "components/button/button";
+
   export default {
     data() {
       return {};

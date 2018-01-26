@@ -189,7 +189,6 @@
                 that.VASGrade=that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName + that.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionDesc;//VAS评分
               }
               let caseTime = that.patientCasemap.caseTime.split(' ')[0];
-
               that.caseTime = caseTime.split('-')[0] + '年' + caseTime.split('-')[1] + '月' + caseTime.split('-')[2] + '日'
               that.illnessTime = ((that.resultMainList[1].symptomOptions[0].optionDesc && that.resultMainList[1].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[1].symptomOptions[0].optionDesc : that.resultMainList[1].symptomOptions[0].optionName)  || "未填写";
               that.heavyTime = ((that.resultMainList[2].symptomOptions[0].optionDesc && that.resultMainList[2].symptomOptions[0].optionDesc.length > 0) ? that.resultMainList[2].symptomOptions[0].optionDesc : that.resultMainList[2].symptomOptions[0].optionName)  || "未填写";
@@ -200,6 +199,7 @@
               that.illnessDis = that.patientCasemap.descriptionDisease || "未填写";
               that.getHelp = that.patientCasemap.needHelp || "未填写";
               that.takeMedicine = that.patientCasemap.takeMedicine || "未填写";
+
 
               that.patientCasemap.attachmentList.forEach((element, index) => {
                 that.imageList1.push({
