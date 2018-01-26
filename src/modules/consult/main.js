@@ -92,7 +92,7 @@ class Consult {
     // this.router.afterEach((to,from)=>{
     //   $(window).trigger("hashchange");
     // })
-    Vue.use(vueg, this.router,options);
+    // Vue.use(vueg, this.router,options);
   }
 
   //路由注册

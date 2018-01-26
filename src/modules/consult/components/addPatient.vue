@@ -214,6 +214,7 @@
   const checkLogin = new CheckLogin();
 
   const XHRList = {
+    patientInfo: "/mcall/customer/patient/baseinfo/v1/getMapList/", // 获取患者个人信息
     addPatient: "/mcall/customer/patient/relation/v1/create/",//增加患者
     deletePatient: "/mcall/customer/patient/relation/v1/update/",//修改和删除患者
     patientList: "/mcall/customer/patient/relation/v1/getMapList/",//患者列表
@@ -815,7 +816,6 @@
           data: {
             customerId: this.customerId,//用户id
             patientName: this.username,//患者姓名
-//            patientAge: this.userage,
             patientSex: this.sexSelect,
             patientRelationId: this.relationShip.id,
             mobile: this.phone,
@@ -833,20 +833,34 @@
             that.finish = true;
           },
           done(data) {
+            if (data.responseObject.responseStatus) {
+              that.getPatientInfo(data.responseObject.responsePk);
+            } else {
+              that.errorMsg = data.responseObject.responseMessage;
+              that.errorShow = true;
+              setTimeout(() => {
+                that.errorShow = false;
+              }, 2000)
+            }
+          }
+        })
+      },
+      // 获取患者个人信息
+      getPatientInfo (patientId = 1516954015676) {
+        const that = this;
+        api.ajax({
+          url: XHRList.patientInfo,
+          method: "POST",
+          data: {
+            patientId: patientId,//患者id
+          },
+          done(data) {
+            console.log(data);
             that.finish = false;
             if (data.responseObject.responseStatus) {
               that.createNewPatient = false;
               that.headerShow = 2;
-              that.patientList.unshift({
-                isValid: "1",
-                patientAge: userage,
-                patientId: data.responseObject.responsePk,
-                patientLogoUrl: null,
-                patientName: that.username,
-                patientRelationId: that.relationShip.id,
-                patientSex: that.sexSelect,
-              });
-//              debugger;
+              that.patientList.unshift(data.responseObject.responseData.dataList[0]);
               //去咨询成功后，需要清除表单数据
               that.resetForm();
               localStorage.removeItem("watchedTips");
