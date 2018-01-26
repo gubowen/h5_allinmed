@@ -459,9 +459,8 @@
         that[param].moreData = true;
         that[param].hasPosition = false;
         that[param].tempData = that[param].lessData;
-        // console.log(e.srcElement.parentElement.parentElement.parentElement.parentElement);
+        // console.log($(e.srcElement).closest('.main-message-wrapper')[0].offsetTop + $(e.srcElement).closest('.main-message-box')[0].offsetTop);
         that.$nextTick(function () {
-          // that.refreshScroll();
           // that.scrollElement(e.srcElement.parentElement.parentElement.parentElement.parentElement)
           that.scrollElement($(e.srcElement).closest('.main-message-wrapper')[0].offsetTop + $(e.srcElement).closest('.main-message-box')[0].offsetTop);
         })
