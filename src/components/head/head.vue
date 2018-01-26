@@ -59,7 +59,7 @@
     &-normal {
       padding: 0 rem(100px);
     }
-    & -small{
+    &-small {
       padding: 0 rem(30px);
     }
     &-light{

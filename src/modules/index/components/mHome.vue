@@ -283,6 +283,7 @@
 
   .mHome {
     padding: 0 0 rem(100px) 0;
+    background-color: #ffffff;
   }
 
   .banner {

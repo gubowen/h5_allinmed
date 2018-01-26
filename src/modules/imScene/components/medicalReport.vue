@@ -57,7 +57,6 @@
     mounted() {
       this.getCaseMain();
       this.getTimeSlot();
-      store.commit("setLogoUrl", this.medicalReportMessage.data)
       store.commit("setPatientName", this.medicalReportMessage.data.patientName)
     },
     methods: {
