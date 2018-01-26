@@ -382,6 +382,7 @@
   export default {
     data() {
       return {
+        patientData:{}, // 患者数据
         serviceTime: "", // 服务时间
         isIos: navigator.userAgent.toLowerCase().includes("iphone"),
         isWeChat: _weChat,
@@ -733,6 +734,39 @@
               index: 0
             }
         }
+      },
+      // 获取患者数据
+      getPationtData () {
+        const that = this;
+        api.ajax({
+          url: XHRList.getMedicalList,
+          method: "POST",
+          data: {
+            caseId: api.getPara().caseId,
+            attUseFlag: 1,
+            isOrder: 0
+          },
+          beforeSend(config) {
+          },
+          done(data) {
+            if (data.responseObject && data.responseObject.responseData) {
+              let dataList = data.responseObject.responseData.dataList;
+              if (dataList && dataList.length !== 0) {
+                that.patientData =  {
+                    caseId: api.getPara().caseId, //问诊单 病例ID
+                    patientName: dataList[0].patientCasemap.patientName, //患者姓名
+                    sexName: dataList[0].patientCasemap.sexName, //患者性别
+                    age: dataList[0].patientCasemap.age, //患者年龄
+                    createDate: new Date().getTime(),
+                    diagnoseConTent: "",
+                    isAttachment: dataList[0].patientCasemap.isAttachment,
+                    time: dataList[0].patientCasemap.caseTime
+                };
+                store.commit("setLogoUrl", that.patientData)
+              }
+            }
+          }
+        });
       },
       //获取患者问诊单
       getMedicalMessage() {
@@ -2084,6 +2118,7 @@
       let that = this;
 
       that.getConsultPrice();
+      that.getPationtData(); // 获取患者数据
 
       if (!api.checkOpenId()) {
         api.wxGetOpenId(1);
