@@ -249,9 +249,11 @@
                 <figcaption class="bottom-item-description">文件</figcaption>
               </figure>
               <input type="file" v-if="isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
-                     accept="application/pdf">
-              <input type="file" v-if="!isIos&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
-                     accept="application/pdf">
+                     accept="application/*">
+              <input type="file" v-if="!isIos&&isWeChat&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                     accept="">
+              <input type="file" v-if="!isIos&& !isWeChat&&inputPdfFlag" multiple @change="sendPdf($event)" ref="pdfSender"
+                     accept="application/*">
             </li>
           </ul>
         </footer>
