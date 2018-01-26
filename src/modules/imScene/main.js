@@ -41,7 +41,7 @@ class ImScene {
     //路由系统注册
     Vue.use(VueRouter);
     Vue.use(touch);
-    Vue.use(VueScroller);
+    // Vue.use(VueScroller);
     this.routerStart();
     this.registerRouter();
     //Vue实例启动
