@@ -6,6 +6,9 @@ import "babel-polyfill";
 import "common/js/third-party/flexible";
 import indexs from "./components/index";
 import buttons from "./components/button";
+import Switch from "./components/switch";
+import MultipleChoice from "./components/MultipleChoice";
+import SingleChoice from "./components/SingleChoice";
 
 
 class ComExample {
@@ -38,7 +41,21 @@ class ComExample {
         path: '/buttons',
         name: "buttons",
         component: buttons
-      }
+      },{
+        path: '/switch',
+        name: "switch",
+        component: Switch
+      },
+      {
+        path: '/MultipleChoice.vue',
+        name: "MultipleChoice",
+        component: MultipleChoice
+      },{
+        path: '/SingleChoice',
+        name: "SingleChoice",
+        component: SingleChoice
+      },
+
     ];
   }
 }

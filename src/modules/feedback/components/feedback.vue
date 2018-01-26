@@ -19,7 +19,7 @@
           <em class="question-em">(选填)</em>
           <figure class="main-input-box-textarea-inner">
             <section class="area-content">
-                <section  @click="textAreaFocus">
+              <section  @click="textAreaFocus">
                 <pre><span>{{suggestionContent}}</span></pre>
                 <textarea class="input-textArea"
                           name="question"
@@ -71,32 +71,12 @@
    *
    * Created by YuxiYang on 2017/12/25.
    */
-  // import autosize from "autosize";
   import api from "common/js/util/util";
   import toast from "components/toast";
   import Loading from "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
-  // const checkLogin = new CheckLogin();
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
   export default {
-    // browser:{
-    //   versions:function(){
-    //     var u = navigator.userAgent, app = navigator.appVersion;
-    //     return {//移动终端浏览器版本信息
-    //       trident: u.indexOf('Trident') > -1, //IE内核
-    //       presto: u.indexOf('Presto') > -1, //opera内核
-    //       webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-    //       gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-    //       mobile: !!u.match(/AppleWebKit.*Mobile.*/)||!!u.match(/AppleWebKit/), //是否为移动终端
-    //       ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-    //       android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-    //       iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
-    //       iPad: u.indexOf('iPad') > -1, //是否iPad
-    //       webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
-    //     };
-    //   }(),
-    //   language:(navigator.browserLanguage || navigator.language).toLowerCase()
-    // },
     data() {
       return {
         customerId:"",
@@ -129,7 +109,6 @@
     },
     mounted(){
       let _this = this;
-      // autosize(this.$el.querySelector(".input-textArea"));
       this.CheckFrom();
     },
     methods:{
@@ -142,7 +121,7 @@
         }
       },
       //检查后没有error后提交所有数据
-      checkAllData(e){
+      checkAllData(){
         const _this=this
         if (!this.suggestionType.service && !this.suggestionType.setting && !this.suggestionType.others) {
           this.validateToast("您还有问题未完善");
@@ -157,7 +136,7 @@
           }else{
             _this.customerId = localStorage.getItem("userId");
           }
-            _this.submitAllData(e);
+          _this.submitAllData();
           // siteSwitch.weChatJudge(ua =>{
           //   //微信
           //   _this.customerId = api.getPara().customerId;
@@ -169,7 +148,7 @@
           // })
         }
       },
-      submitAllData(e){
+      submitAllData(){
         let _this =this,
           _arr=[];
         console.log(_this.customerId);
@@ -195,8 +174,8 @@
             suggestionType:_arr.join(""),
             suggestionContent:this.suggestionContent,
             suggestionNumbers:this.suggestionNumbers,
-            customerId:_this.customerId||0,
-            doctorId:api.getPara().doctorCustomerId||"",
+            customerId:_this.customerId || 0,
+            doctorId:api.getPara().doctorCustomerId || 0,
             visitSiteId: api.getSiteId(),
             equipmentVersion: api.getDeviceType(),
             networkEnvironment: api.getNetWork(),
@@ -206,7 +185,7 @@
             _this.finish=true;
             if (data.responseObject.responseStatus){
               _this.submitSuccess=true;
-              _this.backToPast(e);
+              _this.backToPast();
             }else{
               _this.submitSuccess=false;
               _this.validateToast("提交失败，请检查您的网络");
@@ -216,23 +195,21 @@
           }
         });
       },
-      backToPast(e){
+      backToPast(){
         let _interval;
         _interval=setInterval(()=>{
           this.backTimeout=this.backTimeout-1;
           if (this.backTimeout===0){
             clearInterval(_interval);
-            this.goToHref(e);
+            this.goToHref();
           }
         },1000);
       },
-      goToHref(e){
+      goToHref(){
         if (api.getPara().from==="im"){
-          // window.location.href=document.referrer;
-          g_sps.jump(e.target,document.referrer); 
+          window.location.href=document.referrer;
         }else{
-          // window.location.href="/";
-          g_sps.jump(e.target,"/"); 
+          window.location.href="/";
         }
       },
       validateToast(content) {
