@@ -108,7 +108,7 @@ export default {
       that.tempSuggest = that.lessSuggest;
       that.$nextTick(function () {
         // that.refreshScroll();
-        that.scrollElement(e.srcElement.parentElement.parentElement.parentElement);
+        that.scrollElement($(e.srcElement).closest('.main-message-wrapper')[0].offsetTop + $(e.srcElement).closest('.main-message-box')[0].offsetTop);
       })
     },
     goToUpload() {
