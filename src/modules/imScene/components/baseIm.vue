@@ -257,7 +257,7 @@
             <input type="file" v-if="!isIos&&!isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
                    multiple accept="video/*">
             <input type="file" v-if="!isIos&&isWeChat&&inputVideoFlag" @change="sendVideo($event)" ref="videoSender"
-                   capture="camcorder">
+                   multiple accept="video/*" capture="camcorder">
           </li>
           <li class="bottom-item" v-if="$store.state.toolbarConfig.file">
             <figure class="bottom-item-content">
