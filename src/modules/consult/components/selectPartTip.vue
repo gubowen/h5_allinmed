@@ -117,6 +117,7 @@
       & > img {
         width: 100%;
         vertical-align: top;
+        margin-top: -.5rem;
       }
     }
     .tips-image-finger {
@@ -158,7 +159,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-60%, 10%);
+      transform: translate(-60%, -.2rem);
     }
   }
 
@@ -169,7 +170,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.5rem, 0.3rem);
+      transform: translate(-1.5rem, -0.2rem);
     }
   }
 
@@ -180,7 +181,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.3rem, 2.3rem);
+      transform: translate(-1.3rem, 1.8rem);
     }
   }
 

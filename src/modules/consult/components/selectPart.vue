@@ -165,6 +165,7 @@
 
     mounted() {  //渲染启动...接收上一页携带路由参数体
       // 检测是否是微信
+      document.documentElement.scrollTop=0;
       this.allReady = true;
       siteSwitch.weChatJudge(() => {
         this.isWeChat = true;
