@@ -345,7 +345,7 @@
           takeMedicine: "",
           complication: "",
           optionList: [],
-          customerId: localStorage.getItem("userId"),
+          customerId:"" ,
           patientId: "",
           wxImgLists: []
         }
@@ -996,6 +996,7 @@
         } else {
           this.allParams.takeMedicine = "";
         }
+        this.allParams.userId=this.patientBaseMessage.userId;
         //装载完成...
         //数据提交开始...
         //跳转第四部分

@@ -78,6 +78,25 @@
               }
             })
         },
+        startRecord() {
+          console.log("start")
+          wx.startRecord();
+        },
+        stopRecord() {
+          console.log("stop")
+          const that=this;
+          wx.stopRecord({
+            complete (res) {
+              that.musicId= res.localId;
+            }
+          });
+        },
+        playRecord() {
+          console.log("play")
+          wx.playVoice({
+            localId: this.musicId
+          });
+        },
         uploadImages(imageUrl){
           let that = this;
           wx.uploadImage({
