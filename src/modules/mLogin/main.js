@@ -128,60 +128,16 @@ class MLogin {
   }
 }
 
-Validator.extend('required', {
-  getMessage(filed){
-    console.log(filed);
-    let result="";
-    switch (filed){
-      case "phone":
-        result="手机号码";
-        break;
-      case "account":
-        result="账号";
-        break;
-      case "password":
-        result="密码";
-        break;
-      case "codeInput":
-        result="短信验证码";
-        break;
-      default:
-        break;
-    }
-    return `请输入${result}`
-  },
-
-  validate: value => {
-    return /^(\w){6,20}$/.test(value)
-  }
-});
 Validator.extend('password', {
   getMessage:field=>"密码长度应在6-20位之间",
-  // messages: {
-  //   en: (field, args) => {
-  //     return "密码长度应在6-20位之间"
-  //   },
-  //   cn: (field, args) => {
-  //     return "密码长度应在6-20位之间"
-  //   },
-  //   zh_CN: (field, args) => {
-  //     return "密码长度应在6-20位之间"
-  //   }
-  // },
+
   validate: value => {
     return /^(\w){6,20}$/.test(value)
   }
 });
 Validator.extend('mobile', {
   getMessage:field=>"请填写真实手机号码",
-  // messages: {
-  //   en: (field, args) => {
-  //     return "请填写真实手机号码"
-  //   },
-  //   cn: (field, args) => {
-  //     return "请填写真实手机号码"
-  //   }
-  // },
+
   validate: value => {
     return value.length == 11 && (/^(127|13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$/).test(value)
   }

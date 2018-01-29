@@ -518,7 +518,31 @@
         }
       );
       api.forbidShare();
+      const dict={
+        en:{
+          custom: {
+            //手机号的验证
+            phone: {
+              required: "请输入手机号码",
+              mobile: "请输入正确的手机号码"
+            },
+            //患者关系的验证规则
+            codeInput: {
+              required: "请输入短信验证码",
+              digits: "验证码错误"
+            },
+            //账号登录密码
+            password: {
+              required: "请输入密码",
+              digits: "密码错误"
+            }
+          }
+        }
+      };
 
+      this.$validator.localize(dict);
+
+      console.log(this.$validator)
     },
     activated() {
       let _this = this;
@@ -541,30 +565,7 @@
         }
       );
       api.forbidShare();
-      const dict={
-        custom: {
-          //手机号的验证
-          phone: {
-            required: "请输入手机号码",
-            mobile: "请输入正确的手机号码"
-          },
-          //患者关系的验证规则
-          codeInput: {
-            required: "请输入短信验证码",
-            digits: "验证码错误"
-          },
-          //账号登录密码
-          password: {
-            required: "请输入密码",
-            digits: "密码错误"
-          }
-        }
-      }
-      this.$validator.localize('en',dict.custom);
-      this.$validator.localize('cn',dict.custom);
-      this.$validator.localize('zh_CN',dict.custom);
 
-      console.log(this.$validator)
     },
     components: {
       vConfirm,
