@@ -186,8 +186,8 @@
       },
       initCaseParams() {
         let params = this.patientBaseMessage.pageParam;
-        this.heightContent = params.height;
-        this.weightContent = params.weight;
+        this.heightContent = this.patientBaseMessage.height;
+        this.weightContent = this.patientBaseMessage.weight;
         this.createParams.patientId = params.patientId;
         this.createParams.customerId = params.userId;
         this.createParams.illnessHistoryId = params.illnessHistoryId;
