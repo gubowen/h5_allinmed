@@ -152,7 +152,7 @@ Validator.extend('required', {
   },
 
   validate: value => {
-    return /^(\w){6,20}$/.test(value)
+    return (value.length>0)
   }
 });
 Validator.extend('password', {
