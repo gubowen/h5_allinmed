@@ -523,6 +523,7 @@ export default {
   background-color: #ffffff;
   padding-top: rem(22px);
   padding-bottom:rem(100px);
+  min-height: 100%;
 }
 
 .upload-wrapper {
