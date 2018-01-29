@@ -535,6 +535,10 @@
             password: {
               required: "请输入密码",
               digits: "密码错误"
+            },
+            account: {
+              required: "请输入手机号码",
+              mobile: "请输入正确的手机号码"
             }
           }
         }
