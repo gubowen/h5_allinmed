@@ -4,10 +4,9 @@
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper" style="width:90%" v-if="adList.length>0">
-        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider" @click="bannerHref($event,item)"
+        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider"
                       :class="{'swiper-no-swiping':adList.length<=1}">
-          <!-- <a :href="item.adAdditionalUrl" @click="bannerHref(item)"> -->
-          <a href="javascript:void(0)">  
+          <a href="javascript:void(0)" @click="bannerHref($event,item)">
             <img :src="item.adAttUrl"/>
           </a>
         </swiper-slide>
@@ -180,8 +179,8 @@
         return logoImg;
       },
       bannerHref(e,item) {
+        g_sps.jump(e.target,item.adAdditionalUrl);
         // g_sps.jump()item.adAdditionalUrl;
-        g_sps.jump(e.item.adAdditionalUrl);
       },
       getFullName(opt) {
         if (opt.fullName.length > 6) {
@@ -250,6 +249,7 @@
             positionId: 583
           },
           done(data) {
+            // that.adList = [{"adNameUrl":"","id":11206,"adAttUrl":"\/\/img99.allinmd.cn\/ad\/2017\/12\/13\/4888_1513143126915.jpg","linkUrl":"","adAttName":"M站物料03跳个人中心","adAttAbstract":"","sortId":0,"adAbstractUrl":"","adAdditionalUrl":"https:\/\/m9.allinmed.cn\/dist\/personal.html#\/followWechat"}]
             if (data.responseObject.responseStatus) {
               that.adList = data.responseObject.responseData.data_list[0].ad_profile_attachment;
             }
