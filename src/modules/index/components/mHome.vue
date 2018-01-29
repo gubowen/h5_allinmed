@@ -4,9 +4,10 @@
     <attention @attentionHandle="attentionHandle"></attention>
     <figure class="banner">
       <swiper :options="swiperOption" ref="mySwiper" style="width:90%" v-if="adList.length>0">
-        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider"
+        <swiper-slide v-for="(item,index) in adList" :key="item.imgId" class="banner-slider" @click="bannerHref($event,item)"
                       :class="{'swiper-no-swiping':adList.length<=1}">
-          <a :href="item.adAdditionalUrl" @click="bannerHref(item)">
+          <!-- <a :href="item.adAdditionalUrl" @click="bannerHref(item)"> -->
+          <a href="javascript:void(0)">  
             <img :src="item.adAttUrl"/>
           </a>
         </swiper-slide>
@@ -178,8 +179,9 @@
         }
         return logoImg;
       },
-      bannerHref(item) {
+      bannerHref(e,item) {
         // g_sps.jump()item.adAdditionalUrl;
+        g_sps.jump(e.item.adAdditionalUrl);
       },
       getFullName(opt) {
         if (opt.fullName.length > 6) {
