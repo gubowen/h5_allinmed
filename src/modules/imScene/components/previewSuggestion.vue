@@ -361,7 +361,7 @@
                 // that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
                 // document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
                 // console.log('top + '+$(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]).closest('.main-message-wrapper')[0].offsetTop);
-                that.scrollElement($ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop)
+                $ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop && that.scrollElement($ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop)
               }
             }
           })

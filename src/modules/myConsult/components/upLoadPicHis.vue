@@ -105,6 +105,7 @@ export default {
   data() {
     return {
       cameraType: _cameraType,
+      params:{}, // 路由传过来的参数
       uploadList: [],
       imageList: {},
       filesObj: {}, //多图file对象存储，用于获取每张图的信息
@@ -151,6 +152,9 @@ export default {
           store.commit("setbottomNav", true);
         }
       );
+    if (this.$route.params && this.$route.params.caseId && this.$route.params.consultationId) {
+      this.params = this.$route.params
+    }
     this.initData();
   },
   methods: {
@@ -261,7 +265,7 @@ export default {
             .replace(/\n/g, ""),
           fileName: files.name,
           extName: files.name.split(".")[1],
-          caseId: that.$route.params.caseId,
+          caseId: that.params.caseId,
           imageType: item.adviceType,
           caseCategoryId: ""
         },
@@ -392,15 +396,15 @@ export default {
         url: XHRList.updateConsultState,
         method: "POST",
         data: {
-          caseId: that.$route.params.caseId,
+          caseId: that.params.caseId,
           state: "0"
         },
         done(data) {
           if (data.responseObject.responseStatus) {
             that.refreshStateOther(6);
             that.getUserBaseData(
-              that.$route.params.caseId,
-              that.$route.params.consultationId
+              that.params.caseId,
+              that.params.consultationId
             );
           } else {
             console.log("更新状态失败");
@@ -457,7 +461,7 @@ export default {
         url: XHRList.refresh,
         method: "POST",
         data: {
-          consultationIds: that.$route.params.consultationId,
+          consultationIds: that.params.consultationId,
           consultationState: state //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放6-已上传资料7-分诊拒绝8-分诊完成9-待检查10-已推荐11-超时未回复
         },
         done(data) {
