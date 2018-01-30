@@ -34,6 +34,10 @@
       letter-spacing: 0;
       line-height: rem(146px);
       float: left;
+      width: rem(420px);
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
   }
 </style>
