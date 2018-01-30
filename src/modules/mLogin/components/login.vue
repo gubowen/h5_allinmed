@@ -228,7 +228,7 @@
       codeKeyPress() {
         let content = this.codeMessage;
         this.$validator.validateAll();
-        console.log(content.length);
+
         if (api.getByteLen(content) > 4) {
           this.codeMessage = api.getStrByteLen(content, 4);
         } else if (content.length == 4) {
@@ -242,7 +242,7 @@
       //密码输入长度检测（6 ~ 20位）
       onKeyPressPassWord() {
         let _password = this.password;
-        console.log(api.getByteLen(_password));
+
         if (_password.length > 5) {
           this.$validator.validateAll();
           if (!this.errors.has("account")) {
@@ -295,7 +295,7 @@
             this.$store.commit("setLoadingState", false);
           })
           .catch(err => {
-            console.log(err);
+
             _this.finish = false;
             _this.toastComm("网络信号差，建议您稍后再试");
             _this.imgUrl = _this.toastImg.wifi;
@@ -517,7 +517,7 @@
           _this.isBroswer = true;
         }
       );
-      api.forbidShare();
+
       const dict={
         en:{
           custom: {
@@ -546,29 +546,28 @@
 
       this.$validator.localize(dict);
 
-      console.log(this.$validator)
     },
     activated() {
       let _this = this;
-      siteSwitch.weChatJudge(
-        ua => {
-          _this.isBroswer = false;
-          if (!api.getPara().customerId&&!api.getPara().isSubscribe){
-            checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
-          }else if (api.getPara().isSubscribe==0){
-            _this.toastComm("您还未关注'唯医互联网骨科医院'微信公众号，请先关注。",()=>{
-              _this.$router.push({
-                path:"/wechat"
-              })
-            });
-
-          }
-        },
-        ua => {
-          _this.isBroswer = true;
-        }
-      );
-      api.forbidShare();
+      // siteSwitch.weChatJudge(
+      //   ua => {
+      //     _this.isBroswer = false;
+      //     if (!api.getPara().customerId&&!api.getPara().isSubscribe){
+      //       checkSubscribe.check(`${window.location.origin}${window.location.pathname}`);
+      //     }else if (api.getPara().isSubscribe==0){
+      //       _this.toastComm("您还未关注'唯医互联网骨科医院'微信公众号，请先关注。",()=>{
+      //         _this.$router.push({
+      //           path:"/wechat"
+      //         })
+      //       });
+      //
+      //     }
+      //   },
+      //   ua => {
+      //     _this.isBroswer = true;
+      //   }
+      // );
+      // // api.forbidShare();
 
     },
     components: {

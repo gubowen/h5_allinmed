@@ -233,7 +233,7 @@ export default {
                 this.confirmFlag = true;
               }
             }
-            
+
             console.log("发送验证码失败 + " + obj.responseMessage);
           }
           this.$store.commit("setLoadingState", false);
@@ -330,7 +330,7 @@ export default {
             localStorage.setItem("logoUrl", _obj.headUrl);
             console.log("登录成功");
             // window.location.href = localStorage.getItem("backUrl");
-            g_sps.jump(e.target,localStorage.getItem("backUrl")); 
+            g_sps.jump(e.target,localStorage.getItem("backUrl"));
           } else {
             console.log("登录失败");
           }
@@ -341,8 +341,6 @@ export default {
 
   mounted() {
     let _this = this;
-    console.log(sendCode);
-    api.forbidShare();
     this.addValidateTips(); // 添加验证规则提示
     siteSwitch.weChatJudge(
       ua => {
