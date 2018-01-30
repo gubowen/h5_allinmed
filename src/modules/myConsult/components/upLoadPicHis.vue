@@ -78,6 +78,7 @@ let _cameraType = "";
 
 import axios from "axios";
 import api from "common/js/util/util";
+import store from "../store/store";
 import confirm from "components/confirm";
 import Loading from "components/loading";
 import Toast from "components/toast";
@@ -142,6 +143,14 @@ export default {
   },
   activated() {
     // this.getUploadList();
+    siteSwitch.weChatJudge(
+        () => {
+          store.commit("setbottomNav", false);
+        },
+        () => {
+          store.commit("setbottomNav", true);
+        }
+      );
     this.initData();
   },
   methods: {
@@ -165,12 +174,12 @@ export default {
     //查看大图
     showBigImg(item, index, type) {
       let that = this;
-
       let _params = {
         imgBlob: that.imageList[type],
         indexNum: index
       };
-      console.log(_params);
+      // console.log(_params);
+      store.commit("setbottomNav", false);
       this.$router.push({
         name: "showBigImg",
         params: _params
