@@ -57,7 +57,7 @@
     <section class="description">您的反馈我们已经收到<br>
       感谢对我们的支持理解</section>
     <section class="back" @click="goToHref">
-      <span class="back-timing" >{{backTimeout}}s后</span><em>{{CheckFrom()?'自动返回':'返回首页'}}</em>
+      <span class="back-timing" >{{backTimeout}}s后</span><em>{{checkFrom()?'自动返回':'返回首页'}}</em>
     </section>
   </section>
 </template>
@@ -75,7 +75,9 @@
   import toast from "components/toast";
   import Loading from "components/loading";
   import siteSwitch from "common/js/siteSwitch/siteSwitch";
+  import CheckLogin from "common/js/auth/checkLogin";
   const feedbackUrl='/mcall/customer/suggestion/v1/create/';
+  const checkLogin=new CheckLogin();
   export default {
     data() {
       return {
@@ -109,11 +111,12 @@
     },
     mounted(){
       let _this = this;
-      this.CheckFrom();
+      this.checkFrom();
+      checkLogin.getStatus();
     },
     methods:{
       //根据入口切换内容
-      CheckFrom(){
+      checkFrom(){
         if(api.getPara().from==="im"){
           return true;
         }else{
