@@ -7,7 +7,7 @@
  * Created by wangjingrong on 17/12/6.
  */
 import Vue from 'vue';
-import vueg from 'vueg'
+// import vueg from 'vueg'
 import App from './App';
 import VeeValidator, {Validator}  from 'vee-validate';
 import VueRouter from 'vue-router';
@@ -16,7 +16,7 @@ import register from './components/register';
 import loginRule from './components/loginRule';
 import forgetPassword from './components/forgetPassword';
 import wechat from 'components/followWechat';
-import 'vueg/css/transition-min.css'
+// import 'vueg/css/transition-min.css'
 import "static/css/base.css";
 import fastclick from 'fastclick';
 import store from "./store/store";
@@ -77,7 +77,7 @@ class MLogin {
         return {x: 0, y: 0}
       }
     });
-    Vue.use(vueg, this.router,options);
+    // Vue.use(vueg, this.router,options);
   }
 
   routerStart() {
