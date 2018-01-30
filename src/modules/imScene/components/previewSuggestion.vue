@@ -1,7 +1,7 @@
 <template>
   <section>
     <!--推荐医生-->
-    <section class="main-message-box" data-alcode-mod='716' v-if="doctorObj.allData.length">
+    <section class="main-message-box doctor-main-box" data-alcode-mod='716' v-if="doctorObj.allData.length">
       <!-- 推荐医生提示 -->
       <section class="doctor-tips">
         <p class="tips-content">
@@ -353,15 +353,18 @@
         if (that.$store.state.previewSuggestionNum <= that.$store.state.renderSuggestionNum) {
           that.$nextTick(function () {
             if (that.$store.state.historyStatus==="history") {
+              console.log('医生数据完成');
               if (!api.getPara().suggest) {
-                console.log('医生数据完成');
                 that.scrollToBottom();
               } else {
-                let $ele = $(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length - 1]);
+                // let $ele = $(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length - 1]);
+                let _eleArr = document.querySelectorAll(".doctor-main-box");
+                let _ele = _eleArr[_eleArr.length -1];
+                console.log(_ele.parentElement.parentElement.offsetTop);
                 // that.scrollElement(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]);
                 // document.body.scrollTop = that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1].offsetTop;
                 // console.log('top + '+$(that.$el.querySelectorAll(".doctor-box")[that.$el.querySelectorAll(".doctor-box").length-1]).closest('.main-message-wrapper')[0].offsetTop);
-                $ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop && that.scrollElement($ele.closest('.main-message-wrapper')[0].offsetTop + $ele.closest('.main-message-box')[0].offsetTop)
+                that.scrollElement(_ele.parentElement.parentElement.offsetTop);
               }
             }
           })
