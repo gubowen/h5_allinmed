@@ -457,7 +457,7 @@
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
                       // window.location.href = localStorage.getItem("backUrl");
-                      g_sps.jump(null,localStorage.getItem("backUrl"));
+                      g_sps.jump(e.target,localStorage.getItem("backUrl"));
                     });
                   } else {
                     _this.toastComm("该手机已注册，请更换其他手机！");
@@ -470,7 +470,7 @@
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
                     // window.location.href = localStorage.getItem("backUrl");
-                    g_sps.jump(null,localStorage.getItem("backUrl"));
+                    g_sps.jump(e.target,localStorage.getItem("backUrl"));
                   });
                 }
               } else {
