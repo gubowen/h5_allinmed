@@ -362,7 +362,7 @@
               typeId: 3
             })
             .then(data => {
-              if (data.responseObject.responseStatus) {
+              if (data&&data.responseObject&&data.responseObject.responseStatus) {
                 const _obj = data.responseObject.responseData;
                 if (api.getPara().customerId && api.getPara().customerId.length > 0) {
                   if (data.responseObject.responsePk == api.getPara().customerId) {
@@ -446,7 +446,7 @@
               password: this.password
             })
             .then(data => {
-              if (data.responseObject.responseStatus) {
+              if (data&&data.responseObject&&data.responseObject.responseStatus) {
                 const _obj = data.responseObject.responseData;
                 if (api.getPara().customerId && api.getPara().customerId.length > 0) {
                   if (data.responseObject.responsePk == api.getPara().customerId) {
@@ -454,6 +454,7 @@
                     localStorage.setItem("userName", _obj.nickName);
                     localStorage.setItem("mobile", _obj.mobile);
                     localStorage.setItem("logoUrl", _obj.headUrl);
+                    console.log(_obj.nickName);
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
                       // window.location.href = localStorage.getItem("backUrl");
@@ -467,6 +468,7 @@
                   localStorage.setItem("userName", _obj.nickName);
                   localStorage.setItem("mobile", _obj.mobile);
                   localStorage.setItem("logoUrl", _obj.headUrl);
+                  console.log(_obj.nickName);
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
                     // window.location.href = localStorage.getItem("backUrl");
