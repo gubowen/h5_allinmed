@@ -1,9 +1,9 @@
 <template>
     <div class="scrollBox" :class="{
-                                                        'down':(state===0),
-                                                        'up':(state==1),
-                                                        'refresh':(state===2),
-                                                        'touch':touching }" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchEnd($event)">
+                'down':(state===0),
+                'up':(state==1),
+                'refresh':(state===2),
+                'touch':touching }" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchEnd($event)">
         <section class="scrollInner" :style="{ transform: 'translateY(' + top + 'px)' }">
             <header class="pull-refresh">
                 <slot name="pull-refresh">
@@ -18,7 +18,6 @@
                 <slot name="load-more">
                     <span v-show="downFlag === false">上拉加载更多</span>
                     <span v-show="downFlag === true">加载中……</span>
-                    <span v-show="downFlag === true">加载完成</span>
                 </slot>
             </footer>
             <!--<div class="nullData" v-show="dataList.noFlag">暂无更多数据</div>-->
@@ -36,15 +35,14 @@
    */
     export default {
         data() {
-            return {
-                top: 0,
-                state: 0,
-                startY: 0,
-                loadMoreShow:false,
-                touching: false,
-                infiniteLoading: false,
-                downFlag: false, //用来显示是否加载中
-            }
+          return{
+            top:0,
+            state:0,
+            startY:0,
+            touching:false,
+            infiniteLoading:false,
+            downFlag:false,
+          }
         },
         methods: {
             touchStart(e) {
