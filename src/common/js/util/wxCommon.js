@@ -24,10 +24,10 @@ class WxCommon {
       if (_openId != null && _userId ==_openIdCheck) {
         _checkKey = true;
       } else {
-        _checkKey = false; 
-        if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
-          sessionStorage.removeItem("count");
-        }
+        _checkKey = false;
+        // if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
+        //   sessionStorage.removeItem("count");
+        // }
       }
       return _checkKey;
     }else{
@@ -53,7 +53,7 @@ class WxCommon {
      *
      *
      */
-    
+
     let appId = "";
     let XHRUrl = "";
     let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
@@ -86,6 +86,7 @@ class WxCommon {
       "#wechat_redirect";
     if (net.getPara().code) {
       if (window.location.href.indexOf("openId") === -1) {
+        localStorage.removeItem("count");
         window.location.href = XHRUrl +
           "?ref=" + (window.location.origin + window.location.pathname)+
           //localStorage.getItem("currentUrl") +
@@ -97,9 +98,9 @@ class WxCommon {
       }
     } else {
       if (window.location.href.indexOf("openId") !== -1) {
-        let count = sessionStorage.getItem("count");
+        let count = localStorage.getItem("count");
         if (!count) {
-          sessionStorage.setItem("count", 1);
+          localStorage.setItem("count", 1);
           if (localStorage.getItem("currentUrl") && localStorage.getItem("currentUrl").indexOf("?") != -1) {
             window.location.href = localStorage.getItem("currentUrl") + "&openId=" + net.getPara().openId;
             localStorage.removeItem("isReLoading");

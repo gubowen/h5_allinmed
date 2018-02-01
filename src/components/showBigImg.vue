@@ -101,7 +101,7 @@ export default {
     // 大图
     topSwiper = new Swiper(".topSwiper", {
       direction: "horizontal",
-      zoom: true,
+      zoom: false,
       initialSlide: index,
       pagination: ".swiper-pagination",
       paginationType: "fraction",
@@ -179,6 +179,7 @@ export default {
     cancelDeletePic(){
       let _this = this;
       _this.deletePicTip = false;
+      _this.activeStats = true;
     },
     imageDeletFn() {
       let _this = this,
@@ -206,7 +207,7 @@ export default {
       // topSwiper = "";
       // thumbSwiper = "";
 
-      if (_this.imageListBox.length <= 0) {
+      if (_this.imageListBox.length <= 1) {
         _this.$router.go(-1);
       }
     },

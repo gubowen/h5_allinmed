@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section class="loginRegisterBox" data-alcode-mod='745'>
+    <section class="loginRegisterBox">
       <ul class="loginRegisterTitle">
         <li class="fl on">{{loginStyle == "phone"?'手机验证登录':'账号密码登录'}}</li>
-        <li class="fr" @click="goReginster" data-alcode='e150'>注册</li>
+        <li class="fr" @click="goReginster">注册</li>
       </ul>
 
       <ul class="loginRegisterContent">
@@ -34,12 +34,12 @@
                      :class="{'hasContent':codeMessage.length>0}"
               >
               <i class="icon-clear" v-if='codeMessage.length' @click='codeMessage = "",isClick=false,allPass=false'></i>
-              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()" data-alcode='e147'>获取验证码</span>
+              <span class="getCode" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime<=0" @click="getCodeApi()">获取验证码</span>
               <span class="codeCountdown" :class="{'hasContent':codeMessage.length>0}" v-if="codeTime>0"><i>{{codeTime}}</i>秒后重新获取</span>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin" data-alcode='e148'>登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="validLogin()">登录</button>
             <article class="changeAndForget">
-              <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e149'>账号密码登录</span>
+              <span class="changeLoginWay fl" @click="toggleLogin">账号密码登录</span>
             </article>
           </form>
         </li>
@@ -57,10 +57,10 @@
                  @click="pwHide=!pwHide"
                  :class="{'hide':pwHide,'hasContent':password.length>0}"></i>
             </p>
-            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn($event)" data-alcode='e153'>登录</button>
+            <button class="loginButton" :class="{'on':isClick}" @click.prevent="submitDisable&&accountLoginFn()">登录</button>
             <article class="changeAndForget">
-              <span class="changeLoginWay fl" @click="toggleLogin" data-alcode='e152'>手机验证登录</span>
-              <span class="forgetPass fr" @click="goForgetPass()" data-alcode='e151'>忘记密码？</span>
+              <span class="changeLoginWay fl" @click="toggleLogin">手机验证登录</span>
+              <span class="forgetPass fr" @click="goForgetPass()">忘记密码？</span>
             </article>
           </form>
         </li>
@@ -228,7 +228,7 @@
       codeKeyPress() {
         let content = this.codeMessage;
         this.$validator.validateAll();
-
+        console.log(content.length);
         if (api.getByteLen(content) > 4) {
           this.codeMessage = api.getStrByteLen(content, 4);
         } else if (content.length == 4) {
@@ -242,7 +242,7 @@
       //密码输入长度检测（6 ~ 20位）
       onKeyPressPassWord() {
         let _password = this.password;
-
+        console.log(api.getByteLen(_password));
         if (_password.length > 5) {
           this.$validator.validateAll();
           if (!this.errors.has("account")) {
@@ -295,7 +295,7 @@
             this.$store.commit("setLoadingState", false);
           })
           .catch(err => {
-
+            console.log(err);
             _this.finish = false;
             _this.toastComm("网络信号差，建议您稍后再试");
             _this.imgUrl = _this.toastImg.wifi;
@@ -319,7 +319,7 @@
         }, 1000);
       },
       //验证登录
-      validLogin(e) {
+      validLogin() {
         let _this = this;
         siteSwitch.weChatJudge(
           ua => {
@@ -329,7 +329,7 @@
                   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   return false;
                 }else{
-                  _this.validLoginData(e);
+                  _this.validLoginData();
                   // if (api.getPara().from==="index"){
                   //   _this.validLoginData();
                   // }else{
@@ -338,7 +338,7 @@
                   // }
                 }
               }else{
-                _this.validLoginData(e);
+                _this.validLoginData();
               }
             }).catch(err=>{
               _this.toastComm("用户不存在");
@@ -346,11 +346,11 @@
             });
           },
           ua => {
-            _this.validLoginData(e);
+            _this.validLoginData();
           }
         );
       },
-      validLoginData(e){
+      validLoginData(){
         let _this = this;
         if (this.allPass) {
           this.$store.commit("setLoadingState", true);
@@ -372,8 +372,7 @@
                     localStorage.setItem("logoUrl", _obj.headUrl);
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
-                      // window.location.href = localStorage.getItem("backUrl");
-                      g_sps.jump(e.target,localStorage.getItem("backUrl"));
+                      window.location.href = localStorage.getItem("backUrl");
                     });
                   } else {
                     this.toastComm("该手机已注册，请更换其他手机！");
@@ -385,8 +384,7 @@
                   localStorage.setItem("logoUrl", _obj.headUrl);
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
-                    // window.location.href = localStorage.getItem("backUrl");
-                    g_sps.jump(e.target,localStorage.getItem("backUrl"));
+                    window.location.href = localStorage.getItem("backUrl");
                   });
                 }
               } else {
@@ -404,9 +402,8 @@
         }
       },
       // 帐密登录
-      accountLoginFn(e) {
+      accountLoginFn() {
         let _this = this;
-        console.log(e);
         siteSwitch.weChatJudge(
           ua => {
             checkbinding.getMessage(_this.phoneMessage).then((res) => {
@@ -416,14 +413,14 @@
                   return false;
                 }else{
                   // if (api.getPara().from==="index"){
-                  _this.accountLoginData(e);
+                  _this.accountLoginData();
                   // }else{
                   //   _this.toastComm("该账号已绑定其他微信，请更换手机号！");
                   //   return false;
                   // }
                 }
               }else{
-                _this.accountLoginData(e);
+                _this.accountLoginData();
               }
             }).catch(err=>{
               _this.toastComm("用户不存在");
@@ -431,11 +428,11 @@
             });
           },
           ua => {
-            _this.accountLoginData(e);
+            _this.accountLoginData();
           }
         );
       },
-      accountLoginData(e){
+      accountLoginData(){
         let _this = this;
         if (this.allPass) {
           _this.submitDisable = false;
@@ -456,8 +453,7 @@
                     localStorage.setItem("logoUrl", _obj.headUrl);
                     this.toastComm("登录成功，即将返回来源页面", () => {
                       // window.location.href = document.referrer;
-                      // window.location.href = localStorage.getItem("backUrl");
-                      g_sps.jump(e.target,localStorage.getItem("backUrl"));
+                      window.location.href = localStorage.getItem("backUrl");
                     });
                   } else {
                     _this.toastComm("该手机已注册，请更换其他手机！");
@@ -469,8 +465,7 @@
                   localStorage.setItem("logoUrl", _obj.headUrl);
                   this.toastComm("登录成功，即将返回来源页面", () => {
                     // window.location.href = document.referrer;
-                    // window.location.href = localStorage.getItem("backUrl");
-                    g_sps.jump(e.target,localStorage.getItem("backUrl"));
+                    window.location.href = localStorage.getItem("backUrl");
                   });
                 }
               } else {
@@ -482,9 +477,7 @@
             });
         } else {
           this.$validator.validateAll();
-          console.log(this.errors)
           if (this.errors.has("account")) {
-
             this.toastComm(this.errors.first("account"));
           } else if (this.errors.has("password")) {
             this.toastComm(this.errors.first("password"));
@@ -494,13 +487,10 @@
     },
     mounted() {
       let _this = this;
-      if(api.getPara()._amChannel){
-        localStorage.setItem("_amChannel",api.getPara()._amChannel);
-      }
+
       siteSwitch.weChatJudge(
         ua => {
           _this.isBroswer = false;
-
           if (!api.getPara().customerId&&!api.getPara().isSubscribe){
             checkSubscribe.check(`${window.location.origin}${window.location.pathname}${window.location.search}`);
           }else if (api.getPara().isSubscribe==0){
@@ -509,14 +499,13 @@
                 path:"/wechat"
               })
             });
-          }else if(api.getPara().isSubscribe&&localStorage.getItem("_amChannel")&&!api.getPara()._amChannel){
-            window.location.href = `${window.location.href.split("#")[0]}&_amChannel=${localStorage.getItem("_amChannel")}`;
           }
         },
         ua => {
           _this.isBroswer = true;
         }
       );
+      api.forbidShare();
 
       const dict={
         en:{
@@ -548,7 +537,7 @@
 
     },
     activated() {
-      let _this = this;
+      // let _this = this;
       // siteSwitch.weChatJudge(
       //   ua => {
       //     _this.isBroswer = false;
@@ -560,15 +549,35 @@
       //           path:"/wechat"
       //         })
       //       });
-      //
+
       //     }
       //   },
       //   ua => {
       //     _this.isBroswer = true;
       //   }
       // );
-      // // api.forbidShare();
-
+      // api.forbidShare();
+      // this.$validator.updateDictionary({
+      //   en: {
+      //     custom: {
+      //       //手机号的验证
+      //       phone: {
+      //         required: "请输入手机号码",
+      //         mobile: "请输入正确的手机号码"
+      //       },
+      //       //患者关系的验证规则
+      //       codeInput: {
+      //         required: "请输入短信验证码",
+      //         digits: "验证码错误"
+      //       },
+      //       //账号登录密码
+      //       password: {
+      //         required: "请输入密码",
+      //         digits: "密码错误"
+      //       }
+      //     }
+      //   }
+      // });
     },
     components: {
       vConfirm,
