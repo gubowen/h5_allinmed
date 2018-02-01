@@ -492,11 +492,13 @@
                     }
                   });
                 } else {
+                  console.log(111);
                   that.upDateStatus({
                     orderId:that.orderId,
                     outTradeNo:localStorage.getItem("orderNumber"),
                     orderSourceId:localStorage.getItem("orderSourceId")
-                  })
+                  });
+
                   that.$emit("paySuccess", {
                     orderType: mOrder.mOrderType,//0免费，其他不是
                     orderAmount: mOrder.mOrderAmount, //价钱
@@ -515,17 +517,25 @@
       },
       //更新订单状态
       upDateStatus(Obj){
-        wxCommon.wxUpOrder({
-          operationType: '2',                                    //操作类型  1-生成订单  2-已支付  3-支付失败  4-取消  5-退款 6-已完成
-          orderId: Obj.orderId,                                  // 订单ID
-          outTradeNo: Obj.outTradeNo,
-          orderType: "1",                               //订单类型  2-手术 3-门诊
-          orderSourceId: Obj.orderSourceId,                       // 订单资源ID
-          status: '2',                                           //1-待支付2-已支付3-已完成4-已取消5-退款中6-支付超时7-退款完成8-退款失败',
-          payTime: '1',
-          callBack: function () {
+        console.log(222);
+        api.ajax({
+          url:'/mcall/cms/pay/order/v1/update/',
+          method: "POST",
+          data:{
+            operationType: '2',                                    //操作类型  1-生成订单  2-已支付  3-支付失败  4-取消  5-退款 6-已完成
+            orderId: Obj.orderId,                                  // 订单ID
+            outTradeNo: Obj.outTradeNo,
+            orderType: "1",                               //订单类型  2-手术 3-门诊
+            orderSourceId: Obj.orderSourceId,                       // 订单资源ID
+            status: '2',                                           //1-待支付2-已支付3-已完成4-已取消5-退款中6-支付超时7-退款完成8-退款失败',
+          },
+          done(data){
+            console.log("订单已更新……")
+          },
+          fail(err){
+
           }
-        })
+        });
       }
     },
     props: {
