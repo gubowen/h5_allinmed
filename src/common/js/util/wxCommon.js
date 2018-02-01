@@ -86,6 +86,7 @@ class WxCommon {
       "#wechat_redirect";
     if (net.getPara().code) {
       if (window.location.href.indexOf("openId") === -1) {
+        localStorage.removeItem("count");
         window.location.href = XHRUrl +
           "?ref=" + (window.location.origin + window.location.pathname)+
           //localStorage.getItem("currentUrl") +
