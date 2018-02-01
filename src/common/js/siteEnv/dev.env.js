@@ -10,7 +10,7 @@
 
 export default function () {
   let result="";
-  if (window.location.host.includes("allinmed")){
+  if (window.location.host.includes("m.allinmed")){
     result="production";
   }else{
     result="development";

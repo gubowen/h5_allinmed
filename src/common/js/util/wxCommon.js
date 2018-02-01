@@ -25,9 +25,9 @@ class WxCommon {
         _checkKey = true;
       } else {
         _checkKey = false;
-        if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
-          sessionStorage.removeItem("count");
-        }
+        // if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
+        //   sessionStorage.removeItem("count");
+        // }
       }
       return _checkKey;
     }else{
