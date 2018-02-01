@@ -105,6 +105,11 @@ export default {
       initialSlide: index,
       pagination: ".swiper-pagination",
       paginationType: "fraction",
+      freeMode:false,
+      touchRatio:0.5,
+      longSwipesRatio:0.1,
+      threshold:50,
+      followFinger:false,
       onDestroy: function(swiper) {
         // alert("你销毁了Swiper;");
       },
@@ -131,6 +136,11 @@ export default {
       spaceBetween: 10,
       direction: "horizontal",
       centeredSlides: true,
+      freeMode:false,
+      touchRatio:0.5,
+      longSwipesRatio:0.1,
+      threshold:50,
+      followFinger:false,
       slidesPerView: "auto",
       // touchRatio: 1,
       speed: 600,
