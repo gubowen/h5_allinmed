@@ -10,7 +10,6 @@ import Vue from 'vue';
 import App from './App';
 import VueRouter from 'vue-router';
 import vueg from 'vueg';
-// import VueScroller from "vue-scroller";
 import Vuex from 'vuex';
 import 'vueg/css/transition-min.css'
 import "static/css/base.css";

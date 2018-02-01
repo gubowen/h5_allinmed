@@ -18,13 +18,13 @@ class WxCommon {
       return true;
     } else if(window.location.href.indexOf("m9.allinmed.cn")>0 || window.location.href.indexOf("m.allinmed.cn")>0){
       let _openId = localStorage.getItem("openId"),
-      _userId = localStorage.getItem("userId"),
-      _openIdCheck = localStorage.getItem("openIdCheckCustomer"),
+      _userId = localStorage.getItem("userId")||0,
+      _openIdCheck = localStorage.getItem("openIdCheckCustomer")||0,
       _checkKey = '';
       if (_openId != null && _userId ==_openIdCheck) {
         _checkKey = true;
       } else {
-        _checkKey = false; 
+        _checkKey = false;
         if (sessionStorage.getItem("count") && sessionStorage.getItem("count").length > 0) {
           sessionStorage.removeItem("count");
         }
@@ -53,7 +53,7 @@ class WxCommon {
      *
      *
      */
-    
+
     let appId = "";
     let XHRUrl = "";
     let _currentPageUrl = (window.location.origin + window.location.pathname + window.location.search),
