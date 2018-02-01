@@ -109,6 +109,7 @@ export default function createOrders(Obj){
             siteSwitch.weChatJudge((ua)=>{
               this.goWxPay(ua);
             },(ua)=>{
+              Obj.backCreateSuccess(this.orderId);  //成功回调
               this.goH5Pay(ua);
             });
           }else{

@@ -92,12 +92,6 @@
   export default {
     data() {
       return {
-        repeatOrderTitle: "图文问诊",
-        repeatOrderId: "",
-        repeatConsultationId: "",
-        repeatOrderAmount: "",
-        repeatOrderType: "",
-        repeatOrderFrequency: "",
         mOrderAmount: "",
         mOrderType: "",
         mOrderFrequency: "",
@@ -204,7 +198,6 @@
         let isClick = 0;
         if (isClick == 0) {
           isClick = 1;
-          that.repeatOrderFrequency = opt.orderFrequency;
           let orderSourceTitle = "图文问诊",
             orderAmount = parseFloat(opt.orderAmount).toFixed(2);
           api.ajax({
@@ -270,7 +263,7 @@
           },
           backCreateSuccess: function (_data) {
             //创建订单成功  （手术必选）
-            that.orderId = _data;
+            localStorage.setItem("orderId",_data);
           },
           backCreateError: function (_data) {
             //创建订单失败  (必选)
@@ -299,27 +292,6 @@
         if (this.payPopupParams.from == "docMain") {
           this.$emit('docCallBack', _type);
         }
-      },
-      ensureEvent() {
-        const that = this;
-        wxCommon.wxPay({
-          isTest: 0,                                               //  是否跳过支付
-          orderId: that.repeatOrderId,                                       //订单ID
-          orderType: 1,                                     //订单类型  1-咨询2-手术3-门诊预约
-          orderSourceId: that.repeatConsultationId,                                 //来源id，对应 咨询id,手术单id，门诊预约id
-          total_fee: that.repeatOrderAmount,                                     //订单总金额 (单位/元)
-          body: that.repeatOrderTitle,                              //订单描述
-          callBack: function (data) {
-            if (data.responseStatus == "true") {
-              that.$emit("paySuccess", {
-                orderType: that.repeatOrderType,//0免费，其他不是
-                orderAmount: that.repeatOrderAmount, //价钱
-                orderFrequency: that.repeatOrderFrequency//聊天次数
-              });
-              that.closePopup();
-            }
-          }
-        });
       },
       ensureCommunEvent() {
         window.location.href = `/dist/imSceneDoctor.html?caseId=${this.payPopupParams.caseId}&doctorCustomerId=${this.payPopupParams.docId}&patientCustomerId=${this.payPopupParams.patientCustomerId}&patientId=${this.payPopupParams.patientId}`
@@ -477,26 +449,33 @@
                     done(d) {
                       if (d.responseObject.responseStatus) {
                         sessionStorage.setItem("orderSourceId", d.responseObject.responsePk);
-                        that.upDateStatus(d.responseObject.responsePk);
-                        that.$emit("paySuccess", {
-                          orderType: mOrder.mOrderType,//0免费，其他不是
-                          orderAmount: mOrder.mOrderAmount, //价钱
-                          orderFrequency: mOrder.mOrderFrequency//聊天次数
+                        that.upDateStatus({
+                          osId:d.responseObject.responsePk,
+                          callBack:function () {
+                            that.$emit("paySuccess", {
+                              orderType: mOrder.mOrderType,//0免费，其他不是
+                              orderAmount: mOrder.mOrderAmount, //价钱
+                              orderFrequency: mOrder.mOrderFrequency//聊天次数
+                            });
+                            that.closePopup();
+                          }
                         });
-                        that.closePopup();
                       }
                     }
                   });
                 } else {
                   console.log(111);
-                  that.upDateStatus(localStorage.getItem("orderSourceId"));
-
-                  that.$emit("paySuccess", {
-                    orderType: mOrder.mOrderType,//0免费，其他不是
-                    orderAmount: mOrder.mOrderAmount, //价钱
-                    orderFrequency: mOrder.mOrderFrequency//聊天次数
+                  that.upDateStatus({
+                    osId:localStorage.getItem("orderSourceId"),
+                    callBack:function () {
+                      that.$emit("paySuccess", {
+                        orderType: mOrder.mOrderType,//0免费，其他不是
+                        orderAmount: mOrder.mOrderAmount, //价钱
+                        orderFrequency: mOrder.mOrderFrequency//聊天次数
+                      });
+                      that.closePopup();
+                    }
                   });
-                  that.closePopup();
                 }
               }
             });
@@ -508,24 +487,23 @@
         })
       },
       //更新订单状态
-      upDateStatus(Obj){
+      upDateStatus(obj){
+        let that =this;
         console.log(222);
         api.ajax({
           url:'/mcall/cms/pay/order/v1/update/',
           method: "POST",
           data:{
             operationType: '2',                                    //操作类型  1-生成订单  2-已支付  3-支付失败  4-取消  5-退款 6-已完成
-            orderId: that.orderId,                                  // 订单ID
+            orderId: localStorage.getItem("orderId"),                                  // 订单ID
             outTradeNo: localStorage.getItem("orderNumber"),
-            orderType: "1",                               //订单类型  2-手术 3-门诊
-            orderSourceId: Obj.orderSourceId,                       // 订单资源ID
+            orderType: "1",                                         //订单类型  2-手术 3-门诊
+            orderSourceId: obj.osId,                                    // 订单资源ID
             status: '2',                                           //1-待支付2-已支付3-已完成4-已取消5-退款中6-支付超时7-退款完成8-退款失败',
           },
           done(data){
             console.log("订单已更新……")
-          },
-          fail(err){
-
+            obj.callBack();
           }
         });
       }
