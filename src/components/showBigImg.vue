@@ -179,6 +179,7 @@ export default {
     cancelDeletePic(){
       let _this = this;
       _this.deletePicTip = false;
+      _this.activeStats = true;
     },
     imageDeletFn() {
       let _this = this,
