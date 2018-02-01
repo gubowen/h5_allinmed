@@ -18,8 +18,8 @@ class WxCommon {
       return true;
     } else if(window.location.href.indexOf("m9.allinmed.cn")>0 || window.location.href.indexOf("m.allinmed.cn")>0){
       let _openId = localStorage.getItem("openId"),
-      _userId = localStorage.getItem("userId")||0,
-      _openIdCheck = localStorage.getItem("openIdCheckCustomer")||0,
+      _userId = localStorage.getItem("userId"),
+      _openIdCheck = localStorage.getItem("openIdCheckCustomer"),
       _checkKey = '';
       if (_openId != null && _userId ==_openIdCheck) {
         _checkKey = true;
@@ -97,9 +97,9 @@ class WxCommon {
       }
     } else {
       if (window.location.href.indexOf("openId") !== -1) {
-        let count = sessionStorage.getItem("count");
+        let count = localStorage.getItem("count");
         if (!count) {
-          sessionStorage.setItem("count", 1);
+          localStorage.setItem("count", 1);
           if (localStorage.getItem("currentUrl") && localStorage.getItem("currentUrl").indexOf("?") != -1) {
             window.location.href = localStorage.getItem("currentUrl") + "&openId=" + net.getPara().openId;
             localStorage.removeItem("isReLoading");
