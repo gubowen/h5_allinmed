@@ -557,6 +557,7 @@
       uploadBtnFn() {
         let _this = this;
         _this.upLoadGuideTip = "2";
+        _this.finish = true;
         let _customerId = localStorage.getItem("customerId")
           ? localStorage.getItem("customerId")
           : localStorage.getItem("userId");
@@ -574,6 +575,7 @@
           checkUpLoadStatus
             .getDataInit({patientCustomerId: _customerId})
             .then(res => {
+              _this.finish = false;
               if (
                 res &&
                 res.responseObject &&
@@ -588,6 +590,7 @@
               }
             })
             .catch(err => {
+              _this.finish = false;
               // _this.toastComm("网络信号差，建议您稍后再试");
               // _this.imgUrl = _this.toastImg.wifi;
             });
