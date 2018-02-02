@@ -30,7 +30,7 @@
                     <!--<span class="doctor-free">首次免费问诊</span>-->
                   </p>
                   <p class="doctor-hospital">{{item.hospitalName}}</p>
-                  <p class="doctor-good">擅长：&nbsp{{item.illnessNameList}}</p>
+                  <p class="doctor-good">擅长：&nbsp{{item.illnessNameList+ "," + item.operationNameList}}</p>
                 </figcaption>
               </section>
               <section class="doctor-item-bottom" v-if="item.isFreeTimes">
