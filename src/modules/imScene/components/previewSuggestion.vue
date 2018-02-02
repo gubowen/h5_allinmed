@@ -30,7 +30,7 @@
                     <!--<span class="doctor-free">首次免费问诊</span>-->
                   </p>
                   <p class="doctor-hospital">{{item.hospitalName}}</p>
-                  <p class="doctor-good">擅长：&nbsp{{item.illnessNameList+ "," + item.operationNameList}}</p>
+                  <p class="doctor-good" v-if="item.illnessNameList.length || item.operationNameList.length">擅长：&nbsp{{item.illnessNameList+ ((item.illnessNameList.length && item.operationNameList.length) ? "," : "") + item.operationNameList}}</p>
                 </figcaption>
               </section>
               <section class="doctor-item-bottom" v-if="item.isFreeTimes">
@@ -323,6 +323,10 @@
           done(data) {
             if (data.responseObject.responseData.dataList) {
               that.doctorObj.allData = data.responseObject.responseData.dataList;
+              // Object.assign(that.doctorObj.allData[0],{
+              //   illnessNameList:"",
+              //   // operationNameList:"",
+              // })
               //that.doctorObj.allData = data.responseObject.responseData.dataList;
               console.log(data.responseObject.responseData.dataList);
               that.checkSuggestData('doctorObj');
