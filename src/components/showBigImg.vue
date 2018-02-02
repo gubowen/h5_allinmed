@@ -73,7 +73,7 @@ export default {
       activeStats: false,
       activeIndex: 0,
       deletePicTip:false,
-      isIos: navigator.userAgent.toLowerCase().includes("iphone")
+      isIos: navigator.userAgent.toLowerCase().includes("iphone")  //navigator.userAgent.toLowerCase().includes("iphone")
     };
   },
   computed: {},
@@ -120,11 +120,13 @@ export default {
       onSlideChangeStart(swiper) {
         // console.log(swiper.activeIndex + "当前索引");
       },
-      onSlideChangeEnd(swiper) {
+      onTransitionEnd(swiper) {  //onTransitionEnd
+        //onSlideChangeEnd
         // setTimeout(function(){
         // $.openPhotoGallery($(".swiper-slide-active").eq(0));
         // },500);
         _this.activeIndex = swiper.activeIndex;
+        console.log(swiper.activeIndex + "当前索引");
       }
     });
     // 小图
@@ -312,9 +314,9 @@ html {
     .swiper-container {
       height: 100%;
       .swiper-wrapper {
-        &.noTransition{
-          transition: none !important;
-        }
+        // &.noTransition{
+        //   transition: none !important;
+        // }
         height: 100%;
         .swiper-slide {
           img {
