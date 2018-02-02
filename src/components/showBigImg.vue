@@ -102,10 +102,11 @@ export default {
     topSwiper = new Swiper(".topSwiper", {
       direction: "horizontal",
       zoom: false,
+      speed: 600,
       initialSlide: index,
       pagination: ".swiper-pagination",
       paginationType: "fraction",
-      longSwipesRatio:0.3,
+      longSwipesRatio:0.5,
       onDestroy: function(swiper) {
         // alert("你销毁了Swiper;");
       },
@@ -132,7 +133,7 @@ export default {
       spaceBetween: 10,
       direction: "horizontal",
       centeredSlides: true,
-      longSwipesRatio:0.3,
+      longSwipesRatio:0.5,
       slidesPerView: "auto",
       // touchRatio: 1,
       speed: 600,
