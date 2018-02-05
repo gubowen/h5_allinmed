@@ -115,7 +115,6 @@ class Api {
     }
     return len;
   }
-
   getStrByteLen(str, len) {
     let newStr = '',
       newLength = 0;
@@ -297,6 +296,29 @@ class Api {
     }
     return time;
 
+  }
+  getByteLength(val) {
+    let len = 0;
+    for (let i = 0; i < val.length; i++) {
+        len += 1;
+    }
+    return len;
+  }
+  getStrByteLength(str, len) {
+    let newStr = '',
+      newLength = 0;
+    for (let i = 0; i < str.length; i++) {
+        newLength++;
+      if (newLength <= len) {
+        newStr = newStr.concat(str[i]);
+      } else {
+        break;
+      }
+    }
+    if (newLength > len) {
+      newStr = newStr + ""
+    }
+    return newStr;
   }
 
   MillisecondToDateNew(msd) {

@@ -223,15 +223,15 @@
         }, 2000);
       },
       contentLimit() {
-        if (api.getByteLen(this.suggestionContent) > 1000){
-          this.suggestionContent = api.getStrByteLen(this.suggestionContent,1000);
+        if (api.getByteLength(this.suggestionContent) > 500){
+          this.suggestionContent = api.getStrByteLength(this.suggestionContent,500);
           this.errorShow = true;
           this.validateToast("最多只能输入500字");
         }
       },
       Limit() {
-        if (api.getByteLen(this.suggestionNumbers) >50){
-          this.suggestionNumbers = api.getStrByteLen(this.suggestionNumbers,50);
+        if (api.getByteLength(this.suggestionNumbers) >50){
+          this.suggestionNumbers = api.getStrByteLength(this.suggestionNumbers,50);
         }
       },
       getByteLen(len) {

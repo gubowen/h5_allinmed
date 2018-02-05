@@ -32,12 +32,12 @@
         </section>
         <ul class="tc-caseDescribeList">
           <!--<li class="tc-caseDescribeItem">-->
-            <!--<span class="tc-caseDescribeItemLeft">不适部位</span>-->
-            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>-->
+          <!--<span class="tc-caseDescribeItemLeft">不适部位</span>-->
+          <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{partName}}</span>-->
           <!--</li>-->
           <!--<li class="tc-caseDescribeItem">-->
-            <!--<span class="tc-caseDescribeItemLeft">症状描述</span>-->
-            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>-->
+          <!--<span class="tc-caseDescribeItemLeft">症状描述</span>-->
+          <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{symptomDescription}}</span>-->
           <!--</li>-->
           <li class="tc-caseDescribeItem" v-if="acheType.length">
             <span class="tc-caseDescribeItemLeft">疼痛性质</span>
@@ -56,8 +56,8 @@
             <span class="tc-caseDescribeItemRight tc-noRevice">{{getHelp}}</span>
           </li>
           <!--<li class="tc-caseDescribeItem">-->
-            <!--<span class="tc-caseDescribeItemLeft">其他症状</span>-->
-            <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>-->
+          <!--<span class="tc-caseDescribeItemLeft">其他症状</span>-->
+          <!--<span class="tc-caseDescribeItemRight tc-noRevice">{{complication}}</span>-->
           <!--</li>-->
         </ul>
       </section>
