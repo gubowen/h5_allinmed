@@ -23,9 +23,9 @@
     methods: {
       goFeedback () {
         if (!this.leaveFlag) {
-          location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}&triageCustomerId=${triageCustomerId}`;
+          location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}&triageCustomerId=${this.triageCustomerId}`;
           if (this.doctorCustomerId){
-            location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}&doctorCustomerId=${this.doctorCustomerId}&triageCustomerId=${triageCustomerId}`;
+            location.href = `/dist/feedback.html?from=im&customerId=${this.customerId}&doctorCustomerId=${this.doctorCustomerId}&triageCustomerId=${this.triageCustomerId}`;
           }
         } else {
           this.$emit('update:isLeave',true);
@@ -44,7 +44,7 @@
       },
       triageCustomerId:{
         type:Number,
-        default:"0"
+        default:0
       },
       doctorCustomerId:{
         type:String
