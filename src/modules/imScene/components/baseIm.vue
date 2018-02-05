@@ -429,7 +429,7 @@
           account: "1_doctor00001"
         },
         sendTextContent: "", //文本消息
-        cId: "0", //聊天消息拓展字段的customerId
+        cId: 0, //聊天消息拓展字段的customerId
         footerPosition: "main-input-box",
         bfscrolltop: document.body.scrollTop,
         // toastTips: "",
@@ -1963,9 +1963,7 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
-                setTimeout(() => {
-                  g_sps.jump(null, urlTemp);
-                },500)
+                g_sps.jump(null, urlTemp);
             }
           }
         });
@@ -2117,6 +2115,12 @@
     beforeCreate() {
     },
     mounted() {
+      window.onpageshow=function(e){
+        console.log(e);
+        if(e.persisted) {
+          window.location.reload() 
+        }
+      };
       let that = this;
       that.getConsultPrice();
       that.getPationtData(); // 获取患者数据

@@ -43,7 +43,7 @@
         type:String
       },
       triageCustomerId:{
-        type:String,
+        type:Number,
         default:"0"
       },
       doctorCustomerId:{
