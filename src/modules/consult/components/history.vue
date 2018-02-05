@@ -57,7 +57,7 @@
                              @change="onFileChange($event,1)" multiple capture="camera" ref="uploader">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="!isIos&&!isWeChat&&uploading1===false&&imageList1.length<50"
-                             @change="onFileChange($event,1)" multiple ref="uploader">
+                             @change="onFileChange($event,1)" multiple capture="camera" ref="uploader">
                       <input class="ev-upLoadInput" accept="image/*" type="file"
                              v-if="isIos&&uploading1===false&&imageList1.length<50" @change="onFileChange($event,1)"
                              multiple ref="uploader">
@@ -392,6 +392,9 @@
         this.backPopupShow = false;
       }
       api.forbidShare();
+
+      alert(navigator.userAgent.toLowerCase().includes("iphone"))
+      alert(_weChat)
     },
     beforeRouteEnter(to, from, next) {
       if (from.name === "discription") {
@@ -557,7 +560,6 @@
       uploadBtnFn() {
         let _this = this;
         _this.upLoadGuideTip = "2";
-        _this.finish = true;
         let _customerId = localStorage.getItem("customerId")
           ? localStorage.getItem("customerId")
           : localStorage.getItem("userId");
@@ -571,6 +573,7 @@
         if (_this.upload.has) {
           return;
         } else {
+           _this.finish = true;
           //是否上传过检测
           checkUpLoadStatus
             .getDataInit({patientCustomerId: _customerId})
