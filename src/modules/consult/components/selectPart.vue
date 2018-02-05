@@ -184,11 +184,11 @@
     },
     watch:{
       "tipShow"(flag){
-        // if (flag){
-        //   $("body").css({"overflow":"hidden","position":"relative"});
-        // }else{
-        //   $("body").css({"overflow":"visible","position":"static"});
-        // }
+        if (flag){
+          $("body").css("overflow","hidden");
+        }else{
+          $("body").css("overflow","visible");
+        }
       }
     },
     computed: {
@@ -480,7 +480,6 @@
   .body-picture {
     margin-top: rem(0px);
     height: 100%;
-    overflow: hidden;
     &.front {
       background: url("../../../common/image/img00/patientConsult/bg_front.png") no-repeat center center;
       background-size: contain;
@@ -493,12 +492,12 @@
       position: relative;
       border: none;
       height: 100%;
-
+      top: -0.3rem;
       & > img {
         position: absolute;
+        bottom: 0;
         width: 100%;
         vertical-align: top;
-
       }
     }
   }

@@ -557,6 +557,7 @@
       uploadBtnFn() {
         let _this = this;
         _this.upLoadGuideTip = "2";
+        _this.finish = true;
         let _customerId = localStorage.getItem("customerId")
           ? localStorage.getItem("customerId")
           : localStorage.getItem("userId");
@@ -570,7 +571,6 @@
         if (_this.upload.has) {
           return;
         } else {
-          _this.finish = true;
           //是否上传过检测
           checkUpLoadStatus
             .getDataInit({patientCustomerId: _customerId})

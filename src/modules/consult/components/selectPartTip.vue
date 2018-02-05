@@ -3,6 +3,7 @@
     <section class="select-part-tips" v-if="tipsShow&&hasWatched" :class="[{'on':tipsShow},patientBody]"
              @click="$emit('update:tipsShow' , false)">
       <figure class="tips-image-box">
+        <div class="img-masker"></div>
         <img :src="moveDone ? clickImg[patientBody] : bodyImg[patientBody]" alt="">
       </figure>
       <figure class="tips-image-finger">
@@ -113,11 +114,20 @@
     z-index: 7;
     .tips-image-box {
       width: 100%;
-      background-color: rgba(0,0,0,0.6);
+      height: 100%;
       & > img {
         width: 100%;
         vertical-align: top;
-        margin-top: 1rem;
+        background-color: rgba(0,0,0,0.6);
+      }
+      & > .img-masker{
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+
       }
     }
     .tips-image-finger {
@@ -159,7 +169,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-60%, 1rem);
+      transform: translate(-60%, -.2rem);
     }
   }
 
@@ -170,7 +180,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.5rem, 1rem);
+      transform: translate(-1.5rem, -0.2rem);
     }
   }
 
@@ -181,7 +191,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.3rem,3rem);
+      transform: translate(-1.3rem, 1.8rem);
     }
   }
 
