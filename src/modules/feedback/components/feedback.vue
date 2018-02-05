@@ -82,6 +82,7 @@
     data() {
       return {
         customerId:"",
+        triageCustomerId:"",
         doctorId:"",
         suggestionType:{
           service:false,
@@ -175,6 +176,7 @@
           method: "POST",
           data: {
             suggestionType:_arr.join(""),
+            triageCustomerId:api.getPara().triageCustomerId,
             suggestionContent:this.suggestionContent,
             suggestionNumbers:this.suggestionNumbers,
             customerId:_this.customerId || 0,

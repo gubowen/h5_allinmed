@@ -137,7 +137,7 @@ class Api {
   }
   getNetWork() {
     let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {tyep: 'unknown'};
-    let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'none'];
+    let type_text = ['unknown', 'ethernet', 'wifi', '2g', '3g', '4g', 'offline'];
     if (typeof(connection.type) == "number") {
       connection.type_text = type_text[connection.type||connection.effectiveType];
     } else {
@@ -151,7 +151,7 @@ class Api {
       } else if (connection.bandwidth > 0) {
         connection.type = '2g';
       } else if (connection.bandwidth == 0) {
-        connection.type = 'none';
+        connection.type = 'offline';
       } else {
         connection.type = 'unknown';
       }
