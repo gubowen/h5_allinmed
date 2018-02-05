@@ -1963,7 +1963,9 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
-                g_sps.jump(null, urlTemp);
+                setTimeout(() => {
+                  g_sps.jump(null, urlTemp);
+                },500)
             }
           }
         });
