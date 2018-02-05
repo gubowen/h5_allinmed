@@ -182,7 +182,7 @@
             visitSiteId: api.getSiteId(),
             equipmentVersion: api.getDeviceType(),
             networkEnvironment: api.getNetWork(),
-            systemVersion: '1.1.2'
+            systemVersion: window.version
           },
           done(data) {
             _this.finish=true;
