@@ -113,12 +113,11 @@
     z-index: 7;
     .tips-image-box {
       width: 100%;
-      height: 100%;
       background-color: rgba(0,0,0,0.6);
       & > img {
         width: 100%;
         vertical-align: top;
-        margin-top: -.5rem;
+        margin-top: 1rem;
       }
     }
     .tips-image-finger {
@@ -160,7 +159,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-60%, -.2rem);
+      transform: translate(-60%, 1rem);
     }
   }
 
@@ -171,7 +170,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.5rem, -0.2rem);
+      transform: translate(-1.5rem, 1rem);
     }
   }
 
@@ -182,7 +181,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.3rem, 1.8rem);
+      transform: translate(-1.3rem,3rem);
     }
   }
 
