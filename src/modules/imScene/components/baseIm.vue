@@ -303,7 +303,7 @@
         }" v-if="ensureShow" @ensureClickEvent="ensureClickEvent"
       ></ensure>
     </transition>
-    <suggestion :customerId="patientCustomerId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></suggestion>
+    <suggestion :customerId="patientCustomerId" :triageCustomerId="cId" :leaveFlag='leaveFlag' :isLeave.sync="isLeave"></suggestion>
   </section>
 
 </template>
@@ -1944,6 +1944,7 @@
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
               that.refreshStateOther(-1);
+              that.finish = false;
               that.payPopupShow = false;
               // window.location.href =
               //   "/dist/imSceneDoctor.html?from=im&caseId=" +
@@ -1954,7 +1955,6 @@
               //       .customerId) +
               //   "&patientId=" +
               //   api.getPara().patientId;
-
               let urlTemp = "/dist/imSceneDoctor.html?from=im&caseId=" +
                 api.getPara().caseId +
                 "&doctorCustomerId=" +
@@ -1963,7 +1963,7 @@
                     .customerId) +
                 "&patientId=" +
                 api.getPara().patientId;
-              g_sps.jump(null, urlTemp);
+                g_sps.jump(null, urlTemp);
             }
           }
         });
@@ -2116,7 +2116,6 @@
     },
     mounted() {
       let that = this;
-
       that.getConsultPrice();
       that.getPationtData(); // 获取患者数据
 
