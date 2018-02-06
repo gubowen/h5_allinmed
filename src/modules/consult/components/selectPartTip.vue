@@ -118,7 +118,8 @@
       & > img {
         width: 100%;
         vertical-align: top;
-        background-color: rgba(0,0,0,0.6);
+        position: relative;
+        z-index: 3;
       }
       & > .img-masker{
         position: absolute;
@@ -127,7 +128,7 @@
         bottom: 0;
         left: 0;
         z-index: 2;
-
+        background-color: rgba(0,0,0,0.6);
       }
     }
     .tips-image-finger {
@@ -137,6 +138,7 @@
       width: rem(160px);
       height: rem(186px);
       opacity: 0;
+      z-index: 3;
       & > img {
         width: 100%;
         vertical-align: top;
@@ -169,7 +171,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-60%, -.2rem);
+      transform: translate(-60%, .2rem);
     }
   }
 
@@ -180,7 +182,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.5rem, -0.2rem);
+      transform: translate(-1.5rem, .2rem);
     }
   }
 
@@ -191,7 +193,7 @@
     }
     100% {
       opacity: 1;
-      transform: translate(-1.3rem, 1.8rem);
+      transform: translate(-1.3rem, 2rem);
     }
   }
 
