@@ -3,7 +3,7 @@ import MHome from "../components/mHome";
 
 export default [{
     path: "/",
-    redirect: ""
+    redirect: "/home"
   }, {
     path: "/followWeChat",
     name: "followWeChat",
