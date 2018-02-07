@@ -2,13 +2,13 @@
   <section class="main-inner ev-fileUpHide">
     <transition name="fadeDown">
       <article class="main-message-time">
-        <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
-        <p class="service-time">
-          <span class="service-time-top">服务时间</span>
-          <span class="service-time-bottom">09: 00-22: 00</span>
-        </p> -->
-        <p class="new-service-time">服务时间：{{serviceTime}}</p>
-      </article>
+      <!-- <p class="residue-time">24小时内免费，剩余时间<span>{{lastTimeText}}</span></p>
+      <p class="service-time">
+        <span class="service-time-top">服务时间</span>
+        <span class="service-time-bottom">09: 00-22: 00</span>
+      </p> -->
+      <p class="new-service-time">服务时间：{{serviceTime}}</p>
+    </article>
     </transition>
     <section @scroll="deleteMsgIndex = -1" class="main-message" ref="wrapper"
              :class="{'padding-top':lastTimeShow,'padding-bottom':inputBoxShow,'input-flag':footerBottomFlag}">
@@ -2118,7 +2118,7 @@
       window.onpageshow=function(e){
         console.log(e);
         if(e.persisted) {
-          window.location.reload() 
+          window.location.reload()
         }
       };
       let that = this;

@@ -394,14 +394,9 @@
                 orderFrequency: 3
               };
               localStorage.setItem("sendTips", JSON.stringify(arg));
-              localStorage.removeItem("selectList");
-              localStorage.removeItem("secondList");
-              localStorage.removeItem("questionList");
-              localStorage.removeItem("complication");
+              localStorage.removeItem("freshCache")
               localStorage.removeItem("noMR");
-//              if (navigator.userAgent.toLowerCase().includes("iphone")) {
-//                that.backPopupShow = true;
-//              }
+
               that.finish = false;
               let urlTemp = "/dist/imSceneDoctor.html?from=report&caseId=" +
                 that.responseCaseId +
@@ -409,13 +404,7 @@
                 api.getPara().doctorId +
                 "&patientId=" +
                 that.createParams.patientId;
-              // window.location.href =
-              //   "/dist/imSceneDoctor.html?from=report&caseId=" +
-              //   that.responseCaseId +
-              //   "&doctorCustomerId=" +
-              //   api.getPara().doctorId +
-              //   "&patientId=" +
-              //   that.createParams.patientId;
+
               localStorage.removeItem("watchedTips");
 
               g_sps.jump(null, urlTemp);
@@ -426,10 +415,7 @@
       // 获取分流ID
       getTriageDoctorId() {
         const that = this;
-        localStorage.removeItem("selectList");
-        localStorage.removeItem("secondList");
-        localStorage.removeItem("questionList");
-        localStorage.removeItem("complication");
+        localStorage.removeItem("freshCache")
         siteSwitch.weChatJudge(
           () => {
 //            if (navigator.userAgent.toLowerCase().includes("iphone")) {

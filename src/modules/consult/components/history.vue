@@ -345,7 +345,7 @@
           takeMedicine: "",
           complication: "",
           optionList: [],
-          customerId:"" ,
+          customerId: "",
           patientId: "",
           wxImgLists: []
         }
@@ -439,6 +439,8 @@
         if (navigator.userAgent.toLowerCase().includes("iphone")) {
           $(".ev-upLoadInput").removeAttr("capture");
         }
+
+        this.recoverFromCache();
       },
       selectHospital() {
         this.$router.push({
@@ -570,7 +572,7 @@
         if (_this.upload.has) {
           return;
         } else {
-           _this.finish = true;
+          _this.finish = true;
           //是否上传过检测
           checkUpLoadStatus
             .getDataInit({patientCustomerId: _customerId})
@@ -999,7 +1001,7 @@
         } else {
           this.allParams.takeMedicine = "";
         }
-        this.allParams.userId=this.patientBaseMessage.userId;
+        this.allParams.userId = this.patientBaseMessage.userId;
         //装载完成...
         //数据提交开始...
         //跳转第四部分
@@ -1107,6 +1109,25 @@
         _this.medical.has = false;
         _this.medical.none = false;
         _this.medicalMessage = "";
+      },
+      setRecoverCache() {
+        const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
+        const assignCache = Object.assign(_freshCache, {
+          visit: this.visit,
+          upload: this.upload,
+          medical: this.medical,
+          imageList1: this.imageList1
+        });
+        localStorage.setItem("freshCache", JSON.stringify(assignCache));
+      },
+      recoverFromCache() {
+        const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
+        if (_freshCache.visit){
+          this.visit = _freshCache.visit;
+          this.upload = _freshCache.upload;
+          this.medical = _freshCache.medical;
+          this.imageList1 = _freshCache.imageList1;
+        }
       }
     },
     components: {
@@ -1116,6 +1137,32 @@
       backPopup,
       progerssBar,
       ensure
+    },
+    watch: {
+      visit: {
+        handler() {
+          this.setRecoverCache();
+        },
+        deep: true
+      },
+      upload: {
+        handler() {
+          this.setRecoverCache();
+        },
+        deep: true
+      },
+      medical: {
+        handler() {
+          this.setRecoverCache();
+        },
+        deep: true
+      },
+      imageList1: {
+        handler() {
+          this.setRecoverCache();
+        },
+        deep: true
+      }
     }
   };
 </script>

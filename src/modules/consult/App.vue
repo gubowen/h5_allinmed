@@ -26,23 +26,32 @@
   import bottomNav from "components/tabbar";
   import store from "./store/store";
 
-  export default{
+  import {mapState} from "vuex";
+  export default {
     data() {
-      return {
-
-      }
+      return {}
     },
-    computed:{
-      bottomShow(){
+    computed: {
+      ...mapState(["patientBaseMessage"]),
+      bottomShow() {
         return store.state.bottomNavShow
       }
     },
-    mounted(){
-      siteSwitch.weChatJudge(()=>{
-        store.commit("setbottomNav",false);
-      },()=>{
-        store.commit("setbottomNav",true);
+    mounted() {
+      siteSwitch.weChatJudge(() => {
+        store.commit("setbottomNav", false);
+      }, () => {
+        store.commit("setbottomNav", true);
       });
+
+    },
+    created(){
+      setTimeout(()=>{
+        window.onbeforeunload = () =>{
+          localStorage.setItem("messageCache",JSON.stringify(this.patientBaseMessage))
+        }
+      },1000);
+
     },
     components: {
       bottomNav

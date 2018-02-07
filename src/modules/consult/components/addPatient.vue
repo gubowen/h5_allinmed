@@ -335,6 +335,9 @@
           }
         })
       });
+      this.$store.commit("setPatientMessage",{});
+
+      localStorage.removeItem("freshCache")
     },
     watch: {
       "customerId"(id) {

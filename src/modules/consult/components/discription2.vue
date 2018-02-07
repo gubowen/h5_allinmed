@@ -5,52 +5,49 @@
       <transition name="fade">
         <section class="consult-wrapper">
           <section class="consult-inner">
-            <section class="consult-total" :data-qId="questionList.questionId">
-              <header class="consult-inner-title">
+            <section class="consult-total" v-for="(question , pIndex) in renderList" :data-qId="question.questionId" v-show="pIndex==0">
+              <header class="consult-inner-title" :class="{'consolt-specialOne':pIndex==0}">
                 <h2>
-                  <span>{{questionList.questionName}}</span>
-                  <em v-if="questionList.questionType==2">(可多选)</em>
+                  <span>{{question.questionName}}</span>
+                  <em v-if="question.questionType==2">(可多选)</em>
                 </h2>
-                <p class="consult-text-discript">医生需要了解你的身体状况，不适程度</p>
+                <p class="consult-text-discript" v-if="pIndex==0">医生需要了解你的身体状况，不适程度</p>
               </header>
               <section class="consult-question-inner"
-                       :class="{mSelector:questionList.questionType==2,sSelector:questionList.questionType==1}"
-                       v-for="(item , index) in questionList.optionList1" :data-oId="item.optionId">
+                       :class="{mSelector:question.questionType==2,sSelector:question.questionType==1}"
+                       v-for="(item , index) in question.optionList1" :data-oId="item.optionId">
                 <article class="consult-question-item"
-                         :class="{'dark':index%2==0,'selected':item.isSelected}"
-                         @click="selectEvent(questionList.questionType==2,index,item,$event)"
+                         :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
+                         @click="selectEvent(question.questionType==2,pIndex,index,item,$event)"
                 >
                   <p>{{item.optionName}}</p>
                   <i class="icon-select"></i>
                   <figure class="input-area"
-                          v-if="item.isAttachment==2&&item.isSelected"
+                          v-if="item.isAttachment==2&&questionList[pIndex].optionList[index].isSelected"
                           @click.stop="">
                     <section class="box">
-                      <section class="area-content">
-                        <pre><span>{{item.optionDesc}}<br></span></pre>
-                        <textarea class="input-textarea"
-                                  :class="{'dark':index%2==0,'selected':item.isSelected}"
-                                  placeholder="填写其他情况"
-                                  @input="otherReason(pIndex,index,$event)"
-                                  v-model="item.optionDesc"
-                                  ref="otherEle"
-                                  @focus="hideBar()"
-                                  @blur="showBar()"
-                        >
-                        </textarea>
-                      </section>
+                    <section class="area-content">
+                    <pre><span>{{questionList[pIndex].optionList[index].optionDesc}}<br></span></pre>
+                  <textarea class="input-textarea"
+                            :class="{'dark':index%2==0,'selected':questionList[pIndex].optionList[index].isSelected}"
+                            placeholder="填写其他情况"
+                            @input="otherReason(pIndex,index,$event)"
+                            v-model="questionList[pIndex].optionList[index].optionDesc"
+                            ref="otherEle"
+                            @focus="hideBar()"
+                            @blur="showBar()"
+                  >
+                  </textarea>
+                    </section>
                     </section>
                   </figure>
                   <p class="text-num-tips"
-                     v-show="getByteLen(item.optionDesc.length)<=50">
-                    {{getByteLen(item.optionDesc.length)}}/50</p>
+                     v-show="getByteLen(questionList[pIndex].optionList[index].optionDesc.length)<=50">
+                    {{getByteLen(questionList[pIndex].optionList[index].optionDesc.length)}}/50</p>
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
                       <section class="pain-level-box">
-                        <h3>
-                          <span>告诉我您的疼痛程度</span>
-                          <i class="icon-closePainLevel" @click="painValue=-1;showPainProgress=false;"></i>
-                        </h3>
+                        <h3><span>告诉我您的疼痛程度</span><i class="icon-closePainLevel" @click="painValue=-1;showPainProgress=false;"></i></h3>
                         <p class="pain-level-content">
                           {{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}
                         </p>
@@ -67,29 +64,24 @@
                           class="pain-level-progress"
                           :label-style="labelStyle"
                         ></vue-slider>
-                        <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">
-                          选好了
-                        </button>
+                        <button class="btn-primary pain-level-ensure" @click.stop="getPainLevelData(item,painValue)">选好了</button>
                       </section>
                     </section>
                   </transition>
                 </article>
                 <transition name="fadeDown">
                   <section class="second-wrapper"
-                           v-if="item.questionList2&&item.questionList2.length!==0&&item.isSelected">
+                           v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected">
                     <section class="pain-level-secondList"
                              :class="{mSelector:scItem.questionType==2,sSelector:scItem.questionType==1}"
                              @click.stop="showSymptomDetail=false"
-                             v-if="item.questionList2&&item.questionList2.length!==0&&item.isSelected"
+                             v-if="item.questionList2&&item.questionList2.length!==0&&questionList[pIndex].optionList[index].isSelected"
                              v-for="(scItem,scIndex) in item.questionList2"
                              :data-qId="scItem.questionId">
                       <section class="pain-level-title-box">
-                        <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass"
-                                @click.stop="painValue=2;showPainProgress=true;showSymptomDetail=false">
+                        <header class="pain-level-title-content" v-if="scItem.questionType==3" :class="painLevelClass" @click.stop="painValue=2;showPainProgress=true;showSymptomDetail=false">
                           <i class="icon-pain-level-tips"></i>
-                          <p :class="{choicePain:painValue == -1}"><em>{{painValue == -1?'请选择您的疼痛等级':'疼痛等级：'}}</em><span
-                            v-if="painValue != -1">{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span>
-                          </p>
+                          <p :class="{choicePain:painValue == -1}"><em>{{painValue == -1?'请选择您的疼痛等级':'疼痛等级：'}}</em><span v-if="painValue != -1">{{painProgress[painValue].optionName}}{{painProgress[painValue].optionDesc}}</span></p>
                         </header>
                       </section>
                       <header class="consult-inner-title" v-if="scItem.questionType!=3">
@@ -100,8 +92,8 @@
                       <article
                         v-if="scItem.questionType!=3" class="consult-question-item"
                         v-for="(scoItem,scoIndex) in scItem.optionList2"
-                        @click.stop="secondClickEvent(scItem.questionType==2,scoItem,scItem,item)"
-                        :class="{'selected':scoItem.isSelected }"
+                        @click.stop="secondClickEvent(scItem.questionType==2,scIndex,scoIndex,index,pIndex)"
+                        :class="{'selected':questionList[pIndex].optionList[index].questionList[scIndex].optionList[scoIndex].isSelected }"
                         :data-oId="scoItem.optionId"
                       >
                         <p>{{scoItem.optionName}}</p>
@@ -172,9 +164,8 @@
           </transition>
         </section>
       </transition>
-      <loading v-show="!finish"></loading>
-      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow"
-                 :backPopupParams="{patientParams:patientParams}"></backPopup>
+      <loading :show="!finish"></loading>
+      <backPopup v-if="backPopupShow" :backPopupShow.sync="backPopupShow" :backPopupParams="{patientParams:patientParams}"></backPopup>
     </section>
   </div>
 </template>
@@ -185,36 +176,21 @@
    * @Notify：
    * @Depend：
    *
-   * Created by qiangkailiang on 2018/02/07.
+   * Created by qiangkailiang on 2017/7/21.
    */
-  /**************************Common Components**************************/
-
+  import api from "common/js/util/util";
   import loading from "components/loading";
   import toast from "components/toast";
   import confirm from "components/confirm";
-  import backPopup from "components/backToastForConsult";
-  import progerssBar from "./progressBar";
-
-  /**************************Common Methods*************************/
-
-  import api from "common/js/util/util";
-  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
-
-  /**************************ThirdParty Components**************************/
-
   import vueSlider from "vue-slider-component";
+  import backPopup from "components/backToastForConsult";
+  import siteSwitch from '@/common/js/siteSwitch/siteSwitch';
+  import progerssBar from "../components/progressBar";
   import Picker from "better-picker";
-
-  /**************************Base Vue-Methods*************************/
-
   import store from "../store/store";
   import {mapState} from "vuex";
 
-  /**************************Private Methods*************************/
-
-  import getPainLevelClass from "../api/getPainLevelClass";
-  import getDotSize from "../api/getDotSize";
-
+  import * as dateData from "../api/datePickerData";
 
   const XHRList = {
     query: "/mcall/cms/part/question/relation/v1/getMapList/",
@@ -251,7 +227,7 @@
         hasSelectedLevel: false,
         painSecondList: [],
         hasSecondQuestionId: "", //拥有二级问题的选项目前是疼痛；
-        secondQuestionList: [{}, {}],
+        secondQuestionList: {},
         secondOptionsList: [],
         selectList: [],
         resultParam: {
@@ -279,37 +255,90 @@
       };
     },
     mounted() {
-      this.init();
+      document.title = "描述病情";
+      this.getQuestionList();
+      this.finish = false;
+      this.customerId = localStorage.getItem('userId');
+
+      setTimeout(() => {
+        document.body.scrollTop = 20;
+      }, 300);
+      if (!api.getPara().doctorId) {
+        if (this.patientBaseMessage.count == 0) {
+          if (
+            !localStorage.getItem("hasCome") ||
+            localStorage.getItem("hasCome") != 0
+          ) {
+            this.firstConsult = true;
+          }
+        }
+      }
+
+      if (localStorage.getItem("PCIMLinks") !== null) {
+        this.backPopupShow = true;
+      } else {
+        this.backPopupShow = false;
+      }
+      api.forbidShare();
     },
-    beforeDestroy() {
-      this.painProgress = {};
-      this.questionList = [];
-      this.renderList = [];
-      this.selectList = [];
+    beforeDestroy(){
+      this.painProgress={};
+      this.questionList=[];
+      this.renderList=[];
+      this.selectList=[];
     },
     computed: {
       ...mapState(
         ["patientBaseMessage"]
       ),
       dotSize() {
-        return getDotSize(document.documentElement.getAttribute("data-dpr"));
+        let dpr = document.documentElement.getAttribute("data-dpr");
+        let result = "";
+        console.log(dpr);
+        switch (parseInt(dpr)) {
+          case 3:
+            result = 240;
+            break;
+          case 2:
+            result = 160;
+            break;
+          case 1:
+            result = 80;
+            break;
+        }
+        return result;
       },
       painLevelClass() {
-        return getPainLevelClass(this.painValue);
-      }
-    },
-    watch: {
-      "secondQuestionList" :{
-        handler() {
-          this.setRecoverCache();
-        },
-        deep: true
-      },
-      "selectList" :{
-        handler() {
-          this.setRecoverCache();
-        },
-        deep: true
+        let className = "";
+        switch (parseInt(this.painValue)) {
+          case -1:
+            className = "pain";
+            break;
+          case 0:
+            className = "pain0";
+            break;
+          case 1:
+          case 2:
+            className = "pain1";
+            break;
+          case 3:
+          case 4:
+            className = "pain2";
+            break;
+          case 5:
+          case 6:
+            className = "pain3";
+            break;
+          case 7:
+          case 8:
+            className = "pain4";
+            break;
+          case 9:
+          case 10:
+            className = "pain5";
+            break;
+        }
+        return className;
       }
     },
     beforeRouteLeave(to, from, next) {
@@ -327,59 +356,32 @@
       next(this.pageLeaveEnsure);
     },
     methods: {
-      init() {
-        document.title = "描述病情";
-
-        this.getQuestionList();
-
-        setTimeout(() => {
-          document.body.scrollTop = 20;
-        }, 300);
-
-        if (!api.getPara().doctorId) {
-          if (this.patientBaseMessage.count == 0) {
-            if (
-              !localStorage.getItem("hasCome") ||
-              localStorage.getItem("hasCome") != 0
-            ) {
-              this.firstConsult = true;
-            }
-          }
-        }
-
-        if (localStorage.getItem("PCIMLinks") !== null) {
-          this.backPopupShow = true;
-        } else {
-          this.backPopupShow = false;
-        }
-        api.forbidShare();
-      },
       // 隐藏底部
-      hideBar() {
-        store.commit("setbottomNav", false);
+      hideBar () {
+        store.commit("setbottomNav",false);
       },
       // 显示底部
-      showBar() {
-        siteSwitch.weChatJudge(() => {
+      showBar () {
+        siteSwitch.weChatJudge(()=>{
           // store.commit("setbottomNav",false);
-        }, () => {
-          store.commit("setbottomNav", true);
+        },()=>{
+          store.commit("setbottomNav",true);
         });
       },
-      createTimePicker(renderList) {
-        let heavyTimeData = [], delayTimeData = [];
-        renderList[1].optionList1.forEach((value) => {
+      createTimePicker() {
+        let heavyTimeData = [],delayTimeData=[];
+        this.renderList[1].optionList1.forEach((value)=>{
           delayTimeData.push({
-            text: value.optionName,
-            value: value.optionId
+            text:value.optionName,
+            value:value.optionId
           })
-        });
-        renderList[2].optionList1.forEach((value) => {
+        })
+        this.renderList[2].optionList1.forEach((value)=>{
           heavyTimeData.push({
-            text: value.optionName,
-            value: value.optionId
+            text:value.optionName,
+            value:value.optionId
           })
-        });
+        })
 
         this.delayTimePicker = new Picker({
           data: [delayTimeData],
@@ -399,46 +401,68 @@
           this.selectList[2].optionIdList[0] = heavyTimeData[selectedIndex].value;
         });
       },
-
-      secondClickEvent(type, scoItem, scItem, item) {
-        /*
-        *    type true为多选
-        *    scoItem 二级问题选项
-        *    scItem 二级问题
-        *    item 一级问题选项
-        *
-        */
-        if (!this.secondQuestionList[0].optionIdList && this.painValue == -1) {
+      secondClickEvent(type, scIndex, scoIndex, index, pIndex) {
+        if(Object.keys(this.secondQuestionList).length == 0 && this.painValue == -1){
           this.painValue = 2;
           this.showPainProgress = true;
         }
-        if (!this.secondQuestionList[1].optionIdList) {
-          this.secondQuestionList[1] = {
-            refOptionId: item.optionId,
-            questionId: scItem.questionId,
-            optionIdList: [],
-            partId: this.patientBaseMessage.partId
-          };
-        }
-
+        const optionId = this.questionList[pIndex].optionList[index].questionList[
+          scIndex
+          ].optionList[scoIndex].optionId;
+        const refOptionId = this.questionList[pIndex].optionList[index].optionId;
+        const questionId = this.questionList[pIndex].optionList[index]
+          .questionList[scIndex].questionId;
+        const slutParam = questionId + refOptionId;
         if (type) {
-          scoItem = !scoItem.isSelected;
-          if (scoItem.isSelected) {
-            this.secondQuestionList[1].optionIdList.push(optionId);
+          this.questionList[pIndex].optionList[index].questionList[
+            scIndex
+            ].optionList[scoIndex].isSelected = !this.questionList[pIndex]
+            .optionList[index].questionList[scIndex].optionList[scoIndex]
+            .isSelected;
+          if (
+            this.questionList[pIndex].optionList[index].questionList[scIndex]
+              .optionList[scoIndex].isSelected
+          ) {
+            if (!this.secondQuestionList[slutParam]) {
+              this.secondQuestionList[slutParam] = {
+                refOptionId: refOptionId,
+                questionId: questionId,
+                optionIdList: [],
+                partId: this.patientBaseMessage.partId
+              };
+            }
+            this.secondQuestionList[slutParam].optionIdList.push(optionId);
             api.removeDub(optionId);
           } else {
-            this.secondQuestionList[1].optionIdList.removeByValue(optionId);
+            this.secondQuestionList[slutParam].optionIdList.removeByValue(
+              optionId
+            );
           }
         } else {
-          scItem.optionList2.forEach((element, i) => {
-            element.isSelected = false;
+          this.questionList[pIndex].optionList[index].questionList[
+            scIndex
+            ].optionList.forEach((element, i) => {
+            if (i === scoIndex) {
+              return;
+            } else {
+              element.isSelected = false;
+            }
           });
-          this.secondQuestionList[1].optionIdList = [];
-          scoItem.isSelected = true;
-          this.secondQuestionList[1].optionIdList[0] = scoItem.optionId;
+          this.questionList[pIndex].optionList[index].questionList[
+            scIndex
+            ].optionList[scoIndex].isSelected = true;
+          if (!this.secondQuestionList[slutParam]) {
+            this.secondQuestionList[slutParam] = {
+              refOptionId: refOptionId,
+              questionId: questionId,
+              optionIdList: [],
+              partId: this.patientBaseMessage.partId
+            };
+          }
+          this.secondQuestionList[slutParam].optionIdList[0] = optionId;
+          api.removeDub(optionId);
         }
       },
-
       getQuestionList() {
         const that = this;
         api.ajax({
@@ -451,74 +475,119 @@
             maxResult: "9999",
             sortType: ""
           },
+          beforeSend(config) {
+          },
           done(data) {
-            that.finish = true;
-
             if (data.responseObject.responseData) {
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
-
-                that.setPrivateItem(dataList[0]);
-                that.setSelectList(dataList);
-                that.createTimePicker(dataList);
+                that.renderList = dataList;
+                that.hasSecondQuestionId = dataList[0].optionList1[0].optionId;
+                that.getBaseIdList(dataList);
+                that.createTimePicker();
               }
             }
-
-            that.recoverSelectedFromCache();
+            that.finish = true;
+            if (localStorage.getItem("selectList")) {
+              that.painValue = localStorage.getItem("painValue");
+              that.selectList = JSON.parse(localStorage.getItem("selectList"));
+              that.secondQuestionList = JSON.parse(
+                localStorage.getItem("secondList")
+              );
+              that.questionList = JSON.parse(
+                localStorage.getItem("questionList")
+              );
+              that.complication = localStorage.getItem("complication");
+            }
+          },
+          fail(err) {
           }
         });
       },
-      recoverSelectedFromCache(){
-        if (localStorage.getItem("freshCache")) {
-          const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
+      getBaseIdList(dataList) {
+        dataList.forEach(element => {
+          this.questionList.push({
+            questionId: element.questionId,
+            optionList: (function () {
+              let result = [];
+              element.optionList1.forEach(cElement => {
+                result.push({
+                  optionId: cElement.optionId,
+                  isSelected: false,
+                  optionDesc: "",
+                  questionList: (function () {
+                    let result = [];
+                    if (cElement.questionList2.length !== 0) {
+                      cElement.questionList2.forEach(eElement => {
+                        result.push({
+                          questionId: eElement.questionId,
+                          optionList: (function () {
+                            let result = [];
+                            eElement.optionList2.forEach(eeElement => {
+                              result.push({
+                                optionId: eeElement.optionId,
+                                isSelected: false,
+                                optionDesc: ""
+                              });
+                            });
+                            return result;
+                          })()
+                        });
+                      });
+                    }
+                    return result;
+                  })()
+                });
+              });
+              return result;
+            })()
+          });
 
-          this.painValue = _freshCache.painValue;
-          this.selectList = JSON.parse(_freshCache.selectList);
-          this.secondQuestionList = JSON.parse(_freshCache.secondList);
-          this.questionList = JSON.parse(_freshCache.questionList);
-          this.delayTimeContent = _freshCache.delayTimeContent;
-          this.heavyTimeContent = _freshCache.heavyTimeContent;
-        }
-      },
-      setPrivateItem(dataList) {
-        dataList.optionList1.forEach((element, index) => {
-          element.isSelected = false;
-          if (element.questionList2.length > 0) {
-            element.questionList2.forEach((eElement, eIndex) => {
-              eElement.optionList2.forEach((EElement, EIndex) => {
-                EElement.isSelected = false;
-              })
-            })
-          }
-        });
-        this.questionList = dataList;
-      },
-      setSelectList(dataList) {
-        dataList.forEach((element, index) => {
           this.selectList.push({
             questionId: element.questionId,
             optionIdList: [],
             partId: this.patientBaseMessage.partId,
             optionDesc: ""
           });
-        })
+        });
       },
-      selectEvent(type, index, item, $event) {
+      selectEvent(type, pIndex, index, item, $event) {
         if (type) {
-          item.isSelected = !item.isSelected;
-          if (item.isSelected) {
-            if (item.optionId == this.hasSecondQuestionId) {
-              this.selectList[0].optionIdList.unshift(item.optionId);
+          // debugger;
+          this.questionList[pIndex].optionList[index].isSelected = !this
+            .questionList[pIndex].optionList[index].isSelected;
+          if (this.questionList[pIndex].optionList[index].isSelected) {
+            // debugger;
+            console.log(this.questionList[pIndex].optionList[index].optionId);
+            if (this.questionList[pIndex].optionList[index].optionId == this.hasSecondQuestionId) {
+              this.selectList[pIndex].optionIdList.unshift(
+                this.questionList[pIndex].optionList[index].optionId
+              );
             } else {
-              this.selectList[0].optionIdList.push(item.optionId);
+              this.selectList[pIndex].optionIdList.push(
+                this.questionList[pIndex].optionList[index].optionId
+              );
             }
-            api.removeDub(this.selectList[0].optionIdList);
+            api.removeDub(this.selectList[pIndex].optionIdList);
           } else {
-            this.selectList[0].optionIdList.removeByValue(item.optionId);
+            this.selectList[pIndex].optionIdList.removeByValue(
+              this.questionList[pIndex].optionList[index].optionId
+            );
           }
         } else {
-          this.selectList[0].optionIdList = [];
-          this.selectList[0].optionIdList.push(item.optionId);
+          this.selectList[pIndex].optionIdList = [];
+          this.questionList[pIndex].optionList.forEach((element, i) => {
+            if (i === index) {
+              return;
+            } else {
+              element.isSelected = false;
+            }
+          });
+          this.questionList[pIndex].optionList[index].isSelected = true;
+          this.selectList[pIndex].optionIdList.push(
+            this.questionList[pIndex].optionList[index].optionId
+          );
+          api.removeDub(this.selectList[pIndex].optionIdList);
         }
 
         if (item.isAttachment == 2) {
@@ -565,6 +634,9 @@
           });
         }
       },
+      painLevel(e) {
+        this.painValue = e.target.value;
+      },
       painLevelRender(data) {
         let flag = false;
         if (data.questionList2 && data.questionList2.length !== 0) {
@@ -592,7 +664,7 @@
         if (content.length > 500) {
           this.questionList[pIndex].optionList[
             index
-            ].optionDesc = content.substring(0, 500);
+            ].optionDesc = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -600,38 +672,28 @@
           this.errorMsg = "最多只能输入500字";
           return false;
         }
-        this.selectList[0].optionDesc = encodeURIComponent(content);
+        this.selectList[pIndex].optionDesc = encodeURIComponent(content);
       },
       getPainLevelData(item, value) {
         this.showPainProgress = false;
-        this.secondQuestionList[0] = {
+        this.secondQuestionList[item.optionId] = {
           optionDesc: "",
           optionIdList: [],
           partId: this.patientBaseMessage.partId,
           questionId: this.painQuestion,
           refOptionId: item.optionId
         };
-        this.secondQuestionList[0].optionIdList.push(
+        this.secondQuestionList[item.optionId].optionIdList.push(
           this.painProgress[value].optionId
         );
-        this.secondQuestionList[0].optionDesc =
+        this.secondQuestionList[item.optionId].optionDesc =
           this.painProgress[value].optionName +
           this.painProgress[value].optionDesc;
       },
-      setRecoverCache(){
-        localStorage.setItem("freshCache", JSON.stringify({
-          selectList: JSON.stringify(this.selectList),
-          secondList: JSON.stringify(this.secondQuestionList),
-          questionList: JSON.stringify(this.questionList),
-          painValue: this.painValue,
-          delayTimeContent: this.delayTimeContent,
-          heavyTimeContent: this.heavyTimeContent
-        }));
-      },
       //数据装载...
       paramsInstall() {
-        if (this.questionList.optionList1[0].isSelected && this.painValue == -1) {
-          window.scroll(0, document.querySelector(".pain").offsetTop - 250);
+        if(this.questionList[0].optionList[0].isSelected && this.painValue == -1){
+          window.scroll(0,document.querySelector(".pain").offsetTop-250);
           this.errorMsg = "请填写疼痛等级";
           this.errorShow = true;
           setTimeout(() => {
@@ -642,32 +704,53 @@
         if (!this.answerValidator()) {
           return false;
         }
-        this.setRecoverCache();
-
+        localStorage.setItem("selectList", JSON.stringify(this.selectList));
+        localStorage.setItem(
+          "secondList",
+          JSON.stringify(this.secondQuestionList)
+        );
+        localStorage.setItem("questionList", JSON.stringify(this.questionList));
+        localStorage.setItem("painValue", this.painValue);
+        localStorage.setItem("complication", this.complication);
         let finalSubmitParam = {
           userId: this.patientBaseMessage.userId,
-          optionList: this.selectList.concat(this.secondQuestionList),
+          optionList: this.selectList,
           patientId: this.patientBaseMessage.patientId,
+          complication: encodeURIComponent(this.complication),
           count: this.patientBaseMessage.count,
-          height: this.patientBaseMessage.height,
-          weight: this.patientBaseMessage.weight,
+          height:this.patientBaseMessage.height,
+          weight:this.patientBaseMessage.weight,
           sex: this.patientBaseMessage.sex
         };
+        // debugger;
+        for (let i in this.secondQuestionList) {
+          if (this.$el.querySelectorAll(`[data-oid='${this.secondQuestionList[i].refOptionId}'] .pain-level-secondList`).length !== 0) {
+            finalSubmitParam.optionList.push(this.secondQuestionList[i]);
+          }
+        }
 
+        for (let j = 0; j < finalSubmitParam.optionList.length; j++) {
+          if (finalSubmitParam.optionList[j].optionIdList.length === 0) {
+            break;
+          } else {
+            finalSubmitParam.optionList[j].optionIdList = finalSubmitParam.optionList[j].optionIdList.join(",");
+          }
+        }
         this.pageLeaveEnsure = true;
 
+        localStorage.removeItem("submitParams");
 
         this.$router.push({
           name: "history",
         });
 
-        this.$store.commit("setPatientMessage", Object.assign(this.patientBaseMessage, finalSubmitParam))
+        this.$store.commit("setPatientMessage",Object.assign(this.patientBaseMessage,finalSubmitParam))
       },
       answerValidator() {
         let errorMsg = ["您还有问题未完善", "您还有问题未完善", "您还有问题未完善"];
         let flag = false;
         for (let index = 0; index < this.selectList.length; index++) {
-          if (this.selectList[index].optionIdList.length === 0) {
+          if (this.selectList[index].optionIdList.length === 0 ) {
             this.errorShow = true;
             setTimeout(() => {
               this.errorShow = false;
@@ -733,7 +816,7 @@
         }
         let content = this.complication;
         if (content.length > 500) {
-          this.complication = content.substring(0, 500);
+          this.complication = content.substring(0,500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
@@ -750,13 +833,12 @@
         localStorage.setItem("isSubmit", "1");
         this.levelShow = false;
         this.pageLeaveEnsure = true;
-        localStorage.removeItem("freshCache")
         this.$router.go(-1);
       },
       getByteLen(len) {
-        if (500 - len <= 0) {
+        if(500 - len <= 0){
           return 0
-        } else {
+        }else{
           return 500 - len;
         }
       }
@@ -799,42 +881,42 @@
       position: relative;
       margin: 0;
       box-sizing: border-box;
-      max-height: 4rem;
+      max-height:4rem;
       overflow: hidden;
-      .box {
+      .box{
         max-height: 2rem;
-        .area-content {
-          position: relative;
+      .area-content{
+        position: relative;
 
-          pre {
-            display: block;
-            visibility: hidden;
-            @include font-dpr(14px);
-            width: 100%;
-            padding-left: rem(20px);
-            padding-right: rem(20px);
-            padding-top: rem(15px);
-            box-sizing: border-box;
-            min-height: rem(72px);
-          }
-          & > Textarea {
-            display: block;
-            max-height: 1.7rem;
-            width: 100%;
-            @include font-dpr(14px);
-            padding-bottom: rem(15px);
-            border: none;
-            box-sizing: border-box;
-            min-height: rem(70px);
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            &.dark {
-              background-color: rgba(239, 239, 239, 0.15);
-            }
+        pre {
+          display: block;
+          visibility: hidden;
+          @include font-dpr(14px);
+          width: 100%;
+          padding-left: rem(20px);
+          padding-right: rem(20px);
+          padding-top: rem(15px);
+          box-sizing: border-box;
+          min-height: rem(72px);
+        }
+        & > Textarea {
+          display: block;
+          max-height: 1.7rem;
+          width:100%;
+          @include font-dpr(14px);
+          padding-bottom:rem(15px);
+          border: none;
+          box-sizing: border-box;
+          min-height: rem(70px);
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          &.dark {
+            background-color: rgba(239, 239, 239, 0.15);
           }
         }
+      }
       }
     }
   }
@@ -868,7 +950,7 @@
     .consult-inner-title {
       padding: rem(60px) rem(60px);
       padding-bottom: rem(50px);
-      &.consolt-specialOne {
+      &.consolt-specialOne{
         padding: rem(60px) rem(60px) rem(40px) rem(60px);
       }
       & > h2 {
@@ -894,11 +976,11 @@
           vertical-align: middle;
         }
       }
-      .consult-text-discript {
-        @include font-dpr(16px);
-        color: #666666;
-        padding-top: rem(4px);
-      }
+      .consult-text-discript{
+          @include font-dpr(16px);
+          color: #666666;
+          padding-top: rem(4px);
+        }
     }
   }
 
@@ -1052,13 +1134,13 @@
       font-weight: normal;
       padding: rem(40px) rem(40px) 0;
       @include clearfix();
-      span {
-        float: left;
+      span{
+        float:left;
       }
-      .icon-closePainLevel {
-        float: right;
+      .icon-closePainLevel{
+        float:right;
         width: rem(30px);
-        height: rem(30px);
+        height:rem(30px);
         background: url("../../../common/image/img00/index/close.png") no-repeat;
         background-size: 100% 100%;
       }

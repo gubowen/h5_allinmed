@@ -276,6 +276,11 @@
 
     created() {
       this.init();
+      window.onbeforeunload=function(){
+
+        alert(45)
+
+      }
     },
 
   };
