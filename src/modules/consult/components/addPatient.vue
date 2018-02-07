@@ -1052,6 +1052,8 @@
           height: this.patientList[index].height?this.patientList[index].height:"",
           weight: this.patientList[index].weight?this.patientList[index].weight:""
         })
+        localStorage.setItem("messageCache", JSON.stringify(this.$store.state.patientBaseMessage))
+
       },
       //添加患者按钮
       addFun() {

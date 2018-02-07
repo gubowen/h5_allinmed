@@ -1017,6 +1017,8 @@
         this.$store.commit("setPatientMessage", Object.assign(this.patientBaseMessage, {
           pageParam: this.allParams
         }))
+
+        localStorage.setItem("messageCache", JSON.stringify(this.$store.state.patientBaseMessage))
       },
       // 填写情况验证
       validateParamsFull() {

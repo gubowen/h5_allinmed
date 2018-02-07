@@ -662,6 +662,8 @@
         });
 
         this.$store.commit("setPatientMessage", Object.assign(this.patientBaseMessage, finalSubmitParam))
+        localStorage.setItem("messageCache", JSON.stringify(this.$store.state.patientBaseMessage))
+
       },
       answerValidator() {
         let errorMsg = ["您还有问题未完善", "您还有问题未完善", "您还有问题未完善"];

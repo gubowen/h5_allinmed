@@ -368,6 +368,7 @@
           height: this.patientBaseMessage.height,
           weight: this.patientBaseMessage.weight
         })
+        localStorage.setItem("messageCache", JSON.stringify(this.$store.state.patientBaseMessage))
       },
     },
     components: {

@@ -89,6 +89,8 @@ class Consult {
         return {x: 0, y: 0}
       }
     });
+
+
     // this.router.afterEach((to,from)=>{
     //   $(window).trigger("hashchange");
     // })

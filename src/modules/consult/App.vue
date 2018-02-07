@@ -27,6 +27,7 @@
   import store from "./store/store";
 
   import {mapState} from "vuex";
+
   export default {
     data() {
       return {}
@@ -43,15 +44,16 @@
       }, () => {
         store.commit("setbottomNav", true);
       });
-
     },
-    created(){
-      setTimeout(()=>{
-        window.onbeforeunload = () =>{
-          localStorage.setItem("messageCache",JSON.stringify(this.patientBaseMessage))
-        }
-      },1000);
-
+    created() {
+      // setTimeout(()=>{
+      //   window.onbeforeunload = () =>{
+      //     localStorage.setItem("messageCache",JSON.stringify(this.patientBaseMessage))
+      //   }
+      // },2000);
+      // this.$router.beforeEach(() => {
+      //   localStorage.setItem("messageCache", JSON.stringify(this.patientBaseMessage))
+      // })
     },
     components: {
       bottomNav
