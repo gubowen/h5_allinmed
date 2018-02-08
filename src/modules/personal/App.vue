@@ -1,7 +1,7 @@
 <template>
   <section class="allinmed-mainInner">
-    <Loading :show="loadingOnOff"></Loading>
-    <router-view  :class="{'have-padding':paddingOnOff}" v-transition></router-view>
+    <Loading v-show="loadingOnOff"></Loading>
+    <router-view  :class="{'have-padding':paddingOnOff}"></router-view>
     <tab :selected=3></tab>
   </section>
 </template>

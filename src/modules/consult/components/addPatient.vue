@@ -158,7 +158,7 @@
         <!--</transition>-->
       </section>
     </section>
-    <loading :show="finish"></loading>
+    <loading v-show="finish"></loading>
     <!--<transition name="fade">-->
     <!--<section class="btnBox-tips maskers show" horizontal="" v-if="hasCase" @click="hasCase=false">-->
     <!--<section class="horizontal-box" @click="hasCase=true">-->
@@ -233,7 +233,7 @@
         headerShow: 2,//头部显示哪个
         patientList: [],//患者列表
         currentIndex: -1,//第几个患者
-        finish: true,//加载的菊花转
+        finish: false,//加载的菊花转
         hasCase: false,//是否有病例单
         createNewPatient: false,//添加新患者
         showSelectArea: false,//选择部位
@@ -836,6 +836,7 @@
             that.finish = true;
           },
           done(data) {
+            that.finish = false;
             if (data.responseObject.responseStatus) {
               that.getPatientInfo(data.responseObject.responsePk);
             } else {
@@ -851,6 +852,7 @@
       // 获取患者个人信息
       getPatientInfo (patientId = 1516954015676) {
         const that = this;
+        that.finish = true;
         api.ajax({
           url: XHRList.patientInfo,
           method: "POST",
