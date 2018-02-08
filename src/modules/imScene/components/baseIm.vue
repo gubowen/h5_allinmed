@@ -594,7 +594,7 @@
       getUserBaseData() {
         const that = this;
         this.finishNum ++;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.getToken,
           method: "POST",
           data: {
@@ -773,7 +773,7 @@
       // 获取患者数据
       getPationtData () {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.getMedicalList,
           method: "POST",
           data: {
@@ -806,7 +806,7 @@
       //获取患者问诊单
       getMedicalMessage() {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.getMedicalList,
           method: "POST",
           data: {
@@ -891,7 +891,7 @@
         //是否有分诊会话记录
         //无则创建
         //有则获取
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.getTriageId,
           method: "POST",
           data: {
@@ -915,7 +915,7 @@
       //创建分流
       createTriageMessage() {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.triageAssign,
           method: "POST",
           data: {
@@ -940,7 +940,7 @@
       // 更新状态
       refreshState(state) {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.refresh,
           method: "POST",
           data: {
@@ -959,7 +959,7 @@
       // 另个一个更新状态
       refreshStateOther(state) {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.refresh,
           method: "POST",
           data: {
@@ -1062,7 +1062,7 @@
       //获取剩余时间
       getLastTime() {
         const that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.time,
           method: "POST",
           data: {
@@ -1765,7 +1765,7 @@
       getConsultPrice() {
         const that = this;
         console.log("获取服务时间");
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.getPrice,
           method: "POST",
           data: {
@@ -1884,7 +1884,7 @@
       againShunt() {
         let that = this;
         console.log("分流参数：" + that.orderSourceId);
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.updateShunt,
           method: "POST",
           data: {
@@ -1919,7 +1919,7 @@
         };
         !!type &&
         Object.assign(data, {customerId: "0", consultationState: "4"}); //付款回调参数传customerId
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.updateCount,
           method: "POST",
           data: data,
@@ -1947,7 +1947,7 @@
       //更新上传了检查检验
       updateMedical() {
         let that = this;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.updateMedicalList,
           method: "POST",
           data: {
@@ -1966,7 +1966,7 @@
         let that = this;
         //        debugger
         that.finishNum ++;
-        api.ajax({
+        api.ajaxNoLoading({
           url: XHRList.updateCount,
           method: "POST",
           data: {

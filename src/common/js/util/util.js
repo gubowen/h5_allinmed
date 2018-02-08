@@ -8,6 +8,7 @@
  */
 // import appVersion from "common/js/versionCode/versionCode";
 import ajax from "./ajax";
+import ajaxNoLoading from "./ajaxNoLoading";
 import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
@@ -53,7 +54,9 @@ class Api {
   ajax(param) {
     ajax(param);
   }
-
+  ajaxNoLoading(param){
+    ajaxNoLoading(param);
+  }
   getPara(symbol) {
     let url = window.location.origin + window.location.pathname + window.location.search;
     let param = {};
