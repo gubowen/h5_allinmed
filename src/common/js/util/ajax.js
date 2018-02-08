@@ -10,9 +10,9 @@ import axios from "axios";
 
 export default function ajax(param) {
   axios.interceptors.request.use(function (config) { //在请求发出之前进行一些操作
-    if (document.querySelector(".ev-loading")) {
-      document.querySelector(".ev-loading").style.display = "block";
-    }
+    // if (document.querySelector(".ev-loading")) {
+    //   document.querySelector(".ev-loading").style.display = "block";
+    // }
     param.beforeSend && param.beforeSend(config);
     return config;
   });
@@ -30,9 +30,9 @@ export default function ajax(param) {
     timeout: 30000
   }).then((res) => {
     param.done(res.data);
-    if (document.querySelector(".ev-loading")) {
-      document.querySelector(".ev-loading").style.display = "none";
-    }
+    // if (document.querySelector(".ev-loading")) {
+    //   document.querySelector(".ev-loading").style.display = "none";
+    // }
   }).catch((err) => {
     param.fail && param.fail(err);
   });

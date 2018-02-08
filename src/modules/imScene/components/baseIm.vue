@@ -412,7 +412,8 @@
         orderSourceId: "",
         beginTimestamp: 0,
         historyBeginTime: 0,
-        finish: true,
+        // finish: true,
+        finishNum: 0, // 用来计算 loading 是否显示
         lastTimeShow: false, //顶部时间的提示和输入框是否展示
         inputBoxShow: false, //底部是否显示
         consultTipsShow: false, //购买咨询消息是否展示(与lastTimeShow分开，解决刚开始默认展示)
@@ -504,6 +505,7 @@
               store.commit("setHistoryStatus", "history");
               that.getMessageList("history");
               that.getMedicalMessageHistory();
+              that.finishNum --;
             },
             onwillreconnect(obj) {
               console.log(
@@ -591,6 +593,7 @@
       //获取用户基本信息
       getUserBaseData() {
         const that = this;
+        this.finishNum ++;
         api.ajax({
           url: XHRList.getToken,
           method: "POST",
@@ -599,7 +602,7 @@
             patientName: api.getPara().patientId
           },
           beforeSend: function () {
-            this.finish = false;
+            // this.finish = true;
           },
           done(param) {
             if (param.responseObject.responseStatus) {
@@ -608,8 +611,9 @@
                 token: param.responseObject.responseData.token
               };
             }
-            that.finish = true;
+
             that.connectToNim();
+            // that.finish = false;
           },
           fail(err) {
             console.log(err.message);
@@ -619,14 +623,16 @@
       // 判断是否有问诊单，发送问诊单
       getMedicalMessageHistory () {
         const that = this;
-        this.finish = true;
+        // this.finish = true;
+        this.finishNum ++;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
           reverse: true, //默认false表示从endTime开始往前查找历史消息;true表示从beginTime开始往后查找历史消息
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
-            that.finish = false;
+            // that.finish = false;
+            that.finishNum --;
             if (obj.msgs.length === 0) {
               return that.getMedicalMessage();
             }
@@ -649,15 +655,15 @@
       getMessageList(type) {
         let that = this;
         //获取云端历史记录
-        this.finish = true;
-
+        // this.finish = true;
+        this.finishNum ++;
         this.nim.getHistoryMsgs({
           scene: "p2p",
           beginTime: 0,
           endTime: that.historyBeginTime,
           to: this.targetData.account, //聊天对象, 账号或者群id
           done(error, obj) {
-            that.finish = false;
+            that.finishNum --;
             if (type === "scrollInit" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
               that.allMsgsGot = true;
@@ -680,6 +686,7 @@
                 //渲染完毕
               });
             }
+            // that.finish = false;
           },
           limit: 20 //本次查询的消息数量限制, 最多100条, 默认100条
         });
@@ -1892,7 +1899,7 @@
               //              that.getLastTime();
               console.log("分流成功");
               that.isClick = false; //是否点击立即咨询重置
-              that.finish = true;
+              // that.finish = true;
             } else {
               console.log("分流失败");
             }
@@ -1958,6 +1965,7 @@
       toUpLoadTimes(opt) {
         let that = this;
         //        debugger
+        that.finishNum ++;
         api.ajax({
           url: XHRList.updateCount,
           method: "POST",
@@ -1972,7 +1980,6 @@
             if (data.responseObject.responseStatus) {
               localStorage.setItem("sendTips", JSON.stringify(opt));
               that.refreshStateOther(-1);
-              that.finish = false;
               that.payPopupShow = false;
               // window.location.href =
               //   "/dist/imSceneDoctor.html?from=im&caseId=" +
@@ -1983,6 +1990,8 @@
               //       .customerId) +
               //   "&patientId=" +
               //   api.getPara().patientId;
+              // that.finish = false;
+              that.finishNum --;
               let urlTemp = "/dist/imSceneDoctor.html?from=im&caseId=" +
                 api.getPara().caseId +
                 "&doctorCustomerId=" +
@@ -2088,6 +2097,14 @@
       }
     },
     computed: {
+      // 计算 loading 是否可以隐藏
+      finish () {
+        if (this.finishNum <= 0) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       // 是否可以离开，传给suggest 的参数
       leaveFlag() {
         if (this.progressNum != 0) {
