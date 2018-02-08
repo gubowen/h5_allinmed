@@ -985,11 +985,6 @@
           this.allParams.illnessHistory = "";
         }
         if (this.upload.has) {
-//        if(this.isWeChat){
-//          this.allParams.inspectionAttId = "";
-//        }else{
-
-//        }
           this.allParams.inspectionAttId = joinImageDataList(this.imageList1) || "";
           this.allParams.affectedAttId = "";
         } else {
@@ -1118,18 +1113,32 @@
           visit: this.visit,
           upload: this.upload,
           medical: this.medical,
-          imageList1: this.imageList1
+          imageList1: this.imageList1,
+          hospitalMessage: this.hospitalMessage,
+          diseaseMessage: this.diseaseMessage,
+          medicalMessage: this.medicalMessage
         });
         localStorage.setItem("freshCache", JSON.stringify(assignCache));
       },
       recoverFromCache() {
         const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
-        if (_freshCache.visit){
+        if (_freshCache.visit) {
           this.visit = _freshCache.visit;
           this.upload = _freshCache.upload;
           this.medical = _freshCache.medical;
           this.imageList1 = _freshCache.imageList1;
         }
+        if (_freshCache.medical && _freshCache.medicalMessage) {
+          this.medicalMessage = _freshCache.medicalMessage;
+        }
+
+        if (_freshCache.hospitalMessage && _freshCache.hospitalMessage.id) {
+          this.hospitalMessage = _freshCache.hospitalMessage;
+        }
+        if (_freshCache.diseaseMessage && _freshCache.diseaseMessage.id) {
+          this.diseaseMessage = _freshCache.diseaseMessage;
+        }
+
       }
     },
     components: {
@@ -1164,6 +1173,15 @@
           this.setRecoverCache();
         },
         deep: true
+      },
+      diseaseMessage() {
+        this.setRecoverCache();
+      },
+      hospitalMessage() {
+        this.setRecoverCache();
+      },
+      medicalMessage() {
+        this.setRecoverCache();
       }
     }
   };

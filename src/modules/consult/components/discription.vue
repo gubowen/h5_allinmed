@@ -31,7 +31,7 @@
                         <textarea class="input-textarea"
                                   :class="{'dark':index%2==0,'selected':item.isSelected}"
                                   placeholder="填写其他情况"
-                                  @input="otherReason(pIndex,index,$event)"
+                                  @input="otherReason(item,index,$event)"
                                   v-model="item.optionDesc"
                                   ref="otherEle"
                                   @focus="hideBar()"
@@ -42,7 +42,7 @@
                     </section>
                   </figure>
                   <p class="text-num-tips"
-                     v-show="getByteLen(item.optionDesc.length)<=50">
+                     v-show="item.isSelected&&getByteLen(item.optionDesc.length)<=50">
                     {{getByteLen(item.optionDesc.length)}}/50</p>
                   <transition name="fade" v-if="painLevelRender(item)">
                     <section class="pain-level-wrapper" @click.stop="showSymptomDetail=false" v-if="showPainProgress">
@@ -299,17 +299,17 @@
       }
     },
     watch: {
-      "secondQuestionList" :{
+      "questionList" :{
         handler() {
           this.setRecoverCache();
         },
         deep: true
       },
-      "selectList" :{
-        handler() {
-          this.setRecoverCache();
-        },
-        deep: true
+      "heavyTimeContent"(){
+        this.setRecoverCache();
+      },
+      "delayTimeContent"(){
+        this.setRecoverCache();
       }
     },
     beforeRouteLeave(to, from, next) {
@@ -578,21 +578,15 @@
         }
         return flag;
       },
-      otherReason(pIndex, index, e) {
+      otherReason(item, index, e) {
         let ranges = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/gi;
 
-        if (ranges.test(this.questionList[pIndex].optionList[index].optionDesc)) {
-          this.questionList[pIndex].optionList[
-            index
-            ].optionDesc = this.questionList[pIndex].optionList[
-            index
-            ].optionDesc.replace(ranges, "");
+        if (ranges.test(item.optionDesc)) {
+          item.optionDesc = item.optionDesc.replace(ranges, "");
         }
-        let content = this.questionList[pIndex].optionList[index].optionDesc;
+        let content = item.optionDesc;
         if (content.length > 500) {
-          this.questionList[pIndex].optionList[
-            index
-            ].optionDesc = content.substring(0, 500);
+          item.optionDesc = content.substring(0, 500);
           this.errorShow = true;
           setTimeout(() => {
             this.errorShow = false;
