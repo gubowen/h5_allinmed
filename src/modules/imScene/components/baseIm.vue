@@ -503,6 +503,7 @@
             onmyinfo(userData) {
               store.commit("setHistoryStatus", "history");
               that.getMessageList("history");
+              that.getMedicalMessageHistory();
             },
             onwillreconnect(obj) {
               console.log(
@@ -615,6 +616,35 @@
           }
         });
       },
+      // 判断是否有问诊单，发送问诊单
+      getMedicalMessageHistory () {
+        const that = this;
+        this.finish = true;
+        this.nim.getHistoryMsgs({
+          scene: "p2p",
+          beginTime: 0,
+          reverse: true, //默认false表示从endTime开始往前查找历史消息;true表示从beginTime开始往后查找历史消息
+          to: this.targetData.account, //聊天对象, 账号或者群id
+          done(error, obj) {
+            that.finish = false;
+            if (obj.msgs.length === 0) {
+              return that.getMedicalMessage();
+            }
+            let medicalFlag = false; //是否有问诊单；
+            for (let i = 0; i < obj.msgs.length; i++) {
+              //判断消息列表里面有几条初诊建议，记录在vuex中
+              if (obj.msgs[i].type === "custom" && JSON.parse(obj.msgs[i].content).type === "medicalReport") {
+                medicalFlag = true;
+                return;
+              }
+            }
+            if (!medicalFlag) {
+              return that.getMedicalMessage();
+            }
+          },
+          limit: 20 //本次查询的消息数量限制, 最多100条, 默认100条
+        });
+      },
       //获取消息列表
       getMessageList(type) {
         let that = this;
@@ -631,8 +661,6 @@
             if (type === "scrollInit" && obj.msgs.length === 0) {
               that.toastControl(`没有更多消息了`);
               that.allMsgsGot = true;
-            } else if (type === "history" && obj.msgs.length === 0) {
-              that.getMedicalMessage();
             } else {
               obj.msgs.forEach((element, index) => {
                 if (index == obj.msgs.length - 1) {
