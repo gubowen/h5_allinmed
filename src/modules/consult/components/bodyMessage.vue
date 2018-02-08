@@ -394,7 +394,7 @@
                 orderFrequency: 3
               };
               localStorage.setItem("sendTips", JSON.stringify(arg));
-              localStorage.removeItem("freshCache")
+              localStorage.removeItem("freshCache");
               localStorage.removeItem("noMR");
 
               that.finish = false;
@@ -613,6 +613,33 @@
         setTimeout(()=>{
           this.isIos = false;
         }, 0)
+      },
+      setRecoverCache(){
+        const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
+        const assignCache = Object.assign(_freshCache, {
+          disContent: this.disContent,
+          helpContent: this.helpContent,
+          heightContent: this.heightContent,
+          weightContent: this.weightContent,
+        });
+        localStorage.setItem("freshCache", JSON.stringify(assignCache));
+      },
+      recoverFromCache(){
+        const _freshCache = JSON.parse(localStorage.getItem("freshCache"));
+        if (_freshCache.disContent) {
+          this.disContent = _freshCache.disContent;
+
+        }
+        if (_freshCache.helpContent) {
+          this.helpContent = _freshCache.helpContent;
+        }
+
+        if (_freshCache.heightContent) {
+          this.heightContent = _freshCache.heightContent;
+        }
+        if (_freshCache.weightContent) {
+          this.weightContent = _freshCache.weightContent;
+        }
       }
     },
     mounted() {
@@ -630,9 +657,24 @@
         this.isWeChat = false;
       });
       this.initCaseParams();
+      this.recoverFromCache();
       this.heightPickerInit();
       this.weightPickerInit();
       api.forbidShare();
+    },
+    watch:{
+      disContent(){
+        this.setRecoverCache();
+      },
+      helpContent(){
+        this.setRecoverCache();
+      },
+      heightContent(){
+        this.setRecoverCache();
+      },
+      weightContent(){
+        this.setRecoverCache();
+      }
     },
     components: {
       progerssBar,

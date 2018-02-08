@@ -693,6 +693,7 @@
               // if(that.checkSystemVersion()<10){
               //   that["imageList" + type][num].blob = res.responseObject.responseData.logoUrl;
               // }
+              that["imageList" + type][num].blob= res.responseObject.responseData.logoUrl;
               that.uploading1 = false;
               that.uploading2 = false;
               that.$el.querySelectorAll(
